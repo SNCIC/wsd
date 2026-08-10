@@ -2475,3 +2475,292 @@ msgstr "扣料前点数"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__qty_after
 msgid "Points After"
 msgstr "扣料后点数"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Download Import Template"
+msgstr "下载导入模板"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "CSV import instructions"
+msgstr "CSV 导入说明"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Save the completed template as a UTF-8 CSV file. Keep the header names unchanged. The first four columns are required. Empty rows are ignored."
+msgstr "请将填写完成的模板保存为 UTF-8 编码的 CSV 文件，并保持表头名称不变。前四列为必填项，空白行会自动忽略。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Column"
+msgstr "列名"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Required"
+msgstr "是否必填"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Accepted value and purpose"
+msgstr "可填写值及用途"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Yes"
+msgstr "是"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "No"
+msgstr "否"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Material code."
+msgstr "物料编码。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Machine sequence; use an integer such as 1 or 2."
+msgstr "设备序号；请填写整数，例如 1 或 2。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Machine table number."
+msgstr "设备料表编号。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Placement location."
+msgstr "上料站位。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Channel serial number. Keep this exact header spelling."
+msgstr "通道序列号。必须保留此表头的精确拼写。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Placement quantity; use a non-negative integer. Empty defaults to 0."
+msgstr "位号数量；请填写非负整数。留空时默认为 0。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Feeder specification."
+msgstr "飞达规格。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Whether this is tray material: Y or N. Empty defaults to N."
+msgstr "是否为托盘料：填写 Y 或 N。留空时默认为 N。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Whether this position is skipped: Y or N. Empty defaults to N."
+msgstr "是否跳过该站位：填写 Y 或 N。留空时默认为 N。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Track type: single or dual. Empty uses the current material table setting."
+msgstr "轨道类型：填写 single 或 dual。留空时使用当前料表的轨道类型。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Direction description."
+msgstr "方向说明。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Additional placement location description."
+msgstr "补充的上料站位说明。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "The import file is missing required columns: %s."
+msgstr "导入文件缺少必填列：%s。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "The import file does not contain any data rows."
+msgstr "导入文件不包含任何数据行。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s: %(column)s is required."
+msgstr "第 %(row)s 行：%(column)s 为必填项。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s: %(column)s must be an integer."
+msgstr "第 %(row)s 行：%(column)s 必须为整数。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s: %(column)s must not be negative."
+msgstr "第 %(row)s 行：%(column)s 不能为负数。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s: %(column)s must be Y or N."
+msgstr "第 %(row)s 行：%(column)s 必须为 Y 或 N。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s: TRACK_TYPE must be single or dual."
+msgstr "第 %(row)s 行：TRACK_TYPE 必须为 single 或 dual。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Rows %(first_row)s and %(second_row)s contain the same material position."
+msgstr "第 %(first_row)s 行与第 %(second_row)s 行包含相同的物料站位。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "Row %(row)s duplicates an existing material position. Select Clear Existing Details to replace all details."
+msgstr "第 %(row)s 行与现有物料站位重复。如需替换全部明细，请勾选“清空现有明细”。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "CSV Column"
+msgstr "CSV 列名"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Business Column"
+msgstr "业务列名"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Accepted Value and Import Rule"
+msgstr "可填写值及导入规则"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Equipment Sequence"
+msgstr "设备序号"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "TABLE Sequence"
+msgstr "TABLE序号"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Station"
+msgstr "站位"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Channel"
+msgstr "通道"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Placement"
+msgstr "点位"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Point Count"
+msgstr "点数"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Skip"
+msgstr "是否跳过"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Tray Material Station"
+msgstr "Tray料站位"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Track Type"
+msgstr "轨道类型"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Direction"
+msgstr "方向"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Placement Location Description"
+msgstr "点位位置说明"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the material code."
+msgstr "填写物料编码。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter an integer such as 1 or 2."
+msgstr "填写整数，例如 1 或 2。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the TABLE sequence."
+msgstr "填写 TABLE 序号。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the station number or code."
+msgstr "填写站位编号或代码。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the channel. Keep this exact CSV header spelling."
+msgstr "填写通道，并保持此 CSV 表头的精确拼写。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the placement value, for example 8mm or 12mm."
+msgstr "填写点位值，例如 8mm 或 12mm。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter a non-negative integer. Empty defaults to 0."
+msgstr "填写非负整数，留空时默认为 0。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter Y to skip the station or N to process it. Empty defaults to N."
+msgstr "填写 Y 跳过该站位，填写 N 正常处理，留空时默认为 N。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter Y for a tray material station or N otherwise. Empty defaults to N."
+msgstr "Tray料站位填写 Y，否则填写 N，留空时默认为 N。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter single or dual. Empty uses the current material table setting."
+msgstr "填写 single 或 dual，留空时使用当前料表设置。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter the direction description when required."
+msgstr "如有需要，填写方向说明。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Enter an additional placement location description when required."
+msgstr "如有需要，填写补充的点位位置说明。"

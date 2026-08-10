@@ -17,12 +17,49 @@
                         <group>
                             <field name="table_id" readonly="1"/>
                             <field name="import_file" filename="import_filename"/>
+                            <a href="/sn_wsd_smt/static/xls/smt_material_table_details_import_template.csv"
+                               download="smt_material_table_details_import_template.csv"
+                               class="btn btn-link"
+                               role="button">
+                                Download Import Template
+                            </a>
                         </group>
                         <group>
                             <field name="import_filename" readonly="1"/>
                             <field name="clear_existing"/>
                         </group>
                     </group>
+                    <div class="alert alert-info" role="alert">
+                        <p class="mb-2"><strong>CSV import instructions</strong></p>
+                        <p class="mb-2">
+                            Save the completed template as a UTF-8 CSV file. Keep the header names unchanged.
+                            The first four columns are required. Empty rows are ignored.
+                        </p>
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>CSV Column</th>
+                                    <th>Business Column</th>
+                                    <th>Required</th>
+                                    <th>Accepted Value and Import Rule</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>ITEM_CODE</code></td><td>Material Code</td><td>Yes</td><td>Enter the material code.</td></tr>
+                                <tr><td><code>DEVICE_SEQ</code></td><td>Equipment Sequence</td><td>Yes</td><td>Enter an integer such as 1 or 2.</td></tr>
+                                <tr><td><code>TABLE_NO</code></td><td>TABLE Sequence</td><td>Yes</td><td>Enter the TABLE sequence.</td></tr>
+                                <tr><td><code>LOADPOINT</code></td><td>Station</td><td>Yes</td><td>Enter the station number or code.</td></tr>
+                                <tr><td><code>CHANEL_SN</code></td><td>Channel</td><td>No</td><td>Enter the channel. Keep this exact CSV header spelling.</td></tr>
+                                <tr><td><code>FEEDER_SPEC</code></td><td>Placement</td><td>No</td><td>Enter the placement value, for example 8mm or 12mm.</td></tr>
+                                <tr><td><code>POINT_QTY</code></td><td>Point Count</td><td>No</td><td>Enter a non-negative integer. Empty defaults to 0.</td></tr>
+                                <tr><td><code>IS_SKIP</code></td><td>Skip</td><td>No</td><td>Enter Y to skip the station or N to process it. Empty defaults to N.</td></tr>
+                                <tr><td><code>IS_TRAY</code></td><td>Tray Material Station</td><td>No</td><td>Enter Y for a tray material station or N otherwise. Empty defaults to N.</td></tr>
+                                <tr><td><code>TRACK_TYPE</code></td><td>Track Type</td><td>No</td><td>Enter single or dual. Empty uses the current material table setting.</td></tr>
+                                <tr><td><code>DIRECTION</code></td><td>Direction</td><td>No</td><td>Enter the direction description when required.</td></tr>
+                                <tr><td><code>POINT_LOCATION</code></td><td>Placement Location Description</td><td>No</td><td>Enter an additional placement location description when required.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </sheet>
                 <footer>
                     <button name="action_import" type="object" string="Import" class="btn-primary"/>
