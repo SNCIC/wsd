@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_wsd_skip_request_user,sn.wsd.skip.request user,model_sn_wsd_skip_request,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_skip_request_approver,sn.wsd.skip.request approver,model_sn_wsd_skip_request,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_skip_request_line_user,sn.wsd.skip.request.line user,model_sn_wsd_skip_request_line,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_skip_request_line_approver,sn.wsd.skip.request.line approver,model_sn_wsd_skip_request_line,mrp.group_mrp_manager,1,1,1,1

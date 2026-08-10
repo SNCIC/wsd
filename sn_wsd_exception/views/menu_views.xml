@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Quality Configuration Submenu -->
+    <menuitem id="menu_sn_wsd_exception_type" name="Exception Types" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_exception_type" sequence="65"/>
+
+    <!-- Quality Operations Submenu -->
+    <menuitem id="menu_sn_wsd_exception_record" name="Exception Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_exception_record" sequence="75"/>
+    <menuitem id="menu_sn_wsd_exception_ledger" name="Exception Ledger" parent="sn_wsd_mrp.menu_sn_quality_trace" action="action_sn_wsd_exception_ledger" sequence="60"/>
+</odoo>

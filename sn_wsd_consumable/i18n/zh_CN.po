@@ -1,0 +1,955 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_consumable
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-10 05:29+0000\n"
+"PO-Revision-Date: 2026-07-10 05:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "%s cannot be negative."
+msgstr "%s 不能为负数。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__active
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__active
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常装饰"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__adhesion_control
+msgid "Adhesion Control"
+msgstr "附着力管控"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__adhesion_test_result
+msgid "Adhesion Test"
+msgstr "附着力测试"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__barcode_rule_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_barcode_rule_form
+msgid "Barcode Rule"
+msgstr "条码规则"
+
+#. module: sn_wsd_consumable
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_barcode_rule
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_barcode_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_barcode_rule_list
+msgid "Barcode Rules"
+msgstr "条码规则"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_barcode_rule_code_company_uniq
+msgid "Barcode rule code must be unique per company."
+msgstr "每个公司的条码规则代码必须是唯一的。"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Basic Information"
+msgstr "基本信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__batch_control
+msgid "Batch Control"
+msgstr "批次管控"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__batch_control__check
+msgid "Check Batch"
+msgstr "检查批次"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__expiry_control__check
+msgid "Check Shelf Life"
+msgstr "检查保质期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__paste_red_glue_control__full
+msgid "Check Warm-up, Stirring, Adhesion Test, Opening, and Shelf Life"
+msgstr "检查回温、搅拌、附着力测试、开封及保质期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__company_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__company_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__conformal_coating
+msgid "Conformal Coating"
+msgstr "三防漆"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_barcode_rule
+msgid "Consumable Barcode Rule"
+msgstr "辅料条码规则"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__consumable_code
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__consumable_code
+msgid "Consumable Code"
+msgstr "辅料编码"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_template
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_id
+msgid "Consumable Control Template"
+msgstr "辅料管控模板"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__info_ids
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_info
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Consumable Info"
+msgstr "辅料信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__consumable_name
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__consumable_name
+msgid "Consumable Name"
+msgstr "辅料名称"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__info_count
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_list
+msgid "Consumable Quantity"
+msgstr "辅料数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__name
+msgid "Consumable SN"
+msgstr "辅料序列号"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_info_name_company_uniq
+msgid "Consumable SN must be unique per company."
+msgstr "辅料序列号在每个公司必须唯一。"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Consumable Template"
+msgstr "辅料模板"
+
+#. module: sn_wsd_consumable
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_template
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_template
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+msgid "Consumable Templates"
+msgstr "辅料模板"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__consumable_type
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__consumable_type
+msgid "Consumable Type"
+msgstr "辅料类型"
+
+#. module: sn_wsd_consumable
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_root
+msgid "Consumables"
+msgstr "生产辅料"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Control Rules"
+msgstr "管控规则"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__create_date
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__date_token
+msgid "Date Segment"
+msgstr "日期字段"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__note
+msgid "Description"
+msgstr "说明"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__display_name
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__exhausted
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Exhausted"
+msgstr "用尽"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__is_expired
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__expired
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Expired"
+msgstr "过期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__expiry_date
+msgid "Expiry Date"
+msgstr "失效日期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__expiry_reminder_days
+msgid "Expiry Reminder Days"
+msgstr "过期提醒天数"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Expiry date cannot be earlier than production date."
+msgstr "失效日期不能早于生产日期。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Expiry reminder days"
+msgstr "过期提醒天数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__adhesion_test_result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Finish Warm-up"
+msgstr "结束回温"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__flux
+msgid "Flux"
+msgstr "助焊剂"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+msgid "Group by Consumable Type"
+msgstr "按辅料类型分组"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Group by Status"
+msgstr "按状态分组"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+msgid "Group by Vendor"
+msgstr "按供应商分组"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__has_message
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__has_message
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_needaction
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__message_needaction
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的关注。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_error
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__message_has_error
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__message_has_error
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息存在发送错误。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__in_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "In Stock"
+msgstr "在库"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Issue"
+msgstr "领用"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__issue_datetime
+msgid "Issue Time"
+msgstr "领用时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__issued
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Issued"
+msgstr "已领用"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__write_date
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Mark Exhausted"
+msgstr "标记用尽"
+
+#. module: sn_wsd_consumable
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Max warm-up count"
+msgstr "最大回温次数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stirring_duration_max
+msgid "Maximum Stirring Duration (min)"
+msgstr "最大搅拌时长 (分钟)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__max_warmup_count
+msgid "Maximum Warm-up Count"
+msgstr "最大回温次数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__warmup_duration_max
+msgid "Maximum Warm-up Duration (min)"
+msgstr "最大回温时长 (分钟)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stirring_duration_min
+msgid "Minimum Stirring Duration (min)"
+msgstr "最小搅拌时长 (分钟)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__warmup_duration_min
+msgid "Minimum Warm-up Duration (min)"
+msgstr "最小回温时长 (分钟)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止日期"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止日期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__batch_control__none
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__expiry_control__none
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__paste_red_glue_control__none
+msgid "No Check"
+msgstr "不检查"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_barcode_rule__date_token__none
+msgid "No Date"
+msgstr "无日期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_template_product_type_company_uniq
+msgid ""
+"Only one consumable template is allowed for the same product and consumable "
+"type in a company."
+msgstr "在同一家公司内，同一种产品和辅料类型只允许有一个辅料模板。"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Open Online"
+msgstr "在线开封"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__opened
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Opened"
+msgstr "已开封"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__open_datetime
+msgid "Opening Time"
+msgstr "开封时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__adhesion_test_result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__prefix
+msgid "Prefix"
+msgstr "前缀"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Process Information"
+msgstr "制程信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__product_tmpl_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__product_tmpl_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__product_id
+msgid "Product Variant"
+msgstr "产品变体"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__production_date
+msgid "Production Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__production_lot_no
+msgid "Production Lot No."
+msgstr "生产批号"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Receive"
+msgstr "接收"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__recycled
+msgid "Recycled"
+msgstr "已回收"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__red_glue
+msgid "Red Glue"
+msgstr "红胶"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__reserve_datetime
+msgid "Reservation Time"
+msgstr "预约/预留时间"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Reserve Issue"
+msgstr "预留领用"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__reserved
+msgid "Reserved"
+msgstr "已预留"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__activity_user_id
+msgid "Responsible User"
+msgstr "负责任用户"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__code
+msgid "Rule Code"
+msgstr "规则代码"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Rule Details"
+msgstr "规则详情"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__name
+msgid "Rule Name"
+msgstr "规则名称"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__safety_stock
+msgid "Safety Stock"
+msgstr "安全库存"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__safety_stock_uom_id
+msgid "Safety Stock Unit"
+msgstr "安全库存单位"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Safety stock"
+msgstr "安全库存"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Second Recycle"
+msgstr "二次回收"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__is_second_recycled
+msgid "Second Recycled"
+msgstr "已二次回收"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__sequence_id
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__sequence_padding
+msgid "Sequence Padding"
+msgstr "序列前导零/填充"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Sequence padding must be greater than zero."
+msgstr "序列前导零/填充长度必须大于零。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__shelf_life_days
+msgid "Shelf Life (Days)"
+msgstr "保质期 (天)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__expiry_control
+msgid "Shelf Life Control"
+msgstr "保质期管控"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Shelf life days"
+msgstr "保质期天数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_bar
+msgid "Solder Bar"
+msgstr "锡条"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_paste
+msgid "Solder Paste"
+msgstr "锡膏"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__paste_red_glue_control
+msgid "Solder Paste and Red Glue Control"
+msgstr "锡膏与红胶管控"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_wire
+msgid "Solder Wire"
+msgstr "锡线"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__specification
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__specification
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Start Warm-up"
+msgstr "开始回温"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__status
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_state
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__activity_state
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态：\n"
+"逾期：已超过截止日期\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Stir"
+msgstr "搅拌"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__stirred
+msgid "Stirred"
+msgstr "已搅拌"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stirring_control
+msgid "Stirring Control"
+msgstr "搅拌管控"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stirring_datetime
+msgid "Stirring Time"
+msgstr "搅拌时间"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Stirring duration max"
+msgstr "最大搅拌时长"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Stirring duration min"
+msgstr "最小搅拌时长"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Stirring duration min cannot be greater than stirring duration max."
+msgstr "最小搅拌时长不能大于最大搅拌时长。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Unload"
+msgstr "下料/卸载"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__unload_datetime
+msgid "Unload Time"
+msgstr "下料时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__vendor_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__vendor_id
+msgid "Vendor"
+msgstr "供应商"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_list
+msgid "View Consumable Info"
+msgstr "查看辅料信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__warmup_count
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__max_warmup_count
+msgid "Warm-up Count"
+msgstr "回温次数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__warmup_end_datetime
+msgid "Warm-up End Time"
+msgstr "回温结束时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__warmup_start_datetime
+msgid "Warm-up Start Time"
+msgstr "回温开始时间"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Warm-up count cannot be negative."
+msgstr "回温次数不能为负数。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Warm-up count cannot exceed the configured max warm-up count."
+msgstr "回温次数不能超过配置的最大回温次数限制。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Warm-up duration max"
+msgstr "最大回温时长"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Warm-up duration min"
+msgstr "最小回温时长"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Warm-up duration min cannot be greater than warm-up duration max."
+msgstr "最小回温时长不能大于最大回温时长。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__status__warming
+msgid "Warming"
+msgstr "回温中"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_barcode_rule__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_barcode_rule__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_info__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_consumable.field_sn_consumable_template__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_barcode_rule__date_token__ym
+msgid "YYMM"
+msgstr "YYMM"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_barcode_rule__date_token__yymmdd
+msgid "YYMMDD"
+msgstr "YYMMDD"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_barcode_rule__date_token__yyyymm
+msgid "YYYYMM"
+msgstr "YYYYMM"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_barcode_rule__date_token__yyyymmdd
+msgid "YYYYMMDD"
+msgstr "YYYYMMDD"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "template_id"
+msgstr "模板ID"

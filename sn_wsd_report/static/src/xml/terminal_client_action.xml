@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.TerminalClientAction">
+        <Layout className="'o_sn_wsd_terminal_client_action'">
+            <t t-set-slot="default">
+                <div class="o_sn_wsd_terminal_page" t-att-class="state.loading ? 'o_is_loading' : ''">
+                    <div class="o_sn_wsd_terminal_header">
+                        <div>
+                            <h1 class="o_sn_wsd_terminal_page_title">Workorder Terminal</h1>
+                            <div class="o_sn_wsd_terminal_page_subtitle">
+                                <t t-esc="stationTitle"/> - <t t-esc="state.dashboard?.workorder_name || ''"/>
+                            </div>
+                        </div>
+                        <div class="o_sn_wsd_terminal_header_actions">
+                            <button class="btn btn-secondary" t-on-click="openReports">Open Reports</button>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_terminal_top_metrics">
+                        <div class="o_sn_wsd_terminal_metric">
+                            <div class="o_metric_label">Cumulative Output</div>
+                            <div class="o_metric_value"><t t-esc="state.dashboard?.qty_output_total || 0"/></div>
+                        </div>
+                        <div class="o_sn_wsd_terminal_metric">
+                            <div class="o_metric_label">Pass Qty</div>
+                            <div class="o_metric_value"><t t-esc="state.dashboard?.qty_pass || 0"/></div>
+                        </div>
+                        <div class="o_sn_wsd_terminal_metric">
+                            <div class="o_metric_label">Available Qty</div>
+                            <div class="o_metric_value"><t t-esc="state.dashboard?.available_qty || 0"/></div>
+                        </div>
+                        <div class="o_sn_wsd_terminal_metric">
+                            <div class="o_metric_label">Previous Output</div>
+                            <div class="o_metric_value"><t t-esc="state.dashboard?.previous_output_qty || 0"/></div>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_terminal_flash" t-if="state.successFlash">
+                        <t t-esc="state.successFlash"/>
+                    </div>
+
+                    <div class="o_sn_wsd_terminal_mode_switch">
+                        <button
+                            class="btn"
+                            t-att-class="state.activeMode === 'serial' ? 'btn-primary' : 'btn-secondary'"
+                            t-on-click="() => this.switchMode('serial')"
+                        >Serial Mode</button>
+                        <button
+                            class="btn"
+                            t-att-class="state.activeMode === 'qty' ? 'btn-primary' : 'btn-secondary'"
+                            t-on-click="() => this.switchMode('qty')"
+                        >Quantity Mode</button>
+                    </div>
+
+                    <div class="o_sn_wsd_terminal_modes">
+                        <section class="o_sn_wsd_terminal_mode_panel" t-att-class="state.activeMode === 'serial' ? 'o_is_active' : 'o_is_inactive'">
+                            <div class="o_mode_panel_header">
+                                <h2>Serial Mode</h2>
+                                <span class="o_mode_panel_hint">Use barcode-driven reporting for station flow, aging, packing, and repair routing.</span>
+                            </div>
+                            <form t-on-submit="submitSerial" t-on-keydown="(ev) => this.onKeydownSubmit(ev, 'serial')" class="o_sn_wsd_terminal_form_block">
+                                <div class="o_terminal_field_grid">
+                                    <label>Report Type
+                                        <select name="report_type" t-on-change="setSerialValue" t-att-value="state.serialForm.report_type">
+                                            <option value="start">Start</option>
+                                            <option value="complete">Complete</option>
+                                        </select>
+                                    </label>
+                                    <label>Operator
+                                        <input name="operator_code" t-att-value="state.serialForm.operator_code" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label class="o_field_span_2">SN / Barcode
+                                        <input t-ref="serialInput" name="serial_no" t-att-value="state.serialForm.serial_no" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label>Override Route Check
+                                        <input type="checkbox" name="override_route" t-att-checked="state.serialForm.override_route" t-on-change="setSerialValue"/>
+                                    </label>
+                                    <label class="o_field_span_2">Remark
+                                        <input name="remark" t-att-value="state.serialForm.remark" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label>Aging Batch
+                                        <input name="aging_batch_id" t-att-value="state.serialForm.aging_batch_id" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label>Aging Slot
+                                        <input name="aging_slot_no" t-att-value="state.serialForm.aging_slot_no" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label>Seal No
+                                        <input name="seal_no" t-att-value="state.serialForm.seal_no" t-on-input="setSerialValue"/>
+                                    </label>
+                                    <label>Carton No
+                                        <input name="carton_no" t-att-value="state.serialForm.carton_no" t-on-input="setSerialValue"/>
+                                    </label>
+                                </div>
+                                <div class="o_terminal_conflict o_is_serial" t-if="serialConflictMessage">
+                                    <t t-esc="serialConflictMessage"/>
+                                </div>
+                                <div class="o_terminal_panel_footer">
+                                    <div class="o_terminal_preview">Current Output: <strong><t t-esc="serialOutputQty"/></strong></div>
+                                    <button class="btn btn-primary" type="submit" t-att-disabled="state.submitting">Submit Serial Report</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <section class="o_sn_wsd_terminal_mode_panel" t-att-class="state.activeMode === 'qty' ? 'o_is_active' : 'o_is_inactive'">
+                            <div class="o_mode_panel_header">
+                                <h2>Quantity Mode</h2>
+                                <span class="o_mode_panel_hint">Use quantity-based reporting for manual counts, machine callbacks, and non-serial posting.</span>
+                            </div>
+                            <form t-on-submit="submitQty" t-on-keydown="(ev) => this.onKeydownSubmit(ev, 'qty')" class="o_sn_wsd_terminal_form_block">
+                                <div class="o_terminal_field_grid">
+                                    <label>Source
+                                        <select name="mode" t-on-change="setQtyValue" t-att-value="state.qtyForm.mode">
+                                            <option value="manual">Manual</option>
+                                            <option value="machine">Machine</option>
+                                        </select>
+                                    </label>
+                                    <label>Report Type
+                                        <select name="report_type" t-on-change="setQtyValue" t-att-value="state.qtyForm.report_type">
+                                            <option value="start">Start</option>
+                                            <option value="complete">Complete</option>
+                                        </select>
+                                    </label>
+                                    <label>Operator
+                                        <input name="operator_code" t-att-value="state.qtyForm.operator_code" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>External Event ID
+                                        <input name="external_event_id" t-att-value="state.qtyForm.external_event_id" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>Input Qty
+                                        <input t-ref="qtyInput" type="number" step="0.01" name="qty_in" t-att-value="state.qtyForm.qty_in" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>OK Qty
+                                        <input type="number" step="0.01" name="qty_ok" t-att-value="state.qtyForm.qty_ok" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>NG Qty
+                                        <input type="number" step="0.01" name="qty_ng" t-att-value="state.qtyForm.qty_ng" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>Scrap Qty
+                                        <input type="number" step="0.01" name="qty_scrap" t-att-value="state.qtyForm.qty_scrap" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>Repair Qty
+                                        <input type="number" step="0.01" name="qty_repair" t-att-value="state.qtyForm.qty_repair" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label>Rework Qty
+                                        <input type="number" step="0.01" name="qty_rework" t-att-value="state.qtyForm.qty_rework" t-on-input="setQtyValue"/>
+                                    </label>
+                                    <label class="o_field_span_2">Remark
+                                        <input name="remark" t-att-value="state.qtyForm.remark" t-on-input="setQtyValue"/>
+                                    </label>
+                                </div>
+                                <div class="o_terminal_conflict o_is_qty" t-if="qtyConflictMessage">
+                                    <t t-esc="qtyConflictMessage"/>
+                                </div>
+                                <div class="o_terminal_panel_footer">
+                                    <div class="o_terminal_preview">Current Output: <strong><t t-esc="qtyOutputQty"/></strong></div>
+                                    <button class="btn btn-primary" type="submit" t-att-disabled="state.submitting or !!qtyConflictMessage">Submit Quantity Report</button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+
+                    <div class="o_sn_wsd_terminal_recent">
+                        <div class="o_recent_header">
+                            <h2>Recent Reports</h2>
+                            <span>The latest submission is highlighted automatically.</span>
+                        </div>
+                        <table class="o_sn_wsd_terminal_recent_table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Source</th>
+                                    <th>Type</th>
+                                    <th>Input</th>
+                                    <th>OK</th>
+                                    <th>NG</th>
+                                    <th>Scrap</th>
+                                    <th>Rework/Repair</th>
+                                    <th>Output</th>
+                                    <th>SN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    t-foreach="state.dashboard?.recent_reports || []"
+                                    t-as="report"
+                                    t-key="report.id"
+                                    t-att-class="recentRowClass(report)"
+                                >
+                                    <td><t t-esc="report.event_time"/></td>
+                                    <td><t t-esc="report.source_type"/></td>
+                                    <td><t t-esc="report.report_type"/></td>
+                                    <td><t t-esc="report.qty_in"/></td>
+                                    <td><t t-esc="report.qty_ok"/></td>
+                                    <td><t t-esc="report.qty_ng"/></td>
+                                    <td><t t-esc="report.qty_scrap"/></td>
+                                    <td><t t-esc="report.qty_rework || report.qty_repair"/></td>
+                                    <td><t t-esc="report.qty_out"/></td>
+                                    <td><t t-esc="(report.serials || []).join(', ')"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>

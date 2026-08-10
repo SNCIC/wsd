@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_filter_inherit_sn_wsd_mrp" model="ir.ui.view">
+        <field name="name">mrp.production.select.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='workcenter_id']" position="after">
+                <field name="x_workshop_id"/>
+                <field name="x_production_line_id"/>
+            </xpath>
+            <xpath expr="//search/filter[@name='filter_in_progress']" position="after">
+                <separator/>
+                <filter string="Online" name="online" domain="[('x_online_state', '=', 'online'), ('state', 'not in', ['done', 'cancel'])]"/>
+                <filter string="Offline" name="offline" domain="[('x_online_state', '=', 'offline')]"/>
+                <filter string="Not Online" name="not_online" domain="[('x_online_state', '!=', 'online')]"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
+                <filter string="Production Line" name="group_production_line" domain="[]" context="{'group_by': 'x_production_line_id'}"/>
+                <filter string="Online Stage" name="group_online_stage" domain="[]" context="{'group_by': 'x_online_state'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_list_sn_wsd_mrp" model="ir.ui.view">
+        <field name="name">mrp.production.list.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+                <attribute name="options">{'show_time': false}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_finished']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+                <attribute name="options">{'show_time': false}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+                <attribute name="options">{'show_time': false}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_customer_display_name" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='date_finished']" position="after">
+                <field name="x_actual_start_date" optional="show"/>
+                <field name="x_actual_finished_date" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="after">
+                <field name="x_process_route_id" optional="show" groups="mrp.group_mrp_routings"/>
+                <field name="x_workshop_id" optional="show"/>
+                <field name="x_production_line_id" optional="show"/>
+                <field name="x_online_state" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='components_availability']" position="attributes">
+                <attribute name="string">Kit Status</attribute>
+            </xpath>
+            <xpath expr="//field[@name='reservation_state']" position="attributes">
+                <attribute name="string">Kit Readiness</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_qty']" position="attributes">
+                <attribute name="string">Input Qty</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="qty_produced" string="Output Qty" sum="Total Output Qty" optional="show"/>
+                <field name="x_is_eip_material" optional="show" widget="boolean_toggle"/>
+                <field name="x_is_nqi_material" optional="show" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_form_sn_wsd_mrp" model="ir.ui.view">
+        <field name="name">mrp.production.form.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_set_online" type="object" string="Online" class="btn-primary" invisible="x_online_state == 'online' or state in ['done', 'cancel']"/>
+                <button name="action_set_offline" type="object" string="Offline" class="btn-secondary" invisible="x_online_state != 'online' or state in ['done', 'cancel']"/>
+            </xpath>
+            <xpath expr="//form" position="inside">
+                <field name="x_has_meter_operations" invisible="1"/>
+            </xpath>
+            <xpath expr="//sheet//div[@name='button_box']" position="inside">
+                <button name="action_open_internal_serials" type="object" class="oe_stat_button" icon="fa-barcode">
+                    <field name="x_internal_serial_count" widget="statinfo" string="Internal Serials"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="attributes">
+                <attribute name="class">o_sn_wsd_mrp_production_notebook</attribute>
+            </xpath>
+            <xpath expr="//group[@name='group_extra_info']/field[@name='user_id']" position="after">
+                <field name="x_workshop_id"/>
+                <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]"/>
+            </xpath>
+            <xpath expr="//div[@name='bom_div']" position="after">
+                <field name="x_process_route_id" readonly="1" groups="mrp.group_mrp_routings"/>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']" position="attributes">
+                <attribute name="domain">[('state', 'not in', ['done', 'cancel'])]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/list/field[@name='quantity']" position="before">
+                <field name="x_mo_total_consumed_qty" string="Consumed" readonly="1" column_invisible="parent.state == 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/list/field[@name='quantity']" position="attributes">
+                <attribute name="string">Current Consumed</attribute>
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="(//button[@name='action_generate_serial'])[1]" position="attributes">
+                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or lot_producing_ids</attribute>
+            </xpath>
+            <xpath expr="(//button[@name='action_generate_serial'])[2]" position="attributes">
+                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or not lot_producing_ids or product_qty == 1</attribute>
+            </xpath>
+            <xpath expr="(//button[@name='action_generate_serial'])[3]" position="attributes">
+                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sn_mrp_online_production" model="ir.actions.act_window">
+        <field name="name">Online Manufacturing Orders</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">list,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="domain">[('x_online_state', '=', 'online'), ('state', 'not in', ('done', 'cancel'))]</field>
+        <field name="context">{'search_default_online': 1}</field>
+    </record>
+</odoo>

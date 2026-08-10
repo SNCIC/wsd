@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workorder_form_sn_wsd_api" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.sn.wsd.api</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@name='button_box']" position="inside">
+                <button name="action_open_mes_travel_events" type="object" class="oe_stat_button" icon="fa-exchange">
+                    <field name="x_mes_travel_count" widget="statinfo" string="Travel Events"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='x_meter_operation_type']" position="after">
+                <field name="x_mes_workcenter_id"/>
+            </xpath>
+            <xpath expr="//field[@name='x_internal_serial_ids']/ancestor::group[1]" position="after">
+                <group string="Latest MES Test Results">
+                    <field name="x_meter_test_result_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="test_time"/>
+                            <field name="internal_serial_id"/>
+                            <field name="test_type"/>
+                            <field name="result"/>
+                            <field name="retry_sequence" optional="hide"/>
+                            <field name="retry_limit" optional="hide"/>
+                            <field name="requires_repair" optional="show"/>
+                            <field name="is_rework_pass" optional="show"/>
+                            <field name="aoi_defect_count"/>
+                            <field name="cycle_time_sec"/>
+                            <field name="basic_error"/>
+                            <field name="phase_error"/>
+                            <field name="operator_code"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_sn_travel_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.sn.travel.list</field>
+        <field name="model">sn.wsd.mes.sn.travel</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" default_order="event_time desc, id desc">
+                <field name="event_time"/>
+                <field name="internal_serial_id"/>
+                <field name="event_type"/>
+                <field name="result"/>
+                <field name="retry_sequence" optional="hide"/>
+                <field name="retry_limit" optional="hide"/>
+                <field name="requires_repair" optional="show"/>
+                <field name="is_rework_pass" optional="show"/>
+                <field name="production_id" optional="hide"/>
+                <field name="workorder_id" optional="hide"/>
+                <field name="workcenter_id"/>
+                <field name="workcenter_code" optional="show"/>
+                <field name="production_line_id" optional="hide"/>
+                <field name="equipment_id" optional="show"/>
+                <field name="operator_code" optional="show"/>
+                <field name="source_system" optional="hide"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_sn_travel_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.sn.travel.form</field>
+        <field name="model">sn.wsd.mes.sn.travel</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_serial_id"/>
+                            <field name="event_time"/>
+                            <field name="event_type"/>
+                            <field name="result"/>
+                            <field name="retry_sequence"/>
+                            <field name="retry_limit"/>
+                            <field name="requires_repair"/>
+                            <field name="is_rework_pass"/>
+                            <field name="rework_source_workorder_id"/>
+                            <field name="operator_code"/>
+                        </group>
+                        <group>
+                            <field name="production_id"/>
+                            <field name="workorder_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="workcenter_code"/>
+                            <field name="production_line_id"/>
+                            <field name="equipment_id"/>
+                        </group>
+                    </group>
+                    <group string="Source">
+                        <group>
+                            <field name="source_system"/>
+                            <field name="external_event_id"/>
+                            <field name="request_id"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <field name="payload"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_sn_travel" model="ir.actions.act_window">
+        <field name="name">MES Travel Events</field>
+        <field name="res_model">sn.wsd.mes.sn.travel</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_mes_sn_travel_list"/>
+        <field name="context">{'create': False}</field>
+    </record>
+</odoo>

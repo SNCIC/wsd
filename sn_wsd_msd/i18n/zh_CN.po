@@ -1,0 +1,774 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_msd
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-08 01:02+0000\n"
+"PO-Revision-Date: 2026-07-08 01:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__active
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_search
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常装饰"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_form
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_bake_count
+msgid "Bake Count"
+msgstr "烘烤次数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__bake_count_limit
+msgid "Bake Count Limit"
+msgstr "烘烤次数限制"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__bake_minutes
+msgid "Bake Minutes"
+msgstr "烘烤分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_bake_start
+msgid "Bake Start"
+msgstr "烘烤开始"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__bake_temperature
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__bake_temperature
+msgid "Bake Temperature"
+msgstr "烘烤温度"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__bake_total_minutes
+msgid "Bake Total Minutes"
+msgstr "烘烤总分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_baked_minutes
+msgid "Baked Minutes"
+msgstr "已烘烤分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields.selection,name:sn_wsd_msd.selection__stock_lot__msd_state__baking
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "Baking"
+msgstr "烘烤中"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_bake_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__component_thickness
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__component_thickness
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__component_thickness
+msgid "Component Thickness"
+msgstr "元件厚度"
+
+#. module: sn_wsd_msd
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_config
+msgid "Configuration"
+msgstr "配置"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__cumulative_exposure_minutes
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__cumulative_exposure_minutes
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_cumulative_exposure_minutes
+msgid "Cumulative Exposure Minutes"
+msgstr "累计暴露分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_current_exposure_minutes
+msgid "Current Exposure Minutes"
+msgstr "当前暴露分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_smt_operation_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__display_name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_move_line__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields.selection,name:sn_wsd_msd.selection__stock_lot__msd_state__dry
+msgid "Dry"
+msgstr "干燥状态"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_expected_bake_end
+msgid "Expected Bake End"
+msgstr "预计烘烤结束"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "Exposure"
+msgstr "暴露"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_exposure_start
+msgid "Exposure Start"
+msgstr "暴露 sectional"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Finish Baking"
+msgstr "结束烘烤"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__has_message
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_smt_operation_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_move_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_needaction
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的注意。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_has_error
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__message_has_error
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息存在发送错误。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__write_uid
+msgid "Last Updated by"
+msgstr "最后更新者"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "Limits"
+msgstr "限制"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_stock_lot
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__lot_id
+msgid "Lot/Serial Number"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_bake_wizard
+msgid "MSD Bake Wizard"
+msgstr "MSD 烘烤向导"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "MSD Control"
+msgstr "MSD 管控"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_control_rule
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msd_control_rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msd_control_rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_rule_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "MSD Control Rule"
+msgstr "MSD 管控规则"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_control_rule
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_control_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+msgid "MSD Control Rules"
+msgstr "MSD 管控规则"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_level
+msgid "MSD MSL Level"
+msgstr "MSD MSL 等级"
+
+#. module: sn_wsd_msd
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_root
+msgid "MSD Management"
+msgstr "MSD 管理"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__is_msd_material
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__is_msd_material
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__is_msd_material
+msgid "MSD Material"
+msgstr "MSD 物料"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_lot_report
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_report
+msgid "MSD Material Report"
+msgstr "MSD 物料报告"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSD Materials"
+msgstr "MSD 物料"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSD State"
+msgstr "MSD 状态"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
+msgid ""
+"MSD control rule thickness ranges cannot overlap for the same MSL level."
+msgstr "对于相同的 MSL 等级，MSD 管控规则的厚度范围不能重叠。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"MSD material setup is incomplete. Maintain the MSL level and component "
+"thickness."
+msgstr "MSD 物料设置不完整。请维护 MSL 等级和元件厚度。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "MSD material under baking cannot be unsealed."
+msgstr "正在烘烤中的 MSD 物料无法拆封。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/product.py:0
+msgid "MSD materials must have an MSL level and component thickness."
+msgstr "MSD 物料必须具有 MSL 等级和元件厚度。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msl_level_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSL Level"
+msgstr "MSL 等级"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_level
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_level
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_search
+msgid "MSL Levels"
+msgstr "MSL 等级"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "Matching"
+msgstr "匹配"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__bake_duration_max
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__bake_duration_max
+msgid "Maximum Bake Minutes"
+msgstr "最大烘烤分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__thickness_max
+msgid "Maximum Thickness"
+msgstr "最大厚度"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__bake_duration_min
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__bake_duration_min
+msgid "Minimum Bake Minutes"
+msgstr "最小烘烤分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__thickness_min
+msgid "Minimum Thickness"
+msgstr "最小厚度"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields.selection,name:sn_wsd_msd.selection__stock_lot__msd_state__opened
+msgid "Opened"
+msgstr "已开封"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__oven_info
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_oven_info
+msgid "Oven Information"
+msgstr "烤箱信息"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_product_template
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "产品移动(移库明细)"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_product_product
+msgid "Product Variant"
+msgstr "产品变体"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_smt_operation_mixin
+msgid "SMT Operation Mixin"
+msgstr "SMT 操作 Mixin"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields.selection,name:sn_wsd_msd.selection__stock_lot__msd_state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "Scrapped MSD material cannot be unsealed."
+msgstr "已报废的 MSD 物料无法拆封。"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Seal"
+msgstr "封存"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields.selection,name:sn_wsd_msd.selection__stock_lot__msd_state__sealed
+msgid "Sealed"
+msgstr "已封存"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Set Dry"
+msgstr "设为干燥"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__standard_exposure_minutes
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__standard_exposure_minutes
+msgid "Standard Exposure Minutes"
+msgstr "标准暴露分钟数"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_bake_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Start Baking"
+msgstr "开始烘烤"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__activity_state
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：截止日期已过\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_target_bake_minutes
+msgid "Target Bake Minutes"
+msgstr "目标烘烤分钟数"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD bake count limit has been reached."
+msgstr "已达到 MSD 烘烤次数限制。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The MSD cumulative exposure limit has been reached. The material must be "
+"scrapped."
+msgstr "已达到 MSD 累计暴露限制。该物料必须报废。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The MSD current exposure limit has been reached. Bake the material before "
+"use."
+msgstr "已达到 MSD 当前暴露限制。使用前请对物料进行烘烤。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is baking and cannot be used."
+msgstr "该 MSD 物料正在烘烤中，无法使用。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is scrapped and cannot be used."
+msgstr "该 MSD 物料已报废，无法使用。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is sealed and must be unsealed before use."
+msgstr "该 MSD 物料已封存，使用前必须先拆封。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_control_rule_positive_bake_count_limit
+msgid "The bake count limit must be greater than zero."
+msgstr "烘烤次数限制必须大于零。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The bake minutes must be within the configured range."
+msgstr "烘烤分钟数必须在配置的范围内。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_control_rule_positive_bake_total
+msgid "The bake total minutes must be greater than zero."
+msgstr "烘烤总分钟数必须大于零。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The configured bake duration is not complete."
+msgstr "配置的烘烤时长尚未完成。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_level_positive_cumulative_exposure
+msgid "The cumulative exposure minutes must be greater than zero."
+msgstr "累计暴露分钟数必须大于零。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The current exposure exceeds the standard exposure limit. Bake the material "
+"before sealing or drying it."
+msgstr "当前暴露时间已超过标准暴露限制。在封存或干燥前，请先烘烤物料。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The current exposure has not exceeded the standard exposure limit. Remaining"
+" minutes: %.2f"
+msgstr "当前暴露时间未超过标准暴露限制。剩余分钟数: %.2f"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
+msgid "The maximum bake minutes cannot be less than the minimum bake minutes."
+msgstr "最大烘烤分钟数不能小于最小烘烤分钟数。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
+msgid "The maximum thickness must be greater than the minimum thickness."
+msgstr "最大厚度必须大于最小厚度。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_control_rule_positive_bake_duration_min
+msgid "The minimum bake minutes must be greater than zero."
+msgstr "最小烘烤分钟数必须大于零。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_control_rule_positive_thickness_min
+msgid "The minimum thickness must be greater than or equal to zero."
+msgstr "最小厚度必须大于或等于零。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_level_positive_standard_exposure
+msgid "The standard exposure minutes must be greater than zero."
+msgstr "标准暴露分钟数必须大于零。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
+msgid "The total bake minutes cannot be less than the minimum bake minutes."
+msgstr "总烘烤分钟数不能小于最小烘烤分钟数。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_level.py:0
+msgid ""
+"The warning exposure minutes cannot exceed the standard exposure minutes."
+msgstr "警告暴露分钟数不能超过标准暴露分钟数。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_level_positive_warning_exposure
+msgid "The warning exposure minutes must be greater than or equal to zero."
+msgstr "警告暴露分钟数必须大于或等于零。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_total_exposure_minutes
+msgid "Total Exposure Minutes"
+msgstr "总暴露分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "Unseal"
+msgstr "拆封"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_unseal_count
+msgid "Unseal Count"
+msgstr "拆封次数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__warning_exposure_minutes
+msgid "Warning Exposure Minutes"
+msgstr "警告暴露分钟数"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"

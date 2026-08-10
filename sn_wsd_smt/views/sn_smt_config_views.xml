@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_smt_config_list" model="ir.ui.view">
+        <field name="name">sn.smt.config.list</field>
+        <field name="model">sn.smt.config</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="key"/>
+                <field name="value"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_operation_record_list" model="ir.ui.view">
+        <field name="name">sn.smt.operation.record.list</field>
+        <field name="model">sn.smt.operation.record</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="operation_type"/>
+                <field name="material_lot_id"/>
+                <field name="old_material_lot_id"/>
+                <field name="feeder_id"/>
+                <field name="cart_id"/>
+                <field name="device_seq"/>
+                <field name="table_no"/>
+                <field name="loadpoint"/>
+                <field name="is_online"/>
+                <field name="required_item_code" optional="show"/>
+                <field name="actual_item_code" optional="show"/>
+                <field name="qty_before" optional="show"/>
+                <field name="operation_qty" optional="show"/>
+                <field name="qty_after" optional="show"/>
+                <field name="operator_id" optional="show"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_operation_log_list" model="ir.ui.view">
+        <field name="name">sn.smt.operation.log.list</field>
+        <field name="model">sn.smt.operation.log</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="event_type"/>
+                <field name="message"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_traceability_list" model="ir.ui.view">
+        <field name="name">sn.smt.traceability.list</field>
+        <field name="model">sn.smt.traceability</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="action_type"/>
+                <field name="material_lot_id"/>
+                <field name="old_material_lot_id"/>
+                <field name="feeder_id"/>
+                <field name="cart_id"/>
+                <field name="device_seq"/>
+                <field name="table_no"/>
+                <field name="loadpoint"/>
+                <field name="required_item_code" optional="show"/>
+                <field name="actual_item_code" optional="show"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_config" model="ir.actions.act_window">
+        <field name="name">SMT Config</field>
+        <field name="res_model">sn.smt.config</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'default_key': 'QM011'}</field>
+    </record>
+
+    <record id="action_sn_smt_operation_record" model="ir.actions.act_window">
+        <field name="name">SMT Operation Records</field>
+        <field name="res_model">sn.smt.operation.record</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_sn_smt_operation_log" model="ir.actions.act_window">
+        <field name="name">SMT Operation Logs</field>
+        <field name="res_model">sn.smt.operation.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_sn_smt_traceability" model="ir.actions.act_window">
+        <field name="name">SMT Traceability</field>
+        <field name="res_model">sn.smt.traceability</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_sn_smt_material_consumption_list" model="ir.ui.view">
+        <field name="name">sn.smt.material.consumption.list</field>
+        <field name="model">sn.smt.material.consumption</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="serial_no"/>
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="required_item_code"/>
+                <field name="actual_item_code"/>
+                <field name="material_sn"/>
+                <field name="device_seq"/>
+                <field name="table_no"/>
+                <field name="loadpoint"/>
+                <field name="point_qty"/>
+                <field name="consumed_qty"/>
+                <field name="qty_before"/>
+                <field name="qty_after"/>
+                <field name="consumed_at"/>
+                <field name="operator_code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_material_consumption_form" model="ir.ui.view">
+        <field name="name">sn.smt.material.consumption.form</field>
+        <field name="model">sn.smt.material.consumption</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_reverse" type="object" string="Reverse" class="btn-secondary" invisible="reversed_id"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="serial_no" readonly="1"/>
+                            <field name="production_id" readonly="1"/>
+                            <field name="workorder_id" readonly="1"/>
+                            <field name="material_sn" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="required_item_code" readonly="1"/>
+                            <field name="actual_item_code" readonly="1"/>
+                            <field name="device_seq" readonly="1"/>
+                            <field name="table_no" readonly="1"/>
+                            <field name="loadpoint" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="point_qty" readonly="1"/>
+                        <field name="consumed_qty" readonly="1"/>
+                        <field name="qty_before" readonly="1"/>
+                        <field name="qty_after" readonly="1"/>
+                        <field name="consumed_at" readonly="1"/>
+                        <field name="operator_code" readonly="1"/>
+                        <field name="note" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_material_consumption" model="ir.actions.act_window">
+        <field name="name">SMT Material Consumption</field>
+        <field name="res_model">sn.smt.material.consumption</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

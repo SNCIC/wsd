@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_wsd_exception_type_user,sn.wsd.exception.type user,model_sn_wsd_exception_type,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_exception_type_manager,sn.wsd.exception.type manager,model_sn_wsd_exception_type,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_exception_record_user,sn.wsd.exception.record user,model_sn_wsd_exception_record,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_exception_record_manager,sn.wsd.exception.record manager,model_sn_wsd_exception_record,mrp.group_mrp_manager,1,1,1,1

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_smt_change_wizard_form" model="ir.ui.view">
+        <field name="name">sn.smt.change.wizard.form</field>
+        <field name="model">sn.smt.change.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="production_id" readonly="1"/>
+                            <field name="workcenter_id"/>
+                            <field name="change_type"/>
+                            <field name="device_table_input"/>
+                            <field name="loadpoint_input"/>
+                        </group>
+                        <group>
+                            <field name="new_material_sn_input"/>
+                            <field name="feeder_input"/>
+                            <field name="message" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_change" type="object" string="Confirm" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

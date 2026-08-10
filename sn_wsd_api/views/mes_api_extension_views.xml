@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Test Result Detail Views -->
+    <record id="view_sn_wsd_mes_test_result_detail_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.detail.list</field>
+        <field name="model">sn.wsd.mes.test.result.detail</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="project_name"/>
+                <field name="lower_limit"/>
+                <field name="upper_limit"/>
+                <field name="actual_value"/>
+                <field name="result"/>
+                <field name="test_result_id"/>
+                <field name="test_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_test_result_detail_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.detail.form</field>
+        <field name="model">sn.wsd.mes.test.result.detail</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="test_result_id" readonly="1"/>
+                            <field name="project_name"/>
+                        </group>
+                        <group>
+                            <field name="result"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group string="Measurement Values">
+                        <group>
+                            <field name="lower_limit"/>
+                            <field name="upper_limit"/>
+                            <field name="actual_value"/>
+                        </group>
+                    </group>
+                    <field name="raw_line"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_test_result_detail" model="ir.actions.act_window">
+        <field name="name">Test Result Details</field>
+        <field name="res_model">sn.wsd.mes.test.result.detail</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Nameplate Binding Views -->
+    <record id="view_sn_wsd_mes_nameplate_binding_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.nameplate.binding.list</field>
+        <field name="model">sn.wsd.mes.nameplate.binding</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="binding_time"/>
+                <field name="internal_serial_id"/>
+                <field name="nameplate_code"/>
+                <field name="production_id"/>
+                <field name="workcenter_id"/>
+                <field name="operator_code"/>
+                <field name="binding_mode"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_nameplate_binding_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.nameplate.binding.form</field>
+        <field name="model">sn.wsd.mes.nameplate.binding</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_serial_id" readonly="1"/>
+                            <field name="nameplate_code"/>
+                            <field name="binding_mode"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="production_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="binding_time"/>
+                        </group>
+                    </group>
+                    <group string="Audit">
+                        <group>
+                            <field name="operator_code"/>
+                            <field name="previous_nameplate_id"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_nameplate_binding" model="ir.actions.act_window">
+        <field name="name">Nameplate Bindings</field>
+        <field name="res_model">sn.wsd.mes.nameplate.binding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Packaging Record Views -->
+    <record id="view_sn_wsd_mes_packaging_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.packaging.record.list</field>
+        <field name="model">sn.wsd.mes.packaging.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="packaging_time"/>
+                <field name="internal_serial_id"/>
+                <field name="nameplate_code"/>
+                <field name="box_sn"/>
+                <field name="pallet_sn"/>
+                <field name="production_id"/>
+                <field name="workorder_id" optional="hide"/>
+                <field name="operator_code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_packaging_record" model="ir.actions.act_window">
+        <field name="name">Packaging Records</field>
+        <field name="res_model">sn.wsd.mes.packaging.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_wsd_mes_packaging_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.packaging.record.form</field>
+        <field name="model">sn.wsd.mes.packaging.record</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_serial_id" readonly="1"/>
+                            <field name="nameplate_code" readonly="1"/>
+                            <field name="box_sn" readonly="1"/>
+                            <field name="pallet_sn" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="production_id" readonly="1"/>
+                            <field name="workorder_id" readonly="1"/>
+                            <field name="workcenter_id" readonly="1"/>
+                            <field name="packaging_time" readonly="1"/>
+                            <field name="active" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="operator_code" readonly="1"/>
+                            <field name="operator_id" readonly="1"/>
+                            <field name="project_code" readonly="1"/>
+                            <field name="crc_value" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="payload" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tooling Usage Log Views -->
+    <record id="view_sn_wsd_mes_tooling_usage_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.tooling.usage.log.list</field>
+        <field name="model">sn.wsd.mes.tooling.usage.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="usage_time"/>
+                <field name="tooling_id"/>
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="internal_serial_id"/>
+                <field name="usage_count"/>
+                <field name="event_type"/>
+                <field name="operator_code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_tooling_usage_log" model="ir.actions.act_window">
+        <field name="name">Tooling Usage Logs</field>
+        <field name="res_model">sn.wsd.mes.tooling.usage.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Process Parameter Views -->
+    <record id="view_sn_wsd_mes_process_parameter_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.process.parameter.list</field>
+        <field name="model">sn.wsd.mes.process.parameter</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="parameter_type"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="workcenter_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_process_parameter_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.process.parameter.form</field>
+        <field name="model">sn.wsd.mes.process.parameter</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="parameter_type"/>
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="operation_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_process_parameter" model="ir.actions.act_window">
+        <field name="name">Process Parameters</field>
+        <field name="res_model">sn.wsd.mes.process.parameter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Process Parameter Validation Views -->
+    <record id="view_sn_wsd_mes_process_parameter_validation_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.process.parameter.validation.list</field>
+        <field name="model">sn.wsd.mes.process.parameter.validation</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="validation_time"/>
+                <field name="production_id"/>
+                <field name="internal_serial_id"/>
+                <field name="parameter_type"/>
+                <field name="passed_code"/>
+                <field name="expected_code"/>
+                <field name="result"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_process_parameter_validation" model="ir.actions.act_window">
+        <field name="name">Parameter Validations</field>
+        <field name="res_model">sn.wsd.mes.process.parameter.validation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- EIP Sync Views -->
+    <record id="view_sn_wsd_mes_eip_category_mapping_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.eip.category.mapping.list</field>
+        <field name="model">sn.wsd.mes.eip.category.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="product_category_id"/>
+                <field name="eip_category"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_eip_category_mapping_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.eip.category.mapping.form</field>
+        <field name="model">sn.wsd.mes.eip.category.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_category_id"/>
+                            <field name="eip_category"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_eip_category_mapping" model="ir.actions.act_window">
+        <field name="name">EIP Category Mappings</field>
+        <field name="res_model">sn.wsd.mes.eip.category.mapping</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_wsd_mes_eip_operation_mapping_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.eip.operation.mapping.list</field>
+        <field name="model">sn.wsd.mes.eip.operation.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="operation_name"/>
+                <field name="eip_operation_code"/>
+                <field name="operation_type"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_eip_operation_mapping" model="ir.actions.act_window">
+        <field name="name">EIP Operation Mappings</field>
+        <field name="res_model">sn.wsd.mes.eip.operation.mapping</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_wsd_mes_eip_sync_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.eip.sync.record.list</field>
+        <field name="model">sn.wsd.mes.eip.sync.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sync_time"/>
+                <field name="internal_serial_id"/>
+                <field name="workcenter_id"/>
+                <field name="eip_category"/>
+                <field name="operation_type"/>
+                <field name="test_result"/>
+                <field name="sync_status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_eip_sync_record" model="ir.actions.act_window">
+        <field name="name">EIP Sync Records</field>
+        <field name="res_model">sn.wsd.mes.eip.sync.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PCB Exposure Record Views -->
+    <record id="view_sn_wsd_mes_pcb_exposure_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.pcb.exposure.record.list</field>
+        <field name="model">sn.wsd.mes.pcb.exposure.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="record_time"/>
+                <field name="internal_serial_id"/>
+                <field name="record_type"/>
+                <field name="exposure_minutes"/>
+                <field name="standard_minutes"/>
+                <field name="state"/>
+                <field name="operator_code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_pcb_exposure_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.pcb.exposure.record.form</field>
+        <field name="model">sn.wsd.mes.pcb.exposure.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_serial_id"/>
+                            <field name="record_type"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="record_time"/>
+                            <field name="operator_code"/>
+                        </group>
+                    </group>
+                    <group string="Exposure Times">
+                        <group>
+                            <field name="exposure_minutes"/>
+                            <field name="standard_minutes"/>
+                            <field name="warning_minutes"/>
+                        </group>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_pcb_exposure_record" model="ir.actions.act_window">
+        <field name="name">PCB Exposure Records</field>
+        <field name="res_model">sn.wsd.mes.pcb.exposure.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Product Warning Views -->
+    <record id="view_sn_wsd_mes_product_warning_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.product.warning.list</field>
+        <field name="model">sn.wsd.mes.product.warning</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="warning_time"/>
+                <field name="internal_serial_id"/>
+                <field name="warning_type"/>
+                <field name="warning_level"/>
+                <field name="message"/>
+                <field name="acknowledged"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_product_warning" model="ir.actions.act_window">
+        <field name="name">Product Warnings</field>
+        <field name="res_model">sn.wsd.mes.product.warning</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_mes_api_records"
+              name="MES API Records"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              sequence="80"/>
+    <menuitem id="menu_sn_wsd_mes_nameplate_binding"
+              name="Nameplate Bindings"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_nameplate_binding"
+              sequence="10"/>
+    <menuitem id="menu_sn_wsd_mes_packaging_record"
+              name="MES Packaging Records"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_packaging_record"
+              sequence="20"/>
+    <menuitem id="menu_sn_wsd_mes_test_result_detail"
+              name="Test Result Details"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_test_result_detail"
+              sequence="30"/>
+    <menuitem id="menu_sn_wsd_mes_tooling_usage_log"
+              name="MES Tooling Usage Logs"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_tooling_usage_log"
+              sequence="40"/>
+    <menuitem id="menu_sn_wsd_mes_process_parameter"
+              name="Process Parameters"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_process_parameter"
+              sequence="50"/>
+    <menuitem id="menu_sn_wsd_mes_process_parameter_validation"
+              name="Parameter Validations"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_process_parameter_validation"
+              sequence="60"/>
+    <menuitem id="menu_sn_wsd_mes_eip_category_mapping"
+              name="EIP Category Mappings"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_eip_category_mapping"
+              sequence="70"/>
+    <menuitem id="menu_sn_wsd_mes_eip_operation_mapping"
+              name="EIP Operation Mappings"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_eip_operation_mapping"
+              sequence="80"/>
+    <menuitem id="menu_sn_wsd_mes_eip_sync_record"
+              name="EIP Sync Records"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_eip_sync_record"
+              sequence="90"/>
+    <menuitem id="menu_sn_wsd_mes_pcb_exposure_record"
+              name="PCB Exposure Records"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_pcb_exposure_record"
+              sequence="100"/>
+    <menuitem id="menu_sn_wsd_mes_product_warning"
+              name="Product Warnings"
+              parent="menu_sn_wsd_mes_api_records"
+              action="action_sn_wsd_mes_product_warning"
+              sequence="110"/>
+</odoo>

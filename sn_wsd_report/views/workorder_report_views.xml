@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workorder_report_list" model="ir.ui.view">
+        <field name="name">mrp.workorder.report.list</field>
+        <field name="model">mrp.workorder.report</field>
+        <field name="arch" type="xml">
+            <list default_order="event_time desc">
+                <field name="name"/>
+                <field name="event_time"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="source_type"/>
+                <field name="report_type"/>
+                <field name="device_id"/>
+                <field name="external_event_id"/>
+                <field name="qty_in"/>
+                <field name="qty_ok"/>
+                <field name="qty_ng"/>
+                <field name="qty_scrap"/>
+                <field name="qty_repair"/>
+                <field name="qty_rework"/>
+                <field name="qty_out"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_workorder_report_form" model="ir.ui.view">
+        <field name="name">mrp.workorder.report.form</field>
+        <field name="model">mrp.workorder.report</field>
+        <field name="arch" type="xml">
+            <form string="Workorder Report">
+                <header>
+                    <button name="action_open_correction_wizard" type="object" string="Correct Report" class="btn-primary" groups="mrp.group_mrp_manager" invisible="state != 'posted' or workorder_id.state in ['done', 'cancel']"/>
+                    <button name="action_post" type="object" string="Post" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-secondary" invisible="state == 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="production_id"/>
+                            <field name="manufacturing_batch_id"/>
+                            <field name="workorder_id"/>
+                            <field name="operation_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="source_type"/>
+                            <field name="report_type"/>
+                        </group>
+                        <group>
+                            <field name="operator_id"/>
+                            <field name="employee_id"/>
+                            <field name="operator_code"/>
+                            <field name="device_id"/>
+                            <field name="external_event_id"/>
+                            <field name="report_batch_no"/>
+                            <field name="event_time"/>
+                        </group>
+                    </group>
+                    <group string="Quantity">
+                        <group>
+                            <field name="qty_in" readonly="state != 'draft'"/>
+                            <field name="qty_ok" readonly="state != 'draft'"/>
+                            <field name="qty_ng" readonly="state != 'draft'"/>
+                            <field name="qty_scrap" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="qty_repair" readonly="state != 'draft'"/>
+                            <field name="qty_rework" readonly="state != 'draft'"/>
+                            <field name="qty_out" readonly="1"/>
+                            <field name="loss_reason_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="SN Lines">
+                            <field name="line_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="serial_no"/>
+                                    <field name="serial_id"/>
+                                    <field name="result"/>
+                                    <field name="ng_reason_id"/>
+                                    <field name="device_id"/>
+                                    <field name="test_time"/>
+                                    <field name="firmware_version"/>
+                                    <field name="operator_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payload">
+                            <group>
+                                <field name="remark"/>
+                                <field name="payload_json"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mrp_workorder_report_search" model="ir.ui.view">
+        <field name="name">mrp.workorder.report.search</field>
+        <field name="model">mrp.workorder.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="external_event_id"/>
+                <field name="device_id"/>
+                <filter string="Manual" name="filter_manual" domain="[('source_type', '=', 'manual')]"/>
+                <filter string="PDA" name="filter_pda" domain="[('source_type', '=', 'pda')]"/>
+                <filter string="Machine" name="filter_machine" domain="[('source_type', '=', 'machine')]"/>
+                <filter string="API" name="filter_api" domain="[('source_type', '=', 'api')]"/>
+                <group>
+                    <filter string="Work Order" name="group_by_workorder" context="{'group_by': 'workorder_id'}"/>
+                    <filter string="Manufacturing Batch" name="group_by_manufacturing_batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                    <filter string="Source Type" name="group_by_source_type" context="{'group_by': 'source_type'}"/>
+                    <filter string="Event Time" name="group_by_event_time" context="{'group_by': 'event_time:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mrp_workorder_report" model="ir.actions.act_window">
+        <field name="name">Workorder Reports</field>
+        <field name="res_model">mrp.workorder.report</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_mrp_workorder_report_search"/>
+    </record>
+</odoo>

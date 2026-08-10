@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <function model="ir.model.data" name="write">
+            <value model="ir.model.data" search="[('module', '=', 'sn_wsd_api'), ('model', '=', 'sn.wsd.api.endpoint'), ('name', 'like', 'endpoint_%')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+        <function model="sn.wsd.api.endpoint" name="_sync_strict_endpoint_defaults"/>
+
+        <record id="endpoint_auth_check" model="sn.wsd.api.endpoint">
+            <field name="name">Login Check</field>
+            <field name="code">auth_check</field>
+            <field name="category">auth</field>
+            <field name="sequence">10</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/auth/check</field>
+            <field name="default_body">{
+  "userName": "operator",
+  "password": "password",
+  "organization": "1"
+}</field>
+            <field name="description">Check external user credentials and optional organization membership.</field>
+        </record>
+
+        <record id="endpoint_panels_add" model="sn.wsd.api.endpoint">
+            <field name="name">Add Panel</field>
+            <field name="code">panels_add</field>
+            <field name="category">panel</field>
+            <field name="sequence">20</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/panels/add</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "productNo": "MO20260525123589",
+  "quantity": 4,
+  "pcbItemSn": "3111001398",
+  "bindings": [
+    {
+      "boardNo": "1",
+      "proSn": "W23350859A01S012624553250"
+    },
+    {
+      "boardNo": "2",
+      "proSn": "W23350859A01S012624553252"
+    },
+    {
+      "boardNo": "3",
+      "proSn": "W23350859A01S012624553253"
+    },
+    {
+      "boardNo": "4",
+      "proSn": "W23350859A01S012624553251"
+    }
+  ]
+}</field>
+            <field name="description">Create a panel and bind PCB board serials.</field>
+        </record>
+
+        <record id="endpoint_panels_query" model="sn.wsd.api.endpoint">
+            <field name="name">Query Panels</field>
+            <field name="code">panels_query</field>
+            <field name="category">panel</field>
+            <field name="sequence">30</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/panels/query</field>
+            <field name="default_body">{
+  "proSn": "W23350859A01S012624553252"
+}</field>
+            <field name="description">Query board serials in the same panel by product serial.</field>
+        </record>
+
+        <record id="endpoint_panels_delete" model="sn.wsd.api.endpoint">
+            <field name="name">Delete Panel</field>
+            <field name="code">panels_delete</field>
+            <field name="category">panel</field>
+            <field name="sequence">40</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/panels/delete</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "panel_no": "PANEL-TEST-001",
+  "operator_code": "OP001"
+}</field>
+            <field name="description">Delete or deactivate a panel binding.</field>
+        </record>
+
+        <record id="endpoint_manufacturing_orders_by_work_order" model="sn.wsd.api.endpoint">
+            <field name="name">Search Manufacturing Batches</field>
+            <field name="code">manufacturing_orders_by_work_order</field>
+            <field name="category">manufacturing</field>
+            <field name="sequence">50</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/manufacturing-orders/by-work-order</field>
+            <field name="default_body">{
+  "keyword": "MO"
+}</field>
+            <field name="description">Search manufacturing batch numbers by keyword. The request field names are kept for device compatibility.</field>
+        </record>
+
+        <record id="endpoint_work_centers_search" model="sn.wsd.api.endpoint">
+            <field name="name">Search Work Centers</field>
+            <field name="code">work_centers_search</field>
+            <field name="category">manufacturing</field>
+            <field name="sequence">60</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/work-centers/search</field>
+            <field name="default_body">{
+  "work_station": "SMT"
+}</field>
+            <field name="description">Search work centers by code or name.</field>
+        </record>
+
+        <record id="endpoint_defect_codes_search" model="sn.wsd.api.endpoint">
+            <field name="name">Search Defect Codes</field>
+            <field name="code">defect_codes_search</field>
+            <field name="category">manufacturing</field>
+            <field name="sequence">70</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/defect-codes/search</field>
+            <field name="default_body">{
+  "err_name": "NG"
+}</field>
+            <field name="description">Search quality defect codes by code or name.</field>
+        </record>
+
+        <record id="endpoint_laser_print_requests" model="sn.wsd.api.endpoint">
+            <field name="name">Submit Laser Print Request</field>
+            <field name="code">laser_print_requests</field>
+            <field name="category">laser</field>
+            <field name="sequence">80</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/laser/print-requests</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "workOrderNo": "BATCH-TEST-001",
+  "quantity": 10,
+  "drawingNo": "DWG-2026-A01",
+  "operator": "OP001"
+}</field>
+            <field name="description">Submit a laser print request and generate printable serial data.</field>
+        </record>
+
+        <record id="endpoint_aoi_results" model="sn.wsd.api.endpoint">
+            <field name="name">Submit AOI Result</field>
+            <field name="code">aoi_results</field>
+            <field name="category">aoi</field>
+            <field name="sequence">90</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/aoi/results</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "productSn": "M0022S012623487760",
+  "logCode": "W2315EM0022S012623487760",
+  "machineName": "手插3线双面AOI",
+  "type": "接口",
+  "retestResult": "失数",
+  "stationResult": "OK",
+  "stationInfo": "OK:过站成功 当前工序[DIP-AOI工序]已过站数量[2040]##1&amp;...",
+  "testTime": "2026-06-10T17:13:08",
+  "retestTime": "2026-06-10T17:15:24",
+  "createTime": "2026-06-10T17:13:08",
+  "fileName": "LCAO1-3",
+  "programName": "DIP-AOI-001",
+  "smallBoardNo": "SB20260610-001",
+  "totalParts": 2504,
+  "errorParts": 0,
+  "confirmedDefectParts": 0,
+  "face": "A",
+  "operator": "2504",
+  "defectDetails": [
+    {
+      "partId": "R101",
+      "position": "X=12.5,Y=34.2",
+      "defectCode": "LCAO1-3",
+      "defectName": "反件",
+      "confirmedResult": "确认不良",
+      "imagePath": "/aoi/images/M0022S012623487760_R101.jpg"
+    }
+  ]
+}</field>
+            <field name="description">Submit AOI inspection result and defect details.</field>
+        </record>
+
+        <record id="endpoint_online_context" model="sn.wsd.api.endpoint">
+            <field name="name">Get Online Context</field>
+            <field name="code">online_context</field>
+            <field name="category">manufacturing</field>
+            <field name="sequence">100</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/online-context</field>
+            <field name="default_body">{
+  "workcenter_id": 1
+}</field>
+            <field name="description">Get current online manufacturing context by work center, line, or workshop.</field>
+        </record>
+
+        <record id="endpoint_workorder_events" model="sn.wsd.api.endpoint">
+            <field name="name">Submit Workorder Event</field>
+            <field name="code">workorder_events</field>
+            <field name="category">execution</field>
+            <field name="sequence">110</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/workorders/events</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "workorder_id": 1,
+  "event_type": "scan",
+  "serial_number": "SN0001",
+  "operator_code": "OP001",
+  "source_system": "ODOO_API_TESTER",
+  "payload": {}
+}</field>
+            <field name="description">Submit a workorder event for MES traceability.</field>
+        </record>
+
+        <record id="endpoint_workorder_scan_pass" model="sn.wsd.api.endpoint">
+            <field name="name">Scan Pass</field>
+            <field name="code">workorder_scan_pass</field>
+            <field name="category">execution</field>
+            <field name="sequence">120</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/workorders/scan-pass</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "M_DATA_AUTH": "1",
+  "M_SN": "SN0001",
+  "M_WORK_STATIONSN": "ST-001",
+  "M_MO_NUMBER": "BATCH-TEST-001",
+  "M_EMP": "admin",
+  "M_COLLABORATION_EMP": "",
+  "M_TEST_RESULT": "OK",
+  "M_TEST_DETAIL": [
+    {
+      "item_name": "Voltage",
+      "low_limit": "0",
+      "up_limit": "10",
+      "item_value": "5",
+      "item_result": "OK"
+    },
+    {
+      "item_name": "Current",
+      "low_limit": "0",
+      "up_limit": "2",
+      "item_value": "1",
+      "item_result": "OK"
+    }
+  ],
+  "M_STR2": "",
+  "M_PARAMETER_PLAN": "",
+  "M_PROGRAM_NUM": "",
+  "M_TEST_PLAN": "",
+  "M_SOFTWARE_NUM": "",
+  "M_SOFTWARE_NAME": "",
+  "M_ADDRESS": "",
+  "M_MAIN_ID": "",
+  "M_MODULE_ID": "",
+  "M_LEADSEAL_ID": "",
+  "M_CODE_ID": "",
+  "M_TOOLING": "TOOL-001",
+  "M_DEVICE_SN": "DEV-001",
+  "M_BOX_SN": "",
+  "M_SECOND_SN": "",
+  "M_STR1": "",
+  "M_STR5": "",
+  "M_STR7": "",
+  "M_STR3": "",
+  "M_STR4": "",
+  "M_STR6": "",
+  "M_STR8": "",
+  "M_STR9": "",
+  "M_STR10": "",
+  "M_PACK_LEFT_SEAL": "",
+  "M_PACK_LEFT_SEAL_RF": "",
+  "M_PACK_RIGHT_SEAL": "",
+  "M_PACK_RIGHT_SEAL_RF": "",
+  "M_PACK_DOOR_SEAL": "",
+  "M_PACK_DOOR_SEAL_RF": "",
+  "M_PACK_NAMEPLATE_RF": "",
+  "M_PACK_MODULE": "",
+  "M_PACK_MAC": "",
+  "M_PACK_TOP": "",
+  "M_PACK_LEFT": "",
+  "M_PACK_RIGHT": "",
+  "M_PACK_BACK": ""
+}</field>
+            <field name="description">Submit a MES scan-pass request. Only documented M_* request parameter names are accepted for this endpoint.</field>
+        </record>
+
+        <record id="endpoint_test_results" model="sn.wsd.api.endpoint">
+            <field name="name">Submit Test Result</field>
+            <field name="code">test_results</field>
+            <field name="category">execution</field>
+            <field name="sequence">130</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/test-results</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "workorder_id": 1,
+  "serial_number": "SN0001",
+  "result": "pass",
+  "operator_code": "OP001",
+  "cycle_time_sec": 10,
+  "source_system": "ODOO_API_TESTER",
+  "payload": {}
+}</field>
+            <field name="description">Submit functional, aging, or station test result data.</field>
+        </record>
+
+        <record id="endpoint_finished_serials" model="sn.wsd.api.endpoint">
+            <field name="name">Upload Finished Serials</field>
+            <field name="code">finished_serials</field>
+            <field name="category">execution</field>
+            <field name="sequence">140</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/finished-serials</field>
+            <field name="is_mutating">1</field>
+            <field name="default_body">{
+  "production_id": 1,
+  "serials": [
+    "SN0001"
+  ],
+  "source_system": "ODOO_API_TESTER"
+}</field>
+            <field name="description">Upload finished serial numbers for a manufacturing batch. The public production_id field contains the manufacturing batch ID.</field>
+        </record>
+
+        <record id="endpoint_serial_trace" model="sn.wsd.api.endpoint">
+            <field name="name">Serial Trace</field>
+            <field name="code">serial_trace</field>
+            <field name="category">traceability</field>
+            <field name="sequence">150</field>
+            <field name="method">POST</field>
+            <field name="path">/api/v1/serials/trace</field>
+            <field name="default_body">{
+  "serial_number": "SN0001",
+  "include_test_results": true,
+  "travel_limit": 50,
+  "test_result_limit": 50
+}</field>
+            <field name="description">Query serial traceability records and optional test results.</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,408 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_wip
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-17 03:26+0000\n"
+"PO-Revision-Date: 2026-06-17 03:26+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "<span class=\"o_stat_text\">Current WIP</span>"
+msgstr "<span class=\"o_stat_text\">当前在制品</span>"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "<span class=\"o_stat_text\">WIP Steps</span>"
+msgstr "<span class=\"o_stat_text\">在制品步骤</span>"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__company_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_wip_qty
+msgid "Current WIP Qty"
+msgstr "当前在制品数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__x_wip_current_total
+msgid "Current WIP Total"
+msgstr "当前在制品合计"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__data_source
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__data_source
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "Data Source"
+msgstr "数据源"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__display_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_wip
+#: model:ir.model.constraint,message:sn_wsd_wip.constraint_sn_wsd_wip_snapshot_production_workorder_uniq
+msgid ""
+"Each work order can only have one active WIP snapshot per manufacturing "
+"order."
+msgstr "每个制造订单的每个工单只能有一个有效的在制品快照。"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_fail_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__fail_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__fail_qty
+msgid "Fail Qty"
+msgstr "失败数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_input_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__input_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__input_qty
+msgid "Input Qty"
+msgstr "投入数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__production_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__production_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__production_name
+msgid "Manufacturing Reference"
+msgstr "制造参考"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_sn_wsd_wip_production_overview
+msgid "Manufacturing WIP Production Overview"
+msgstr "制造在制品生产概览"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_sn_wsd_wip_report
+msgid "Manufacturing WIP Report"
+msgstr "制造在制品报表"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_sn_wsd_wip_snapshot
+msgid "Manufacturing WIP Snapshot"
+msgstr "制造在制品快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__max_step_wip_qty
+msgid "Max Step WIP Qty"
+msgstr "步骤最大在制品数量"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_list
+msgid "Max WIP"
+msgstr "最大在制品"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "Open WIP Overview"
+msgstr "打开在制品概览"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "Open WIP Visualization"
+msgstr "打开在制品可视化"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_pass_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__pass_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__pass_qty
+msgid "Passed Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_pending_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__pending_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__pending_qty
+msgid "Pending Qty"
+msgstr "待处理数量"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "Persisted Snapshots"
+msgstr "持久化快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__route_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__route_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__route_id
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__route_step_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__route_step_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "Process Step"
+msgstr "工艺步骤"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__product_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__product_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__mrp_workorder__x_wip_data_source__qty
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__sn_wsd_wip_report__data_source__qty
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__sn_wsd_wip_snapshot__data_source__qty
+msgid "Quantity Reporting"
+msgstr "数量报告"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_workorder_form_sn_wsd_wip
+msgid "Refresh WIP Snapshot"
+msgstr "刷新在制品快照"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_search
+msgid "Route"
+msgstr "路线"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__mrp_workorder__x_wip_data_source__sn
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__sn_wsd_wip_report__data_source__sn
+#: model:ir.model.fields.selection,name:sn_wsd_wip.selection__sn_wsd_wip_snapshot__data_source__sn
+msgid "SN Travel"
+msgstr "序列号流转"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_scrap_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__scrap_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__scrap_qty
+msgid "Scrap Qty"
+msgstr "报废数量"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_workorder_form_sn_wsd_wip
+msgid "Snapshot Quantities"
+msgstr "快照数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__snapshot_time
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__snapshot_time
+msgid "Snapshot Time"
+msgstr "快照时间"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__start_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__start_qty
+msgid "Start Qty"
+msgstr "起始数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__total_start_qty
+msgid "Started Qty"
+msgstr "已开始数量"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__step_code
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__step_code
+msgid "Step Code"
+msgstr "步骤代码"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__step_count
+msgid "Step Count"
+msgstr "步骤计数"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__step_name
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__step_name
+msgid "Step Name"
+msgstr "步骤名称"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__step_sequence
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__step_sequence
+msgid "Step Sequence"
+msgstr "步骤序列"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_form
+msgid "Summary"
+msgstr "摘要"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_list
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_production_form_sn_wsd_wip
+msgid "WIP"
+msgstr "在制品"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_pivot
+msgid "WIP Analysis"
+msgstr "在制品分析"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_data_source
+msgid "WIP Data Source"
+msgstr "在制品数据源"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_qty_fail_snapshot
+msgid "WIP Fail Qty Snapshot"
+msgstr "在制品失败数量快照"
+
+#. module: sn_wsd_wip
+#: model:ir.actions.act_window,name:sn_wsd_wip.action_sn_wsd_wip_production_overview
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__x_wip_overview_id
+#: model:ir.ui.menu,name:sn_wsd_wip.menu_sn_wsd_wip_overview
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_search
+msgid "WIP Overview"
+msgstr "在制品概览"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_graph
+msgid "WIP Overview Dashboard"
+msgstr "在制品概览仪表盘"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_qty_pass_snapshot
+msgid "WIP Pass Qty Snapshot"
+msgstr "在制品合格数量快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_qty_pending_snapshot
+msgid "WIP Pending Qty Snapshot"
+msgstr "在制品待处理数量快照"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_production_overview_pivot
+msgid "WIP Production Overview"
+msgstr "在制品生产概览"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__wip_qty
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__wip_qty
+msgid "WIP Qty"
+msgstr "在制品数量"
+
+#. module: sn_wsd_wip
+#: model:ir.actions.act_window,name:sn_wsd_wip.action_sn_wsd_wip_report
+#: model:ir.ui.menu,name:sn_wsd_wip.menu_sn_wsd_wip_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "WIP Report"
+msgstr "在制品报表"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__x_wip_report_line_ids
+msgid "WIP Report Lines"
+msgstr "在制品报表明细"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_qty_scrap_snapshot
+msgid "WIP Scrap Qty Snapshot"
+msgstr "在制品报废数量快照"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_mrp_workorder_form_sn_wsd_wip
+msgid "WIP Snapshot"
+msgstr "在制品快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_snapshot_time
+msgid "WIP Snapshot Time"
+msgstr "在制品快照时间"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__x_wip_snapshot_ids
+msgid "WIP Snapshots"
+msgstr "在制品快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_workorder__x_wip_qty_start_snapshot
+msgid "WIP Start Qty Snapshot"
+msgstr "在制品起始数量快照"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_mrp_production__x_wip_report_line_count
+msgid "WIP Step Count"
+msgstr "在制品步骤计数"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_graph
+msgid "WIP Visualization"
+msgstr "在制品可视化"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_mrp_workorder
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__workorder_id
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__workorder_name
+msgid "Work Order Reference"
+msgstr "工单参考"

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- WSD Maintenance Root Menu -->
+    <menuitem id="menu_sn_wsd_maintenance_root" name="WSD Equipment" parent="maintenance.menu_maintenance_title" sequence="5"/>
+
+    <!-- Maintenance Items (Master Data) -->
+    <menuitem id="menu_sn_wsd_maintenance_items" name="Maintenance Items" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_item" sequence="10"/>
+
+    <!-- Maintenance Plans -->
+    <menuitem id="menu_sn_wsd_maintenance_plans" name="Maintenance Plans" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_plan_maintenance" sequence="20"/>
+    <menuitem id="menu_sn_wsd_inspection_plans" name="Inspection Plans" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_plan_inspection" sequence="25"/>
+    <menuitem id="menu_sn_wsd_calibration_plans" name="Calibration Plans" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_plan_calibration" sequence="28"/>
+
+    <!-- Maintenance Executions -->
+    <menuitem id="menu_sn_wsd_maintenance_execution" name="Equipment Maintenance" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_execution_maintenance" sequence="30"/>
+    <menuitem id="menu_sn_wsd_inspection_execution" name="Equipment Inspections" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_execution_inspection" sequence="40"/>
+    <menuitem id="menu_sn_wsd_calibration_execution" name="Calibration Executions" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_execution_calibration" sequence="50"/>
+
+    <!-- Downtime Records -->
+    <menuitem id="menu_sn_wsd_downtime_records" name="Downtime Records" parent="menu_sn_wsd_maintenance_root" action="action_sn_wsd_maintenance_downtime" sequence="70"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_sn_wsd_maintenance_configuration" name="WSD Configuration" parent="maintenance.menu_maintenance_configuration" sequence="10"/>
+    <menuitem id="menu_sn_wsd_lifecycle_logs" name="Lifecycle Logs" parent="menu_sn_wsd_maintenance_configuration" action="action_sn_wsd_maintenance_lifecycle_log" sequence="15"/>
+</odoo>

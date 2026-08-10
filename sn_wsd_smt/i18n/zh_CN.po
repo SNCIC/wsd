@@ -1,0 +1,2477 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_smt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-17 07:32+0000\n"
+"PO-Revision-Date: 2026-07-17 07:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_table_line_sn_smt_table_line_unique
+msgid "A production line can only be linked once to the same material table."
+msgstr "一条生产线只能与同一个料表关联一次。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__action_type
+msgid "ACTION_TYPE"
+msgstr "动作类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__area_sn
+msgid "AREA_SN"
+msgstr "区域SN"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__action_type
+msgid "Action Type"
+msgstr "动作类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常徽章"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid ""
+"At least one query condition, productNo or pcbItemSn, must be provided."
+msgstr "必须至少提供一个查询条件：productNo 或 pcbItemSn。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Binding %s has invalid format and must be an object."
+msgstr "绑定项 %s 格式无效，必须是对象。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Binding %s is missing boardNo."
+msgstr "绑定项 %s 缺少 boardNo。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Binding %s is missing proSn."
+msgstr "绑定项 %s 缺少 proSn。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_form
+msgid "Board Information"
+msgstr "单板信息"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__board_no
+msgid "Board No"
+msgstr "单板编号"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Board Qty"
+msgstr "单板数量"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Board SN %s already exists in this panel."
+msgstr "单板序列号 %s 已存在于此拼板中。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__board_ids
+msgid "Board SN List"
+msgstr "单板序列号列表"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Board list (bindings) cannot be empty."
+msgstr "单板列表（bindings）不能为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Board number %d already exists in this panel."
+msgstr "单板编号 %d 已存在于此拼板中。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Board number (%d) cannot exceed panel quantity (%d)."
+msgstr "单板编号（%d）不能超过拼板数量（%d）。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_board__board_no
+msgid "Board number in the panel, such as 1, 2, 3, or 4."
+msgstr "拼板中的单板编号，例如 1、2、3 或 4。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Board number must be greater than 0."
+msgstr "单板编号必须大于 0。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Boards"
+msgstr "单板"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__bottom
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__bottom
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__bottom
+msgid "B Side"
+msgstr "B面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__bound_production_id
+msgid "Bound Manufacturing Order"
+msgstr "绑定的制造订单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__chanel_sn
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__chanel_sn
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__chanel_sn
+msgid "CHANEL_SN"
+msgstr "通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__import_file
+msgid "CSV File"
+msgstr "CSV文件"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_bl_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_change_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_lcsl_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_query_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_tp_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_xl_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_zc_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__cart_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__cart_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__cart_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__cart_id
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__cart
+msgid "Cart"
+msgstr "飞达车"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__cart_load
+msgid "Cart Load"
+msgstr "飞达车装载"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__cart_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__cart_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__cart_input
+msgid "Cart SN"
+msgstr "飞达车SN"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid "Cart loading saved successfully."
+msgstr "料车上料已成功保存。"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_cart
+msgid "Carts"
+msgstr "飞达车"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_change_wizard__change_type__change
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__change_type__change
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__change
+msgid "Change"
+msgstr "换料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__change_type
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__change_type
+msgid "Change Type"
+msgstr "更换类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_online_state__changeover
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__changeover
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_zc_wizard_form
+msgid "Changeover"
+msgstr "换产"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__changeover_inherit
+msgid "Changeover Inherit"
+msgstr "换产继承"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid ""
+"Changeover aborted because the loaded material is not compatible with the "
+"target manufacturing order."
+msgstr "因已上料物料与目标制造订单不兼容，换线已中止。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid ""
+"Changeover aborted because the loaded substitute material is not compatible "
+"with the target manufacturing order."
+msgstr "因已上料替代物料与目标制造订单不兼容，换线已中止。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid "Changeover aborted."
+msgstr "换线已中止。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid "Changeover completed."
+msgstr "换线已完成。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__channel_sn
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__chanel_sn
+msgid "Channel"
+msgstr "通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__clear_existing
+msgid "Clear Existing Details"
+msgstr "清空现有明细"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__line_code
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Completed panel records cannot be deleted."
+msgstr "已完成的拼板记录不能删除。"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_config
+msgid "Config"
+msgstr "配置"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_change_wizard_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__confirmed
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_change_wizard__change_type__continue
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__change_type__continue
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__continue
+msgid "Continue"
+msgstr "续料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__create_date
+msgid "Create Date"
+msgstr "创建日期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__create_uid
+msgid "Created By"
+msgstr "创建人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__production_id
+msgid "Current Manufacturing Order"
+msgstr "当前制造订单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__device_seq
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__device_seq
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__device_seq
+msgid "DEVICE_SEQ"
+msgstr "设备序号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__direction
+msgid "DIRECTION"
+msgstr "进料方向"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Deleted successfully."
+msgstr "删除成功。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__description
+msgid "Description"
+msgstr "描述"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__detail_count
+msgid "Detail Count"
+msgstr "明细总数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__detail_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_form
+msgid "Details"
+msgstr "明细"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__device_seq
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__device_seq
+msgid "Device Sequence"
+msgstr "设备序号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__device_table_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__device_table_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__device_table_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__device_table_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__device_table_input
+msgid "Device.TABLE"
+msgstr "料台"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__9
+msgid "Disabled"
+msgstr "已禁用"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel_api__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__done
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_online_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__track_type__dual
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__track_type__dual
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__track_type__dual
+msgid "Dual Track"
+msgstr "双轨"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__event_type
+msgid "Event Type"
+msgstr "事件类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__feeder_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__feeder_spec
+msgid "FEEDER_SPEC"
+msgstr "点位"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__feeder_id
+msgid "Feeder"
+msgstr "飞达"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
+msgid "Feeder Lines"
+msgstr "飞达明细"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__feeder_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__name
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__feeder_input
+msgid "Feeder SN"
+msgstr "飞达SN"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_mrp_feeder_scan_wizard
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_scan
+msgid "Feeder Scan"
+msgstr "飞达扫描"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__feeder_spec
+msgid "Feeder Spec"
+msgstr "飞达规格"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__feeder
+msgid "Feeder Table"
+msgstr "飞达排位表"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder
+msgid "Feeders"
+msgstr "飞达"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__import_filename
+msgid "Filename"
+msgstr "文件名"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome图标，例如 fa-tasks"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel_api__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_load
+msgid "IS_LOAD"
+msgstr "是否上料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__is_online
+msgid "IS_ONLINE"
+msgstr "是否在线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_qc_test
+msgid "IS_QC_TEST"
+msgstr "是否首检"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__is_repeat
+msgid "IS_REPEAT"
+msgstr "是否重复"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__is_skip
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_skip
+msgid "IS_SKIP"
+msgstr "是否跳过"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__is_tray
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_tray
+msgid "IS_TRAY"
+msgstr "Tray料站位"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__is_valid
+msgid "IS_VALID"
+msgstr "是否有效"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__item_code
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__item_code
+msgid "ITEM_CODE"
+msgstr "物料编码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__item_count
+msgid "ITEM_COUNT"
+msgstr "物料总数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__item_type
+msgid "ITEM_TYPE"
+msgstr "物料类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__0
+msgid "Idle"
+msgstr "空闲"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的关注。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__message_has_error
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息在发送时会出错。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
+msgid "Import"
+msgstr "导入"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_form
+msgid "Import Details"
+msgstr "导入详情"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_table_import_wizard
+msgid "Import SMT Details"
+msgstr "导入 SMT 详情"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__1
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__2
+msgid "In Use"
+msgstr "使用中"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "Input value is empty."
+msgstr "输入值为空。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
+msgid "Invalid"
+msgstr "无效"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_is_follower
+msgid "Is Follower"
+msgstr "关注者"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__is_online
+msgid "Is Online"
+msgstr "是否上线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__item_code
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__item_code
+msgid "Item Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__key
+msgid "Key"
+msgstr "键"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__loadpoint
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__loadpoint
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loadpoint
+msgid "LOADPOINT"
+msgstr "站位"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__line
+msgid "Line"
+msgstr "线体"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_lcsl_wizard_form
+msgid "Load Cart"
+msgstr "装载料车"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_feeder_id
+msgid "Loaded Feeder"
+msgstr "已装载飞达"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_product_id
+msgid "Loaded Material"
+msgstr "已装载物料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_material_lot_id
+msgid "Loaded Material SN"
+msgstr "已装载物料批次"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__loadpoint_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__loadpoint_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__loadpoint
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__loadpoint_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__loadpoint
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__loadpoint_input
+msgid "Loadpoint"
+msgstr "站位"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_stock_lot
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__production_name
+msgid "MO Number"
+msgstr "制造订单号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__model_code
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__model_code
+msgid "MODEL_CODE"
+msgstr "机型编码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__model_ver
+msgid "MODEL_VER"
+msgstr "机型版本"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__mo_number
+msgid "MO_NUMBER"
+msgstr "工单号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__mt_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__mt_id
+msgid "MT_ID"
+msgstr "料表ID"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__machine
+msgid "Machine"
+msgstr "机台"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__maintenance_ok
+msgid "Maintenance OK"
+msgstr "保养合格"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__production_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__product_id
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__item_type__0
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__cart_id
+msgid "Material Cart"
+msgstr "料车"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__material_lot_id
+msgid "Material Lot"
+msgstr "物料批次"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_material_management
+msgid "Material Management"
+msgstr "物料管理"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__material
+msgid "Material Reel"
+msgstr "料盘"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__material_sn_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__material_sn_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__material_sn_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__material_sn_input
+msgid "Material SN"
+msgstr "物料批次/条码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__table_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__material_table_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__table_id
+msgid "Material Table"
+msgstr "点检有料表"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_material_table
+msgid "Material Tables"
+msgstr "机型料表"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "Material change or continuation completed."
+msgstr "换料或续料已完成。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "Material refill completed."
+msgstr "补料已完成。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__message
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__message
+msgid "Message"
+msgstr "消息"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__feeder_input
+msgid "New Feeder SN"
+msgstr "新飞达条码"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__new_material_sn_input
+msgid "New Material SN"
+msgstr "新物料批次"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__is_valid__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__is_skip__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__is_tray__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__is_online__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__is_repeat__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_load__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_qc_test__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_skip__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_tray__n
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__is_online__n
+msgid "No"
+msgstr "否"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid ""
+"No SMT online material positions were generated for the manufacturing order."
+msgstr "未为该制造订单生成 SMT 在线料位数据。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_material_query_wizard.py:0
+msgid "No manufacturing order is online for the current line."
+msgstr "当前产线没有已上线的制造订单。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "No matching SMT material table was found for the manufacturing order."
+msgstr "未找到与该制造订单匹配的 SMT 机型料表。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid ""
+"No matching SMT material table was found for the target manufacturing order."
+msgstr "未找到与目标制造订单匹配的 SMT 物料表。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "No matching device sequence was found for the current work center."
+msgstr "未找到与当前工作中心匹配的设备序列。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__1
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__note
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_panel__quantity
+msgid ""
+"Number of boards in the panel. For example, 4 means one panel contains 4 "
+"boards."
+msgstr "拼板中的单板数量。例如，4 表示一块拼板包含 4 块单板。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__offline_material_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Offline Materials"
+msgstr "离线备料物料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__action_type__5
+msgid "Offline Preparation"
+msgstr "离线备料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__offline_material_ids
+msgid "Offline Preparation Records"
+msgstr "离线备料记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__offline_prepare
+msgid "Offline Prepare"
+msgstr "离线备料"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "Offline preparation saved successfully."
+msgstr "离线备料数据保存成功。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__material_sn_input
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__old_material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__old_material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__old_material_lot_id
+msgid "Old Material SN"
+msgstr "旧物料批次"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_online_state__online
+msgid "Online"
+msgstr "已上线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__online_load
+msgid "Online Load"
+msgstr "上料上线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__online_material_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__online_material_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__online_material_id
+msgid "Online Material"
+msgstr "在线物料"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_online_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Online Materials"
+msgstr "在线料位"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "Online loading saved successfully."
+msgstr "在线上料已成功保存。"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_operation_log
+msgid "Operation Logs"
+msgstr "操作日志"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__operation_record_id
+msgid "Operation Record"
+msgstr "操作记录"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_operation_record
+msgid "Operation Records"
+msgstr "操作记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__operation_type
+msgid "Operation Type"
+msgstr "操作类型"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_form
+msgid "Order Number"
+msgstr "订单号"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Order number (productNo) cannot be empty."
+msgstr "订单号（productNo）不能为空。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_panel__product_no
+msgid "Order number mapped to the manufacturing order number."
+msgstr "映射到制造订单号的订单号。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_pcb_board
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_pcb_board
+msgid "PCB Board Records"
+msgstr "PCB 单板记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__pcb_item_sn
+msgid "PCB Item SN"
+msgstr "PCB 项目序列号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_pcb_panel_count
+msgid "PCB Panel Count"
+msgstr "PCB 拼板数量"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_pcb_panel
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_pcb_panel
+msgid "PCB Panel Records"
+msgstr "PCB 拼板记录"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "PCB SN"
+msgstr "PCB 序列号"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "PCB SN %s already exists (Panel ID: %d)"
+msgstr "PCB 序列号 %s 已存在（拼板 ID：%d）"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "PCB SN %s already exists in this company."
+msgstr "PCB 序列号 %s 已存在于此公司。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "PCB SN [%s] already exists (Panel ID: %s)."
+msgstr "PCB 序列号 [%s] 已存在（拼板 ID：%s）。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__point_location
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__point_location
+msgid "POINT_LOCATION"
+msgstr "位号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__point_qty
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__point_qty
+msgid "POINT_QTY"
+msgstr "点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__process_face
+msgid "PROCESS_FACE"
+msgstr "加工面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__product_side
+msgid "PRODUCT_SIDE"
+msgstr "产品面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__program_name
+msgid "PROGRAM_NAME"
+msgstr "程序名称"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__project_id
+msgid "PROJECT_ID"
+msgstr "项目ID"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__panel_id
+msgid "Panel"
+msgstr "拼板"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Panel ID"
+msgstr "拼板 ID"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__quantity
+msgid "Panel Quantity"
+msgstr "拼板数量"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel quantity (quantity) cannot be empty."
+msgstr "拼板数量（quantity）不能为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel quantity (quantity) must be a number."
+msgstr "拼板数量（quantity）必须是数字。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel quantity (quantity) must be greater than 0."
+msgstr "拼板数量（quantity）必须大于 0。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Panel quantity must be positive."
+msgstr "拼板数量必须为正数。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel record does not exist (ID: %s)."
+msgstr "拼板记录不存在（ID：%s）。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "Please set the SMT product side first."
+msgstr "请先设置 SMT 产品面。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "Please set the SMT production line first."
+msgstr "请先设置 SMT 生产线体。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__product_no
+msgid "Product No"
+msgstr "产品编号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__pro_sn
+msgid "Product SN"
+msgstr "产品序列号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_board__pro_sn
+msgid "Product serial number of the board."
+msgstr "单板的产品序列号。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__production_line_id
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__line_link_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_form
+msgid "Production Lines"
+msgstr "适用线体"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_query_wizard_form
+msgid "Query"
+msgstr "查询"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Query successful."
+msgstr "查询成功。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
+msgid "Register Substitute"
+msgstr "登记替代料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__replace_count
+msgid "Replace Count"
+msgstr "换料次数"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Request parameters must be a JSON object."
+msgstr "请求参数必须是 JSON 对象。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_user_id
+msgid "Responsible User"
+msgstr "负责人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__result_text
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_root
+msgid "SMT"
+msgstr "SMT管理"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT BL"
+msgstr "SMT 备料"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT CHANGE"
+msgstr "SMT 换料"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_lcsl_wizard
+msgid "SMT Cart Loading Wizard"
+msgstr "SMT 料车装载向导"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_cart
+msgid "SMT Carts"
+msgstr "SMT 料车"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_change_wizard
+msgid "SMT Change Material Wizard"
+msgstr "SMT 换料向导"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_zc_wizard
+msgid "SMT Changeover Wizard"
+msgstr "SMT 转产向导"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_config
+msgid "SMT Config"
+msgstr "SMT 配置"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_config
+msgid "SMT Configuration"
+msgstr "SMT 系统配置"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder
+msgid "SMT Feeder"
+msgstr "SMT 供料器"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder
+msgid "SMT Feeders"
+msgstr "SMT 供料器"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT LCSL"
+msgstr "SMT 料站表"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
+msgid "SMT Management"
+msgstr "SMT 管理"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_cart
+msgid "SMT Material Cart"
+msgstr "SMT 料车"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_query_wizard
+msgid "SMT Material Query Wizard"
+msgstr "SMT 物料查询向导"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_table
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_material_table_id
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__smt
+msgid "SMT Material Table"
+msgstr "SMT 料表"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_table_detail
+msgid "SMT Material Table Detail"
+msgstr "SMT 料表明细"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_table_import_wizard
+msgid "SMT Material Table Import Wizard"
+msgstr "SMT 料表导入向导"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_table_line
+msgid "SMT Material Table Production Line Link"
+msgstr "SMT 料表产线关联"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_material_table
+msgid "SMT Material Tables"
+msgstr "SMT 料表"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_traceability
+msgid "SMT Material Traceability"
+msgstr "SMT 物料追溯"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_model_ver
+msgid "SMT Model Version"
+msgstr "SMT 机型版本"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_offline_material_ids
+msgid "SMT Offline Materials"
+msgstr "SMT 离线备料"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_offline_material
+msgid "SMT Offline Preparation Record"
+msgstr "SMT 离线备料记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_offline_material_ids
+msgid "SMT Offline Preparation Records"
+msgstr "SMT 离线备料记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_bl_wizard
+msgid "SMT Offline Preparation Wizard"
+msgstr "SMT 离线备料向导"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT Online"
+msgstr "SMT 上线"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_tp_wizard
+msgid "SMT Online Loading Wizard"
+msgstr "SMT 在线上料向导"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_online_material
+msgid "SMT Online Material"
+msgstr "SMT 在线物料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_online_material_count
+msgid "SMT Online Material Count"
+msgstr "SMT 在线物料数量"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_online_material
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_online_material_ids
+msgid "SMT Online Materials"
+msgstr "SMT 在线物料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_online_state
+msgid "SMT Online State"
+msgstr "SMT 在线状态"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_operation_log
+msgid "SMT Operation Log"
+msgstr "SMT 操作日志"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_operation_log
+msgid "SMT Operation Logs"
+msgstr "SMT 操作日志"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_operation_mixin
+msgid "SMT Operation Mixin"
+msgstr "SMT 操作 Mixin"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_operation_record
+msgid "SMT Operation Record"
+msgstr "SMT 操作记录"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_operation_record
+msgid "SMT Operation Records"
+msgstr "SMT 操作记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_pcb_board
+msgid "SMT PCB Board"
+msgstr "SMT PCB 单板"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_pcb_panel
+msgid "SMT PCB Panel"
+msgstr "SMT PCB 拼板"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_pcb_panel_api
+msgid "SMT PCB Panel API Service"
+msgstr "SMT PCB 拼板 API 服务"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_pcb_panel_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT PCB Panels"
+msgstr "SMT PCB 拼板"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_product_side
+msgid "SMT Product Side"
+msgstr "SMT 产品面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_production_line_id
+msgid "SMT Production Line"
+msgstr "SMT 生产线"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT Query"
+msgstr "SMT 查询"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT TP"
+msgstr "SMT 上料"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_table_import_mixin
+msgid "SMT Table Import Mixin"
+msgstr "SMT 料表导入 Mixin"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_traceability
+msgid "SMT Traceability"
+msgstr "SMT 追溯"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_xl_wizard
+msgid "SMT Unload Wizard"
+msgstr "SMT 下料向导"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT XL"
+msgstr "SMT 下料"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "SMT ZC"
+msgstr "SMT 转产"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid ""
+"SMT online materials cannot be regenerated after offline preparation or "
+"online loading has started."
+msgstr "离线备料或在线上料开始后，不能重新生成 SMT 在线物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid ""
+"SMT online materials cannot be regenerated because SMT operation records "
+"already exist."
+msgstr "由于已存在 SMT 操作记录，不能重新生成 SMT 在线物料。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_bl_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_tp_wizard_form
+msgid "Save"
+msgstr "保存"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Saved successfully."
+msgstr "保存成功。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
+msgid "Scan"
+msgstr "扫描"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
+msgid "Scan Feeders"
+msgstr "扫描飞达"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Scanned"
+msgstr "已扫描"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__board_count
+msgid "Scanned Board Count"
+msgstr "已扫描单板数量"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+msgid "Scanned board count (%d) cannot exceed panel quantity (%d)."
+msgstr "已扫描单板数量（%d）不能超过拼板数量（%d）。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
+msgid "Side"
+msgstr "面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__single
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__single
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__single
+msgid "Single Side"
+msgstr "单面"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__track_type__single
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__track_type__single
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__track_type__single
+msgid "Single Track"
+msgstr "单轨"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__station
+msgid "Station"
+msgstr "料站"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__status
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__status
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__state
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：已超过截止日期\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__lot_id
+msgid "Stock Lot"
+msgstr "库存批次"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "System error: %s"
+msgstr "系统错误：%s"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__table
+msgid "TABLE"
+msgstr "料表"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__table_no
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__table_no
+msgid "TABLE No"
+msgstr "台车/料表号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__table_name
+msgid "TABLE_NAME"
+msgstr "料表名称"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__table_no
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__table_no
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__table_no
+msgid "TABLE_NO"
+msgstr "TABLE序号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__table_type
+msgid "TABLE_TYPE"
+msgstr "料表类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__track_type
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__track_type
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__track_type
+msgid "TRACK_TYPE"
+msgstr "轨道类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__target_production_id
+msgid "Target Manufacturing Order"
+msgstr "目标制造订单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__online_material_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__online_material_id
+msgid "Target Position"
+msgstr "目标位置"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The Device.TABLE input format is invalid."
+msgstr "设备.TABLE输入格式无效。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_config_sn_smt_config_unique
+msgid "The SMT configuration key must be unique per company."
+msgstr "每个公司的 SMT 配置键必须是唯一的。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid ""
+"The SMT material table contains items that are not in the manufacturing "
+"order BOM: %s"
+msgstr "SMT 物料表包含制造订单 BOM 中不存在的物料：%s"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_cart_sn_smt_cart_name_unique
+msgid "The cart SN must be unique per company."
+msgstr "每个公司的料车序列号必须是唯一的。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid "The cart has no prepared materials."
+msgstr "料车没有已备物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The cart is not loaded."
+msgstr "料车未上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid ""
+"The cart prepared materials do not match the current device TABLE "
+"requirements."
+msgstr "料车已备物料与当前设备 TABLE 要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid ""
+"The cart prepared materials do not match the current manufacturing order "
+"requirements."
+msgstr "料车已备物料与当前制造订单要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The current continuation parameters require changing the feeder first."
+msgstr "当前续料参数要求先更换飞达。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid "The current device TABLE does not need loading."
+msgstr "当前设备 TABLE 不需要上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The current device has no online materials."
+msgstr "当前设备没有在线物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "The current device table does not require offline preparation."
+msgstr "当前设备料表不需要离线备料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The current device table does not require online loading."
+msgstr "当前设备料表不需要在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The current device table has no online materials."
+msgstr "当前设备料表没有在线物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The current line has no online materials."
+msgstr "当前产线没有在线物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "The current loadpoint does not require offline preparation."
+msgstr "当前料站不需要离线备料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The current loadpoint does not require online loading."
+msgstr "当前上料点不需要在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The current loadpoint is already loaded online."
+msgstr "当前上料点已在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "The current loadpoint is already prepared offline."
+msgstr "当前料站已完成离线备料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The current loadpoint is skipped and does not require online loading."
+msgstr "当前上料点已跳过，不需要在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+msgid ""
+"The current machine loading requirements do not include the offline prepared"
+" materials."
+msgstr "当前机器上料要求不包含离线已备物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid "The current manufacturing order has no online materials."
+msgstr "当前制造订单没有在线物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The current material quantity is zero."
+msgstr "当前物料数量为零。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_lcsl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The device TABLE input is invalid."
+msgstr "设备 TABLE 输入无效。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_table_detail_sn_smt_table_detail_unique
+msgid ""
+"The device sequence, table number, loadpoint, and channel must be unique per"
+" material table."
+msgstr "每个料表中的设备顺序、台车/料表号、料站和通道必须是唯一的。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder SN does not exist."
+msgstr "供料器序列号不存在。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_feeder_sn_smt_feeder_name_unique
+msgid "The feeder SN must be unique per company."
+msgstr "每个公司的供料器序列号必须是唯一的。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder channel does not match the SMT position channel."
+msgstr "供料器通道与 SMT 位置通道不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The feeder channel does not match the loadpoint channel."
+msgstr "飞达通道与上料点通道不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder is already bound to another manufacturing order."
+msgstr "该飞达已绑定到另一个制造订单。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder is not available for use because maintenance is not valid."
+msgstr "供料器无法使用，因为保养状态无效。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The feeder maintenance status is expired and cannot be used."
+msgstr "飞达维护状态已过期，不能使用。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder specification does not match the SMT position requirement."
+msgstr "飞达规格与 SMT 站位要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid ""
+"The feeder specification does not match the loadpoint feeder requirement."
+msgstr "飞达规格与上料点飞达要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The feeder status is invalid."
+msgstr "供料器状态无效。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
+msgid "The import file is empty."
+msgstr "导入的文件为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The input value is empty."
+msgstr "输入值为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"The linked production line company must match the material table company."
+msgstr "关联的生产线所属公司必须与料表所属公司一致。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid ""
+"The manufacturing order is already online. Use SMT unload, changeover, or "
+"material change operations instead."
+msgstr "制造订单已上线。请改用 SMT 下料、换线或换料操作。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The manufacturing order is missing the SMT product side."
+msgstr "制造订单缺失 SMT 产品面配置。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_material_query_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The material SN could not be resolved to a material item code."
+msgstr "无法将物料序列号解析为物料编码。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The material SN could not be resolved to a stock lot."
+msgstr "无法将物料序列号解析为库存批次。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_material_query_wizard.py:0
+msgid ""
+"The material SN does not match the current online material table "
+"requirements."
+msgstr "物料序列号与当前在线物料表要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The material does not match the current SMT loadpoint requirement."
+msgstr "物料与当前 SMT 上料点要求不匹配。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The material has not been issued and cannot be loaded online."
+msgstr "物料未发料，不能在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+msgid "The material is already in use."
+msgstr "该物料已被使用。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The material is already loaded online or continued."
+msgstr "物料已在线上料或已续料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The material is already loaded online."
+msgstr "该物料已在在线上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The material is already online."
+msgstr "物料已在线。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The material is not currently loaded."
+msgstr "当前未上载该物料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "The material is not prepared offline for the current loadpoint."
+msgstr "该物料未针对当前上料点进行离线备料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The material is not reserved for the current manufacturing order."
+msgstr "该物料未为当前制造订单预留。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid "The material or product has expired."
+msgstr "物料或产品已过期。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_table_sn_smt_table_name_unique
+msgid "The material table name must be unique per company."
+msgstr "每个公司的料表名称必须是唯一的。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The new SN cannot be the same as the current SN."
+msgstr "新序列号不能与当前序列号相同。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The new material SN is empty."
+msgstr "新物料序列号为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The old material SN could not be resolved to a material item code."
+msgstr "无法将旧物料序列号解析为物料编码。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+msgid "The old material SN is empty."
+msgstr "旧物料序列号为空。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_online_material_sn_smt_online_material_unique
+msgid "The online material position must be unique per manufacturing order."
+msgstr "每个制造订单的在线物料位置必须是唯一的。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_offline_material_sn_smt_offline_material_unique
+msgid ""
+"The same SMT position can only have one active offline preparation record."
+msgstr "同一个 SMT 位置只能有一个激活的离线备料记录。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_change_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "The selected loadpoint is not loaded."
+msgstr "所选上料点未上料。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_zc_wizard.py:0
+msgid ""
+"The target manufacturing order must be different from the current "
+"manufacturing order."
+msgstr "目标制造订单必须不同于当前制造订单。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__top
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__top
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__top
+msgid "T Side"
+msgstr "T面"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_traceability
+msgid "Traceability"
+msgstr "追溯"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_panel__pcb_item_sn
+msgid ""
+"Unique serial number of the PCB panel. Example: "
+"3111001398$W01260$20260504$8$439055."
+msgstr "PCB 拼板的唯一序列号。例如：3111001398$W01260$20260504$8$439055。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "Unknown unload scope."
+msgstr "未知的下料范围。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__operation_type__unload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_xl_wizard_form
+msgid "Unload"
+msgstr "下料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__unload_scope
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__unload_scope
+msgid "Unload Scope"
+msgstr "下料范围"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_xl_wizard.py:0
+msgid "Unload completed."
+msgstr "下料已完成。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__unloaded_at
+msgid "Unloaded At"
+msgstr "下料时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__write_uid
+msgid "Updated By"
+msgstr "更新人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__usage_count
+msgid "Usage Count"
+msgstr "使用次数"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
+msgid "Valid"
+msgstr "有效"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_bl_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_tp_wizard_form
+msgid "Validate"
+msgstr "验证"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/wizard/sn_smt_bl_wizard.py:0
+#: code:addons/sn_wsd_smt/wizard/sn_smt_tp_wizard.py:0
+msgid "Validation passed."
+msgstr "验证通过。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__value
+msgid "Value"
+msgstr "值"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_change_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_lcsl_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__write_date
+msgid "Write Date"
+msgstr "写入日期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__is_valid__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__is_skip__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table_detail__is_tray__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__is_online__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_offline_material__is_repeat__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_load__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_qc_test__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_skip__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__is_tray__y
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_operation_record__is_online__y
+msgid "Yes"
+msgstr "是"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "bindings must be an array."
+msgstr "bindings 必须是数组。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "panel_id cannot be empty."
+msgstr "panel_id 不能为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "panel_id must be a number."
+msgstr "panel_id 必须是数字。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "production_id"
+msgstr "production_id"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__required_product_id
+msgid "Main Material"
+msgstr "主料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__required_item_code
+msgid "Main Item Code"
+msgstr "主料料号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__actual_item_code
+msgid "Actual Item Code"
+msgstr "实际料号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_qty
+msgid "Loaded Points"
+msgstr "上料点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__consumed_qty
+msgid "Consumed Points"
+msgstr "已用点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__remaining_qty
+msgid "Remaining Points"
+msgstr "剩余点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__last_operation_type
+msgid "Last Operation"
+msgstr "最近操作"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__last_consumed_serial_id
+msgid "Last Product SN"
+msgstr "最后扣料产品SN"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__last_consumed_at
+msgid "Last Consumption Time"
+msgstr "最后扣料时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_at
+msgid "Loaded At"
+msgstr "上料时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_consumption
+msgid "SMT Material Consumption"
+msgstr "SMT 用料追溯"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_stock_lot_form_inherit_smt_consumption
+msgid "SMT Product Usage"
+msgstr "SMT 产品用料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_consumption_count
+msgid "SMT Consumption Count"
+msgstr "SMT 用料记录数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_consumed_points
+msgid "SMT Consumed Points"
+msgstr "SMT 已用点数"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "SMT Consumption Reconciliation"
+msgstr "SMT 用料对账"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
+msgid "Reconcile"
+msgstr "对账"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__last_operation_type__online_load
+msgid "Load"
+msgstr "上料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__qty_before
+msgid "Points Before"
+msgstr "扣料前点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__qty_after
+msgid "Points After"
+msgstr "扣料后点数"

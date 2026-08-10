@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_reel_split" model="ir.ui.view">
+        <field name="name">stock.picking.form.reel.split</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='button_validate'][1]" position="before">
+                <button name="action_open_reel_split_wizard"
+                        string="Generate Reel Lots"
+                        type="object"
+                        class="btn-primary"
+                        groups="stock.group_stock_user"
+                        invisible="not can_generate_reel_lots"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_reel_splits"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-code-fork"
+                        groups="stock.group_stock_user"
+                        invisible="reel_split_count == 0">
+                    <field name="reel_split_count" string="Reel Splits" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <field name="can_generate_reel_lots" invisible="1"/>
+                <field name="reel_split_count" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

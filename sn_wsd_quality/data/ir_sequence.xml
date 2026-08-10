@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_sn_wsd_quality_issue" model="ir.sequence">
+        <field name="name">WSD Quality Issue</field>
+        <field name="code">sn.wsd.quality.issue</field>
+        <field name="prefix">QI%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_serial_freeze" model="ir.sequence">
+        <field name="name">WSD SN Freeze</field>
+        <field name="code">sn.wsd.serial.freeze</field>
+        <field name="prefix">FRZ%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_fai" model="ir.sequence">
+        <field name="name">WSD FAI Inspection</field>
+        <field name="code">sn.wsd.quality.inspection.fai</field>
+        <field name="prefix">FAI%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_iqc" model="ir.sequence">
+        <field name="name">WSD IQC Inspection</field>
+        <field name="code">sn.wsd.quality.inspection.iqc</field>
+        <field name="prefix">IQC%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_ipqc" model="ir.sequence">
+        <field name="name">WSD IPQC Inspection</field>
+        <field name="code">sn.wsd.quality.inspection.ipqc</field>
+        <field name="prefix">IPQC%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_oqc" model="ir.sequence">
+        <field name="name">WSD OQC Inspection</field>
+        <field name="code">sn.wsd.quality.inspection.oqc</field>
+        <field name="prefix">OQC%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_skip" model="ir.sequence">
+        <field name="name">WSD Quality Inspection Skip</field>
+        <field name="code">sn.wsd.quality.inspection.skip</field>
+        <field name="prefix">QSK%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_sn_wsd_quality_inspection_sample" model="ir.sequence">
+        <field name="name">WSD Quality Inspection Sample</field>
+        <field name="code">sn.wsd.quality.inspection.sample</field>
+        <field name="prefix">QSP%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

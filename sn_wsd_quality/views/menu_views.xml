@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Quality Configuration Submenu -->
+    <menuitem id="menu_sn_wsd_quality_inspection_scheme" name="Inspection Schemes" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_inspection_scheme" sequence="30"/>
+    <menuitem id="menu_sn_wsd_quality_sampling_standard" name="Sampling Standards" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_sampling_standard" sequence="31"/>
+    <menuitem id="menu_sn_wsd_quality_sampling_matrix" name="AQL Sampling Matrix" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_sampling_matrix" sequence="31"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_item" name="Inspection Items" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_inspection_item" sequence="32"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_item_group" name="Inspection Item Groups" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_inspection_item_group" sequence="33"/>
+    <menuitem id="menu_sn_wsd_meter_component_binding" name="Component Bindings" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_meter_component_binding" sequence="35"/>
+    <menuitem id="menu_sn_wsd_quality_defect_code" name="Defect Codes" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_defect_code" sequence="40"/>
+    <menuitem id="menu_sn_wsd_quality_issue" name="Quality Issues" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_issue" sequence="45"/>
+
+    <!-- Quality Operations Submenu -->
+    <menuitem id="menu_sn_wsd_quality_inspection_fai" name="FAI Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_fai" sequence="50"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_ipqc" name="IPQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_ipqc" sequence="60"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_oqc" name="OQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_oqc" sequence="65"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_skip" name="IPQC Skip Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_skip" sequence="70"/>
+
+    <record id="menu_sn_wsd_quality_inspection_iqc" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+</odoo>

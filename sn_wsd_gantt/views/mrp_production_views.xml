@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_production_gantt_view" model="ir.ui.view">
+        <field name="name">mrp.production.gantt</field>
+        <field name="model">mrp.production</field>
+        <field name="type">gantt</field>
+        <field name="arch" type="xml">
+            <gantt
+                string="Manufacturing Schedule"
+                date_start="date_start"
+                date_stop="date_finished"
+                default_group_by="product_id"
+                default_scale="week"
+                progress="duration"
+                color="state"
+                create="0"
+            >
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id"/>
+                <field name="state"/>
+                <field name="duration"/>
+                <field name="duration_expected"/>
+                <field name="user_id"/>
+                <field name="components_availability"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="mrp_production_gantt_search_view" model="ir.ui.view">
+        <field name="name">mrp.production.gantt.search</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <search string="Search Manufacturing Schedule">
+                <field name="name" string="Manufacturing Order" filter_domain="['|', ('name', 'ilike', self), ('origin', 'ilike', self)]"/>
+                <field name="product_id"/>
+                <field name="product_variant_attributes"/>
+                <field name="move_raw_ids" string="Component" filter_domain="[('move_raw_ids.product_id', 'ilike', self)]"/>
+                <field name="workcenter_id" string="Work Center" filter_domain="[('workorder_ids.workcenter_id', 'ilike', self)]"/>
+                <field name="x_workshop_id"/>
+                <field name="x_production_line_id"/>
+                <field name="origin"/>
+                <field name="picking_type_id"/>
+                <field name="user_id"/>
+                <filter string="To Do" name="todo" domain="[('state', 'in', ('draft', 'confirmed', 'progress', 'to_close'))]"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Planned" name="filter_planned" domain="[('is_planned', '=', True)]"/>
+                <filter string="In Progress" name="filter_in_progress" domain="[('state', '=', 'progress')]"/>
+                <filter string="To Close" name="filter_to_close" domain="[('state', '=', 'to_close')]"/>
+                <separator/>
+                <filter string="MO Pending" name="waiting" domain="[('reservation_state', '=', 'waiting')]"/>
+                <filter string="MO Ready" name="filter_ready" domain="[('reservation_state', '=', 'assigned')]"/>
+                <filter string="Components Available" name="available" domain="[('components_availability_state', '=', 'available')]"/>
+                <filter string="Late Availability" name="late" domain="[('components_availability_state', '=', 'late')]"/>
+                <separator/>
+                <filter string="Late" name="filter_late_mo" domain="[('date_start', '&lt;', 'now'), ('state', '=', 'confirmed')]"/>
+                <filter string="Delayed Productions" name="planning_issues" domain="['|', ('delay_alert_date', '!=', False), ('is_delayed', '=', True)]"/>
+                <filter string="My MOs" name="my_mos" domain="[('user_id', '=', uid)]"/>
+                <filter name="filter_date_start" string="Start Date" date="date_start"/>
+                <filter name="filter_date_finished" string="End Date" date="date_finished"/>
+                <separator/>
+                <group>
+                    <filter string="Product" name="group_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                    <filter string="Responsible" name="group_responsible" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
+                    <filter string="Production Line" name="group_production_line" domain="[]" context="{'group_by': 'x_production_line_id'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Material Availability" name="group_reservation_state" domain="[]" context="{'group_by': 'reservation_state'}"/>
+                    <filter string="Operation Type" name="group_picking_type" domain="[]" context="{'group_by': 'picking_type_id'}"/>
+                    <filter string="Start Date" name="group_date_start" domain="[]" context="{'group_by': 'date_start'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="mrp.mrp_production_action" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,gantt,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="mrp_production_gantt_search_view"/>
+    </record>
+
+    <record id="mrp_workorder_gantt_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.gantt</field>
+        <field name="model">mrp.workorder</field>
+        <field name="type">gantt</field>
+        <field name="arch" type="xml">
+            <gantt
+                string="Work Orders Schedule"
+                date_start="date_start"
+                date_stop="date_finished"
+                default_group_by="workcenter_id"
+                default_scale="week"
+                progress="progress"
+                color="state"
+                dependency_field="blocked_by_workorder_ids"
+                dependency_inverted_field="needed_by_workorder_ids"
+                create="0"
+            >
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="workcenter_id"/>
+                <field name="product_id"/>
+                <field name="qty_production"/>
+                <field name="qty_remaining"/>
+                <field name="qty_produced"/>
+                <field name="product_uom_id"/>
+                <field name="duration_expected"/>
+                <field name="duration"/>
+                <field name="state"/>
+                <field name="production_state"/>
+                <field name="working_state"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="mrp.action_mrp_workorder_production_specific" model="ir.actions.act_window">
+        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
+    </record>
+
+    <record id="mrp.action_mrp_workorder_workcenter" model="ir.actions.act_window">
+        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
+    </record>
+
+    <record id="mrp.action_mrp_workorder_production" model="ir.actions.act_window">
+        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
+    </record>
+
+    <record id="mrp.mrp_workorder_todo" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,gantt,form,calendar,pivot,graph</field>
+    </record>
+</odoo>

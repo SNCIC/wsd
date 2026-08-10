@@ -1,0 +1,858 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_exception
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-10 09:45+0000\n"
+"PO-Revision-Date: 2026-07-10 09:45+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__active
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_search
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常装饰"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_search
+msgid "Archived"
+msgstr "归档"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__can_close
+msgid "Can Close"
+msgstr "可关闭"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__category
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__category
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_search
+msgid "Category"
+msgstr "类别"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__closed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Closed"
+msgstr "已关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__closed_at
+msgid "Closed At"
+msgstr "关闭时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__closed_by_id
+msgid "Closed By"
+msgstr "关闭人"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Closed exceptions cannot be cancelled."
+msgstr "已关闭的异常不能取消。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Closed or cancelled exceptions cannot be changed by this action."
+msgstr "已关闭或已取消的异常无法通过此操作进行更改。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Closed or cancelled exceptions cannot be suspended."
+msgstr "已关闭或已取消的异常不能挂起。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__company_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__description
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_form
+msgid "Description"
+msgstr "描述"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__equipment_id
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_type__category__equipment
+#: model:sn.wsd.exception.type,name:sn_wsd_exception.exception_type_equipment
+msgid "Equipment Failure"
+msgstr "设备故障"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__escalated_at
+msgid "Escalated At"
+msgstr "升级时间"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Escalated MES exception: %s"
+msgstr "已升级的 MES 异常：%s"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__escalation_user_id
+msgid "Escalated To"
+msgstr "升级给"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_type__suspend_after_escalation_minutes
+msgid ""
+"Escalated exceptions exceeding this additional age are suspended by the "
+"scheduled action."
+msgstr "超过此额外时限的已升级异常将被定时任务自动挂起。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Escalation"
+msgstr "升级"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__escalation_group_ids
+msgid "Escalation Groups"
+msgstr "升级通知组"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__timeout_minutes
+msgid "Escalation Timeout Minutes"
+msgstr "升级超时时间（分钟）"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_mrp_workorder__x_exception_record_count
+msgid "Exception Count"
+msgstr "异常计数"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__description
+msgid "Exception Description"
+msgstr "异常描述"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_ledger
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_ledger
+msgid "Exception Ledger"
+msgstr "异常台账"
+
+#. module: sn_wsd_exception
+#: model:res.groups,name:sn_wsd_exception.group_sn_wsd_exception_manager
+msgid "Exception Manager"
+msgstr "异常管理员"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/mrp_workorder.py:0
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_record
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_mrp_workorder__x_exception_record_ids
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_record
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Exception Records"
+msgstr "异常记录"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__name
+msgid "Exception Reference"
+msgstr "异常编号"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__exception_type_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__name
+msgid "Exception Type"
+msgstr "异常类型"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_type
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_search
+msgid "Exception Types"
+msgstr "异常类型"
+
+#. module: sn_wsd_exception
+#: model:res.groups,name:sn_wsd_exception.group_sn_wsd_exception_user
+msgid "Exception User"
+msgstr "异常用户"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception processing started."
+msgstr "异常处理已开始。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception verification failed and was returned for processing."
+msgstr "异常验证未通过，已退回重新处理。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception verification passed."
+msgstr "异常验证已通过。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was cancelled."
+msgstr "异常已取消。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was closed."
+msgstr "异常已关闭。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was escalated because it was overdue."
+msgstr "异常因逾期已被升级处理。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was registered."
+msgstr "异常已登记。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was submitted for verification."
+msgstr "异常已提交验证。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Exception was suspended."
+msgstr "异常已挂起。"
+
+#. module: sn_wsd_exception
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_root
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_mrp_workorder_form_sn_wsd_exception
+msgid "Exceptions"
+msgstr "异常"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者 (业务伙伴)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__handled_at
+msgid "Handled At"
+msgstr "处理时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__handler_user_id
+msgid "Handled By"
+msgstr "处理人"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Handling"
+msgstr "处理中"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__handling_plan
+msgid "Handling Plan"
+msgstr "处理方案"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__handled_result
+msgid "Handling Result"
+msgstr "处理结果"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "用于指示异常活动的图标。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的关注。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__message_has_error
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息存在发送错误。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__in_progress
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "In Progress"
+msgstr "处理中"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__write_uid
+msgid "Last Updated by"
+msgstr "最后更新者"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.server,name:sn_wsd_exception.ir_cron_sn_wsd_exception_escalation_ir_actions_server
+msgid "MES Exception Escalation"
+msgstr "MES 异常升级"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__material_product_id
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_type__category__material
+#: model:sn.wsd.exception.type,name:sn_wsd_exception.exception_type_material
+msgid "Material Exception"
+msgstr "物料异常"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__meter_serial_id
+msgid "Meter Serial"
+msgstr "电能表序列号"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__verification_result__ng
+msgid "NG"
+msgstr "不合格"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "New MES exception: %s"
+msgstr "新建 MES 异常：%s"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_type_form
+msgid "Notification"
+msgstr "通知"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__notify_group_ids
+msgid "Notification Groups"
+msgstr "通知组"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "存在发送错误的消息数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__verification_result__ok
+msgid "OK"
+msgstr "合格"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__occurred_at
+msgid "Occurred At"
+msgstr "发生时间"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Occurred Date"
+msgstr "发生日期"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Only exceptions waiting for verification can be rejected."
+msgstr "只有等待验证的异常才能被拒绝。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Only exceptions waiting for verification can be verified."
+msgstr "只有等待验证的异常才能进行验证。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Only in-progress exceptions can be submitted for verification."
+msgstr "只有处理中的异常才能提交验证。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Only pending or suspended exceptions can be started."
+msgstr "只有待处理或挂起的异常才能开始处理。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Only verified OK exceptions can be closed."
+msgstr "只有验证结果为“合格”的异常才能关闭。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Open"
+msgstr "打开"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_type__timeout_minutes
+msgid ""
+"Open exceptions exceeding this age are escalated by the scheduled action."
+msgstr "超过此存在时间的未结异常将被定时任务自动升级。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_type__category__other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__is_overdue
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Overdue"
+msgstr "逾期"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_type__category__personnel
+#: model:sn.wsd.exception.type,name:sn_wsd_exception.exception_type_personnel
+msgid "Personnel Exception"
+msgstr "人员异常"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__route_step_id
+msgid "Process Step"
+msgstr "工序"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__processing_started_at
+msgid "Processing Started At"
+msgstr "处理开始时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_type__category__quality
+#: model:sn.wsd.exception.type,name:sn_wsd_exception.exception_type_quality
+msgid "Quality Exception"
+msgstr "质量异常"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__rating_ids
+msgid "Ratings"
+msgstr "评价"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Registration"
+msgstr "登记信息"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__reported_by_id
+msgid "Reported By"
+msgstr "报告人"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__responsible_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Responsible"
+msgstr "负责人"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__root_cause
+msgid "Root Cause Analysis"
+msgstr "根本原因分析"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid ""
+"Root cause, handling plan, and handling result are required before "
+"verification."
+msgstr "在进行验证前，必须填写根本原因、处理方案和处理结果。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_record
+msgid "SN WSD Exception Record"
+msgstr "SN WSD 异常记录"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_type
+msgid "SN WSD Exception Type"
+msgstr "SN WSD 异常类型"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__serial_lot_id
+msgid "SN/Lot"
+msgstr "序列号/批次号"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__attachment_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Site Photos"
+msgstr "现场照片"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Start Processing"
+msgstr "开始处理"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态：\n"
+"逾期：截止日期已过\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Submit to Verify"
+msgstr "提交验证"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Suspend"
+msgstr "挂起"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__suspend_after_escalation_minutes
+msgid "Suspend After Escalation Minutes"
+msgstr "升级后挂起时间（分钟）"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__suspended
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Suspended"
+msgstr "已挂起"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__suspended_at
+msgid "Suspended At"
+msgstr "挂起时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.constraint,message:sn_wsd_exception.constraint_sn_wsd_exception_type_code_company_uniq
+msgid "The exception type code must be unique per company."
+msgstr "异常类型编码必须在公司内唯一。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_record__state__to_verify
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "To Verify"
+msgstr "待验证"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_type__code
+msgid "Type Code"
+msgstr "类型编码"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Unsupported operator for overdue search."
+msgstr "逾期搜索不支持该运算符。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_type__escalation_group_ids
+msgid ""
+"Users in these groups receive an activity when this exception type is "
+"escalated."
+msgstr "当该类型的异常升级时，这些组中的用户将会收到一个关联的活动通知。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_type__notify_group_ids
+msgid ""
+"Users in these groups receive an activity when this exception type is "
+"registered."
+msgstr "当该类型的异常登记时，这些组中的用户将会收到一个关联的活动通知。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Verification"
+msgstr "验证信息"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__verification_note
+msgid "Verification Note"
+msgstr "验证备注"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__verification_result
+msgid "Verification Result"
+msgstr "验证结果"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__verified_at
+msgid "Verified At"
+msgstr "验证时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__verifier_user_id
+msgid "Verified By"
+msgstr "验证人"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_record.py:0
+msgid "Verify MES exception: %s"
+msgstr "验证 MES 异常：%s"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Verify NG"
+msgstr "验证不合格"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_form
+msgid "Verify OK"
+msgstr "验证合格"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,help:sn_wsd_exception.field_sn_wsd_exception_record__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_record_search
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_mrp_workorder
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_record__workorder_id
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/mrp_workorder.py:0
+msgid "workorder_id"
+msgstr "workorder_id"
+
+#. module: sn_wsd_exception
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_type
+msgid "Exception Types"
+msgstr "异常类型"
+
+#. module: sn_wsd_exception
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_record
+msgid "Exception Records"
+msgstr "异常记录"
+
+#. module: sn_wsd_exception
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_ledger
+msgid "Exception Ledger"
+msgstr "异常台账"

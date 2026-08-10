@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_meter_pack_record_tree" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.record.list</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_id"/>
+                <field name="production_id"/>
+                <field name="pack_workorder_id"/>
+                <field name="seal_no"/>
+                <field name="carton_no"/>
+                <field name="carton_package_id" optional="hide"/>
+                <field name="pallet_no"/>
+                <field name="pallet_package_id" optional="hide"/>
+                <field name="scan_check_result"/>
+                <field name="pack_time"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_meter_pack_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.record.form</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_apply_to_serial" type="object" string="Apply to Serial" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="serial_id"/>
+                            <field name="production_id"/>
+                            <field name="pack_workorder_id"/>
+                            <field name="operator_code"/>
+                        </group>
+                        <group>
+                            <field name="seal_no"/>
+                            <field name="carton_no"/>
+                            <field name="carton_package_id" readonly="1"/>
+                            <field name="carton_seq"/>
+                            <field name="pallet_no"/>
+                            <field name="pallet_package_id" readonly="1"/>
+                            <field name="scan_check_result"/>
+                            <field name="pack_time"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_meter_pack_record" model="ir.actions.act_window">
+        <field name="name">Pack Records</field>
+        <field name="res_model">sn.wsd.meter.pack.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

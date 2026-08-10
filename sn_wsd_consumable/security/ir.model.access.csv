@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_consumable_barcode_rule_user,sn.consumable.barcode.rule user,model_sn_consumable_barcode_rule,mrp.group_mrp_user,1,0,0,0
+access_sn_consumable_barcode_rule_manager,sn.consumable.barcode.rule manager,model_sn_consumable_barcode_rule,mrp.group_mrp_manager,1,1,1,1
+access_sn_consumable_template_user,sn.consumable.template user,model_sn_consumable_template,mrp.group_mrp_user,1,0,0,0
+access_sn_consumable_template_manager,sn.consumable.template manager,model_sn_consumable_template,mrp.group_mrp_manager,1,1,1,1
+access_sn_consumable_info_user,sn.consumable.info user,model_sn_consumable_info,mrp.group_mrp_user,1,1,1,0
+access_sn_consumable_info_manager,sn.consumable.info manager,model_sn_consumable_info,mrp.group_mrp_manager,1,1,1,1

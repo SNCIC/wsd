@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_tooling_pda_wizard_form" model="ir.ui.view">
+        <field name="name">sn.tooling.pda.wizard.form</field>
+        <field name="model">sn.tooling.pda.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tooling PDA Operation">
+                <group>
+                    <group>
+                        <field name="workorder_id" readonly="1"/>
+                        <field name="tooling_id"/>
+                        <field name="operation_type"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_apply" type="object" string="Execute" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

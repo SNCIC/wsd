@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_msd_level_user,sn.msd.level.user,model_sn_msd_level,base.group_user,1,0,0,0
+access_sn_msd_level_manager,sn.msd.level.manager,model_sn_msd_level,stock.group_stock_manager,1,1,1,1
+access_sn_msd_control_rule_user,sn.msd.control.rule.user,model_sn_msd_control_rule,base.group_user,1,0,0,0
+access_sn_msd_control_rule_manager,sn.msd.control.rule.manager,model_sn_msd_control_rule,stock.group_stock_manager,1,1,1,1
+access_sn_msd_bake_wizard_user,sn.msd.bake.wizard.user,model_sn_msd_bake_wizard,base.group_user,1,1,1,1

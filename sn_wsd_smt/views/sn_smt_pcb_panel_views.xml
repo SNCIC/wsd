@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PCB Panel List View -->
+    <record id="view_sn_smt_pcb_panel_list" model="ir.ui.view">
+        <field name="name">sn.smt.pcb.panel.list</field>
+        <field name="model">sn.smt.pcb.panel</field>
+        <field name="arch" type="xml">
+            <list create="1" edit="1" delete="1">
+                <field name="create_date"/>
+                <field name="product_no"/>
+                <field name="quantity"/>
+                <field name="pcb_item_sn" string="PCB Item Code"/>
+                <field name="board_count"/>
+                <field name="state"/>
+                <field name="production_name"/>
+                <field name="manufacturing_batch_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PCB Panel Form View -->
+    <record id="view_sn_smt_pcb_panel_form" model="ir.ui.view">
+        <field name="name">sn.smt.pcb.panel.form</field>
+        <field name="model">sn.smt.pcb.panel</field>
+        <field name="arch" type="xml">
+            <form create="1" edit="1" delete="1">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_no" placeholder="Order Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="pcb_item_sn" string="PCB Item Code"/>
+                        </group>
+                        <group>
+                            <field name="production_id" readonly="1"/>
+                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Board Information">
+                        <field name="board_ids" nolabel="1" context="{'default_panel_id': id}">
+                            <list editable="bottom" create="1">
+                                <field name="board_no"/>
+                                <field name="pro_sn"/>
+                                <field name="state"/>
+                                <field name="lot_id" readonly="1"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="create_uid" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="write_date" readonly="1"/>
+                            <field name="write_uid" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PCB Panel Action -->
+    <record id="action_sn_smt_pcb_panel" model="ir.actions.act_window">
+        <field name="name">PCB Panel Records</field>
+        <field name="res_model">sn.smt.pcb.panel</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- PCB Board List View -->
+    <record id="view_sn_smt_pcb_board_list" model="ir.ui.view">
+        <field name="name">sn.smt.pcb.board.list</field>
+        <field name="model">sn.smt.pcb.board</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="1" delete="1">
+                <field name="create_date"/>
+                <field name="panel_id"/>
+                <field name="board_no"/>
+                <field name="pro_sn"/>
+                <field name="state"/>
+                <field name="lot_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PCB Board Form View -->
+    <record id="view_sn_smt_pcb_board_form" model="ir.ui.view">
+        <field name="name">sn.smt.pcb.board.form</field>
+        <field name="model">sn.smt.pcb.board</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="1" delete="1">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="panel_id" readonly="1"/>
+                            <field name="board_no"/>
+                        </group>
+                        <group>
+                            <field name="pro_sn"/>
+                            <field name="state"/>
+                            <field name="lot_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="create_uid" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PCB Board Action -->
+    <record id="action_sn_smt_pcb_board" model="ir.actions.act_window">
+        <field name="name">PCB Board Records</field>
+        <field name="res_model">sn.smt.pcb.board</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

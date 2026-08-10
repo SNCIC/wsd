@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_serial_freeze_list" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.freeze.list</field>
+        <field name="model">sn.wsd.serial.freeze</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_id"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="workcenter_id"/>
+                <field name="freeze_reason"/>
+                <field name="freeze_user_id"/>
+                <field name="freeze_time"/>
+                <field name="release_user_id"/>
+                <field name="release_time"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_serial_freeze_form" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.freeze.form</field>
+        <field name="model">sn.wsd.serial.freeze</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_release_wizard" type="object" string="Release" class="btn-primary" invisible="state != 'frozen'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="frozen,released"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="serial_id" readonly="state != 'frozen'"/>
+                            <field name="serial_no" readonly="1"/>
+                            <field name="production_id" readonly="1"/>
+                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="workorder_id" readonly="state != 'frozen'"/>
+                            <field name="workcenter_id" readonly="1"/>
+                            <field name="operation_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'frozen'"/>
+                            <field name="freeze_user_id" readonly="1"/>
+                            <field name="freeze_time" readonly="1"/>
+                            <field name="release_user_id" readonly="1"/>
+                            <field name="release_time" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Freeze Reason">
+                            <field name="freeze_reason" nolabel="1" readonly="state != 'frozen'"/>
+                        </page>
+                        <page string="Release Reason">
+                            <field name="release_reason" nolabel="1" readonly="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_serial_freeze_search" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.freeze.search</field>
+        <field name="model">sn.wsd.serial.freeze</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_id"/>
+                <field name="serial_no"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="workcenter_id"/>
+                <filter name="frozen" string="Frozen" domain="[('state', '=', 'frozen')]"/>
+                <filter name="released" string="Released" domain="[('state', '=', 'released')]"/>
+                <filter name="group_by_production" string="Manufacturing Order" context="{'group_by': 'production_id'}"/>
+                <filter name="group_by_manufacturing_batch" string="Manufacturing Batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                <filter name="group_by_workorder" string="Work Order" context="{'group_by': 'workorder_id'}"/>
+                <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_serial_freeze" model="ir.actions.act_window">
+        <field name="name">SN Freeze Records</field>
+        <field name="res_model">sn.wsd.serial.freeze</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_serial_freeze_search"/>
+        <field name="context">{'search_default_frozen': 1}</field>
+    </record>
+
+    <record id="action_release_sn_wsd_serial_freeze" model="ir.actions.server">
+        <field name="name">Release Frozen SNs</field>
+        <field name="model_id" ref="model_sn_wsd_serial_freeze"/>
+        <field name="binding_model_id" ref="model_sn_wsd_serial_freeze"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_open_release_wizard()</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_serial_freeze"
+              name="SN Freeze Records"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_serial_freeze"
+              sequence="15"/>
+</odoo>

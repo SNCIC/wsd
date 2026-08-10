@@ -1,0 +1,238 @@
+.o_sn_wsd_workshop_action {
+    .o_title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .o_sn_wsd_workshop_body {
+        overflow: auto;
+        padding: 0;
+        word-break: break-word;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .o_sn_wsd_workshop_loading {
+        align-items: center;
+        background: rgba(255, 255, 255, 0.9);
+        color: $o-brand-primary;
+        display: flex;
+        font-weight: 600;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .o_sn_wsd_workshop_selectors {
+        display: grid;
+        gap: map-get($spacers, 2);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: map-get($spacers, 2);
+
+        button {
+            align-items: center;
+            display: flex;
+            gap: map-get($spacers, 2);
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .o_sn_wsd_workshop_context {
+        background: var(--body-bg);
+        padding: map-get($spacers, 2) map-get($spacers, 3);
+    }
+
+    .o_sn_wsd_workshop_smt_counts {
+        display: grid;
+        gap: map-get($spacers, 2);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .o_sn_wsd_workshop_smt_count {
+        background: $gray-100;
+        border: 1px solid $border-color;
+        border-radius: var(--border-radius);
+        display: flex;
+        flex-direction: column;
+        min-height: 48px;
+        justify-content: center;
+        padding: map-get($spacers, 1) map-get($spacers, 2);
+        text-align: center;
+
+        span {
+            font-size: 0.78rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        strong {
+            font-size: 1.2rem;
+            line-height: 1.2;
+        }
+    }
+
+    .o_sn_wsd_workshop_command_row {
+        display: flex;
+        gap: map-get($spacers, 2);
+        padding: map-get($spacers, 2);
+
+        .o_sn_wsd_workshop_command {
+            min-height: 44px;
+        }
+
+        .btn {
+            flex: 0 0 44px;
+            min-height: 44px;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .o_sn_wsd_workshop_summary {
+        background: rgba($warning, 0.12);
+        color: color-contrast(rgba($warning, 0.12));
+        font-weight: 600;
+        padding: map-get($spacers, 2) map-get($spacers, 3);
+    }
+
+    .o_sn_wsd_workshop_result {
+        display: flex;
+        flex-direction: column;
+        gap: map-get($spacers, 1);
+        min-height: 84px;
+        padding: map-get($spacers, 2) map-get($spacers, 3);
+    }
+
+    .o_sn_wsd_workshop_smt_buttons {
+        display: grid;
+        gap: map-get($spacers, 2);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding: map-get($spacers, 2);
+
+        .btn {
+            min-height: 52px;
+            white-space: normal;
+        }
+    }
+
+    .o_stock_barcode_camera_video {
+        max-height: 35vh;
+        max-width: 100%;
+    }
+}
+
+.o_sn_wsd_workshop_modal_backdrop {
+    align-items: flex-start;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    padding-top: 44px;
+    position: fixed;
+    z-index: 1050;
+}
+
+.o_sn_wsd_workshop_modal {
+    background: var(--body-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    height: calc(100vh - 88px);
+    max-height: calc(100vh - 88px);
+    max-width: 520px;
+    overflow: hidden;
+    padding: map-get($spacers, 3);
+    width: calc(100vw - 104px);
+
+    h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 map-get($spacers, 3);
+        text-align: center;
+    }
+}
+
+.o_sn_wsd_workshop_search {
+    align-items: center;
+    background: $gray-200;
+    border-radius: var(--border-radius);
+    display: flex;
+    gap: map-get($spacers, 2);
+    min-height: 44px;
+    margin-bottom: map-get($spacers, 2);
+    padding: 0 map-get($spacers, 3);
+
+    .fa {
+        color: $gray-600;
+        font-size: 14px;
+    }
+
+    input {
+        background: transparent;
+        border: 0;
+        color: $body-color;
+        flex: 1;
+        font-size: 1rem;
+        min-width: 0;
+        outline: none;
+    }
+}
+
+.o_sn_wsd_workshop_records {
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+
+    button {
+        align-items: center;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid $border-color;
+        color: $body-color;
+        display: flex;
+        font-size: 1rem;
+        justify-content: space-between;
+        min-height: 46px;
+        padding: 0 map-get($spacers, 2);
+        text-align: left;
+        width: 100%;
+    }
+
+    small {
+        color: $text-muted;
+        font-size: 0.875rem;
+        margin-left: map-get($spacers, 2);
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .o_sn_wsd_workshop_action {
+        .o_title {
+            font-size: 1rem;
+        }
+
+        .o_sn_wsd_workshop_selectors,
+        .o_sn_wsd_workshop_smt_buttons {
+            gap: map-get($spacers, 1);
+        }
+
+        .o_sn_wsd_workshop_smt_buttons .btn {
+            min-height: 48px;
+        }
+    }
+
+    .o_sn_wsd_workshop_modal {
+        height: calc(100vh - 40px);
+        max-height: calc(100vh - 40px);
+        padding: map-get($spacers, 2);
+        width: calc(100vw - 20px);
+    }
+}

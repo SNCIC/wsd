@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sn_wsd_plm_root"
+              name="PLM"
+              parent="mrp.menu_mrp_root"
+              sequence="25"/>
+    <menuitem id="menu_sn_wsd_engineering_bom"
+              name="Engineering BoMs"
+              parent="menu_sn_wsd_plm_root"
+              action="action_engineering_bom"
+              sequence="10"/>
+    <menuitem id="menu_sn_wsd_production_bom"
+              name="Production BoMs"
+              parent="menu_sn_wsd_plm_root"
+              action="action_production_bom"
+              sequence="20"/>
+</odoo>

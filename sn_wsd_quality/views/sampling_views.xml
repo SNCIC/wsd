@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_quality_sampling_standard_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.sampling.standard.list</field>
+        <field name="model">sn.wsd.quality.sampling.standard</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not active">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_sampling_standard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.sampling.standard.form</field>
+        <field name="model">sn.wsd.quality.sampling.standard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="lot_ranges" string="Lot Ranges">
+                            <field name="lot_range_ids">
+                                <list editable="bottom">
+                                    <field name="inspection_level"/>
+                                    <field name="lot_qty_min"/>
+                                    <field name="lot_qty_max"/>
+                                    <field name="sample_size_code"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="plans" string="Sampling Plans">
+                            <field name="plan_ids">
+                                <list editable="bottom">
+                                    <field name="switching_mode"/>
+                                    <field name="sample_size_code"/>
+                                    <field name="sample_size"/>
+                                    <field name="aql_value"/>
+                                    <field name="accept_qty"/>
+                                    <field name="reject_qty"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_sampling_standard_search" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.sampling.standard.search</field>
+        <field name="model">sn.wsd.quality.sampling.standard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_sampling_lot_range_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.sampling.lot.range.list</field>
+        <field name="model">sn.wsd.quality.sampling.lot.range</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="standard_id"/>
+                <field name="inspection_level"/>
+                <field name="lot_qty_min"/>
+                <field name="lot_qty_max"/>
+                <field name="sample_size_code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_sampling_plan_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.sampling.plan.list</field>
+        <field name="model">sn.wsd.quality.sampling.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="standard_id"/>
+                <field name="switching_mode"/>
+                <field name="sample_size_code"/>
+                <field name="sample_size"/>
+                <field name="aql_value"/>
+                <field name="accept_qty"/>
+                <field name="reject_qty"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quality_sampling_standard" model="ir.actions.act_window">
+        <field name="name">Sampling Standards</field>
+        <field name="res_model">sn.wsd.quality.sampling.standard</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_sampling_standard_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="action_sn_wsd_quality_sampling_matrix" model="ir.actions.server">
+        <field name="name">AQL Sampling Matrix</field>
+        <field name="model_id" ref="model_sn_wsd_quality_sampling_standard"/>
+        <field name="state">code</field>
+        <field name="code">action = env['sn.wsd.quality.sampling.standard'].action_open_sampling_matrix()</field>
+    </record>
+</odoo>

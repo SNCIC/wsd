@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_quality_issue_form_sn_wsd_repair" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.issue.form.sn.wsd.repair</field>
+        <field name="model">sn.wsd.quality.issue</field>
+        <field name="inherit_id" ref="sn_wsd_quality.view_sn_wsd_quality_issue_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Repair Orders">
+                    <group>
+                        <field name="repair_order_count" readonly="1"/>
+                        <button name="action_open_repair_orders" type="object" string="Repair Orders" class="btn-secondary"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

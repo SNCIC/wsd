@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_quality_inspection_scheme_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.scheme.list</field>
+        <field name="model">sn.wsd.quality.inspection.scheme</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'obsolete'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="inspection_type"/>
+                <field name="product_tmpl_ids" widget="many2many_tags"/>
+                <field name="product_categ_ids" widget="many2many_tags"/>
+                <field name="workcenter_id"/>
+                <field name="production_line_id"/>
+                <field name="interval_minutes"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.list</field>
+        <field name="model">sn.wsd.quality.inspection.item</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="item_type"/>
+                <field name="required"/>
+                <field name="lower_limit" optional="hide"/>
+                <field name="upper_limit" optional="hide"/>
+                <field name="expected_value"/>
+                <field name="unit"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.form</field>
+        <field name="model">sn.wsd.quality.inspection.item</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="item_type"/>
+                            <field name="required"/>
+                        </group>
+                        <group>
+                            <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                            <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                            <field name="expected_value"/>
+                            <field name="selection_values" invisible="item_type != 'selection'"/>
+                            <field name="unit"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="instruction" string="Instruction">
+                            <field name="instruction" nolabel="1"/>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_search" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.search</field>
+        <field name="model">sn.wsd.quality.inspection.item</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <separator/>
+                <filter name="item_type" string="Item Type" context="{'group_by': 'item_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_group_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.group.list</field>
+        <field name="model">sn.wsd.quality.inspection.item.group</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="item_count"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_group_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.group.form</field>
+        <field name="model">sn.wsd.quality.inspection.item.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="item_count" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="items" string="Inspection Items">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_id" domain="[('active', '=', True)]"/>
+                                    <field name="item_code"/>
+                                    <field name="name"/>
+                                    <field name="item_type"/>
+                                    <field name="required"/>
+                                    <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="expected_value"/>
+                                    <field name="selection_values" invisible="item_type != 'selection'"/>
+                                    <field name="unit"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_item_group_search" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.item.group.search</field>
+        <field name="model">sn.wsd.quality.inspection.item.group</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_scheme_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.scheme.form</field>
+        <field name="model">sn.wsd.quality.inspection.scheme</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_set_effective" type="object" string="Set Effective" class="btn-primary" invisible="state == 'effective'"/>
+                    <button name="action_set_obsolete" type="object" string="Set Obsolete" invisible="state == 'obsolete'"/>
+                    <button name="action_set_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,effective,obsolete"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="inspection_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="responsible_user_id"/>
+                            <field name="interval_minutes" invisible="inspection_type != 'ipqc'"/>
+                            <field name="accept_qty" invisible="inspection_type != 'oqc'"/>
+                            <field name="reject_qty" invisible="inspection_type != 'oqc'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="scope" string="Scope">
+                            <group>
+                                <group>
+                                    <field name="product_tmpl_ids" widget="many2many_tags"/>
+                                    <field name="product_categ_ids" widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <field name="workcenter_id"/>
+                                    <field name="operation_id"/>
+                                    <field name="production_line_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="sampling" string="Sampling">
+                            <group>
+                                <group>
+                                    <field name="sampling_method"/>
+                                    <field name="sample_selection_method"/>
+                                    <field name="lot_qty_source" invisible="sampling_method == 'fixed'"/>
+                                    <field name="sampling_standard_id" invisible="sampling_method != 'aql'"/>
+                                </group>
+                                <group>
+                                    <field name="inspection_level" invisible="sampling_method != 'aql'"/>
+                                    <field name="switching_mode" invisible="sampling_method != 'aql'"/>
+                                    <field name="aql_value" invisible="sampling_method != 'aql'"/>
+                                    <field name="sample_size"/>
+                                    <field name="accept_qty"/>
+                                    <field name="reject_qty"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="items" string="Inspection Items">
+                            <group>
+                                <field name="item_group_ids" widget="many2many_tags" domain="[('active', '=', True)]"/>
+                            </group>
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_id" domain="[('active', '=', True)]"/>
+                                    <field name="item_code" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="item_type"/>
+                                    <field name="required"/>
+                                    <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="expected_value"/>
+                                    <field name="selection_values" invisible="item_type != 'selection'"/>
+                                    <field name="unit"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="sequence"/>
+                                                <field name="item_id" domain="[('active', '=', True)]"/>
+                                                <field name="item_code" readonly="1"/>
+                                                <field name="name" readonly="1"/>
+                                                <field name="item_type"/>
+                                                <field name="required"/>
+                                            </group>
+                                            <group>
+                                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="expected_value"/>
+                                                <field name="selection_values" invisible="item_type != 'selection'"/>
+                                                <field name="unit"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="instruction" string="Instruction">
+                                                <field name="instruction" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.list</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="result in ('fail', 'reject')" decoration-success="result == 'pass'" decoration-warning="result == 'partial'">
+                <header>
+                    <button name="action_batch_set_pass" type="object" string="设置合格"/>
+                </header>
+                <field name="name"/>
+                <field name="inspection_type"/>
+                <field name="state"/>
+                <field name="result"/>
+                <field name="scheme_id"/>
+                <field name="sampling_method" optional="hide"/>
+                <field name="lot_qty" optional="hide"/>
+                <field name="sample_size" optional="show"/>
+                <field name="sample_checked_qty" optional="show"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="picking_id"/>
+                <field name="product_id"/>
+                <field name="area_sn"/>
+                <field name="model_code"/>
+                <field name="scheduled_time"/>
+                <field name="inspector_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.form</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'open'"/>
+                    <button name="action_set_all_pass" type="object" string="Set All Pass" invisible="state not in ['open', 'in_progress']"/>
+                    <button name="action_done" type="object" string="Finish" class="btn-primary" invisible="state not in ['open', 'in_progress']"/>
+                    <button name="action_mark_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
+                    <button name="action_reset_open" type="object" string="Reset" invisible="state not in ['done', 'overdue', 'skipped']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_open_form" icon="fa-check-square-o">
+                            <field name="result" widget="statinfo" string="Result"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="inspection_type" readonly="state != 'open'"/>
+                            <field name="scheme_id" readonly="state != 'open'"/>
+                            <field name="scheme_code" readonly="1"/>
+                            <field name="result" readonly="state != 'done'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="scheduled_time"/>
+                            <field name="start_time" readonly="1"/>
+                            <field name="finish_time" readonly="1"/>
+                            <field name="inspector_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="scope" string="Scope">
+                            <group>
+                                <group>
+                                    <field name="production_id"/>
+                                    <field name="manufacturing_batch_id"/>
+                                    <field name="workorder_id"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="operation_id"/>
+                                </group>
+                                <group>
+                                    <field name="production_line_id"/>
+                                    <field name="area_sn"/>
+                                    <field name="model_code"/>
+                                    <field name="product_id"/>
+                                </group>
+                                <group>
+                                    <field name="picking_id"/>
+                                    <field name="move_line_id"/>
+                                    <field name="lot_id"/>
+                                </group>
+                                <group>
+                                    <field name="sample_window_start"/>
+                                    <field name="sample_window_end"/>
+                                    <field name="evidence_travel_id"/>
+                                    <field name="evidence_internal_serial_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="sampling" string="Sampling">
+                            <group>
+                                <group>
+                                    <field name="sampling_method" readonly="1"/>
+                                    <field name="sampling_standard_id" readonly="1"/>
+                                    <field name="lot_qty_source" readonly="1"/>
+                                    <field name="lot_qty" readonly="1"/>
+                                    <field name="sample_selection_method" readonly="state != 'open'"/>
+                                </group>
+                                <group>
+                                    <field name="inspection_level" readonly="1"/>
+                                    <field name="switching_mode" readonly="1"/>
+                                    <field name="aql_value" readonly="1"/>
+                                    <field name="sample_size_code" readonly="1"/>
+                                    <field name="sample_size" readonly="1"/>
+                                    <field name="sample_checked_qty" readonly="1"/>
+                                    <field name="sample_defect_qty" readonly="1"/>
+                                    <field name="accept_qty" readonly="1"/>
+                                    <field name="reject_qty" readonly="1"/>
+                                </group>
+                            </group>
+                            <field name="sample_ids">
+                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="internal_serial_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="result"/>
+                                    <field name="defect_code_id" invisible="result != 'fail'"/>
+                                    <field name="note"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="sequence"/>
+                                                <field name="name" readonly="1"/>
+                                                <field name="internal_serial_id"/>
+                                                <field name="lot_id"/>
+                                            </group>
+                                            <group>
+                                                <field name="result"/>
+                                                <field name="defect_code_id" invisible="result != 'fail'"/>
+                                                <field name="company_id" groups="base.group_multi_company"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="notes" string="Notes">
+                                                <field name="note" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="items" string="Inspection Items">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_code"/>
+                                    <field name="name"/>
+                                    <field name="item_type"/>
+                                    <field name="required"/>
+                                    <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                    <field name="text_value" invisible="item_type == 'numeric'"/>
+                                    <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                    <field name="is_checked"/>
+                                    <field name="result"/>
+                                    <field name="unit"/>
+                                    <field name="note"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="sequence"/>
+                                                <field name="item_code"/>
+                                                <field name="name"/>
+                                                <field name="item_type"/>
+                                                <field name="required"/>
+                                            </group>
+                                            <group>
+                                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                                <field name="text_value" invisible="item_type == 'numeric'"/>
+                                                <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                                <field name="is_checked"/>
+                                                <field name="result"/>
+                                                <field name="unit"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="instruction" string="Instruction">
+                                                <field name="instruction" nolabel="1"/>
+                                            </page>
+                                            <page name="attachments" string="Attachments">
+                                                <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                                            </page>
+                                            <page name="notes" string="Notes">
+                                                <field name="note" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
+                            <group>
+                                <field name="sample_size"/>
+                                <field name="sample_checked_qty" readonly="1"/>
+                                <field name="inspected_qty" readonly="1"/>
+                                <field name="defect_qty" readonly="1"/>
+                                <field name="sample_defect_qty" readonly="1"/>
+                                <field name="accept_qty"/>
+                                <field name="reject_qty"/>
+                            </group>
+                            <field name="defect_line_ids">
+                                <list editable="bottom">
+                                    <field name="internal_serial_id"/>
+                                    <field name="defect_code_id"/>
+                                    <field name="defect_qty"/>
+                                    <field name="position"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="attachments" string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_search" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.search</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="scheme_id"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="workorder_id"/>
+                <field name="product_id"/>
+                <filter name="open" string="Open" domain="[('state', 'in', ['open', 'in_progress'])]"/>
+                <filter name="failed" string="Failed" domain="[('result', 'in', ['fail', 'reject'])]"/>
+                <separator/>
+                <filter name="type" string="Type" context="{'group_by': 'inspection_type'}"/>
+                <filter name="state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="scheme" string="Scheme" context="{'group_by': 'scheme_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_inspection_skip_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.skip.list</field>
+        <field name="model">sn.wsd.quality.inspection.skip</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="scheme_id"/>
+                <field name="production_line_id"/>
+                <field name="workcenter_id"/>
+                <field name="area_sn"/>
+                <field name="model_code"/>
+                <field name="scheduled_time"/>
+                <field name="reason"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_scheme" model="ir.actions.act_window">
+        <field name="name">Inspection Schemes</field>
+        <field name="res_model">sn.wsd.quality.inspection.scheme</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_item" model="ir.actions.act_window">
+        <field name="name">Inspection Items</field>
+        <field name="res_model">sn.wsd.quality.inspection.item</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_item_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_item_group" model="ir.actions.act_window">
+        <field name="name">Inspection Item Groups</field>
+        <field name="res_model">sn.wsd.quality.inspection.item.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_item_group_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection" model="ir.actions.act_window">
+        <field name="name">Quality Inspections</field>
+        <field name="res_model">sn.wsd.quality.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_search"/>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_fai" model="ir.actions.act_window">
+        <field name="name">FAI Inspections</field>
+        <field name="res_model">sn.wsd.quality.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('inspection_type', '=', 'fai')]</field>
+        <field name="context">{'default_inspection_type': 'fai', 'search_default_type': 1}</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_search"/>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_iqc" model="ir.actions.act_window">
+        <field name="name">IQC Inspections</field>
+        <field name="res_model">sn.wsd.quality.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('inspection_type', '=', 'iqc')]</field>
+        <field name="context">{'default_inspection_type': 'iqc', 'search_default_type': 1}</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_search"/>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_ipqc" model="ir.actions.act_window">
+        <field name="name">IPQC Inspections</field>
+        <field name="res_model">sn.wsd.quality.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('inspection_type', '=', 'ipqc')]</field>
+        <field name="context">{'default_inspection_type': 'ipqc', 'search_default_type': 1}</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_search"/>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_oqc" model="ir.actions.act_window">
+        <field name="name">OQC Inspections</field>
+        <field name="res_model">sn.wsd.quality.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('inspection_type', '=', 'oqc')]</field>
+        <field name="context">{'default_inspection_type': 'oqc', 'search_default_type': 1}</field>
+        <field name="search_view_id" ref="view_sn_wsd_quality_inspection_search"/>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_batch_set_pass" model="ir.actions.server">
+        <field name="name">Set Qualified</field>
+        <field name="model_id" ref="model_sn_wsd_quality_inspection"/>
+        <field name="binding_model_id" eval="False"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.action_batch_set_pass()
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quality_inspection_skip" model="ir.actions.act_window">
+        <field name="name">IPQC Skip Records</field>
+        <field name="res_model">sn.wsd.quality.inspection.skip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

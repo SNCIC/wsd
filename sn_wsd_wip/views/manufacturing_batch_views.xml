@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_manufacturing_batch_wip_form_inherit" model="ir.ui.view">
+        <field name="name">sn.wsd.manufacturing.batch.wip.form.inherit</field>
+        <field name="model">sn.wsd.manufacturing.batch</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_wip_report" type="object" class="oe_stat_button" icon="fa-tasks">
+                    <field name="x_wip_report_line_count" widget="statinfo" string="WIP Steps"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='wip_qty']" position="after">
+                <field name="x_wip_current_total" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

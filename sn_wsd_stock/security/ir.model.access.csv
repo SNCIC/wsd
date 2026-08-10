@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_lot_reel_split_user,sn.lot.reel.split user,model_sn_lot_reel_split,stock.group_stock_user,1,0,1,0
+access_sn_lot_reel_split_manager,sn.lot.reel.split manager,model_sn_lot_reel_split,stock.group_stock_manager,1,1,1,0
+access_sn_lot_reel_split_line_user,sn.lot.reel.split.line user,model_sn_lot_reel_split_line,stock.group_stock_user,1,0,1,0
+access_sn_lot_reel_split_line_manager,sn.lot.reel.split.line manager,model_sn_lot_reel_split_line,stock.group_stock_manager,1,1,1,0
+access_sn_lot_reel_split_wizard_user,sn.lot.reel.split.wizard user,model_sn_lot_reel_split_wizard,stock.group_stock_user,1,1,1,1
+access_sn_lot_reel_split_wizard_line_user,sn.lot.reel.split.wizard.line user,model_sn_lot_reel_split_wizard_line,stock.group_stock_user,1,1,1,1

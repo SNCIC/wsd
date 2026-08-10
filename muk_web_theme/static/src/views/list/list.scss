@@ -1,0 +1,39 @@
+.o_list_renderer {
+    .o_list_table {
+        > thead,
+        > tbody,
+        > tfoot {
+            > tr > th,
+            > tr > td {
+                border-inline-end: 1px solid $border-color;
+            }
+
+            > tr > :last-child {
+                border-inline-end: 0;
+            }
+        }
+
+        > thead > tr > th,
+        > tfoot > tr > td,
+        > tbody > tr.o_group_header > th,
+        > tbody > tr.o_group_header > td {
+            border-bottom: 1px solid $border-color;
+        }
+
+        > tbody > tr.o_data_row > td {
+            border-bottom-width: var(--ListRenderer-data-row-border-bottom-width, 1px);
+        }
+
+        > tbody > tr.o_data_row.o_data_row_selected > td,
+        > tbody.o_keyboard_navigation > tr > th:focus-within,
+        > tbody.o_keyboard_navigation > tr > td:focus-within {
+            border-color: $border-color;
+        }
+
+        .o_list_actions_header,
+        .o_list_record_remove,
+        .o_list_record_open_form_view {
+            border-inline-start: 1px solid $border-color;
+        }
+    }
+}

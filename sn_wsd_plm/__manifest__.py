@@ -1,0 +1,20 @@
+{
+    'name': 'SN WSD PLM',
+    'version': '19.0.1.1.0',
+    'summary': 'Engineering and production BoM lifecycle management for electric meter manufacturing',
+    'depends': ['sn_wsd_mrp'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/mrp_bom_views.xml',
+        'views/process_route_views.xml',
+        'views/mrp_production_views.xml',
+        'views/menu_views.xml',
+        'wizard/bom_substitute_design_wizard_views.xml',
+        'wizard/bom_apply_substitute_wizard_views.xml',
+        'wizard/bom_version_compare_wizard_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

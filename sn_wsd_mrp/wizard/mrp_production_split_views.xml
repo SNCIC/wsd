@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_split_form_inherit_sn_wsd_mrp" model="ir.ui.view">
+        <field name="name">mrp.production.split.form.sn.wsd.mrp</field>
+        <field name="model">mrp.production.split</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_split_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="string">Schedule</attribute>
+            </xpath>
+            <xpath expr="//footer/button[@name='action_split']" position="attributes">
+                <attribute name="string">Confirm</attribute>
+            </xpath>
+            <xpath expr="//field[@name='production_detailed_vals_ids']/list/field[@name='user_id']" position="after">
+                <field name="x_workshop_id"/>
+                <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]"/>
+                <field name="date_deadline"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp.action_mrp_production_split" model="ir.actions.act_window">
+        <field name="name">Schedule</field>
+    </record>
+</odoo>

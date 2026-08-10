@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_feeder_scan_wizard_form" model="ir.ui.view">
+        <field name="name">mrp.feeder.scan.wizard.form</field>
+        <field name="model">mrp.feeder.scan.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Feeder Scan">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="feeder_line_id" readonly="1"/>
+                            <field name="expected_product_id" readonly="1"/>
+                            <field name="loaded_qty"/>
+                        </group>
+                        <group>
+                            <field name="scanned_barcode"/>
+                            <field name="scanned_product_id" readonly="1"/>
+                            <field name="scanned_lot"/>
+                            <field name="match_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_verify" type="object" string="Verify" class="btn-secondary"/>
+                    <button name="action_verify_and_continue" type="object" string="Verify and Continue" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mrp_substitute_wizard_form" model="ir.ui.view">
+        <field name="name">mrp.substitute.wizard.form</field>
+        <field name="model">mrp.substitute.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Record Substitute Usage">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="workorder_id" readonly="1"/>
+                            <field name="production_id" readonly="1"/>
+                            <field name="original_product_id"/>
+                            <field name="bom_line_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="scanned_barcode"/>
+                            <field name="scanned_product_id" readonly="1"/>
+                            <field name="substitute_qty"/>
+                            <field name="substitute_lot"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" nolabel="1" placeholder="Note"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_validate" type="object" string="Confirm" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

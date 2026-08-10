@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_barcode.WorkshopOperationAction">
+        <div class="o_content o_barcode_client_action o_sn_wsd_workshop_action h-100 flex-column">
+            <header class="o_barcode_header border-bottom">
+                <div class="navbar navbar-expand p-2 m-1">
+                    <nav class="navbar-nav me-auto">
+                        <button t-on-click="goBack" class="o_exit btn btn-secondary me-3" t-att-aria-label="backLabel">
+                            <i class="oi oi-chevron-left"/>
+                        </button>
+                        <div class="o_title text-start p-0">
+                            <div t-out="workshopOperationsLabel"/>
+                            <div t-if="state.userName" class="o_barcode_partner text-muted">
+                                <i class="fa fa-user-circle-o me-1"/>
+                                <t t-out="state.userName"/>
+                            </div>
+                        </div>
+                    </nav>
+                    <nav class="navbar-nav">
+                        <button t-if="cameraScannerSupported"
+                                class="o_stock_mobile_barcode btn"
+                                t-att-class="cameraScannerClassState"
+                                t-att-disabled="state.cameraScannerEnabled &amp;&amp; !state.readyToToggleCamera"
+                                t-on-click="toggleCameraScanner">
+                            <i class="fa fa-barcode" role="img"/>
+                        </button>
+                    </nav>
+                </div>
+                <div t-if="state.cameraScannerEnabled" class="text-bg-800">
+                    <BarcodeVideoScanner t-props="barcodeVideoScannerProps"/>
+                </div>
+                <div class="o_barcode_lines_header py-3 px-2 text-bg-800">
+                    <div name="barcode_messages" class="d-flex align-items-center justify-content-center w-100">
+                        <span class="fa fa-lg fa-barcode me-3"/>
+                        <span class="o_scan_message" t-out="scanMessage"/>
+                    </div>
+                </div>
+            </header>
+
+            <main class="o_sn_wsd_workshop_body o_barcode_lines list-group flex-grow-1 text-bg-200">
+                <div t-if="state.smtLoading" class="o_sn_wsd_workshop_loading">
+                    <i class="fa fa-spinner fa-spin me-2"/>
+                    <t t-out="loadingLabel"/>
+                </div>
+
+                <div class="o_sn_wsd_workshop_selectors list-group-item">
+                    <button type="button" class="btn btn-secondary" t-on-click="() => this.openSelector('line')">
+                        <span t-out="selectedLine?.display_name || selectedLine?.name || productionLineLabel"/>
+                        <i class="fa fa-caret-down"/>
+                    </button>
+                    <button type="button" class="btn btn-secondary" t-on-click="() => this.openSelector('station')">
+                        <span t-out="selectedStation?.display_name || selectedStation?.name || workCenterLabel"/>
+                        <i class="fa fa-caret-down"/>
+                    </button>
+                </div>
+
+                <div t-if="state.productionName" class="o_sn_wsd_workshop_context list-group-item">
+                    <div class="fw-bold" t-out="state.productionName"/>
+                    <small t-if="state.materialTableName" class="text-muted" t-out="state.materialTableName"/>
+                    <div t-if="hasSmtMaterialStatus" class="o_sn_wsd_workshop_smt_counts mt-2">
+                        <div class="o_sn_wsd_workshop_smt_count">
+                            <span class="text-muted" t-out="requiredQtyLabel"/>
+                            <strong t-out="state.smtMaterialSummary.required_qty"/>
+                        </div>
+                        <div class="o_sn_wsd_workshop_smt_count">
+                            <span class="text-muted" t-out="loadedQtyLabel"/>
+                            <strong class="text-success" t-out="state.smtMaterialSummary.loaded_qty"/>
+                        </div>
+                        <div class="o_sn_wsd_workshop_smt_count">
+                            <span class="text-muted" t-out="unloadedQtyLabel"/>
+                            <strong class="text-warning" t-out="state.smtMaterialSummary.unloaded_qty"/>
+                        </div>
+                    </div>
+                </div>
+
+                <form t-on-submit="submitCommand" class="o_sn_wsd_workshop_command_row list-group-item">
+                    <input class="o_sn_wsd_workshop_command form-control"
+                           t-model="state.command"
+                           t-ref="commandInput"
+                           t-att-placeholder="enterCommandLabel"
+                           t-att-disabled="state.smtLoading ? 'disabled' : null"/>
+                    <button t-if="isSmtOperation" type="button"
+                            class="btn btn-secondary"
+                            t-on-click="cancelSmtOperation">
+                        <i class="fa fa-times"/>
+                    </button>
+                </form>
+
+                <div t-if="isSmtOperation &amp;&amp; smtScanSummary" class="o_sn_wsd_workshop_summary list-group-item">
+                    <span t-out="smtScanSummary"/>
+                </div>
+
+                <section class="o_sn_wsd_workshop_result list-group-item">
+                    <div class="d-flex justify-content-between gap-2">
+                        <span class="text-muted" t-out="originalValueLabel"/>
+                        <span class="text-end text-break" t-out="state.rawValue"/>
+                    </div>
+                    <div class="d-flex justify-content-between gap-2">
+                        <span class="text-muted" t-out="processingResultLabel"/>
+                        <span class="text-end text-break fw-bold" t-att-class="resultClass" t-out="state.result"/>
+                    </div>
+                </section>
+
+                <section class="o_sn_wsd_workshop_smt_buttons list-group-item">
+                    <t t-foreach="smtOperationButtons" t-as="opBtn" t-key="opBtn.key">
+                        <button type="button"
+                                class="btn"
+                                t-att-class="state.selectedOperation === opBtn.key ? 'btn-primary' : 'btn-secondary'"
+                                t-on-click="() => this.runOperation(opBtn)">
+                            <t t-out="opBtn.label"/>
+                        </button>
+                    </t>
+                </section>
+            </main>
+
+            <footer class="o_barcode_control o_action_buttons d-flex justify-content-between p-2 gap-2 border-top">
+                <button type="button" class="btn btn-secondary" disabled="disabled">
+                    <t t-out="totalLabel"/>
+                </button>
+                <button type="button" class="btn btn-primary" disabled="disabled">
+                    <t t-out="state.total"/>
+                </button>
+            </footer>
+
+            <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
+                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
+                    <h2 t-out="selectorTitle"/>
+                    <div class="o_sn_wsd_workshop_search">
+                        <i class="fa fa-search"/>
+                        <input t-model="state.selectorQuery" t-att-placeholder="enterKeywordLabel"/>
+                    </div>
+                    <div class="o_sn_wsd_workshop_records">
+                        <t t-foreach="selectorRecords" t-as="record" t-key="record.id">
+                            <button type="button" t-on-click="() => this.selectRecord(record)">
+                                <span t-out="record.display_name || record.name"/>
+                                <small t-if="record.code" t-out="record.code"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

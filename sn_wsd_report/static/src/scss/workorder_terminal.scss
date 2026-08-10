@@ -1,0 +1,106 @@
+.o_sn_wsd_terminal_form {
+    .o_form_sheet_bg {
+        background: #f3f5f8;
+    }
+
+    .o_form_sheet {
+        max-width: 1280px;
+        padding: 24px;
+    }
+
+    .o_sn_wsd_terminal_shell {
+        display: grid;
+        grid-template-columns: minmax(320px, 1.1fr) minmax(360px, 1fr);
+        gap: 16px;
+    }
+
+    .o_sn_wsd_terminal_panel {
+        background: #ffffff;
+        border: 1px solid #d7dce3;
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .o_sn_wsd_terminal_panel_title {
+        margin: 0 0 12px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .o_sn_wsd_terminal_kpis {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .o_sn_wsd_terminal_kpi {
+        border: 1px solid #d7dce3;
+        border-radius: 6px;
+        padding: 12px;
+        min-height: 72px;
+        background: #f9fafb;
+    }
+
+    .o_sn_wsd_terminal_kpi_label {
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .o_sn_wsd_terminal_kpi_value {
+        font-size: 24px;
+        font-weight: 600;
+        color: #111827;
+        line-height: 1.2;
+    }
+
+    .o_sn_wsd_terminal_hint {
+        margin: 12px 0 0;
+        padding: 10px 12px;
+        border-radius: 6px;
+        background: #eef5ff;
+        color: #1d4ed8;
+        font-size: 13px;
+    }
+
+    .o_sn_wsd_terminal_compact_group {
+        .o_inner_group {
+            gap: 8px 16px;
+        }
+    }
+
+    .o_sn_wsd_terminal_footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .o_sn_wsd_terminal_footer_note {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    @media (max-width: 992px) {
+        .o_sn_wsd_terminal_shell {
+            grid-template-columns: 1fr;
+        }
+
+        .o_sn_wsd_terminal_kpis {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .o_form_sheet {
+            padding: 16px;
+        }
+
+        .o_sn_wsd_terminal_kpis {
+            grid-template-columns: 1fr;
+        }
+    }
+}

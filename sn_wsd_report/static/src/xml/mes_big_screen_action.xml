@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.MesBigScreenAction">
+        <Layout className="'o_sn_wsd_mes_big_screen_action'">
+            <t t-set-slot="default">
+                <div class="o_sn_wsd_big_screen" t-att-class="state.loading ? 'o_is_loading' : ''">
+                    <div class="o_screen_shell">
+                        <header class="o_screen_header">
+                            <div class="o_header_wing o_header_wing_left">
+                                <span/>
+                                <span/>
+                                <span/>
+                            </div>
+                            <div class="o_header_title">
+                                <div class="o_header_title_inner">
+                                    <h1>&#29983;&#20135;&#21487;&#35270;&#21270;&#22823;&#23631;</h1>
+                                </div>
+                            </div>
+                            <div class="o_header_wing o_header_wing_right">
+                                <span/>
+                                <span/>
+                                <span/>
+                            </div>
+                        </header>
+
+                        <main class="o_screen_grid">
+                            <section class="o_screen_column o_screen_column_left">
+                                <div class="o_tech_panel o_material_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>&#24403;&#26376;&#29983;&#20135;&#25351;&#26631;</span>
+                                        <small>&#25130;&#27490;&#26102;&#38388; <t t-esc="summary.refresh_time || ''"/></small>
+                                    </div>
+                                    <div class="o_ring_metric_grid">
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_cyan"><span><t t-esc="formatNumber(summary.production_count || 0)"/></span></div>
+                                            <label>&#21046;&#20196;&#24635;&#25968;</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_green"><span><t t-esc="formatNumber(summary.today_output_total || 0)"/></span></div>
+                                            <label>&#20170;&#26085;&#20986;&#31449;</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_blue"><span><t t-esc="formatNumber(summary.today_pass_total || 0)"/></span></div>
+                                            <label>&#20170;&#26085;&#33391;&#21697;</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_amber"><span><t t-esc="formatNumber(summary.today_test_count || 0)"/></span></div>
+                                            <label>&#27979;&#35797;&#31508;&#25968;</label>
+                                        </div>
+                                    </div>
+                                    <div class="o_left_card_grid">
+                                        <div t-foreach="progressCards" t-as="item" t-key="item.production_name" class="o_small_metric_card" t-att-class="traceRowClass(item.progress_status)">
+                                            <span><t t-esc="item.production_name || '-'"/></span>
+                                            <strong><t t-esc="formatNumber(item.qty_output_total || 0)"/></strong>
+                                            <em><t t-esc="formatNumber(item.progress_rate || 0, 1)"/>%</em>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_energy_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>&#24037;&#24207;&#33021;&#32791;&#24335;&#25351;&#26631;</span>
+                                        <small>&#33391;&#29575; / &#24322;&#24120;</small>
+                                    </div>
+                                    <div class="o_hex_summary">
+                                        <div class="o_hex_side">
+                                            <strong><t t-esc="formatNumber(summary.today_pass_total || 0)"/></strong>
+                                            <span>&#24050;&#23436;&#25104;</span>
+                                            <em><t t-esc="passRate"/>%</em>
+                                        </div>
+                                        <div class="o_hex_core">
+                                            <strong><t t-esc="formatNumber(summary.today_output_total || 0)"/></strong>
+                                            <span>&#20170;&#26085;&#32047;&#35745;&#20986;&#31449;</span>
+                                        </div>
+                                        <div class="o_hex_side">
+                                            <strong><t t-esc="formatNumber(summary.station_alert_count || 0)"/></strong>
+                                            <span>&#24322;&#24120;&#24037;&#20301;</span>
+                                            <em><t t-esc="formatNumber(summary.open_progress_count || 0)"/></em>
+                                        </div>
+                                    </div>
+                                    <div class="o_quad_status">
+                                        <div t-foreach="operationCards" t-as="item" t-key="`${item.report_date}-${item.station_code}-${item.operation_type}`" class="o_status_chip">
+                                            <label><t t-esc="item.station_code || '-'"/></label>
+                                            <strong><t t-esc="formatNumber(item.pass_rate || 0, 1)"/>%</strong>
+                                            <span>&#19981;&#33391; <t t-esc="formatNumber(item.abnormal_qty || 0)"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="o_screen_column o_screen_column_center">
+                                <div class="o_center_frame">
+                                    <div class="o_center_top_bar">
+                                        <span/>
+                                        <strong><t t-esc="summary.today_date || ''"/></strong>
+                                        <span/>
+                                    </div>
+                                    <div class="o_center_body">
+                                        <div class="o_side_counter_list">
+                                            <div t-foreach="progressCards.slice(0, 4)" t-as="item" t-key="`left-${item.production_name}`" class="o_side_counter">
+                                                <strong><t t-esc="formatNumber(item.qty_pass || 0)"/></strong>
+                                                <span><t t-esc="item.production_name || '-'"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="o_gauge_block">
+                                            <div class="o_gauge" t-att-style="gaugeStyle">
+                                                <div class="o_gauge_scale"/>
+                                                <div class="o_gauge_value">
+                                                    <strong><t t-esc="centerProgressRate"/>%</strong>
+                                                    <span>&#20170;&#26085;&#23436;&#25104;&#20219;&#21153;</span>
+                                                </div>
+                                            </div>
+                                            <div class="o_center_lines">
+                                                <div>
+                                                    <span>&#29983;&#20135;&#35760;&#24405;A</span>
+                                                    <strong><t t-esc="formatNumber(summary.today_output_total || 0)"/></strong>
+                                                    <em>&#20135;&#21697;&#21517;&#31216; / SN</em>
+                                                </div>
+                                                <div>
+                                                    <span>&#29983;&#20135;&#35760;&#24405;B</span>
+                                                    <strong><t t-esc="formatNumber(summary.today_pass_total || 0)"/></strong>
+                                                    <em>&#33391;&#21697;&#25968; / &#36890;&#36807;</em>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="o_side_counter_list">
+                                            <div t-foreach="alertStations.slice(0, 4)" t-as="item" t-key="`right-${item.station_code}`" class="o_side_counter" t-att-class="stationRowClass(item.alert_level)">
+                                                <strong><t t-esc="formatNumber(item.backlog_qty || 0)"/></strong>
+                                                <span><t t-esc="item.station_code || '-'"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_flip_total">
+                                        <span>&#20170;&#26085;&#36710;&#38388;&#23436;&#25104;&#25968;&#37327;</span>
+                                        <div class="o_flip_digits">
+                                            <b t-foreach="completedDigits" t-as="digit" t-key="digit_index"><t t-esc="digit"/></b>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_center_chart_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>&#26102;&#27573;&#29983;&#20135;&#36235;&#21183;</span>
+                                        <small>&#21046;&#20196;&#36827;&#24230; / &#33391;&#21697;</small>
+                                    </div>
+                                    <div class="o_chart_stage"><canvas t-ref="progressCanvas"/></div>
+                                </div>
+                            </section>
+
+                            <section class="o_screen_column o_screen_column_right">
+                                <div class="o_top_stat_grid">
+                                    <div class="o_cylinder_card">
+                                        <span>&#29615;&#27604;&#21464;&#21270; +43.2%</span>
+                                        <strong><t t-esc="formatNumber(summary.today_test_count || 0)"/></strong>
+                                        <em>&#26085;&#27979;&#35797;&#37327;</em>
+                                    </div>
+                                    <div class="o_cylinder_card">
+                                        <span>&#29615;&#27604;&#21464;&#21270; +43.2%</span>
+                                        <strong><t t-esc="formatNumber(summary.today_output_total || 0)"/></strong>
+                                        <em>&#26085;&#20986;&#31449;&#37327;</em>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_rank_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>&#36710;&#38388;&#26085;&#20135;&#37327;</span>
+                                        <small>&#25130;&#27490;&#26102;&#38388; <t t-esc="summary.refresh_time || ''"/></small>
+                                    </div>
+                                    <div class="o_bar_rank_list">
+                                        <div t-foreach="outputBars" t-as="item" t-key="`${item.report_date}-${item.station_code}`" class="o_bar_rank_row">
+                                            <div class="o_bar_rank_label">
+                                                <span><t t-esc="item.station_code || '-'"/></span>
+                                                <strong><t t-esc="formatNumber(item.qty_out || 0)"/></strong>
+                                            </div>
+                                            <div class="o_bar_rank_track">
+                                                <i t-att-style="progressBarStyle(item.qty_out || 0, summary.today_output_total || 0)"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_trace_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>&#20170;&#26085;&#25805;&#20316;&#21592;&#24037;&#20316;&#24773;&#20917;</span>
+                                        <small>SN &#27969;&#36716;</small>
+                                    </div>
+                                    <div class="o_trace_table">
+                                        <div class="o_trace_table_head">
+                                            <span>&#26102;&#38388;</span>
+                                            <span>SN</span>
+                                            <span>&#24037;&#20301;</span>
+                                            <span>&#32467;&#26524;</span>
+                                        </div>
+                                        <div
+                                            t-foreach="compactTraces"
+                                            t-as="item"
+                                            t-key="`${item.event_time}-${item.serial_no}-${item.reference_name}`"
+                                            class="o_trace_table_row"
+                                            t-att-class="traceRowClass(item.status)"
+                                        >
+                                            <span><t t-esc="item.event_time"/></span>
+                                            <span><t t-esc="item.serial_no"/></span>
+                                            <span><t t-esc="item.station_code"/></span>
+                                            <span><t t-esc="item.result"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_hidden_chart_carrier">
+                                    <canvas t-ref="yieldCanvas"/>
+                                    <canvas t-ref="testCanvas"/>
+                                    <canvas t-ref="agingCanvas"/>
+                                    <canvas t-ref="efficiencyCanvas"/>
+                                    <canvas t-ref="congestionCanvas"/>
+                                    <canvas t-ref="repairCanvas"/>
+                                    <canvas t-ref="traceCanvas"/>
+                                </div>
+                            </section>
+                        </main>
+
+                        <footer class="o_screen_footer">
+                            <div>
+                                <span>&#33258;&#21160;&#21047;&#26032;</span>
+                                <button
+                                    class="btn o_screen_button"
+                                    t-att-class="state.autoRefresh ? 'o_is_active' : ''"
+                                    t-on-click="toggleAutoRefresh"
+                                >
+                                    <t t-esc="state.autoRefresh ? `ON ${state.countdown}s` : 'OFF'"/>
+                                </button>
+                            </div>
+                            <button class="btn o_screen_button o_primary" t-on-click="manualRefresh" t-att-disabled="state.refreshing">
+                                <t t-esc="state.refreshing ? '&#21047;&#26032;&#20013;' : '&#31435;&#21363;&#21047;&#26032;'"/>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>

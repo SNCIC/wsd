@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_mrp_team_member_add_wizard_form" model="ir.ui.view">
+        <field name="name">sn.mrp.team.member.add.wizard.form</field>
+        <field name="model">sn.mrp.team.member.add.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Team Members">
+                <sheet>
+                    <group>
+                        <field name="team_id" readonly="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="employee_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Add" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_team_member_remove_wizard_form" model="ir.ui.view">
+        <field name="name">sn.mrp.team.member.remove.wizard.form</field>
+        <field name="model">sn.mrp.team.member.remove.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Remove Team Members">
+                <sheet>
+                    <group>
+                        <field name="team_id" readonly="1"/>
+                        <field name="member_ids" widget="many2many_tags"/>
+                        <field name="leader_reassignment_required" invisible="1"/>
+                        <field name="new_leader_member_id" invisible="not leader_reassignment_required" required="leader_reassignment_required"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Remove" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

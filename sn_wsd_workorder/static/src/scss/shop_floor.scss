@@ -1,0 +1,124 @@
+.o_sn_wsd_shop_floor {
+    background: #f6f7f9;
+
+    .o_sn_wsd_shop_floor_search {
+        width: 220px;
+    }
+
+    .o_sn_wsd_shop_floor_filters {
+        min-width: 0;
+    }
+
+    .o_sn_wsd_shop_floor_scope_select {
+        min-width: 170px;
+    }
+
+    .o_sn_wsd_shop_floor_workcenter_select {
+        min-width: 220px;
+    }
+
+    .o_sn_wsd_shop_floor_employee_select {
+        width: 180px;
+    }
+
+    .o_sn_wsd_shop_floor_pin {
+        width: 96px;
+    }
+
+    .o_sn_wsd_workorder_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 16px;
+        align-items: start;
+    }
+
+    .o_sn_wsd_workorder_card {
+        border-radius: 8px;
+        min-width: 0;
+    }
+
+    .o_sn_wsd_workorder_card_header {
+        background: #fff;
+    }
+
+    .o_sn_wsd_workorder_menu {
+        border-radius: 6px;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
+        inset-inline-end: 0;
+        min-width: 240px;
+        padding: 6px;
+        position: absolute;
+        top: 100%;
+        z-index: 20;
+
+        .dropdown-item {
+            align-items: center;
+            border-radius: 4px;
+            display: flex;
+            gap: 8px;
+            min-height: 36px;
+            padding: 8px 10px;
+            white-space: nowrap;
+        }
+
+        .fa {
+            flex: 0 0 18px;
+            margin-right: 0 !important;
+            text-align: center;
+        }
+    }
+
+    .o_sn_wsd_component_row {
+        min-height: 44px;
+    }
+
+    .o_sn_wsd_shop_floor_empty {
+        display: flex;
+        min-height: 240px;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 18px;
+    }
+
+    .btn {
+        min-height: 40px;
+    }
+
+    .o_sn_wsd_modal_backdrop {
+        align-items: center;
+        background: rgba(17, 24, 39, 0.55);
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 24px;
+        position: fixed;
+        z-index: 1050;
+    }
+
+    .o_sn_wsd_modal {
+        border-radius: 8px;
+        max-width: 520px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_sn_wsd_shop_floor {
+        .o_sn_wsd_workorder_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .o_sn_wsd_shop_floor_search,
+        .o_sn_wsd_shop_floor_employee_select,
+        .o_sn_wsd_shop_floor_pin,
+        .o_sn_wsd_shop_floor_scope_select,
+        .o_sn_wsd_shop_floor_workcenter_select {
+            width: 100%;
+        }
+
+        .o_sn_wsd_shop_floor_header > .ms-auto {
+            width: 100%;
+        }
+    }
+}

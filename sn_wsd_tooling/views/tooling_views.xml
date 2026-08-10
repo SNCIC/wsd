@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_sn_tooling_operation" model="ir.sequence">
+        <field name="name">Tooling Operation</field>
+        <field name="code">sn.tooling.operation</field>
+        <field name="prefix">TLG%(y)s</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="view_sn_tooling_template_list" model="ir.ui.view">
+        <field name="name">sn.tooling.template.list</field>
+        <field name="model">sn.tooling.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="tool_type"/>
+                <field name="product_tmpl_id"/>
+                <field name="panel_count"/>
+                <field name="maintenance_count_limit"/>
+                <field name="maintenance_cycle_days"/>
+                <field name="tooling_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_template_form" model="ir.ui.view">
+        <field name="name">sn.tooling.template.form</field>
+        <field name="model">sn.tooling.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_tooling" icon="fa-wrench">
+                            <field name="tooling_count" widget="statinfo" string="Tooling"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="tool_type"/>
+                            <field name="product_tmpl_id"/>
+                            <field name="product_id"/>
+                            <field name="spec"/>
+                        </group>
+                        <group>
+                            <field name="panel_count"/>
+                            <field name="safe_stock_qty"/>
+                            <field name="maintenance_by_count"/>
+                            <field name="maintenance_count_limit" invisible="not maintenance_by_count"/>
+                            <field name="maintenance_count_reminder" invisible="not maintenance_by_count"/>
+                            <field name="maintenance_by_cycle"/>
+                            <field name="maintenance_cycle_days" invisible="not maintenance_by_cycle"/>
+                            <field name="maintenance_cycle_reminder_days" invisible="not maintenance_by_cycle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Maintenance Items">
+                            <field name="maintenance_item_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="default_result"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_list" model="ir.ui.view">
+        <field name="name">sn.tooling.list</field>
+        <field name="model">sn.tooling</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tool_type"/>
+                <field name="product_tmpl_id"/>
+                <field name="spec"/>
+                <field name="workcenter_id"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'in_stock'"
+                    decoration-info="state == 'online'"
+                    decoration-warning="state in ('issued', 'cleaning')"
+                    decoration-danger="state in ('disabled', 'scrapped')"/>
+                <field name="maintenance_status" widget="badge"
+                    decoration-success="maintenance_status == 'normal'"
+                    decoration-warning="maintenance_status == 'due'"
+                    decoration-danger="maintenance_status == 'expired'"/>
+                <field name="current_usage_count"/>
+                <field name="total_usage_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_search" model="ir.ui.view">
+        <field name="name">sn.tooling.search</field>
+        <field name="model">sn.tooling</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_tmpl_id"/>
+                <field name="tool_type"/>
+                <field name="workcenter_id"/>
+                <filter string="In Stock" name="in_stock" domain="[('state', '=', 'in_stock')]"/>
+                <filter string="Issued" name="issued" domain="[('state', '=', 'issued')]"/>
+                <filter string="Online" name="online" domain="[('state', '=', 'online')]"/>
+                <filter string="Maintenance Due" name="due" domain="[('maintenance_status', '=', 'due')]"/>
+                <filter string="Maintenance Expired" name="expired" domain="[('maintenance_status', '=', 'expired')]"/>
+                <group>
+                    <filter string="Tool Type" name="group_tool_type" context="{'group_by': 'tool_type'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Maintenance Status" name="group_maintenance_state" context="{'group_by': 'maintenance_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_form" model="ir.ui.view">
+        <field name="name">sn.tooling.form</field>
+        <field name="model">sn.tooling</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_maintenance_wizard" type="object" string="Batch Maintenance" invisible="maintenance_status not in ('due', 'expired')" class="btn-primary"/>
+                    <button name="action_disable" type="object" string="Disable" invisible="state != 'in_stock'" class="btn-secondary"/>
+                    <button name="action_enable" type="object" string="Enable" invisible="state != 'disabled'" class="btn-secondary"/>
+                    <button name="action_scrap" type="object" string="Scrap" invisible="state == 'scrapped'" groups="mrp.group_mrp_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_stock,issued,online,cleaning,disabled,scrapped"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_operation_logs" icon="fa-exchange">
+                            <field name="operation_count" widget="statinfo" string="Operation Logs"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_usage_logs" icon="fa-history">
+                            <field name="usage_count" widget="statinfo" string="Usage Logs"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_maintenance_logs" icon="fa-wrench">
+                            <field name="maintenance_log_count" widget="statinfo" string="Maintenance Logs"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_maintenance_requests" icon="fa-life-ring">
+                            <field name="maintenance_request_count" widget="statinfo" string="Maintenance Requests"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="template_id"/>
+                            <field name="name"/>
+                            <field name="tool_type"/>
+                            <field name="product_tmpl_id"/>
+                            <field name="product_id"/>
+                            <field name="spec"/>
+                            <field name="workcenter_id"/>
+                            <field name="bom_id"/>
+                        </group>
+                        <group>
+                            <field name="location_id"/>
+                            <field name="vendor_id"/>
+                            <field name="manufacture_date"/>
+                            <field name="acceptance_date"/>
+                            <field name="panel_count"/>
+                            <field name="safe_stock_qty"/>
+                            <field name="maintenance_equipment_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Maintenance Rules">
+                            <field name="maintenance_by_count"/>
+                            <field name="maintenance_count_limit" invisible="not maintenance_by_count"/>
+                            <field name="maintenance_count_reminder" invisible="not maintenance_by_count"/>
+                            <field name="maintenance_by_cycle"/>
+                            <field name="maintenance_cycle_days" invisible="not maintenance_by_cycle"/>
+                            <field name="maintenance_cycle_reminder_days" invisible="not maintenance_by_cycle"/>
+                        </group>
+                        <group string="Maintenance Status">
+                            <field name="maintenance_status" readonly="1"/>
+                            <field name="count_maintenance_status" readonly="1"/>
+                            <field name="cycle_maintenance_status" readonly="1"/>
+                            <field name="last_maintenance_date"/>
+                            <field name="next_count_maintenance_at" readonly="1"/>
+                            <field name="next_cycle_maintenance_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Usage Counters">
+                            <field name="current_usage_count" readonly="1"/>
+                            <field name="total_usage_count" readonly="1"/>
+                        </group>
+                        <group string="State Details">
+                            <field name="disabled_reason" invisible="state != 'disabled'"/>
+                            <field name="scrap_reason"/>
+                            <field name="scrap_user_id" readonly="1"/>
+                            <field name="scrap_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Applicability">
+                            <field name="applicability_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_tmpl_id"/>
+                                    <field name="product_id"/>
+                                    <field name="bom_id"/>
+                                    <field name="operation_id"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_operation_log_list" model="ir.ui.view">
+        <field name="name">sn.tooling.operation.log.list</field>
+        <field name="model">sn.tooling.operation.log</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="tooling_id"/>
+                <field name="workorder_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="operation_type"/>
+                <field name="operator_id"/>
+                <field name="operation_time"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_usage_log_list" model="ir.ui.view">
+        <field name="name">sn.tooling.usage.log.list</field>
+        <field name="model">sn.tooling.usage.log</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="tooling_id"/>
+                <field name="workorder_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="operator_id"/>
+                <field name="operation_time"/>
+                <field name="pass_qty"/>
+                <field name="panel_count"/>
+                <field name="usage_qty"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_maintenance_log_list" model="ir.ui.view">
+        <field name="name">sn.tooling.maintenance.log.list</field>
+        <field name="model">sn.tooling.maintenance.log</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="tooling_id"/>
+                <field name="maintenance_user_id"/>
+                <field name="maintenance_time"/>
+                <field name="before_status"/>
+                <field name="after_status"/>
+                <field name="before_current_usage_count"/>
+                <field name="after_current_usage_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_maintenance_log_form" model="ir.ui.view">
+        <field name="name">sn.tooling.maintenance.log.form</field>
+        <field name="model">sn.tooling.maintenance.log</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="tooling_id" readonly="1"/>
+                            <field name="maintenance_user_id" readonly="1"/>
+                            <field name="maintenance_time" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="before_status" readonly="1"/>
+                            <field name="after_status" readonly="1"/>
+                            <field name="before_current_usage_count" readonly="1"/>
+                            <field name="after_current_usage_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list create="0" delete="0">
+                            <field name="name"/>
+                            <field name="result"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_tooling_template" model="ir.actions.act_window">
+        <field name="name">Tooling Templates</field>
+        <field name="res_model">sn.tooling.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sn_tooling" model="ir.actions.act_window">
+        <field name="name">Tooling</field>
+        <field name="res_model">sn.tooling</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_tooling_search"/>
+    </record>
+
+    <record id="action_sn_tooling_operation_log" model="ir.actions.act_window">
+        <field name="name">Tooling Operation Logs</field>
+        <field name="res_model">sn.tooling.operation.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_sn_tooling_usage_log" model="ir.actions.act_window">
+        <field name="name">Tooling Usage Logs</field>
+        <field name="res_model">sn.tooling.usage.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_sn_tooling_maintenance_log" model="ir.actions.act_window">
+        <field name="name">Tooling Maintenance Logs</field>
+        <field name="res_model">sn.tooling.maintenance.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_tooling_root" name="Tooling Management" parent="mrp.menu_mrp_root" sequence="46" groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_sn_tooling_template" name="Tooling Templates" parent="menu_sn_tooling_root" action="action_sn_tooling_template" sequence="10"/>
+    <menuitem id="menu_sn_tooling" name="Tooling" parent="menu_sn_tooling_root" action="action_sn_tooling" sequence="20"/>
+    <menuitem id="menu_sn_tooling_operation_log" name="Operation Logs" parent="menu_sn_tooling_root" action="action_sn_tooling_operation_log" sequence="30"/>
+    <menuitem id="menu_sn_tooling_usage_log" name="Usage Logs" parent="menu_sn_tooling_root" action="action_sn_tooling_usage_log" sequence="40"/>
+    <menuitem id="menu_sn_tooling_maintenance_log" name="Maintenance Logs" parent="menu_sn_tooling_root" action="action_sn_tooling_maintenance_log" sequence="50"/>
+</odoo>

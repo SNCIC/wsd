@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sn_consumable_barcode_rule_list" model="ir.ui.view">
+            <field name="name">sn.consumable.barcode.rule.list</field>
+            <field name="model">sn.consumable.barcode.rule</field>
+            <field name="arch" type="xml">
+                <list string="Barcode Rules">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="prefix"/>
+                    <field name="date_token"/>
+                    <field name="sequence_padding"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="active" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_barcode_rule_form" model="ir.ui.view">
+            <field name="name">sn.consumable.barcode.rule.form</field>
+            <field name="model">sn.consumable.barcode.rule</field>
+            <field name="arch" type="xml">
+                <form string="Barcode Rule">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="prefix"/>
+                                <field name="date_token"/>
+                            </group>
+                            <group>
+                                <field name="sequence_padding"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_template_list" model="ir.ui.view">
+            <field name="name">sn.consumable.template.list</field>
+            <field name="model">sn.consumable.template</field>
+            <field name="arch" type="xml">
+                <list string="Consumable Templates">
+                    <field name="consumable_code"/>
+                    <field name="consumable_name"/>
+                    <field name="consumable_type"/>
+                    <field name="safety_stock"/>
+                    <field name="safety_stock_uom_id" groups="uom.group_uom"/>
+                    <field name="barcode_rule_id"/>
+                    <field name="vendor_id" optional="show"/>
+                    <field name="info_count" string="Consumable Quantity"/>
+                    <button name="action_view_infos" type="object" string="View Consumable Info" class="btn-secondary"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_template_form" model="ir.ui.view">
+            <field name="name">sn.consumable.template.form</field>
+            <field name="model">sn.consumable.template</field>
+            <field name="arch" type="xml">
+                <form string="Consumable Template">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="display_name" readonly="1"/></h1>
+                        </div>
+                        <group string="Basic Information">
+                            <group>
+                                <field name="product_tmpl_id"/>
+                                <field name="consumable_code"/>
+                                <field name="consumable_type"/>
+                                <field name="consumable_name"/>
+                                <field name="specification"/>
+                            </group>
+                            <group>
+                                <field name="safety_stock"/>
+                                <field name="safety_stock_uom_id" groups="uom.group_uom"/>
+                                <field name="barcode_rule_id"/>
+                                <field name="vendor_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <group string="Control Rules">
+                            <group>
+                                <field name="paste_red_glue_control" widget="radio"/>
+                                <field name="expiry_control" widget="radio"/>
+                                <field name="batch_control" widget="radio"/>
+                            </group>
+                            <group>
+                                <field name="stirring_control"/>
+                                <field name="adhesion_control"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group string="Rule Details">
+                            <group>
+                                <field name="warmup_duration_min"/>
+                                <field name="warmup_duration_max"/>
+                                <field name="stirring_duration_min" invisible="not stirring_control"/>
+                                <field name="stirring_duration_max" invisible="not stirring_control"/>
+                            </group>
+                            <group>
+                                <field name="shelf_life_days"/>
+                                <field name="expiry_reminder_days"/>
+                                <field name="max_warmup_count"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Consumable Info">
+                                <field name="info_ids" readonly="1">
+                                    <list create="0" delete="0">
+                                        <field name="name"/>
+                                        <field name="status" widget="badge"/>
+                                        <field name="is_second_recycled"/>
+                                        <field name="vendor_id"/>
+                                        <field name="max_warmup_count"/>
+                                        <field name="warmup_count"/>
+                                        <field name="production_lot_no"/>
+                                        <field name="production_date"/>
+                                        <field name="expiry_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_info_list" model="ir.ui.view">
+            <field name="name">sn.consumable.info.list</field>
+            <field name="model">sn.consumable.info</field>
+            <field name="arch" type="xml">
+                <list string="Consumable Info">
+                    <field name="name"/>
+                    <field name="status" widget="badge"/>
+                    <field name="is_second_recycled"/>
+                    <field name="consumable_code"/>
+                    <field name="consumable_name"/>
+                    <field name="specification"/>
+                    <field name="consumable_type"/>
+                    <field name="vendor_id"/>
+                    <field name="max_warmup_count"/>
+                    <field name="warmup_count"/>
+                    <field name="production_lot_no"/>
+                    <field name="production_date"/>
+                    <field name="expiry_date"/>
+                    <field name="open_datetime" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_info_form" model="ir.ui.view">
+            <field name="name">sn.consumable.info.form</field>
+            <field name="model">sn.consumable.info</field>
+            <field name="arch" type="xml">
+                <form string="Consumable Info">
+                    <header>
+                        <button name="action_mark_in_stock" type="object" string="Receive" invisible="status not in ['draft', 'recycled']"/>
+                        <button name="action_reserve" type="object" string="Reserve Issue" invisible="status != 'in_stock'"/>
+                        <button name="action_start_warmup" type="object" string="Start Warm-up" invisible="status != 'reserved'"/>
+                        <button name="action_finish_warmup" type="object" string="Finish Warm-up" invisible="status != 'warming'"/>
+                        <button name="action_stir" type="object" string="Stir" invisible="status not in ['warming', 'stirred'] or not template_id.stirring_control"/>
+                        <button name="action_issue" type="object" string="Issue" invisible="status not in ['reserved', 'stirred']"/>
+                        <button name="action_open" type="object" string="Open Online" invisible="status != 'issued'"/>
+                        <button name="action_unload" type="object" string="Unload" invisible="status != 'opened'"/>
+                        <button name="action_mark_recycled" type="object" string="Second Recycle" invisible="status not in ['issued', 'opened']"/>
+                        <button name="action_mark_exhausted" type="object" string="Mark Exhausted" invisible="status not in ['issued', 'opened']"/>
+                        <button name="action_mark_scrapped" type="object" string="Scrap" invisible="status in ['scrapped', 'exhausted']"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,in_stock,reserved,warming,stirred,issued,opened,recycled,exhausted,expired,scrapped"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="template_id"/>
+                                <field name="consumable_code" readonly="1"/>
+                                <field name="consumable_name" readonly="1"/>
+                                <field name="specification" readonly="1"/>
+                                <field name="consumable_type" readonly="1"/>
+                                <field name="vendor_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="is_second_recycled"/>
+                                <field name="max_warmup_count" readonly="1"/>
+                                <field name="warmup_count"/>
+                                <field name="production_lot_no"/>
+                                <field name="production_date"/>
+                                <field name="expiry_date"/>
+                            </group>
+                        </group>
+                        <group string="Process Information">
+                            <group>
+                                <field name="reserve_datetime"/>
+                                <field name="issue_datetime"/>
+                                <field name="open_datetime"/>
+                                <field name="unload_datetime"/>
+                            </group>
+                            <group>
+                                <field name="warmup_start_datetime"/>
+                                <field name="warmup_end_datetime"/>
+                                <field name="stirring_datetime"/>
+                                <field name="adhesion_test_result" invisible="not template_id.adhesion_control"/>
+                                <field name="is_expired" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_template_search" model="ir.ui.view">
+            <field name="name">sn.consumable.template.search</field>
+            <field name="model">sn.consumable.template</field>
+            <field name="arch" type="xml">
+                <search string="Consumable Templates">
+                    <field name="consumable_code"/>
+                    <field name="consumable_name"/>
+                    <field name="consumable_type"/>
+                    <filter name="group_by_type" string="Group by Consumable Type" context="{'group_by': 'consumable_type'}"/>
+                    <filter name="group_by_vendor" string="Group by Vendor" context="{'group_by': 'vendor_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_info_search" model="ir.ui.view">
+            <field name="name">sn.consumable.info.search</field>
+            <field name="model">sn.consumable.info</field>
+            <field name="arch" type="xml">
+                <search string="Consumable Info">
+                    <field name="name"/>
+                    <field name="consumable_code"/>
+                    <field name="consumable_name"/>
+                    <field name="production_lot_no"/>
+                    <field name="status"/>
+                    <filter name="filter_expired" string="Expired" domain="[('is_expired', '=', True)]"/>
+                    <filter name="filter_in_stock" string="In Stock" domain="[('status', '=', 'in_stock')]"/>
+                    <filter name="filter_issued" string="Issued" domain="[('status', '=', 'issued')]"/>
+                    <filter name="filter_opened" string="Opened" domain="[('status', '=', 'opened')]"/>
+                    <filter name="filter_exhausted" string="Exhausted" domain="[('status', '=', 'exhausted')]"/>
+                    <filter name="group_by_type" string="Group by Consumable Type" context="{'group_by': 'consumable_type'}"/>
+                    <filter name="group_by_status" string="Group by Status" context="{'group_by': 'status'}"/>
+                    <filter name="group_by_vendor" string="Group by Vendor" context="{'group_by': 'vendor_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sn_consumable_template" model="ir.actions.act_window">
+            <field name="name">Consumable Templates</field>
+            <field name="res_model">sn.consumable.template</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sn_consumable_template_search"/>
+        </record>
+
+        <record id="action_sn_consumable_info" model="ir.actions.act_window">
+            <field name="name">Consumable Info</field>
+            <field name="res_model">sn.consumable.info</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sn_consumable_info_search"/>
+        </record>
+
+        <record id="action_sn_consumable_barcode_rule" model="ir.actions.act_window">
+            <field name="name">Barcode Rules</field>
+            <field name="res_model">sn.consumable.barcode.rule</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_sn_consumable_root"
+                  name="Consumables"
+                  parent="mrp.menu_mrp_root"
+                  sequence="45"/>
+
+        <menuitem id="menu_sn_consumable_template"
+                  name="Consumable Templates"
+                  parent="menu_sn_consumable_root"
+                  action="action_sn_consumable_template"
+                  sequence="10"/>
+
+        <menuitem id="menu_sn_consumable_info"
+                  name="Consumable Info"
+                  parent="menu_sn_consumable_root"
+                  action="action_sn_consumable_info"
+                  sequence="20"/>
+
+        <menuitem id="menu_sn_consumable_barcode_rule"
+                  name="Barcode Rules"
+                  parent="menu_sn_consumable_root"
+                  action="action_sn_consumable_barcode_rule"
+                  sequence="30"
+                  groups="mrp.group_mrp_manager"/>
+    </data>
+</odoo>

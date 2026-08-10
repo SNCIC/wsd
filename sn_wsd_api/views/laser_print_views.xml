@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_laser_print_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.laser.print.record.list</field>
+        <field name="model">sn.wsd.laser.print.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="print_time"/>
+                <field name="name"/>
+                <field name="work_order_no"/>
+                <field name="product_id"/>
+                <field name="sn_scope"/>
+                <field name="drawing_no"/>
+                <field name="quantity"/>
+                <field name="operator_code"/>
+                <field name="source_system"/>
+                <field name="request_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_laser_print_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.laser.print.record.form</field>
+        <field name="model">sn.wsd.laser.print.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_id" readonly="1"/>
+                            <field name="work_order_no" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="sn_scope" readonly="1"/>
+                            <field name="drawing_no" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="quantity" readonly="1"/>
+                            <field name="operator_code" readonly="1"/>
+                            <field name="print_time" readonly="1"/>
+                            <field name="source_system" readonly="1"/>
+                            <field name="request_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Printed Serials">
+                            <field name="line_ids" nolabel="1" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="serial_no"/>
+                                    <field name="lot_id"/>
+                                    <field name="internal_serial_id" column_invisible="parent.sn_scope != 'meter_product'"/>
+                                    <field name="pcb_board_id" column_invisible="parent.sn_scope != 'smt_pcb_board'"/>
+                                    <field name="drawing_no"/>
+                                    <field name="operator_code"/>
+                                    <field name="print_time"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_laser_print_record_search" model="ir.ui.view">
+        <field name="name">sn.wsd.laser.print.record.search</field>
+        <field name="model">sn.wsd.laser.print.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="work_order_no"/>
+                <field name="product_id"/>
+                <field name="sn_scope"/>
+                <field name="drawing_no"/>
+                <field name="operator_code"/>
+                <field name="source_system"/>
+                <filter string="Today" name="today" domain="[('print_time', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <group>
+                    <filter string="Manufacturing Order" name="group_production" context="{'group_by': 'production_id'}"/>
+                    <filter string="SN Scope" name="group_sn_scope" context="{'group_by': 'sn_scope'}"/>
+                    <filter string="Drawing No" name="group_drawing" context="{'group_by': 'drawing_no'}"/>
+                    <filter string="Operator" name="group_operator" context="{'group_by': 'operator_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_laser_print_record" model="ir.actions.act_window">
+        <field name="name">Laser Print Records</field>
+        <field name="res_model">sn.wsd.laser.print.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_laser_print_record_search"/>
+    </record>
+
+    <menuitem id="menu_sn_wsd_laser_print_record" name="Laser Print Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_wsd_laser_print_record" sequence="7"/>
+</odoo>

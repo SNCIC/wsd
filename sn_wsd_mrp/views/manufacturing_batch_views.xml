@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_manufacturing_batch_list" model="ir.ui.view">
+        <field name="name">sn.wsd.manufacturing.batch.list</field>
+        <field name="model">sn.wsd.manufacturing.batch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="planned_qty" sum="Total Planned"/>
+                <field name="completed_qty" sum="Total Completed"/>
+                <field name="wip_qty" sum="Total WIP"/>
+                <field name="remaining_qty" sum="Total Remaining"/>
+                <field name="route_id"/>
+                <field name="route_revision"/>
+                <field name="operation_snapshot_count"/>
+                <field name="state"/>
+                <field name="date_start"/>
+                <field name="date_finished"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_manufacturing_batch_form" model="ir.ui.view">
+        <field name="name">sn.wsd.manufacturing.batch.form</field>
+        <field name="model">sn.wsd.manufacturing.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_missing_internal_serials"
+                            type="object"
+                            string="Generate Factory Serial Numbers"
+                            class="btn-primary"
+                            groups="mrp.group_mrp_user"
+                            invisible="not can_generate_internal_serials"/>
+                    <field name="can_generate_internal_serials" invisible="1"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,partial_done,done,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_productions" type="object" class="oe_stat_button" icon="fa-cogs">
+                            <field name="production_count" widget="statinfo" string="Manufacturing Orders"/>
+                        </button>
+                        <button name="action_open_internal_serials" type="object" class="oe_stat_button" icon="fa-barcode">
+                            <field name="internal_serial_count" widget="statinfo" string="Internal Serials"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="product_uom_id"/>
+                            <field name="bom_id"/>
+                            <field name="route_id"/>
+                            <field name="route_revision"/>
+                        </group>
+                        <group>
+                            <field name="planned_qty" readonly="1"/>
+                            <field name="active_internal_serial_count" readonly="1"/>
+                            <field name="missing_internal_serial_count" readonly="1"/>
+                            <field name="produced_qty" readonly="1"/>
+                            <field name="completed_qty" readonly="1"/>
+                            <field name="wip_qty" readonly="1"/>
+                            <field name="remaining_qty" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="productions" string="Manufacturing Orders">
+                            <field name="production_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="x_batch_role"/>
+                                    <field name="product_qty"/>
+                                    <field name="qty_produced"/>
+                                    <field name="state"/>
+                                    <field name="date_start"/>
+                                    <field name="date_finished"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="route_snapshot" string="Route Snapshot">
+                            <field name="operation_snapshot_ids" readonly="1">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="step_code"/>
+                                    <field name="operation_name"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="workcenter_code"/>
+                                    <field name="station_type"/>
+                                    <field name="route_revision"/>
+                                    <field name="allow_entry"/>
+                                    <field name="allow_reentry"/>
+                                    <field name="allow_repair_return"/>
+                                    <field name="allow_skip_with_override"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_manufacturing_batch_search" model="ir.ui.view">
+        <field name="name">sn.wsd.manufacturing.batch.search</field>
+        <field name="model">sn.wsd.manufacturing.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="route_id"/>
+                <field name="state"/>
+                <group>
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Route" name="group_by_route" context="{'group_by': 'route_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_manufacturing_batch" model="ir.actions.act_window">
+        <field name="name">Manufacturing Batches</field>
+        <field name="res_model">sn.wsd.manufacturing.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_manufacturing_batch_search"/>
+    </record>
+
+    <record id="view_mrp_production_form_batch_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.form.batch.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='bom_div']" position="after">
+                <field name="x_manufacturing_batch_id" readonly="1"/>
+                <field name="x_batch_role" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_internal_serial_list_batch_inherit" model="ir.ui.view">
+        <field name="name">sn.wsd.internal.serial.list.batch.inherit</field>
+        <field name="model">sn.wsd.internal.serial</field>
+        <field name="inherit_id" ref="view_sn_wsd_internal_serial_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='production_id']" position="after">
+                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="current_production_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_internal_serial_form_batch_inherit" model="ir.ui.view">
+        <field name="name">sn.wsd.internal.serial.form.batch.inherit</field>
+        <field name="model">sn.wsd.internal.serial</field>
+        <field name="inherit_id" ref="view_sn_wsd_internal_serial_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='production_id']" position="after">
+                <field name="manufacturing_batch_id"/>
+                <field name="current_production_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

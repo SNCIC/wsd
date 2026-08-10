@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workcenter_form_sn_wsd_workorder" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.sn.wsd.workorder</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='costs_hour']" position="after">
+                <field name="sn_employee_costs_hour"/>
+                <field name="sn_shop_floor_enabled"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

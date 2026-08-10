@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sn_wsd_mes_analysis" name="MES Analysis" parent="mrp.menu_mrp_reporting" sequence="33"/>
+    <menuitem id="menu_sn_wsd_mes_big_screen" name="MES Big Screen" parent="mrp.menu_mrp_reporting" action="action_sn_wsd_mes_big_screen_server" sequence="32"/>
+    <menuitem id="menu_sn_wsd_production_progress_report" name="Production Progress" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_production_progress_report" sequence="5"/>
+    <menuitem id="menu_sn_wsd_operation_daily_report" name="Operation Daily" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_operation_daily_report" sequence="10"/>
+    <menuitem id="menu_sn_wsd_test_pass_rate_report" name="Test Pass Rates" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_test_pass_rate_report" sequence="15"/>
+    <menuitem id="menu_sn_wsd_aging_loss_report" name="Aging Loss" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_aging_loss_report" sequence="20"/>
+    <menuitem id="menu_sn_wsd_repair_closure_report" name="Repair Closure" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_repair_closure_report" sequence="25"/>
+    <menuitem id="menu_sn_wsd_serial_trace_summary_report" name="Serial Trace Summary" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_serial_trace_summary_report" sequence="30"/>
+    <menuitem id="menu_sn_wsd_serial_trace_detail_report" name="Serial Trace Detail" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_serial_trace_detail_report" sequence="32"/>
+    <menuitem id="menu_sn_wsd_test_history_report" name="SN Test History" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_test_history_report" sequence="34"/>
+    <menuitem id="menu_sn_wsd_station_efficiency_report" name="Station Efficiency" parent="menu_sn_wsd_mes_analysis" action="action_sn_wsd_station_efficiency_report" sequence="35"/>
+    <menuitem id="menu_mrp_workorder_report" name="Workorder Reports" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_mrp_workorder_report" sequence="5"/>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workorder_form_sn_wsd_report" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.sn.wsd.report</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_terminal_report_wizard"
+                        type="object"
+                        string="Report"
+                        class="btn-primary"
+                        invisible="not x_is_meter_operation or state in ['done', 'cancel']"/>
+                <button name="action_open_workorder_reports"
+                        type="object"
+                        string="Workorder Reports"
+                        class="btn-secondary"
+                        invisible="not x_is_meter_operation"/>
+            </xpath>
+            <xpath expr="//field[@name='x_meter_qty_scrap']" position="after">
+                <field name="workorder_report_count" readonly="1"/>
+                <button name="action_sync_meter_qty" type="object" string="Sync Qty From Serials" class="btn-secondary"/>
+            </xpath>
+            <xpath expr="//field[@name='x_meter_qty_scrap']/ancestor::group[2]" position="after">
+                <group string="Report Records">
+                    <field name="workorder_report_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="event_time"/>
+                            <field name="source_type"/>
+                            <field name="report_type"/>
+                            <field name="device_id"/>
+                            <field name="external_event_id"/>
+                            <field name="qty_in"/>
+                            <field name="qty_ok"/>
+                            <field name="qty_ng"/>
+                            <field name="qty_scrap"/>
+                            <field name="qty_repair"/>
+                            <field name="qty_rework"/>
+                            <field name="qty_out"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

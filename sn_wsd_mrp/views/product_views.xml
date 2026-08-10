@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_material_info" model="ir.ui.view">
+        <field name="name">product.template.form.material.info</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']/field[@name='categ_id']" position="after">
+                <field name="material_specification"/>
+                <field name="abc_class"/>
+                <field name="rated_current"/>
+                <field name="is_eip_material"/>
+                <field name="is_nqi_material"/>
+                <field name="msd_info"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_only_form_drawing_no" model="ir.ui.view">
+        <field name="name">product.template.only.form.drawing.no</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Drawing No.</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_list_material_info" model="ir.ui.view">
+        <field name="name">product.template.list.material.info</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Drawing No.</attribute>
+            </xpath>
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="material_specification" optional="hide"/>
+                <field name="abc_class" optional="hide"/>
+                <field name="rated_current" optional="hide"/>
+                <field name="is_eip_material" optional="hide"/>
+                <field name="is_nqi_material" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_list_material_info" model="ir.ui.view">
+        <field name="name">product.product.list.material.info</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Drawing No.</attribute>
+            </xpath>
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="material_specification" optional="hide" readonly="1"/>
+                <field name="abc_class" optional="hide" readonly="1"/>
+                <field name="rated_current" optional="hide" readonly="1"/>
+                <field name="is_eip_material" optional="hide" readonly="1"/>
+                <field name="is_nqi_material" optional="hide" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_form_drawing_no" model="ir.ui.view">
+        <field name="name">product.product.form.drawing.no</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Drawing No.</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_easy_form_drawing_no" model="ir.ui.view">
+        <field name="name">product.product.easy.form.drawing.no</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Drawing No.</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

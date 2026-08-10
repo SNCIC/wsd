@@ -1,0 +1,3063 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_quality
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-10 06:12+0000\n"
+"PO-Revision-Date: 2026-07-10 06:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_production_form_quality_inspection
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_quality_inspection
+msgid "<span class=\"o_stat_text\">Inspections</span>"
+msgstr "<span class=\"o_stat_text\">检验</span>"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__accept_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__accept_qty
+msgid "Accept Qty"
+msgstr "接收数量"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Accept and reject quantities must be greater than or equal to zero."
+msgstr "接收数量和拒绝数量必须大于或等于零。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Accept quantity must be less than or equal to reject quantity."
+msgstr "接收数量必须小于或等于拒绝数量。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__active
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__active
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__active
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__active
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__active
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__state__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_verification_scheme_search
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__active_component_binding_count
+msgid "Active Component Binding Count"
+msgstr "激活的元器件绑定数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__active_component_binding_ids
+msgid "Active Component Bindings"
+msgstr "激活的元器件绑定"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__active_freeze_id
+msgid "Active Freeze"
+msgstr "有效冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常徽章"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__aging
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__aging
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__aging
+msgid "Aging"
+msgstr "老化"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__selection_values
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__selection_values
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__selection_values
+msgid "Allowed Values"
+msgstr "允许值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__analysis
+msgid "Analysis"
+msgstr "分析"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__appearance
+msgid "Appearance"
+msgstr "外观"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_wizard_form
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__area_sn
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__area_sn
+msgid "Area SN"
+msgstr "区域序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__assembly
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__assembly
+msgid "Assembly"
+msgstr "装配"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__attachment_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__attachment_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Attachments"
+msgstr "附件"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze_wizard__mode__release
+msgid "Batch Release"
+msgstr "批量解冻"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__event_type__bind
+msgid "Bind"
+msgstr "绑定"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__state
+msgid "Binding State"
+msgstr "绑定状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_quality_hold_state__blocked
+msgid "Blocked"
+msgstr "冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__calibration
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__calibration
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__calibration
+msgid "Calibration"
+msgstr "校准/调校"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__category
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__category
+msgid "Category"
+msgstr "类别"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__certificate_template
+msgid "Certificate Template"
+msgstr "证书模板"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__is_checked
+msgid "Checked"
+msgstr "已点检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__closed
+msgid "Closed"
+msgstr "已关闭"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__closed_time
+msgid "Closed Time"
+msgstr "关闭时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__collector
+msgid "Collector"
+msgstr "采集器"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__communication
+msgid "Communication"
+msgstr "通信"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__comm_module
+msgid "Communication Module"
+msgstr "通信模块"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__communication_test
+msgid "Communication Test"
+msgstr "通信测试"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid ""
+"Complete all required inspection items before finishing the inspection."
+msgstr "在结束检验前，请完成所有必填的检验项目。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_batch_no
+msgid "Component Batch No."
+msgstr "元器件批次号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_meter_component_binding_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__component_binding_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__component_binding_count
+msgid "Component Binding Count"
+msgstr "元器件绑定数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__component_binding_ids
+msgid "Component Binding History"
+msgstr "元器件绑定历史"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_meter_component_binding
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_meter_component_binding_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__component_binding_ids
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_meter_component_binding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Component Bindings"
+msgstr "元器件绑定"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_lot_id
+msgid "Component Lot/Serial"
+msgstr "元器件批次/序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_product_id
+msgid "Component Product"
+msgstr "元器件产品"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_sn
+msgid "Component SN"
+msgstr "元器件序列号/条码"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_lot_form_sn_wsd_quality
+msgid "Component Traceability"
+msgstr "元器件追溯"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_type
+msgid "Component Type"
+msgstr "元器件类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__concession
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Concession"
+msgstr "让步接收"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_production_form_quality_inspection
+msgid "Create FAI"
+msgstr "创建首检(FAI)"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_move_line_detailed_operation_tree_quality_inspection
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_move_line_operation_tree_quality_inspection
+msgid "Create IQC"
+msgstr "创建来料检(IQC)"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_quality_inspection
+msgid "Create OQC"
+msgstr "创建出货检(OQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__severity__critical
+msgid "Critical"
+msgstr "严重(A类缺陷)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__current_a
+msgid "Current (A)"
+msgstr "电流 (A)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__freeze_reason
+msgid "Current Freeze Reason"
+msgstr "当前冻结原因"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__freeze_time
+msgid "Current Freeze Time"
+msgstr "当前冻结时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__ct
+msgid "Current Transformer"
+msgstr "电流互感器(CT)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__defect_code_id
+msgid "Defect Code"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_defect_code
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_defect_code
+msgid "Defect Codes"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__defect_line_ids
+msgid "Defect Lines"
+msgstr "缺陷明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__name
+msgid "Defect Name"
+msgstr "缺陷名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__defect_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__defect_qty
+msgid "Defect Qty"
+msgstr "缺陷数量"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Defect code is required on every OQC defect line."
+msgstr "出货检(OQC)的每条缺陷明细行都需要填写缺陷代码。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Defect quantity must be greater than zero."
+msgstr "缺陷数量必须大于零。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Defects"
+msgstr "缺陷"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__description
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__description
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_defect_code_form
+msgid "Description"
+msgstr "描述"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__detected_time
+msgid "Detected Time"
+msgstr "发现时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__display_module
+msgid "Display Module"
+msgstr "显示模块"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_lot__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__disposition
+msgid "Disposition"
+msgstr "处置方式"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__state__done
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_skip__reason__duplicate_open
+msgid "Duplicate Open Inspection"
+msgstr "存在重复的未完结检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__esam
+msgid "ESAM"
+msgstr "ESAM芯片"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__esam_no
+msgid "ESAM No."
+msgstr "ESAM序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__state__effective
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__state__effective
+msgid "Effective"
+msgstr "已生效"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__effective_date_from
+msgid "Effective From"
+msgstr "生效日期自"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__effective_date_to
+msgid "Effective To"
+msgstr "生效日期至"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__effective_version_count
+msgid "Effective Version Count"
+msgstr "有效版本数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__event_time
+msgid "Event Time"
+msgstr "事件时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__event_type
+msgid "Event Type"
+msgstr "事件类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__evidence_serial_lot_id
+msgid "Evidence SN"
+msgstr "凭证表号/序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__evidence_travel_id
+msgid "Evidence Travel"
+msgstr "凭证流转记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__expected_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__expected_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__expected_value
+msgid "Expected Value"
+msgstr "预期值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__fai
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__fai
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__fai
+msgid "FAI"
+msgstr "首检(FAI)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__fqc
+msgid "FQC"
+msgstr "过程终检(FQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_fqc_status
+msgid "FQC Status"
+msgstr "FQC状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_result_line__result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__manual_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_fqc_status__failed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_oqc_status__failed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+msgid "Failed"
+msgstr "不合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__final_test
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__final_test
+msgid "Final Test"
+msgstr "终检/完检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Finish"
+msgstr "完成"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__finish_time
+msgid "Finish Time"
+msgstr "完成时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__serial_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__serial_lot_id
+msgid "Finished Serial Lot"
+msgstr "成品序列号/批次"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "Finished or scrapped SNs cannot be frozen."
+msgstr "已完工或已报废的序列号无法被冻结。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Freeze"
+msgstr "冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__freeze_count
+msgid "Freeze Count"
+msgstr "冻结次数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_sn_wsd_quality
+msgid "Freeze Current SNs"
+msgstr "冻结当前序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__operation_id
+msgid "Freeze Operation"
+msgstr "冻结操作"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__freeze_reason
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__freeze_reason
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_form
+msgid "Freeze Reason"
+msgstr "冻结原因"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_freeze_record_count
+msgid "Freeze Record Count"
+msgstr "冻结记录数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_freeze_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__freeze_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__freeze_record_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Freeze Records"
+msgstr "冻结记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__name
+msgid "Freeze Reference"
+msgstr "冻结单号"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "Freeze SN"
+msgstr "冻结序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_freeze_state
+msgid "Freeze State"
+msgstr "冻结状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__freeze_time
+msgid "Freeze Time"
+msgstr "冻结时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__freeze_user_id
+msgid "Freeze User"
+msgstr "冻结人员"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__workcenter_id
+msgid "Freeze Work Center"
+msgstr "冻结工作中心"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__workorder_id
+msgid "Freeze Work Order"
+msgstr "冻结工单"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "Freeze Work Order SNs"
+msgstr "冻结工单序列号"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/serial_freeze_wizard.py:0
+msgid "Freeze reason is required."
+msgstr "必须填写冻结原因。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__frequency_hz
+msgid "Frequency (Hz)"
+msgstr "频率 (Hz)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_freeze_state__frozen
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze__state__frozen
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Frozen"
+msgstr "已冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__has_message
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__has_message
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__has_message
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__hipot
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__hipot
+msgid "Hipot"
+msgstr "耐压测试"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_result_line__result__hold
+msgid "Hold"
+msgstr "暂缓/挂起"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__iccid
+msgid "ICCID"
+msgstr "ICCID"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_lot__id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__imei
+msgid "IMEI"
+msgstr "IMEI"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__imsi
+msgid "IMSI"
+msgstr "IMSI"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__ipqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__ipqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__ipqc
+msgid "IPQC"
+msgstr "IPQC"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_skip
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_skip
+msgid "IPQC Skip Records"
+msgstr "IPQC跳检记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__iqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__iqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__iqc
+msgid "IQC"
+msgstr "IQC"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__message_needaction
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_needaction
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__message_needaction
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，表示有新消息需要您关注。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，表示某些消息存在发送错误。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__state__in_progress
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_skip__reason__incomplete_plan
+msgid "Incomplete Plan"
+msgstr "计划未完成"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__inspected_qty
+msgid "Inspected Qty"
+msgstr "已检验数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__inspection_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__inspection_id
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__inspection
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__inspection
+msgid "Inspection"
+msgstr "检验/检查"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__interval_minutes
+msgid "Inspection Interval (Minutes)"
+msgstr "检验间隔 (分钟)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_item
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_item
+msgid "Inspection Items"
+msgstr "检验项"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__name
+msgid "Inspection No."
+msgstr "检验单号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__result
+msgid "Inspection Result"
+msgstr "检验结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__inspection_type
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__inspection_type
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__inspection_type
+msgid "Inspection Type"
+msgstr "检验类型"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Inspection interval must be greater than zero."
+msgstr "检验间隔必须大于零。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__inspector_id
+msgid "Inspector"
+msgstr "检验员"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__instruction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__instruction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__instruction
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_form
+msgid "Instruction"
+msgstr "作业指导/说明"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_is_follower
+msgid "Is Follower"
+msgstr "是否关注者"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__name
+msgid "Issue Reference"
+msgstr "问题单号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__issue_source
+msgid "Issue Source"
+msgstr "问题来源"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__item_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__item_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__code
+msgid "Item Code"
+msgstr "项目编码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__name
+msgid "Item Name"
+msgstr "项目名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__item_type
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__item_type
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__item_type
+msgid "Item Type"
+msgstr "项目类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__verification_scheme_id
+msgid "Latest Verification Scheme"
+msgstr "最新检定方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__latest_verification_version
+msgid "Latest Verification Version"
+msgstr "最新检定版本"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_stock_lot
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__lot_id
+msgid "Lot/Serial Number"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__lower_limit
+msgid "Lower Limit"
+msgstr "下限"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__mcu
+msgid "MCU"
+msgstr "微控制器 (MCU)"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_mes_test_result
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__test_result_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__test_result_id
+msgid "MES Test Result"
+msgstr "MES测试结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__workcenter_id
+msgid "MES Work Center"
+msgstr "MES工作中心"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__main_pcb
+msgid "Main PCB"
+msgstr "主板 (Main PCB)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__severity__major
+msgid "Major"
+msgstr "主要缺陷"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__manual
+msgid "Manual"
+msgstr "手工"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__manual_result
+msgid "Manual Result"
+msgstr "手动判定结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__production_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__production_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__production_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__production_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Mark FQC Failed"
+msgstr "标记FQC不合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Mark FQC Passed"
+msgstr "标记FQC合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Mark OQC Failed"
+msgstr "标记OQC不合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Mark OQC Passed"
+msgstr "标记OQC合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__material
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_sn_wsd_quality
+msgid "Material Bindings"
+msgstr "物料绑定记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__measured_current_a
+msgid "Measured Current (A)"
+msgstr "实测电流 (A)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__measured_error
+msgid "Measured Error (%)"
+msgstr "实测误差 (%)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__measured_power_factor
+msgid "Measured Power Factor"
+msgstr "实测功率因数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__measured_value
+msgid "Measured Value"
+msgstr "测量值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__measured_voltage_v
+msgid "Measured Voltage (V)"
+msgstr "实测电压 (V)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_meter_component_binding
+msgid "Meter Component Binding Event"
+msgstr "电表元器件绑定事件"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_lot__x_meter_component_binding_ids
+msgid "Meter Component Bindings"
+msgstr "电表元器件绑定"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__meter_product_type
+msgid "Meter Product Type"
+msgstr "电表产品类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_defect_code
+msgid "Meter Quality Defect Code"
+msgstr "电表质量缺陷代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_issue
+msgid "Meter Quality Issue"
+msgstr "电表质量问题"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__meter_serial_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__meter_serial_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__serial_id
+msgid "Meter Serial"
+msgstr "电表序列号/条码"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_meter_serial
+msgid "Meter Serial Archive"
+msgstr "电表序列号档案"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_meter_verification_point
+msgid "Meter Verification Point"
+msgstr "电表检定点"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_meter_verification_result_line
+msgid "Meter Verification Result Line"
+msgstr "电表检定结果明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_meter_verification_scheme
+msgid "Meter Verification Scheme"
+msgstr "电表检定方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__metering_chip
+msgid "Metering Chip"
+msgstr "计量芯片"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__severity__minor
+msgid "Minor"
+msgstr "轻微"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__mode
+msgid "Mode"
+msgstr "模式"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__model_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__model_code
+msgid "Model Code"
+msgstr "型号代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__manual_result__na
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__result__na
+msgid "N/A"
+msgstr "不适用"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_quality.py:0
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_skip__reason__no_active_production
+msgid "No Active Production"
+msgstr "无进行中的生产"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid ""
+"No effective FAI inspection plan was found for this manufacturing order."
+msgstr "未找到此制造订单的有效首件检查（FAI）计划。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective IQC inspection plan was found for this product."
+msgstr "未找到此产品的有效来料检验（IQC）计划。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective OQC inspection plan was found for this work order."
+msgstr "未找到此工单的有效出货检验（OQC）计划。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/serial_freeze_wizard.py:0
+msgid "No freezable SNs were found on the selected work order."
+msgstr "在所选工单上未找到可冻结的序列号（SN）。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_freeze_state__normal
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_verification_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_form
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_needaction_counter
+msgid "Number of Actions"
+msgstr "待处理事务数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__item_type__numeric
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__item_type__numeric
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__item_type__numeric
+msgid "Numeric"
+msgstr "数值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__oqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__oqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__oqc
+msgid "OQC"
+msgstr "出货检验（OQC）"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_oqc_status
+msgid "OQC Status"
+msgstr "OQC 状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__state__obsolete
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__state__obsolete
+msgid "Obsolete"
+msgstr "废弃"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__state__open
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__open
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+msgid "Open"
+msgstr "打开/未结"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Open Freeze Records"
+msgstr "打开冻结记录"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Open Full Binding History"
+msgstr "打开完整绑定历史"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__open_quality_issue_count
+msgid "Open Quality Issue Count"
+msgstr "未结质量缺陷计数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Open Quality Issues"
+msgstr "未结质量缺陷"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__operation_id
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__move_line_id
+msgid "Operation Line"
+msgstr "明细行"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__operator_code
+msgid "Operator Code"
+msgstr "操作员代码"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_wizard_form
+msgid "Optional release reason"
+msgstr "解冻原因（选填）"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__other
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__other
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__state__overdue
+msgid "Overdue"
+msgstr "逾期"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__packaging
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__packaging
+msgid "Packaging"
+msgstr "包装"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__partial
+msgid "Partial Pass"
+msgstr "部分合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_result_line__result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__manual_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__item_type__pass_fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__item_type__pass_fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__item_type__pass_fail
+msgid "Pass or Fail"
+msgstr "合格/不合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_fqc_status__passed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_oqc_status__passed
+msgid "Passed"
+msgstr "通过"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__payload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_form
+msgid "Payload"
+msgstr "有效载荷/数据包"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_fqc_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_oqc_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__manual_result__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__result__pending
+msgid "Pending"
+msgstr "待定"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+msgid "Plan"
+msgstr "计划"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__scheme_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__code
+msgid "Plan Code"
+msgstr "计划代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__name
+msgid "Plan Name"
+msgstr "计划名称"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/serial_freeze_wizard.py:0
+msgid "Please select a work order."
+msgstr "请选择工单。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/serial_freeze_wizard.py:0
+msgid "Please select frozen records to release."
+msgstr "请选择要解冻的记录。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/serial_freeze_wizard.py:0
+msgid "Please select or enter a valid SN."
+msgstr "请选择或输入有效的序列号（SN）。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__point_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__point_code
+msgid "Point Code"
+msgstr "检定点代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__point_count
+msgid "Point Count"
+msgstr "检定点数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__point_name
+msgid "Point Name"
+msgstr "检定点名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__position
+msgid "Position"
+msgstr "位置"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__power_factor
+msgid "Power Factor"
+msgstr "功率因数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__procedure_standard
+msgid "Procedure Standard"
+msgstr "规程标准"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_procedure_version
+msgid "Procedure Version"
+msgstr "规程版本"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_product_template
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__product_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "产品移动(移库明细)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__product_tmpl_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__product_tmpl_id
+msgid "Product Template"
+msgstr "产品模板"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_verification_scheme_search
+msgid "Product Type"
+msgstr "产品类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_product_product
+msgid "Product Variant"
+msgstr "产品变体"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__production_line_id
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__programming
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__programming
+msgid "Programming"
+msgstr "编程/程序烧录"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_serial_form_quality
+msgid "Quality"
+msgstr "质量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_quality_hold_state__hold
+msgid "Quality Hold"
+msgstr "质量挂起/锁仓"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_quality_hold_state
+msgid "Quality Hold State"
+msgstr "质量挂起状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__inspection_id
+msgid "Quality Inspection"
+msgstr "质量检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_production__x_quality_inspection_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_quality_inspection_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__x_quality_inspection_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move__x_quality_inspection_count
+msgid "Quality Inspection Count"
+msgstr "质量检验计数"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_production__x_quality_inspection_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_quality_inspection_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__x_quality_inspection_ids
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_production_form_quality_inspection
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_quality_inspection
+msgid "Quality Inspections"
+msgstr "质量检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_quality_issue_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__quality_issue_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__quality_issue_count
+msgid "Quality Issue Count"
+msgstr "质量缺陷计数"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_quality.py:0
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_issue
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_quality_issue_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__quality_issue_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__quality_issue_ids
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_issue
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_sn_wsd_quality
+msgid "Quality Issues"
+msgstr "质量缺陷/缺陷记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__rating_ids
+msgid "Ratings"
+msgstr "评价"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__reason
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__reference_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__reference_error
+msgid "Reference Error (%)"
+msgstr "引用误差 (%) / 化整前误差 (%)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__reject
+msgid "Reject"
+msgstr "拒绝/不合格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__reject_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__reject_qty
+msgid "Reject Qty"
+msgstr "拒绝数量/不合格数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__relay
+msgid "Relay"
+msgstr "磁保持继电器"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_form
+msgid "Release"
+msgstr "解冻/释放"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+#: model:ir.actions.server,name:sn_wsd_quality.action_release_sn_wsd_serial_freeze
+msgid "Release Frozen SNs"
+msgstr "释放已冻结的序列号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__release_reason
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__release_reason
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_form
+msgid "Release Reason"
+msgstr "解冻原因"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__release_time
+msgid "Release Time"
+msgstr "解冻时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__release_user_id
+msgid "Release User"
+msgstr "解冻人员"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_quality_hold_state__released
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze__state__released
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Released"
+msgstr "已解冻/已释放"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__state__removed
+msgid "Removed"
+msgstr "已拆除"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__repair
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__repair
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__repair_action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Repair Action"
+msgstr "维修措施"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__repairing
+msgid "Repairing"
+msgstr "维修中"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__event_type__replace
+msgid "Replace"
+msgstr "更换/替换"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__state__replaced
+msgid "Replaced"
+msgstr "已更换"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__required
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__required
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__required
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__required
+msgid "Required"
+msgstr "必填"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Reset"
+msgstr "重置"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+msgid "Reset to Draft"
+msgstr "重置为草稿"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__responsible_user_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__responsible_user_id
+msgid "Responsible"
+msgstr "负责人"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__result
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__disposition__return_material
+msgid "Return Material"
+msgstr "退料"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__disposition__rework
+msgid "Rework"
+msgstr "返工"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__root_cause
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Root Cause"
+msgstr "根本原因"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__root_cause_hint
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_defect_code_form
+msgid "Root Cause Hint"
+msgstr "根本原因提示"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__sim
+msgid "SIM"
+msgstr "SIM卡"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__serial_no
+msgid "SN"
+msgstr "序列号"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "SN %(serial)s is frozen. Reason: %(reason)s. Passing is not allowed."
+msgstr "序列号 %(serial)s 已被冻结。原因：%(reason)s。不允许通过。"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_serial_freeze
+msgid "SN Freeze Record"
+msgstr "条码冻结记录"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_serial_freeze
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_serial_freeze
+msgid "SN Freeze Records"
+msgstr "条码冻结记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_serial_freeze_wizard
+msgid "SN Freeze Wizard"
+msgstr "条码冻结向导"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_sn_wsd_quality
+msgid "SN Freezes"
+msgstr "条码冻结"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_size
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__sample_size
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Sample Size"
+msgstr "抽样数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_window_end
+msgid "Sample Window End"
+msgstr "抽样窗口结束时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_window_start
+msgid "Sample Window Start"
+msgstr "抽样窗口开始时间"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Sample size must be greater than zero."
+msgstr "抽样数量必须大于零。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__scheduled_time
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__scheduled_time
+msgid "Scheduled Time"
+msgstr "计划时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__code
+msgid "Scheme Code"
+msgstr "方案编码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__name
+msgid "Scheme Name"
+msgstr "方案名称"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+msgid "Scope"
+msgstr "范围"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__disposition__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__scrap_recommended
+msgid "Scrap Recommended"
+msgstr "建议报废"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_quality_hold_state__scrapped
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__security_chip
+msgid "Security Chip"
+msgstr "安全芯片"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__security_chip_no
+msgid "Security Chip No."
+msgstr "安全芯片号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__item_type__selection
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__item_type__selection
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__item_type__selection
+msgid "Selection"
+msgstr "下拉选项"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__serial_lot_id
+msgid "Serial Number"
+msgstr "序列号/批次号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Set All Pass"
+msgstr "全部设为合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+msgid "Set Effective"
+msgstr "设为生效"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+msgid "Set Obsolete"
+msgstr "设为废弃"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__severity
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__severity
+msgid "Severity"
+msgstr "严重程度"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__shunt
+msgid "Shunt"
+msgstr "分流器"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__single_phase
+msgid "Single Phase"
+msgstr "单相"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze_wizard__mode__single
+msgid "Single SN Freeze"
+msgstr "单个条码冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__name
+msgid "Skip No."
+msgstr "跳过单号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__state__skipped
+msgid "Skipped"
+msgstr "已跳过"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Start"
+msgstr "开始"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Start Analysis"
+msgstr "开始分析"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Start Repair"
+msgstr "开始维修"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__start_time
+msgid "Start Time"
+msgstr "开始时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__station_type
+msgid "Station Type"
+msgstr "工位类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_state
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_state
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__activity_state
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：已超过截止日期\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__target_current_a
+msgid "Target Current (A)"
+msgstr "目标电流 (A)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__target_power_factor
+msgid "Target Power Factor"
+msgstr "目标功率因数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__target_voltage_v
+msgid "Target Voltage (V)"
+msgstr "目标电压 (V)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__terminal
+msgid "Terminal"
+msgstr "接线端子"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__issue_source__test_result
+msgid "Test Result"
+msgstr "测试结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__test_type
+msgid "Test Type"
+msgstr "测试类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__item_type__text
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__item_type__text
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__item_type__text
+msgid "Text"
+msgstr "文本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__text_value
+msgid "Text Value"
+msgstr "文本值"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "The OQC sample inspection is not complete."
+msgstr "OQC出货抽检未完成。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+msgid ""
+"The component lot/serial must belong to the selected component product."
+msgstr "组件批次/序列号必须属于所选的组件产品。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_defect_code_code_company_uniq
+msgid "The defect code must be unique per company."
+msgstr "每个公司的缺陷代码必须是唯一的。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_verification.py:0
+msgid ""
+"The effective end date must be greater than or equal to the effective start "
+"date."
+msgstr "有效结束日期必须大于或等于有效开始日期。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid ""
+"The freeze work order must belong to the same manufacturing order as the SN."
+msgstr "冻结工单必须与该序列号属于同一个制造订单。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_scheme_line_scheme_item_code_uniq
+msgid "The inspection item code must be unique within one scheme."
+msgstr "同一个方案内的检验项目编码必须是唯一的。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_scheme_code_company_uniq
+msgid "The inspection scheme code must be unique per company."
+msgstr "每个公司的检验方案编码必须是唯一的。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "The lower limit must be less than or equal to the upper limit."
+msgstr "下限必须小于或等于上限。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_meter_verification_point_scheme_point_code_uniq
+msgid "The point code must be unique within one verification scheme."
+msgstr "同一个检定方案内的点编码必须是唯一的。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_meter_verification_scheme_code_version_company_uniq
+msgid "The verification scheme code and version must be unique per company."
+msgstr "每个公司的检定方案编码和版本必须是唯一的。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__three_phase
+msgid "Three Phase"
+msgstr "三相"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__tolerance_abs
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__tolerance_abs
+msgid "Tolerance (+/- %)"
+msgstr "误差范围 (+/- %)"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_verification.py:0
+msgid "Tolerance must be greater than or equal to zero."
+msgstr "容差必须大于或等于零。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__picking_id
+msgid "Transfer"
+msgstr "调拨/库存移动"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__event_type__unbind
+msgid "Unbind"
+msgstr "解绑"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__unit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__unit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__unit
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__upper_limit
+msgid "Upper Limit"
+msgstr "上限"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__disposition__use_as_is
+msgid "Use As Is"
+msgstr "让步接收/特采"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__vendor_batch_no
+msgid "Vendor Batch No."
+msgstr "供应商批号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_fail_count
+msgid "Verification Fail Count"
+msgstr "检定失败点数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_pass_count
+msgid "Verification Pass Count"
+msgstr "检定合格点数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__verification_point_id
+msgid "Verification Point"
+msgstr "检定点"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_point_count
+msgid "Verification Point Count"
+msgstr "检定总点数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_point_line_ids
+msgid "Verification Point Results"
+msgstr "检定点结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__point_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_verification_scheme_form
+msgid "Verification Points"
+msgstr "检定点明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_production__x_verification_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_mrp_workorder__x_verification_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__x_verification_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__x_verification_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__verification_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__verification_scheme_id
+msgid "Verification Scheme"
+msgstr "检定方案"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_meter_verification_scheme
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_meter_verification_scheme
+msgid "Verification Schemes"
+msgstr "检定方案"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_verification.py:0
+msgid ""
+"Verification scheme %(code)s already has an effective version %(version)s in"
+" the overlapping date range."
+msgstr "在重叠的日期范围内，检定方案 %(code)s 已经存在有效的版本 %(version)s。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_issue__state__verified
+msgid "Verified"
+msgstr "已验证"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__verified_time
+msgid "Verified Time"
+msgstr "验证时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__event_type__verify
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
+msgid "Verify"
+msgstr "验证"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_scheme__version
+msgid "Version"
+msgstr "版本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__voltage_v
+msgid "Voltage (V)"
+msgstr "电压 (V)"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection
+msgid "WSD Quality Inspection"
+msgstr "WSD 质量检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_defect_line
+msgid "WSD Quality Inspection Defect Line"
+msgstr "WSD 质量检验缺陷明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_line
+msgid "WSD Quality Inspection Line"
+msgstr "WSD 质量检验明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_scheme
+msgid "WSD Quality Inspection Plan"
+msgstr "WSD 质量检验方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_scheme_line
+msgid "WSD Quality Inspection Plan Line"
+msgstr "WSD 质量检验方案明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_skip
+msgid "WSD Quality Inspection Skip"
+msgstr "WSD 质量检验跳过"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.server,name:sn_wsd_quality.ir_cron_sn_wsd_quality_ipqc_generation_ir_actions_server
+msgid "WSD Quality: Generate IPQC Inspections"
+msgstr "WSD 质量：生成 IPQC 检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_fqc_status__waived
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_serial__x_oqc_status__waived
+msgid "Waived"
+msgstr "免检"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_issue__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_freeze__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通历史"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_mrp_workorder
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__workorder_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze_wizard__mode__workorder
+msgid "Work Order Batch Freeze"
+msgstr "工单批量冻结"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/meter_component_trace.py:0
+#: code:addons/sn_wsd_quality/models/meter_quality.py:0
+msgid "meter_serial_id"
+msgstr "电能表表号ID"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "production_id"
+msgstr "生产订单ID"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/serial_freeze.py:0
+msgid "serial_id"
+msgstr "条码ID"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "workorder_id"
+msgstr "工单ID"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__x_iqc_required
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__x_iqc_required
+msgid "Requires IQC"
+msgstr "需要来料质检"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__x_iqc_inspection_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__x_iqc_inspection_scheme_id
+msgid "IQC Inspection Plan"
+msgstr "来料质检模板"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move__x_iqc_required
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__x_iqc_required
+msgid "IQC Required"
+msgstr "需要来料质检"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move__x_iqc_passed
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__x_iqc_passed
+msgid "IQC Passed"
+msgstr "来料质检通过"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "An IQC inspection plan is required when IQC is enabled."
+msgstr "启用来料质检时必须设置来料质检模板。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "The selected inspection plan must be an IQC plan."
+msgstr "选择的质检模板必须是来料质检模板。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Set a quantity before creating IQC inspections."
+msgstr "创建来料质检前请先填写数量。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "This product does not require IQC."
+msgstr "该产品不需要来料质检。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Missing IQC operation details: %s"
+msgstr "缺少来料质检操作明细：%s"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Missing IQC: %s"
+msgstr "缺少来料质检：%s"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Unfinished or failed IQC: %s"
+msgstr "来料质检未完成或未通过：%s"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid ""
+"Complete all required IQC inspections before validating this quality control transfer.\n"
+"%s"
+msgstr ""
+"请先完成所有必需的来料质检，再验证该质量控制调拨单。\n"
+"%s"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.server,name:sn_wsd_quality.action_sn_wsd_quality_inspection_batch_set_pass
+msgid "Set Qualified"
+msgstr "设置合格"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Select at least one open inspection."
+msgstr "请至少选择一张打开状态的质检单。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_mrp_workorder_form_quality_inspection
+msgid "Travel Events"
+msgstr "过站流水"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_item
+msgid "WSD Quality Inspection Item"
+msgstr "WSD 质量检验项"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_scheme
+msgid "WSD Quality Inspection Scheme"
+msgstr "WSD 质量检验方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_scheme_line
+msgid "WSD Quality Inspection Scheme Item"
+msgstr "WSD 质量检验方案项目"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__item_id
+msgid "Inspection Item"
+msgstr "检验项"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__scheme_id
+msgid "Inspection Scheme"
+msgstr "检验方案"
+
+#. module: sn_wsd_quality
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_scheme
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_scheme
+msgid "Inspection Schemes"
+msgstr "检验方案"
+
+#. module: sn_wsd_quality
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_fai
+msgid "FAI Inspections"
+msgstr "首检(FAI)"
+
+#. module: sn_wsd_quality
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_iqc
+msgid "IQC Inspections"
+msgstr "来料检验(IQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_ipqc
+msgid "IPQC Inspections"
+msgstr "过程检验(IPQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_oqc
+msgid "OQC Inspections"
+msgstr "出厂检验(OQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__fai
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__inspection_type__fai
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__fai
+msgid "FAI - First Article Inspection"
+msgstr "首检(FAI)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__iqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__inspection_type__iqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__iqc
+msgid "IQC - Incoming Quality Control"
+msgstr "来料检验(IQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__ipqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__inspection_type__ipqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__ipqc
+msgid "IPQC - In-Process Quality Control"
+msgstr "过程检验(IPQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_type__oqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__inspection_type__oqc
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_type__oqc
+msgid "OQC - Outgoing Quality Control"
+msgstr "出厂检验(OQC)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_item_code_company_uniq
+msgid "The inspection item code must be unique per company."
+msgstr "每个公司的检验项编码必须唯一。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective inspection scheme was found."
+msgstr "未找到有效检验方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid ""
+"No effective FAI inspection scheme was found for this manufacturing order."
+msgstr "未找到此制造订单的有效首检(FAI)方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective IQC inspection scheme was found for this product."
+msgstr "未找到此产品的有效来料检验(IQC)方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective OQC inspection scheme was found for this work order."
+msgstr "未找到此工单的有效出厂检验(OQC)方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "An IQC inspection scheme is required when IQC is enabled."
+msgstr "启用来料检验(IQC)时必须配置来料检验方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "The selected inspection scheme must be an IQC scheme."
+msgstr "所选检验方案必须是来料检验(IQC)方案。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__product_tmpl_ids
+msgid "Products"
+msgstr "产品"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__product_categ_ids
+msgid "Product Categories"
+msgstr "产品类别"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__product_tmpl_id
+msgid "Legacy Product Template"
+msgstr "历史产品模板"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_search
+msgid "Scheme"
+msgstr "方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_skip__reason__incomplete_plan
+msgid "Incomplete Scheme"
+msgstr "不完整的检定方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_product__x_iqc_inspection_scheme_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_product_template__x_iqc_inspection_scheme_id
+msgid "IQC Inspection Scheme"
+msgstr "IQC检验方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_sampling_standard
+msgid "WSD Quality Sampling Standard"
+msgstr "WSD 质量抽样标准"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_sampling_lot_range
+msgid "WSD Quality Sampling Lot Range"
+msgstr "WSD 质量抽样批量范围"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_sampling_plan
+msgid "WSD Quality Sampling Plan"
+msgstr "WSD 质量抽样方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_sample
+msgid "WSD Quality Inspection Sample"
+msgstr "WSD 质量检验样本"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_sampling_standard
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_sampling_standard
+msgid "Sampling Standards"
+msgstr "抽样标准"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__name
+msgid "Standard Name"
+msgstr "标准名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__code
+msgid "Standard Code"
+msgstr "标准编码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__lot_range_ids
+msgid "Lot Ranges"
+msgstr "批量范围"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__plan_ids
+msgid "Sampling Plans"
+msgstr "抽样方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__lot_qty_min
+msgid "From Quantity"
+msgstr "开始数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__lot_qty_max
+msgid "To Quantity"
+msgstr "结束数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__inspection_level
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__inspection_level
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__inspection_level
+msgid "Inspection Level"
+msgstr "检验水平"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__sample_size_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__sample_size_code
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_size_code
+msgid "Sample Size Code"
+msgstr "样本量字码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__aql_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__aql_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__aql_value
+msgid "AQL"
+msgstr "AQL"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__switching_mode
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__switching_mode
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__switching_mode
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Switching Mode"
+msgstr "转移规则"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sampling_method
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__sampling_method
+msgid "Sampling Method"
+msgstr "抽样方式"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sampling_standard_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__sampling_standard_id
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Sampling Standard"
+msgstr "抽样标准"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__lot_qty_source
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__lot_qty_source
+msgid "Lot Quantity Source"
+msgstr "批量来源"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__lot_qty
+msgid "Lot Quantity"
+msgstr "批量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_selection_method
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__sample_selection_method
+msgid "Sample Selection"
+msgstr "样本选择"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_ids
+msgid "Samples"
+msgstr "样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_checked_qty
+msgid "Checked Samples"
+msgstr "已检样本数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_defect_qty
+msgid "Defect Samples"
+msgstr "缺陷样本数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__name
+msgid "Sample No."
+msgstr "样本编号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__sampling_method__fixed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__sampling_method__fixed
+msgid "Fixed Quantity"
+msgstr "固定数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__sampling_method__aql
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__sampling_method__aql
+msgid "AQL"
+msgstr "AQL"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__sampling_method__full
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__sampling_method__full
+msgid "100% Inspection"
+msgstr "100% 检验"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__sample_selection_method__systematic
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__sample_selection_method__systematic
+msgid "Systematic"
+msgstr "系统等距"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+msgid "Sampling"
+msgstr "抽样"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Lot Ranges"
+msgstr "批量范围"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Sampling Plans"
+msgstr "抽样方案"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_sampling_standard_code_company_uniq
+msgid "The sampling standard code must be unique per company."
+msgstr "抽样标准编码在每家公司内必须唯一。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_sampling_lot_range_range_level_uniq
+msgid "The lot range must be unique within one standard and inspection level."
+msgstr "同一标准和检验水平内的批量范围必须唯一。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_sampling_plan_plan_uniq
+msgid ""
+"The AQL sampling plan must be unique per standard, switching mode, sample "
+"code, and AQL."
+msgstr "同一标准、转移规则、样本量字码和 AQL 的抽样方案必须唯一。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_sample_serial_uniq
+msgid "The same serial number can only be sampled once in one inspection."
+msgstr "同一检验中同一序列号只能抽样一次。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.js:0
+#: model:ir.actions.server,name:sn_wsd_quality.action_sn_wsd_quality_sampling_matrix
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_sampling_matrix
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "AQL Sampling Matrix"
+msgstr "AQL规则"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.js:0
+msgid "Select a sampling standard before saving."
+msgstr "保存前请选择抽样标准。"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.js:0
+msgid "Sampling matrix saved."
+msgstr "抽样矩阵已保存。"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Save"
+msgstr "保存"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Reload"
+msgstr "重新加载"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Select..."
+msgstr "选择..."
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Unsaved changes"
+msgstr "未保存更改"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Loading..."
+msgstr "正在加载..."
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Lot Range Code Matrix"
+msgstr "批量范围字码矩阵"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Add Range"
+msgstr "新增范围"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "From"
+msgstr "开始"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "To"
+msgstr "结束"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Delete"
+msgstr "删除"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "AQL Ac/Re Matrix"
+msgstr "AQL Ac/Re 矩阵"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Add Code"
+msgstr "新增字码"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Code"
+msgstr "字码"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Ac"
+msgstr "Ac"
+
+#. module: sn_wsd_quality
+#. odoo-javascript
+#: code:addons/sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml:0
+msgid "Re"
+msgstr "Re"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Tightened"
+msgstr "加严"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Reduced"
+msgstr "放宽"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_item_group
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_item_group
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__item_group_ids
+msgid "Inspection Item Groups"
+msgstr "检验项组"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__group_id
+msgid "Inspection Item Group"
+msgstr "检验项组"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__name
+msgid "Group Name"
+msgstr "组名称"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__code
+msgid "Group Code"
+msgstr "组编码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__item_count
+msgid "Item Count"
+msgstr "检验项数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_item_group
+msgid "WSD Quality Inspection Item Group"
+msgstr "WSD 质量检验项组"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_item_group_line
+msgid "WSD Quality Inspection Item Group Line"
+msgstr "WSD 质量检验项组明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_item_group_code_company_uniq
+msgid "The inspection item group code must be unique per company."
+msgstr "检验项组编码在每个公司内必须唯一。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_item_group_line_group_item_uniq
+msgid "The inspection item must be unique within one group."
+msgstr "同一个检验项组内的检验项必须是唯一的。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "The inspection item type must match the item group inspection type."
+msgstr "检验项类型必须与检验项组的检验类型一致。"

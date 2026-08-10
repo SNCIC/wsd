@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_quality_defect_code_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.defect.code.list</field>
+        <field name="model">sn.wsd.quality.defect.code</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="station_type"/>
+                <field name="severity"/>
+                <field name="scrap_recommended"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_defect_code_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.defect.code.form</field>
+        <field name="model">sn.wsd.quality.defect.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="category"/>
+                            <field name="station_type"/>
+                        </group>
+                        <group>
+                            <field name="severity"/>
+                            <field name="scrap_recommended"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" nolabel="1"/>
+                        </page>
+                        <page string="Root Cause Hint">
+                            <field name="root_cause_hint" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quality_defect_code" model="ir.actions.act_window">
+        <field name="name">Defect Codes</field>
+        <field name="res_model">sn.wsd.quality.defect.code</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_wsd_quality_issue_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.issue.list</field>
+        <field name="model">sn.wsd.quality.issue</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="internal_serial_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="defect_code_id"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="issue_source"/>
+                <field name="workorder_id"/>
+                <field name="workcenter_id"/>
+                <field name="state"/>
+                <field name="disposition"/>
+                <field name="responsible_user_id"/>
+                <field name="detected_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_issue_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.issue.form</field>
+        <field name="model">sn.wsd.quality.issue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_analysis" type="object" string="Start Analysis" invisible="state != 'open'"/>
+                    <button name="action_start_repair" type="object" string="Start Repair" invisible="state not in ['open', 'analysis']"/>
+                    <button name="action_verify" type="object" string="Verify" invisible="state != 'repairing'"/>
+                    <button name="action_close" type="object" string="Close" invisible="state not in ['analysis', 'repairing', 'verified']"/>
+                    <button name="action_scrap" type="object" string="Scrap" class="btn-danger" invisible="state in ['closed', 'scrapped']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,analysis,repairing,verified,closed,scrapped"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="internal_serial_id"/>
+                            <field name="internal_serial_id"/>
+                            <field name="production_id"/>
+                            <field name="manufacturing_batch_id"/>
+                            <field name="workorder_id"/>
+                            <field name="workcenter_id"/>
+                        </group>
+                        <group>
+                            <field name="defect_code_id"/>
+                            <field name="severity"/>
+                            <field name="category"/>
+                            <field name="issue_source"/>
+                            <field name="disposition"/>
+                            <field name="responsible_user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="detected_time"/>
+                            <field name="verified_time"/>
+                            <field name="closed_time"/>
+                        </group>
+                        <group>
+                            <field name="test_result_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Root Cause">
+                            <field name="root_cause" nolabel="1"/>
+                        </page>
+                        <page string="Repair Action">
+                            <field name="repair_action" nolabel="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quality_issue" model="ir.actions.act_window">
+        <field name="name">Quality Issues</field>
+        <field name="res_model">sn.wsd.quality.issue</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_internal_serial_form_quality" model="ir.ui.view">
+        <field name="name">sn.wsd.internal.serial.form.quality</field>
+        <field name="model">sn.wsd.internal.serial</field>
+        <field name="inherit_id" ref="sn_wsd_api.view_sn_wsd_internal_serial_form_api"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_freeze_wizard" type="object" string="Freeze" class="btn-secondary" invisible="x_freeze_state == 'frozen'"/>
+                <button name="action_open_freeze_records" type="object" string="Freeze Records" class="btn-secondary"/>
+                <field name="x_freeze_state" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='packaging']//field[@name='pallet_no']" position="after">
+                <field name="component_binding_count" readonly="1"/>
+                <field name="active_component_binding_count" readonly="1"/>
+            </xpath>
+            <xpath expr="//page[@name='notes']" position="before">
+                <page name="quality" string="Quality">
+                    <group>
+                        <group>
+                            <field name="x_quality_hold_state"/>
+                            <field name="x_freeze_state" readonly="1"/>
+                            <field name="active_freeze_id" readonly="1" invisible="x_freeze_state != 'frozen'"/>
+                            <field name="freeze_reason" readonly="1" invisible="x_freeze_state != 'frozen'"/>
+                            <field name="freeze_time" readonly="1" invisible="x_freeze_state != 'frozen'"/>
+                            <field name="x_fqc_status"/>
+                            <field name="x_oqc_status"/>
+                        </group>
+                        <group>
+                            <field name="quality_issue_count" readonly="1"/>
+                            <field name="open_quality_issue_count" readonly="1"/>
+                            <field name="freeze_count" readonly="1"/>
+                            <button name="action_view_quality_issues" type="object" string="Open Quality Issues" class="btn-secondary"/>
+                            <button name="action_open_freeze_records" type="object" string="Open Freeze Records" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <button name="action_mark_fqc_passed" type="object" string="Mark FQC Passed" class="btn-secondary"/>
+                        <button name="action_mark_fqc_failed" type="object" string="Mark FQC Failed" class="btn-secondary"/>
+                        <button name="action_mark_oqc_passed" type="object" string="Mark OQC Passed" class="btn-secondary"/>
+                        <button name="action_mark_oqc_failed" type="object" string="Mark OQC Failed" class="btn-secondary"/>
+                    </group>
+                    <field name="quality_issue_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="defect_code_id"/>
+                            <field name="category"/>
+                            <field name="severity"/>
+                            <field name="state"/>
+                            <field name="disposition"/>
+                            <field name="workorder_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="detected_time"/>
+                        </list>
+                    </field>
+                    <field name="freeze_record_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="state"/>
+                            <field name="workorder_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="freeze_reason"/>
+                            <field name="freeze_user_id"/>
+                            <field name="freeze_time"/>
+                            <field name="release_user_id"/>
+                            <field name="release_time"/>
+                        </list>
+                    </field>
+                </page>
+                <page name="component_bindings" string="Component Bindings">
+                    <group>
+                        <button name="action_view_component_bindings" type="object" string="Open Full Binding History" class="btn-secondary"/>
+                    </group>
+                    <field name="component_binding_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="event_time"/>
+                            <field name="component_type"/>
+                            <field name="event_type"/>
+                            <field name="state"/>
+                            <field name="component_product_id"/>
+                            <field name="component_lot_id"/>
+                            <field name="component_sn"/>
+                            <field name="component_batch_no"/>
+                            <field name="imei"/>
+                            <field name="esam_no"/>
+                            <field name="security_chip_no"/>
+                            <field name="workorder_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='test_results']//field[@name='result']" position="after">
+                <field name="defect_code_id"/>
+                <field name="quality_issue_count"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_skip_request_list" model="ir.ui.view">
+        <field name="name">sn.wsd.skip.request.list</field>
+        <field name="model">sn.wsd.skip.request</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'approved'" decoration-muted="state in ['cancelled', 'revoked', 'rejected']" decoration-warning="state == 'submitted'">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="product_id"/>
+                <field name="route_id"/>
+                <field name="applicant_id"/>
+                <field name="request_date"/>
+                <field name="line_count"/>
+                <field name="approved_by_id" optional="hide"/>
+                <field name="approved_at" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_skip_request_form" model="ir.ui.view">
+        <field name="name">sn.wsd.skip.request.form</field>
+        <field name="model">sn.wsd.skip.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" groups="mrp.group_mrp_manager" invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-secondary" groups="mrp.group_mrp_manager" invisible="state != 'submitted'"/>
+                    <button name="action_revoke" type="object" string="Revoke" class="btn-secondary" groups="mrp.group_mrp_manager" invisible="state != 'approved'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state not in ['draft', 'submitted']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_id" readonly="state != 'draft'"/>
+                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="route_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="applicant_id" readonly="state != 'draft'"/>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                            <field name="submitted_at" readonly="1"/>
+                            <field name="line_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" readonly="state != 'draft'" nolabel="1" placeholder="Reason for skipping selected operations"/>
+                    </group>
+                    <notebook>
+                        <page string="Skip Operations" name="skip_operations">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" decoration-danger="is_processed">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="production_id" column_invisible="1"/>
+                                    <field name="workorder_id"/>
+                                    <field name="route_operation_id"/>
+                                    <field name="operation_code"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="is_processed" readonly="1"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Approval" name="approval">
+                            <group>
+                                <group>
+                                    <field name="approved_by_id" readonly="1"/>
+                                    <field name="approved_at" readonly="1"/>
+                                    <field name="rejected_by_id" readonly="1"/>
+                                    <field name="rejected_at" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="revoked_by_id" readonly="1"/>
+                                    <field name="revoked_at" readonly="1"/>
+                                    <field name="reject_reason" readonly="state != 'submitted'"/>
+                                    <field name="revoke_reason" readonly="state != 'approved'"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_skip_request_search" model="ir.ui.view">
+        <field name="name">sn.wsd.skip.request.search</field>
+        <field name="model">sn.wsd.skip.request</field>
+        <field name="arch" type="xml">
+            <search string="Skip Requests">
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="product_id"/>
+                <field name="route_id"/>
+                <field name="applicant_id"/>
+                <filter string="Open" name="filter_open" domain="[('state', 'in', ['draft', 'submitted'])]"/>
+                <filter string="Submitted" name="filter_submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Revoked" name="filter_revoked" domain="[('state', '=', 'revoked')]"/>
+                <separator/>
+                <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
+                <filter string="Manufacturing Batch" name="group_by_manufacturing_batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                <filter string="Applicant" name="group_by_applicant" context="{'group_by': 'applicant_id'}"/>
+                <filter string="Request Date" name="group_by_request_date" context="{'group_by': 'request_date:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_skip_request" model="ir.actions.act_window">
+        <field name="name">Skip Requests</field>
+        <field name="res_model">sn.wsd.skip.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_skip_request_search"/>
+        <field name="context">{'search_default_filter_open': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_lot_form_msd" model="ir.ui.view">
+        <field name="name">stock.lot.form.msd</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header invisible="not is_msd_material">
+                    <button name="action_msd_unseal" type="object" string="Unseal" class="btn-primary" invisible="msd_state not in ['sealed', 'dry']"/>
+                    <button name="action_msd_seal" type="object" string="Seal" invisible="msd_state != 'opened'"/>
+                    <button name="action_msd_set_dry" type="object" string="Set Dry" invisible="msd_state != 'opened'"/>
+                    <button name="action_open_msd_bake_wizard" type="object" string="Start Baking" class="btn-primary" invisible="msd_state != 'opened'"/>
+                    <button name="action_msd_finish_bake" type="object" string="Finish Baking" class="btn-primary" invisible="msd_state != 'baking'"/>
+                    <button name="action_msd_scrap" type="object" string="Scrap" invisible="msd_state == 'scrapped'"/>
+                    <field name="msd_state" widget="statusbar" statusbar_visible="sealed,opened,baking,dry,scrapped"/>
+                </header>
+            </xpath>
+            <xpath expr="//group[@name='inventory_group']" position="after">
+                <group string="MSD Control" name="msd_control" invisible="not is_msd_material">
+                    <field name="is_msd_material" invisible="1"/>
+                    <field name="msl_level_id"/>
+                    <field name="component_thickness"/>
+                    <field name="msd_rule_id"/>
+                    <field name="msd_unseal_count"/>
+                    <field name="msd_bake_count"/>
+                    <field name="msd_exposure_start"/>
+                    <field name="msd_current_exposure_minutes"/>
+                    <field name="msd_cumulative_exposure_minutes"/>
+                    <field name="msd_total_exposure_minutes"/>
+                    <field name="msd_bake_start"/>
+                    <field name="msd_baked_minutes"/>
+                    <field name="msd_expected_bake_end"/>
+                    <field name="msd_oven_info"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_lot_list_msd" model="ir.ui.view">
+        <field name="name">stock.lot.list.msd</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="is_msd_material" optional="hide"/>
+                <field name="msd_state" optional="show"/>
+                <field name="msl_level_id" optional="hide"/>
+                <field name="component_thickness" optional="hide"/>
+                <field name="msd_current_exposure_minutes" optional="hide"/>
+                <field name="msd_cumulative_exposure_minutes" optional="hide"/>
+                <field name="msd_bake_start" optional="hide"/>
+                <field name="msd_baked_minutes" optional="hide"/>
+                <field name="msd_expected_bake_end" optional="hide"/>
+                <field name="msd_oven_info" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_lot_search_msd" model="ir.ui.view">
+        <field name="name">stock.lot.search.msd</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.search_product_lot_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='on_hand']" position="after">
+                <filter string="MSD Materials" name="msd_materials" domain="[('is_msd_material', '=', True)]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter name="group_by_msd_state" string="MSD State" context="{'group_by': 'msd_state'}"/>
+                <filter name="group_by_msl_level" string="MSL Level" context="{'group_by': 'msl_level_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sn_msd_lot_report" model="ir.actions.act_window">
+        <field name="name">MSD Material Report</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_msd_material', '=', True)]</field>
+        <field name="context">{'search_default_msd_materials': 1}</field>
+    </record>
+</odoo>

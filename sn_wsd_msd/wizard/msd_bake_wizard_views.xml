@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_msd_bake_wizard_form" model="ir.ui.view">
+        <field name="name">sn.msd.bake.wizard.form</field>
+        <field name="model">sn.msd.bake.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Start MSD Baking">
+                <group>
+                    <field name="lot_id" readonly="1"/>
+                    <field name="rule_id" readonly="1"/>
+                    <field name="bake_temperature" readonly="1"/>
+                    <field name="bake_duration_min" readonly="1"/>
+                    <field name="bake_duration_max" readonly="1"/>
+                    <field name="bake_minutes"/>
+                    <field name="oven_info"/>
+                </group>
+                <footer>
+                    <button name="action_start_bake" type="object" string="Start Baking" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

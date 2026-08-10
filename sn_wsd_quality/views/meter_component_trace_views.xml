@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_meter_component_binding_list" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.component.binding.list</field>
+        <field name="model">sn.wsd.meter.component.binding</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="event_time"/>
+                <field name="internal_serial_id"/>
+                <field name="manufacturing_batch_id"/>
+                <field name="component_type"/>
+                <field name="event_type"/>
+                <field name="state"/>
+                <field name="component_product_id"/>
+                <field name="component_lot_id"/>
+                <field name="component_sn"/>
+                <field name="component_batch_no"/>
+                <field name="imei"/>
+                <field name="esam_no"/>
+                <field name="security_chip_no"/>
+                <field name="workorder_id"/>
+                <field name="operator_code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_meter_component_binding_form" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.component.binding.form</field>
+        <field name="model">sn.wsd.meter.component.binding</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_serial_id"/>
+                            <field name="internal_serial_id"/>
+                            <field name="production_id"/>
+                            <field name="manufacturing_batch_id"/>
+                            <field name="workorder_id"/>
+                            <field name="workcenter_id"/>
+                        </group>
+                        <group>
+                            <field name="component_type"/>
+                            <field name="event_type"/>
+                            <field name="state"/>
+                            <field name="event_time"/>
+                            <field name="operator_code"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="component_product_id"/>
+                            <field name="component_lot_id"/>
+                            <field name="component_sn"/>
+                            <field name="component_batch_no"/>
+                            <field name="vendor_batch_no"/>
+                        </group>
+                        <group>
+                            <field name="imei"/>
+                            <field name="iccid"/>
+                            <field name="imsi"/>
+                            <field name="esam_no"/>
+                            <field name="security_chip_no"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                        <page string="Payload">
+                            <field name="payload"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_meter_component_binding" model="ir.actions.act_window">
+        <field name="name">Component Bindings</field>
+        <field name="res_model">sn.wsd.meter.component.binding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
+

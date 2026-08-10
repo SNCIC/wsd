@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_form_inherit_sn_smt" model="ir.ui.view">
+        <field name="name">mrp.production.form.sn.smt</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <field name="x_has_smt_operations" invisible="1"/>
+                <field name="x_smt_consumption_count" invisible="1"/>
+                <field name="x_smt_consumed_points" invisible="1"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_open_smt_consumption" type="object" class="oe_stat_button" icon="fa-list-alt" invisible="not x_has_smt_operations">
+                        <field name="x_smt_consumption_count" widget="statinfo" string="SMT Usage"/>
+                    </button>
+                    <button name="action_check_smt_consumption_reconciliation" type="object" class="oe_stat_button" icon="fa-balance-scale" invisible="not x_has_smt_operations">
+                        <span class="o_stat_text">Reconcile</span>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_workorder_form_sn_smt" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.sn.smt</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <field name="x_is_smt_operation" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="SMT Management" invisible="not x_is_smt_operation">
+                    <group>
+                        <button name="action_scan_next_feeder"
+                                type="object"
+                                string="Scan Feeders"
+                                invisible="state in ['done', 'cancel']"/>
+                    </group>
+                </page>
+                <page string="Feeder Lines" name="feeder_line_ids" invisible="not x_is_smt_operation">
+                    <field name="feeder_line_ids" readonly="1">
+                        <list create="0" delete="0">
+                            <field name="feeder_no"/>
+                            <field name="device_seq" optional="show"/>
+                            <field name="table_no" optional="show"/>
+                            <field name="loadpoint" optional="show"/>
+                            <field name="chanel_sn" optional="show"/>
+                            <field name="feeder_spec" optional="show"/>
+                            <field name="expected_product_id"/>
+                            <field name="actual_product_id"/>
+                            <field name="lot_name"/>
+                            <field name="loaded_qty"/>
+                            <field name="consumed_qty"/>
+                            <field name="scrap_qty"/>
+                            <field name="remaining_qty"/>
+                            <field name="verify_user_id" optional="show"/>
+                            <field name="verify_datetime" optional="show"/>
+                            <field name="state" widget="badge"/>
+                            <button name="action_scan_feeder"
+                                    type="object"
+                                    string="Scan"
+                                    invisible="state != 'pending'"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_bom_form_sn_wsd_plm" model="ir.ui.view">
+        <field name="name">mrp.bom.form.sn.wsd.plm</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_release_plm"
+                            type="object"
+                            string="Release"
+                            class="oe_highlight"
+                            invisible="x_plm_state != 'draft'"/>
+                    <button name="action_create_new_revision"
+                            type="object"
+                            string="New Revision"
+                            invisible="x_plm_state == 'cancelled'"/>
+                    <button name="action_compare_revisions"
+                            type="object"
+                            string="Compare Versions"
+                            invisible="x_revision_count &lt; 2"/>
+                    <button name="action_create_production_bom"
+                            type="object"
+                            string="Create Production BoM"
+                            invisible="x_bom_stage_type != 'engineering' or x_plm_state != 'released'"/>
+                    <button name="action_reset_draft"
+                            type="object"
+                            string="Reset to Draft"
+                            invisible="x_plm_state not in ['cancelled']"/>
+                    <button name="action_cancel_plm"
+                            type="object"
+                            string="Cancel"
+                            invisible="x_plm_state != 'draft'"/>
+                    <field name="x_plm_state" widget="statusbar" statusbar_visible="draft,released,obsolete"/>
+                </header>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button"
+                        name="action_open_production_boms"
+                        type="object"
+                        icon="fa-sitemap"
+                        invisible="x_bom_stage_type != 'engineering' or x_production_bom_count == 0">
+                    <field name="x_production_bom_count" widget="statinfo" string="Production BoMs"/>
+                </button>
+                <button class="oe_stat_button"
+                        name="action_compare_revisions"
+                        type="object"
+                        icon="fa-exchange"
+                        invisible="x_revision_count &lt; 2">
+                    <field name="x_revision_count" widget="statinfo" string="Versions"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="x_bom_stage_type" widget="radio" options="{'horizontal': true}" class="mt-2"/>
+            </xpath>
+            <xpath expr="//page[@name='miscellaneous']" position="after">
+                <page string="PLM" name="plm">
+                    <group>
+                        <group string="Revision Information" name="revision_info">
+                            <field name="x_revision"/>
+                            <field name="x_is_current_revision" readonly="1"/>
+                            <field name="x_previous_bom_id" readonly="1"/>
+                        </group>
+                        <group string="Stage &amp; Origin" name="stage_origin">
+                            <field name="x_source_engineering_bom_id" readonly="1" invisible="x_bom_stage_type != 'production'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Release Information" name="release_info">
+                            <field name="x_released_by" readonly="1"/>
+                            <field name="x_released_date" readonly="1"/>
+                        </group>
+                        <group string="Validity Period" name="validity_period">
+                            <field name="x_effective_date"/>
+                            <field name="x_expire_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='product_id']" position="before">
+                <button name="action_open_substitute_design"
+                        type="object"
+                        icon="fa-random"
+                        title="Substitute Design"
+                        invisible="parent.x_bom_stage_type != 'engineering'"/>
+                <button name="action_open_apply_substitute"
+                        type="object"
+                        icon="fa-exchange"
+                        title="Apply Substitute"
+                        invisible="parent.x_bom_stage_type != 'production' or x_substitution_role == 'substitute'"/>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='operation_id']" position="after">
+                <field name="x_substitution_role" optional="hide"/>
+                <field name="x_substitution_note" optional="show" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_list_sn_wsd_plm" model="ir.ui.view">
+        <field name="name">mrp.bom.list.sn.wsd.plm</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_tmpl_id']" position="before">
+                <field name="x_bom_stage_type"/>
+                <field name="x_plm_state" widget="badge"/>
+                <field name="x_revision"/>
+            </xpath>
+            <xpath expr="//field[@name='product_uom_id']" position="after">
+                <field name="x_is_current_revision" optional="show"/>
+                <field name="x_effective_date" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_filter_sn_wsd_plm" model="ir.ui.view">
+        <field name="name">mrp.bom.search.sn.wsd.plm</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.view_mrp_bom_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='phantom']" position="after">
+                <separator/>
+                <filter string="Engineering BoM" name="engineering_bom" domain="[('x_bom_stage_type', '=', 'engineering')]"/>
+                <filter string="Production BoM" name="production_bom" domain="[('x_bom_stage_type', '=', 'production')]"/>
+                <filter string="Released" name="released" domain="[('x_plm_state', '=', 'released')]"/>
+                <filter string="Current Revision" name="current_revision" domain="[('x_is_current_revision', '=', True)]"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_type']" position="after">
+                <filter string="BoM Usage" name="group_by_bom_usage" domain="[]" context="{'group_by': 'x_bom_stage_type'}"/>
+                <filter string="PLM Status" name="group_by_plm_status" domain="[]" context="{'group_by': 'x_plm_state'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_engineering_bom" model="ir.actions.act_window">
+        <field name="name">Engineering BoMs</field>
+        <field name="res_model">mrp.bom</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="mrp.view_mrp_bom_filter"/>
+        <field name="domain">[('x_bom_stage_type', '=', 'engineering')]</field>
+        <field name="context">{'default_x_bom_stage_type': 'engineering', 'default_company_id': allowed_company_ids[0]}</field>
+    </record>
+
+    <record id="action_production_bom" model="ir.actions.act_window">
+        <field name="name">Production BoMs</field>
+        <field name="res_model">mrp.bom</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="mrp.view_mrp_bom_filter"/>
+        <field name="domain">[('x_bom_stage_type', '=', 'production')]</field>
+        <field name="context">{'default_x_bom_stage_type': 'production', 'default_company_id': allowed_company_ids[0]}</field>
+    </record>
+
+    <record id="view_mrp_bom_form_hide_legacy_substitute" model="ir.ui.view">
+        <field name="name">mrp.bom.form.hide.legacy.substitute</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_bom_form_substitute"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='substitute_rule_count']" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//page[@name='substitute_materials']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,1187 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_plm
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-21 03:06+0000\n"
+"PO-Revision-Date: 2026-07-21 03:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "%(product)s x %(qty)s"
+msgstr "%(product)s x %(qty)s"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"%(sub)s cannot replace %(org)s. Configure the substitute on the product "
+"first."
+msgstr "%(sub)s 无法替代 %(org)s。请先在物料/产品上配置该替代料。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid "A component cannot substitute itself."
+msgstr "元件/物料不能替代其自身。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"A new revision can only be created when the linked process route is not "
+"released. Release a new revision of the route first."
+msgstr "创建新版本时，关联的工艺路线不能已发布。请先发布新版本的工艺路线。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "A production BoM must have a process route before release."
+msgstr "制造BOM在发布前必须配置工艺路线。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__added_count
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__add
+msgid "Added"
+msgstr "新增"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Allow Entry"
+msgstr "允许首站进入"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Allow Reentry"
+msgstr "允许重复进入"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Allow Repair Return"
+msgstr "允许维修返回"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Allow Skip With Override"
+msgstr "允许授权跳站"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__substitute_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
+msgid "Allowed Substitutes"
+msgstr "允许的替代料"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_apply_substitute_wizard
+msgid "Apply BoM Substitute Wizard"
+msgstr "应用BOM替代料向导"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Apply Substitute"
+msgstr "应用替代料"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid ""
+"Apply substitutes on the original component line, not on a substitute line."
+msgstr "请在主料（原始元件）行上应用替代料，而非在替代料行上执行。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_bom_ids
+msgid "Available Bom"
+msgstr ""
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__original_qty
+msgid "Available Qty"
+msgstr "可用用量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_route_ids
+msgid "Available Route"
+msgstr ""
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__available_substitute_ids
+msgid "Available Substitute"
+msgstr "可用替代料"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_duration
+msgid "Base Duration (min)"
+msgstr "基准工时（分钟）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_operation
+msgid "Base Operation"
+msgstr "基准工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_dependency
+msgid "Base Predecessors"
+msgstr "基准前置工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_qty
+msgid "Base Qty"
+msgstr "基准用量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__base_bom_id
+msgid "Base Revision"
+msgstr "基准版本"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__base_route_id
+msgid "Base Route Revision"
+msgstr "基准路线版本"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_sequence
+msgid "Base Sequence"
+msgstr "基准顺序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_uom_id
+msgid "Base Unit"
+msgstr "基准单位"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_value
+msgid "Base Value"
+msgstr "基准值"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_workcenter
+msgid "Base Work Center"
+msgstr "基准工作中心"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_bom
+msgid "Bill of Material"
+msgstr "物料清单"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_bom_line
+msgid "Bill of Material Line"
+msgstr "物料清单行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__bom_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__bom_id
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_wizard__comparison_mode__bom
+msgid "BoM"
+msgstr "物料清单(BOM)"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__bom_line_id
+msgid "BoM Line"
+msgstr "BOM明细行"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_bom_line_substitute
+msgid "BoM Line Substitute Material"
+msgstr "物料清单行替代物料"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "BoM Quantity"
+msgstr "BOM数量"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "BoM Revision"
+msgstr "BOM升版/修订"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__setting
+msgid "BoM Settings"
+msgstr "BOM基本信息"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_substitute_design_wizard
+msgid "BoM Substitute Design Wizard"
+msgstr "BOM替代料设计向导"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "BoM Unit"
+msgstr "BOM单位"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_bom_stage_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "BoM Usage"
+msgstr "BOM用途分类"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_version_compare_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "BoM Version Comparison"
+msgstr "BOM版本对比"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_version_compare_line
+msgid "BoM Version Comparison Line"
+msgstr ""
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_electronics_legacy.py:0
+msgid ""
+"BoM-line substitute design is deprecated. Maintain allowed substitutes on "
+"the product through engineering BoMs instead."
+msgstr "已弃用直接在BOM行设计替代料的方式。请改通过设计BOM(EBOM)在物料主数据上维护可用的替代料。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "By-product Differences"
+msgstr "联副产品差异"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__byproduct
+msgid "By-products"
+msgstr "联副产品"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "Cancelled BoMs cannot be copied into a new revision."
+msgstr "已取消的BOM不能复制创建新版本。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__category
+msgid "Category"
+msgstr "类别"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__updated_count
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__update
+msgid "Changed"
+msgstr "变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__company_id
+msgid "Company"
+msgstr ""
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Compare"
+msgstr "开始对比"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_sn_wsd_process_route_form_plm_compare
+msgid "Compare Versions"
+msgstr "版本对比"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__line_ids
+msgid "Comparison Lines"
+msgstr "对比明细"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__comparison_mode
+msgid "Comparison Mode"
+msgstr "对比模式"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__product_id
+msgid "Component"
+msgstr "元件/物料"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Component Differences"
+msgstr "组件差异"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__component
+msgid "Components"
+msgstr "组件"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Computed On Last: %s"
+msgstr "基于最近记录数：%s"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__operation_id
+msgid "Consumed in Operation"
+msgstr "消耗工序"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Cost Based On: %s"
+msgstr "成本依据：%s"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Create Production BoM"
+msgstr "生成制造BOM"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_is_current_revision
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "Current Revision"
+msgstr "当前有效版本"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Data Definitions: %s"
+msgstr "采集项定义：%s"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr "所有库存作业使用的默认计量单位。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__change_type
+msgid "Difference"
+msgstr "差异类型"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line_substitute__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_substitute_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Duration Computation: %s"
+msgstr "工时计算方式：%s"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_effective_date
+msgid "Effective Date"
+msgstr "生效日期"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_bom_stage_type__engineering
+msgid "Engineering"
+msgstr "设计BOM(EBOM)"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "Engineering BoM"
+msgstr "设计BOM"
+
+#. module: sn_wsd_plm
+#: model:ir.actions.act_window,name:sn_wsd_plm.action_engineering_bom
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_engineering_bom
+msgid "Engineering BoMs"
+msgstr "设计BOM"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "Engineering BoMs cannot reference a source engineering BoM."
+msgstr "设计BOM不能再引用源设计BOM。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_expire_date
+msgid "Expiration Date"
+msgstr "失效日期"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_apply_substitute_wizard__substitution_mode__full
+msgid "Full"
+msgstr "全额替代"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line_substitute__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_substitute_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__review
+msgid "In Review"
+msgstr "审核中"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__item_name
+msgid "Item"
+msgstr "对比项目"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__product_id
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__product_code
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_process_route
+msgid "Meter Process Route"
+msgstr "电表工艺路线"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Meter Product Type"
+msgstr "电表产品类型"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitution_mode
+msgid "Mode"
+msgstr "替代模式"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "New Revision"
+msgstr "升版/创建新版本"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "No other revision is available for comparison."
+msgstr "当前BOM没有其他可对比的历史版本。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/process_route.py:0
+msgid "No other route revision is available for comparison."
+msgstr "当前工艺路线没有其他可对比的历史版本。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"No substitute-enabled BoM line exists for the selected original product on "
+"this manufacturing order."
+msgstr "在该制造订单中，所选主料未找到已启用替代功能的BOM明细行。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__none
+msgid "None"
+msgstr "无"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__obsolete
+msgid "Obsolete"
+msgstr "已废弃"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__operation_code
+msgid "Operation Code"
+msgstr "工序编码"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Operation Differences"
+msgstr "工序差异"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__operation
+msgid "Operations"
+msgstr "工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_origin_line_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__bom_line_id
+msgid "Original BoM Line"
+msgstr "原始BOM明细行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__original_product_id
+msgid "Original Component"
+msgstr "原始主料元件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_original_product_id
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__original
+msgid "Original Material"
+msgstr "原始主料"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__product_uom_id
+msgid "Original UoM"
+msgstr "主料单位"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Overview"
+msgstr "概览"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_root
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "PLM"
+msgstr "生命周期管理 (PLM)"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_plm_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "PLM Status"
+msgstr "PLM状态"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_apply_substitute_wizard__substitution_mode__partial
+msgid "Partial"
+msgstr "部分替代"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_previous_bom_id
+msgid "Previous Revision"
+msgstr "上一版本"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_process_route_id
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_wizard__comparison_mode__route
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Process Route Differences"
+msgstr "工艺路线差异"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__route_operation
+msgid "Process Route Operations"
+msgstr "工艺路线工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__route_setting
+msgid "Process Route Settings"
+msgstr "工艺路线基本信息"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/process_route.py:0
+msgid "Process Route Version Comparison"
+msgstr "工艺路线版本对比"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_bom_stage_type__production
+msgid "Production"
+msgstr "制造BOM(MBOM)"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "Production BoM"
+msgstr "制造BOM"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_production_bom_count
+msgid "Production BoM Count"
+msgstr "制造BOM数量"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model:ir.actions.act_window,name:sn_wsd_plm.action_production_bom
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_production_bom_ids
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_production_bom
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Production BoMs"
+msgstr "制造BOM"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "Production BoMs can only be generated from engineering BoMs."
+msgstr "制造BOM只能由设计BOM生成。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Release"
+msgstr "发布"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Release Information"
+msgstr "发布信息"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__released
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
+msgid "Released"
+msgstr "已发布"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_released_by
+msgid "Released By"
+msgstr "发布人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_released_date
+msgid "Released On"
+msgstr "发布时间"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"Released or obsolete BoM lines cannot be changed directly. Create a new "
+"revision instead."
+msgstr "已发布或已废弃的BOM明细行无法直接修改，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"Released or obsolete BoM lines cannot be deleted directly. Create a new "
+"revision instead."
+msgstr "已发布或已废弃的BOM明细行无法直接删除，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"Released or obsolete BoMs cannot be changed directly. Create a new revision "
+"instead."
+msgstr "已发布或已废弃的BOM无法直接修改，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"Released or obsolete BoMs cannot receive new lines directly. Create a new "
+"revision instead."
+msgstr "已发布或已废弃的BOM无法直接新增明细行，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid ""
+"Released or obsolete engineering BoMs cannot be changed directly. Create a "
+"new revision instead."
+msgstr "已发布或已废弃的设计BOM无法直接修改，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid ""
+"Released or obsolete production BoMs cannot be changed directly. Create a "
+"new revision instead."
+msgstr "已发布或已废弃的制造BOM无法直接修改，请通过创建新版本进行变更。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__removed_count
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__remove
+msgid "Removed"
+msgstr "删除"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Reset to Draft"
+msgstr "重置为草稿"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_revision
+msgid "Revision"
+msgstr "版本号"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_revision_count
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__x_revision_count
+msgid "Revision Count"
+msgstr "版本数量"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Revision Information"
+msgstr "版本信息"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Code"
+msgstr "路线编码"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Control: %s"
+msgstr "路线控制：%s"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Effective Date"
+msgstr "路线生效日期"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Expiration Date"
+msgstr "路线失效日期"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Name"
+msgstr "路线名称"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Route Notes"
+msgstr "路线备注"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Select two different revisions to compare."
+msgstr "请选择两个不同的版本进行对比。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Select two different route revisions to compare."
+msgstr "请选择两个不同的工艺路线版本进行对比。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Select two revisions to compare."
+msgstr "请选择两个版本进行对比。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Select two route revisions to compare."
+msgstr "请选择两个工艺路线版本进行对比。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__setting_change_count
+msgid "Setting Changes"
+msgstr "基础信息变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__show_unchanged
+msgid "Show Unchanged Items"
+msgstr "显示无变化项"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_source_engineering_bom_id
+msgid "Source Engineering BoM"
+msgstr "来源设计BOM"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Stage & Origin"
+msgstr "阶段与来源"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"Submit or release the engineering BoM before generating a production BoM."
+msgstr "生成制造BOM前，必须先提交或发布对应的设计BOM。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_id
+msgid "Substitute Component"
+msgstr "替代物料元件"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Substitute Design"
+msgstr "替代料设计"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_substitute_line_ids
+msgid "Substitute Lines"
+msgstr "替代料明细行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_substitute_product_id
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__substitute
+msgid "Substitute Material"
+msgstr "替代物料"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_substitute_wizard
+msgid "Substitute Material Wizard"
+msgstr "替代物料向导"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_qty
+msgid "Substitute Qty"
+msgstr "替代数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_uom_id
+msgid "Substitute UoM"
+msgstr "替代料单位"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid "Substitute design is only available on engineering BoMs."
+msgstr "替代料设计仅适用于设计BOM(EBOM)。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "Substitute for %(product)s x %(qty)s"
+msgstr "替代 %(product)s x %(qty)s"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid "Substitute products must belong to the same company as the component."
+msgstr "替代物料必须与主料元件属于同一公司。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "Substituted by %(items)s"
+msgstr "已被 %(items)s 替代"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid "Substitutes can only be applied on production BoMs."
+msgstr "替代料仅可应用在制造BOM(MBOM)上。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_note
+msgid "Substitution Note"
+msgstr "替代说明/备注"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_qty
+msgid "Substitution Qty"
+msgstr "替代用量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_role
+msgid "Substitution Role"
+msgstr "替代角色"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Swap Revisions"
+msgstr "交换对比方向"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_duration
+msgid "Target Duration (min)"
+msgstr "对比工时（分钟）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_operation
+msgid "Target Operation"
+msgstr "对比工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_dependency
+msgid "Target Predecessors"
+msgstr "对比前置工序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_qty
+msgid "Target Qty"
+msgstr "对比用量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__target_bom_id
+msgid "Target Revision"
+msgstr "对比版本"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__target_route_id
+msgid "Target Route Revision"
+msgstr "对比路线版本"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_sequence
+msgid "Target Sequence"
+msgstr "对比顺序"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_uom_id
+msgid "Target Unit"
+msgstr "对比单位"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_value
+msgid "Target Value"
+msgstr "对比值"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_workcenter
+msgid "Target Work Center"
+msgstr "对比工作中心"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid "The component must match the selected BoM line."
+msgstr "所选元件必须与指定的BOM明细行相符。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "The effective date must be earlier than the expiration date."
+msgstr "生效日期必须早于失效日期。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid "The original component must match the selected BoM line."
+msgstr "原始主料元件必须与所选的BOM明细行相符。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid ""
+"The process route must belong to the same company as the bill of material."
+msgstr "工艺路线必须与物料清单属于同一公司。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+msgid "The scanned substitute product could not be identified."
+msgstr "无法识别扫描的替代物料/产品。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+msgid "The selected BoM line does not belong to the selected BoM."
+msgstr "所选的BOM明细行不属于当前的BOM。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid "The selected product is not configured as an allowed substitute."
+msgstr "所选物料未被配置为合法的允许替代料。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "The selected revisions must belong to the same BoM revision family."
+msgstr "所选版本必须属于同一个BOM版本族。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid ""
+"The selected revisions must belong to the same process route revision "
+"family."
+msgstr "所选版本必须属于同一个工艺路线版本族。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "The source BoM must be an engineering BoM."
+msgstr "源BOM必须为设计BOM(EBOM)。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"The substitute product is not present on the manufacturing order. Update the"
+" production BoM and regenerate the order before recording usage."
+msgstr ""
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid ""
+"The substitute quantity cannot exceed the current original line quantity."
+msgstr "替代数量不能超过当前主料行的用量。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid "The substitute quantity cannot exceed the original component quantity."
+msgstr "替代数量不能超过原始主料元件的用量。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid "The substitute quantity must be positive."
+msgstr "替代数量必须大于零。"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+msgid ""
+"The substitute unit of measure must be in the same category as the original "
+"component unit."
+msgstr "替代料的计量单位必须与原主料的单位属于同一类别。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__total_change_count
+msgid "Total Changes"
+msgstr "差异总数"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__unchanged_count
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__unchanged
+msgid "Unchanged"
+msgstr "无变化"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+msgid "Validity Period"
+msgstr "有效期"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_sn_wsd_process_route_form_plm_compare
+msgid "Versions"
+msgstr "历史版本"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+msgid "x_source_engineering_bom_id"
+msgstr "x_source_engineering_bom_id"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Comparison Scope"
+msgstr "对比范围"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Summary"
+msgstr "汇总"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+msgid "Process Route Operation Differences"
+msgstr "工艺路线工序差异"

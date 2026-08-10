@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- BOM Line Substitute -->
+    <record id="view_mrp_bom_line_substitute_list" model="ir.ui.view">
+        <field name="name">mrp.bom.line.substitute.list</field>
+        <field name="model">mrp.bom.line.substitute</field>
+        <field name="arch" type="xml">
+            <list string="Substitute Materials" editable="bottom">
+                <field name="priority"/>
+                <field name="original_product_id" readonly="1"/>
+                <field name="substitute_product_id"/>
+                <field name="company_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_line_substitute_form" model="ir.ui.view">
+        <field name="name">mrp.bom.line.substitute.form</field>
+        <field name="model">mrp.bom.line.substitute</field>
+        <field name="arch" type="xml">
+            <form string="Substitute Material">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="bom_id"/>
+                            <field name="bom_line_id"/>
+                            <field name="original_product_id"/>
+                        </group>
+                        <group>
+                            <field name="substitute_product_id"/>
+                            <field name="priority"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_form_substitute" model="ir.ui.view">
+        <field name="name">mrp.bom.form.substitute</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='operation_id']" position="after">
+                <field name="substitute_rule_count" string="Subs." optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']" position="inside">
+                <form string="BoM Line">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="bom_id" invisible="1"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="product_uom_id" groups="uom.group_uom" widget="many2one_uom"/>
+                            </group>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="operation_id" groups="mrp.group_mrp_routings"/>
+                                <field name="substitute_rule_count" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Substitute Materials" name="substitute_materials">
+                                <field name="substitute_line_ids"
+                                       context="{'default_bom_line_id': id}"
+                                       mode="list,form">
+                                    <list editable="bottom">
+                                        <field name="priority"/>
+                                        <field name="original_product_id" readonly="1"/>
+                                        <field name="substitute_product_id"/>
+                                    </list>
+                                    <form string="Substitute Material">
+                                        <group>
+                                            <group>
+                                                <field name="original_product_id" readonly="1"/>
+                                                <field name="substitute_product_id"/>
+                                            </group>
+                                            <group>
+                                                <field name="priority"/>
+                                                <field name="company_id" groups="base.group_multi_company"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Substitute -->
+    <record id="view_product_product_form_substitute" model="ir.ui.view">
+        <field name="name">product.product.form.substitute</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="inside">
+                <group string="Substitutes">
+                    <field name="substitute_ids" widget="many2many_tags"/>
+                    <field name="substitute_for_ids" widget="many2many_tags" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Excess Return -->
+    <record id="view_mrp_production_form_excess_return" model="ir.ui.view">
+        <field name="name">mrp.production.form.sn_wsd_mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_excess_return"
+                        type="object"
+                        string="Return Excess"
+                        class="btn-secondary"
+                        invisible="state != 'done' or not can_return_excess"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_substitute_usage_list" model="ir.ui.view">
+        <field name="name">mrp.substitute.usage.list</field>
+        <field name="model">mrp.substitute.usage</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" default_order="create_date desc">
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="original_product_id"/>
+                <field name="original_lot_id" optional="hide"/>
+                <field name="substitute_product_id"/>
+                <field name="substitute_bom_line_id" optional="show"/>
+                <field name="substitute_lot_id" optional="hide"/>
+                <field name="substitute_uom_qty" sum="Total Substitute Qty"/>
+                <field name="uom_id" groups="uom.group_uom"/>
+                <field name="approved_by"/>
+                <field name="approved_date"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_substitute_usage_form" model="ir.ui.view">
+        <field name="name">mrp.substitute.usage.form</field>
+        <field name="model">mrp.substitute.usage</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_id"/>
+                            <field name="workorder_id"/>
+                            <field name="bom_id"/>
+                            <field name="bom_line_id"/>
+                            <field name="substitute_bom_line_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="approved_by"/>
+                            <field name="approved_date"/>
+                            <field name="consume_move_line_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="original_product_id"/>
+                            <field name="original_lot_id"/>
+                            <field name="original_uom_qty"/>
+                        </group>
+                        <group>
+                            <field name="substitute_product_id"/>
+                            <field name="substitute_lot_id"/>
+                            <field name="substitute_uom_qty"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mrp_substitute_usage_search" model="ir.ui.view">
+        <field name="name">mrp.substitute.usage.search</field>
+        <field name="model">mrp.substitute.usage</field>
+        <field name="arch" type="xml">
+            <search string="Substitute Usage">
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="original_product_id"/>
+                <field name="substitute_product_id"/>
+                <field name="substitute_bom_line_id"/>
+                <field name="approved_by"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                <group>
+                    <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
+                    <filter string="Work Order" name="group_by_workorder" context="{'group_by': 'workorder_id'}"/>
+                    <filter string="Original Product" name="group_by_original_product" context="{'group_by': 'original_product_id'}"/>
+                    <filter string="Substitute Product" name="group_by_substitute_product" context="{'group_by': 'substitute_product_id'}"/>
+                    <filter string="Substitute BoM Line" name="group_by_substitute_bom_line" context="{'group_by': 'substitute_bom_line_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mrp_substitute_usage" model="ir.actions.act_window">
+        <field name="name">Substitute Usage</field>
+        <field name="res_model">mrp.substitute.usage</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mrp_substitute_usage_search"/>
+    </record>
+
+    <record id="view_mrp_feeder_line_list" model="ir.ui.view">
+        <field name="name">mrp.feeder.line.list</field>
+        <field name="model">mrp.feeder.line</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" default_order="production_id desc, workorder_id, feeder_no">
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="feeder_no"/>
+                <field name="expected_product_id"/>
+                <field name="expected_qty" sum="Total Expected Qty"/>
+                <field name="actual_product_id"/>
+                <field name="lot_id"/>
+                <field name="loaded_qty" sum="Total Loaded Qty"/>
+                <field name="consumed_qty" sum="Total Consumed Qty"/>
+                <field name="scrap_qty" sum="Total Scrap Qty"/>
+                <field name="remaining_qty" sum="Total Remaining Qty"/>
+                <field name="verify_user_id" optional="hide"/>
+                <field name="verify_datetime" optional="hide"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_feeder_line_form" model="ir.ui.view">
+        <field name="name">mrp.feeder.line.form</field>
+        <field name="model">mrp.feeder.line</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_id"/>
+                            <field name="workorder_id"/>
+                            <field name="source_move_id"/>
+                            <field name="feeder_no"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="verify_user_id"/>
+                            <field name="verify_datetime"/>
+                            <field name="unload_datetime"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="expected_product_id"/>
+                            <field name="expected_product_code"/>
+                            <field name="expected_qty"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                        </group>
+                        <group>
+                            <field name="actual_product_id"/>
+                            <field name="actual_product_code"/>
+                            <field name="lot_id"/>
+                            <field name="lot_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="loaded_qty"/>
+                            <field name="consumed_qty"/>
+                        </group>
+                        <group>
+                            <field name="scrap_qty"/>
+                            <field name="remaining_qty"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mrp_feeder_line_search" model="ir.ui.view">
+        <field name="name">mrp.feeder.line.search</field>
+        <field name="model">mrp.feeder.line</field>
+        <field name="arch" type="xml">
+            <search string="Feeder Lines">
+                <field name="production_id"/>
+                <field name="workorder_id"/>
+                <field name="feeder_no"/>
+                <field name="expected_product_id"/>
+                <field name="actual_product_id"/>
+                <field name="lot_id"/>
+                <filter string="Pending" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Verified" name="filter_verified" domain="[('state', '=', 'verified')]"/>
+                <filter string="Consuming" name="filter_consuming" domain="[('state', '=', 'consuming')]"/>
+                <group>
+                    <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
+                    <filter string="Work Order" name="group_by_workorder" context="{'group_by': 'workorder_id'}"/>
+                    <filter string="Expected Product" name="group_by_expected_product" context="{'group_by': 'expected_product_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mrp_feeder_line" model="ir.actions.act_window">
+        <field name="name">Feeder Lines</field>
+        <field name="res_model">mrp.feeder.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mrp_feeder_line_search"/>
+    </record>
+
+    <record id="view_mrp_excess_return_list" model="ir.ui.view">
+        <field name="name">mrp.excess.return.list</field>
+        <field name="model">mrp.excess.return</field>
+        <field name="arch" type="xml">
+            <list string="Excess Returns">
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="create_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_excess_return_form" model="ir.ui.view">
+        <field name="name">mrp.excess.return.form</field>
+        <field name="model">mrp.excess.return</field>
+        <field name="arch" type="xml">
+            <form string="Excess Return">
+                <header>
+                    <button name="action_create_returns"
+                            type="object"
+                            string="Generate Moves"
+                            invisible="state != 'draft' or move_ids"/>
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancel"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="production_id"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list>
+                                    <field name="move_id"/>
+                                    <field name="product_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="location_id"/>
+                                    <field name="picked_qty"/>
+                                    <field name="consumed_qty"/>
+                                    <field name="return_qty"/>
+                                    <field name="return_uom_id" groups="uom.group_uom"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Moves">
+                            <field name="move_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="reference"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom" groups="uom.group_uom"/>
+                                    <field name="location_id"/>
+                                    <field name="location_dest_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mrp_excess_return" model="ir.actions.act_window">
+        <field name="name">Excess Returns</field>
+        <field name="res_model">mrp.excess.return</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_mrp_feeder_scan_wizard" model="ir.actions.act_window">
+        <field name="name">Feeder Scan</field>
+        <field name="res_model">mrp.feeder.scan.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_mrp_excess_return"
+              name="Excess Returns"
+              parent="mrp.menu_mrp_manufacturing"
+              action="action_mrp_excess_return"
+              sequence="50"/>
+    <menuitem id="menu_mrp_substitute_usage"
+              name="Substitute Usage"
+              parent="menu_sn_wsd_traceability"
+              action="action_mrp_substitute_usage"
+              groups="mrp.group_mrp_user"
+              sequence="8"/>
+    <menuitem id="menu_mrp_feeder_line"
+              name="Feeder Lines"
+              parent="menu_sn_wsd_traceability"
+              action="action_mrp_feeder_line"
+              groups="mrp.group_mrp_user"
+              sequence="9"/>
+</odoo>

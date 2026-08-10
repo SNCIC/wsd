@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Downtime Search View -->
+    <record id="view_sn_wsd_maintenance_downtime_search" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.downtime.search</field>
+        <field name="model">sn.wsd.maintenance.downtime</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="failure_code"/>
+                <filter string="Open" name="open" domain="[('state', '=', 'open')]"/>
+                <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                <filter name="start_time" date="start_time"/>
+                <group>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Equipment" name="group_equipment" context="{'group_by': 'equipment_id'}"/>
+                    <filter string="Failure Code" name="group_failure_code" context="{'group_by': 'failure_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Downtime List View -->
+    <record id="view_sn_wsd_maintenance_downtime_list" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.downtime.list</field>
+        <field name="model">sn.wsd.maintenance.downtime</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="failure_code"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="duration_hours" sum="Total"/>
+                <field name="state" widget="badge" decoration-warning="state == 'open'" decoration-success="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Downtime Form View -->
+    <record id="view_sn_wsd_maintenance_downtime_form" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.downtime.form</field>
+        <field name="model">sn.wsd.maintenance.downtime</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'open'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="equipment_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="maintenance_request_id"/>
+                            <field name="failure_code"/>
+                        </group>
+                        <group>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="duration_hours" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Downtime Action -->
+    <record id="action_sn_wsd_maintenance_downtime" model="ir.actions.act_window">
+        <field name="name">Downtime Records</field>
+        <field name="res_model">sn.wsd.maintenance.downtime</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_sn_wsd_maintenance_downtime_search"/>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

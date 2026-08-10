@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_smt_material_query_wizard_form" model="ir.ui.view">
+        <field name="name">sn.smt.material.query.wizard.form</field>
+        <field name="model">sn.smt.material.query.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="production_id" readonly="1"/>
+                            <field name="material_sn_input"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="result_text" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_query" type="object" string="Query" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_bom_form_sn_wsd_process_route" model="ir.ui.view">
+        <field name="name">mrp.bom.form.sn.wsd.process.route</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="x_process_route_id" required="1"/>
+            </xpath>
+            <xpath expr="//page[@name='operations']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_routing_workcenter_form_sn_wsd_process_route" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.form.sn.wsd.process.route</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_product_template_attribute_value_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="after">
+                <field name="x_process_route_id" readonly="1"/>
+                <field name="x_route_operation_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='blocked_by_operation_ids']" position="after">
+                <field name="x_step_code"/>
+                <field name="x_allow_entry" readonly="1"/>
+                <field name="x_allow_serial_creation" readonly="1"/>
+                <field name="x_allow_reentry" readonly="1"/>
+                <field name="x_allow_repair_return" readonly="1"/>
+                <field name="x_allow_skip_with_override" readonly="1"/>
+                <field name="x_ng_retry_limit" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_routing_workcenter_list_sn_wsd_process_route" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.list.sn.wsd.process.route</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_id']" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_product_template_attribute_value_ids']" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="after">
+                <field name="x_process_route_id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_route_operation_id" column_invisible="True"/>
+                <field name="x_step_code" optional="show"/>
+                <field name="x_station_type" optional="show"/>
+                <field name="x_allow_entry" optional="show"/>
+                <field name="x_allow_serial_creation" optional="show"/>
+                <field name="x_allow_reentry" optional="hide"/>
+                <field name="x_allow_repair_return" optional="hide"/>
+                <field name="x_allow_skip_with_override" optional="hide"/>
+                <field name="x_ng_retry_limit" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_routing_workcenter_search_sn_wsd_process_route" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.search.sn.wsd.process.route</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_id']" position="replace"/>
+            <xpath expr="//filter[@name='bom']" position="replace"/>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_process_route_list" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.list</field>
+        <field name="model">sn.wsd.process.route</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="code"/>
+                <field name="version"/>
+                <field name="name"/>
+                <field name="x_plm_state"/>
+                <field name="x_revision"/>
+                <field name="x_is_current_revision"/>
+                <field name="meter_product_type"/>
+                <field name="x_workshop_id"/>
+                <field name="bom_count"/>
+                <field name="operation_count"/>
+                <field name="x_effective_date"/>
+                <field name="x_expire_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_process_route_form" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.form</field>
+        <field name="model">sn.wsd.process.route</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_release_plm"
+                            type="object"
+                            string="Release"
+                            class="oe_highlight"
+                            invisible="x_plm_state != 'draft'"
+                            confirm="Release this route? Previous released revision will be marked obsolete."/>
+                    <button name="action_create_new_revision"
+                            type="object"
+                            string="New Revision"
+                            invisible="x_plm_state == 'cancelled'"
+                            confirm="Create a new revision based on this route?"/>
+                    <button name="action_reset_draft"
+                            type="object"
+                            string="Reset to Draft"
+                            invisible="x_plm_state not in ['cancelled']"/>
+                    <button name="action_cancel_plm"
+                            type="object"
+                            string="Cancel"
+                            invisible="x_plm_state != 'draft'"/>
+                    <field name="x_plm_state" widget="statusbar" statusbar_visible="draft,released,obsolete"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" readonly="x_plm_state == 'released'"/>
+                            <field name="version" readonly="x_plm_state == 'released'" class="oe_inline" style="margin-left: 8px;"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="x_plm_state == 'released'"/>
+                            <field name="meter_product_type" readonly="x_plm_state == 'released'"/>
+                        </group>
+                        <group>
+                            <field name="x_workshop_id" readonly="x_plm_state == 'released'"/>
+                            <field name="bom_count" readonly="1"/>
+                            <field name="operation_count" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" readonly="x_plm_state in ['released', 'obsolete']"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Operations">
+                            <button name="action_open_linked_bom" type="object" string="Open Linked Bill of Material" class="btn-secondary" invisible="not bom_count"/>
+                            <field name="route_operation_ids" nolabel="1" context="{'default_route_id': id}" readonly="x_plm_state == 'released'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="x_step_code"/>
+                                    <field name="operation_id"/>
+                                    <field name="workcenter_id" optional="show"/>
+                                    <field name="x_station_type" optional="show"/>
+                                    <field name="time_cycle_manual"/>
+                                    <field name="blocked_by_route_operation_ids" widget="many2many_tags"/>
+                                    <field name="x_allow_entry" optional="show"/>
+                                    <field name="x_allow_serial_creation" optional="show"/>
+                                    <field name="x_allow_reentry" optional="hide"/>
+                                    <field name="x_allow_repair_return" optional="hide"/>
+                                    <field name="x_allow_skip_with_override" optional="hide"/>
+                                    <field name="x_ng_retry_limit" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bills of Material">
+                            <field name="bom_ids" nolabel="1" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="code"/>
+                                    <field name="product_tmpl_id"/>
+                                    <field name="product_id"/>
+                                    <field name="x_workshop_id"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="PLM" name="plm_page">
+                            <group>
+                                <group string="Revision Information">
+                                    <field name="x_revision" readonly="x_plm_state in ['released', 'obsolete']"/>
+                                    <field name="x_is_current_revision" readonly="1"/>
+                                    <field name="x_previous_route_id" readonly="1"/>
+                                </group>
+                                <group string="Release Information">
+                                    <field name="x_released_by" readonly="1" invisible="not x_released_by"/>
+                                    <field name="x_released_date" readonly="1" invisible="not x_released_date"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Validity Period">
+                                    <field name="x_effective_date" readonly="x_plm_state == 'released'"/>
+                                    <field name="x_expire_date" readonly="x_plm_state == 'released'"/>
+                                </group>
+                                <group string="Production Routes">
+                                    <field name="x_production_route_count" readonly="1"/>
+                                    <button name="action_open_production_routes" type="object" string="Open Production Routes" class="btn-secondary" invisible="not x_production_route_count"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1" readonly="x_plm_state == 'released'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_process_route_search" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.search</field>
+        <field name="model">sn.wsd.process.route</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="x_workshop_id"/>
+                <filter string="Active" name="active_only" domain="[('active', '=', True)]"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('x_plm_state', '=', 'draft')]"/>
+                <filter string="In Review" name="in_review" domain="[('x_plm_state', '=', 'review')]"/>
+                <filter string="Released" name="released" domain="[('x_plm_state', '=', 'released')]"/>
+                <filter string="Obsolete" name="obsolete" domain="[('x_plm_state', '=', 'obsolete')]"/>
+                <filter string="Current Revision" name="current_revision" domain="[('x_is_current_revision', '=', True)]"/>
+                <group name="group_by">
+                    <filter string="PLM Status" name="group_plm_state" context="{'group_by': 'x_plm_state'}"/>
+                    <filter string="Workshop" name="group_workshop" context="{'group_by': 'x_workshop_id'}"/>
+                    <filter string="Revision" name="group_revision" context="{'group_by': 'x_revision'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_process_route" model="ir.actions.act_window">
+        <field name="name">Process Routes</field>
+        <field name="res_model">sn.wsd.process.route</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_process_route_search"/>
+    </record>
+
+    <record id="view_sn_wsd_process_route_operation_list" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.operation.list</field>
+        <field name="model">sn.wsd.process.route.operation</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="route_id"/>
+                <field name="sequence" widget="handle"/>
+                <field name="x_step_code"/>
+                <field name="operation_id"/>
+                <field name="workcenter_id"/>
+                <field name="x_station_type"/>
+                <field name="time_mode"/>
+                <field name="time_cycle_manual"/>
+                <field name="x_allow_entry"/>
+                <field name="x_allow_serial_creation"/>
+                <field name="x_allow_reentry"/>
+                <field name="x_allow_repair_return"/>
+                <field name="x_allow_skip_with_override"/>
+                <field name="x_ng_retry_limit"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_process_route_operation_form" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.operation.form</field>
+        <field name="model">sn.wsd.process.route.operation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="route_id"/>
+                            <field name="sequence"/>
+                            <field name="operation_id"/>
+                            <field name="available_operation_ids" invisible="1"/>
+                            <field name="x_step_code" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="route_workshop_id" readonly="1"/>
+                            <field name="available_workcenter_ids" invisible="1"/>
+                            <field name="workcenter_id" domain="[('id', 'in', available_workcenter_ids)]"/>
+                            <field name="x_station_type" readonly="1"/>
+                            <field name="time_mode" widget="radio" options="{'horizontal': true}"/>
+                            <field name="time_mode_batch" invisible="time_mode == 'manual'"/>
+                            <field name="time_cycle_manual"/>
+                            <field name="cost_mode" widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="blocked_by_route_operation_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="Route Control">
+                        <field name="x_allow_entry"/>
+                        <field name="x_allow_serial_creation"/>
+                        <field name="x_allow_reentry"/>
+                        <field name="x_allow_repair_return"/>
+                        <field name="x_allow_skip_with_override"/>
+                        <field name="x_ng_retry_limit"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_process_route_operation_search" model="ir.ui.view">
+        <field name="name">sn.wsd.process.route.operation.search</field>
+        <field name="model">sn.wsd.process.route.operation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="operation_id"/>
+                <field name="x_step_code"/>
+                <field name="route_id"/>
+                <field name="workcenter_id"/>
+                <group>
+                    <filter string="Process Route" name="group_route" context="{'group_by': 'route_id'}"/>
+                    <filter string="Work Center" name="group_workcenter" context="{'group_by': 'workcenter_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_operation_list" model="ir.ui.view">
+        <field name="name">sn.wsd.operation.list</field>
+        <field name="model">sn.wsd.operation</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="x_station_type"/>
+                <field name="x_workcenter_ids" widget="many2many_tags"/>
+                <field name="time_mode"/>
+                <field name="time_cycle_manual"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_operation_form" model="ir.ui.view">
+        <field name="name">sn.wsd.operation.form</field>
+        <field name="model">sn.wsd.operation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="x_station_type"/>
+                            <field name="x_workcenter_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="time_mode" widget="radio" options="{'horizontal': true}"/>
+                            <field name="time_mode_batch" invisible="time_mode == 'manual'"/>
+                            <field name="time_cycle_manual"/>
+                            <field name="cost_mode" widget="radio" options="{'horizontal': true}"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_operation_search" model="ir.ui.view">
+        <field name="name">sn.wsd.operation.search</field>
+        <field name="model">sn.wsd.operation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="x_station_type"/>
+                <field name="x_workcenter_ids"/>
+                <filter string="Active" name="active_only" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive_only" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Station Type" name="group_station_type" context="{'group_by': 'x_station_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_process_route_operation" model="ir.actions.act_window">
+        <field name="name">Operations</field>
+        <field name="res_model">sn.wsd.operation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_operation_search"/>
+        <field name="context">{'search_default_active_only': 1}</field>
+    </record>
+</odoo>

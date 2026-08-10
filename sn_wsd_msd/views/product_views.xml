@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_msd" model="ir.ui.view">
+        <field name="name">product.template.form.msd</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']//group[@name='group_general']" position="inside">
+                <field name="is_msd_material"/>
+                <field name="msl_level_id" invisible="not is_msd_material" required="is_msd_material"/>
+                <field name="component_thickness" invisible="not is_msd_material" required="is_msd_material"/>
+                <field name="msd_control_rule_id" invisible="not is_msd_material" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_list_msd" model="ir.ui.view">
+        <field name="name">product.template.list.msd</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="is_msd_material" optional="hide"/>
+                <field name="msl_level_id" optional="hide"/>
+                <field name="component_thickness" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_list_msd" model="ir.ui.view">
+        <field name="name">product.product.list.msd</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="is_msd_material" optional="hide" readonly="1"/>
+                <field name="msl_level_id" optional="hide" readonly="1"/>
+                <field name="component_thickness" optional="hide" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_msd_control_rule_list" model="ir.ui.view">
+        <field name="name">sn.msd.control.rule.list</field>
+        <field name="model">sn.msd.control.rule</field>
+        <field name="arch" type="xml">
+            <list string="MSD Control Rules" multi_edit="1">
+                <field name="name"/>
+                <field name="msl_level_id"/>
+                <field name="thickness_min"/>
+                <field name="thickness_max"/>
+                <field name="standard_exposure_minutes"/>
+                <field name="cumulative_exposure_minutes"/>
+                <field name="bake_temperature"/>
+                <field name="bake_duration_min"/>
+                <field name="bake_duration_max"/>
+                <field name="bake_total_minutes"/>
+                <field name="bake_count_limit"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_msd_control_rule_form" model="ir.ui.view">
+        <field name="name">sn.msd.control.rule.form</field>
+        <field name="model">sn.msd.control.rule</field>
+        <field name="arch" type="xml">
+            <form string="MSD Control Rule">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Matching">
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="msl_level_id"/>
+                            <field name="thickness_min"/>
+                            <field name="thickness_max"/>
+                        </group>
+                        <group string="Exposure">
+                            <field name="standard_exposure_minutes"/>
+                            <field name="cumulative_exposure_minutes"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Baking">
+                            <field name="bake_temperature"/>
+                            <field name="bake_duration_min"/>
+                            <field name="bake_duration_max"/>
+                        </group>
+                        <group string="Limits">
+                            <field name="bake_total_minutes"/>
+                            <field name="bake_count_limit"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_msd_control_rule_search" model="ir.ui.view">
+        <field name="name">sn.msd.control.rule.search</field>
+        <field name="model">sn.msd.control.rule</field>
+        <field name="arch" type="xml">
+            <search string="MSD Control Rules">
+                <field name="name"/>
+                <field name="msl_level_id"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <group>
+                    <filter name="group_by_msl_level" string="MSL Level" context="{'group_by': 'msl_level_id'}"/>
+                    <filter name="group_by_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_msd_control_rule" model="ir.actions.act_window">
+        <field name="name">MSD Control Rules</field>
+        <field name="res_model">sn.msd.control.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_msd_control_rule_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

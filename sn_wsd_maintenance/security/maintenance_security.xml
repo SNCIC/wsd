@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_sn_wsd_maintenance_user" model="res.groups">
+        <field name="name">WSD Maintenance User</field>
+        <field name="privilege_id" ref="maintenance.res_groups_privilege_maintenance"/>
+        <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_sn_wsd_maintenance_manager" model="res.groups">
+        <field name="name">WSD Maintenance Manager</field>
+        <field name="privilege_id" ref="maintenance.res_groups_privilege_maintenance"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_sn_wsd_maintenance_user')), Command.link(ref('maintenance.group_equipment_manager'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <record id="rule_sn_wsd_maintenance_plan_company" model="ir.rule">
+            <field name="name">Maintenance Plan Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_maintenance_plan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_maintenance_execution_company" model="ir.rule">
+            <field name="name">Maintenance Execution Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_maintenance_execution"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_maintenance_downtime_company" model="ir.rule">
+            <field name="name">Maintenance Downtime Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_maintenance_downtime"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

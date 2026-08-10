@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_quality.SamplingMatrixAction">
+        <Layout display="display" className="'o_sn_wsd_sampling_matrix_action h-100'">
+            <t t-set-slot="control-panel-create-button">
+                <button type="button" class="btn btn-primary" t-on-click="saveMatrix" t-att-disabled="state.saving or state.loading or !state.dirty">
+                    <i class="fa fa-save me-1"/>
+                    <span>Save</span>
+                </button>
+                <button type="button" class="btn btn-secondary ms-2" t-on-click="loadMatrix" t-att-disabled="state.saving or state.loading">
+                    <i class="fa fa-refresh me-1"/>
+                    <span>Reload</span>
+                </button>
+            </t>
+            <div class="o_sn_wsd_sampling_matrix d-flex flex-column h-100">
+                <div class="o_sn_wsd_sampling_matrix_filters d-flex flex-wrap align-items-end gap-3 px-3 py-2 border-bottom">
+                    <label class="o_sn_wsd_sampling_filter">
+                        <span class="form-label">Sampling Standard</span>
+                        <select class="form-select" t-on-change="onStandardChange" t-att-disabled="state.loading or state.saving">
+                            <option value="">Select...</option>
+                            <t t-foreach="state.standards" t-as="standard" t-key="standard.id">
+                                <option t-att-value="standard.id" t-att-selected="standard.id === state.standardId">
+                                    <t t-esc="standard.display_name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </label>
+                    <label class="o_sn_wsd_sampling_filter">
+                        <span class="form-label">Switching Mode</span>
+                        <select class="form-select" t-on-change="onModeChange" t-att-disabled="state.loading or state.saving">
+                            <t t-foreach="state.modes" t-as="mode" t-key="mode.key">
+                                <option t-att-value="mode.key" t-att-selected="mode.key === state.switchingMode">
+                                    <t t-esc="mode.label"/>
+                                </option>
+                            </t>
+                        </select>
+                    </label>
+                    <span class="badge rounded-pill text-bg-warning" t-if="state.dirty">Unsaved changes</span>
+                </div>
+
+                <div class="o_sn_wsd_sampling_matrix_body flex-grow-1 overflow-auto">
+                    <div t-if="state.loading" class="p-4 text-muted">Loading...</div>
+                    <t t-else="">
+                        <section class="o_sn_wsd_sampling_section">
+                            <div class="o_sn_wsd_sampling_section_header">
+                                <h3>Lot Range Code Matrix</h3>
+                                <button type="button" class="btn btn-secondary btn-sm" t-on-click="addLotRow">
+                                    <i class="fa fa-plus me-1"/>
+                                    <span>Add Range</span>
+                                </button>
+                            </div>
+                            <div class="o_sn_wsd_sampling_table_wrap">
+                                <table class="table table-sm table-bordered o_sn_wsd_sampling_table o_sn_wsd_lot_matrix">
+                                    <thead>
+                                        <tr>
+                                            <th class="o_sn_wsd_sticky_col">From</th>
+                                            <th>To</th>
+                                            <t t-foreach="state.levels" t-as="level" t-key="level.key">
+                                                <th><t t-esc="level.label"/></th>
+                                            </t>
+                                            <th class="o_sn_wsd_action_col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.lotRows" t-as="row" t-key="row_index">
+                                            <tr>
+                                                <td class="o_sn_wsd_sticky_col">
+                                                    <input class="form-control form-control-sm" type="number" min="1" t-att-value="row.lot_qty_min" t-on-input="(ev) => this.updateLotQty(row, 'lot_qty_min', ev.target.value)"/>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" type="number" min="1" t-att-value="row.lot_qty_max" t-on-input="(ev) => this.updateLotQty(row, 'lot_qty_max', ev.target.value)"/>
+                                                </td>
+                                                <t t-foreach="state.levels" t-as="level" t-key="level.key">
+                                                    <td>
+                                                        <input class="form-control form-control-sm o_sn_wsd_code_input" maxlength="2" t-att-value="row.codes[level.key] || ''" t-on-input="(ev) => this.updateLotCode(row, level.key, ev.target.value)"/>
+                                                    </td>
+                                                </t>
+                                                <td class="o_sn_wsd_action_col">
+                                                    <button type="button" class="btn btn-link text-danger p-0" t-on-click="() => this.removeLotRow(row)" title="Delete">
+                                                        <i class="fa fa-trash"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="o_sn_wsd_sampling_section">
+                            <div class="o_sn_wsd_sampling_section_header">
+                                <h3>AQL Ac/Re Matrix</h3>
+                                <button type="button" class="btn btn-secondary btn-sm" t-on-click="addPlanRow">
+                                    <i class="fa fa-plus me-1"/>
+                                    <span>Add Code</span>
+                                </button>
+                            </div>
+                            <div class="o_sn_wsd_sampling_table_wrap">
+                                <table class="table table-sm table-bordered o_sn_wsd_sampling_table o_sn_wsd_plan_matrix">
+                                    <thead>
+                                        <tr>
+                                            <th class="o_sn_wsd_sticky_col" rowspan="2">Code</th>
+                                            <th rowspan="2">Sample Size</th>
+                                            <t t-foreach="state.aqls" t-as="aql" t-key="aql.key">
+                                                <th colspan="2">AQL <t t-esc="aql.label"/></th>
+                                            </t>
+                                            <th class="o_sn_wsd_action_col" rowspan="2"></th>
+                                        </tr>
+                                        <tr>
+                                            <t t-foreach="state.aqls" t-as="aql" t-key="aql.key">
+                                                <th>Ac</th>
+                                                <th>Re</th>
+                                            </t>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.planRows" t-as="row" t-key="row_index">
+                                            <tr>
+                                                <td class="o_sn_wsd_sticky_col">
+                                                    <input class="form-control form-control-sm o_sn_wsd_code_input" maxlength="2" t-att-value="row.sample_size_code" t-on-input="(ev) => this.updatePlanCode(row, ev.target.value)"/>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm" type="number" min="1" t-att-value="row.sample_size" t-on-input="(ev) => this.updatePlanSampleSize(row, ev.target.value)"/>
+                                                </td>
+                                                <t t-foreach="state.aqls" t-as="aql" t-key="aql.key">
+                                                    <td>
+                                                        <input class="form-control form-control-sm o_sn_wsd_qty_input" type="number" min="0" t-att-value="row.cells[aql.key] ? row.cells[aql.key].accept_qty : ''" t-on-input="(ev) => this.updatePlanCell(row, aql.key, 'accept_qty', ev.target.value)"/>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control form-control-sm o_sn_wsd_qty_input" type="number" min="0" t-att-value="row.cells[aql.key] ? row.cells[aql.key].reject_qty : ''" t-on-input="(ev) => this.updatePlanCell(row, aql.key, 'reject_qty', ev.target.value)"/>
+                                                    </td>
+                                                </t>
+                                                <td class="o_sn_wsd_action_col">
+                                                    <button type="button" class="btn btn-link text-danger p-0" t-on-click="() => this.removePlanRow(row)" title="Delete">
+                                                        <i class="fa fa-trash"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </t>
+                </div>
+            </div>
+        </Layout>
+    </t>
+</templates>

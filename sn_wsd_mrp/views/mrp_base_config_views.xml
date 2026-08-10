@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_mrp_workshop_search" model="ir.ui.view">
+        <field name="name">sn.mrp.workshop.search</field>
+        <field name="model">sn.mrp.workshop</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="component_location_id"/>
+                <field name="finished_product_location_id"/>
+                <filter string="Active" name="active_only" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive_only" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_workshop_list" model="ir.ui.view">
+        <field name="name">sn.mrp.workshop.list</field>
+        <field name="model">sn.mrp.workshop</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="component_location_id" optional="show"/>
+                <field name="finished_product_location_id" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_workshop_form" model="ir.ui.view">
+        <field name="name">sn.mrp.workshop.form</field>
+        <field name="model">sn.mrp.workshop</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Manufacturing Locations">
+                        <field name="component_location_id"/>
+                        <field name="finished_product_location_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Production Lines">
+                            <field name="production_line_ids" nolabel="1" context="{'default_workshop_id': id, 'default_company_id': company_id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_mrp_workshop" model="ir.actions.act_window">
+        <field name="name">Workshops</field>
+        <field name="res_model">sn.mrp.workshop</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_mrp_workshop_search"/>
+        <field name="context">{'search_default_active_only': 1}</field>
+    </record>
+
+    <record id="view_sn_mrp_production_line_search" model="ir.ui.view">
+        <field name="name">sn.mrp.production.line.search</field>
+        <field name="model">sn.mrp.production.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="workshop_id"/>
+                <filter string="Active" name="active_only" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive_only" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Workshop" name="group_workshop" context="{'group_by': 'workshop_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_production_line_list" model="ir.ui.view">
+        <field name="name">sn.mrp.production.line.list</field>
+        <field name="model">sn.mrp.production.line</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="workshop_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_production_line_form" model="ir.ui.view">
+        <field name="name">sn.mrp.production.line.form</field>
+        <field name="model">sn.mrp.production.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="workshop_id"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Teams">
+                            <field name="team_ids" nolabel="1" context="{'default_production_line_id': id, 'default_workshop_id': workshop_id, 'default_company_id': company_id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="shift_id"/>
+                                    <field name="state"/>
+                                    <field name="member_count" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Work Centers">
+                            <field name="station_ids" nolabel="1" context="{'default_production_line_id': id, 'default_company_id': company_id}">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_mrp_production_line" model="ir.actions.act_window">
+        <field name="name">Production Lines</field>
+        <field name="res_model">sn.mrp.production.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_mrp_production_line_search"/>
+        <field name="context">{'search_default_active_only': 1}</field>
+    </record>
+
+    <record id="view_sn_mrp_team_search" model="ir.ui.view">
+        <field name="name">sn.mrp.team.search</field>
+        <field name="model">sn.mrp.team</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="workshop_id"/>
+                <field name="production_line_id"/>
+                <field name="shift_id"/>
+                <filter string="In Use" name="active_state" domain="[('state', '=', 'active')]"/>
+                <filter string="Inactive" name="inactive_state" domain="[('state', '=', 'inactive')]"/>
+                <group>
+                    <filter string="Workshop" name="group_workshop" context="{'group_by': 'workshop_id'}"/>
+                    <filter string="Production Line" name="group_production_line" context="{'group_by': 'production_line_id'}"/>
+                    <filter string="Shift" name="group_shift" context="{'group_by': 'shift_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_team_list" model="ir.ui.view">
+        <field name="name">sn.mrp.team.list</field>
+        <field name="model">sn.mrp.team</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="workshop_id"/>
+                <field name="production_line_id"/>
+                <field name="shift_id"/>
+                <field name="leader_member_id"/>
+                <field name="performance_ratio_total"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_mrp_team_form" model="ir.ui.view">
+        <field name="name">sn.mrp.team.form</field>
+        <field name="model">sn.mrp.team</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_set_active" type="object" string="Set In Use" class="btn-primary" invisible="state == 'active'"/>
+                    <button name="action_set_inactive" type="object" string="Set Inactive" class="btn-secondary" invisible="state == 'inactive'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,inactive"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_add_members_wizard" type="object" class="oe_stat_button" icon="fa-user-plus">
+                            <field name="member_count" widget="statinfo" string="Add Members"/>
+                        </button>
+                        <button name="action_open_remove_members_wizard" type="object" class="oe_stat_button" icon="fa-user-times">
+                            <field name="member_count" widget="statinfo" string="Remove Members"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="workshop_id"/>
+                            <field name="production_line_id" domain="[('workshop_id', '=', workshop_id)]"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="shift_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Members">
+                            <field name="member_ids" nolabel="1" context="{'default_team_id': id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="employee_id"/>
+                                    <field name="employee_code"/>
+                                    <field name="performance_ratio"/>
+                                    <field name="is_leader"/>
+                                    <field name="workshop_id" optional="hide"/>
+                                    <field name="production_line_id" optional="hide"/>
+                                    <field name="shift_id" optional="hide"/>
+                                </list>
+                            </field>
+                            <group class="mt16">
+                                <field name="leader_member_id" readonly="1"/>
+                                <field name="performance_ratio_total" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_mrp_team" model="ir.actions.act_window">
+        <field name="name">Teams</field>
+        <field name="res_model">sn.mrp.team</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_mrp_team_search"/>
+        <field name="context">{'search_default_active_state': 1}</field>
+    </record>
+</odoo>
+

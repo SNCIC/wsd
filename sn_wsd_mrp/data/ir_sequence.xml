@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_sn_wsd_internal_serial" model="ir.sequence">
+        <field name="name">WSD Internal Serial Record</field>
+        <field name="code">sn.wsd.internal.serial</field>
+        <field name="prefix">ISR%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_wsd_manufacturing_batch" model="ir.sequence">
+        <field name="name">WSD Manufacturing Batch</field>
+        <field name="code">sn.wsd.manufacturing.batch</field>
+        <field name="prefix">BATCH%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_wsd_internal_serial_no" model="ir.sequence">
+        <field name="name">WSD Internal Serial Number</field>
+        <field name="code">sn.wsd.internal.serial.no</field>
+        <field name="prefix">SN%(y)s%(month)s-</field>
+        <field name="padding">7</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_wsd_meter_aging_batch" model="ir.sequence">
+        <field name="name">WSD Meter Aging Batch</field>
+        <field name="code">sn.wsd.meter.aging.batch</field>
+        <field name="prefix">AG%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_wsd_meter_pack_record" model="ir.sequence">
+        <field name="name">WSD Meter Pack Record</field>
+        <field name="code">sn.wsd.meter.pack.record</field>
+        <field name="prefix">PK%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_mrp_excess_return" model="ir.sequence">
+        <field name="name">MRP Excess Return</field>
+        <field name="code">mrp.excess.return</field>
+        <field name="prefix">MER/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_mrp_substitute_usage" model="ir.sequence">
+        <field name="name">MRP Substitute Usage</field>
+        <field name="code">mrp.substitute.usage</field>
+        <field name="prefix">MSU/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

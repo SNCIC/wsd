@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_tooling_maintenance_wizard_form" model="ir.ui.view">
+        <field name="name">sn.tooling.maintenance.wizard.form</field>
+        <field name="model">sn.tooling.maintenance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Maintenance">
+                <group>
+                    <group>
+                        <field name="tooling_ids" widget="many2many_tags" readonly="1"/>
+                        <field name="product_tmpl_id" readonly="1"/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <field name="name"/>
+                        <field name="result"/>
+                        <field name="note"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_apply" type="object" string="Confirm Maintenance" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

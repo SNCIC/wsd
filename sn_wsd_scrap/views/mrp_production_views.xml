@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_list_sn_wsd_scrap" model="ir.ui.view">
+        <field name="name">mrp.production.list.sn.wsd.scrap</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_produced']" position="after">
+                <field name="x_scrap_qty_total" string="Scrap Qty" sum="Total Scrap Qty" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

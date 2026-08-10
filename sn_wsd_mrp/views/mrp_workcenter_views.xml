@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workcenter_search_inherit_sn_wsd" model="ir.ui.view">
+        <field name="name">mrp.workcenter.search.sn.wsd</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.view_mrp_workcenter_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="code"/>
+                <field name="x_workshop_id"/>
+                <field name="x_production_line_id"/>
+                <field name="x_workcenter_type"/>
+                <filter string="In Use" name="status_active" domain="[('x_workcenter_status', '=', 'active')]"/>
+                <filter string="Inactive" name="status_inactive" domain="[('x_workcenter_status', '=', 'inactive')]"/>
+                <group>
+                    <filter string="Ownership Type" name="group_type" context="{'group_by': 'x_workcenter_type'}"/>
+                    <filter string="Workshop" name="group_workshop" context="{'group_by': 'x_workshop_id'}"/>
+                    <filter string="Production Line" name="group_production_line" context="{'group_by': 'x_production_line_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_workcenter_list_inherit_sn_wsd" model="ir.ui.view">
+        <field name="name">mrp.workcenter.list.sn.wsd</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="x_workcenter_type" optional="show"/>
+                <field name="x_workshop_id" optional="show"/>
+                <field name="x_production_line_id" optional="show"/>
+                <field name="x_operation_ids" optional="show" widget="many2many_tags"/>
+                <field name="x_workcenter_status" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_workcenter_form_inherit_sn_wsd" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.sn.wsd</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+            </xpath>
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='general_info']" position="after">
+                <page string="Scope Information" name="scope_info">
+                    <group>
+                        <group>
+                            <field name="x_workcenter_type"/>
+                            <field name="x_workshop_id"/>
+                            <field name="x_operation_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]" invisible="x_workcenter_type != 'line'" required="x_workcenter_type == 'line'"/>
+                            <field name="x_workcenter_status"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_routing_workcenter_form_inherit_sn_wsd" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.form.sn.wsd</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='workcenter_id']" position="attributes">
+                <attribute name="domain">[('active', '=', True)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_routing_workcenter_list_inherit_sn_wsd" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.list.sn.wsd</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='workcenter_id']" position="attributes">
+                <attribute name="domain">[('active', '=', True)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_form_inherit_sn_wsd_process_scope" model="ir.ui.view">
+        <field name="name">mrp.bom.form.sn.wsd.process.scope</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="x_workshop_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_list_inherit_sn_wsd_process_scope" model="ir.ui.view">
+        <field name="name">mrp.bom.list.sn.wsd.process.scope</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="x_process_route_id" optional="show"/>
+                <field name="x_workshop_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

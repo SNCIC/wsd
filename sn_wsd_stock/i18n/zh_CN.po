@@ -1,0 +1,784 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-24 05:53+0000\n"
+"PO-Revision-Date: 2026-07-24 05:53+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_form
+msgid "<span class=\"o_stat_text\">Conversion Moves</span>"
+msgstr "<span class=\"o_stat_text\">转换移动</span>"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_production_lot_form_reel_split
+msgid "<span class=\"o_stat_text\">Source Lot</span>"
+msgstr "<span class=\"o_stat_text\">来源批次</span>"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_lot.py:0
+msgid "A lot cannot be its own source lot."
+msgstr "批次不能将自身作为来源批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_lot.py:0
+msgid "A reel lot and its source lot must belong to the same company."
+msgstr "料盘批次与其来源批次必须属于同一公司。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_lot.py:0
+msgid "A reel lot and its source lot must use the same product."
+msgstr "料盘批次与其来源批次必须使用相同的物料。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_line_lot_unique
+msgid "A reel lot can only belong to one split line."
+msgstr "一个料盘批次只能属于一条拆分明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "A reel lot name must end with a hyphen followed by digits."
+msgstr "料盘批次名称必须以连字符跟数字结尾。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常修饰"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+msgid "Apply Reel Split"
+msgstr "应用料盘拆分"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__available_source_lot_ids
+msgid "Available Source Lot"
+msgstr "可用来源批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_generate_reel_lots
+msgid "Can Generate Reel Lots"
+msgstr "可生成料盘批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__child_lot_count
+msgid "Child Lot Count"
+msgstr "子批次数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Clear the Picked status before generating reel lots."
+msgstr "生成料盘批次前请先取消“已捡货”状态。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__company_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__reel_split_role__consume
+msgid "Consume Source Lot"
+msgstr "消耗来源批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/lot_reel_split.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__conversion_move_ids
+msgid "Conversion Moves"
+msgstr "转换移动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__create_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__default_location_dest_id
+msgid "Default Destination"
+msgstr "默认目的位置"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split_wizard__product_uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr "用于所有库存作业的默认计量单位。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__location_dest_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__location_dest_id
+msgid "Destination Location"
+msgstr "目的位置"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__display_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_traceability_report__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"Every reel destination must be an internal location below the transfer "
+"destination."
+msgstr "每个料盘的目的位置必须是调拨目的位置下属的内部位置。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Every reel quantity must be greater than zero."
+msgstr "每个料盘的数量必须大于零。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+msgid "Generate Lines"
+msgstr "生成明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split_wizard_line
+msgid "Generate Reel Lot Line"
+msgstr "生成料盘批次明细"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_picking.py:0
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+#: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_reel_split
+msgid "Generate Reel Lots"
+msgstr "生成料盘批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Generate the reel lot lines before applying the split."
+msgstr "在应用拆分前，请先生成料盘批次明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Generated %(count)s reel lots from source lot %(lot)s."
+msgstr "已从来源批次 %(lot)s 生成 %(count)s 个料盘批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_traceability_report__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "用于指示异常活动的图标。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的关注。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_has_error
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息存在发送错误。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__write_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split
+msgid "Lot Reel Split"
+msgstr "批次料盘拆分"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split_line
+msgid "Lot Reel Split Line"
+msgstr "批次料盘拆分明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_stock_lot
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Only products tracked by lots can be split into reel lots."
+msgstr "只有按批次追溯的物料才能拆分为料盘批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__reel_split_role__produce
+msgid "Produce Reel Lot"
+msgstr "产出料盘批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__product_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__product_id
+msgid "Product"
+msgstr "物料"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__source_move_id
+msgid "Product Move"
+msgstr "物料移动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__quantity
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__quantity
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__quantity_per_reel
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__quantity_per_reel
+msgid "Quantity per Reel"
+msgstr "每盘数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__split_quantity
+msgid "Quantity to Split"
+msgstr "待拆分数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__lot_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__lot_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__is_reel_lot
+msgid "Reel Lot"
+msgstr "料盘批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__lot_prefix
+msgid "Reel Lot Prefix"
+msgstr "料盘批前缀"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__line_ids
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__child_lot_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_production_lot_form_reel_split
+msgid "Reel Lots"
+msgstr "料盘批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+msgid "Reel Rule"
+msgstr "料盘规则"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__reel_sequence
+msgid "Reel Sequence"
+msgstr "料盘序号"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__split_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__reel_split_id
+msgid "Reel Split"
+msgstr "料盘拆分"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__reel_split_count
+msgid "Reel Split Count"
+msgstr "料盘拆分数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__reel_split_line_id
+msgid "Reel Split Line"
+msgstr "料盘拆分明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__reel_split_role
+msgid "Reel Split Role"
+msgstr "料盘拆分角色"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_lot_reel_split
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__reel_split_ids
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_lot_reel_split
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_reel_split
+msgid "Reel Splits"
+msgstr "料盘拆分"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"Reel lot generation does not support packaged or owner-restricted source "
+"stock. Unpack it first."
+msgstr "料盘批次生成不支持带包装或有所有者限制的来源库存，请先拆包。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Reel lot names must be unique."
+msgstr "料盘批次名称必须唯一。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_picking.py:0
+msgid ""
+"Reel lots can only be generated on an active storage transfer for lot-"
+"tracked products."
+msgstr "只有在针对按批次追溯物料的有效入库/上架调拨单上，才能生成料盘批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__name
+msgid "Reference"
+msgstr "参考单号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__is_remainder
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__is_remainder
+msgid "Remainder Reel"
+msgstr "尾数盘"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__sequence_padding
+msgid "Sequence Digits"
+msgstr "序号位数"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__source_location_id
+msgid "Source Location"
+msgstr "来源位置"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_lot.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__source_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__source_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__parent_lot_id
+msgid "Source Lot"
+msgstr "来源批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"Source lot %(lot)s has only %(quantity)s %(uom)s available in %(location)s."
+msgstr "来源批次 %(lot)s 在位置 %(location)s 中仅有 %(quantity)s %(uom)s 可用。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__user_id
+msgid "Split By"
+msgstr "拆分人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__date
+msgid "Split Date"
+msgstr "拆分日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__quantity
+msgid "Split Quantity"
+msgstr "拆分数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Split quantity and quantity per reel must be greater than zero."
+msgstr "拆分数量和每盘数量必须大于零。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__sequence_start
+msgid "Starting Sequence"
+msgstr "起始序号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态：\n"
+"逾期：已超过截止日期\n"
+"今天：活动日期为今天\n"
+"计划：未来的活动。"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_stock_move
+msgid "Stock Move"
+msgstr "库存移动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__picking_location_dest_id
+msgid "Storage Destination"
+msgstr "入库目的位置"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__source_move_id
+msgid "Storage Move"
+msgstr "入库移动"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__picking_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__picking_id
+msgid "Storage Transfer"
+msgstr "入库调拨"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_lot__parent_lot_id
+msgid "Supplier or source lot from which this reel lot was generated."
+msgstr "生成此料盘批次供应商批次或来源批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The destination must be an internal location below the transfer destination."
+msgstr "目的位置必须是调拨目的位置下属的内部位置。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "The following reel lot names already exist: %s"
+msgstr "以下料盘批次名称已存在：%s"
+
+#. module: sn_wsd_stock
+#: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_quantity_per_reel_positive
+msgid "The quantity per reel must be greater than zero."
+msgstr "每盘数量必须大于零。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The reel lot prefix must start with the complete source lot followed by a "
+"hyphen."
+msgstr "料盘批前缀必须以完整的来源批次号开头，后跟一个连字符。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_line_quantity_positive
+msgid "The reel quantity must be greater than zero."
+msgstr "料盘数量必须大于零。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_line_split_sequence_unique
+msgid "The reel sequence must be unique within a split."
+msgstr "料盘序号在同一拆分单中必须唯一。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "The selected product move does not belong to this storage transfer."
+msgstr "选定的物料移动不属于此入库调拨单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The sequence start must be positive and sequence digits must be between 1 "
+"and 9."
+msgstr "起始序号必须大于零，且序号位数必须在 1 到 9 之间。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "The source lot is not reserved on the selected product move."
+msgstr "来源批次未在选定的物料移动上预留。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_quantity_positive
+msgid "The split quantity must be greater than zero."
+msgstr "拆分数量必须大于零。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The split quantity must equal the quantity reserved from source lot %(lot)s:"
+" %(quantity)s %(uom)s."
+msgstr "拆分数量必须等于来源批次 %(lot)s 预留的数量：%(quantity)s %(uom)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The starting sequence is no longer available. Regenerate the lines starting "
+"from %(sequence)s."
+msgstr "起始序号不再可用，请从 %(sequence)s 开始重新生成明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "The sum of reel quantities must equal the split quantity."
+msgstr "料盘数量之和必须等于拆分总数量。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"The transfer operation type is not configured as a receipt storage step."
+msgstr "该调拨作业类型未配置为收货入库步骤。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "This transfer is not an active receipt storage transfer."
+msgstr "此调拨单不是有效的收货入库调拨单。"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_stock_traceability_report
+msgid "Traceability Report"
+msgstr "追溯报表"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_stock_picking
+msgid "Transfer"
+msgstr "调拨"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__product_uom_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__product_uom_id
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通历史"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/lot_reel_split.py:0
+msgid "reel_split_id"
+msgstr "reel_split_id"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_rule__weekend_policy
+msgid "Weekend Policy"
+msgstr "周末休息策略"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__none
+msgid "No Weekend Exclusion"
+msgstr "不排除周末"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__sunday
+msgid "Sunday Off"
+msgstr "周日休息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__saturday
+msgid "Saturday Off"
+msgstr "周六休息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__weekend
+msgid "Saturday and Sunday Off"
+msgstr "周六、周日休息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_rule__weekend_policy
+msgid "Weekend days excluded when applying this rule lead time."
+msgstr "应用此规则的提前期时排除的周末休息日。"

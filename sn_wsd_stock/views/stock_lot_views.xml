@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_production_lot_form_reel_split" model="ir.ui.view">
+        <field name="name">stock.lot.form.reel.split</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_reel_lots" type="object" class="oe_stat_button" icon="fa-code-fork"
+                        invisible="child_lot_count == 0">
+                    <field name="child_lot_count" string="Reel Lots" widget="statinfo"/>
+                </button>
+                <button name="action_view_source_lot" type="object" class="oe_stat_button" icon="fa-level-up"
+                        invisible="not parent_lot_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Source Lot</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="is_reel_lot" invisible="1"/>
+                <field name="parent_lot_id" readonly="1" invisible="not parent_lot_id"/>
+                <field name="reel_sequence" readonly="1" invisible="not is_reel_lot"/>
+                <field name="reel_split_line_id" readonly="1" invisible="not reel_split_line_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_production_lot_list_reel_split" model="ir.ui.view">
+        <field name="name">stock.lot.list.reel.split</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="parent_lot_id" optional="hide"/>
+                <field name="reel_sequence" optional="hide"/>
+                <field name="is_reel_lot" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

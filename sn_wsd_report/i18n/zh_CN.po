@@ -1,0 +1,2023 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-10 05:35+0000\n"
+"PO-Revision-Date: 2026-07-10 05:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/wizard/workorder_terminal_wizard.py:0
+msgid ""
+"%s\n"
+"\n"
+"Error Code: %s"
+msgstr ""
+"%s\n"
+"\n"
+"错误代码: %s"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid ""
+"<span class=\"o_sn_wsd_terminal_footer_note\">Use serial mode for station "
+"flow, and quantity mode for counted output posting.</span>"
+msgstr ""
+"<span class=\"o_sn_wsd_terminal_footer_note\">工位流转使用序列号模式，计件产量过账使用数量模式。</span>"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__source_type__api
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__source_type__api
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__mode__api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+msgid "API"
+msgstr "API接口"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__actual_hours
+msgid "Actual Hours"
+msgstr "实际工时"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__aging
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__aging
+msgid "Aging"
+msgstr "老化"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__batch_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__aging_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__aging_batch_id
+msgid "Aging Batch"
+msgstr "老化批次"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_aging_loss_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_aging_loss_report
+msgid "Aging Loss"
+msgstr "老化损耗"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_aging_loss_report
+msgid "Aging Loss Report"
+msgstr "老化损耗报表"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Aging Slot"
+msgstr "老化槽位"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__aging_slot_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__aging_slot_no
+msgid "Aging Slot No"
+msgstr "老化槽位号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__aging_temp_c
+msgid "Aging Temp C"
+msgstr "老化温度(℃)"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "All report lines must belong to the same company as the report."
+msgstr "所有报表行必须与报表属于同一个公司。"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_scan_wizard_form
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__available_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Available Qty"
+msgstr "可用数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__avg_cycle_time_sec
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__avg_cycle_time_sec
+msgid "Avg Cycle Time (sec)"
+msgstr "平均节拍(秒)"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Balance"
+msgstr "结存"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__report_balance_qty
+msgid "Balance Qty"
+msgstr "结存数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__basic_error
+msgid "Basic Error"
+msgstr "基本误差"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__batch_name
+msgid "Batch"
+msgstr "批次"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__boolean
+msgid "Boolean"
+msgstr "布尔值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__calibration
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__calibration
+msgid "Calibration"
+msgstr "校表/校准"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_scan_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_workorder_report_correction_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__state__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__carton_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__carton_no
+msgid "Carton No"
+msgstr "箱号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__closure_rate
+msgid "Closure Rate (%)"
+msgstr "闭环率(%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__code
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__report_type__complete
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_scan_wizard__mode__complete
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__report_type__complete
+msgid "Complete"
+msgstr "完工"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__create_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Cumulative Output"
+msgstr "累计产量"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/mrp_workorder_report_bridge.py:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_out
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__qty_output_total
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__output_qty
+msgid "Cumulative Output Qty"
+msgstr "累计产出数量"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Current Output"
+msgstr "当前产出"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Current Output:"
+msgstr "当前产出:"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__state
+msgid "Current State"
+msgstr "当前状态"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__current_workorder_id
+msgid "Current Workorder"
+msgstr "当前工单"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__cycle_time_sec
+msgid "Cycle Time (sec)"
+msgstr "测试节拍(秒)"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_data_line_search
+msgid "Data Code"
+msgstr "数据项代码"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__date
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__datetime
+msgid "Datetime"
+msgstr "日期时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__float
+msgid "Decimal"
+msgstr "小数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__defect_code_id
+msgid "Defect Code"
+msgstr "不良代码/缺陷代码"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__definition_id
+msgid "Definition"
+msgstr "定义"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__device_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__device_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__device_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__device_id
+msgid "Device"
+msgstr "台位/设备"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workcenter__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_mes_dashboard_service__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workcenter__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_mes_dashboard_service__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__done_workorder_count
+msgid "Done Workorders"
+msgstr "已完工工单数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__efficiency_rate
+msgid "Efficiency Rate (%)"
+msgstr "效率型/达成率(%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__employee_id
+msgid "Employee"
+msgstr "员工/操作工"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__equipment_id
+msgid "Equipment"
+msgstr "设备/工装"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__event_source
+msgid "Event Source"
+msgstr "事件来源"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__event_time
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__event_time
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__event_time
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__event_time
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_data_line_search
+msgid "Event Time"
+msgstr "事件时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__event_type
+msgid "Event Type"
+msgstr "事件类型"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__workcenter_id
+msgid "Execution Work Center"
+msgstr "执行工作中心/工位"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__external_event_id
+msgid "External Event"
+msgstr "外部事件"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__external_event_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__external_event_id
+msgid "External Event ID"
+msgstr "外部事件ID"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__fail_count
+msgid "Fail Count"
+msgstr "不合格数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__fail_qty
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__qty_fail
+msgid "Fail Qty"
+msgstr "不合格数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__final_result
+msgid "Final Result"
+msgstr "最终结果"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__final_test
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__final_test
+msgid "Final Test"
+msgstr "终检/完检"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__firmware_version
+msgid "Firmware Version"
+msgstr "固件版本"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__result__hold
+msgid "Hold"
+msgstr "拦截/挂起"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__hold_count
+msgid "Hold Count"
+msgstr "拦截数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__hold_qty
+msgid "Hold Qty"
+msgstr "拦截数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Input"
+msgstr "投入"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_in
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_in
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_in
+msgid "Input Qty"
+msgstr "投入数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__inspection
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__inspection
+msgid "Inspection"
+msgstr "检验"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__integer
+msgid "Integer"
+msgstr "整数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__json
+msgid "JSON"
+msgstr "JSON"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__label
+msgid "Label"
+msgstr "标签"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__write_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__latest_event_type
+msgid "Latest Event"
+msgstr "最新事件"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__latest_event_time
+msgid "Latest Event Time"
+msgstr "最新事件时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__latest_workcenter_code
+msgid "Latest Work Center"
+msgstr "最新工作中心/工位"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__load_qty
+msgid "Load Qty"
+msgstr "上架数量/落位数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__loss_qty
+msgid "Loss Qty"
+msgstr "损耗数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__loss_rate
+msgid "Loss Rate (%)"
+msgstr "损耗率(%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__loss_reason_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__loss_reason_id
+msgid "Loss Reason"
+msgstr "损耗原因"
+
+#. module: sn_wsd_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_mes_analysis
+msgid "MES Analysis"
+msgstr "MES报表分析"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/mes_analysis_report.py:0
+#: model:ir.actions.client,name:sn_wsd_report.action_sn_wsd_mes_big_screen_client
+#: model:ir.actions.server,name:sn_wsd_report.action_sn_wsd_mes_big_screen_server
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_mes_big_screen
+msgid "MES Big Screen"
+msgstr "MES看板大屏"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_mes_dashboard_service
+msgid "MES Dashboard Service"
+msgstr "MES看板服务"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__mes_workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__mes_workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__mes_workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__mes_workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__mes_workcenter_id
+msgid "MES Work Center"
+msgstr "MES工作中心"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__source_type__machine
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__source_type__machine
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__mode__machine
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+msgid "Machine"
+msgstr "机台设备"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "Machine and API reports must provide an external event ID."
+msgstr "设备和API接口上报必须提供外部事件ID。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__source_type__manual
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__source_type__manual
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__mode__manual
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+msgid "Manual"
+msgstr "手工采集"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__production_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__production_id
+msgid "Manufacturing Order"
+msgstr "生产订单"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__production_name
+msgid "Manufacturing Reference"
+msgstr "生产单号"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_mrp_workorder_report
+msgid "Manufacturing Workorder Report"
+msgstr "生产工单报表"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_mrp_workorder_report_line
+msgid "Manufacturing Workorder Report Line"
+msgstr "生产工单报表明细"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__meter_serial_id
+msgid "Meter Serial"
+msgstr "表号/序列号"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "Missing required operation data: %s"
+msgstr "缺失必要的工序数据：%s"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__mode
+msgid "Mode"
+msgstr "模式"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report_line__result__ng
+msgid "NG"
+msgstr "不合格 (NG)"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_ng
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_ng
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_ng
+msgid "NG Qty"
+msgstr "不合格数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__ng_rate
+msgid "NG Rate (%)"
+msgstr "不合格率 (%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__ng_reason_id
+msgid "NG Reason"
+msgstr "不合格原因"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/wizard/meter_workorder_scan_wizard.py:0
+#: code:addons/sn_wsd_report/wizard/workorder_terminal_wizard.py:0
+msgid "No active work order is available for this work center."
+msgstr "该工作中心当前没有进行中的工单。"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__note
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report_line__result__ok
+msgid "OK"
+msgstr "合格 (OK)"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_ok
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_ok
+msgid "OK Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__open_count
+msgid "Open Count"
+msgstr "未结案数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Open Reports"
+msgstr "打开报表"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__open_workorder_count
+msgid "Open Workorders"
+msgstr "未结案工单数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__operation_id
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_operation_daily_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_operation_daily_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_operation_daily_report_pivot
+msgid "Operation Daily"
+msgstr "工序日报"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_operation_daily_report
+msgid "Operation Daily Report"
+msgstr "工序日报表"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+msgid "Operation Data"
+msgstr "工序数据"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__data_line_ids
+msgid "Operation Data Lines"
+msgstr "工序数据明细"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__operation_type
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__operation_type
+msgid "Operation Type"
+msgstr "工序类型"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__operator_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__operator_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__operator_code
+msgid "Operator"
+msgstr "操作员"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__operator_code
+msgid "Operator Code"
+msgstr "操作员代码"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__product_qty
+msgid "Order Qty"
+msgstr "订单数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Output"
+msgstr "产出"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_out
+msgid "Output Qty"
+msgstr "产出数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__override_route
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__override_route
+msgid "Override Route Check"
+msgstr "跳过工艺路线校验"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__source_type__pda
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__source_type__pda
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__mode__pda
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+msgid "PDA"
+msgstr "PDA掌上终端"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__pack_date
+msgid "Pack Date"
+msgstr "包装日期"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__packaging
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__packaging
+msgid "Packaging"
+msgstr "包装"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__pallet_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__pallet_no
+msgid "Pallet No"
+msgstr "栈板号/托盘号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__pass_count
+msgid "Pass Count"
+msgstr "合格次数"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__pass_qty
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_ok
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__qty_pass
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__pass_qty
+msgid "Pass Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__pass_rate
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__pass_rate
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__pass_rate
+msgid "Pass Rate (%)"
+msgstr "合格率 (%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__payload
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__payload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+msgid "Payload"
+msgstr "有效载荷/数据报文"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__payload_json
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__payload_json
+msgid "Payload JSON"
+msgstr "JSON数据报文"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__phase_error
+msgid "Phase Error"
+msgstr "相位误差"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__theoretical_cycle_time_min
+msgid "Planned Cycle Time (min)"
+msgstr "理论标准节拍 (分钟)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__planned_hours
+msgid "Planned Hours"
+msgstr "计划工时"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+msgid "Post"
+msgstr "过账/提交"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__state__posted
+msgid "Posted"
+msgstr "已过账/已提交"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Previous Output"
+msgstr "前工序产出"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__previous_output_qty
+msgid "Previous Output Qty"
+msgstr "前工序产出数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__route_id
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__product_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__product_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__product_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__production_id
+msgid "Production"
+msgstr "生产"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__production_date
+msgid "Production Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_production_progress_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_production_progress_report
+msgid "Production Progress"
+msgstr "生产进度"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_production_progress_report
+msgid "Production Progress Report"
+msgstr "生产进度报表"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_history_report__test_type__programming
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_test_pass_rate_report__test_type__programming
+msgid "Programming"
+msgstr "程序烧录/编程"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__progress_rate
+msgid "Progress Rate (%)"
+msgstr "进度率 (%)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__quality_issue_count
+msgid "Quality Issue Count"
+msgstr "质量问题件数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__quantity
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Quantity Mode"
+msgstr "按数量报工模式"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_repair_closure_report__repair_mode__qty
+msgid "Quantity Repair"
+msgstr "批量维修"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid ""
+"Quantity mode: output is posted by totals and aggregated into workorder "
+"report summary."
+msgstr "数量模式：按总数提交产出，并汇总到工单报表摘要中。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Recent Reports"
+msgstr "最近报表"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__reference_name
+msgid "Reference"
+msgstr "关联单号"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__remark
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__remark
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report_line__result__repair
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_repair_closure_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_repair_closure_report
+msgid "Repair Closure"
+msgstr "维修结案"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_repair_closure_report
+msgid "Repair Closure Report"
+msgstr "维修结案报表"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__repair_mode
+msgid "Repair Mode"
+msgstr "维修模式"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__closed_ok_count
+msgid "Repair OK Count"
+msgstr "维修合格结案数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__repair_order_count
+msgid "Repair Order Count"
+msgstr "维修单数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_repair
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_repair
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__repair_qty_total
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_repair
+msgid "Repair Qty"
+msgstr "维修数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__scrapped_count
+msgid "Repair Scrap Count"
+msgstr "维修报废数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__report_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_form_sn_wsd_report
+msgid "Report"
+msgstr "报表/报告"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__report_batch_no
+msgid "Report Batch No."
+msgstr "报工批次号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_count
+msgid "Report Count"
+msgstr "报工记录数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__report_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__report_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__report_date
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__report_date
+msgid "Report Date"
+msgstr "报告日期"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Report Entry"
+msgstr "报工输入"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_in_total
+msgid "Report Input Qty"
+msgstr "累计报工投入数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__report_line_id
+msgid "Report Line"
+msgstr "报表明细行"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_ng_total
+msgid "Report NG Qty"
+msgstr "累计报工不合格数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_ok_total
+msgid "Report OK Qty"
+msgstr "累计报工合格数"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_form_sn_wsd_report
+msgid "Report Records"
+msgstr "报工记录"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__name
+msgid "Report Reference"
+msgstr "报工单号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_repair_total
+msgid "Report Repair Qty"
+msgstr "累计报工维修数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_rework_total
+msgid "Report Rework Qty"
+msgstr "累计报工返工数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_qty_scrap_total
+msgid "Report Scrap Qty"
+msgstr "累计报工报废数"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__report_type
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__report_type
+msgid "Report Type"
+msgstr "报工类型"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__reported_count
+msgid "Reported Count"
+msgstr "已报工次数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__report_output_qty
+msgid "Reported Output Qty"
+msgstr "已报地产出数量"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "Reported quantities cannot be negative."
+msgstr "报工数量不能为负数。"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__result
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__result
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__result
+msgid "Result"
+msgstr "判定结果"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_rework
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_rework
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__qty_rework
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_rework
+msgid "Rework Qty"
+msgstr "返工数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Rework/Repair"
+msgstr "返工/维修"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__route_operation_id
+msgid "Route Operation"
+msgstr "工艺路线工序"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__serial_no
+msgid "SN"
+msgstr "条码/序列号"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "SN / Barcode"
+msgstr "表号/条码"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+msgid "SN Lines"
+msgstr "条码明细"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_repair_closure_report__repair_mode__sn
+msgid "SN Pass Repair"
+msgstr "单表维修合格"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_test_history_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_test_history_report
+msgid "SN Test History"
+msgstr "序列号测试历史"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "SN 流转"
+msgstr "序列号流转"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workcenter_form_sn_wsd_report
+msgid "Scan"
+msgstr "扫描"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_scan_wizard_form
+msgid "Scan Meter Serial"
+msgstr "扫描电表序列号"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report_line__result__scrap
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__qty_scrap
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__qty_scrap
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_production_progress_report__qty_scrap
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__qty_scrap
+msgid "Scrap Qty"
+msgstr "报废数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__seal_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__seal_no
+msgid "Seal No"
+msgstr "铅封号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__selection
+msgid "Selection"
+msgstr "下拉选项"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__is_serial_flow
+msgid "Serial Flow"
+msgstr "按序列号流转"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Serial Mode"
+msgstr "序列号模式"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__serial_no
+msgid "Serial No"
+msgstr "序列号"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__serial_lot_id
+msgid "Serial Number"
+msgstr "序列号/批次"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_serial_trace_detail_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_serial_trace_detail_report
+msgid "Serial Trace Detail"
+msgstr "序列号追溯明细"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_serial_trace_detail_report
+msgid "Serial Trace Detail Report"
+msgstr "序列号追溯明细报表"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_serial_trace_summary_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_serial_trace_summary_report
+msgid "Serial Trace Summary"
+msgstr "序列号追溯汇总"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_serial_trace_summary_report
+msgid "Serial Trace Summary Report"
+msgstr "序列号追溯汇总报表"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid ""
+"Serial mode: the terminal will continue the meter flow, including "
+"traceability, station travel, aging, and packing actions."
+msgstr "序列号模式：工位终端将继续电表流转过程，包括追溯、工位过站、老化和装箱操作。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Source"
+msgstr "数据源"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__source_type
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__source_type
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__mode
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_data_line_search
+msgid "Source Type"
+msgstr "来源类型"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_repair_closure_report__workorder_id
+msgid "Source Workorder"
+msgstr "源工单"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__report_type__start
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_scan_wizard__mode__start
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_terminal_wizard__report_type__start
+msgid "Start"
+msgstr "开工/开始"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__start_date
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Station Control"
+msgstr "工位控制"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_station_efficiency_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_station_efficiency_report
+msgid "Station Efficiency"
+msgstr "工位效率"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_station_efficiency_report
+msgid "Station Efficiency Report"
+msgstr "工位效率报表"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__state
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Submit"
+msgstr "提交"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Submit Quantity Report"
+msgstr "提交数量报工"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Submit Serial Report"
+msgstr "提交条码报工"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_form_sn_wsd_report
+msgid "Sync Qty From Serials"
+msgstr "从序列号同步数量"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_test_history_report
+msgid "Test History Report"
+msgstr "测试历史报表"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_test_pass_rate_report
+msgid "Test Pass Rate Report"
+msgstr "测试合格率报表"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_test_pass_rate_report
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_test_pass_rate_report
+msgid "Test Pass Rates"
+msgstr "测试合格率"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__test_result_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__test_result_id
+msgid "Test Result"
+msgstr "测试结果"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__test_result_count
+msgid "Test Result Count"
+msgstr "测试结果计数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__test_time
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__test_time
+msgid "Test Time"
+msgstr "测试时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__test_type
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__test_type
+msgid "Test Type"
+msgstr "测试类型"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__test_value
+msgid "Test Value"
+msgstr "测试值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__test_value_json
+msgid "Test Value JSON"
+msgstr "测试值 JSON"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__tester_channel
+msgid "Tester Channel"
+msgstr "测试台通道/表位"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields.selection,name:sn_wsd_report.selection__sn_wsd_workorder_data_line__value_type__char
+msgid "Text"
+msgstr "文本"
+
+#. module: sn_wsd_report
+#: model:ir.model.constraint,message:sn_wsd_report.constraint_mrp_workorder_report_report_event_company_unique
+msgid "The external event ID must be unique per company."
+msgstr "每个公司的外部事件 ID 必须唯一。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "The latest submission is highlighted automatically."
+msgstr "最新提交的内容已自动高亮显示。"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "The output quantity cannot be greater than the input quantity."
+msgstr "产出数量不能大于投入数量。"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "The same SN cannot appear twice in one report."
+msgstr "同一报告中不能重复出现相同的序列号(SN)。"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid ""
+"The selected work order must belong to the selected manufacturing order."
+msgstr "所选工单必须属于所选的制造订单(生产制令)。"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_data_line.py:0
+msgid "The value is above the configured maximum."
+msgstr "该数值超过了配置的最大值。"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_data_line.py:0
+msgid "The value is below the configured minimum."
+msgstr "该数值低于配置的最小值。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_aging_loss_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_operation_daily_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_production_progress_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_repair_closure_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_serial_trace_detail_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_station_efficiency_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_test_pass_rate_report_list
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__total_count
+msgid "Total Count"
+msgstr "总计数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__total_cycle_time_sec
+msgid "Total Cycle Time (sec)"
+msgstr "总周期时间 (秒)"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__travel_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__travel_id
+msgid "Travel"
+msgstr "流转/轨迹"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__travel_count
+msgid "Travel Count"
+msgstr "流转工位计数"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__travel_id
+msgid "Travel Event"
+msgstr "流转事件"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__travel_event_count
+msgid "Travel Event Count"
+msgstr "流转事件计数"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid ""
+"Use barcode-driven reporting for station flow, aging, packing, and repair "
+"routing."
+msgstr "对于工位流转、老化、装箱和维修路由，请使用条码驱动型报工。"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid ""
+"Use quantity-based reporting for manual counts, machine callbacks, and non-"
+"serial posting."
+msgstr "对于人工计数、机器回传以及非非序列号过账，请使用数量驱动型报工。"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_boolean
+msgid "Value Boolean"
+msgstr "布尔值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_char
+msgid "Value Char"
+msgstr "字符值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_date
+msgid "Value Date"
+msgstr "日期值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_datetime
+msgid "Value Datetime"
+msgstr "日期时间值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_display
+msgid "Value Display"
+msgstr "显示值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_float
+msgid "Value Float"
+msgstr "浮点值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_integer
+msgid "Value Integer"
+msgstr "整数值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_json
+msgid "Value Json"
+msgstr "JSON值"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__value_type
+msgid "Value Type"
+msgstr "数值类型"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_summary_report__verification_date
+msgid "Verification Date"
+msgstr "检定/校表日期"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__verification_fail_count
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__verification_fail_count
+msgid "Verification Fail Count"
+msgstr "检定不合格计数"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_mrp_workcenter
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__workcenter_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__workcenter_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__workcenter_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__workcenter_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__workcenter_code
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__station_code
+msgid "Work Center Code"
+msgstr "工作中心编码"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_mrp_workorder
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_terminal_wizard__workorder_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_data_line_search
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__workcenter_id
+msgid "Workcenter"
+msgstr "工作中心"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_aging_loss_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_operation_daily_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_serial_trace_detail_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_station_efficiency_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_history_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_test_pass_rate_report__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_data_line__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_report.field_sn_wsd_workorder_scan_wizard__workorder_id
+msgid "Workorder"
+msgstr "工单"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_workorder_data_line
+msgid "Workorder Data Line"
+msgstr "工单数据明细行"
+
+#. module: sn_wsd_report
+#: model:ir.actions.act_window,name:sn_wsd_report.action_sn_wsd_workorder_data_line
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_workorder_data_line
+msgid "Workorder Data Lines"
+msgstr "工单数据明细行"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_workorder_scan_wizard
+msgid "Workorder Meter Scan Wizard"
+msgstr "工单电表扫描向导"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/wizard/workorder_terminal_wizard.py:0
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_line__report_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__report_id
+msgid "Workorder Report"
+msgstr "工单报表/报工记录"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/mrp_workorder_report_bridge.py:0
+#: model:ir.actions.act_window,name:sn_wsd_report.action_mrp_workorder_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder__workorder_report_ids
+#: model:ir.ui.menu,name:sn_wsd_report.menu_mrp_workorder_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_form_sn_wsd_report
+msgid "Workorder Reports"
+msgstr "工单报表/报工记录"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/terminal_client_action.xml:0
+msgid "Workorder Terminal"
+msgstr "工单终端"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_workorder_terminal_wizard
+msgid "Workorder Terminal Wizard"
+msgstr "工单终端向导"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/wizard/workorder_terminal_wizard.py:0
+msgid "error"
+msgstr "错误"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/mrp_workorder_report_bridge.py:0
+msgid "workorder_id"
+msgstr "workorder_id"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "{\"key\": \"value\"}"
+msgstr "{\"key\": \"value\"}"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "不良"
+msgstr "不良"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "产品名称 / SN"
+msgstr "产品名称 / 序列号"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日出站"
+msgstr "今日出站"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日完成任务"
+msgstr "今日完成任务"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日操作员工作情况"
+msgstr "今日操作员工作情况"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日累计出站"
+msgstr "今日累计出站"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日良品"
+msgstr "今日良品"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "今日车间完成数量"
+msgstr "今日车间完成数量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "制令总数"
+msgstr "生产订单总数"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "制令进度 / 良品"
+msgstr "订单进度 / 良品"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "工位"
+msgstr "工位"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "工序能耗式指标"
+msgstr "工序能耗指标"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "已完成"
+msgstr "已完成"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "异常工位"
+msgstr "异常工位"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "当月生产指标"
+msgstr "当月生产指标"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "截止时间"
+msgstr "截止时间"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "日出站量"
+msgstr "日出站量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "日测试量"
+msgstr "日检定/测试量"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "时段生产趋势"
+msgstr "时段生产趋势"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "时间"
+msgstr "时间"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "测试笔数"
+msgstr "测试点数/检定笔数"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "环比变化 +43.2%"
+msgstr "环比变化 +43.2%"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "生产可视化大屏"
+msgstr "生产可视化大屏"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "生产记录A"
+msgstr "生产记录A"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "生产记录B"
+msgstr "生产记录B"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "结果"
+msgstr "结果"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "自动刷新"
+msgstr "自动刷新"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "良品数 / 通过"
+msgstr "良品数 / 合格"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "良率 / 异常"
+msgstr "合格率 / 异常"
+
+#. module: sn_wsd_report
+#. odoo-javascript
+#: code:addons/sn_wsd_report/static/src/xml/mes_big_screen_action.xml:0
+msgid "车间日产量"
+msgstr "车间日产量"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_mrp_workorder_report_form:0
+msgid "Correct Report"
+msgstr "纠正报工"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_workorder_report_correction_wizard_form
+msgid "Correct Workorder Report"
+msgstr "纠正工单报工"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid "Corrected Workorder Report"
+msgstr "已纠正的工单报工"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__correction_reason
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__reason
+msgid "Correction Reason"
+msgstr "纠正原因"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__correction_user_id:0
+msgid "Corrected By"
+msgstr "纠正人"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__correction_time:0
+msgid "Corrected On"
+msgstr "纠正时间"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__correction_of_id:0
+msgid "Corrected Report"
+msgstr "被纠正的报工"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__correction_ids:0
+msgid "Correction Reports"
+msgstr "纠正报工记录"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_workorder_report_correction_wizard_form
+msgid "Corrected Quantities"
+msgstr "纠正后数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__qty_ok
+msgid "Correct OK Quantity"
+msgstr "纠正后合格数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__qty_ng
+msgid "Correct NG Quantity"
+msgstr "纠正后不良数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__qty_scrap
+msgid "Correct Scrap Quantity"
+msgstr "纠正后报废数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__qty_repair
+msgid "Correct Repair Quantity"
+msgstr "纠正后维修数量"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report_correction_wizard__qty_rework
+msgid "Correct Rework Quantity"
+msgstr "纠正后返工数量"
+
+#. module: sn_wsd_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_workorder_report_correction_wizard_form
+msgid "Confirm Correction"
+msgstr "确认纠正"
+
+#. module: sn_wsd_report
+#: model:res.groups,name:sn_wsd_report.group_sn_wsd_report_correction_manager:0
+msgid "Workorder Report Correction Manager"
+msgstr "工单报工纠正管理员"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid "Only posted reports can be corrected."
+msgstr "只有已提交的报工才能进行纠正。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid ""
+"A completed or cancelled work order cannot be corrected from this screen."
+msgstr "已完成或已取消的工单不能在此页面纠正。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid ""
+"Serial-number reports must be corrected through the serial or quality flow."
+msgstr "包含序列号的报工必须通过序列号或质量流程纠正。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid "Machine and API reports require an external correction event."
+msgstr "机台和 API 报工必须通过外部纠正事件处理。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid "Corrected output cannot exceed the original input quantity."
+msgstr "纠正后的产出数量不能超过原投入数量。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid "Corrected quantities cannot be negative."
+msgstr "纠正后的数量不能为负数。"
+
+#. module: sn_wsd_report
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+#: code:addons/sn_wsd_report/wizard/workorder_report_correction_wizard.py:0
+msgid "Only Manufacturing Managers can correct reports."
+msgstr "只有制造管理者可以纠正报工。"
+
+#. module: sn_wsd_report
+#: model:ir.model.fields,field_description:sn_wsd_report.field_mrp_workorder_report__manufacturing_batch_id
+msgid "Manufacturing Batch"
+msgstr "制造批次"
+

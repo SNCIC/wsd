@@ -1,0 +1,22 @@
+{
+    'name': 'SN WSD API',
+    'version': '19.0.3.2.7',
+    'summary': 'MES API data ingestion for WSD meter manufacturing',
+    'depends': ['sn_wsd_mrp', 'sn_wsd_maintenance', 'sn_wsd_smt', 'sn_wsd_tooling'],
+    'data': [
+        'data/ir_sequence.xml',
+        'security/security_groups.xml',
+        'security/ir.model.access.csv',
+        'data/api_endpoint_data.xml',
+        'views/laser_print_views.xml',
+        'views/mrp_workcenter_api_views.xml',
+        'views/internal_serial_api_views.xml',
+        'views/mrp_workorder_api_views.xml',
+        'views/mes_api_extension_views.xml',
+        'views/api_tester_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,4286 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_mrp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-25 03:02+0000\n"
+"PO-Revision-Date: 2026-07-25 03:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"%(sub)s cannot replace %(org)s. Configure the substitute on the BoM line "
+"first."
+msgstr "%(sub)s 不能替代 %(org)s。请先在物料清单行上配置替代料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/meter_workorder_scan_wizard.py:0
+msgid ""
+"%s\n"
+"\n"
+"Error Code: %s"
+msgstr ""
+"%s\n"
+"\n"
+"错误代码：%s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid "%s (Copy)"
+msgstr "%s (副本)"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid "%s substitute issue"
+msgstr "%s 替代料问题"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__abc_class__a
+msgid "A"
+msgstr "A"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "A target field is required when a target model is configured."
+msgstr "配置目标模型时，必须指定目标字段。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid "A team can only have one team leader."
+msgstr "一个团队只能有一名团队负责人。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "A workshop level work center cannot be bound to a production line."
+msgstr "车间级工作中心不能绑定到生产线。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__abc_class
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__abc_class
+msgid "ABC Class"
+msgstr "ABC 分类"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__aoi
+msgid "AOI"
+msgstr "AOI"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__source_type__api
+msgid "API"
+msgstr "API"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_accuracy_class
+msgid "Accuracy Class"
+msgstr "准确度等级"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_needaction
+msgid "Action Needed"
+msgstr "需采取行动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常状态修饰"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__actual_product_code
+msgid "Actual Code"
+msgstr "实际编码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_actual_finished_date
+msgid "Actual Completion Date"
+msgstr "实际完成日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__actual_hours
+msgid "Actual Hours"
+msgstr "实际工时"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__actual_product_id
+msgid "Actual Product"
+msgstr "实际产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_actual_start_date
+msgid "Actual Start Date"
+msgstr "实际开始日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__cost_mode__actual
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_operation__cost_mode__actual
+msgid "Actual time"
+msgstr "实际时间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_add_wizard_form
+msgid "Add"
+msgstr "添加"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_team_member_add_wizard
+msgid "Add Manufacturing Team Members Wizard"
+msgstr "添加制造团队成员向导"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+msgid "Add Members"
+msgstr "添加成员"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_add_wizard_form
+msgid "Add Team Members"
+msgstr "添加团队成员"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__aging
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__aging
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__aging
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__aging
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__aging
+msgid "Aging"
+msgstr "老化"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_aging_batch
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_aging_batch_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_aging_batch_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_meter_aging_batch
+msgid "Aging Batches"
+msgstr "老化批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__aging_cart_no
+msgid "Aging Cart No"
+msgstr "老化台车号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__aging_done
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__aging_done
+msgid "Aging Done"
+msgstr "老化完成"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_aging_hours_actual
+msgid "Aging Hours Actual"
+msgstr "实际老化时数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_aging_hours_planned
+msgid "Aging Hours Planned"
+msgstr "计划老化时数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__aging_load
+msgid "Aging Load"
+msgstr "老化上架"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__aging_result
+msgid "Aging Result"
+msgstr "老化结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__aging_unload
+msgid "Aging Unload"
+msgstr "老化下架"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_entry
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_entry
+msgid "Allow Entry"
+msgstr "允许作为起始工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_reentry
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_reentry
+msgid "Allow Reentry"
+msgstr "允许相同工位重复进入"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_repair_return
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_repair_return
+msgid "Allow Repair Return"
+msgstr "允许返修返回"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_skip_with_override
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_skip_with_override
+msgid "Allow Skip With Override"
+msgstr "允许强制跳过"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_reentry
+msgid "Allow a serial to be processed again on the same BoM operation."
+msgstr "允许同一序列号在同一个物料清单工序上再次处理。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_reentry
+msgid "Allow a serial to be processed again on the same operation."
+msgstr "允许同一序列号在同一个工序上再次处理。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_repair_return
+msgid ""
+"Allow serials returning from a repair station to enter this BoM operation."
+msgstr "允许从维修工位返回的序列号进入此物料清单工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_repair_return
+msgid "Allow serials returning from a repair station to enter this operation."
+msgstr "允许从维修工位返回的序列号进入此工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_entry
+msgid ""
+"Allow serials without a previous route event to enter this BoM operation."
+msgstr "允许没有前序路线事件的序列号进入此物料清单工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_entry
+msgid "Allow serials without a previous route event to enter this operation."
+msgstr "允许没有前序路线事件的序列号进入此工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_skip_with_override
+msgid ""
+"Allow this BoM operation to be reached with an explicit route override."
+msgstr "允许通过显式路线强制覆盖到达此物料清单工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_skip_with_override
+msgid "Allow this operation to be reached with an explicit route override."
+msgstr "允许通过显式路线强制覆盖到达此工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__source_type__any
+msgid "Any"
+msgstr "任意"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_record_form
+msgid "Apply to Serial"
+msgstr "应用到序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_substitute_usage__state__approved
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Approved"
+msgstr "已批准"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__approved_by
+msgid "Approved By"
+msgstr "批准人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__approved_date
+msgid "Approved On"
+msgstr "批准时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__name
+msgid "Archive Number"
+msgstr "存档编号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__assembled
+msgid "Assembled"
+msgstr "已组装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__assembly
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__assembly
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__assembly
+msgid "Assembly"
+msgstr "组装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__assembly_done
+msgid "Assembly Done"
+msgstr "组装完成"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__available_bom_line_ids
+msgid "Available Bom Line"
+msgstr "可用物料清单行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__available_operation_ids
+msgid "Available Operation"
+msgstr "可用工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__available_original_product_ids
+msgid "Available Original Product"
+msgstr "可用原始产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__available_workcenter_ids
+msgid "Available Workcenter"
+msgstr "可用工作中心"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__abc_class__b
+msgid "B"
+msgstr "B"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__barcode
+msgid "Barcode"
+msgstr "条码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__batch_id
+msgid "Batch"
+msgstr "批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_bom
+msgid "Bill of Material"
+msgstr "物料清单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_bom_line
+msgid "Bill of Material Line"
+msgstr "物料清单明细行"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Bills of Material"
+msgstr "物料清单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__blocked_by_route_operation_ids
+msgid "Blocked By"
+msgstr "前置工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__needed_by_route_operation_ids
+msgid "Blocks"
+msgstr "后置工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__bom_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__bom_id
+msgid "BoM"
+msgstr "物料清单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__bom_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__bom_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__bom_line_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_form_substitute
+msgid "BoM Line"
+msgstr "物料清单行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_bom_line_substitute
+msgid "BoM Line Substitute Material"
+msgstr "物料清单行替代物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__boolean
+msgid "Boolean"
+msgstr "布尔值"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__burned
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__burned
+msgid "Burned"
+msgstr "已烧录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__abc_class__c
+msgid "C"
+msgstr "C"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__calibration
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__calibration
+msgid "Calibration"
+msgstr "校表/校准"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_calibration_recipe
+msgid "Calibration Recipe"
+msgstr "校准方案"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__can_return_excess
+msgid "Can Return Excess"
+msgstr "可退回余料"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_scan_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_add_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_excess_return__state__cancelled
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__cancel
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "Cancelled process routes cannot be copied into a new revision."
+msgstr "已取消的工艺路线不能复制创建新版本。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__carton_no
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__carton_no
+msgid "Carton No"
+msgstr "纸箱号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__carton_seq
+msgid "Carton Seq"
+msgstr "纸箱序号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__code
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__collector
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__collector
+msgid "Collector"
+msgstr "采集器"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__comm_module_sn
+msgid "Comm Module Sn"
+msgstr "通信模块序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_comm_protocol
+msgid "Communication Protocol"
+msgstr "通信协议"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__communication_result
+msgid "Communication Result"
+msgstr "通信测试结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__communication_test
+msgid "Communication Test"
+msgstr "通信测试"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
+msgid "Component Bindings"
+msgstr "组件绑定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__time_mode__auto
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_operation__time_mode__auto
+msgid "Computed"
+msgstr "自动计算"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__time_mode_batch
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__time_mode_batch
+msgid "Computed On Last"
+msgstr "基于最近批次计算"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__consume_move_line_id
+msgid "Consumed Move Line"
+msgstr "消耗的库存移动明细"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__consumed_qty
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__consumed_qty
+msgid "Consumed Qty"
+msgstr "已消耗数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__consuming
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+msgid "Consuming"
+msgstr "消耗中"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_contract_no
+msgid "Contract No."
+msgstr "合同号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__cost_mode
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__cost_mode
+msgid "Cost Based On"
+msgstr "成本计算依据"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Create a new revision based on this route?"
+msgstr "是否基于此路线创建新版本？"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__created
+msgid "Created"
+msgstr "已创建"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+msgid "Cumulative Output Qty"
+msgstr "累计产出数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__current_aging_batch_id
+msgid "Current Aging Batch"
+msgstr "当前老化批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_serial_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+msgid "Current Meter Serials"
+msgstr "当前电表序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_is_current_revision
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Current Revision"
+msgstr "当前有效版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_current_spec
+msgid "Current Spec"
+msgstr "当前规格"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__current_workorder_id
+msgid "Current Workorder"
+msgstr "当前工单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_customer_display_id
+msgid "Customer"
+msgstr "客户"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__customer_batch_no
+msgid "Customer Batch No"
+msgstr "客户批次号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_customer_project
+msgid "Customer Project"
+msgstr "客户项目"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__dip
+msgid "DIP"
+msgstr "DIP插件"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__data_definition_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_operation_form
+msgid "Data Definitions"
+msgstr "数据定义"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__date
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__datetime
+msgid "Datetime"
+msgstr "日期时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__float
+msgid "Decimal"
+msgstr "小数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_feeder_line__uom_id
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_substitute_usage__uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr "所有库存作业使用的默认计量单位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_delivery_batch_no
+msgid "Delivery Batch No."
+msgstr "出货批号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__depleted
+msgid "Depleted"
+msgstr "已用尽"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__display_module_sn
+msgid "Display Module Sn"
+msgstr "显示模块序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_lot__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_move__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_excess_return__state__done
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__done
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__done
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_operation_data_definition__payload_path
+msgid "Dot path used to extract the value from an uploaded payload."
+msgstr "用于从上传的载荷中提取值的点路径。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_excess_return__state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_online_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_substitute_usage__state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__draft
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__time_mode
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__time_mode
+msgid "Duration Computation"
+msgstr "时长计算"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_is_eip_material
+msgid "EIP"
+msgstr "是否EIP"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__is_eip_material
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__is_eip_material
+msgid "EIP Material"
+msgstr "EIP 物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_effective_date
+msgid "Effective Date"
+msgstr "生效日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__employee_id
+msgid "Employee"
+msgstr "员工"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__employee_code
+msgid "Employee Code"
+msgstr "员工工号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid "Employee code is required."
+msgstr "员工工号是必填项。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__employee_ids
+msgid "Employees"
+msgstr "员工"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__end_time
+msgid "End Time"
+msgstr "结束时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__equipment_id
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__substitute_ids
+msgid "Equivalent products allowed as substitutes when this item is short."
+msgstr "当该物料短缺时，允许作为替代品的等效产品。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_exception_flag
+msgid "Exception"
+msgstr "异常"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__exception_code
+msgid "Exception Code"
+msgstr "异常代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_exception_note
+msgid "Exception Note"
+msgstr "异常备注"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_exception_type
+msgid "Exception Type"
+msgstr "异常类型"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+msgid "Exceptions"
+msgstr "异常"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_excess_return
+msgid "Excess Material Return"
+msgstr "超料退料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_excess_return_line
+msgid "Excess Material Return Line"
+msgstr "超料退料单明细"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_move__excess_return_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+msgid "Excess Return"
+msgstr "超料退料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__excess_return_count
+msgid "Excess Return Count"
+msgstr "超料退料单数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_mrp_excess_return
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__excess_return_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_mrp_excess_return
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_list
+msgid "Excess Returns"
+msgstr "超料退料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__expected_product_code
+msgid "Expected Code"
+msgstr "应装编码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__expected_product_id
+msgid "Expected Material"
+msgstr "应装物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__expected_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+msgid "Expected Product"
+msgstr "应装产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__expected_qty
+msgid "Expected Qty"
+msgstr "预期数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_expire_date
+msgid "Expiration Date"
+msgstr "失效日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__fct
+msgid "FCT"
+msgstr "FCT"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch_line__result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_pack_record__scan_check_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__aging_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__communication_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_verification_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__hipot_result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_fail
+msgid "Fail Qty"
+msgstr "不合格数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_feeder_scan_wizard
+msgid "Feeder Barcode Verification"
+msgstr "飞达条码核验"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_mrp_feeder_line
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__feeder_line_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__feeder_line_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_mrp_feeder_line
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+msgid "Feeder Lines"
+msgstr "飞达（供料器）明细"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__feeder_no
+msgid "Feeder No"
+msgstr "飞达编号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__feeder_line_id
+msgid "Feeder Position"
+msgstr "飞达位置"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_mrp_feeder_scan_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_scan_wizard_form
+msgid "Feeder Scan"
+msgstr "飞达扫描"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_result
+msgid "Final Result"
+msgstr "最终结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__final_test
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__final_test
+msgid "Final Test"
+msgstr "终检/完工测试"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_verification_result
+msgid "Final Verification Result"
+msgstr "终检结果"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_aging_batch_form
+msgid "Finish Aging"
+msgstr "结束老化"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__firmware
+msgid "Firmware"
+msgstr "固件"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_firmware_version
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__firmware_version
+msgid "Firmware Version"
+msgstr "固件版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__time_mode__manual
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_operation__time_mode__manual
+msgid "Fixed"
+msgstr "固定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_fixture_id
+msgid "Fixture"
+msgstr "治具"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（业务伙伴）"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+msgid "Generate Moves"
+msgstr "生成库存移动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__hardware_version
+msgid "Hardware Version"
+msgstr "硬件版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__has_message
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__has_message
+msgid "Has Message"
+msgstr "包含消息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_has_meter_operations
+msgid "Has Meter Operations"
+msgstr "包含电表工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_has_smt_operations
+msgid "Has SMT Operations"
+msgstr "包含SMT工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__hipot
+msgid "Hipot"
+msgstr "耐压"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__hipot_result
+msgid "Hipot Result"
+msgstr "耐压结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch_line__result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_pack_record__scan_check_result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__aging_result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__communication_result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_verification_result__hold
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__hipot_result__hold
+msgid "Hold"
+msgstr "暂缓"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__ict
+msgid "ICT"
+msgstr "ICT"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_lot__id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_move__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_lot_id
+msgid "Identified Lot"
+msgstr "识别的批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_product_id
+msgid "Identified Material"
+msgstr "识别的物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_product_name
+msgid "Identified Material Name"
+msgstr "识别的物料名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_needaction
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "若勾选，则有新消息需要您关注。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_has_error
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_has_error
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "若勾选，则某些消息存在发送错误。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__review
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "In Review"
+msgstr "审核中"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_status__active
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_mrp_team__state__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
+msgid "In Use"
+msgstr "使用中"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_status__inactive
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_mrp_team__state__inactive
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
+msgid "Inactive"
+msgstr "未启用"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "Inactive work centers cannot be used in process routes."
+msgstr "未启用的工作中心不能用于工艺路线中。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__initial_calibrated
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__initial_calibrated
+msgid "Initial Calibrated"
+msgstr "初校完成"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__initial_calibration
+msgid "Initial Calibration"
+msgstr "初校"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_input
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp
+msgid "Input Qty"
+msgstr "投入数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__inspection
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__inspection
+msgid "Inspection"
+msgstr "检验"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_inspection_standard
+msgid "Inspection Standard"
+msgstr "检验标准"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__integer
+msgid "Integer"
+msgstr "整数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_is_meter_operation
+msgid "Is Meter Operation"
+msgstr "是否为电表工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_is_smt_operation
+msgid "Is SMT Operation"
+msgstr "是否为SMT工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__json
+msgid "JSON"
+msgstr "JSON"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp
+msgid "Kit Readiness"
+msgstr "齐套就绪"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp
+msgid "Kit Status"
+msgstr "齐套状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__write_uid
+msgid "Last Updated by"
+msgstr "最后更新者"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__leader_reassignment_required
+msgid "Leader Reassignment Required"
+msgstr "需要重新指定班组长"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__x_requires_feeder_verification
+msgid ""
+"Legacy non-SMT feeder verification flag. SMT feeder verification is driven "
+"by SMT material tables."
+msgstr "当组件必须通过飞达或物料架流程进行核验时启用此项。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__line_count
+msgid "Line Count"
+msgstr "明细行数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+msgid "Lines"
+msgstr "明细"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__bom_ids
+msgid "Linked Bills of Material"
+msgstr "关联物料清单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__bom_count
+msgid "Linked BoM Count"
+msgstr "关联BOM数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__load_time
+msgid "Load Time"
+msgstr "装载时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__loaded
+msgid "Loaded"
+msgstr "已装载"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__loaded_qty
+msgid "Loaded Qty"
+msgstr "上料数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__loaded_qty
+msgid "Loaded Quantity"
+msgstr "上料数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__lot_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__lot_id
+msgid "Lot"
+msgstr "批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__lot_name
+msgid "Lot Name"
+msgstr "批次名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_stock_lot
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__lot_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__lot_id
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+msgid "MES Execution"
+msgstr "MES 执行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_mes_execution_note
+msgid "MES Execution Note"
+msgstr "MES 执行备注"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_mes_workcenter_id
+msgid "MES Work Center"
+msgstr "MES 工作中心"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__msd_info
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__msd_info
+msgid "MSD Information"
+msgstr "MSD 信息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__source_type__machine
+msgid "Machine"
+msgstr "机器"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__main_pcb_sn
+msgid "Main Pcb Sn"
+msgstr "主板序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__source_type__manual
+msgid "Manual"
+msgstr "手动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__time_cycle_manual
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__time_cycle_manual
+msgid "Manual Duration"
+msgstr "手动时长"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_production_line
+msgid "Manufacturing Production Line"
+msgstr "制造产线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_team
+msgid "Manufacturing Team"
+msgstr "制造班组"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_team_member
+msgid "Manufacturing Team Member"
+msgstr "制造班组成员"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_workshop
+msgid "Manufacturing Workshop"
+msgstr "制造车间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_scan_wizard__match_status__match
+msgid "Matched"
+msgstr "匹配"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__material_ready
+msgid "Material Ready"
+msgstr "物料就绪"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__material_specification
+msgid "Material Specification"
+msgstr "物料规格"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+msgid ""
+"Material mismatch.\n"
+"Expected: %(expected)s\n"
+"Scanned: %(actual)s"
+msgstr ""
+"物料不匹配。\n"
+"应为：%(expected)s\n"
+"扫描：%(actual)s"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__max_value
+msgid "Max Value"
+msgstr "最大值"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__member_count
+msgid "Member Count"
+msgstr "成员数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__member_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__member_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+msgid "Members"
+msgstr "成员"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__message
+msgid "Message"
+msgstr "消息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_meter_aging_batch
+msgid "Meter Aging Batch"
+msgstr "电表老化批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_meter_aging_batch_line
+msgid "Meter Aging Batch Line"
+msgstr "电表老化批次明细"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_equipment_id
+msgid "Meter Equipment"
+msgstr "电表设备"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_flow_state
+msgid "Meter Flow State"
+msgstr "电表流程状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_base_config
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_lot_form_sn_wsd_mrp
+msgid "Meter MES"
+msgstr "电表 MES"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_model
+msgid "Meter Model"
+msgstr "电表型号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_operation_type
+msgid "Meter Operation Type"
+msgstr "电表工序类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_meter_pack_record
+msgid "Meter Pack Record"
+msgstr "电表包装记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_process_route
+msgid "Meter Process Route"
+msgstr "电表工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_process_route_operation
+msgid "Meter Process Route Operation"
+msgstr "电表工艺路线工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_product_type
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__meter_product_type
+msgid "Meter Product Type"
+msgstr "电表产品类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__meter_serial
+msgid "Meter Serial"
+msgstr "电表序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_meter_serial
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_lot__x_wsd_meter_serial_id
+msgid "Meter Serial Archive"
+msgstr "电表序列号档案"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_serial
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_meter_serial
+msgid "Meter Serials"
+msgstr "电表序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_workcenter_id
+msgid "Meter Work Center"
+msgstr "电表工作中心"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Meter serial archives can only be generated for final assembly manufacturing"
+" orders."
+msgstr "仅总装制造订单可生成电表序列号档案。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__min_value
+msgid "Min Value"
+msgstr "最小值"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_scan_wizard__match_status__mismatch
+msgid "Mismatched"
+msgstr "不匹配"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
+msgid "Moves"
+msgstr "库存移动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_is_nqi_material
+msgid "NQI"
+msgstr "是否NQI"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__is_nqi_material
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__is_nqi_material
+msgid "NQI Material"
+msgstr "NQI 物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_aging
+msgid "Need Aging"
+msgstr "需要老化"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_carton_traceability
+msgid "Need Carton Traceability"
+msgstr "需要纸箱追溯"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_final_verification
+msgid "Need Final Verification"
+msgstr "需要终检"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_burn_firmware
+msgid "Need Firmware Burning"
+msgstr "需要烧录固件"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_initial_calibration
+msgid "Need Initial Calibration"
+msgstr "需要初校"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_need_sealing
+msgid "Need Sealing"
+msgstr "需要铅封"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_quality.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "New Revision"
+msgstr "新建版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__new_leader_member_id
+msgid "New Team Leader"
+msgstr "新班组长"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"No BoM substitute rule exists for the selected original product on this "
+"manufacturing order."
+msgstr "此制造订单中所选原始产品不存在物料清单替代规则。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+msgid "No Lot"
+msgstr "无批次"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/meter_workorder_scan_wizard.py:0
+msgid "No active work order is available for this station."
+msgstr "该工位没有可用的活跃工单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "No excess material is available for return."
+msgstr "没有可退回的超额物料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid ""
+"No excess move lines could be derived from the consumed material lines."
+msgstr "无法从已消耗物料明细中推导出超额库存移动明细。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "No feeder line is waiting for verification on this work order."
+msgstr "此工单没有等待核验的飞达明细。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+msgid "No material was identified. Please check the barcode."
+msgstr "未识别到物料。请检查条码。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__none
+msgid "None"
+msgstr "无"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_aging_batch_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_serial_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__obsolete
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Obsolete"
+msgstr "已作废"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_online_state__offline
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid "Offline"
+msgstr "下线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_online_state__online
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid "Online"
+msgstr "上线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_online_state
+msgid "Online Stage"
+msgstr "上线状态"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Only one manufacturing order can be online for the same workshop and "
+"production line. Current online order: %s"
+msgstr "同一个车间和产线只能有一个制造订单上线。当前上线订单：%s"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Open Linked Bill of Material"
+msgstr "打开关联的物料清单"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Open Production Routes"
+msgstr "打开工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__operation_id
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__code
+msgid "Operation Code"
+msgstr "工序代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_operation_data_definition
+msgid "Operation Data Definition"
+msgstr "工序数据定义"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_operation_data_definition
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_operation_data_definition
+msgid "Operation Data Definitions"
+msgstr "工序数据定义"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__name
+msgid "Operation Name"
+msgstr "工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_process_route_operation
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_operation_ids
+msgid "Operations"
+msgstr "工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_operator_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__operator_code
+msgid "Operator Code"
+msgstr "操作员代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_lot_id
+msgid "Original Lot"
+msgstr "原始批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__original_product_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_product_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Original Product"
+msgstr "原始产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_uom_qty
+msgid "Original Qty"
+msgstr "原始数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__other
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp
+msgid "Output Qty"
+msgstr "产出数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workcenter_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
+msgid "Ownership Type"
+msgstr "权属类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__pcb_assembly
+msgid "PCB Assembly"
+msgstr "PCB 组装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__pcb_repair
+msgid "PCB Repair"
+msgstr "PCB 维修"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__pcba_done
+msgid "PCBA Done"
+msgstr "PCBA完成"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__source_type__pda
+msgid "PDA"
+msgstr "PDA"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "PLM"
+msgstr "产品生命周期管理"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_plm_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "PLM Status"
+msgstr "PLM状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__pack_date
+msgid "Pack Date"
+msgstr "包装日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_pack_record
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_pack_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_pack_record_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_meter_pack_record
+msgid "Pack Records"
+msgstr "包装记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__pack_time
+msgid "Pack Time"
+msgstr "包装时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__pack_workorder_id
+msgid "Pack Workorder"
+msgstr "包装工单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__packaging
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__packaging
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_serial_form
+msgid "Packaging"
+msgstr "包装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__packed
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__packed
+msgid "Packed"
+msgstr "已包装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__packing
+msgid "Packing"
+msgstr "包装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__pallet_no
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__pallet_no
+msgid "Pallet No"
+msgstr "栈板号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__x_panel_no
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_lot__x_panel_no
+msgid "Panel No"
+msgstr "拼板号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_parameter_template
+msgid "Parameter Template"
+msgstr "参数模板"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_parameter_version
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__parameter_version
+msgid "Parameter Version"
+msgstr "参数版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__parameter_write
+msgid "Parameter Write"
+msgstr "参数写入"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__parameter_written
+msgid "Parameter Written"
+msgstr "参数已写入"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch_line__result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_pack_record__scan_check_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__aging_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__communication_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_verification_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__hipot_result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_pass
+msgid "Pass Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__payload_path
+msgid "Payload Path"
+msgstr "载荷路径"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__pending
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_scan_wizard__match_status__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+msgid "Pending"
+msgstr "待定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__performance_ratio
+msgid "Performance Ratio"
+msgstr "绩效比例"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__performance_ratio_total
+msgid "Performance Ratio Total"
+msgstr "总绩效比例"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__picked_qty
+msgid "Picked Qty"
+msgstr "已拣货数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__planned_hours
+msgid "Planned Hours"
+msgstr "计划工时"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_previous_route_id
+msgid "Previous Revision"
+msgstr "上一版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__priority
+msgid "Priority"
+msgstr "优先级"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_process_route_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_process_route_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_process_route_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__route_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_operation_search
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_process_route
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_process_route
+msgid "Process Routes"
+msgstr "工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_product_template
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__product_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__product_tmpl_id
+msgid "Product Template"
+msgstr "产品模板"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_product_product
+msgid "Product Variant"
+msgstr "产品变体"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__production_id
+msgid "Production"
+msgstr "生产"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_production_batch_no
+msgid "Production Batch No."
+msgstr "生产批号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__production_date
+msgid "Production Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__production_line_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_type__line
+msgid "Production Line Level"
+msgstr "生产线层级"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_mrp_production_line
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__production_line_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_production_line
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_form
+msgid "Production Lines"
+msgstr "生产线"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "Production Route"
+msgstr "制造工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_production_route_count
+msgid "Production Route Count"
+msgstr "制造工艺路线数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_production_route_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Production Routes"
+msgstr "制造工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__substitute_for_ids
+msgid "Products that can be replaced by this item."
+msgstr "可被此物料替代的产品。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_program_version
+msgid "Program Version"
+msgstr "程序版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__programming
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__programming
+msgid "Programming"
+msgstr "烧录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__bom_operation_count
+msgid "Projected BoM Operation Count"
+msgstr "预计物料清单工序数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__bom_operation_ids
+msgid "Projected BoM Operations"
+msgstr "预计物料清单工序"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_form
+msgid "Projection"
+msgstr "投影"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__protocol_version
+msgid "Protocol Version"
+msgstr "协议版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__qr_code
+msgid "Qr Code"
+msgstr "二维码"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_quality_config
+msgid "Quality Configuration"
+msgstr "质量配置"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_quality.py:0
+msgid "Quality Issues"
+msgstr "质量问题"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_quality_root
+msgid "Quality Management"
+msgstr "质量管理"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_quality_operation
+msgid "Quality Operations"
+msgstr "质量作业"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_quality_trace
+msgid "Quality Traceability"
+msgstr "质量追溯"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__rated_current
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__rated_current
+msgid "Rated Current"
+msgstr "额定电流"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__name
+msgid "Reference"
+msgstr "参考号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__reflow
+msgid "Reflow"
+msgstr "回流焊"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+msgid "Register Substitute"
+msgstr "登记替代料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_substitute_usage__state__rejected
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Rejected"
+msgstr "已拒绝"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Release"
+msgstr "发布"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Release Information"
+msgstr "发布信息"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid ""
+"Release this route? Previous released revision will be marked obsolete."
+msgstr "是否发布此路线？之前发布的版本将被标记为已作废。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__released
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Released"
+msgstr "已发布"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_released_by
+msgid "Released By"
+msgstr "发布人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_released_date
+msgid "Released On"
+msgstr "发布时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__remaining_qty
+msgid "Remaining Qty"
+msgstr "剩余数量"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
+msgid "Remove"
+msgstr "移除"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_mrp_team_member_remove_wizard
+msgid "Remove Manufacturing Team Members Wizard"
+msgstr "移除制造团队成员向导"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+msgid "Remove Members"
+msgstr "移除成员"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
+msgid "Remove Team Members"
+msgstr "移除团队成员"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__repair
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__repair
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__required
+msgid "Required"
+msgstr "必填"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__x_requires_feeder_verification
+msgid "Requires Feeder Verification"
+msgstr "需要飞达核验"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Reset to Draft"
+msgstr "重置为草稿"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__activity_user_id
+msgid "Responsible User"
+msgstr "负责人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__result
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__return_id
+msgid "Return"
+msgstr "退回"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_excess_return
+msgid "Return Excess"
+msgstr "退回余料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__location_id
+msgid "Return Location"
+msgstr "退回位置"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__return_qty
+msgid "Return Qty"
+msgstr "退回数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__name
+msgid "Return Reference"
+msgstr "退料单号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "Return quantity cannot exceed excess quantity."
+msgstr "退回数量不能超过超额数量。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__returned
+msgid "Returned"
+msgstr "已退回"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_revision
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Revision"
+msgstr "版本号"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Revision Information"
+msgstr "版本信息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__rework
+msgid "Rework"
+msgstr "返工"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_rework
+msgid "Rework Qty"
+msgstr "返工数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__code
+msgid "Route Code"
+msgstr "路线代码"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_operation_form
+msgid "Route Control"
+msgstr "路线控制"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__name
+msgid "Route Name"
+msgstr "路线名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__route_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_search
+msgid "Route Operation"
+msgstr "路线工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_step_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_step_code
+msgid "Route Operation Code"
+msgstr "工序代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__operation_count
+msgid "Route Operation Count"
+msgstr "路线工序数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_route_operation_id
+msgid "Route Operation Template"
+msgstr "工序模板"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__route_operation_ids
+msgid "Route Operations"
+msgstr "路线工序"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "Route Revision"
+msgstr "工艺路线版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__route_workshop_id
+msgid "Route Workshop"
+msgstr "路线车间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__smt
+msgid "SMT"
+msgstr "SMT表面贴装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_feeder_line
+msgid "SMT Feeder Setup Record"
+msgstr "SMT 飞达上料记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__scan_check_result
+msgid "Scan Check Result"
+msgstr "扫描检查结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__scanned_barcode
+msgid "Scanned Barcode"
+msgstr "扫描的条码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_lot
+msgid "Scanned Lot Number"
+msgstr "扫描的批次号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_barcode
+msgid "Scanned Material Barcode"
+msgstr "扫描的物料条码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__scanned_product_id
+msgid "Scanned Product"
+msgstr "扫描的产品"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_form_inherit_sn_wsd
+msgid "Scope Information"
+msgstr "范围信息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__scrap
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__scrap_qty
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_scrap
+msgid "Scrap Qty"
+msgstr "报废数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__seal_no
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__seal_no
+msgid "Seal No"
+msgstr "铅封号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__sealed
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__sealed
+msgid "Sealed"
+msgstr "已铅封"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__sealing
+msgid "Sealing"
+msgstr "加封"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__selection
+msgid "Selection"
+msgstr "选择项"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__selection_options
+msgid "Selection Options"
+msgstr "选择项选项"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__serial_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__serial_id
+msgid "Serial"
+msgstr "序列"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__line_ids
+msgid "Serial Lines"
+msgstr "序列行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__serial_no
+msgid "Serial No"
+msgstr "序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_meter_serial_serial_no_company_uniq
+msgid "Serial number must be unique per company."
+msgstr "每个公司的序列号必须是唯一的。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "Serial number not found."
+msgstr "未找到序列号。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_aging_batch_form
+msgid "Serials"
+msgstr "序列号列表"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+msgid "Set In Use"
+msgstr "设为使用中"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_form
+msgid "Set Inactive"
+msgstr "设为未启用"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Set the workshop and production line before putting the manufacturing order "
+"online."
+msgstr "在将制造订单上线之前，请先设置车间和生产线。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__shift_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__shift_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
+msgid "Shift"
+msgstr "班次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_shift_code
+msgid "Shift Code"
+msgstr "班次代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__single_phase
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__single_phase
+msgid "Single Phase"
+msgstr "单相"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__slot_no
+msgid "Slot No"
+msgstr "槽位号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line_substitute__priority
+msgid "Smaller values have higher priority."
+msgstr "数值越小，优先级越高。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_source_engineering_route_id
+msgid "Source Engineering Route"
+msgstr "来源设计工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__move_id
+msgid "Source Move"
+msgstr "源库存移动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__source_move_id
+msgid "Source Raw Move"
+msgstr "源原材料移动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__source_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_search
+msgid "Source Type"
+msgstr "来源类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_operation
+msgid "Standard Operation"
+msgstr "标准工序"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_aging_batch_form
+msgid "Start Aging"
+msgstr "开始老化"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__start_time
+msgid "Start Time"
+msgstr "开始时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__state
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__state
+msgid "State"
+msgstr "状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_workcenter_code
+msgid "Station Code"
+msgstr "工位代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_station_type
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_station_type
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__x_station_type
+msgid "Station Type"
+msgstr "工位类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "Station not found."
+msgstr "未找到工位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__state
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__state
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__state
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workcenter_status
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_state
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：到期日已过\n"
+"今日：活动日期为今天\n"
+"已计划：未来的活动。基于活动的状态：\n"
+"已逾期：截止日期已过\n"
+"今天：活动日期为今天\n"
+"已计划：未来的活动。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_stock_move
+msgid "Stock Move"
+msgstr "库存移动"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__move_ids
+msgid "Stock Moves"
+msgstr "库存移动"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"Submit or release the engineering process route before generating a "
+"production route."
+msgstr "生成制造工艺路线前，必须先提交或发布对应的设计工艺路线。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_form_substitute
+msgid "Subs."
+msgstr "替代料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__substitute_for_ids
+msgid "Substitute For"
+msgstr "可替代"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__substitute_lot_id
+msgid "Substitute Lot"
+msgstr "替代批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__substitute_lot
+msgid "Substitute Lot/Serial"
+msgstr "替代批次/序列号"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_form_substitute
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_line_substitute_form
+msgid "Substitute Material"
+msgstr "替代物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_substitute_usage
+msgid "Substitute Material Usage"
+msgstr "替代物料使用记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_substitute_wizard
+msgid "Substitute Material Wizard"
+msgstr "替代物料向导"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__substitute_line_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__substitute_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_form_substitute
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_line_substitute_list
+msgid "Substitute Materials"
+msgstr "替代物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_product_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Substitute Product"
+msgstr "替代产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__substitute_ids
+msgid "Substitute Products"
+msgstr "替代产品"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_uom_qty
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__substitute_qty
+msgid "Substitute Qty"
+msgstr "替代数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__substitute_rule_count
+msgid "Substitute Rule Count"
+msgstr "替代规则数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_mrp_substitute_usage
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__substitute_usage_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_mrp_substitute_usage
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Substitute Usage"
+msgstr "替代使用记录"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_form_substitute
+msgid "Substitutes"
+msgstr "替代料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__target_field
+msgid "Target Field"
+msgstr "目标字段"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__target_model
+msgid "Target Model"
+msgstr "目标模型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__team_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_add_wizard__team_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member_remove_wizard__team_id
+msgid "Team"
+msgstr "团队"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__leader_member_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__is_leader
+msgid "Team Leader"
+msgstr "团队负责人"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_mrp_team
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__team_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_team
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_form
+msgid "Teams"
+msgstr "班组"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_tender_no
+msgid "Tender No."
+msgstr "标书号 / 招标号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__terminal
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__terminal
+msgid "Terminal"
+msgstr "终端"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_test_profile
+msgid "Test Profile"
+msgstr "测试配置 / 测试方案"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__test_result
+msgid "Test Result"
+msgstr "测试结果"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__char
+msgid "Text"
+msgstr "文本"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
+msgid ""
+"The component lot/serial must belong to the selected component product."
+msgstr "组件批次/序列号必须属于所选组件产品。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_operation_data_definition_definition_code_uniq
+msgid "The data definition code must be unique within one route operation."
+msgstr "数据定义代码在同一路线工序内必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The effective date must be earlier than the expiration date."
+msgstr "生效日期必须早于失效日期。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid ""
+"The effective end date must be greater than or equal to the effective start "
+"date."
+msgstr "生效结束日期必须大于或等于生效开始日期。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_team_member_sn_mrp_team_member_unique
+msgid "The employee is already a member of this team."
+msgstr "该员工已经是该团队的成员。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The manufacturing order production line does not match these work order work"
+" centers: %s"
+msgstr "制造订单生产线与这些工单工作中心不匹配：%s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The minimum value cannot be greater than the maximum value."
+msgstr "最小值不能大于最大值。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_team_member_wizard.py:0
+msgid "The new team leader cannot be part of the members being removed."
+msgstr "新的团队负责人不能是被移除成员的一部分。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_operation_operation_code_company_uniq
+msgid "The operation code must be unique per company."
+msgstr "每个公司的工序代码必须唯一。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_operation_route_operation_code_uniq
+msgid "The operation must be unique within one process route."
+msgstr "在同一工艺路线中，路线工序编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The operation must belong to the same company as the process route."
+msgstr "工序必须与工艺路线属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The ownership type is required when maintaining workshop or production line "
+"scope."
+msgstr "维护车间或生产线范围时，必须指定归属类型。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_team_member_sn_mrp_team_member_ratio_check
+msgid "The performance ratio must be between 0 and 100."
+msgstr "绩效比例必须在 0 到 100 之间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The previous work center cannot be the same as the current work center."
+msgstr "前序工作中心不能与当前工作中心相同。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "The previous work center must belong to the same company."
+msgstr "前序工作中心必须属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_route_code_version_company_uniq
+msgid "The process route code and version must be unique per company."
+msgstr "每个公司的工艺路线代码和版本必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The process route is required on the bill of material."
+msgstr "物料清单上必须指定工艺路线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The process route must belong to the same company as the bill of material."
+msgstr "工艺路线必须与物料清单属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid "The product variant must belong to the selected product template."
+msgstr "产品变体必须属于所选产品模板。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_production_line_sn_mrp_production_line_company__31639eab
+msgid "The production line code must be unique per company."
+msgstr "每个公司的生产线编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The production line is required for a production line level work center."
+msgstr "生产线级别的工作中心必须指定生产线。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The production line must belong to the same company as the manufacturing "
+"order."
+msgstr "生产线必须与制造订单属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "The production line must belong to the selected workshop."
+msgstr "生产线必须属于所选的车间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The projected operation must belong to the process route selected on the "
+"bill of material."
+msgstr "规划的工序必须属于物料清单（BOM）上选择的工艺路线。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_mrp_bom_line_substitute_unique_bom_line_substitute
+msgid ""
+"The same substitute product can only be configured once for a BoM line."
+msgstr "同一个替代产品在一个物料清单行中只能配置一次。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid "The scanned substitute product could not be identified."
+msgstr "无法识别扫描的替代产品。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The selected operation must belong to the current workshop."
+msgstr "所选工序必须属于当前车间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The selected work center must belong to the current workshop."
+msgstr "所选工作中心必须属于当前车间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "The substitute product must be different from the original product."
+msgstr "替代产品必须不同于原始产品。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_team_sn_mrp_team_company_code_unique
+msgid "The team code must be unique per company."
+msgstr "每个公司的团队编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid "The total performance ratio of team members must be 100%."
+msgstr "团队成员的总绩效比例必须为 100%。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_product_template_check_warranty_period_days
+msgid "The warranty period must be greater than or equal to zero."
+msgstr "保修期必须大于或等于零。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_mrp_workcenter_sn_wsd_workcenter_code_unique
+msgid "The work center code must be unique."
+msgstr "工作中心编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The work center must belong to the same company as the process route."
+msgstr "工作中心必须与工艺路线属于同一公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "The work order is not mapped to a MES station."
+msgstr "工单未映射到MES工位。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "The work order is not ready to start."
+msgstr "工单尚未准备开始。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "The work order state does not allow this operation."
+msgstr "工单状态不允许此操作。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_workshop_sn_mrp_workshop_company_code_unique
+msgid "The workshop code must be unique per company."
+msgstr "每个公司的车间编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "The workshop is required when the work center scope is configured."
+msgstr "配置工作中心范围时，必须指定车间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The workshop must belong to the same company as the process route."
+msgstr "车间必须与工艺路线属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__cost_mode__estimated
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_operation__cost_mode__estimated
+msgid "Theorical time"
+msgstr "理论时间"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid ""
+"There are %(count)s verified feeder positions missing actual material or "
+"loaded quantity."
+msgstr "有 %(count)s 个已核验的飞达位置缺少实际物料或上料数量。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid "There are still %(count)s feeder positions pending verification."
+msgstr "仍有 %(count)s 个飞达位置待核验。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return_line__picked_qty
+msgid ""
+"This is the quantity of product that is planned to be moved.Lowering this "
+"quantity does not generate a backorder.Changing this quantity on assigned "
+"moves affects the product reservation, and should be done with care."
+msgstr "这是计划移动的产品数量。降低此数量不会生成欠单。在已分配的库存移动上更改此数量会影响产品预留，应谨慎操作。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid ""
+"This serial cannot enter the current station according to the configured "
+"route."
+msgstr "根据配置的工艺路线，该序列号无法进入当前工位。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid "This serial has already been processed on the current station."
+msgstr "该序列号已在当前工位处理过。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__three_phase
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__three_phase
+msgid "Three Phase"
+msgstr "三相"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid "Tolerance must be greater than or equal to zero."
+msgstr "公差必须大于或等于零。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_list
+msgid "Total Consumed Qty"
+msgstr "消耗数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_list
+msgid "Total Expected Qty"
+msgstr "预期数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_list
+msgid "Total Loaded Qty"
+msgstr "已上料数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp
+msgid "Total Output Qty"
+msgstr "产出数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_list
+msgid "Total Remaining Qty"
+msgstr "剩余数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_list
+msgid "Total Scrap Qty"
+msgstr "报废数量合计"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_list
+msgid "Total Substitute Qty"
+msgstr "替代数量合计"
+
+#. module: sn_wsd_mrp
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_traceability
+msgid "Traceability"
+msgstr "追溯性"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__unload_datetime
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__unload_time
+msgid "Unload Time"
+msgstr "下料时间"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "Unsupported work center status search."
+msgstr "不支持的工作中心状态搜索。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__return_uom_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__uom_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__uom_id
+msgid "UoM"
+msgstr "计量单位"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_form
+msgid "Validation"
+msgstr "验证"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Validity Period"
+msgstr "有效期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__value_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_search
+msgid "Value Type"
+msgstr "值类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "Value ranges can only be configured for numeric definitions."
+msgstr "只有数值型定义才能配置取值范围。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__verification
+msgid "Verification"
+msgstr "检定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__verification_date
+msgid "Verification Date"
+msgstr "检定日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__match_status
+msgid "Verification Result"
+msgstr "核验结果"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+msgid "Verification passed: %(product)s / Lot: %(lot)s"
+msgstr "核验通过：%(product)s / 批次：%(lot)s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid ""
+"Verification scheme %(code)s already has an effective version %(version)s in"
+" the overlapping date range."
+msgstr "验证方案 %(code)s 在重叠日期范围内已有一个生效版本 %(version)s。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__verified
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__verified
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__verified
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+msgid "Verified"
+msgstr "已核对"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__verify_user_id
+msgid "Verified By"
+msgstr "核对人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__verify_datetime
+msgid "Verified On"
+msgstr "核对时间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_scan_wizard_form
+msgid "Verify"
+msgstr "核验"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_scan_wizard_form
+msgid "Verify and Continue"
+msgstr "核验并继续"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__version
+msgid "Version"
+msgstr "版本"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_serial_form
+msgid "Versions"
+msgstr "版本"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_voltage_spec
+msgid "Voltage Spec"
+msgstr "电压规格"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__warranty_period_days
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__warranty_period_days
+msgid "Warranty Period Days"
+msgstr "保修期天数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__can_return_excess
+msgid ""
+"Whether finished raw moves contain excess material that can be returned."
+msgstr "已完成的原材料移动中是否包含可退回的超额物料。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_workcenter
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_operation_search
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_routing_workcenter
+msgid "Work Center Usage"
+msgstr "工作中心使用情况"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__station_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_form
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__x_workcenter_ids
+msgid "Work Centers"
+msgstr "MES 工作中心"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_mrp_workorder
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__workorder_id
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__workorder
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__workorder_id
+msgid "Workorder"
+msgstr "工单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__report
+msgid "Workorder Report"
+msgstr "工单报表"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_type__workshop
+msgid "Workshop Level"
+msgstr "车间级别"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_mrp_workshop
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_workshop
+msgid "Workshops"
+msgstr "车间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_aging_batch_count
+msgid "X Meter Aging Batch Count"
+msgstr "电表老化批次数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_pack_record_count
+msgid "X Meter Pack Record Count"
+msgstr "电表包装记录数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_aging_count
+msgid "X Meter Serial Aging Count"
+msgstr "电表序列号老化数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_assembled_count
+msgid "X Meter Serial Assembled Count"
+msgstr "电表序列号组装数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_burned_count
+msgid "X Meter Serial Burned Count"
+msgstr "电表序列号烧录数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_count
+msgid "X Meter Serial Count"
+msgstr "电表序列号数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_created_count
+msgid "X Meter Serial Created Count"
+msgstr "电表序列号生成数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_failed
+msgid "X Meter Serial Failed"
+msgstr "电表序列号失败数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_packed
+msgid "X Meter Serial Packed"
+msgstr "电表序列号已包装"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_passed
+msgid "X Meter Serial Passed"
+msgstr "电表序列号通过数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_rework_count
+msgid "X Meter Serial Rework Count"
+msgstr "电表序列号返工数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_scrapped
+msgid "X Meter Serial Scrapped"
+msgstr "电表序列号已报废"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_verified_count
+msgid "X Meter Serial Verified Count"
+msgstr "电表序列号已检定数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "You cannot deactivate a work center with work orders in progress."
+msgstr "您不能停用有正在进行中工单的工作中心。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid ""
+"You must assign a new team leader before removing the current team leader."
+msgstr "在移除当前团队负责人之前，您必须指定一个新的团队负责人。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_team_member_wizard.py:0
+msgid ""
+"You must choose a new team leader before removing the current team leader."
+msgstr "在移除当前团队负责人之前，您必须选择一个新的团队负责人。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/meter_workorder_scan_wizard.py:0
+msgid "error"
+msgstr "错误"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
+#: code:addons/sn_wsd_mrp/models/meter_quality.py:0
+msgid "meter_serial_id"
+msgstr "电表序列号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "x_source_engineering_route_id"
+msgstr "源工程路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_res_partner__x_customer_alias
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_res_users__x_customer_alias
+msgid "Customer Alias"
+msgstr "客户别名"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_partner_form_sn_wsd_mrp
+msgid "e.g. Customer short name"
+msgstr "例如：客户简称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_customer_id
+msgid "Source Customer"
+msgstr "来源客户"
+
+#. module: sn_wsd_mrp
+msgid "Physical Serial Identity"
+msgstr "物理序列号身份"
+
+#. module: sn_wsd_mrp
+msgid "Physical SN"
+msgstr "物理序列号"
+
+#. module: sn_wsd_mrp
+msgid "Production Stages"
+msgstr "生产阶段"
+
+#. module: sn_wsd_mrp
+msgid "Source Lot/Serial"
+msgstr "来源批次/序列号"
+
+#. module: sn_wsd_mrp
+msgid "Product Lot/Serial"
+msgstr "产品批次/序列号"
+
+#. module: sn_wsd_mrp
+msgid "Entry Work Order"
+msgstr "入口工单"
+
+#. module: sn_wsd_mrp
+msgid "Entry Time"
+msgstr "进入时间"
+
+#. module: sn_wsd_mrp
+msgid "Replaces Scrapped Serial"
+msgstr "替代报废序列号"
+
+#. module: sn_wsd_mrp
+msgid "Replacement Serials"
+msgstr "替代序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_serial_creation
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_serial_creation
+msgid "Allow Serial Creation"
+msgstr "允许创建序列号"
+
+#. module: sn_wsd_mrp
+msgid "Meter Carton"
+msgstr "电表箱"
+
+#. module: sn_wsd_mrp
+msgid "Meter Pallet"
+msgstr "电表托盘"
+
+#. module: sn_wsd_mrp
+msgid "WSD Package Role"
+msgstr "WSD 包裹角色"
+
+#. module: sn_wsd_mrp
+msgid "WSD Pack State"
+msgstr "WSD 包装状态"
+
+#. module: sn_wsd_mrp
+msgid "Carton Package"
+msgstr "箱包裹"
+
+#. module: sn_wsd_mrp
+msgid "Pallet Package"
+msgstr "托盘包裹"
+
+#. module: sn_wsd_mrp
+msgid "Carton Pallet Binding Log"
+msgstr "箱托绑定日志"
+
+#. module: sn_wsd_mrp
+msgid "Previous Pallet Package"
+msgstr "原托盘包裹"
+
+#. module: sn_wsd_mrp
+msgid "Bind"
+msgstr "绑定"
+
+#. module: sn_wsd_mrp
+msgid "Unbind"
+msgstr "解绑"
+
+#. module: sn_wsd_mrp
+msgid "Move"
+msgstr "移箱"
+
+#. module: sn_wsd_mrp
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__component_location_id
+msgid "Component Location"
+msgstr "车间领料库位"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__finished_product_location_id
+msgid "Finished Product Location"
+msgstr "车间成品库位"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_form
+msgid "Manufacturing Locations"
+msgstr "制造库位"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_mrp_workshop__component_location_id
+msgid "Internal location where components are delivered before manufacturing."
+msgstr "制造前配送组件的车间内部库位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_mrp_workshop__finished_product_location_id
+msgid ""
+"Internal location where finished products are stored before being "
+"transferred to stock."
+msgstr "成品正式入库前暂存的车间内部库位。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A workshop must be selected before confirming the multi-step manufacturing "
+"order '%s'."
+msgstr "确认多步制造订单“%s”前必须选择车间。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A component location must be configured for workshop '%s' before confirming "
+"a two-step or three-step manufacturing order."
+msgstr "确认两步或三步制造订单前，必须为车间“%s”配置领料库位。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A finished product location must be configured for workshop '%s' before "
+"confirming a three-step manufacturing order."
+msgstr "确认三步制造订单前，必须为车间“%s”配置成品库位。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
+"must be active."
+msgstr "车间“%(workshop)s”的%(location_label)s库位“%(location)s”必须处于启用状态。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
+"must belong to the manufacturing order company."
+msgstr "车间“%(workshop)s”的%(location_label)s库位“%(location)s”必须属于制造订单所在公司。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location of workshop '%(workshop)s' must be located "
+"under the %(parent_label)s location '%(parent_location)s'."
+msgstr ""
+"车间“%(workshop)s”的%(location_label)s库位必须位于%(parent_label)s库位“%(parent_location)s”下。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "component"
+msgstr "领料"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "finished product"
+msgstr "成品"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "pre-production"
+msgstr "生产前"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "post-production"
+msgstr "生产后"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__qty_remaining
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_list_sn_wsd_mrp
+msgid "Quantity To Produce"
+msgstr "待生产数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__qty_ready
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_list_sn_wsd_mrp
+msgid "WIP Quantity"
+msgstr "WIP数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__active_internal_serial_count
+msgid "Active Internal Serial Count"
+msgstr "有效厂内序列号数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__missing_internal_serial_count
+msgid "Missing Internal Serial Count"
+msgstr "缺少厂内序列号数量"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form
+msgid "Generate Factory Serial Numbers"
+msgstr "生成厂内序列号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid "Internal serials cannot be generated for a closed manufacturing batch."
+msgstr "已关闭的制造批次不能生成厂内序列号。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid "The manufacturing batch has no active manufacturing orders."
+msgstr "制造批次没有未取消的制造订单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch planned quantity must be a whole number before "
+"internal serials can be generated."
+msgstr "生成厂内序列号前，制造批次计划数量必须为整数。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Manufacturing order %(production)s must have a whole-number quantity before "
+"internal serials can be generated."
+msgstr "生成厂内序列号前，制造订单 %(production)s 的数量必须为整数。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch already has all required active internal serials."
+msgstr "制造批次已经具有全部所需的有效厂内序列号。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid "No internal serial number sequence is configured."
+msgstr "未配置厂内序列号序列。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Generated %(count)s internal serials to fill the manufacturing batch "
+"capacity. Serial range: %(first)s to %(last)s."
+msgstr "已生成 %(count)s 个厂内序列号以补足制造批次容量。序列号范围：%(first)s 至 %(last)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "A manufacturing batch is required to generate internal serials."
+msgstr "生成厂内序列号需要制造批次。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The first operation of every manufacturing order must allow serial creation."
+" Check the following manufacturing orders: %(productions)s."
+msgstr "每张制造订单的第一道工序都必须允许创建序列号。请检查以下制造订单：%(productions)s。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__name
+msgid "Batch Reference"
+msgstr "制造批次编号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__can_generate_internal_serials
+msgid "Can Generate Internal Serials"
+msgstr "可生成厂内序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__child_ids
+msgid "Child Serials"
+msgstr "子序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__completed_qty
+msgid "Completed Quantity"
+msgstr "已完成数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__current_production_id
+msgid "Current Manufacturing Order"
+msgstr "当前制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__current_operation_id
+msgid "Current Operation"
+msgstr "当前工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__current_workcenter_id
+msgid "Current Workcenter"
+msgstr "当前工作中心"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__date_finished
+msgid "Finished Date"
+msgstr "完成日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_internal_serial
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__target_model__internal_serial
+msgid "Internal Serial"
+msgstr "厂内序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__internal_serial_count
+msgid "Internal Serial Count"
+msgstr "厂内序列号数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_internal_serial
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__internal_serial_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_internal_serial
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form
+msgid "Internal Serials"
+msgstr "厂内序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_manufacturing_batch
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__batch_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_package__x_wsd_manufacturing_batch_id
+msgid "Manufacturing Batch"
+msgstr "制造批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_manufacturing_batch_operation
+msgid "Manufacturing Batch Route Operation Snapshot"
+msgstr "制造批次路线工序快照"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_manufacturing_batch
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_manufacturing_batch
+msgid "Manufacturing Batches"
+msgstr "制造批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__production_count
+msgid "Manufacturing Order Count"
+msgstr "制造订单数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__production_group_id
+msgid "Manufacturing Order Group"
+msgstr "制造订单组"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__production_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form
+msgid "Manufacturing Orders"
+msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__origin_production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_identity__origin_production_id
+msgid "Origin Manufacturing Order"
+msgstr "原始制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__parent_id
+msgid "Parent Serial"
+msgstr "父序列号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__planned_qty
+msgid "Planned Quantity"
+msgstr "计划数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__produced_qty
+msgid "Produced Quantity"
+msgstr "已生产数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__bom_operation_id
+msgid "Projected BoM Operation"
+msgstr "预计物料清单工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__remaining_qty
+msgid "Remaining Quantity"
+msgstr "剩余数量"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_search
+msgid "Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__operation_snapshot_ids
+msgid "Route Operation Snapshots"
+msgstr "路线工序快照"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form
+msgid "Route Snapshot"
+msgstr "路线快照"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__name
+msgid "Serial Record"
+msgstr "序列号记录"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_internal_serial__serial_type
+msgid "Serial Type"
+msgstr "序列号类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s does not have a current passing result."
+msgstr "序列号 %s 当前没有合格结果。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s has already been packaged."
+msgstr "序列号 %s 已完成包装。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s has an open quality issue."
+msgstr "序列号 %s 存在未关闭的质量问题。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s has been scrapped."
+msgstr "序列号 %s 已报废。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s has failed FQC."
+msgstr "序列号 %s 未通过成品质量检验。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s has not passed final verification."
+msgstr "序列号 %s 未通过最终检定。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s is blocked by quality control."
+msgstr "序列号 %s 已被质量控制阻止。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "Serial number %s is frozen."
+msgstr "序列号 %s 已冻结。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid "Serial number is required."
+msgstr "序列号为必填项。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__route_operation_id
+msgid "Source Route Operation"
+msgstr "来源路线工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__date_start
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing batch must belong to the same company as the internal "
+"serial."
+msgstr "制造批次必须与厂内序列号属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch must belong to the same company as the manufacturing"
+" order."
+msgstr "制造批次必须与制造订单属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing batch product must match the internal serial product."
+msgstr "制造批次产品必须与厂内序列号产品一致。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch product must match the manufacturing order product."
+msgstr "制造批次产品必须与制造订单产品一致。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing order must belong to the internal serial manufacturing "
+"batch."
+msgstr "制造订单必须属于厂内序列号对应的制造批次。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing order must belong to the same company as the internal "
+"serial."
+msgstr "制造订单必须与厂内序列号属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "The physical serial identity must belong to the same company."
+msgstr "物理序列号身份必须属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid "The production stage SN must match the physical serial identity."
+msgstr "生产阶段序列号必须与物理序列号身份一致。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_list
+msgid "Total Completed"
+msgstr "已完成总数"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_list
+msgid "Total Planned"
+msgstr "计划总数"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_list
+msgid "Total Remaining"
+msgstr "剩余总数"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_list
+msgid "Total WIP"
+msgstr "WIP总数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__product_uom_id
+msgid "Unit of Measure"
+msgstr "计量单位"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__workcenter_code
+msgid "Work Center Code"
+msgstr "工作中心代码"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Generated %(count)s internal serials for the manufacturing batch. Serial "
+"range: %(first)s to %(last)s."
+msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围：%(first)s 至 %(last)s。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_ng_retry_limit
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_ng_retry_limit
+msgid "NG Retry Limit"
+msgstr "NG重试上限"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_ng_retry_limit
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_ng_retry_limit
+msgid ""
+"Maximum NG scan-pass attempts allowed before the serial must enter repair. "
+"Set 0 for no automatic repair threshold."
+msgstr "序列号必须进入维修前允许的最大NG过站次数。设置为0表示不启用自动维修阈值。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_form_material_info
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_only_form_drawing_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_list_material_info
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_list_material_info
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_form_drawing_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_easy_form_drawing_no
+msgid "Drawing No."
+msgstr "图号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__date_deadline
+msgid "Expected Completion Date"
+msgstr "预计完成日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__x_production_line_id
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__x_workshop_id
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_workcenter__x_operation_ids
+msgid "Operations that can be executed at this work center."
+msgstr "可在此工作中心执行的工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_operation__x_workcenter_ids
+msgid "Work centers that can execute this operation."
+msgstr "可执行此工序的工作中心。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "A work center must be linked to at least one operation."
+msgstr "工作中心必须至少关联一个工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The work center must be linked to the selected operation."
+msgstr "工作中心必须关联到所选工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_mrp_online_production
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_online_production
+msgid "Online Manufacturing Orders"
+msgstr "在线制造订单"

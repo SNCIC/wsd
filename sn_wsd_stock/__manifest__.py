@@ -1,0 +1,21 @@
+{
+    'name': 'SN WSD Stock',
+    'version': '19.0.1.1.1',
+    'summary': 'Reel-level lot generation during the storage step of receipts',
+    'category': 'Supply Chain/Inventory',
+    'depends': ['stock', 'mail', 'resource'],
+    'data': [
+        'data/ir_sequence.xml',
+        'security/lot_reel_split_security.xml',
+        'security/ir.model.access.csv',
+        'views/stock_lot_views.xml',
+        'views/stock_picking_views.xml',
+        'views/stock_rule_views.xml',
+        'views/lot_reel_split_views.xml',
+        'wizard/lot_reel_split_wizard_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

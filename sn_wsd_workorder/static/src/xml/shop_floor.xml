@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_workorder.ShopFloor">
+        <div class="o_action o_sn_wsd_shop_floor h-100 d-flex flex-column">
+            <header class="o_sn_wsd_shop_floor_header border-bottom bg-view px-3 py-2 d-flex flex-wrap gap-2 align-items-center">
+                <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.close()">
+                    <i class="fa fa-arrow-left" role="img"/>
+                </button>
+                <div class="ms-auto d-flex flex-wrap gap-2 align-items-center">
+                    <input class="form-control o_sn_wsd_shop_floor_search" t-att-placeholder="labels.searchWorkorders" t-model="state.search"/>
+                    <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.reload()">
+                        <i class="fa fa-refresh" role="img"/>
+                    </button>
+                </div>
+            </header>
+            <section class="o_sn_wsd_shop_floor_status px-3 py-2 border-bottom d-flex flex-wrap gap-2 align-items-center">
+                <span class="fw-semibold" t-out="labels.currentOperator"/>
+                <span class="badge text-bg-primary" t-if="state.operator" t-out="state.operator.name"/>
+                <span class="badge text-bg-secondary" t-else="" t-out="labels.noOperator"/>
+            </section>
+            <main class="o_sn_wsd_shop_floor_body flex-grow-1 overflow-auto p-3">
+                <div t-if="state.loading" class="o_sn_wsd_shop_floor_empty">
+                    <i class="fa fa-spinner fa-spin me-2" role="img"/><t t-out="labels.loadingWorkorders"/>
+                </div>
+                <div t-elif="!filteredWorkorders.length" class="o_sn_wsd_shop_floor_empty">
+                    <t t-out="labels.noWorkorders"/>
+                </div>
+                <div t-else="" class="o_sn_wsd_workorder_grid">
+                    <t t-foreach="filteredWorkorders" t-as="workorder" t-key="workorder.id">
+                        <article class="o_sn_wsd_workorder_card border bg-view">
+                            <div class="o_sn_wsd_workorder_card_header border-bottom p-3">
+                                <div class="d-flex justify-content-between gap-2 align-items-start">
+                                    <div class="min-w-0">
+                                        <h3 class="h5 mb-1 text-truncate" t-out="workorder.production.name"/>
+                                        <div class="text-muted text-truncate" t-out="workorder.product"/>
+                                    </div>
+                                    <span class="badge text-nowrap" t-att-class="stateClass(workorder.state)" t-out="stateLabel(workorder.state)"/>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mt-2 small">
+                                    <span class="badge text-bg-light" t-out="workorder.workcenter.name"/>
+                                    <span class="badge text-bg-light" t-if="workorder.operation_type" t-out="workorder.operation_type"/>
+                                    <span class="badge text-bg-light">
+                                        <t t-out="workorder.qty_produced"/> / <t t-out="workorder.qty_remaining"/> <t t-out="workorder.uom"/>
+                                    </span>
+                                    <span class="badge text-bg-light">
+                                        <t t-out="formatMinutes(workorder.duration)"/> / <t t-out="formatMinutes(workorder.duration_expected)"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex justify-content-between gap-2 align-items-center mb-2">
+                                    <strong t-out="workorder.name"/>
+                                    <div class="position-relative">
+                                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.toggleWorkorderMenu(workorder)">
+                                            <i class="fa fa-ellipsis-v" role="img"/>
+                                        </button>
+                                        <div class="dropdown-menu show o_sn_wsd_workorder_menu" t-if="state.openMenuWorkorderId === workorder.id">
+                                            <button class="dropdown-item" t-on-click="() => this.openWorkorder(workorder)">
+                                                <i class="fa fa-tasks me-2" role="img"/><t t-out="labels.openWorkOrder"/>
+                                            </button>
+                                            <button class="dropdown-item" t-on-click="() => this.openProduction(workorder)">
+                                                <i class="fa fa-industry me-2" role="img"/><t t-out="labels.openManufacturingOrder"/>
+                                            </button>
+                                            <button class="dropdown-item" t-on-click="() => this.openQuantityDialog(workorder, false)">
+                                                <i class="fa fa-calculator me-2" role="img"/><t t-out="labels.reportQuantity"/>
+                                            </button>
+                                            <button class="dropdown-item" t-on-click="() => this.openQuantityDialog(workorder, true)">
+                                                <i class="fa fa-check-circle me-2" role="img"/><t t-out="labels.reportAndFinish"/>
+                                            </button>
+                                            <button class="dropdown-item" t-if="workorder.can_correct_reports" t-on-click="() => this.openReportCorrection(workorder)">
+                                                <i class="fa fa-pencil-square-o me-2" role="img"/><t t-out="labels.correctReport"/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_sn_wsd_components" t-if="workorder.components.length">
+                                    <div class="small fw-semibold text-muted mb-1" t-out="labels.materials"/>
+                                    <t t-foreach="workorder.components" t-as="component" t-key="component.id">
+                                        <button class="o_sn_wsd_component_row btn btn-link text-reset text-decoration-none d-flex justify-content-between gap-2 small border-bottom py-1 px-0 w-100" t-on-click="() => this.openConsumeDialog(workorder, component)">
+                                            <span class="text-truncate text-start" t-out="component.product"/>
+                                            <span class="text-nowrap">
+                                                <t t-out="component.done_qty"/> / <t t-out="component.planned_qty"/> <t t-out="component.uom"/>
+                                            </span>
+                                        </button>
+                                    </t>
+                                </div>
+                            </div>
+                            <footer class="border-top p-3 d-flex flex-wrap gap-2 justify-content-end bg-100">
+                                <button class="btn btn-primary" t-on-click="() => this.execute(workorder, 'start')" t-if="workorder.state !== 'progress'">
+                                    <i class="fa fa-play me-1" role="img"/><t t-out="labels.startWork"/>
+                                </button>
+                                <button class="btn btn-secondary" t-on-click="() => this.execute(workorder, 'pause')" t-if="workorder.state === 'progress'">
+                                    <i class="fa fa-pause me-1" role="img"/><t t-out="labels.pauseWork"/>
+                                </button>
+                                <button class="btn btn-secondary" t-on-click="() => this.openQuantityDialog(workorder, false)">
+                                    <i class="fa fa-calculator me-1" role="img"/><t t-out="labels.reportQuantity"/>
+                                </button>
+                                <button class="btn btn-success" t-on-click="() => this.openQuantityDialog(workorder, true)">
+                                    <i class="fa fa-check-circle me-1" role="img"/><t t-out="labels.finish"/>
+                                </button>
+                            </footer>
+                        </article>
+                    </t>
+                </div>
+            </main>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.quantityDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-if="state.quantityDialog.finish" t-out="labels.reportAndFinish"/>
+                            <h4 class="h5 mb-1" t-else="" t-out="labels.reportQuantity"/>
+                            <div class="text-muted small" t-out="state.quantityDialog.workorder.display_name"/>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.closeQuantityDialog()">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <label class="form-label" t-out="labels.reportedQuantity"/>
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.quantityDialog.quantity"/>
+                        <span class="input-group-text" t-out="state.quantityDialog.workorder.uom"/>
+                    </div>
+                    <div class="small text-muted mb-3">
+                        <t t-out="labels.remainingQuantity"/> <t t-out="state.quantityDialog.workorder.qty_remaining"/> <t t-out="state.quantityDialog.workorder.uom"/>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeQuantityDialog()" t-out="labels.cancel"/>
+                        <button class="btn btn-primary" t-on-click="() => this.submitQuantity()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.consumeDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-out="labels.registerMaterialConsumption"/>
+                            <div class="text-muted small" t-out="state.consumeDialog.component.product"/>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.closeConsumeDialog()">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <label class="form-label" t-out="labels.consumedQuantity"/>
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.consumeDialog.quantity"/>
+                        <span class="input-group-text" t-out="state.consumeDialog.component.uom"/>
+                    </div>
+                    <div class="small text-muted mb-3">
+                        <t t-out="labels.planned"/> <t t-out="state.consumeDialog.component.planned_qty"/> <t t-out="state.consumeDialog.component.uom"/>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeConsumeDialog()" t-out="labels.cancel"/>
+                        <button class="btn btn-primary" t-on-click="() => this.submitConsume()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

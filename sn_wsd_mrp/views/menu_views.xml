@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp.mrp_planning_menu_root" model="ir.ui.menu">
+        <field name="group_ids" eval="[Command.set([ref('base.group_no_one')])]"/>
+    </record>
+
+    <menuitem id="menu_sn_mrp_base_config" name="Meter MES" parent="mrp.menu_mrp_configuration" sequence="85"/>
+    <menuitem
+        id="menu_sn_mrp_online_production"
+        name="Online Manufacturing Orders"
+        parent="mrp.menu_mrp_manufacturing"
+        action="action_sn_mrp_online_production"
+        sequence="15"
+    />
+    <menuitem id="menu_sn_quality_root" name="Quality Management" parent="mrp.menu_mrp_root" sequence="70"/>
+    <menuitem id="menu_sn_quality_config" name="Quality Configuration" parent="menu_sn_quality_root" sequence="1"/>
+    <menuitem id="menu_sn_quality_operation" name="Quality Operations" parent="menu_sn_quality_root" sequence="2"/>
+    <menuitem id="menu_sn_quality_trace" name="Quality Traceability" parent="menu_sn_quality_root" sequence="3"/>
+    <menuitem id="menu_sn_mrp_workshop" name="Workshops" parent="menu_sn_mrp_base_config" action="action_sn_mrp_workshop" sequence="5"/>
+    <menuitem id="menu_sn_mrp_production_line" name="Production Lines" parent="menu_sn_mrp_base_config" action="action_sn_mrp_production_line" sequence="10"/>
+    <menuitem id="menu_sn_mrp_team" name="Teams" parent="menu_sn_mrp_base_config" action="action_sn_mrp_team" sequence="15"/>
+    <record id="mrp.menu_view_resource_search_mrp" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_sn_mrp_base_config"/>
+        <field name="sequence">20</field>
+    </record>
+    <record id="mrp.menu_mrp_routing_action" model="ir.ui.menu">
+        <field name="name">Operations</field>
+        <field name="parent_id" ref="menu_sn_mrp_base_config"/>
+        <field name="sequence">25</field>
+        <field name="action" ref="action_sn_wsd_process_route_operation"/>
+    </record>
+    <menuitem id="menu_sn_wsd_process_route" name="Process Routes" parent="menu_sn_mrp_base_config" action="action_sn_wsd_process_route" sequence="27"/>
+    <menuitem id="menu_sn_wsd_traceability" name="Traceability" parent="mrp.menu_mrp_root" sequence="90"/>
+    <menuitem id="menu_sn_wsd_manufacturing_batch" name="Manufacturing Batches" parent="menu_sn_wsd_traceability" action="action_sn_wsd_manufacturing_batch" sequence="5"/>
+    <menuitem id="menu_sn_wsd_internal_serial" name="Internal Serials" parent="menu_sn_wsd_traceability" action="action_sn_wsd_internal_serial" sequence="10"/>
+    <menuitem id="menu_sn_wsd_meter_aging_batch" name="Aging Batches" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_aging_batch" sequence="20"/>
+    <menuitem id="menu_sn_wsd_meter_pack_record" name="Pack Records" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_pack_record" sequence="30"/>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Quality Configuration Submenu -->
+    <menuitem id="menu_sn_wsd_scrap_reason" name="Scrap Reason Codes" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_scrap_reason" sequence="52"/>
+
+    <!-- Quality Operations Submenu -->
+    <menuitem id="menu_sn_wsd_scrap_record" name="Scrap Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_scrap_record" sequence="65"/>
+</odoo>

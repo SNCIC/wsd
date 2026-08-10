@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Maintenance Execution Search View -->
+    <record id="view_sn_wsd_maintenance_execution_search" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.execution.search</field>
+        <field name="model">sn.wsd.maintenance.execution</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="execution_type"/>
+                <field name="state"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Abnormal" name="abnormal" domain="[('abnormal_count', '&gt;', 0)]"/>
+                <filter name="planned_date" date="planned_date"/>
+                <group>
+                    <filter string="Type" name="group_type" context="{'group_by': 'execution_type'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Equipment" name="group_equipment" context="{'group_by': 'equipment_id'}"/>
+                    <filter string="Responsible" name="group_responsible" context="{'group_by': 'responsible_user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Maintenance Execution List View -->
+    <record id="view_sn_wsd_maintenance_execution_list" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.execution.list</field>
+        <field name="model">sn.wsd.maintenance.execution</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="execution_type"/>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="planned_date"/>
+                <field name="responsible_user_id"/>
+                <field name="actual_hours"/>
+                <field name="abnormal_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ['draft', 'submitted']"
+                       decoration-warning="state == 'reviewed'"
+                       decoration-success="state == 'done'"
+                       decoration-muted="state in ['skipped', 'cancel']"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Maintenance Execution Form View -->
+    <record id="view_sn_wsd_maintenance_execution_form" model="ir.ui.view">
+        <field name="name">sn.wsd.maintenance.execution.form</field>
+        <field name="model">sn.wsd.maintenance.execution</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_review" type="object" string="Review" class="btn-secondary" invisible="state != 'submitted'"/>
+                    <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state not in ['submitted', 'reviewed']"/>
+                    <button name="action_skip" type="object" string="Skip" invisible="state in ['done', 'skipped', 'cancel']"/>
+                    <button name="action_create_failure_request" type="object" string="Create Failure Request" class="btn-secondary" invisible="abnormal_count == 0 or maintenance_request_id"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,reviewed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="execution_type"/>
+                            <field name="plan_id"/>
+                            <field name="equipment_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="planned_date"/>
+                        </group>
+                        <group>
+                            <field name="responsible_user_id"/>
+                            <field name="reviewer_id" readonly="1"/>
+                            <field name="review_time" readonly="1"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="baseline_hours"/>
+                            <field name="actual_hours" readonly="1"/>
+                            <field name="maintenance_request_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group invisible="execution_type != 'calibration'">
+                        <group>
+                            <field name="calibration_before"/>
+                            <field name="calibration_after"/>
+                            <field name="calibration_deviation"/>
+                            <field name="calibration_result" required="execution_type == 'calibration'"/>
+                            <field name="next_calibration_date"/>
+                        </group>
+                        <group>
+                            <field name="calibration_adjustment"/>
+                            <field name="certificate" filename="certificate_filename" invisible="calibration_result != 'pass'"/>
+                            <field name="certificate_filename" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Execution Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_id"/>
+                                    <field name="required"/>
+                                    <field name="standard"/>
+                                    <field name="result"/>
+                                    <field name="measured_value"/>
+                                    <field name="abnormal_note"/>
+                                    <field name="spare_part_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Skip" invisible="state != 'skipped'">
+                            <group>
+                                <field name="skip_reason"/>
+                                <field name="authorized_user_id"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Maintenance Execution Actions -->
+    <record id="action_sn_wsd_maintenance_execution" model="ir.actions.act_window">
+        <field name="name">Maintenance Executions</field>
+        <field name="res_model">sn.wsd.maintenance.execution</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_maintenance_execution_search"/>
+    </record>
+
+    <record id="action_sn_wsd_maintenance_execution_maintenance" model="ir.actions.act_window">
+        <field name="name">Equipment Maintenance</field>
+        <field name="res_model">sn.wsd.maintenance.execution</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('execution_type', '=', 'maintenance')]</field>
+        <field name="context">{'default_execution_type': 'maintenance'}</field>
+        <field name="search_view_id" ref="view_sn_wsd_maintenance_execution_search"/>
+    </record>
+
+    <record id="action_sn_wsd_maintenance_execution_inspection" model="ir.actions.act_window">
+        <field name="name">Equipment Inspections</field>
+        <field name="res_model">sn.wsd.maintenance.execution</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('execution_type', '=', 'inspection')]</field>
+        <field name="context">{'default_execution_type': 'inspection'}</field>
+        <field name="search_view_id" ref="view_sn_wsd_maintenance_execution_search"/>
+    </record>
+
+    <record id="action_sn_wsd_maintenance_execution_calibration" model="ir.actions.act_window">
+        <field name="name">Calibration Executions</field>
+        <field name="res_model">sn.wsd.maintenance.execution</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('execution_type', '=', 'calibration')]</field>
+        <field name="context">{'default_execution_type': 'calibration'}</field>
+        <field name="search_view_id" ref="view_sn_wsd_maintenance_execution_search"/>
+    </record>
+</odoo>

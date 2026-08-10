@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_internal_serial_form_api" model="ir.ui.view">
+        <field name="name">sn.wsd.internal.serial.form.api</field>
+        <field name="model">sn.wsd.internal.serial</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_internal_serial_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='packaging']//field[@name='pallet_no']" position="after">
+                <field name="travel_count" readonly="1"/>
+                <field name="test_result_count" readonly="1"/>
+                <field name="x_mes_repair_state" readonly="1"/>
+                <field name="x_rework_source_workorder_id" readonly="1"/>
+                <field name="x_rework_entry_workorder_id" readonly="1"/>
+                <field name="x_rework_exit_workorder_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//page[@name='notes']" position="before">
+                <page name="travel_timeline" string="Travel Timeline">
+                    <field name="mes_travel_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="event_time"/>
+                            <field name="line_code"/>
+                            <field name="workcenter_code"/>
+                            <field name="event_type"/>
+                            <field name="result"/>
+                            <field name="retry_sequence" optional="hide"/>
+                            <field name="retry_limit" optional="hide"/>
+                            <field name="requires_repair" optional="show"/>
+                            <field name="is_rework_pass" optional="show"/>
+                            <field name="equipment_id"/>
+                            <field name="operator_code"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+                <page name="test_results" string="Test Results">
+                    <field name="mes_test_result_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="test_time"/>
+                            <field name="test_type"/>
+                            <field name="result"/>
+                            <field name="retry_sequence" optional="hide"/>
+                            <field name="retry_limit" optional="hide"/>
+                            <field name="requires_repair" optional="show"/>
+                            <field name="is_rework_pass" optional="show"/>
+                            <field name="aoi_defect_count"/>
+                            <field name="workcenter_code"/>
+                            <field name="equipment_id"/>
+                            <field name="cycle_time_sec"/>
+                            <field name="basic_error"/>
+                            <field name="phase_error"/>
+                            <field name="aging_temp_c"/>
+                            <field name="operator_code"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

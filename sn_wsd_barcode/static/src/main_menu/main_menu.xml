@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.MainMenu">
+        <div class="o_home_menu_background h-100 w-100 pt-sm-3">
+            <div class="o_sn_wsd_barcode_main_menu container d-flex flex-column h-100 h-sm-auto bg-view shadow">
+                <header>
+                    <div class="d-flex align-items-center justify-content-between my-3">
+                        <a t-if="!pwaService.isScopedApp" href="/odoo" class="o_sn_wsd_barcode_home_menu oi oi-apps me-3 text-dark"/>
+                        <span class="fs-2 me-auto" t-out="barcodeScannerLabel"/>
+                        <button t-if="pwaService.isScopedApp" class="btn btn-secondary" t-on-click="logout" t-out="logoutLabel"/>
+                        <a t-elif="pwaService.isSupportedOnBrowser" class="btn btn-secondary d-flex align-items-center justify-content-center" href="/scoped_app?app_id=sn_wsd_barcode&amp;path=scoped_app/barcode" target="_blank" t-out="installLabel"/>
+                    </div>
+                </header>
+                <main class="o_sn_wsd_barcode_main_actions flex-grow-1 d-flex flex-column justify-content-center">
+                    <button class="o_button_operations btn btn-block btn-primary mb-3 p-3 w-100"
+                            t-on-click="() => this.actionService.doAction('sn_wsd_barcode.stock_picking_type_action_kanban')">
+                        <t t-out="warehouseOperationsLabel"/>
+                    </button>
+                    <button class="o_button_workshop btn btn-block btn-primary mb-3 p-3 w-100"
+                            t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_production_menu_action')">
+                        <t t-out="productionOperationsLabel"/>
+                    </button>
+                    <button t-attf-class="o_button_inventory btn btn-block btn-{{this.quantCount ? 'info' : 'secondary'}} mb-3 p-3 w-100"
+                            t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_inventory_client_action')">
+                        <t t-out="countInventoryLabel"/>
+                        <span t-if="this.quantCount" class="ms-2 p-1 px-2 bg-light rounded-circle text-primary" t-out="this.quantCount"/>
+                    </button>
+                </main>
+            </div>
+        </div>
+    </t>
+</templates>

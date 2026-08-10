@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workorder_form_sn_wsd_quality" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.sn.wsd.quality</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="sn_wsd_api.view_mrp_workorder_form_sn_wsd_api"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_internal_serial_ids']/ancestor::group[1]" position="after">
+                <group string="Material Bindings">
+                    <field name="x_meter_component_binding_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="event_time"/>
+                            <field name="internal_serial_id"/>
+                            <field name="component_type"/>
+                            <field name="event_type"/>
+                            <field name="state"/>
+                            <field name="component_product_id"/>
+                            <field name="component_lot_id"/>
+                            <field name="component_sn"/>
+                            <field name="component_batch_no"/>
+                            <field name="imei"/>
+                            <field name="esam_no"/>
+                        </list>
+                    </field>
+                </group>
+                <group string="Quality Issues">
+                    <field name="x_quality_issue_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="internal_serial_id"/>
+                            <field name="defect_code_id"/>
+                            <field name="severity"/>
+                            <field name="state"/>
+                            <field name="disposition"/>
+                            <field name="detected_time"/>
+                        </list>
+                    </field>
+                </group>
+                <group string="SN Freezes">
+                    <group>
+                        <field name="x_freeze_record_count" readonly="1"/>
+                        <button name="action_open_freeze_wizard" type="object" string="Freeze Current SNs" class="btn-secondary"/>
+                    </group>
+                    <field name="x_freeze_record_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name"/>
+                            <field name="serial_id"/>
+                            <field name="state"/>
+                            <field name="freeze_reason"/>
+                            <field name="freeze_user_id"/>
+                            <field name="freeze_time"/>
+                            <field name="release_user_id"/>
+                            <field name="release_time"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='x_meter_test_result_ids']//field[@name='result']" position="after">
+                <field name="defect_code_id"/>
+                <field name="quality_issue_count"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

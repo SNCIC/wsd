@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_barcode.ProductionMenu">
+        <div class="o_home_menu_background h-100 w-100 pt-sm-3">
+            <div class="o_sn_wsd_production_menu container d-flex flex-column h-100 h-sm-auto bg-view shadow">
+                <header>
+                    <div class="d-flex align-items-center justify-content-between my-3">
+                        <button type="button" class="btn btn-secondary me-3" t-on-click="goBack" t-att-aria-label="backLabel">
+                            <i class="oi oi-chevron-left"/>
+                        </button>
+                        <span class="fs-2 me-auto" t-out="title"/>
+                    </div>
+                </header>
+                <main class="o_sn_wsd_production_menu_actions flex-grow-1 d-flex flex-column justify-content-center">
+                    <t t-foreach="operationTypes" t-as="operationType" t-key="operationType.key">
+                        <button type="button"
+                                class="o_sn_wsd_production_type btn btn-primary mb-3 p-3 w-100"
+                                t-on-click="() => this.openOperationType(operationType)">
+                            <span class="d-block fs-4 fw-bold" t-out="operationType.label"/>
+                            <small class="d-block mt-1 opacity-75" t-out="operationType.description"/>
+                        </button>
+                    </t>
+                </main>
+            </div>
+        </div>
+    </t>
+</templates>

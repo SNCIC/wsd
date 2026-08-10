@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_barcode.PalletBindingAction">
+        <div class="o_content o_sn_wsd_pallet_binding h-100 d-flex flex-column">
+            <header class="border-bottom p-2 d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-secondary o_sn_wsd_touch" t-on-click="goBack" aria-label="Back">
+                    <i class="oi oi-chevron-left"/>
+                </button>
+                <h1 class="fs-3 m-0">Pallet Binding</h1>
+            </header>
+            <main class="container py-3 flex-grow-1">
+                <div class="alert" t-att-class="messageClass" t-out="state.message"/>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-5">Current Pallet</dt>
+                            <dd class="col-7 fw-bold text-break" t-out="state.palletNo || '-'"/>
+                            <dt class="col-5">Last Carton</dt>
+                            <dd class="col-7 text-break" t-out="state.lastCartonNo || '-'"/>
+                            <dt class="col-5">Cartons</dt>
+                            <dd class="col-7" t-out="state.cartonCount"/>
+                            <dt class="col-5">Meters</dt>
+                            <dd class="col-7" t-out="state.meterCount"/>
+                        </dl>
+                    </div>
+                </div>
+                <form t-on-submit="submitCommand" class="d-flex gap-2 mb-3">
+                    <input t-ref="scanInput" t-model="state.command" class="form-control form-control-lg o_sn_wsd_touch" autofocus="autofocus" placeholder="Scan pallet or carton"/>
+                    <button type="submit" class="btn btn-primary o_sn_wsd_touch" t-att-disabled="state.loading ? 'disabled' : null">
+                        <i t-if="state.loading" class="fa fa-spinner fa-spin"/>
+                        <span t-else="">Apply</span>
+                    </button>
+                </form>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-success btn-lg o_sn_wsd_touch" t-on-click="closePallet" t-att-disabled="!state.palletNo || state.loading ? 'disabled' : null">Close Pallet</button>
+                    <button type="button" class="btn btn-secondary btn-lg o_sn_wsd_touch" t-on-click="resetPallet" t-att-disabled="state.loading ? 'disabled' : null">Change Pallet</button>
+                </div>
+            </main>
+        </div>
+    </t>
+</templates>

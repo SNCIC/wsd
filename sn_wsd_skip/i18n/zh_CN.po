@@ -1,0 +1,617 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_skip
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-10 06:09+0000\n"
+"PO-Revision-Date: 2026-07-21 06:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_production_form_sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_workorder_form_sn_wsd_skip
+msgid "<span class=\"o_stat_text\">Skip Requests</span>"
+msgstr "<span class=\"o_stat_text\">跳站申请</span>"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_needaction
+msgid "Action Needed"
+msgstr "需要采取行动"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常装饰"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__applicant_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Applicant"
+msgstr "申请人"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Approval"
+msgstr "审批"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Approve"
+msgstr "批准"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__approved
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Approved"
+msgstr "已批准"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__approved_at
+msgid "Approved At"
+msgstr "批准时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__approved_by_id
+msgid "Approved By"
+msgstr "批准人"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "At least one operation must be selected."
+msgstr "必须至少选择一个工序。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__company_id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__create_date
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_mes_sn_travel__display_name
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__display_name
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者(业务伙伴)"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_mes_sn_travel__id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选，新消息需要您的关注。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__message_has_error
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选，某些消息存在发送错误。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__write_uid
+msgid "Last Updated by"
+msgstr "最后更新者"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__write_date
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model,name:sn_wsd_skip.model_sn_wsd_mes_sn_travel
+msgid "MES SN Travel"
+msgstr "MES条码流转"
+
+#. module: sn_wsd_skip
+#: model:ir.model,name:sn_wsd_skip.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__production_id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_needaction_counter
+msgid "Number of Actions"
+msgstr "行动数量"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息数量"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only approved skip requests can be revoked."
+msgstr "只有已批准的跳站申请才能被撤销。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only draft or cancelled skip requests can be deleted."
+msgstr "只有草稿或已取消的跳站申请才能被删除。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only draft or submitted skip requests can be cancelled."
+msgstr "只有草稿或已提交的跳站申请才能被取消。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only draft skip requests can be edited."
+msgstr "只有草稿状态的跳站申请才能被编辑。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only draft skip requests can be submitted."
+msgstr "只有草稿状态的跳站申请才能被提交。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only skip approvers can perform this action."
+msgstr "只有跳站审批员才能执行此操作。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only submitted skip requests can be approved."
+msgstr "只有已提交的跳站申请才能被批准。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only submitted skip requests can be rejected."
+msgstr "只有已提交的跳站申请才能被拒绝。"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Open"
+msgstr "打开"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__workorder_id
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid ""
+"Operation %(operation)s already has an approved skip request for this "
+"manufacturing order."
+msgstr "在此制造订单中，工序 %(operation)s 已经存在一个已批准的跳站申请。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__line_count
+msgid "Operation Count"
+msgstr "工序数量"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__route_id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__route_id
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__is_processed
+msgid "Processed"
+msgstr "已处理"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__rating_ids
+msgid "Ratings"
+msgstr "评价"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__reason
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Reason for skipping selected operations"
+msgstr "跳过所选工序的原因"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Reject"
+msgstr "拒绝"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__reject_reason
+msgid "Reject Reason"
+msgstr "拒绝原因"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__rejected
+msgid "Rejected"
+msgstr "已拒绝"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__rejected_at
+msgid "Rejected At"
+msgstr "拒绝时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__rejected_by_id
+msgid "Rejected By"
+msgstr "拒绝人"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Request Date"
+msgstr "申请日期"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__name
+msgid "Request No."
+msgstr "申请编号"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__request_date
+msgid "Request Time"
+msgstr "申请时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__activity_user_id
+msgid "Responsible User"
+msgstr "负责人"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Revoke"
+msgstr "撤销"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__revoke_reason
+msgid "Revoke Reason"
+msgstr "撤销原因"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__revoked
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Revoked"
+msgstr "已撤销"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__revoked_at
+msgid "Revoked At"
+msgstr "撤销时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__revoked_by_id
+msgid "Revoked By"
+msgstr "撤销人"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__operation_code
+msgid "Route Operation Code"
+msgstr "工序代码"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__route_operation_id
+msgid "Route Operation Template"
+msgstr "工序模板"
+
+#. module: sn_wsd_skip
+#: model:ir.rule,name:sn_wsd_skip.rule_sn_wsd_skip_request_company
+msgid "Skip request company rule"
+msgstr "跳站申请公司规则"
+
+#. module: sn_wsd_skip
+#: model:ir.rule,name:sn_wsd_skip.rule_sn_wsd_skip_request_line_company
+msgid "Skip request line company rule"
+msgstr "跳站申请明细行公司规则"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_workorder__x_skip_effective
+msgid "Skip Effective"
+msgstr "跳站生效"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Skip Operations"
+msgstr "跳过工序"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__request_id
+msgid "Skip Request"
+msgstr "跳站申请"
+
+#. module: sn_wsd_skip
+#: model:res.groups,name:sn_wsd_skip.group_sn_wsd_skip_approver
+msgid "Skip Request Approver"
+msgstr "跳站申请审批员"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_production__x_skip_request_count
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_workorder__x_skip_request_count
+msgid "Skip Request Count"
+msgstr "跳站申请数量"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_mrp_workorder__x_skip_request_line_ids
+msgid "Skip Request Lines"
+msgstr "跳站申请明细行"
+
+#. module: sn_wsd_skip
+#: model:res.groups,name:sn_wsd_skip.group_sn_wsd_skip_user
+msgid "Skip Request User"
+msgstr "跳站申请用户"
+
+#. module: sn_wsd_skip
+#: model:ir.sequence,name:sn_wsd_skip.seq_sn_wsd_skip_request
+msgid "Skip Request Sequence"
+msgstr "跳站申请序列"
+
+#. module: sn_wsd_skip
+#: model:ir.actions.act_window,name:sn_wsd_skip.action_sn_wsd_skip_request
+#: model:ir.ui.menu,name:sn_wsd_skip.menu_sn_wsd_skip_request
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/mrp_production.py:0
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_production_form_sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_workorder_form_sn_wsd_skip
+msgid "Skip Requests"
+msgstr "跳站申请"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_skip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_form
+msgid "Submit"
+msgstr "提交"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields.selection,name:sn_wsd_skip.selection__sn_wsd_skip_request__state__submitted
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Submitted"
+msgstr "已提交"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__submitted_at
+msgid "Submitted At"
+msgstr "提交时间"
+
+#. module: sn_wsd_skip
+#: model:ir.model.constraint,message:sn_wsd_skip.constraint_sn_wsd_skip_request_line_request_workorder_uniq
+msgid "The operation must be unique within one skip request."
+msgstr "在同一个跳站申请中，工序必须是唯一的。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "The skipped operation must belong to the selected manufacturing order."
+msgstr "跳过的工序必须属于所选的制造订单。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "This operation has already been processed and cannot be skipped."
+msgstr "该工序已经处理完毕，无法跳过。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_skip
+#: model:ir.model,name:sn_wsd_skip.model_sn_wsd_skip_request
+msgid "WSD Skip Station Request"
+msgstr "WSD跳站申请"
+
+#. module: sn_wsd_skip
+#: model:ir.model,name:sn_wsd_skip.model_sn_wsd_skip_request_line
+msgid "WSD Skip Station Request Line"
+msgstr "WSD跳站申请明细"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通历史"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_skip
+#: model:ir.model,name:sn_wsd_skip.model_mrp_workorder
+msgid "Work Order"
+msgstr "工单"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/mrp_workorder.py:0
+msgid "line_ids.workorder_id"
+msgstr "line_ids.workorder_id"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/mrp_production.py:0
+msgid "production_id"
+msgstr "production_id"

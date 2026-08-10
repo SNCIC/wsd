@@ -1,0 +1,21 @@
+{
+    'name': 'SN WSD Exception Management',
+    'version': '19.0.3.1.0',
+    'summary': 'MES exception registration, escalation, processing, verification, and ledger',
+    'depends': ['mail', 'sn_wsd_mrp'],
+    'data': [
+        'security/exception_security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence.xml',
+        'data/exception_type_data.xml',
+        'data/exception_cron.xml',
+        'views/exception_type_views.xml',
+        'views/exception_record_views.xml',
+        'views/mrp_workorder_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

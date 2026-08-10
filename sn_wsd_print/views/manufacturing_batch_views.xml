@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_manufacturing_batch_form_print_inherit" model="ir.ui.view">
+        <field name="name">sn.wsd.manufacturing.batch.form.print.inherit</field>
+        <field name="model">sn.wsd.manufacturing.batch</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_manufacturing_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_generate_missing_internal_serials']" position="attributes">
+                <attribute name="name">action_open_generate_internal_serial_print_wizard</attribute>
+                <attribute name="string">Generate and Print Factory Serial Numbers</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
