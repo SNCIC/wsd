@@ -4284,3 +4284,9 @@ msgstr "工作中心必须关联到所选工序。"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_online_production
 msgid "Online Manufacturing Orders"
 msgstr "在线制造订单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+msgid "Performance ratio cannot exceed 100%."
+msgstr "绩效比率不得超过100%。"

@@ -83,6 +83,22 @@ class SnMrpTeam(models.Model):
         for record in self:
             record.performance_ratio_total = sum(record.member_ids.mapped('performance_ratio'))
 
+    @api.onchange('member_ids')
+    def _onchange_member_ids_rebalance_ratio(self):
+        """成员增删或改某行 ratio 时，重分配 performance_ratio。
+        """
+        for team in self:
+            members = team.member_ids
+            if not members:
+                continue
+            edited = members.filtered(
+                lambda m: m._origin and not float_is_zero(
+                    m.performance_ratio - m._origin.performance_ratio,
+                    precision_rounding=0.0001,
+                )
+            )[:1]
+            members._rebalance_performance_ratio(edited_member=edited or None)
+
     @api.constrains('workshop_id', 'production_line_id')
     def _check_workshop_matches_production_line(self):
         for record in self:
@@ -99,7 +115,7 @@ class SnMrpTeam(models.Model):
     @api.constrains('member_ids', 'member_ids.performance_ratio')
     def _check_performance_ratio_total(self):
         for record in self:
-            if record.member_ids and not float_is_zero(record.performance_ratio_total - 100.0, precision_rounding=0.0001):
+            if record.member_ids and not float_is_zero(record.performance_ratio_total - 100.0, precision_rounding=0.0100):
                 raise ValidationError(_('The total performance ratio of team members must be 100%.'))
 
     @api.onchange('workshop_id')
@@ -247,6 +263,32 @@ class SnMrpTeamMember(models.Model):
         for record in self:
             if record.employee_id and not record.employee_code:
                 record.employee_code = record.employee_id.barcode or record.employee_id.pin or record.employee_id.name
+
+    def _rebalance_performance_ratio(self, edited_member=None):
+        """把 100% 在本集合的成员间分配。
+
+        :param edited_member: 被用户手动修改的成员记录（保留其值），其余成员均摊剩余。
+            若为 None，则所有成员均摊（新增行/初始化场景）。
+        """
+        all_members = self
+        if not all_members:
+            return
+        if len(all_members) == 1:
+            all_members.performance_ratio = 100.0
+            return
+        if edited_member and edited_member in all_members:
+            edited_val = edited_member.performance_ratio
+            if edited_val > 100.0:
+                raise ValidationError(_('Performance ratio cannot exceed 100%.'))
+            remaining = max(0.0, 100.0 - edited_val)
+            others = all_members - edited_member
+            share = remaining / len(others)
+            for m in others:
+                m.performance_ratio = round(share, 4)
+        else:
+            share = 100.0 / len(all_members)
+            for m in all_members:
+                m.performance_ratio = round(share, 4)
 
     @api.constrains('employee_code')
     def _check_employee_code(self):
