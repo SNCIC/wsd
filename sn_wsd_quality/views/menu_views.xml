@@ -17,6 +17,7 @@
     <menuitem id="menu_sn_wsd_quality_inspection_skip" name="IPQC Skip Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_skip" sequence="70"/>
 
     <record id="menu_sn_wsd_quality_inspection_iqc" model="ir.ui.menu">
+        <field name="name">IQC Inspections</field>
         <field name="active" eval="False"/>
     </record>
 </odoo>
