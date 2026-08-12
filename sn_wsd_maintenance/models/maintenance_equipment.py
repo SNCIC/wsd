@@ -358,17 +358,17 @@ class SnSmtWorkcenterDevice(models.Model):
     # 设备关联信息（只读，从所选设备自动带入）
     device_sn = fields.Char(
         related='device_id.serial_no',
-        string='设备SN',
+        string='Device SN',
         store=True,
     )
     device_name = fields.Char(
         related='device_id.name',
-        string='设备名称',
+        string='Device Name',
     )
     device_category_id = fields.Many2one(
         'maintenance.equipment.category',
         related='device_id.category_id',
-        string='设备类型',
+        string='Device Category',
         store=True,
     )
 

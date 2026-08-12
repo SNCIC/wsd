@@ -136,10 +136,10 @@
         <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page string="设备信息" name="device_info">
+                <page string="Device Info" name="device_info">
                     <field name="x_smt_device_ids" nolabel="1">
                         <list editable="bottom">
-                            <field name="device_id" string="设备"/>
+                            <field name="device_id" string="Device"/>
                             <field name="device_sn" readonly="1"/>
                             <field name="device_name" readonly="1"/>
                             <field name="device_category_id" readonly="1"/>
