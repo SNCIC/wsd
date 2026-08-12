@@ -2198,7 +2198,7 @@ msgstr "生产日期"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
 msgid "Production Line"
-msgstr "生产线"
+msgstr "产线"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_type__line
@@ -2211,7 +2211,7 @@ msgstr "生产线层级"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_mrp_production_line
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_workshop_form
 msgid "Production Lines"
-msgstr "生产线"
+msgstr "产线"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -4248,7 +4248,7 @@ msgstr "预计完成日期"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__x_production_line_id
 msgid "Production Line"
-msgstr "生产线"
+msgstr "产线"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__x_workshop_id
@@ -4290,3 +4290,27 @@ msgstr "在线制造订单"
 #: code:addons/sn_wsd_mrp/models/mrp_team.py:0
 msgid "Performance ratio cannot exceed 100%."
 msgstr "绩效比率不得超过100%。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
+msgid "Automated Line"
+msgstr "自动化线"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
+msgid "Manual Line"
+msgstr "人工线"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
+msgid "Line Type"
+msgstr "线体属性"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
+msgid "Feeder Control"
+msgstr "管控Feeder"

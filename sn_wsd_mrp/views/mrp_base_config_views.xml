@@ -40,7 +40,7 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="code"/>
+                            <field name="code" placeholder="留空自动生成"/>
                         </group>
                         <group>
                             <field name="sequence"/>
@@ -122,13 +122,15 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="code"/>
+                            <field name="code" placeholder="留空自动生成"/>
                             <field name="workshop_id"/>
                         </group>
                         <group>
                             <field name="sequence"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="active"/>
+                            <field name="x_line_type"/>
+                            <field name="x_smt_is_feeder_control"/>
                         </group>
                     </group>
                     <notebook>
@@ -233,7 +235,7 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="code"/>
+                            <field name="code" placeholder="留空自动生成"/>
                             <field name="workshop_id"/>
                             <field name="production_line_id" domain="[('workshop_id', '=', workshop_id)]"/>
                         </group>
@@ -246,7 +248,11 @@
                     </group>
                     <notebook>
                         <page string="Members">
-                            <field name="member_ids" nolabel="1" context="{'default_team_id': id}">
+                            <field name="member_ids" nolabel="1" context="{'default_team_id': id}"
+                                   widget="sn_wsd_x2many_multi_add"
+                                   options="{'multi_add_model': 'hr.employee',
+                                             'multi_add_field': 'employee_id',
+                                             'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="employee_id"/>

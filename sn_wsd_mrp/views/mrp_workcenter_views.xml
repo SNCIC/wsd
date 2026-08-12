@@ -35,14 +35,11 @@
         <field name="model">mrp.workcenter</field>
         <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='code']" position="attributes">
-                <attribute name="required">True</attribute>
-            </xpath>
             <xpath expr="//field[@name='code']" position="after">
                 <field name="x_workcenter_type" optional="show"/>
                 <field name="x_workshop_id" optional="show"/>
                 <field name="x_production_line_id" optional="show"/>
-                <field name="x_operation_ids" optional="show" widget="many2many_tags"/>
+                <field name="x_operation_id" optional="show"/>
                 <field name="x_workcenter_status" optional="show"/>
             </xpath>
         </field>
@@ -53,25 +50,27 @@
         <field name="model">mrp.workcenter</field>
         <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <!-- 工作中心编码移到第一位(名称前) -->
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="code" position="move"/>
             </xpath>
             <xpath expr="//field[@name='code']" position="attributes">
-                <attribute name="required">True</attribute>
+                <attribute name="string">工作中心编码</attribute>
+                <attribute name="placeholder">留空自动生成</attribute>
             </xpath>
-            <xpath expr="//notebook/page[@name='general_info']" position="after">
-                <page string="Scope Information" name="scope_info">
+            <!-- 在原生顶部 group(名称/代码) 后插入车间/产线/工序/状态 -->
+            <xpath expr="//sheet//group[1]" position="after">
+                <group string="生产组织">
                     <group>
-                        <group>
-                            <field name="x_workcenter_type"/>
-                            <field name="x_workshop_id"/>
-                            <field name="x_operation_ids" widget="many2many_tags"/>
-                        </group>
-                        <group>
-                            <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]" invisible="x_workcenter_type != 'line'" required="x_workcenter_type == 'line'"/>
-                            <field name="x_workcenter_status"/>
-                        </group>
+                        <field name="x_workshop_id" required="1"/>
+                        <field name="x_production_line_id" string="产线" domain="[('workshop_id', '=', x_workshop_id)]"/>
+                        <field name="x_operation_id" string="工序" required="1"/>
                     </group>
-                </page>
+                    <group>
+                        <field name="x_workcenter_status"/>
+                        <field name="x_workcenter_type" invisible="1"/>
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>
