@@ -129,25 +129,24 @@
         </field>
     </record>
 
-    <!-- Workcenter Form View -->
+    <!-- Workcenter Form View: 设备信息 tab (设备表格) -->
     <record id="view_mrp_workcenter_form_wsd_maintenance" model="ir.ui.view">
         <field name="name">mrp.workcenter.form.wsd.maintenance</field>
         <field name="model">mrp.workcenter</field>
-        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_workcenter_form_inherit_sn_wsd"/>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//notebook/page[@name='scope_info']//field[@name='x_workcenter_status']" position="after">
-                <field name="x_smt_is_feeder_control"/>
-            </xpath>
-            <xpath expr="//notebook/page[@name='scope_info']" position="inside">
-                <separator string="SMT Devices"/>
-                <field name="x_smt_device_ids" nolabel="1">
-                    <list editable="bottom">
-                        <field name="device_seq"/>
-                        <field name="device_id"/>
-                        <field name="track_type"/>
-                        <field name="note"/>
-                    </list>
-                </field>
+            <xpath expr="//notebook" position="inside">
+                <page string="设备信息" name="device_info">
+                    <field name="x_smt_device_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="device_id" string="设备"/>
+                            <field name="device_sn" readonly="1"/>
+                            <field name="device_name" readonly="1"/>
+                            <field name="device_category_id" readonly="1"/>
+                            <field name="device_seq"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
