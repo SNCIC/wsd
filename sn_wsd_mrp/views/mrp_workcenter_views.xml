@@ -17,6 +17,15 @@
                     <filter string="Workshop" name="group_workshop" context="{'group_by': 'x_workshop_id'}"/>
                     <filter string="Production Line" name="group_production_line" context="{'group_by': 'x_production_line_id'}"/>
                 </group>
+                <!-- 左侧 aside 导航树：车间 → 产线
+                     Odoo 19 searchpanel 联动规则: 被 domain 引用的字段必须单选(select="1"),
+                     带 domain 的字段必须多选(select="multi")。
+                     所以: 车间单选(选一个), 产线多选并按所选车间联动过滤。 -->
+                <searchpanel view_types="kanban,list">
+                    <field name="x_workshop_id" string="Workshop" select="1" icon="fa-industry" enable_counters="1"/>
+                    <field name="x_production_line_id" string="Production Line" select="multi" icon="fa-stream" enable_counters="1"
+                           domain="[('workshop_id', 'in', x_workshop_id)]"/>
+                </searchpanel>
             </xpath>
         </field>
     </record>
@@ -109,6 +118,18 @@
                 <field name="x_process_route_id" optional="show"/>
                 <field name="x_workshop_id" optional="show"/>
             </xpath>
+        </field>
+    </record>
+
+    <!-- 覆盖原生 Work Centers action：左侧 aside 导航(车间/产线)由 searchpanel 提供 -->
+    <record id="mrp.mrp_workcenter_action" model="ir.actions.act_window">
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new work center
+          </p><p>
+            Manufacturing operations are processed at Work Centers. Use the workshop
+            and production line filters on the left to narrow the list.
+          </p>
         </field>
     </record>
 </odoo>
