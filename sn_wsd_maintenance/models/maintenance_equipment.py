@@ -355,6 +355,22 @@ class SnSmtWorkcenterDevice(models.Model):
         required=True,
     )
     note = fields.Char(string='Note')
+    # 设备关联信息（只读，从所选设备自动带入）
+    device_sn = fields.Char(
+        related='device_id.serial_no',
+        string='Device SN',
+        store=True,
+    )
+    device_name = fields.Char(
+        related='device_id.name',
+        string='Device Name',
+    )
+    device_category_id = fields.Many2one(
+        'maintenance.equipment.category',
+        related='device_id.category_id',
+        string='Device Category',
+        store=True,
+    )
 
     _sn_smt_workcenter_device_seq_unique = models.Constraint(
         'unique(workcenter_id, device_seq)',

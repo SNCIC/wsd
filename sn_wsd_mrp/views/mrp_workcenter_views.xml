@@ -17,6 +17,15 @@
                     <filter string="Workshop" name="group_workshop" context="{'group_by': 'x_workshop_id'}"/>
                     <filter string="Production Line" name="group_production_line" context="{'group_by': 'x_production_line_id'}"/>
                 </group>
+                <!-- 左侧 aside 导航树：车间 → 产线
+                     Odoo 19 searchpanel 联动规则: 被 domain 引用的字段必须单选(select="1"),
+                     带 domain 的字段必须多选(select="multi")。
+                     所以: 车间单选(选一个), 产线多选并按所选车间联动过滤。 -->
+                <searchpanel view_types="kanban,list">
+                    <field name="x_workshop_id" string="Workshop" select="1" icon="fa-industry" enable_counters="1"/>
+                    <field name="x_production_line_id" string="Production Line" select="multi" icon="fa-stream" enable_counters="1"
+                           domain="[('workshop_id', 'in', x_workshop_id)]"/>
+                </searchpanel>
             </xpath>
         </field>
     </record>
@@ -26,14 +35,11 @@
         <field name="model">mrp.workcenter</field>
         <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='code']" position="attributes">
-                <attribute name="required">True</attribute>
-            </xpath>
             <xpath expr="//field[@name='code']" position="after">
                 <field name="x_workcenter_type" optional="show"/>
                 <field name="x_workshop_id" optional="show"/>
                 <field name="x_production_line_id" optional="show"/>
-                <field name="x_operation_ids" optional="show" widget="many2many_tags"/>
+                <field name="x_operation_id" optional="show"/>
                 <field name="x_workcenter_status" optional="show"/>
             </xpath>
         </field>
@@ -44,25 +50,27 @@
         <field name="model">mrp.workcenter</field>
         <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <!-- 工作中心编码移到第一位(名称前) -->
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="code" position="move"/>
             </xpath>
             <xpath expr="//field[@name='code']" position="attributes">
-                <attribute name="required">True</attribute>
+                <attribute name="string">工作中心编码</attribute>
+                <attribute name="placeholder">留空自动生成</attribute>
             </xpath>
-            <xpath expr="//notebook/page[@name='general_info']" position="after">
-                <page string="Scope Information" name="scope_info">
+            <!-- 在原生顶部 group(名称/代码) 后插入车间/产线/工序/状态 -->
+            <xpath expr="//sheet//group[1]" position="after">
+                <group string="生产组织">
                     <group>
-                        <group>
-                            <field name="x_workcenter_type"/>
-                            <field name="x_workshop_id"/>
-                            <field name="x_operation_ids" widget="many2many_tags"/>
-                        </group>
-                        <group>
-                            <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]" invisible="x_workcenter_type != 'line'" required="x_workcenter_type == 'line'"/>
-                            <field name="x_workcenter_status"/>
-                        </group>
+                        <field name="x_workshop_id" required="1"/>
+                        <field name="x_production_line_id" string="产线" domain="[('workshop_id', '=', x_workshop_id)]"/>
+                        <field name="x_operation_id" string="工序" required="1"/>
                     </group>
-                </page>
+                    <group>
+                        <field name="x_workcenter_status"/>
+                        <field name="x_workcenter_type" invisible="1"/>
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>
@@ -109,6 +117,18 @@
                 <field name="x_process_route_id" optional="show"/>
                 <field name="x_workshop_id" optional="show"/>
             </xpath>
+        </field>
+    </record>
+
+    <!-- 覆盖原生 Work Centers action：左侧 aside 导航(车间/产线)由 searchpanel 提供 -->
+    <record id="mrp.mrp_workcenter_action" model="ir.actions.act_window">
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new work center
+          </p><p>
+            Manufacturing operations are processed at Work Centers. Use the workshop
+            and production line filters on the left to narrow the list.
+          </p>
         </field>
     </record>
 </odoo>

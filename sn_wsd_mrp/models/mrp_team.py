@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_is_zero
 
 
@@ -10,7 +10,7 @@ class SnMrpTeam(models.Model):
     _check_company_auto = True
 
     name = fields.Char(required=True)
-    code = fields.Char(required=True, index=True)
+    code = fields.Char(index=True, copy=False)
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
     state = fields.Selection(
@@ -146,6 +146,14 @@ class SnMrpTeam(models.Model):
                 vals['state'] = 'inactive'
             elif vals.get('state') == 'inactive' and 'active' not in vals:
                 vals['active'] = False
+            if not vals.get('code'):
+                code = self.env['ir.sequence'].next_by_code('sn.mrp.team')
+                if not code:
+                    raise UserError(_(
+                        'The coding rule is not configured. Please create an ir.sequence '
+                        'with code %s in Settings > Technical > Sequences.'
+                    ) % 'sn.mrp.team')
+                vals['code'] = code
         return super().create(vals_list)
 
     def write(self, vals):

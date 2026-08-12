@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 class SnMrpWorkshop(models.Model):
@@ -8,7 +9,7 @@ class SnMrpWorkshop(models.Model):
     _check_company_auto = True
 
     name = fields.Char(required=True)
-    code = fields.Char(required=True, index=True)
+    code = fields.Char(index=True, copy=False)
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
@@ -64,6 +65,19 @@ class SnMrpWorkshop(models.Model):
         default.setdefault('active', True)
         return super().copy(default=default)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('code'):
+                code = self.env['ir.sequence'].next_by_code('sn.mrp.workshop')
+                if not code:
+                    raise UserError(_(
+                        'The coding rule is not configured. Please create an ir.sequence '
+                        'with code %s in Settings > Technical > Sequences.'
+                    ) % 'sn.mrp.workshop')
+                vals['code'] = code
+        return super().create(vals_list)
+
 
 class SnMrpProductionLine(models.Model):
     _name = 'sn.mrp.production.line'
@@ -72,7 +86,7 @@ class SnMrpProductionLine(models.Model):
     _check_company_auto = True
 
     name = fields.Char(required=True)
-    code = fields.Char(required=True, index=True)
+    code = fields.Char(index=True, copy=False)
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
@@ -101,6 +115,12 @@ class SnMrpProductionLine(models.Model):
         copy=False,
     )
     note = fields.Text()
+    x_smt_is_feeder_control = fields.Boolean(string='Feeder Control')
+    x_line_type = fields.Selection(
+        [('auto', 'Automated Line'), ('manual', 'Manual Line')],
+        string='Line Type',
+        default='manual',
+    )
 
     _sn_mrp_production_line_company_code_unique = models.Constraint(
         'unique(company_id, code)',
@@ -132,4 +152,17 @@ class SnMrpProductionLine(models.Model):
         default.setdefault('code', self._get_copy_code())
         default.setdefault('active', True)
         return super().copy(default=default)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('code'):
+                code = self.env['ir.sequence'].next_by_code('sn.mrp.production.line')
+                if not code:
+                    raise UserError(_(
+                        'The coding rule is not configured. Please create an ir.sequence '
+                        'with code %s in Settings > Technical > Sequences.'
+                    ) % 'sn.mrp.production.line')
+                vals['code'] = code
+        return super().create(vals_list)
 

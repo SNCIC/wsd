@@ -56,4 +56,36 @@
         <field name="company_id" eval="False"/>
     </record>
 
+    <record id="seq_sn_mrp_workshop" model="ir.sequence">
+        <field name="name">Manufacturing Workshop</field>
+        <field name="code">sn.mrp.workshop</field>
+        <field name="prefix">WS</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_mrp_production_line" model="ir.sequence">
+        <field name="name">Manufacturing Production Line</field>
+        <field name="code">sn.mrp.production.line</field>
+        <field name="prefix">PL</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_sn_mrp_team" model="ir.sequence">
+        <field name="name">Manufacturing Team</field>
+        <field name="code">sn.mrp.team</field>
+        <field name="prefix">TM</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_mrp_workcenter" model="ir.sequence">
+        <field name="name">Work Center</field>
+        <field name="code">mrp.workcenter</field>
+        <field name="prefix">WC</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
 </odoo>

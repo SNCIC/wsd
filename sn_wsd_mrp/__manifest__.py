@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD MRP',
-    'version': '19.0.3.5.7',
+    'version': '19.0.3.6.0',
     'summary': 'Manufacturing and internal serial extensions built on Odoo MRP',
     'depends': ['product', 'mrp', 'stock', 'maintenance', 'hr', 'mail'],
     'data': [
@@ -28,6 +28,7 @@
         'web.assets_backend': [
             ('include', 'web.chartjs_lib'),
             'sn_wsd_mrp/static/src/scss/mrp_production.scss',
+            'sn_wsd_mrp/static/src/views/fields/x2many_multi_add/x2many_multi_add_field.js',
         ],
     },
     'installable': True,
