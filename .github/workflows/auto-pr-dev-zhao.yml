@@ -1,0 +1,55 @@
+name: Auto-create PR for dev-zhao
+
+on:
+  push:
+    branches:
+      - dev-zhao
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: auto-pr-dev-zhao
+  cancel-in-progress: true
+
+jobs:
+  create-or-update-pull-request:
+    name: Create or update pull request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the pushed branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create a pull request when none exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          if [ "$(git rev-list --count origin/main..HEAD)" -eq 0 ]; then
+            echo "The pushed branch has no commits ahead of main."
+            exit 0
+          fi
+
+          pr_number="$(gh pr list \
+            --base main \
+            --head dev-zhao \
+            --state open \
+            --json number \
+            --jq '.[0].number // ""')"
+
+          if [ -n "$pr_number" ]; then
+            echo "Pull request #${pr_number} already exists."
+            echo "The pushed commits have been added to it automatically."
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head dev-zhao \
+            --title "Merge dev-zhao into main" \
+            --body "This pull request was created automatically after commits were pushed to dev-zhao."
