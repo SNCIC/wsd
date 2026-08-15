@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, Command
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
 
@@ -34,6 +34,44 @@ class MrpProduction(models.Model):
         store=True,
         readonly=True,
     )
+    x_route_id = fields.Many2one(
+        'sn.wsd.process.route',
+        string='Process Route (Independent)',
+        copy=True,
+        tracking=True,
+        help='Independent route snapshot; no longer derived from the BOM.',
+    )
+
+    @api.onchange('product_id')
+    def _onchange_x_route_id_from_drawing_no(self):
+        # BOM/Routing decoupling: the route is resolved through the product's
+        # 图号 (drawing number), not through the BOM. Seed the independent
+        # x_route_id from the current released route matching the 图号, but
+        # only when it is empty so a manually chosen route is preserved.
+        for production in self:
+            if production.x_route_id:
+                continue
+            route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
+                production.product_id.x_drawing_no, production.company_id.id)
+            if route:
+                production.x_route_id = route
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        productions = super().create(vals_list)
+        # BOM/Routing decoupling: snapshot the current effective route for the
+        # product's 图号 into the independent x_route_id at creation (unless
+        # explicitly set). The onchange only fires from the UI form, so
+        # programmatic creation (import, daily-plan generation, ...) needs
+        # this explicit seeding.
+        for production in productions:
+            if not production.x_route_id:
+                route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
+                    production.product_id.x_drawing_no, production.company_id.id)
+                if route:
+                    production.x_route_id = route
+        return productions
+
     x_is_eip_material = fields.Boolean(
         string='EIP',
         related='product_id.is_eip_material',

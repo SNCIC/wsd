@@ -48,7 +48,7 @@
                 <field name="x_actual_finished_date" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='bom_id']" position="after">
-                <field name="x_process_route_id" optional="show" groups="mrp.group_mrp_routings"/>
+                <field name="x_route_id" optional="show" groups="mrp.group_mrp_routings"/>
                 <field name="x_workshop_id" optional="show"/>
                 <field name="x_production_line_id" optional="show"/>
                 <field name="x_online_state" optional="show"/>
@@ -95,7 +95,7 @@
                 <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]"/>
             </xpath>
             <xpath expr="//div[@name='bom_div']" position="after">
-                <field name="x_process_route_id" readonly="1" groups="mrp.group_mrp_routings"/>
+                <field name="x_route_id" groups="mrp.group_mrp_routings"/>
             </xpath>
             <xpath expr="//field[@name='move_raw_ids']" position="attributes">
                 <attribute name="domain">[('state', 'not in', ['done', 'cancel'])]</attribute>

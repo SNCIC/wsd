@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="sn_wsd_route_graph.RouteFormActions">
+        <div t-if="inEdition" class="o_route_form_actions d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-primary" t-on-click="onClickSave">保存</button>
+            <button type="button" class="btn btn-secondary" t-on-click="onClickDiscard">取消</button>
+            <span class="text-muted small">保存：流程结构变化自动升版，其他改动不升版 · 取消：不保存任何改动</span>
+        </div>
+    </t>
+    <t t-name="sn_wsd_route_graph.RouteFlowEditor">
+        <div class="o_route_flow_root">
+            <div class="o_route_flow_toolbar">
+                <button t-if="isFullscreenAction" class="btn btn-secondary btn-sm" t-on-click="onClickBack">返回</button>
+                <button class="btn btn-secondary btn-sm" t-on-click="onFitScreen">适应屏幕</button>
+                <span class="o_route_flow_hint">流程图改动随页面"保存"生效：流程结构变化自动升版，仅调整位置或改其他字段不升版</span>
+            </div>
+            <div class="o_route_flow_shell">
+                <!-- Left: operation palette -->
+                <div class="o_route_flow_palette">
+                    <div class="o_route_flow_palette_header">
+                        可用工序 <span class="text-muted" t-esc="paletteAvailableCount"/>
+                    </div>
+                    <div class="o_route_flow_palette_body">
+                        <t t-foreach="paletteGroups" t-as="group" t-key="group.key">
+                            <div class="o_palette_group_title" t-esc="group.label"/>
+                            <div t-foreach="group.ops" t-as="op" t-key="op.id"
+                                 t-att-class="'o_palette_card ' + paletteThemeClass(op) + (op.used ? ' o_used' : '')"
+                                 t-on-click="onPaletteClick"
+                                 t-att-data-op-id="op.id">
+                                <div class="o_palette_icon" t-esc="paletteIcon(op)"/>
+                                <div class="o_palette_name" t-esc="op.name || op.code"/>
+                            </div>
+                        </t>
+                        <div t-if="paletteGroups.length === 0" class="text-muted text-center small" style="padding:24px 8px;">
+                            没有可用工序
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: graph canvas -->
+                <div class="o_route_flow_canvas">
+                    <div t-ref="container" class="o_route_flow_x6" style="width:100%;height:100%;"/>
+                </div>
+
+                <!-- Right: property panel (matches reference: 属性面板 / 工序属性 / 工序序号 / 当前工序 / 工序特性) -->
+                <div class="o_route_flow_panel" t-if="state.selected">
+                    <div class="o_prop_head">
+                        <strong>属性面板</strong>
+                        <button type="button" class="o_prop_close" t-on-click="onClosePanel">×</button>
+                    </div>
+                    <div class="o_prop_sub">工序属性 (<span t-esc="state.selected.name || ''"/>)</div>
+                    <div class="mb-2">
+                        <label class="o_prop_label">工序序号</label>
+                        <input type="number" class="form-control form-control-sm" t-att-value="state.selected.sequence" t-on-change="onSequenceChange"/>
+                    </div>
+                    <div class="mb-2">
+                        <label class="o_prop_label">当前工序</label>
+                        <input type="text" class="form-control form-control-sm" t-att-value="state.selected.name" readonly="1"/>
+                    </div>
+                    <div class="mt-2">
+                        <label class="o_prop_label">工序特性</label>
+                        <div class="o_prop_tags">
+                            <button type="button" t-att-class="state.selected.x_allow_entry ? 'o_prop_tag o_prop_tag_on o_prop_tag_start' : 'o_prop_tag'" t-on-click="onToggleStart">开始工序</button>
+                            <button type="button" t-att-class="state.selected.x_allow_exit ? 'o_prop_tag o_prop_tag_on o_prop_tag_end' : 'o_prop_tag'" t-on-click="onToggleEnd">结束工序</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No placeholder: when nothing is selected the canvas (flex:1) expands full width. -->
+            </div>
+        </div>
+    </t>
+
+    <t t-name="sn_wsd_route_graph.RouteFlowViewer">
+        <div class="o_flow_viewer" t-att-style="props.height ? 'height:' + props.height : 'height:420px'">
+            <div t-if="!props.graphData or !props.graphData.nodes or !props.graphData.nodes.length" class="o_flow_viewer_empty">
+                <span t-esc="props.emptyLabel || '暂无流程图'"/>
+            </div>
+            <div t-ref="viewer" t-if="props.graphData and props.graphData.nodes and props.graphData.nodes.length"
+                 style="width:100%;height:100%;"/>
+        </div>
+    </t>
+
+    <t t-name="sn_wsd_route_graph.RouteFlowViewerWidget">
+        <RouteFlowViewer t-if="state.graphData" graphData="state.graphData" height="'480px'"/>
+        <div t-if="!state.graphData" class="text-muted p-3">流程图加载中...</div>
+    </t>
+
+    <t t-name="sn_wsd_route_graph.RouteVersionCompare">
+        <div class="o_route_compare">
+            <div class="o_route_compare_toolbar">
+                <button class="btn btn-secondary btn-sm" t-on-click="onClickBack">返回</button>
+                <strong t-esc="routeName"/>
+                <span class="text-muted">|</span>
+                <label class="mb-0">版本A</label>
+                <select class="form-select form-select-sm" style="width:auto" t-on-change="onChangeA">
+                    <option t-foreach="state.options" t-as="opt" t-key="opt.key"
+                            t-att-value="opt.key" t-att-selected="opt.key === state.selA ? 'selected' : undefined"
+                            t-esc="opt.label"/>
+                </select>
+                <label class="mb-0">版本B</label>
+                <select class="form-select form-select-sm" style="width:auto" t-on-change="onChangeB">
+                    <option t-foreach="state.options" t-as="opt" t-key="opt.key"
+                            t-att-value="opt.key" t-att-selected="opt.key === state.selB ? 'selected' : undefined"
+                            t-esc="opt.label"/>
+                </select>
+                <span class="ms-auto text-muted small">左右画布均可缩放/拖动 · 只读</span>
+            </div>
+            <div class="o_route_compare_panes">
+                <div class="o_route_compare_pane">
+                    <div class="o_route_compare_pane_header">
+                        <span class="badge bg-primary" t-esc="optionLabel(state.selA) || 'A'"/>
+                        <span class="text-muted small">版本A</span>
+                    </div>
+                    <div class="o_route_compare_pane_canvas">
+                        <RouteFlowViewer t-if="state.graphA" t-key="'A' + state.selA" graphData="state.graphA"/>
+                    </div>
+                </div>
+                <div class="o_route_compare_pane">
+                    <div class="o_route_compare_pane_header">
+                        <span class="badge bg-success" t-esc="optionLabel(state.selB) || 'B'"/>
+                        <span class="text-muted small">版本B</span>
+                    </div>
+                    <div class="o_route_compare_pane_canvas">
+                        <RouteFlowViewer t-if="state.graphB" t-key="'B' + state.selB" graphData="state.graphB"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

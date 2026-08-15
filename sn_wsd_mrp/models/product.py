@@ -32,6 +32,10 @@ class ProductTemplate(models.Model):
         string='Rated Current',
         tracking=True,
     )
+    x_drawing_no = fields.Char(
+        string='Drawing No.',
+        tracking=True,
+    )
 
 
 class ProductProduct(models.Model):
@@ -39,6 +43,11 @@ class ProductProduct(models.Model):
 
     material_specification = fields.Char(
         related='product_tmpl_id.material_specification',
+        store=True,
+        readonly=False,
+    )
+    x_drawing_no = fields.Char(
+        related='product_tmpl_id.x_drawing_no',
         store=True,
         readonly=False,
     )

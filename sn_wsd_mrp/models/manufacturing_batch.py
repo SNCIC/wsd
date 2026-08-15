@@ -382,7 +382,7 @@ class SnManufacturingBatch(models.Model):
             'product_uom_id': production.product_uom_id.id,
             'bom_id': production.bom_id.id,
             'route_id': production.x_process_route_id.id,
-            'route_revision': production.x_process_route_id.x_revision if production.x_process_route_id else False,
+            'route_version': production.x_process_route_id.version if production.x_process_route_id else 0,
             'production_group_id': production.production_group_id.id,
         }
         self.write(values)
@@ -578,7 +578,7 @@ class MrpProduction(models.Model):
                 'product_uom_id': production.product_uom_id.id,
                 'bom_id': production.bom_id.id,
                 'route_id': production.x_process_route_id.id,
-                'route_revision': production.x_process_route_id.x_revision if production.x_process_route_id else False,
+                'route_version': production.x_process_route_id.version if production.x_process_route_id else 0,
                 'origin_production_id': production.id,
                 'production_group_id': production.production_group_id.id,
             })

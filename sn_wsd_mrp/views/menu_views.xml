@@ -30,6 +30,7 @@
         <field name="action" ref="action_sn_wsd_process_route_operation"/>
     </record>
     <menuitem id="menu_sn_wsd_process_route" name="Process Routes" parent="menu_sn_mrp_base_config" action="action_sn_wsd_process_route" sequence="27"/>
+    <menuitem id="menu_sn_wsd_process_route_drawing" name="Drawing Number Binding" parent="menu_sn_mrp_base_config" action="action_sn_wsd_process_route_drawing" sequence="30"/>
     <menuitem id="menu_sn_wsd_traceability" name="Traceability" parent="mrp.menu_mrp_root" sequence="90"/>
     <menuitem id="menu_sn_wsd_manufacturing_batch" name="Manufacturing Batches" parent="menu_sn_wsd_traceability" action="action_sn_wsd_manufacturing_batch" sequence="5"/>
     <menuitem id="menu_sn_wsd_internal_serial" name="Internal Serials" parent="menu_sn_wsd_traceability" action="action_sn_wsd_internal_serial" sequence="10"/>

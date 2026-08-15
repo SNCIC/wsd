@@ -88,4 +88,12 @@
         <field name="company_id" eval="False"/>
     </record>
 
+    <record id="seq_sn_wsd_operation" model="ir.sequence">
+        <field name="name">Standard Operation</field>
+        <field name="code">sn.wsd.operation</field>
+        <field name="prefix">OP</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
 </odoo>

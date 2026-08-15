@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Version history is accessed through the side-by-side compare action
+         only (route form smart button); there is no version list/form page. -->
+    <record id="action_route_version_compare" model="ir.actions.client">
+        <field name="name">Compare Route Versions</field>
+        <field name="tag">route_version_compare</field>
+    </record>
+</odoo>
