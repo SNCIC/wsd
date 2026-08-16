@@ -285,11 +285,11 @@ class MrpProduction(models.Model):
                 raise ValidationError(_('Please set the SMT production line first.'))
             if not production.x_smt_product_side:
                 raise ValidationError(_('Please set the SMT product side first.'))
-            if not production.x_production_line_id:
-                production.x_production_line_id = production.x_smt_production_line_id
             if not production.x_workshop_id:
                 production.x_workshop_id = production.x_smt_production_line_id.workshop_id
-            production.action_set_online()
+            # Online is carried by the MES orders (制令单): the SMT online
+            # materials are prepared by the sn.wsd.mes.order online hook.
+            production._action_online_mes_orders()
         return True
 
     def action_open_smt_online_materials(self):
@@ -335,3 +335,20 @@ class MrpProduction(models.Model):
 
     def action_open_smt_change_wizard(self):
         return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_change_wizard_form')
+
+
+class MesOrderSmtOnline(models.Model):
+    """Hook the SMT online-material preparation onto the MES-order (制令单)
+    online flow: replacing the legacy MO-level online, the SMT table is now
+    prepared when the MES order goes online."""
+
+    _inherit = 'sn.wsd.mes.order'
+
+    def action_online(self):
+        smt_productions = self.mapped('production_id').filtered('x_has_smt_operations')
+        if smt_productions:
+            smt_productions._prepare_smt_online_materials()
+        super().action_online()
+        if smt_productions:
+            smt_productions.write({'x_smt_online_state': 'online'})
+        return True

@@ -1,11 +1,12 @@
 {
     'name': 'SN WSD MRP',
-    'version': '19.0.5.0.0',
+    'version': '19.0.6.1.0',
     'summary': 'Manufacturing and internal serial extensions built on Odoo MRP',
-    'depends': ['product', 'mrp', 'stock', 'maintenance', 'hr', 'mail'],
+    'depends': ['product', 'mrp', 'stock', 'purchase', 'maintenance', 'hr', 'mail'],
     'data': [
         'data/stock_package_type.xml',
         'data/ir_sequence.xml',
+        'security/mes_security.xml',
         'security/ir.model.access.csv',
         'wizard/mrp_team_member_wizard_views.xml',
         'wizard/mrp_electronics_wizard_views.xml',
@@ -20,6 +21,8 @@
         'views/meter_aging_views.xml',
         'views/meter_pack_views.xml',
         'views/mrp_production_views.xml',
+        'views/mes_order_views.xml',
+        'views/mes_route_check_views.xml',
         'views/manufacturing_batch_views.xml',
         'views/mrp_workorder_views.xml',
         'views/product_views.xml',

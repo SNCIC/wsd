@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_plm
 #
@@ -114,7 +114,7 @@ msgstr "请在主料（原始元件）行上应用替代料，而非在替代料
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_bom_ids
 msgid "Available Bom"
-msgstr ""
+msgstr "可用 BOM"
 
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__original_qty
@@ -124,7 +124,7 @@ msgstr "可用用量"
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_route_ids
 msgid "Available Route"
-msgstr ""
+msgstr "可用路线"
 
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__available_substitute_ids
@@ -254,7 +254,7 @@ msgstr "BOM版本对比"
 #. module: sn_wsd_plm
 #: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_version_compare_line
 msgid "BoM Version Comparison Line"
-msgstr ""
+msgstr "BOM 版本对比行"
 
 #. module: sn_wsd_plm
 #. odoo-python
@@ -311,7 +311,7 @@ msgstr "关闭"
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__company_id
 msgid "Company"
-msgstr ""
+msgstr "公司"
 
 #. module: sn_wsd_plm
 #: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
@@ -1103,7 +1103,7 @@ msgstr "源BOM必须为设计BOM(EBOM)。"
 msgid ""
 "The substitute product is not present on the manufacturing order. Update the"
 " production BoM and regenerate the order before recording usage."
-msgstr ""
+msgstr "替代料不存在于该制造订单。请更新生产 BOM 并重新生成订单后再记录用量。"
 
 #. module: sn_wsd_plm
 #. odoo-python
@@ -1157,7 +1157,7 @@ msgstr "历史版本"
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__wizard_id
 msgid "Wizard"
-msgstr ""
+msgstr "向导"
 
 #. module: sn_wsd_plm
 #. odoo-python
@@ -1185,3 +1185,18 @@ msgstr "汇总"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
 msgid "Process Route Operation Differences"
 msgstr "工艺路线工序差异"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__byproduct_line_ids
+msgid "By-product Lines"
+msgstr "副产品行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__component_line_ids
+msgid "Component Lines"
+msgstr "组件行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__route_operation_line_ids
+msgid "Process Route Operation Lines"
+msgstr "工艺路线工序行"

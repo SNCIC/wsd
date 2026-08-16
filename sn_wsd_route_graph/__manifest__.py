@@ -17,6 +17,7 @@ First version loads X6 from CDN; swap to a local static asset for production.
             'sn_wsd_route_graph/static/src/xml/route_graph_templates.xml',
             'sn_wsd_route_graph/static/src/js/route_graph_editor.js',
             'sn_wsd_route_graph/static/src/js/route_flow_widget.js',
+            'sn_wsd_route_graph/static/src/js/mes_order_route_widget.js',
             'sn_wsd_route_graph/static/src/js/route_form_actions.js',
             'sn_wsd_route_graph/static/src/js/route_flow_viewer.js',
             'sn_wsd_route_graph/static/src/js/route_version_compare.js',

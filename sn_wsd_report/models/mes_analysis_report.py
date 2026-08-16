@@ -39,7 +39,7 @@ class SnWsdProductionProgressReport(models.Model):
                     p.name AS production_name,
                     p.company_id,
                     p.product_id,
-                    p.x_process_route_id AS route_id,
+                    p.x_route_id AS route_id,
                     p.product_qty,
                     COALESCE(SUM(wo.qty_produced), 0.0) AS qty_output_total,
                     COALESCE(SUM(wo.x_meter_qty_pass), 0.0) AS qty_pass,
@@ -58,7 +58,7 @@ class SnWsdProductionProgressReport(models.Model):
                     COUNT(*) FILTER (WHERE wo.state = 'done') AS done_workorder_count
                 FROM mrp_production p
                 LEFT JOIN mrp_workorder wo ON wo.production_id = p.id
-                GROUP BY p.id, p.name, p.company_id, p.product_id, p.x_process_route_id, p.product_qty
+                GROUP BY p.id, p.name, p.company_id, p.product_id, p.x_route_id, p.product_qty
             )
         """)
 

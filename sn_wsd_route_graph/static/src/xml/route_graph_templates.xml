@@ -71,6 +71,66 @@
         </div>
     </t>
 
+    <t t-name="sn_wsd_route_graph.MesOrderRouteEditor">
+        <div class="o_mes_route_root">
+            <div class="o_mes_route_toolbar">
+                <button t-if="state.editable" class="btn btn-primary btn-sm" t-on-click="onClickSave"
+                        t-att-disabled="state.saving or !state.dirty">保存</button>
+                <button class="btn btn-secondary btn-sm" t-on-click="onFitScreen">适应屏幕</button>
+                <span class="o_mes_route_hint" t-if="state.editable">
+                    编辑只作用于本制令单的工艺（保存后不再自动跟随公共路线）；带 🔒 的工序已有执行记录，不可修改
+                </span>
+                <span class="o_mes_route_hint" t-if="!state.editable">制令单已关闭，工艺只读</span>
+            </div>
+            <div class="o_mes_route_shell">
+                <div class="o_mes_route_palette" t-if="state.editable">
+                    <div class="o_mes_route_palette_header">
+                        可用工序 <span class="text-muted" t-esc="paletteAvailableCount"/>
+                    </div>
+                    <div class="o_mes_route_palette_body">
+                        <t t-foreach="paletteGroups" t-as="group" t-key="group.key">
+                            <div class="o_palette_group_title" t-esc="group.label"/>
+                            <div t-foreach="group.ops" t-as="op" t-key="op.id"
+                                 t-att-class="'o_palette_card' + (op.used ? ' o_used' : '')"
+                                 t-on-click="onPaletteClick"
+                                 t-att-data-op-id="op.id">
+                                <div class="o_palette_name" t-esc="op.name || op.code"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <div class="o_mes_route_canvas">
+                    <div t-ref="container" style="width:100%;height:100%;"/>
+                </div>
+                <div class="o_route_flow_panel" t-if="state.selected">
+                    <div class="o_prop_head">
+                        <strong>属性面板</strong>
+                        <button type="button" class="o_prop_close" t-on-click="onClosePanel">×</button>
+                    </div>
+                    <div class="o_prop_sub">工序属性 (<span t-esc="state.selected.name || ''"/>)</div>
+                    <div class="mb-2">
+                        <label class="o_prop_label">工序序号</label>
+                        <input type="number" class="form-control form-control-sm" t-att-value="state.selected.sequence" t-on-change="onSequenceChange"/>
+                    </div>
+                    <div class="mb-2">
+                        <label class="o_prop_label">当前工序</label>
+                        <input type="text" class="form-control form-control-sm" t-att-value="state.selected.name" readonly="1"/>
+                    </div>
+                    <div class="mt-2">
+                        <label class="o_prop_label">工序特性</label>
+                        <div class="o_prop_tags">
+                            <button type="button" t-att-class="state.selected.x_allow_entry ? 'o_prop_tag o_prop_tag_on o_prop_tag_start' : 'o_prop_tag'" t-on-click="onToggleStart">开始工序</button>
+                            <button type="button" t-att-class="state.selected.x_allow_exit ? 'o_prop_tag o_prop_tag_on o_prop_tag_end' : 'o_prop_tag'" t-on-click="onToggleEnd">结束工序</button>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span t-if="state.selected._frozen" class="o_prop_tag" style="background:#8c8c8c;border-color:#8c8c8f;">已执行(锁定)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
     <t t-name="sn_wsd_route_graph.RouteFlowViewer">
         <div class="o_flow_viewer" t-att-style="props.height ? 'height:' + props.height : 'height:420px'">
             <div t-if="!props.graphData or !props.graphData.nodes or !props.graphData.nodes.length" class="o_flow_viewer_empty">

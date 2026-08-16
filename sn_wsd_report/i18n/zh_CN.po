@@ -33,7 +33,8 @@ msgid ""
 "<span class=\"o_sn_wsd_terminal_footer_note\">Use serial mode for station "
 "flow, and quantity mode for counted output posting.</span>"
 msgstr ""
-"<span class=\"o_sn_wsd_terminal_footer_note\">工位流转使用序列号模式，计件产量过账使用数量模式。</span>"
+"<span "
+"class=\"o_sn_wsd_terminal_footer_note\">工位流转使用序列号模式，计件产量过账使用数量模式。</span>"
 
 #. module: sn_wsd_report
 #: model:ir.model.fields.selection,name:sn_wsd_report.selection__mrp_workorder_report__source_type__api
@@ -2021,3 +2022,22 @@ msgstr "只有制造管理者可以纠正报工。"
 msgid "Manufacturing Batch"
 msgstr "制造批次"
 
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/mrp_workorder_report_bridge.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_report.view_sn_wsd_workorder_terminal_wizard_form
+msgid "Terminal Report"
+msgstr "终端报表"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/workorder_report.py:0
+msgid ""
+"The selected manufacturing order must belong to the selected manufacturing "
+"batch."
+msgstr "所选制造订单必须属于所选制造批次。"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_mrp_workorder_report_correction_wizard
+msgid "Workorder Report Correction Wizard"
+msgstr "工单报表修正向导"

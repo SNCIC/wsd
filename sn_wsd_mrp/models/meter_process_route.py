@@ -3,7 +3,11 @@ import json
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 
-from .constants import PROCESS_SECTION_SELECTION, STATION_TYPE_SELECTION
+from .constants import (
+    PROCESS_SECTION_SELECTION,
+    SIDE_SELECTION,
+    STATION_TYPE_SELECTION,
+)
 
 
 class SnWsdOperation(models.Model):
@@ -165,8 +169,10 @@ class MeterProcessRoute(models.Model):
         string='Meter Product Type',
     )
     x_production_side = fields.Selection(
-        [('single', 'Single'), ('top', 'Top (T)'), ('bottom', 'Bottom (B)')],
+        SIDE_SELECTION,
         string='Production Side',
+        help='Board side this route produces. Scheduling a MES order resolves '
+             'the live route by drawing number AND side.',
     )
     x_production_stage = fields.Selection(
         [('smt', 'SMT'), ('insertion', 'Insertion'), ('assembly', 'Assembly')],
@@ -181,15 +187,6 @@ class MeterProcessRoute(models.Model):
         string='Predecessor Route',
         ondelete='set null',
         index=True,
-    )
-    bom_ids = fields.One2many(
-        'mrp.bom',
-        'x_process_route_id',
-        string='Linked Bills of Material',
-    )
-    bom_count = fields.Integer(
-        string='Linked BoM Count',
-        compute='_compute_route_counts',
     )
     route_operation_ids = fields.One2many(
         'sn.wsd.process.route.operation',
@@ -293,10 +290,9 @@ class MeterProcessRoute(models.Model):
         'The process route code must be unique per company.',
     )
 
-    @api.depends('route_flow_json', 'route_operation_ids', 'bom_ids')
+    @api.depends('route_flow_json', 'route_operation_ids')
     def _compute_route_counts(self):
         for route in self:
-            route.bom_count = len(route.bom_ids)
             # Operation count comes from the flow JSON (source of truth).
             route.operation_count = len(route._flow_graph()['nodes'])
 
@@ -370,13 +366,17 @@ class MeterProcessRoute(models.Model):
             ) if nodes else False
 
     @api.model
-    def _find_current_route_by_drawing_no(self, drawing_no, company_id=None):
+    def _find_current_route_by_drawing_no(self, drawing_no, company_id=None, side=None, workshop_id=None):
         """Return the current confirmed+active route bound to the given drawing number.
 
-        A route may bind multiple drawing numbers (物料编号/图号) via
-        sn.wsd.process.route.drawing. This helper resolves the current effective
-        route for a given 图号; falls back to the legacy single ``x_drawing_no`` on
-        the route when no binding exists (migration compatibility).
+        The drawing <-> route link lives exclusively in
+        sn.wsd.process.route.drawing (图号绑定表). Matching key is
+        车间 + 图号 + 面别:
+        - ``workshop_id`` filters by the route's workshop (workshops may each
+          maintain their own route for the same drawing + side); when omitted,
+          any workshop matches.
+        - ``side`` (single/top/bottom) filters by the route's explicitly
+          declared production side; a route without a side matches no side.
         """
         if not drawing_no:
             return self.env['sn.wsd.process.route']
@@ -386,15 +386,69 @@ class MeterProcessRoute(models.Model):
         domain = [
             ('state', '=', 'confirmed'),
             ('active', '=', True),
+            ('id', 'in', bound_route_ids or [False]),
         ]
-        if bound_route_ids:
-            domain.append(('id', 'in', bound_route_ids))
-        else:
-            # Legacy fallback: single drawing number on the route.
-            domain.append(('x_drawing_no', '=', drawing_no))
+        if side:
+            domain.append(('x_production_side', '=', side))
+        if workshop_id:
+            domain.append(('x_workshop_id', '=', workshop_id))
         if company_id:
             domain.append(('company_id', '=', company_id))
         return self.search(domain, order='confirmed_date desc, id desc', limit=1)
+
+    @api.model
+    def _mes_side_route_map(self, drawings, company_id=None, workshop_id=None):
+        """Batch route-check lookup: {drawing_no: {side_key: live_route}}.
+
+        Mirrors ``_find_current_route_by_drawing_no`` for many drawing numbers
+        at once: bindings only, explicitly declared sides only.
+        ``workshop_id`` restricts to one workshop's routes; without it the
+        first live route per (drawing, side) wins.
+        """
+        result = {drawing: {} for drawing in drawings}
+        drawings = [d for d in drawings if d]
+        if not drawings:
+            return result
+        Drawing = self.env['sn.wsd.process.route.drawing']
+        bindings = Drawing.search([('x_drawing_no', 'in', drawings)])
+        route_ids = {binding.route_id.id for binding in bindings}
+        base = [
+            ('state', '=', 'confirmed'),
+            ('active', '=', True),
+        ]
+        if workshop_id:
+            base.append(('x_workshop_id', '=', workshop_id))
+        if company_id:
+            base.append(('company_id', '=', company_id))
+        live = {}
+        if route_ids:
+            live = self.search(
+                base + [('id', 'in', list(route_ids))],
+                order='confirmed_date desc, id desc')
+        for binding in bindings:
+            route = live.filtered(lambda r: r.id == binding.route_id.id)
+            if route and route.x_production_side:
+                result.setdefault(binding.x_drawing_no, {}).setdefault(
+                    route.x_production_side, route)
+        return result
+
+    @api.model
+    def _mes_open_route_create_action(self, drawing_no, side, workshop_id=None):
+        """Act-window opening a NEW route form prefilled with workshop +
+        drawing + side (the [Maintain Route] / per-side add buttons)."""
+        context = {'default_x_production_side': side}
+        if drawing_no:
+            context['default_x_drawing_ids'] = [(0, 0, {'x_drawing_no': drawing_no})]
+        if workshop_id:
+            context['default_x_workshop_id'] = workshop_id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('New Process Route'),
+            'res_model': 'sn.wsd.process.route',
+            'view_mode': 'form',
+            'target': 'current',
+            'context': context,
+        }
 
     @api.onchange('x_workshop_id')
     def _onchange_x_workshop_id(self):
@@ -449,29 +503,6 @@ class MeterProcessRoute(models.Model):
         routes sharing a name stay distinguishable in m2o dropdowns."""
         for route in self:
             route.display_name = ' / '.join(filter(None, [route.code, route.name]))
-
-    def _sync_linked_bom_operations(self):
-        for route in self:
-            route.bom_ids._sync_process_route_operations()
-
-    def action_open_linked_bom(self):
-        self.ensure_one()
-        action = {
-            'type': 'ir.actions.act_window',
-            'name': 'Linked Bill of Material',
-            'res_model': 'mrp.bom',
-        }
-        if len(self.bom_ids) == 1:
-            action.update({
-                'view_mode': 'form',
-                'res_id': self.bom_ids.id,
-            })
-        else:
-            action.update({
-                'view_mode': 'list,form',
-                'domain': [('id', 'in', self.bom_ids.ids)],
-            })
-        return action
 
     # ------------------------------------------------------------------
     # standalone confirmation lifecycle
@@ -662,6 +693,14 @@ class MeterProcessRoute(models.Model):
                 'confirmed_date': now,
             })
             self.message_post(body=_('Flow saved as version V%s.') % self.version)
+            # Orders not yet online follow the common route automatically —
+            # unless they were locally edited (customized): their edits are
+            # preserved until a manual sync accepts the common version back.
+            self.env['sn.wsd.mes.order'].search([
+                ('x_mes_route_id.route_id', '=', self.id),
+                ('x_online_date', '=', False),
+                ('x_mes_route_id.is_customized', '=', False),
+            ]).action_sync_route()
         elif self.state == 'draft' and nodes:
             # Unchanged structure but never went live (e.g. layout-only edit
             # before any save): go live without a new version.
@@ -689,7 +728,27 @@ class MeterProcessRoute(models.Model):
         })
         return self._apply_flow_versioning()
 
+    def _check_flow_json_cycles(self, flow_json):
+        """Cycle gate: ANY write of route_flow_json is checked against the
+        value being written — cancelled routes and copy()'s skip context
+        included. A cycle raises immediately; there is no fallback path."""
+        try:
+            data = json.loads(flow_json)
+        except (ValueError, TypeError):
+            return  # malformed json is not a cycle issue; handled downstream
+        if not isinstance(data, dict):
+            return
+        adjacency = {}
+        for edge in data.get('edges') or []:
+            src = edge.get('source')
+            tgt = edge.get('target')
+            if src and tgt and src != tgt:
+                adjacency.setdefault(tgt, set()).add(src)
+        self._check_route_graph_cycle(adjacency)
+
     def write(self, vals):
+        if 'route_flow_json' in vals and vals['route_flow_json']:
+            self._check_flow_json_cycles(vals['route_flow_json'])
         result = super().write(vals)
         if 'route_flow_json' in vals:
             # Form save: the canvas is part of the record now — the same
@@ -702,6 +761,11 @@ class MeterProcessRoute(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        # Cycle gate first — a cyclic graph never reaches the database, no
+        # matter which context the create comes from (copy included).
+        for vals in vals_list:
+            if vals.get('route_flow_json'):
+                self._check_flow_json_cycles(vals['route_flow_json'])
         # A route created together with a flow graph (form save of a new
         # record with a drawn canvas) goes live as V1. Duplicates copy the
         # flow but must start from scratch — copy() sets the skip flag.
@@ -943,26 +1007,11 @@ class MeterProcessRouteOperation(models.Model):
         domain="[('route_id', '=', route_id), ('id', '!=', id)]",
         copy=False,
     )
-    bom_operation_ids = fields.One2many(
-        'mrp.routing.workcenter',
-        'x_route_operation_id',
-        string='Projected BoM Operations',
-        readonly=True,
-    )
-    bom_operation_count = fields.Integer(
-        string='Projected BoM Operation Count',
-        compute='_compute_bom_operation_count',
-    )
 
     _route_operation_code_uniq = models.Constraint(
         'unique(route_id, operation_id)',
         'The operation must be unique within one process route.',
     )
-
-    @api.depends('bom_operation_ids')
-    def _compute_bom_operation_count(self):
-        for operation in self:
-            operation.bom_operation_count = len(operation.bom_operation_ids)
 
     @api.depends(
         'route_id.x_workshop_id',
@@ -982,29 +1031,6 @@ class MeterProcessRouteOperation(models.Model):
             if route_operation.operation_id:
                 workcenter_domain.append(('id', 'in', route_operation.operation_id.x_workcenter_ids.ids))
             route_operation.available_workcenter_ids = workcenter_model.search(workcenter_domain)
-
-    def _prepare_bom_operation_values(self, bom):
-        self.ensure_one()
-        return {
-            'name': self.name,
-            'bom_id': bom.id,
-            'workcenter_id': self.workcenter_id.id or self.operation_id.x_workcenter_ids[:1].id or self.env['mrp.workcenter'].search([('company_id', '=', self.company_id.id), ('active', '=', True)], limit=1).id,
-            'sequence': self.sequence,
-            'time_mode': self.time_mode,
-            'time_mode_batch': self.time_mode_batch,
-            'time_cycle_manual': self.time_cycle_manual,
-            'cost_mode': self.cost_mode,
-            'x_route_operation_id': self.id,
-            'x_step_code': self.x_step_code,
-            'x_station_type': self.x_station_type,
-            'x_allow_entry': self.x_allow_entry,
-            'x_allow_exit': self.x_allow_exit,
-            'x_allow_serial_creation': self.x_allow_serial_creation,
-            'x_allow_reentry': self.x_allow_reentry,
-            'x_allow_repair_return': self.x_allow_repair_return,
-            'x_allow_skip_with_override': self.x_allow_skip_with_override,
-            'x_ng_retry_limit': self.x_ng_retry_limit,
-        }
 
     @api.onchange('operation_id')
     def _onchange_operation_id_apply_defaults(self):
@@ -1036,120 +1062,10 @@ class MeterProcessRouteOperation(models.Model):
                 if operation.workcenter_id.x_workshop_id != operation.route_workshop_id:
                     raise ValidationError(_('The selected work center must belong to the current workshop.'))
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        records.mapped('route_id')._sync_linked_bom_operations()
-        return records
-
-    def write(self, vals):
-        result = super().write(vals)
-        self.mapped('route_id')._sync_linked_bom_operations()
-        return result
-
-    def unlink(self):
-        routes = self.mapped('route_id')
-        result = super().unlink()
-        routes._sync_linked_bom_operations()
-        return result
-
-
-class MrpBom(models.Model):
-    _inherit = 'mrp.bom'
-
-    x_process_route_id = fields.Many2one(
-        'sn.wsd.process.route',
-        string='Process Route',
-        # Optional: the route is bound to the product via 图号 (drawing number),
-        # not to the BOM. Kept only so a BOM may still (optionally) carry the
-        # operations it is synchronised from; a materials-only BOM leaves it empty.
-        check_company=True,
-        index=True,
-    )
-
-    @api.constrains('x_process_route_id', 'company_id')
-    def _check_process_route_scope(self):
-        for bom in self:
-            # The route is optional on the BOM (it lives on the product via 图号);
-            # only validate the company scope when one is actually set.
-            route = bom.x_process_route_id
-            if route and route.company_id != bom.company_id:
-                raise ValidationError(_('The process route must belong to the same company as the bill of material.'))
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        boms = super().create(vals_list)
-        boms.filtered('x_process_route_id')._sync_process_route_operations()
-        return boms
-
-    def write(self, vals):
-        result = super().write(vals)
-        if {'x_process_route_id', 'company_id'}.intersection(vals):
-            self._sync_process_route_operations()
-        return result
-
-    def _sync_process_route_operations(self):
-        for bom in self:
-            route = bom.x_process_route_id
-            route_operations = route.route_operation_ids.sorted(lambda operation: (operation.sequence, operation.id)) \
-                if route else self.env['sn.wsd.process.route.operation']
-
-            # The process route is the single source of truth for BoM operations.
-            # Rebuild the BoM operations from scratch so deleted or detached route
-            # operations cannot remain as stale rows on the BoM or MO.
-            if bom.operation_ids:
-                bom.operation_ids.unlink()
-
-            workorder_map = {}
-            for route_operation in route_operations:
-                bom_operation = self.env['mrp.routing.workcenter'].create(
-                    route_operation._prepare_bom_operation_values(bom)
-                )
-                workorder_map[route_operation.id] = bom_operation
-
-            for route_operation in route_operations:
-                bom_operation = workorder_map.get(route_operation.id)
-                if not bom_operation:
-                    continue
-                bom_operation.blocked_by_operation_ids = [
-                    fields.Command.set([
-                        workorder_map[dependency.id].id
-                        for dependency in route_operation.blocked_by_route_operation_ids
-                        if dependency.id in workorder_map
-                    ])
-                ]
-
-            draft_productions = self.env['mrp.production'].search([
-                ('bom_id', '=', bom.id),
-                ('state', '=', 'draft'),
-            ])
-            for production in draft_productions:
-                production._link_bom(bom)
-
-
-class MrpProduction(models.Model):
-    _inherit = 'mrp.production'
-
-    x_process_route_id = fields.Many2one(
-        'sn.wsd.process.route',
-        string='Process Route',
-        related='bom_id.x_process_route_id',
-        store=True,
-        readonly=True,
-    )
-
 
 class MrpRoutingWorkcenter(models.Model):
     _inherit = 'mrp.routing.workcenter'
 
-    x_process_route_id = fields.Many2one(
-        'sn.wsd.process.route',
-        string='Process Route',
-        related='bom_id.x_process_route_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
     x_route_operation_id = fields.Many2one(
         'sn.wsd.process.route.operation',
         string='Route Operation Template',
@@ -1188,20 +1104,19 @@ class MrpRoutingWorkcenter(models.Model):
         default=0,
         help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
-
-    @api.constrains('x_route_operation_id', 'bom_id')
-    def _check_route_projection(self):
-        for operation in self.filtered('x_route_operation_id'):
-            if operation.x_route_operation_id.route_id != operation.bom_id.x_process_route_id:
-                raise ValidationError(_('The projected operation must belong to the process route selected on the bill of material.'))
+    # Legacy columns kept only so existing work orders (which relate to
+    # x_route_operation_id through their BoM operation row) keep working until
+    # the work-order side is migrated; no new data is written here.
 
 
 class ProcessRouteDrawing(models.Model):
     """Binding between a common process route and a drawing number (物料编号/图号).
 
-    A route binds multiple drawing numbers here; the drawing-number resolver
-    ``_find_current_route_by_drawing_no`` matches work orders to routes via this
-    table. Configured on a dedicated page, not inline on the route form.
+    A route binds multiple drawing numbers here; MES orders resolve their route
+    through this table by 车间 + 图号 + 面别. A double-sided drawing carries one
+    binding per production side (T/B) and each workshop may keep its own set,
+    so uniqueness is (company, workshop, drawing, side). Configured on a
+    dedicated page and inline on the route form.
     """
     _name = 'sn.wsd.process.route.drawing'
     _description = 'Process Route Drawing Number Binding'
@@ -1219,6 +1134,21 @@ class ProcessRouteDrawing(models.Model):
         string='Drawing No.',
         required=True,
         index=True,
+    )
+    x_side = fields.Selection(
+        related='route_id.x_production_side',
+        string='Production Side',
+        store=True,
+        index=True,
+        help='Production side of the bound route; kept in sync from the route.',
+    )
+    x_workshop_id = fields.Many2one(
+        'sn.mrp.workshop',
+        related='route_id.x_workshop_id',
+        string='Workshop',
+        store=True,
+        index=True,
+        help='Workshop of the bound route; kept in sync from the route.',
     )
     route_code = fields.Char(
         string='Route Code',
@@ -1246,16 +1176,19 @@ class ProcessRouteDrawing(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    # 同一路线不能重复绑同一图号；一个产品（图号）只能绑定一条工艺路线。
+    # 同一路线不能重复绑同一图号；一个产品（图号）在同一个车间每面只能
+    # 绑定一条工艺路线（双面板 = T/B 各一条；不同车间可各绑各的）。
+    # 历史约束 unique(company, drawing) 由 migrations/19.0.6.0.0 丢弃。
     # Odoo 19 约束消息经 ir.model.constraint.message（translate）翻译，po 条目
     # 引用 model:ir.model.constraint,message:<xmlid>。
     _route_drawing_uniq = models.Constraint(
         'unique(route_id, x_drawing_no)',
         'A route cannot bind the same drawing number twice.',
     )
-    _drawing_single_route = models.Constraint(
-        'unique(company_id, x_drawing_no)',
-        'A drawing number can only be bound to one process route.',
+    _drawing_side_route_uniq = models.Constraint(
+        'unique(company_id, x_workshop_id, x_drawing_no, x_side)',
+        'A drawing number can only be bound to one process route per workshop '
+        'and production side.',
     )
 
     @api.depends('x_drawing_no')

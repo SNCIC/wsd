@@ -9,17 +9,24 @@ class MrpProduction(models.Model):
         workcenter = workcenter or self.env['mrp.workcenter']
         production_line = production_line or workcenter.x_production_line_id
         workshop = workshop or workcenter.x_workshop_id or production_line.workshop_id
+        # Online (上线) is resolved through the MES orders (制令单): the online
+        # order for the line (or workshop) leads to the current MO. The MO-level
+        # online state is legacy and no longer maintained.
         domain = [
-            ('x_online_state', '=', 'online'),
-            ('state', 'not in', ['done', 'cancel']),
+            ('x_online_date', '!=', False),
+            ('state', 'not in', ['done', 'cancelled']),
         ]
-        if workshop:
-            domain.append(('x_workshop_id', '=', workshop.id))
         if production_line:
-            domain.append(('x_production_line_id', '=', production_line.id))
+            domain.append(('production_line_id', '=', production_line.id))
+        elif workshop:
+            domain.append(('production_line_id.workshop_id', '=', workshop.id))
         if workcenter and workcenter.company_id:
             domain.append(('company_id', '=', workcenter.company_id.id))
-        return self.search(domain, order='date_start desc, id desc', limit=1)
+        order = self.env['sn.wsd.mes.order'].search(domain, order='x_online_date desc, id desc', limit=1)
+        production = order.production_id
+        if production.state in ('done', 'cancel'):
+            return self.env['mrp.production']
+        return production
 
     def _get_current_online_workorder(self, workcenter=None):
         self.ensure_one()

@@ -6,6 +6,9 @@ from . import internal_serial
 from . import meter_aging
 from . import meter_pack
 from . import mrp_production
+from . import mrp_production_mes
+from . import mes_order
+from . import mes_order_route
 from . import mrp_workorder
 from . import mrp_workorder_mes_fields
 from . import stock_move
@@ -13,6 +16,7 @@ from . import stock_lot
 from . import stock_package
 from . import meter_process_route
 from . import mrp_workcenter
+from . import mrp_routing_workcenter_daily_plan
 from . import product
 from . import mrp_electronics
 from . import manufacturing_batch

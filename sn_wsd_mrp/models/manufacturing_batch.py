@@ -1,8 +1,12 @@
+import logging
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare
 
 from .constants import STATION_TYPE_SELECTION
+
+_logger = logging.getLogger(__name__)
 
 
 class SnManufacturingBatch(models.Model):
@@ -381,8 +385,8 @@ class SnManufacturingBatch(models.Model):
             'product_id': production.product_id.id,
             'product_uom_id': production.product_uom_id.id,
             'bom_id': production.bom_id.id,
-            'route_id': production.x_process_route_id.id,
-            'route_version': production.x_process_route_id.version if production.x_process_route_id else 0,
+            'route_id': production.x_route_id.id,
+            'route_version': production.x_route_id.version if production.x_route_id else 0,
             'production_group_id': production.production_group_id.id,
         }
         self.write(values)
@@ -572,17 +576,24 @@ class MrpProduction(models.Model):
         for production, vals in zip(productions, vals_list):
             if production.x_manufacturing_batch_id:
                 continue
-            batch = batch_model.create({
-                'company_id': production.company_id.id,
-                'product_id': production.product_id.id,
-                'product_uom_id': production.product_uom_id.id,
-                'bom_id': production.bom_id.id,
-                'route_id': production.x_process_route_id.id,
-                'route_version': production.x_process_route_id.version if production.x_process_route_id else 0,
-                'origin_production_id': production.id,
-                'production_group_id': production.production_group_id.id,
-            })
-            production.write({'x_manufacturing_batch_id': batch.id, 'x_batch_role': 'origin'})
+            # DEGRADED on purpose (module scheduled for removal): batch
+            # bookkeeping must never block manufacturing-order creation.
+            try:
+                batch = batch_model.create({
+                    'company_id': production.company_id.id,
+                    'product_id': production.product_id.id,
+                    'product_uom_id': production.product_uom_id.id,
+                    'bom_id': production.bom_id.id,
+                    'route_id': production.x_route_id.id,
+                    'route_version': production.x_route_id.version if production.x_route_id else 0,
+                    'origin_production_id': production.id,
+                    'production_group_id': production.production_group_id.id,
+                })
+                production.write({'x_manufacturing_batch_id': batch.id, 'x_batch_role': 'origin'})
+            except Exception as error:
+                _logger.warning(
+                    "Manufacturing batch creation failed for %s, continuing "
+                    "without a batch: %s", production.display_name, error)
         return productions
 
     def _get_backorder_mo_vals(self):
@@ -617,23 +628,35 @@ class MrpProduction(models.Model):
         result = super().action_confirm()
         for production in self.filtered(lambda record: record.x_manufacturing_batch_id):
             batch = production.x_manufacturing_batch_id
-            if batch.production_group_id != production.production_group_id:
-                batch.production_group_id = production.production_group_id
-            if not batch.origin_production_id:
-                batch.origin_production_id = production
-            if not batch.route_id and production.x_process_route_id:
-                batch._sync_from_production(production)
+            try:
+                if batch.production_group_id != production.production_group_id:
+                    batch.production_group_id = production.production_group_id
+                if not batch.origin_production_id:
+                    batch.origin_production_id = production
+                if not batch.route_id and production.x_route_id:
+                    batch._sync_from_production(production)
+            except Exception as error:
+                # DEGRADED (module scheduled for removal): never block MO confirm
+                _logger.warning(
+                    "Manufacturing batch sync failed for %s: %s",
+                    production.display_name, error)
         return result
 
     def write(self, vals):
         result = super().write(vals)
-        if {'product_id', 'product_uom_id', 'bom_id', 'x_process_route_id'}.intersection(vals):
+        if {'product_id', 'product_uom_id', 'bom_id'}.intersection(vals):
             for production in self.filtered('x_manufacturing_batch_id'):
                 if production.state not in ('draft', 'confirmed'):
                     continue
                 batch = production.x_manufacturing_batch_id
                 if batch.origin_production_id == production:
-                    batch._sync_from_production(production)
+                    # DEGRADED (module scheduled for removal): never block MO write
+                    try:
+                        batch._sync_from_production(production)
+                    except Exception as error:
+                        _logger.warning(
+                            "Manufacturing batch sync failed for %s: %s",
+                            production.display_name, error)
         return result
 
     @api.constrains('x_manufacturing_batch_id', 'company_id', 'product_id')

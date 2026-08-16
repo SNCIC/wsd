@@ -12,7 +12,6 @@ BOM_LOCKED_FIELDS = {
     'bom_line_ids',
     'byproduct_ids',
     'operation_ids',
-    'x_process_route_id',
 }
 
 BOM_LINE_LOCKED_FIELDS = {
@@ -110,13 +109,6 @@ class MrpBom(models.Model):
         string='Revision Count',
         compute='_compute_x_revision_count',
     )
-    x_process_route_id = fields.Many2one(
-        'sn.wsd.process.route',
-        string='Process Route',
-        check_company=True,
-        index=True,
-    )
-
     @api.depends_context('sn_wsd_revision_display')
     def _compute_display_name(self):
         super()._compute_display_name()
@@ -178,15 +170,6 @@ class MrpBom(models.Model):
             if bom.x_source_engineering_bom_id and bom.x_source_engineering_bom_id.x_bom_stage_type != 'engineering':
                 raise ValidationError(_('The source BoM must be an engineering BoM.'))
 
-    @api.constrains('x_process_route_id', 'company_id', 'x_bom_stage_type')
-    def _check_process_route_scope(self):
-        for bom in self:
-            if not bom.x_process_route_id:
-                continue
-            route = bom.x_process_route_id
-            if route.company_id != bom.company_id:
-                raise ValidationError(_('The process route must belong to the same company as the bill of material.'))
-
     @api.constrains('x_effective_date', 'x_expire_date')
     def _check_x_effective_dates(self):
         for bom in self:
@@ -223,8 +206,9 @@ class MrpBom(models.Model):
 
     def action_release_plm(self):
         for bom in self:
-            if bom.x_bom_stage_type == 'production' and not bom.x_process_route_id:
-                raise UserError(_('A production BoM must have a process route before release.'))
+            # No process-route requirement anymore: the route lives on the
+            # product (resolved through 图号 bindings), a materials-only BoM
+            # may carry no route at all.
             previous_revisions = self.search(bom._get_revision_family_domain() & Domain('id', '!=', bom.id) & Domain('x_plm_state', '=', 'released'))
             previous_revisions.with_context(allow_plm_locked_write=True).write({
                 'x_plm_state': 'obsolete',
@@ -243,8 +227,6 @@ class MrpBom(models.Model):
         self.ensure_one()
         if self.x_plm_state == 'cancelled':
             raise UserError(_('Cancelled BoMs cannot be copied into a new revision.'))
-        if self.x_bom_stage_type == 'production' and self.x_process_route_id and self.x_process_route_id.x_plm_state == 'released':
-            raise UserError(_('A new revision can only be created when the linked process route is not released. Release a new revision of the route first.'))
         new_bom = self.copy(default={
             'x_plm_state': 'draft',
             'x_revision': self._get_next_revision(),
@@ -255,8 +237,6 @@ class MrpBom(models.Model):
             'x_expire_date': False,
             'active': True,
         })
-        if new_bom.x_bom_stage_type == 'production' and new_bom.x_process_route_id:
-            new_bom._sync_process_route_operations()
         return {
             'type': 'ir.actions.act_window',
             'name': _('BoM Revision'),
@@ -310,8 +290,6 @@ class MrpBom(models.Model):
             'x_expire_date': False,
             'active': True,
         })
-        if new_bom.x_process_route_id:
-            new_bom._sync_process_route_operations()
         return {
             'type': 'ir.actions.act_window',
             'name': _('Production BoM'),

@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
             <xpath expr="//search/field[@name='workcenter_id']" position="after">
                 <field name="x_workshop_id"/>
-                <field name="x_production_line_id"/>
             </xpath>
             <xpath expr="//search/filter[@name='filter_in_progress']" position="after">
                 <separator/>
@@ -17,7 +16,6 @@
             </xpath>
             <xpath expr="//search/group" position="inside">
                 <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
-                <filter string="Production Line" name="group_production_line" domain="[]" context="{'group_by': 'x_production_line_id'}"/>
                 <filter string="Online Stage" name="group_online_stage" domain="[]" context="{'group_by': 'x_online_state'}"/>
             </xpath>
         </field>
@@ -50,7 +48,6 @@
             <xpath expr="//field[@name='bom_id']" position="after">
                 <field name="x_route_id" optional="show" groups="mrp.group_mrp_routings"/>
                 <field name="x_workshop_id" optional="show"/>
-                <field name="x_production_line_id" optional="show"/>
                 <field name="x_online_state" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='components_availability']" position="attributes">
@@ -76,23 +73,45 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <button name="action_set_online" type="object" string="Online" class="btn-primary" invisible="x_online_state == 'online' or state in ['done', 'cancel']"/>
-                <button name="action_set_offline" type="object" string="Offline" class="btn-secondary" invisible="x_online_state != 'online' or state in ['done', 'cancel']"/>
+                <!-- Force close (强制关闭): manual bail-out for abandoned MOs;
+                     the normal closure path is all-MES-orders-done -> auto. -->
+                <button name="action_force_close" type="object" string="Force Close" class="btn-secondary"
+                        confirm="Force close this manufacturing order? Released MES orders will be revoked, remaining quantities voided (no backorder) and the order closed."
+                        invisible="state not in ('confirmed', 'progress')"/>
+            </xpath>
+            <!-- native manual produce/start paths are driven by the MES-order
+                 flow now; only Confirm / Cancel / Schedule / Force Close stay.
+                 NOTE: xpath position="attributes" only hits the FIRST match,
+                 so every native variant gets its own discriminator. -->
+            <xpath expr="//header//button[@name='button_mark_done'][@invisible='not move_raw_ids or not show_produce']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='button_mark_done'][@invisible='not move_raw_ids or not show_produce_all']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='button_mark_done'][@invisible='move_raw_ids or not show_produce']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='button_mark_done'][@invisible='move_raw_ids or not show_produce_all']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header//button[@name='action_start']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//form" position="inside">
                 <field name="x_has_meter_operations" invisible="1"/>
             </xpath>
-            <xpath expr="//sheet//div[@name='button_box']" position="inside">
-                <button name="action_open_internal_serials" type="object" class="oe_stat_button" icon="fa-barcode">
-                    <field name="x_internal_serial_count" widget="statinfo" string="Internal Serials"/>
-                </button>
-            </xpath>
+            <!-- internal-serial smart button moved to the MES orders (制令单):
+                 boards are produced and tracked under their MES order -->
             <xpath expr="//notebook" position="attributes">
                 <attribute name="class">o_sn_wsd_mrp_production_notebook</attribute>
             </xpath>
             <xpath expr="//group[@name='group_extra_info']/field[@name='user_id']" position="after">
                 <field name="x_workshop_id"/>
-                <field name="x_production_line_id" domain="[('workshop_id', '=', x_workshop_id)]"/>
+                <field name="x_mes_schedule_state" widget="badge"
+                       decoration-danger="x_mes_schedule_state == 'unplanned'"
+                       decoration-warning="x_mes_schedule_state == 'partial'"
+                       decoration-success="x_mes_schedule_state == 'planned'"/>
             </xpath>
             <xpath expr="//div[@name='bom_div']" position="after">
                 <field name="x_route_id" groups="mrp.group_mrp_routings"/>
@@ -115,6 +134,77 @@
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[3]" position="attributes">
                 <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
+            </xpath>
+            <!-- Work Orders (operations) page: hidden. Work orders are never
+                 generated in this project (mrp.routing.workcenter
+                 _skip_operation_line always returns True), so the tab is
+                 dead UI on the MO form. -->
+            <xpath expr="//page[@name='operations']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_form_mes_orders" model="ir.ui.view">
+        <field name="name">mrp.production.form.mes.orders.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="MES Orders" name="mes_orders">
+                    <group>
+                        <group string="Scheduling">
+                            <field name="x_mes_scheduled_qty"/>
+                            <field name="x_mes_unscheduled_qty"/>
+                            <field name="x_mes_produced_qty"/>
+                        </group>
+                    </group>
+                    <field name="x_mes_order_ids" nolabel="1" readonly="1">
+                        <list create="false" edit="false" delete="false">
+                            <!-- hidden column: the o2m dialog parses the full MES-order
+                                 form against the fields collected from this inline list,
+                                 so every field of that form must appear here (column_invisible) -->
+                            <field name="internal_serial_count" column_invisible="1"/>
+                            <field name="name"/>
+                            <field name="production_line_id"/>
+                            <field name="date_plan"/>
+                            <field name="planned_qty" sum="Total Planned"/>
+                            <field name="picked_qty" sum="Total Picked"/>
+                            <field name="produced_qty"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                </page>
+                <!-- Replenishment page hidden for now (feature parked):
+                     the button, tab and computed fields stay in the code and
+                     can be re-enabled by restoring this page. -->
+                <page string="Replenishment" name="mes_replenishment" invisible="1">
+                    <group>
+                        <group string="Replenishment">
+                            <field name="x_last_replenishment_date"/>
+                        </group>
+                    </group>
+                    <separator string="Suggested Moves"/>
+                    <field name="x_replenishment_move_ids" nolabel="1" readonly="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="product_id"/>
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom" groups="uom.group_uom"/>
+                            <field name="picking_id" optional="show"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                    <separator string="Purchase Orders"/>
+                    <field name="x_replenishment_po_ids" nolabel="1" readonly="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="date_order"/>
+                            <field name="amount_untaxed" sum="Total Untaxed"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>

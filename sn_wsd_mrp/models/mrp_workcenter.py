@@ -161,16 +161,10 @@ class MrpBom(models.Model):
     x_workshop_id = fields.Many2one(
         'sn.mrp.workshop',
         string='Workshop',
-        compute='_compute_x_process_scope',
-        store=True,
         check_company=True,
         index=True,
+        required=True,
+        help='Workshop executing this BOM. Manufacturing orders inherit it '
+             '(stored, editable) and resolve their process routes per '
+             'workshop + drawing number + board side.',
     )
-
-    @api.depends(
-        'x_process_route_id.x_workshop_id',
-    )
-    def _compute_x_process_scope(self):
-        for bom in self:
-            route = bom.x_process_route_id
-            bom.x_workshop_id = route.x_workshop_id

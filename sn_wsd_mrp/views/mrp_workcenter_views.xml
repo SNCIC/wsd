@@ -103,7 +103,7 @@
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='type']" position="after">
-                <field name="x_workshop_id" readonly="1"/>
+                <field name="x_workshop_id"/>
             </xpath>
         </field>
     </record>
@@ -114,7 +114,6 @@
         <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='type']" position="after">
-                <field name="x_process_route_id" optional="show"/>
                 <field name="x_workshop_id" optional="show"/>
             </xpath>
         </field>

@@ -43,7 +43,6 @@ class TestBomVersionCompare(TransactionCase):
         cls.route_operation_template = cls.env['sn.wsd.operation'].create({
             'code': 'PLM-CMP-ASSY',
             'name': 'Comparison Route Assembly',
-            'workcenter_id': cls.workcenter.id,
             'time_cycle_manual': 10.0,
         })
         cls.base_route = cls.env['sn.wsd.process.route'].create({
@@ -77,7 +76,7 @@ class TestBomVersionCompare(TransactionCase):
             'x_bom_stage_type': 'engineering',
             'x_plm_state': 'draft',
             'x_revision': 'A.0',
-            'x_process_route_id': cls.base_route.id,
+            'x_workshop_id': cls.workshop.id,
             'bom_line_ids': [fields.Command.create({
                 'product_id': cls.component.id,
                 'product_qty': 2.0,

@@ -829,8 +829,8 @@ class SnSmtOperationMixin(models.AbstractModel):
         snapshot = self._get_completion_snapshot(production)
         if snapshot['line_complete']:
             production.x_smt_online_state = 'online'
-            if hasattr(production, 'x_online_state') and production.x_online_state != 'online':
-                production.action_set_online()
+            # Online is carried by the MES orders (制令单)
+            production._action_online_mes_orders()
             if production._fields.get('x_meter_flow_state'):
                 production.x_meter_flow_state = 'material_ready'
         else:

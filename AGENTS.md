@@ -2,11 +2,15 @@
 
 本文件是 ZCode（以及所有贡献者）在本仓库开发 `sn_wsd_*` / `muk_web_*` 模块时必须遵守的规则。
 
+## 注意
+**1.注意多公司，在处理任何业务时，首先考虑到多公司**
+**2.不允许考虑降级处理，现在是开发阶段，如果有问题处理老旧数据，也不能为了老旧数据给逻辑变更**
+
 ## 仓库与运行环境
 
 - 本目录（`wsd/`）是独立 git 仓库（github.com/SNCIC/wsd），作为 Odoo 19 的 addons 路径之一挂载。
 - 运行环境：Odoo 19，Python 3.12。
-- **本地开发**用 `../odoo.local.conf`（连本地 docker `odoo19-db`，已开 `dev_mode = reload`），开发库 **`odoo19-dev`**。
+- **本地开发**用 `../odoo.local.conf`（连本地 docker `odoo19-db`，已开 `dev_mode = reload`）。
 - `odoo-bin` 在上级目录：`D:\workspace\odoo\odoo-19.0\odoo-bin`。
 - **启动命令** `.venv/Scripts/python.exe D:\workspace\odoo\odoo-19.0\odoo-bin -c odoo.local.conf -d mes`
 
@@ -56,12 +60,11 @@
 
 ```bash
 cd D:/workspace/odoo/odoo-19.0
-.venv/Scripts/python.exe D:\workspace\odoo\odoo-19.0\odoo-bin -c odoo.local.conf -d odoo19-dev -u sn_wsd_workorder --stop-after-init
+.venv/Scripts/python.exe D:\workspace\odoo\odoo-19.0\odoo-bin -c odoo.local.conf -d mes -u sn_wsd_workorder --stop-after-init
 ```
 
 - `-u <MOD>` 升级指定模块（多个用逗号）；`--stop-after-init` 让它升级完即退出。
 - 新增了 `.po` 条目时，这步会把 zh_CN 翻译刷进库。
-
 
 ## 目录约定（沿用现有模块）
 
@@ -89,7 +92,7 @@ sn_wsd_xxx/
 <field name="member_ids" widget="sn_wsd_x2many_multi_add"
        options="{'multi_add_model': 'hr.employee',          <!-- 数据源模型 -->
                  'multi_add_field': 'employee_id',          <!-- 目标行上指向源模型的 m2o 字段 -->
-                 'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}"/>
+                 'multi_add_domain': '[("company_id", "=", company_id)]'}"/>
 ```
 
 - `multi_add_model`：要挑的源模型。
@@ -101,12 +104,7 @@ sn_wsd_xxx/
 ### ⚠️ 改动此组件务必遵守（踩过的坑）
 
 1. **`extractProps` 不能用箭头函数的 `...arguments`**：箭头函数没有自己的 `arguments`，会取到外层（模块包装）的参数，导致基类 `x2ManyField.extractProps` 拿不到 `fieldInfo`、读 `attrs['add-label']` 崩溃。必须显式传参：`x2ManyField.extractProps(fieldInfo, dynamicInfo)`。
-
 2. **客户端新建的行是虚拟草稿，失焦即丢**：`addNewRecord` 建出的行 `canBeAbandoned=true`，一旦点进去编辑、再点别处，可编辑列表的 `leaveEditMode(force)` 会把它丢弃（`_abandonRecords`，见 `addons/web/static/src/model/relational_model/static_list.js`）。根治办法：建完行后**立即 `await this.props.record.save()`**，让新行落库成真实记录（`canBeAbandoned=false`）。这也是 stock 走 `forceSave`+服务端的原因——不存在"纯前端建行又不丢弃"的两全法；若不想自动存父记录，就只能改走服务端创建（`orm.call` + reload）。
-
 3. **循环建行用 `mode: "readonly"`**：默认 `mode:"edit"` 会让每行进编辑态、堆叠成多个 editedRecord。传 `mode:"readonly"` 避免堆叠；onchange 仍会触发（`_loadNewRecord` 在设 mode 之前跑，关联字段照常自动填）。
-
 4. **option 域求值**：`new Domain(options.multi_add_domain || "[]").toList(record.evalContext)`——`Domain.toList(context)` 会解析 Python 域串并求值字段引用（与 `getFieldDomain` 同机制）。
-
 5. **纯 JS 改动也要重建 asset**：`odoo.local.conf` 的 `dev_mode = reload` 不覆盖前端资源包；改 JS 后用 `--dev=assets` 启动（请求时重建包）或升级模块（`-u`）。
-
