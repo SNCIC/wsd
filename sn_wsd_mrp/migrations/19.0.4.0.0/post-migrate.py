@@ -1,5 +1,7 @@
 import logging
 
+from odoo.tools import sql
+
 _logger = logging.getLogger(__name__)
 
 
@@ -23,9 +25,11 @@ def migrate(cr, version):
         ('sn_wsd_mes_sn_travel', 'daily_route_operation_id'),
         ('sn_wsd_internal_serial', 'current_daily_order_id'),
     ):
-        cr.execute("ALTER TABLE %s DROP COLUMN IF EXISTS %s" % (table, column))
+        if sql.table_exists(cr, table):
+            cr.execute("ALTER TABLE %s DROP COLUMN IF EXISTS %s" % (table, column))
 
     for column in ('x_daily_order_count', 'x_split_state', 'x_total_planned_qty', 'x_total_done_qty'):
-        cr.execute("ALTER TABLE mrp_production DROP COLUMN IF EXISTS %s" % column)
+        if sql.table_exists(cr, 'mrp_production'):
+            cr.execute("ALTER TABLE mrp_production DROP COLUMN IF EXISTS %s" % column)
 
     _logger.info("sn_wsd_mrp 19.0.4.0.0: dropped retired daily-plan schema")

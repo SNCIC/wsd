@@ -1,5 +1,7 @@
 import logging
 
+from odoo.tools import sql
+
 _logger = logging.getLogger(__name__)
 
 
@@ -18,24 +20,27 @@ def migrate(cr, version):
     if not version:
         return
 
-    cr.execute("""
-        ALTER TABLE sn_wsd_process_route_drawing
-        DROP CONSTRAINT IF EXISTS sn_wsd_process_route_drawing_drawing_single_route
-    """)
-    cr.execute("""
-        UPDATE sn_wsd_process_route_drawing d
-        SET x_side = r.x_production_side,
-            x_workshop_id = r.x_workshop_id
-        FROM sn_wsd_process_route r
-        WHERE r.id = d.route_id
-          AND (d.x_side IS DISTINCT FROM r.x_production_side
-               OR d.x_workshop_id IS DISTINCT FROM r.x_workshop_id)
-    """)
-    cr.execute("""
-        UPDATE product_template
-        SET x_board_side = 'single'
-        WHERE x_board_side IS NULL
-    """)
+    if sql.table_exists(cr, 'sn_wsd_process_route_drawing'):
+        cr.execute("""
+            ALTER TABLE sn_wsd_process_route_drawing
+            DROP CONSTRAINT IF EXISTS sn_wsd_process_route_drawing_drawing_single_route
+        """)
+        if sql.table_exists(cr, 'sn_wsd_process_route'):
+            cr.execute("""
+                UPDATE sn_wsd_process_route_drawing d
+                SET x_side = r.x_production_side,
+                    x_workshop_id = r.x_workshop_id
+                FROM sn_wsd_process_route r
+                WHERE r.id = d.route_id
+                  AND (d.x_side IS DISTINCT FROM r.x_production_side
+                       OR d.x_workshop_id IS DISTINCT FROM r.x_workshop_id)
+            """)
+    if sql.table_exists(cr, 'product_template'):
+        cr.execute("""
+            UPDATE product_template
+            SET x_board_side = 'single'
+            WHERE x_board_side IS NULL
+        """)
 
     _logger.info("sn_wsd_mrp 19.0.6.0.0: drawing bindings are now side-aware; "
                  "products default to the single board side")

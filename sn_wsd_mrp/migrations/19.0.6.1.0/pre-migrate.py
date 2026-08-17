@@ -10,11 +10,16 @@ from odoo.tools import sql
 def migrate(cr, version):
     if not sql.table_exists(cr, 'sn_wsd_mes_order_route'):
         # execution records pointed at the old operation rows (test/demo data)
-        cr.execute("DELETE FROM sn_wsd_serial_wip")
-        cr.execute("DELETE FROM sn_wsd_serial_operation_history")
-        cr.execute("DELETE FROM sn_wsd_mes_operation_report")
-        cr.execute("DELETE FROM sn_wsd_mes_order WHERE x_online_date IS NOT NULL")
-        cr.execute("UPDATE sn_wsd_mes_order SET x_mes_route_id = NULL")
+        for table in (
+            'sn_wsd_serial_wip',
+            'sn_wsd_serial_operation_history',
+            'sn_wsd_mes_operation_report',
+        ):
+            if sql.table_exists(cr, table):
+                cr.execute("DELETE FROM %s" % table)
+        if sql.table_exists(cr, 'sn_wsd_mes_order'):
+            cr.execute("DELETE FROM sn_wsd_mes_order WHERE x_online_date IS NOT NULL")
+            cr.execute("UPDATE sn_wsd_mes_order SET x_mes_route_id = NULL")
         cr.execute("DROP TABLE IF EXISTS mes_route_operation_rel CASCADE")
         cr.execute("DROP TABLE IF EXISTS sn_wsd_mes_route_operation CASCADE")
         cr.execute("DROP TABLE IF EXISTS sn_wsd_mes_route CASCADE")

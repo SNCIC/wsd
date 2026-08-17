@@ -10,8 +10,13 @@ Runs before Odoo rewrites the schema/views:
   a button that no longer exists)
 """
 
+from odoo.tools import sql
+
 
 def migrate(cr, version):
+    if not sql.table_exists(cr, 'sn_wsd_process_route'):
+        return
+
     # 1. Drop the old multi-record unique constraint (keep others intact).
     cr.execute("""
         SELECT conname FROM pg_constraint

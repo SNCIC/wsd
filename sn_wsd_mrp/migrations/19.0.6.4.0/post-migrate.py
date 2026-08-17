@@ -2,14 +2,17 @@
 """Split the single report quantity into the three counters: legacy rows
 carry OK-only amounts."""
 
+from odoo.tools import sql
+
 
 def migrate(cr, version):
-    cr.execute("""
-        UPDATE sn_wsd_mes_operation_report
-        SET qty_ok = COALESCE(qty_ok, 0) + COALESCE(qty, 0)
-        WHERE qty IS NOT NULL AND qty > 0
-          AND COALESCE(qty_ok, 0) = 0
-    """)
+    if sql.table_exists(cr, 'sn_wsd_mes_operation_report'):
+        cr.execute("""
+            UPDATE sn_wsd_mes_operation_report
+            SET qty_ok = COALESCE(qty_ok, 0) + COALESCE(qty, 0)
+            WHERE qty IS NOT NULL AND qty > 0
+              AND COALESCE(qty_ok, 0) = 0
+        """)
     # the stored per-operation/order counters were computed from the old
     # column before the backfill ran -- recompute them from the new ones
     from odoo.api import Environment
