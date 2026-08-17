@@ -6,7 +6,10 @@ from odoo.tools import sql
 
 
 def migrate(cr, version):
-    if sql.table_exists(cr, 'sn_wsd_mes_operation_report'):
+    if (
+        sql.table_exists(cr, 'sn_wsd_mes_operation_report')
+        and sql.column_exists(cr, 'sn_wsd_mes_operation_report', 'qty')
+    ):
         cr.execute("""
             UPDATE sn_wsd_mes_operation_report
             SET qty_ok = COALESCE(qty_ok, 0) + COALESCE(qty, 0)
