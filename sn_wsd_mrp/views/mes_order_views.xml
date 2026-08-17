@@ -23,6 +23,7 @@
                        decoration-success="x_side == 'single'"/>
                 <field name="planned_qty" sum="Total Planned"/>
                 <field name="picked_qty" sum="Total Picked"/>
+                <field name="x_input_qty" sum="Total Input"/>
                 <field name="produced_qty" sum="Total Produced"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'released'"
@@ -45,6 +46,8 @@
                     <button name="action_online" type="object" string="Go Online"
                             class="btn-primary" invisible="x_online_date or state == 'cancelled'"
                             confirm="Put this MES order online? SNs may then be fed in and the management mode is locked."/>
+                    <button name="action_open_done_wizard" type="object" string="完工入库"
+                            class="btn-primary" invisible="state != 'in_progress' or x_output_qty &lt;= 0"/>
                     <button name="action_sync_route" type="object" string="Sync Route"
                             invisible="x_online_date or state == 'cancelled'"/>
                     <button name="action_cancel" type="object" string="Cancel (Revoke)" class="btn-secondary"
@@ -74,7 +77,6 @@
                             <field name="date_plan" readonly="1"/>
                             <field name="planned_qty" readonly="1"/>
                             <field name="picked_qty" readonly="1"/>
-                            <field name="produced_qty" readonly="1"/>
                         </group>
                     </group>
                     <group string="工艺路线">
@@ -82,6 +84,10 @@
                             <field name="x_manage_mode" readonly="x_online_date"/>
                             <field name="x_online_date" readonly="1"/>
                             <field name="x_mes_route_id" readonly="1" widget="many2one" options="{'no_open': True}"/>
+                            <field name="x_input_qty" readonly="1"/>
+                            <field name="x_output_qty" readonly="1"/>
+                            <field name="x_workorder_input_qty" readonly="1"/>
+                            <field name="x_done_qty" readonly="1"/>
                             <field name="state" invisible="1"/>
                         </group>
                         <group string="计数工序">
@@ -111,6 +117,36 @@
                             </field>
                         </page>
                     </notebook>
+                    <separator string="工序数量"/>
+                    <field name="x_route_operation_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="sequence" column_invisible="1"/>
+                            <field name="display_label" string="工序"/>
+                            <field name="x_wip_qty" string="在制" sum="合计"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_ok_qty" string="完成数" sum="合计"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_ng_qty" string="不良数" sum="合计"
+                                   decoration-warning="x_ng_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_scrap_qty" string="报废数" sum="合计"
+                                   decoration-danger="x_scrap_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_yield_rate" string="良率" widget="percentage"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_reported_ok_qty" string="合格" sum="合计"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_ng_qty" string="不良" sum="合计"
+                                   decoration-warning="x_reported_ng_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_scrap_qty" string="报废" sum="合计"
+                                   decoration-danger="x_reported_scrap_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_qty" string="累计报工" sum="合计"
+                                   decoration-success="x_reported_ok_qty + x_reported_scrap_qty &gt;= parent.planned_qty"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                        </list>
+                    </field>
                 </sheet>
                 <chatter/>
                 <div class="oe_chatter">
@@ -157,12 +193,13 @@
                 <field name="production_line_id" type="col"/>
                 <field name="planned_qty" type="measure"/>
                 <field name="picked_qty" type="measure"/>
+                <field name="x_input_qty" type="measure"/>
                 <field name="produced_qty" type="measure"/>
             </pivot>
         </field>
     </record>
 
-    <!-- Kanban (shop terminal) -->
+    <!-- Kanban (used by the MES Orders action kanban mode) -->
     <record id="view_sn_wsd_mes_order_kanban" model="ir.ui.view">
         <field name="name">sn.wsd.mes.order.kanban</field>
         <field name="model">sn.wsd.mes.order</field>
@@ -175,6 +212,7 @@
                 <field name="planned_qty"/>
                 <field name="x_side"/>
                 <field name="state"/>
+                <field name="x_partner_id"/>
                 <templates>
                     <t t-name="card">
                         <div>
@@ -184,9 +222,12 @@
                                        decoration-info="x_side in ('top', 'bottom')"
                                        decoration-success="x_side == 'single'"/>
                             </div>
-                            <div class="text-muted"><field name="production_id"/></div>
-                            <div>
-                                <field name="date_plan"/> · <field name="planned_qty"/> <field name="product_id" widget="many2one_avatar"/>
+                            <div><field name="product_id"/></div>
+                            <div class="text-muted" t-if="record.x_partner_id.raw_value">
+                                <field name="x_partner_id"/>
+                            </div>
+                            <div class="text-muted">
+                                <field name="date_plan"/> · <field name="planned_qty"/> <field name="production_id"/>
                             </div>
                             <field name="state" widget="badge"
                                    decoration-info="state == 'released'"
@@ -200,11 +241,41 @@
         </field>
     </record>
 
+    <!-- Calendar (daily plan on a month grid, one color per line) -->
+    <record id="view_sn_wsd_mes_order_calendar" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.calendar</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <calendar date_start="date_plan" mode="month" color="production_line_id"
+                      event_limit="5" hide_time="true"
+                      create="false" edit="false" delete="false">
+                <field name="planned_qty"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Graph (planned vs executed, by date / line) -->
+    <record id="view_sn_wsd_mes_order_graph" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.graph</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <graph type="bar" stacked="1">
+                <field name="date_plan" interval="day"/>
+                <field name="production_line_id"/>
+                <field name="planned_qty" type="measure"/>
+                <field name="picked_qty" type="measure"/>
+                <field name="x_input_qty" type="measure"/>
+                <field name="produced_qty" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
     <!-- Daily plan report (P3): read-only, grouped by date + line -->
     <record id="action_sn_wsd_mes_daily_plan" model="ir.actions.act_window">
         <field name="name">Daily Plan</field>
         <field name="res_model">sn.wsd.mes.order</field>
-        <field name="view_mode">list,pivot,form</field>
+        <field name="view_mode">list,calendar,pivot,graph,form</field>
         <field name="search_view_id" ref="view_sn_wsd_mes_order_search"/>
         <field name="context">{'search_default_group_date': 1, 'search_default_group_line': 1}</field>
         <field name="help" type="html">
@@ -213,23 +284,17 @@
         </field>
     </record>
 
-    <!-- Shop terminal (P4-2): read-only, today by default -->
-    <record id="action_sn_wsd_mes_shop_terminal" model="ir.actions.act_window">
-        <field name="name">Shop Terminal</field>
-        <field name="res_model">sn.wsd.mes.order</field>
-        <field name="view_mode">kanban,list,form</field>
-        <field name="search_view_id" ref="view_sn_wsd_mes_order_search"/>
-        <field name="context">{'search_default_f_today': 1, 'search_default_group_line': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Nothing scheduled for today</p>
-        </field>
-    </record>
+    <!-- Shop Terminal action/menu superseded by the 车间 module
+         (sn_wsd_workorder full-screen terminal): purge them from
+         existing databases, keep the kanban view for MES Orders -->
+    <delete model="ir.ui.menu" id="menu_sn_wsd_mes_shop_terminal"/>
+    <delete model="ir.actions.act_window" id="action_sn_wsd_mes_shop_terminal"/>
 
     <!-- Dedicated MES orders page: flat read-only list of every order -->
     <record id="action_sn_wsd_mes_orders" model="ir.actions.act_window">
         <field name="name">MES Orders</field>
         <field name="res_model">sn.wsd.mes.order</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,kanban,calendar,pivot,graph,form</field>
         <field name="search_view_id" ref="view_sn_wsd_mes_order_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No MES orders yet</p>
@@ -242,8 +307,38 @@
               parent="menu_sn_wsd_mes_root" sequence="10"/>
     <menuitem id="menu_sn_wsd_mes_orders" name="MES Orders" action="action_sn_wsd_mes_orders"
               parent="menu_sn_wsd_mes_root" sequence="15"/>
-    <menuitem id="menu_sn_wsd_mes_shop_terminal" name="Shop Terminal" action="action_sn_wsd_mes_shop_terminal"
-              parent="menu_sn_wsd_mes_root" sequence="20"/>
+
+    <!-- ==================================================================
+         Completion wizard (完工入库): backflush + receipt + closure.
+         ================================================================== -->
+    <record id="view_sn_wsd_mes_done_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.done.wizard.form</field>
+        <field name="model">sn.wsd.mes.done.wizard</field>
+        <field name="arch" type="xml">
+            <form string="完工入库">
+                <group>
+                    <group>
+                        <field name="mes_order_id"/>
+                        <field name="output_qty"/>
+                        <field name="done_qty"/>
+                        <field name="qty"/>
+                    </group>
+                    <group>
+                        <field name="destination" widget="radio"/>
+                        <field name="workshop_id"
+                               options="{'no_create': True}"
+                               invisible="destination != 'lineside'"
+                               required="destination == 'lineside'"/>
+                        <field name="available_workshop_ids" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="确认完工" type="object" class="btn-primary"/>
+                    <button string="取消" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
     <!-- ==================================================================
          Scheduling wizard (P2-1) - the single scheduling entry point.

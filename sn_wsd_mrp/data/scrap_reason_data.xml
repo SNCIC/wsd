@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="scrap_reason_material" model="sn.wsd.scrap.reason">
+        <field name="code">MAT</field>
+        <field name="name">来料不良</field>
+    </record>
+    <record id="scrap_reason_process" model="sn.wsd.scrap.reason">
+        <field name="code">PRC</field>
+        <field name="name">工艺不良</field>
+    </record>
+    <record id="scrap_reason_machine" model="sn.wsd.scrap.reason">
+        <field name="code">MCN</field>
+        <field name="name">设备异常</field>
+    </record>
+    <record id="scrap_reason_damaged" model="sn.wsd.scrap.reason">
+        <field name="code">DMG</field>
+        <field name="name">跌落损坏</field>
+    </record>
+    <record id="scrap_reason_other" model="sn.wsd.scrap.reason">
+        <field name="code">OTH</field>
+        <field name="name">其他</field>
+    </record>
+</odoo>

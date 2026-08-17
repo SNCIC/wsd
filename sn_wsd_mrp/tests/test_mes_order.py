@@ -61,6 +61,14 @@ class TestMesOrder(TransactionCase):
         cls.env['sn.wsd.process.route.drawing'].create({
             'route_id': cls.route.id, 'x_drawing_no': 'DWG-MES-TEST',
         })
+        # station-mode flags on the legacy lines so the materialized private
+        # routes carry start/end semantics for the pass-station tests; the
+        # edge makes the output operation unreachable until the input one is
+        # completed/reported-full (OR-join reachability)
+        route_ops = cls.route.route_operation_ids.sorted('sequence')
+        route_ops[0].x_allow_entry = True
+        route_ops[1].x_allow_exit = True
+        route_ops[1].blocked_by_route_operation_ids = [(6, 0, route_ops[0].ids)]
 
     def _make_mo(self, qty=10000):
         product = self.env['product.product'].create({
@@ -477,3 +485,324 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(mo.state, 'cancel')
         self.assertEqual(order.state, 'cancelled')
         self.assertAlmostEqual(mo.x_mes_scheduled_qty, 0.0)
+
+    # ------------------------------------------------------------------
+    # station passing by work center (过站) + execution quantities
+    # ------------------------------------------------------------------
+    def _make_workcenter(self, operation, line=False, workshop=False):
+        return self.env['mrp.workcenter'].create({
+            'name': 'WC-%s' % (operation.code or operation.name),
+            'x_workshop_id': (workshop or self.workshop).id,
+            'x_operation_id': operation.id,
+            'x_production_line_id': line.id if line else False,
+        })
+
+    def _make_online_order(self, qty=4, mode='station'):
+        mo = self._make_mo(qty=10)
+        order = self._make_order(mo, qty)
+        if mode != 'station':
+            order.x_manage_mode = mode
+        order.action_online()
+        return order
+
+    def test_30_scan_enter_counts_input_on_entry(self):
+        """Feeding an SN at the start work center counts input immediately,
+        carries the work center onto the WIP row and bumps op counters."""
+        order = self._make_online_order()
+        wc_in = self._make_workcenter(self.op_in, line=self.line)
+        serial = order.scan_enter('SN-STA-001', wc_in)
+        self.assertEqual(serial.name, 'SN-STA-001')
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id', '=', serial.id)])
+        self.assertEqual(wip.route_operation_id.operation_id, self.op_in)
+        self.assertEqual(wip.workcenter_id, wc_in)
+        self.assertEqual(order.x_input_qty, 1.0)
+        self.assertEqual(order.x_workorder_input_qty, 1.0)
+        self.assertEqual(order.x_output_qty, 0.0)
+        op_row = order.x_mes_route_id.x_daily_input_operation_id
+        self.assertEqual((op_row.x_wip_qty, op_row.x_ok_qty, op_row.x_ng_qty), (1, 0, 0))
+        self.assertFalse(order.leave_station(serial, 'ok'))
+        self.assertEqual((op_row.x_wip_qty, op_row.x_ok_qty), (0, 1))
+
+    def test_31_exit_operation_finishes_and_seals(self):
+        """Leaving the end operation finishes the SN and seals the order
+        against re-feeding the same SN."""
+        order = self._make_online_order()
+        wc_in = self._make_workcenter(self.op_in, line=self.line)
+        wc_out = self._make_workcenter(self.op_out, line=self.line)
+        serial = order.scan_enter('SN-STA-002', wc_in)
+        order.leave_station(serial, 'ok')
+        order.scan_enter('SN-STA-002', wc_out)
+        self.assertTrue(order.leave_station(serial, 'ok'))
+        self.assertEqual(order.x_output_qty, 1.0)
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-STA-002', wc_in)
+
+    def test_32_line_and_workshop_guards(self):
+        """Start-operation work centers must share the order's line; every
+        work center must share the order's workshop."""
+        order = self._make_online_order()
+        other_workshop = self.env['sn.mrp.workshop'].create(
+            {'name': 'WS-X', 'code': 'WSX'})
+        with self.assertRaises(ValidationError):
+            order.scan_enter(
+                'SN-STA-003',
+                self._make_workcenter(self.op_in, workshop=other_workshop))
+        other_line = self.env['sn.mrp.production.line'].create({
+            'name': 'LB', 'workshop_id': self.workshop.id,
+        })
+        with self.assertRaises(ValidationError):
+            order.scan_enter(
+                'SN-STA-003', self._make_workcenter(self.op_in, line=other_line))
+
+    def test_33_first_entry_rules(self):
+        """Unknown SNs cannot join mid-route; known-but-never-fed SNs must
+        start at a start operation."""
+        order = self._make_online_order()
+        wc_out = self._make_workcenter(self.op_out, line=self.line)
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-NEVER-SEEN', wc_out)
+        serial = self.env['sn.wsd.serial.identity'].create(
+            {'name': 'SN-STA-004'})
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-STA-004', wc_out)
+
+    def test_34_report_mode_quantities(self):
+        """Report-mode quantities read the reported amounts at the counter
+        operations; successors unlock once the plan quantity is reached."""
+        order = self._make_online_order(qty=4, mode='report')
+        op_in_row = order.x_mes_route_id.x_daily_input_operation_id
+        op_out_row = order.x_mes_route_id.x_daily_output_operation_id
+        order.report_operation_qty(op_in_row, 3)
+        self.assertEqual(order.x_input_qty, 3.0)
+        self.assertEqual(op_in_row.x_reported_qty, 3.0)
+        with self.assertRaises(ValidationError):
+            order.report_operation_qty(op_out_row, 1)
+        order.report_operation_qty(op_in_row, 1)
+        order.report_operation_qty(op_out_row, 2)
+        self.assertEqual(order.x_output_qty, 2.0)
+
+    def test_44_report_quota_scrap_and_completion(self):
+        """Quota rule (OK+scrap consume, NG is a statistic, the whole batch
+        fits the remainder), scrap generates a native scrap order, and the
+        completion formula is OK + scrap >= plan."""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 4)
+        order.x_manage_mode = 'report'
+        order.action_online()
+        op_in_row = order.x_mes_route_id.x_daily_input_operation_id
+        op_out_row = order.x_mes_route_id.x_daily_output_operation_id
+        component, line_side = self._stock_line_side(order)
+        # batch OK 3 + NG 1 -> effective 3, remainder 1
+        order.report_operation_qty(op_in_row, 3, 1)
+        self.assertEqual(op_in_row.x_reported_ng_qty, 1.0)
+        # OK 2 more exceeds the remainder of 1
+        with self.assertRaises(ValidationError):
+            order.report_operation_qty(op_in_row, 2)
+        # NG-only batch is still capped by the physical board count
+        with self.assertRaises(ValidationError):
+            order.report_operation_qty(op_in_row, 0, 2)
+        # scrap 1: native scrap order per component, validated, quota closed
+        reason = self.env['sn.wsd.scrap.reason'].search([], limit=1)
+        order.report_operation_qty(op_in_row, 0, 0, 1, scrap_reason=reason)
+        scrap = self.env['stock.scrap'].search([('origin', '=', order.name)])
+        self.assertEqual(len(scrap), 1)
+        self.assertEqual(scrap.scrap_qty, 2.0)  # BOM: 2 components per unit
+        self.assertEqual(scrap.state, 'done')
+        self.assertEqual(scrap.x_scrap_reason_id, reason)
+        self.assertEqual(scrap.location_id, line_side)
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
+        self.assertEqual(quant.quantity, 98.0)
+        # input op complete (3 OK + 1 scrap >= 4) -> output reportable
+        order.report_operation_qty(op_out_row, 4)
+        self.assertEqual(order.x_output_qty, 4.0)
+        # invested amount counts NG: 3 + 1 + 1 = 5
+        self.assertEqual(order.x_input_qty, 5.0)
+
+    # ------------------------------------------------------------------
+    # completion (完工入库): backflush + receipt + closure
+    # ------------------------------------------------------------------
+    def _done_workcenters(self):
+        return (
+            self._make_workcenter(self.op_in, line=self.line),
+            self._make_workcenter(self.op_out, line=self.line),
+        )
+
+    def _order_with_output(self):
+        """One online station-mode order with a single SN walked through
+        both operations (output quantity = 1)."""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 4)
+        order.action_online()
+        wc_in, wc_out = self._done_workcenters()
+        serial = order.scan_enter('SN-DONE-001', wc_in)
+        order.leave_station(serial, 'ok')
+        order.scan_enter('SN-DONE-001', wc_out)
+        order.leave_station(serial, 'ok')
+        self.assertEqual(order.x_output_qty, 1.0)
+        return order
+
+    def _stock_line_side(self, order, qty=100):
+        component = order.production_id.bom_id.bom_line_ids.product_id
+        if not component.is_storable:
+            component.is_storable = True
+        line_side = order.production_line_id.workshop_id.component_location_id
+        Quant = self.env['stock.quant']
+        if not Quant.search([('product_id', '=', component.id),
+                             ('location_id', '=', line_side.id)]):
+            Quant.create({'product_id': component.id,
+                          'location_id': line_side.id, 'quantity': qty})
+        return component, line_side
+
+    def test_40_complete_to_stock_waits_for_validation(self):
+        order = self._order_with_output()
+        component, line_side = self._stock_line_side(order)
+        order.action_complete(1.0, 'stock')
+        receipt = order.picking_ids.filtered(
+            lambda p: p.state not in ('cancel',))
+        self.assertEqual(len(receipt), 1)
+        self.assertNotEqual(receipt.state, 'done')
+        self.assertEqual(receipt.x_mes_order_qty, 1.0)
+        self.assertEqual(order.x_done_qty, 1.0)
+        self.assertEqual(order.state, 'done')
+        self.assertEqual(order.production_id.state, 'done')
+        # backflush consumed 2 components per finished unit
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
+        self.assertEqual(quant.quantity, 98.0)
+
+    def test_41_complete_to_lineside_autovalidates(self):
+        order = self._order_with_output()
+        self._stock_line_side(order)
+        wh = order.production_id.picking_type_id.warehouse_id
+        workshop2 = self.env['sn.mrp.workshop'].create(
+            {'name': 'WS-ZJ', 'code': 'WSZJ'})
+        workshop2.component_location_id = self.env['stock.location'].create({
+            'name': 'ZJ-LINE-SIDE', 'usage': 'internal',
+            'location_id': wh.lot_stock_id.location_id.id,
+        }).id
+        order.action_complete(1.0, 'lineside', workshop=workshop2)
+        receipt = order.picking_ids.filtered(lambda p: p.state not in ('cancel',))
+        self.assertEqual(receipt.state, 'done')
+        self.assertEqual(receipt.location_dest_id, workshop2.component_location_id)
+        finished = order.production_id.product_id
+        if finished.is_storable:
+            quant = self.env['stock.quant'].search([
+                ('product_id', '=', finished.id),
+                ('location_id', '=', workshop2.component_location_id.id)])
+            self.assertEqual(quant.quantity, 1.0)
+        self.assertEqual(order.state, 'done')
+
+    def test_42_backflush_shortage_blocks_completion(self):
+        order = self._order_with_output()
+        # stockable component, no stock at all on the line side -> the
+        # backflush must fail and roll the whole completion back
+        # (the negative-stock guard is opt-in during tests via its context key)
+        component = order.production_id.bom_id.bom_line_ids.product_id
+        if not component.is_storable:
+            component.is_storable = True
+        with self.assertRaises(ValidationError):
+            order.with_context(test_stock_no_negative=True).action_complete(1.0, 'stock')
+        self.env.flush_all()
+        order.invalidate_recordset()
+        self.assertEqual(order.x_done_qty, 0.0)
+        self.assertEqual(order.state, 'in_progress')
+        self.assertFalse(order.picking_ids.filtered(
+            lambda p: p.state not in ('cancel',)))
+
+    def test_43_complete_without_bom_blocked(self):
+        """No BoM on the MO -> completion must fail hard (scheduling always
+        provides one; a BOM-less order must never complete silently)."""
+        order = self._make_online_order()  # _make_mo fixture has no BoM
+        with self.assertRaises(ValidationError):
+            order.action_complete(1.0, 'stock')
+        order.invalidate_recordset()
+        self.assertEqual(order.x_done_qty, 0.0)
+        self.assertEqual(order.state, 'in_progress')
+        self.assertFalse(order.picking_ids.filtered(
+            lambda p: p.state not in ('cancel',)))
+
+    def test_46_sn_bound_until_produced(self):
+        """Single-binding: an NG or mid-flow SN cannot escape to another
+        order; only producing (end op OK) releases it."""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order_a = self._make_order(mo, 4)
+        order_a.action_online()
+        order_b = self._make_order(mo, 4)
+        order_b.action_online()
+        wc_in, wc_out = self._done_workcenters()
+        serial = order_a.scan_enter('SN-BIND-001', wc_in)
+        order_a.leave_station(serial, 'ng')
+        # NG on A, not produced there -> cannot enter B
+        with self.assertRaises(ValidationError):
+            order_b.scan_enter('SN-BIND-001', wc_in)
+        # a healthy board produced through the end operation is released
+        serial2 = order_a.scan_enter('SN-BIND-002', wc_in)
+        order_a.leave_station(serial2, 'ok')
+        order_a.scan_enter('SN-BIND-002', wc_out)
+        order_a.leave_station(serial2, 'ok')
+        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in)
+        self.assertTrue(serial2_b)
+
+    def test_47_station_scan_routing(self):
+        """Line-bound stations only bring their own line's orders; the scan
+        router switches orders, expands WIP and feeds the selected order."""
+        self._set_line_side()
+        other_line = self.env['sn.mrp.production.line'].create({
+            'name': 'LB2', 'workshop_id': self.workshop.id,
+        })
+        mo = self._make_bom_mo(qty=10)
+        order_a = self._make_order(mo, 4)                 # line LA
+        order_a.action_online()
+        order_b = self._make_order(mo, 4, line=other_line)  # line LB2
+        order_b.action_online()
+        wc_in, _wc_out = self._done_workcenters()  # bound to LA
+        Station = env = self.env['sn.wsd.mes.order']
+        data = Station.sn_station_floor_data(wc_in.id)
+        self.assertEqual([o['name'] for o in data['orders']], [order_a.name])
+        # order barcode switches nothing here (B is another line, not listed)
+        # feed a new SN through the scan router
+        result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001', order_a.id)
+        self.assertEqual(result['action'], 'entered')
+        self.assertEqual(order_a.x_input_qty, 1.0)
+        # scanning that WIP SN returns the leave action
+        result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001')
+        self.assertEqual(result['action'], 'leave')
+        self.assertEqual(result['order_id'], order_a.id)
+        # an unknown SN without a selected order is refused
+        with self.assertRaises(ValidationError):
+            Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        # scanning the order barcode switches the current order
+        result = Station.sn_station_scan(wc_in.id, order_a.name)
+        self.assertEqual(result['action'], 'select_order')
+
+    def test_45_station_leave_scrap(self):
+        """Station mode: leaving with result Scrap is terminal -- the SN is
+        sealed, components are scrapped through a native scrap order."""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 8)
+        order.action_online()
+        wc_in, _wc_out = self._done_workcenters()
+        self._stock_line_side(order)
+        serial = order.scan_enter('SN-SCRAP-001', wc_in)
+        reason = self.env['sn.wsd.scrap.reason'].search([], limit=1)
+        with self.assertRaises(ValidationError):
+            order.leave_station(serial, 'scrap')  # reason is mandatory
+        order.leave_station(serial, 'scrap', scrap_reason=reason)
+        op_row = order.x_mes_route_id.x_daily_input_operation_id
+        self.assertEqual(op_row.x_scrap_qty, 1.0)
+        self.assertEqual(op_row.x_ng_qty, 0)
+        # yield counts the scrapped board
+        self.assertAlmostEqual(op_row.x_yield_rate, 0.0)
+        scrap = self.env['stock.scrap'].search([('origin', '=', order.name)])
+        self.assertEqual(len(scrap), 1)
+        self.assertEqual(scrap.scrap_qty, 2.0)  # BOM: 2 components per unit
+        self.assertEqual(scrap.state, 'done')
+        # the scrapped SN is sealed for this order
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-SCRAP-001', wc_in)

@@ -537,6 +537,10 @@ export class RouteFlowEditor extends Component {
             graph.on("cell:added", markDirty);
             graph.on("cell:removed", markDirty);
             graph.on("cell:change:data", markDirty);
+            // dragging only changes layout: push ONCE when the drag ends
+            // (node:moved), never per-frame -- mid-drag pushes make the
+            // record observer rebuild the canvas under the pointer
+            graph.on("node:moved", markDirty);
 
             this._loading = false;
             // Fit the whole flow into view (re-fit once the card markup has settled).

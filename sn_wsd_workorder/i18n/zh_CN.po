@@ -263,6 +263,8 @@ msgid "车间"
 msgstr "车间"
 
 #. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
 #: model:ir.ui.menu,name:sn_wsd_workorder.menu_sn_wsd_workorders
 msgid "Work Orders"
 msgstr "工单"
@@ -401,4 +403,327 @@ msgstr "车间数量报工"
 #: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
 msgid "Correct Report"
 msgstr "纠正报工"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Feed SN"
+msgstr "投入"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "In progress at this station"
+msgstr "本工位在制"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Input"
+msgstr "投入"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Input Point"
+msgstr "投入点"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Loading Station"
+msgstr "正在加载工位数据"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "No online MES orders run through this operation."
+msgstr "没有上线中的制令单经过此工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Output"
+msgstr "产出"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Output Point"
+msgstr "产出点"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Planned"
+msgstr "计划"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Report"
+msgstr "报工"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Reported"
+msgstr "已报"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scan or type SN, then press Enter"
+msgstr "扫码或输入 SN 后回车"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Select a MES order first."
+msgstr "请先选择制令单。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "SN entered the operation."
+msgstr "SN 已进入工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "SN flow finished on this MES order."
+msgstr "SN 已完成本制令单流程。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Station"
+msgstr "过站"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Station Passing"
+msgstr "过站"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "WIP"
+msgstr "在制"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Work Order Input"
+msgstr "工单投入"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Work Order Input Point"
+msgstr "工单投入点"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Complete (Receipt)"
+msgstr "完工入库"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Done"
+msgstr "已完工"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Done Qty"
+msgstr "完工数量"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Complete Products"
+msgstr "完工入库"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Completion receipt created."
+msgstr "完工入库单已生成。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Destination"
+msgstr "入库去向"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Workshop line side (auto-validated)"
+msgstr "车间线边仓（直接验证）"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Finished goods stock (waiting for validation)"
+msgstr "成品库（待仓库验证）"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Select a workshop"
+msgstr "请选择车间"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "MES order completed."
+msgstr "制令单已完成。"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "OK Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "NG Qty"
+msgstr "不良数量"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scrap Qty"
+msgstr "报废数量"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scrap"
+msgstr "报废"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Confirm Scrap"
+msgstr "确认报废"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scrap Reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Select a scrap reason."
+msgstr "请选择报废原因。"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Customer"
+msgstr "客户"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Other live orders"
+msgstr "其他在线单"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Go"
+msgstr "执行"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scan an order barcode to switch, a WIP SN to leave, or a new SN to feed the current order."
+msgstr "扫制令单条码切换当前单；扫在制 SN 出站；扫新 SN 投入当前单。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scan SN / order barcode…"
+msgstr "扫描 SN / 制令单条码…"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Switch"
+msgstr "切换"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "tap to act"
+msgstr "点击操作"
+
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "Feeding happens at a start operation only: this work center runs %(op)s of order %(order)s. Switch to a start station to feed SN %(sn)s."
+msgstr "投入只能在开始工序进行：当前工位执行的是制令单 %(order)s 的 %(op)s。请切换到开始工序工位后再投入 SN %(sn)s。"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "NG mode"
+msgstr "NG 模式"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "OK pass-through"
+msgstr "OK 直过"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scrap mode"
+msgstr "报废模式"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "SN left with NG."
+msgstr "SN 已判 NG 出站。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "SN left with OK."
+msgstr "SN 已判 OK 出站。"
+
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "More WIP hidden — scanning still works"
+msgstr "更多在制未显示（扫码操作不受影响）"
 

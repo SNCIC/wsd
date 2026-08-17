@@ -105,6 +105,7 @@ export class MesOrderRouteEditor extends Component {
             ".o_prop_tag { padding: 4px 14px; font-size: 12px; font-weight: 600; border: 1px solid #d9d9d9; border-radius: 14px; background: #fff; color: #595959; }",
             ".o_prop_tag_on { color: #fff !important; }",
             ".o_prop_tag_start { background: #52c41a; border-color: #52c41a; }",
+            ".o_prop_tag_end { background: #ff4d4f; border-color: #ff4d4f; }",
             ".o_route_node_card.o_selected { background: #f0f7ff; }",
             ".o_mes_route_canvas .x6-port-body { cursor: crosshair; }",
             ".o_mes_route_canvas .x6-edge:hover .x6-edge-path:last-child { stroke: #ff4d4f !important; }",
@@ -227,6 +228,8 @@ export class MesOrderRouteEditor extends Component {
                 this.state.dirty = true;
             };
             graph.on("cell:added", markDirty);
+            // layout-only drags mark the editor dirty once, at drag end
+            graph.on("node:moved", markDirty);
             graph.on("cell:removed", (args) => {
                 if (args.cell.isNode && args.cell.isNode()) {
                     const d = args.cell.getData();
@@ -238,7 +241,14 @@ export class MesOrderRouteEditor extends Component {
                 markDirty();
             });
 
-            canvas.graph.nodes.forEach((n, i) => this._addNode(graph, n, 30, 30 + i * 90));
+            // restore the saved layout; unsaved rows fall back to a column
+            canvas.graph.nodes.forEach((n, i) => {
+                const nx = Number.parseFloat(n.x);
+                const ny = Number.parseFloat(n.y);
+                this._addNode(graph, n,
+                    Number.isFinite(nx) ? nx : 30,
+                    Number.isFinite(ny) ? ny : 30 + i * 90);
+            });
             canvas.graph.edges.forEach(e => this._addEdge(graph, e));
             this._applyPortMagnets();
             this._loading = false;

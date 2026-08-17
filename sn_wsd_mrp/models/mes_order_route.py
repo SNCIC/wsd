@@ -183,6 +183,8 @@ class MesOrderRoute(models.Model):
                 'x_allow_entry': bool(node.get('x_allow_entry')),
                 'x_allow_exit': bool(node.get('x_allow_exit')),
                 'is_input': bool(node.get('x_allow_entry')),
+                'x_canvas_x': node.get('x'),
+                'x_canvas_y': node.get('y'),
             }
             current = by_op.get(op_id)
             if current and current in frozen:
@@ -280,8 +282,8 @@ class MesOrderRoute(models.Model):
                 'is_input': op.is_input,
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
-                'x': 30,
-                'y': 30,
+                'x': op.x_canvas_x,
+                'y': op.x_canvas_y,
             })
         for op in self.operation_ids:
             for dep in op.blocked_by_ids:
@@ -289,31 +291,29 @@ class MesOrderRoute(models.Model):
         return {'nodes': nodes, 'edges': edges}
 
     def _execution_state_map(self):
-        """op row id -> 'done' | 'wip' | 'ng' | 'partial' | None (+ qty info)."""
+        """op row id -> 'done' | 'wip' | 'ng' | 'partial' | None (+ qty info).
+
+        Reads the stored per-operation counters — no per-node searches."""
         self.ensure_one()
         result = {}
         if self.manage_mode == 'report':
-            Report = self.env['sn.wsd.mes.operation.report']
             planned = self.mes_order_id.planned_qty or 0.0
             for op in self.operation_ids:
-                qty = sum(Report.search([('route_operation_id', '=', op.id)]).mapped('qty'))
-                if qty + 0.00001 >= planned and planned > 0:
+                effective = op.x_reported_ok_qty + op.x_reported_scrap_qty
+                if effective + 0.00001 >= planned and planned > 0:
                     result[op.id] = 'done'
-                elif qty > 0:
-                    result[op.id] = 'partial:%s/%s' % (qty, planned)
+                elif op.x_reported_qty > 0:
+                    result[op.id] = 'partial:%s/%s' % (effective, planned)
                 else:
                     result[op.id] = None
             return result
-        History = self.env['sn.wsd.serial.operation.history']
-        Wip = self.env['sn.wsd.serial.wip']
         for op in self.operation_ids:
             state = None
-            hist = History.search([('route_operation_id', '=', op.id)])
-            if hist.filtered(lambda h: h.result == 'ok'):
+            if op.x_ok_qty:
                 state = 'done'
-            elif hist.filtered(lambda h: h.result == 'ng'):
+            elif op.x_ng_qty:
                 state = 'ng'
-            if Wip.search_count([('route_operation_id', '=', op.id)]):
+            if op.x_wip_qty:
                 state = 'wip'
             result[op.id] = state
         return result
@@ -346,6 +346,14 @@ class MesOrderRouteOperation(models.Model):
     )
     sequence = fields.Integer(default=100)
     time_cycle_manual = fields.Float(default=60.0)
+    x_canvas_x = fields.Integer(
+        string='Canvas X', aggregator=None,
+        help='Saved canvas position so the flow editor restores the layout.',
+    )
+    x_canvas_y = fields.Integer(
+        string='Canvas Y', aggregator=None,
+        help='Saved canvas position so the flow editor restores the layout.',
+    )
     x_allow_entry = fields.Boolean(
         string='Start Operation',
         help="Manual flag, same semantics as the common route editor: SNs "
@@ -368,6 +376,57 @@ class MesOrderRouteOperation(models.Model):
         'mes_order_route_operation_rel', 'src_id', 'dest_id',
         string='Successors',
     )
+    serial_history_ids = fields.One2many(
+        'sn.wsd.serial.operation.history', 'route_operation_id',
+    )
+    serial_wip_ids = fields.One2many(
+        'sn.wsd.serial.wip', 'route_operation_id',
+    )
+    report_ids = fields.One2many(
+        'sn.wsd.mes.operation.report', 'route_operation_id',
+    )
+    # Execution counters (event-driven stored computes): each pass/report
+    # rewrites this row inside the same transaction, so the flow canvas,
+    # order quantities and station terminals read them with zero aggregation.
+    x_wip_qty = fields.Integer(
+        string='In Progress', compute='_compute_pass_statistics', store=True,
+        help='SNs currently at this operation.',
+    )
+    x_ok_qty = fields.Integer(
+        string='Passed', compute='_compute_pass_statistics', store=True,
+        help='SNs that left this operation with result OK.',
+    )
+    x_ng_qty = fields.Integer(
+        string='Rejected', compute='_compute_pass_statistics', store=True,
+        help='SNs that left this operation with result NG.',
+    )
+    x_scrap_qty = fields.Float(
+        string='Scrapped', compute='_compute_pass_statistics', store=True,
+        help='Scrapped amount: SNs that left with result Scrap (station '
+             'mode) or accumulated scrap reports (report mode).',
+    )
+    x_reported_qty = fields.Float(
+        string='Reported Quantity', compute='_compute_pass_statistics', store=True,
+        help='Accumulated reported quantity (report mode): OK + NG + scrap, '
+             'the invested amount.',
+    )
+    x_reported_ok_qty = fields.Float(
+        string='Reported OK', compute='_compute_pass_statistics', store=True,
+        help='Accumulated OK reported quantity (report mode).',
+    )
+    x_reported_ng_qty = fields.Float(
+        string='Reported NG', compute='_compute_pass_statistics', store=True,
+        help='Accumulated NG reported quantity (report mode).',
+    )
+    x_reported_scrap_qty = fields.Float(
+        string='Reported Scrap', compute='_compute_pass_statistics', store=True,
+        help='Accumulated scrap reported quantity (report mode).',
+    )
+    x_yield_rate = fields.Float(
+        string='Yield Rate', compute='_compute_pass_statistics', store=True,
+        help='OK passes divided by OK + NG passes (scrap included in '
+             'report mode).',
+    )
 
     _route_op_uniq = models.Constraint(
         'unique(mes_route_id, operation_id)',
@@ -379,6 +438,31 @@ class MesOrderRouteOperation(models.Model):
         for op in self:
             op.display_label = ' / '.join(
                 filter(None, [op.x_step_code, op.name])) or op.operation_id.display_name
+
+    @api.depends('serial_history_ids.result', 'serial_wip_ids',
+                 'report_ids.qty_ok', 'report_ids.qty_ng', 'report_ids.qty_scrap')
+    def _compute_pass_statistics(self):
+        for op in self:
+            reports = op.report_ids
+            ok_qty = sum(reports.mapped('qty_ok'))
+            ng_qty = sum(reports.mapped('qty_ng'))
+            scrap_qty = sum(reports.mapped('qty_scrap'))
+            op.x_reported_ok_qty = ok_qty
+            op.x_reported_ng_qty = ng_qty
+            op.x_reported_scrap_qty = scrap_qty
+            op.x_reported_qty = ok_qty + ng_qty + scrap_qty
+            op.x_wip_qty = len(op.serial_wip_ids)
+            histories = op.serial_history_ids
+            op.x_ok_qty = len(histories.filtered(lambda h: h.result == 'ok'))
+            op.x_ng_qty = len(histories.filtered(lambda h: h.result == 'ng'))
+            if op.mes_route_id.manage_mode == 'report':
+                op.x_scrap_qty = scrap_qty
+                passed = ok_qty + ng_qty + scrap_qty
+                op.x_yield_rate = (ok_qty / passed) if passed else 0.0
+            else:
+                op.x_scrap_qty = len(histories.filtered(lambda h: h.result == 'scrap'))
+                passed = op.x_ok_qty + op.x_ng_qty + op.x_scrap_qty
+                op.x_yield_rate = (op.x_ok_qty / passed) if passed else 0.0
 
     def _has_execution_records(self):
         """Rows already walked/reported by SNs — frozen for sync & edits."""
@@ -400,10 +484,9 @@ class MesOrderRouteOperation(models.Model):
         if mes_order.x_manage_mode == 'report':
             done_ids = set()
             for op in self:
-                qty = sum(self.env['sn.wsd.mes.operation.report'].search([
-                    ('route_operation_id', '=', op.id),
-                ]).mapped('qty'))
-                if qty + 0.00001 >= mes_order.planned_qty:
+                effective = sum(op.report_ids.mapped('qty_ok')) \
+                    + sum(op.report_ids.mapped('qty_scrap'))
+                if effective + 0.00001 >= mes_order.planned_qty:
                     done_ids.add(op.id)
             return self.browse(done_ids)
         domain = [
@@ -439,8 +522,13 @@ class SerialOperationHistory(models.Model):
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation', required=True, index=True, ondelete='restrict',
     )
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter', string='Work Center', index=True, ondelete='set null',
+        help='Work center where the SN entered this operation (copied from '
+             'the WIP row on leave, kept for equipment-level traceability).',
+    )
     result = fields.Selection(
-        [('ok', 'OK'), ('ng', 'NG'), ('skipped', 'Skipped')],
+        [('ok', 'OK'), ('ng', 'NG'), ('scrap', 'Scrap'), ('skipped', 'Skipped')],
         required=True, index=True,
     )
     in_date = fields.Datetime()
@@ -471,6 +559,10 @@ class SerialWip(models.Model):
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation', required=True, index=True, ondelete='restrict',
     )
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter', string='Work Center', index=True, ondelete='set null',
+        help='Work center where the SN is currently being processed.',
+    )
     in_date = fields.Datetime(default=fields.Datetime.now)
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
@@ -483,7 +575,11 @@ class SerialWip(models.Model):
 
 
 class MesOperationReport(models.Model):
-    """Coarse mode: per-operation reported quantity (no SN tracking)."""
+    """Coarse mode: per-operation reported quantities (no SN tracking).
+
+    One report carries the three counters of a batch: OK (counts towards
+    completion), NG (statistic only -- rework re-reports as OK later) and
+    Scrap (consumes quota and generates native scrap orders)."""
     _name = 'sn.wsd.mes.operation.report'
     _description = 'MES Operation Report'
     _order = 'id desc'
@@ -494,7 +590,18 @@ class MesOperationReport(models.Model):
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation', required=True, index=True, ondelete='restrict',
     )
-    qty = fields.Float(required=True)
+    qty_ok = fields.Float(string='OK Quantity', required=True)
+    qty_ng = fields.Float(
+        string='NG Quantity',
+        help='Reworkable defects of this batch. Pure statistic: it does '
+             'not consume the plan quota; reworked boards are re-reported '
+             'as OK.',
+    )
+    qty_scrap = fields.Float(
+        string='Scrap Quantity',
+        help='Unrecoverable loss of this batch. Consumes the plan quota '
+             'and generates a native scrap order per component.',
+    )
     reported_by = fields.Many2one(
         'res.users', default=lambda self: self.env.user,
     )
