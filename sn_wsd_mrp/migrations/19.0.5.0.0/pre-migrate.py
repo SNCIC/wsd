@@ -69,14 +69,13 @@ def migrate(cr, version):
           )
     """)
     cr.execute("""
-        UPDATE ir_ui_view SET active = false
-        WHERE id IN (
-            SELECT res_id FROM ir_model_data
-            WHERE module = 'sn_wsd_mrp'
-              AND name IN (
-                  'view_mrp_routing_workcenter_form_sn_wsd_process_route',
-                  'view_mrp_routing_workcenter_list_sn_wsd_process_route'
-              )
-              AND model = 'ir.ui.view'
-        )
+        UPDATE ir_ui_view
+        SET active = false
+        WHERE active
+          AND arch_db::text LIKE '%x_process_route_id%'
+          AND model IN (
+              'mrp.bom',
+              'mrp.production',
+              'mrp.routing.workcenter'
+          )
     """)
