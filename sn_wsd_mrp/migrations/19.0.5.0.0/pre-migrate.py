@@ -68,3 +68,15 @@ def migrate(cr, version):
               WHERE module = 'sn_wsd_plm' AND model = 'ir.ui.view'
           )
     """)
+    cr.execute("""
+        UPDATE ir_ui_view SET active = false
+        WHERE id IN (
+            SELECT res_id FROM ir_model_data
+            WHERE module = 'sn_wsd_mrp'
+              AND name IN (
+                  'view_mrp_routing_workcenter_form_sn_wsd_process_route',
+                  'view_mrp_routing_workcenter_list_sn_wsd_process_route'
+              )
+              AND model = 'ir.ui.view'
+        )
+    """)
