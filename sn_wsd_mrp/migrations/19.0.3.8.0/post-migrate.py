@@ -26,7 +26,10 @@ def migrate(cr, version):
             continue
         graph = route._flow_graph_from_operations()
         if graph.get('nodes'):
-            route.route_flow_json = json.dumps(graph)
+            cr.execute(
+                "UPDATE sn_wsd_process_route SET route_flow_json = %s WHERE id = %s",
+                (json.dumps(graph), route.id),
+            )
             migrated_json += 1
     _logger.info("route_flow_json: migrated %d route(s)", migrated_json)
 
