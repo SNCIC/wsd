@@ -122,3 +122,86 @@
         }
     }
 }
+
+// Station passing tab (SN feeding / station leave / operation reporting)
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_station_wc {
+        min-width: 240px;
+        width: auto;
+    }
+
+    .o_sn_wsd_station_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 12px;
+    }
+
+    .o_sn_wsd_station_card {
+        border-radius: 8px;
+        cursor: pointer;
+
+        &.o_selected {
+            box-shadow: 0 0 0 2px rgba(113, 75, 103, 0.55);
+        }
+    }
+
+    .o_sn_wsd_station_snbar {
+        .o_sn_wsd_station_sn_input {
+            flex: 1 1 320px;
+            font-size: 1.05rem;
+        }
+    }
+
+    .o_sn_wsd_station_wip_row:last-child {
+        border-bottom: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_sn_wsd_shop_floor {
+        .o_sn_wsd_station_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .o_sn_wsd_station_wc {
+            width: 100%;
+        }
+    }
+}
+
+// Scan-driven terminal: scan box, current banner, grouped WIP
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_scanbox {
+        .o_sn_wsd_scan_input {
+            font-size: 1.15rem;
+        }
+    }
+
+    .o_sn_wsd_current {
+        border-left: 4px solid #714b67;
+    }
+
+    .o_sn_wsd_other_row {
+        font-size: 0.9rem;
+    }
+
+    .o_sn_wsd_wip_group {
+        padding-left: 6px;
+    }
+
+    .o_sn_wsd_station_wip_row {
+        cursor: pointer;
+    }
+}
+
+// scan mode tints: default OK pass-through, NG/scrap warnings
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_scanbox.o_scan_mode_ng {
+        border-color: #ffc107 !important;
+        background: #fffbea !important;
+    }
+    .o_sn_wsd_scanbox.o_scan_mode_scrap {
+        border-color: #212529 !important;
+        background: #f1f3f5 !important;
+    }
+}

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================================================================
+         Process route check (工艺路线检查视图): MO-driven workbench.
+         A row appears when the MO's product board side + workshop +
+         drawing number cannot match a live process route; the per-side
+         buttons open a new route form prefilled with workshop + drawing
+         + side. Products without a declared board side type are out of
+         scope (legacy, side-agnostic scheduling).
+         ================================================================== -->
+
+    <record id="view_sn_wsd_mes_route_check_list" model="ir.ui.view">
+        <field name="name">mrp.production.list.mes.route.check</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false"
+                  decoration-danger="x_mes_route_missing">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="x_drawing_no" optional="show"/>
+                <field name="x_board_side" widget="badge"
+                       decoration-success="x_board_side == 'single'"
+                       decoration-info="x_board_side == 'double'"/>
+                <field name="x_workshop_id"/>
+                <field name="product_qty" optional="show"/>
+                <field name="date_deadline" optional="hide"/>
+                <field name="x_mes_route_single_ok" widget="badge"
+                       decoration-success="x_mes_route_single_ok" decoration-danger="not x_mes_route_single_ok"
+                       invisible="x_board_side != 'single'"/>
+                <field name="x_mes_route_top_ok" widget="badge"
+                       decoration-success="x_mes_route_top_ok" decoration-danger="not x_mes_route_top_ok"
+                       invisible="x_board_side != 'double'"/>
+                <field name="x_mes_route_bottom_ok" widget="badge"
+                       decoration-success="x_mes_route_bottom_ok" decoration-danger="not x_mes_route_bottom_ok"
+                       invisible="x_board_side != 'double'"/>
+                <field name="x_mes_route_missing_sides"/>
+                <button name="action_mes_add_single_route" type="object"
+                        string="Add Single Route" icon="fa-plus-circle"
+                        invisible="x_board_side != 'single' or x_mes_route_single_ok"/>
+                <button name="action_mes_add_top_route" type="object"
+                        string="Add T Route" icon="fa-plus-circle"
+                        invisible="x_board_side != 'double' or x_mes_route_top_ok"/>
+                <button name="action_mes_add_bottom_route" type="object"
+                        string="Add B Route" icon="fa-plus-circle"
+                        invisible="x_board_side != 'double' or x_mes_route_bottom_ok"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_route_check_search" model="ir.ui.view">
+        <field name="name">mrp.production.search.mes.route.check</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="x_workshop_id"/>
+                <filter name="route_missing" string="Route Not Matched"
+                        domain="[('x_mes_route_missing', '=', True)]"/>
+                <filter name="route_matched" string="Route Matched"
+                        domain="[('x_mes_route_missing', '=', False), ('product_id.x_drawing_no', '!=', False)]"/>
+                <separator/>
+                <filter name="board_single" string="Single Side"
+                        domain="[('product_id.x_board_side', '=', 'single')]"/>
+                <filter name="board_double" string="Double Side"
+                        domain="[('product_id.x_board_side', '=', 'double')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_workshop" string="Workshop"
+                            context="{'group_by': 'x_workshop_id'}"/>
+                    <filter name="group_board_side" string="Board Side Type"
+                            context="{'group_by': 'x_board_side'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_route_check" model="ir.actions.act_window">
+        <field name="name">Process Route Check</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_mes_route_check_search"/>
+        <field name="domain">[('state', 'not in', ('done', 'cancel')), ('product_id.x_drawing_no', '!=', False)]</field>
+        <field name="context">{'search_default_route_missing': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Every manufacturing order matches its routes</p>
+            <p>This workbench lists open manufacturing orders whose product board
+            side, workshop and drawing number cannot match a live process route.
+            Use the per-row button to create the missing route prefilled with
+            the workshop, drawing number and side.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_mes_route_check" name="Process Route Check"
+              parent="sn_wsd_mrp.menu_sn_wsd_mes_root"
+              action="action_sn_wsd_mes_route_check" sequence="5"/>
+
+</odoo>

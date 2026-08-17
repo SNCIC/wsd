@@ -6,101 +6,157 @@
                 <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.close()">
                     <i class="fa fa-arrow-left" role="img"/>
                 </button>
-                <div class="ms-auto d-flex flex-wrap gap-2 align-items-center">
-                    <input class="form-control o_sn_wsd_shop_floor_search" t-att-placeholder="labels.searchWorkorders" t-model="state.search"/>
-                    <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.reload()">
-                        <i class="fa fa-refresh" role="img"/>
-                    </button>
-                </div>
+                <strong><i class="fa fa-random me-1" role="img"/><t t-out="labels.stationTab"/></strong>
             </header>
-            <section class="o_sn_wsd_shop_floor_status px-3 py-2 border-bottom d-flex flex-wrap gap-2 align-items-center">
-                <span class="fw-semibold" t-out="labels.currentOperator"/>
-                <span class="badge text-bg-primary" t-if="state.operator" t-out="state.operator.name"/>
-                <span class="badge text-bg-secondary" t-else="" t-out="labels.noOperator"/>
-            </section>
-            <main class="o_sn_wsd_shop_floor_body flex-grow-1 overflow-auto p-3">
-                <div t-if="state.loading" class="o_sn_wsd_shop_floor_empty">
-                    <i class="fa fa-spinner fa-spin me-2" role="img"/><t t-out="labels.loadingWorkorders"/>
+            
+            <main class="o_sn_wsd_shop_floor_body o_sn_wsd_station_body flex-grow-1 overflow-auto p-3">
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <span class="fw-semibold" t-out="labels.currentOperator"/>
+                    <span class="badge text-bg-primary" t-if="state.operator" t-out="state.operator.name"/>
+                    <span class="badge text-bg-secondary" t-else="" t-out="labels.noOperator"/>
                 </div>
-                <div t-elif="!filteredWorkorders.length" class="o_sn_wsd_shop_floor_empty">
-                    <t t-out="labels.noWorkorders"/>
+                <div t-if="state.station.loading" class="o_sn_wsd_shop_floor_empty">
+                    <i class="fa fa-spinner fa-spin me-2" role="img"/><t t-out="labels.loadingStation"/>
                 </div>
-                <div t-else="" class="o_sn_wsd_workorder_grid">
-                    <t t-foreach="filteredWorkorders" t-as="workorder" t-key="workorder.id">
-                        <article class="o_sn_wsd_workorder_card border bg-view">
-                            <div class="o_sn_wsd_workorder_card_header border-bottom p-3">
-                                <div class="d-flex justify-content-between gap-2 align-items-start">
-                                    <div class="min-w-0">
-                                        <h3 class="h5 mb-1 text-truncate" t-out="workorder.production.name"/>
-                                        <div class="text-muted text-truncate" t-out="workorder.product"/>
-                                    </div>
-                                    <span class="badge text-nowrap" t-att-class="stateClass(workorder.state)" t-out="stateLabel(workorder.state)"/>
+                <div t-else="" class="d-flex flex-column gap-3">
+
+                    <!-- work center bar -->
+                    <div class="o_sn_wsd_station_bar bg-view border rounded p-2 d-flex flex-wrap gap-2 align-items-center">
+                        <strong t-out="labels.workcenter"/>
+                        <select class="form-select o_sn_wsd_station_wc" t-on-change="onWorkcenterChange">
+                            <option t-foreach="state.station.workcenters" t-as="wc" t-key="wc.id"
+                                    t-att-value="wc.id" t-att-selected="state.station.workcenterId === wc.id"
+                                    t-out="wc.label"/>
+                        </select>
+                        <span class="ms-2 small text-muted" t-if="state.station.workcenter">
+                            <t t-out="labels.operationLabel"/>: <strong t-out="state.station.workcenter.operation"/>
+                        </span>
+                        <button class="btn btn-secondary o_btn_icon ms-auto" t-on-click="() => this.loadStation()">
+                            <i class="fa fa-refresh" role="img"/>
+                        </button>
+                    </div>
+
+                    <!-- the scan box: one entry for feed / leave / order switching -->
+                    <div t-att-class="'o_sn_wsd_scanbox border rounded p-3 bg-view ' + (
+                        state.station.mode === 'ng' ? 'o_scan_mode_ng' :
+                        state.station.mode === 'scrap' ? 'o_scan_mode_scrap' : 'o_scan_mode_ok')">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text"><i class="fa fa-barcode" role="img"/></span>
+                            <input class="form-control o_sn_wsd_scan_input" t-att-placeholder="labels.scanPlaceholder"
+                                   t-model="state.station.scan" t-on-keydown="onScanKeydown"/>
+                            <button class="btn btn-primary" t-on-click="() => this.onScanSubmit()">
+                                <t t-out="labels.scanGo"/>
+                            </button>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                            <span class="small text-muted me-1" t-out="labels.scanHint"/>
+                            <div class="btn-group btn-group-sm ms-auto">
+                                <button class="btn" t-att-class="state.station.mode === 'ok' ? 'btn-success' : 'btn-outline-success'"
+                                        t-on-click="() => this.setStationMode('ok')">
+                                    <i class="fa fa-check me-1" role="img"/><t t-out="labels.modeOk"/>
+                                </button>
+                                <button class="btn" t-att-class="state.station.mode === 'ng' ? 'btn-warning' : 'btn-outline-warning'"
+                                        t-on-click="() => this.setStationMode('ng')">
+                                    <i class="fa fa-exclamation me-1" role="img"/><t t-out="labels.modeNg"/>
+                                </button>
+                                <button class="btn" t-att-class="state.station.mode === 'scrap' ? 'btn-dark' : 'btn-outline-dark'"
+                                        t-on-click="() => this.setStationMode('scrap')">
+                                    <i class="fa fa-trash me-1" role="img"/><t t-out="labels.modeScrap"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- current production banner -->
+                    <div t-if="selectedStationOrder" class="o_sn_wsd_current border rounded p-3 bg-view">
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <div class="min-w-0">
+                                <div class="fw-bold fs-5 text-truncate">
+                                    <t t-out="selectedStationOrder.name"/> — <t t-out="selectedStationOrder.product"/>
                                 </div>
-                                <div class="d-flex flex-wrap gap-2 mt-2 small">
-                                    <span class="badge text-bg-light" t-out="workorder.workcenter.name"/>
-                                    <span class="badge text-bg-light" t-if="workorder.operation_type" t-out="workorder.operation_type"/>
-                                    <span class="badge text-bg-light">
-                                        <t t-out="workorder.qty_produced"/> / <t t-out="workorder.qty_remaining"/> <t t-out="workorder.uom"/>
-                                    </span>
-                                    <span class="badge text-bg-light">
-                                        <t t-out="formatMinutes(workorder.duration)"/> / <t t-out="formatMinutes(workorder.duration_expected)"/>
-                                    </span>
+                                <div class="small" t-if="selectedStationOrder.partner">
+                                    <t t-out="labels.customerLabel"/>: <t t-out="selectedStationOrder.partner"/>
                                 </div>
                             </div>
-                            <div class="p-3">
-                                <div class="d-flex justify-content-between gap-2 align-items-center mb-2">
-                                    <strong t-out="workorder.name"/>
-                                    <div class="position-relative">
-                                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.toggleWorkorderMenu(workorder)">
-                                            <i class="fa fa-ellipsis-v" role="img"/>
-                                        </button>
-                                        <div class="dropdown-menu show o_sn_wsd_workorder_menu" t-if="state.openMenuWorkorderId === workorder.id">
-                                            <button class="dropdown-item" t-on-click="() => this.openWorkorder(workorder)">
-                                                <i class="fa fa-tasks me-2" role="img"/><t t-out="labels.openWorkOrder"/>
-                                            </button>
-                                            <button class="dropdown-item" t-on-click="() => this.openProduction(workorder)">
-                                                <i class="fa fa-industry me-2" role="img"/><t t-out="labels.openManufacturingOrder"/>
-                                            </button>
-                                            <button class="dropdown-item" t-on-click="() => this.openQuantityDialog(workorder, false)">
-                                                <i class="fa fa-calculator me-2" role="img"/><t t-out="labels.reportQuantity"/>
-                                            </button>
-                                            <button class="dropdown-item" t-on-click="() => this.openQuantityDialog(workorder, true)">
-                                                <i class="fa fa-check-circle me-2" role="img"/><t t-out="labels.reportAndFinish"/>
-                                            </button>
-                                            <button class="dropdown-item" t-if="workorder.can_correct_reports" t-on-click="() => this.openReportCorrection(workorder)">
-                                                <i class="fa fa-pencil-square-o me-2" role="img"/><t t-out="labels.correctReport"/>
-                                            </button>
-                                        </div>
+                            <div class="d-flex flex-column gap-1 align-items-end">
+                                <span class="badge" t-att-class="selectedStationOrder.manage_mode === 'report' ? 'text-bg-info' : 'text-bg-secondary'"
+                                      t-out="selectedStationOrder.manage_mode === 'report' ? labels.reportModeBadge : labels.stationModeBadge"/>
+                                <span t-if="selectedStationOrder.op.is_input_point" class="badge text-bg-warning" t-out="labels.inputPoint"/>
+                                <span t-if="selectedStationOrder.op.is_output_point" class="badge text-bg-success" t-out="labels.outputPoint"/>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 mt-2 small">
+                            <span class="badge text-bg-light"><t t-out="labels.plannedQtyLabel"/>: <t t-out="selectedStationOrder.planned_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station'" class="badge text-bg-light"><t t-out="labels.inputQtyLabel"/>: <t t-out="selectedStationOrder.input_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station'" class="badge text-bg-light"><t t-out="labels.outputQtyLabel"/>: <t t-out="selectedStationOrder.output_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station'" class="badge text-bg-light"><t t-out="labels.wipQtyLabel"/>: <t t-out="selectedStationOrder.op.wip_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station'" class="badge text-bg-light">OK: <t t-out="selectedStationOrder.op.ok_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station'" class="badge text-bg-light">NG: <t t-out="selectedStationOrder.op.ng_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'station' and selectedStationOrder.op.scrap_qty" class="badge text-bg-dark"><t t-out="labels.scrapBtn"/>: <t t-out="selectedStationOrder.op.scrap_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'report'" class="badge text-bg-light"><t t-out="labels.reportedLabel"/>: <t t-out="selectedStationOrder.op.reported_effective"/> / <t t-out="selectedStationOrder.planned_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'report' and selectedStationOrder.op.reported_ng_qty" class="badge text-bg-warning"><t t-out="labels.ngQtyLabel"/>: <t t-out="selectedStationOrder.op.reported_ng_qty"/></span>
+                            <span t-if="selectedStationOrder.manage_mode === 'report' and selectedStationOrder.op.reported_scrap_qty" class="badge text-bg-danger"><t t-out="labels.scrapQtyLabel"/>: <t t-out="selectedStationOrder.op.reported_scrap_qty"/></span>
+                            <span t-if="selectedStationOrder.done_qty" class="badge text-bg-success"><t t-out="labels.doneQtyLabel"/>: <t t-out="selectedStationOrder.done_qty"/></span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-2">
+                            <button t-if="selectedStationOrder.manage_mode === 'report'" class="btn btn-primary btn-sm" t-on-click="() => this.openStationReportDialog(selectedStationOrder)">
+                                <i class="fa fa-calculator me-1" role="img"/><t t-out="labels.reportQuantity"/>
+                            </button>
+                            <button t-if="selectedStationOrder.can_done" class="btn btn-success btn-sm" t-on-click="() => this.openStationDoneDialog(selectedStationOrder)">
+                                <i class="fa fa-download me-1" role="img"/><t t-out="labels.doneButton"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div t-else="" class="o_sn_wsd_shop_floor_empty"><t t-out="labels.noStationOrders"/></div>
+
+                    <!-- other live orders: collapsed, tap or scan to switch -->
+                    <div t-if="otherOrders.length" class="o_sn_wsd_other_orders">
+                        <div class="small fw-semibold text-muted mb-1" t-out="labels.otherOrders"/>
+                        <div t-foreach="otherOrders" t-as="o" t-key="o.id"
+                             class="o_sn_wsd_other_row d-flex flex-wrap gap-2 align-items-center border rounded p-2 bg-view mb-1">
+                            <span class="fw-semibold" t-out="o.name"/>
+                            <span class="small text-truncate" t-out="o.product"/>
+                            <span t-if="o.partner" class="small text-muted" t-out="o.partner"/>
+                            <span class="badge text-bg-light"><t t-out="labels.plannedQtyLabel"/>: <t t-out="o.planned_qty"/></span>
+                            <span class="badge" t-att-class="o.manage_mode === 'report' ? 'text-bg-info' : 'text-bg-secondary'"
+                                  t-out="o.manage_mode === 'report' ? labels.reportModeBadge : labels.stationModeBadge"/>
+                            <button class="btn btn-outline-primary btn-sm ms-auto" t-on-click="() => this.selectStationOrder(o)" t-out="labels.switchOrder"/>
+                        </div>
+                    </div>
+
+                    <!-- pending WIP grouped by order; actions unfold on tap/scan -->
+                    <div t-if="state.station.wip.length" class="o_sn_wsd_station_wip bg-view border rounded">
+                        <div class="p-2 border-bottom fw-semibold">
+                            <t t-out="labels.inProgressHere"/> (<t t-out="state.station.wip.length"/>)
+                        </div>
+                        <div class="p-2 d-flex flex-column gap-2">
+                            <t t-foreach="groupedWip" t-as="group" t-key="group.order_id">
+                                <div class="o_sn_wsd_wip_group">
+                                    <div class="small fw-semibold border-bottom pb-1 mb-1">
+                                        <t t-out="group.order_name"/>
                                     </div>
-                                </div>
-                                <div class="o_sn_wsd_components" t-if="workorder.components.length">
-                                    <div class="small fw-semibold text-muted mb-1" t-out="labels.materials"/>
-                                    <t t-foreach="workorder.components" t-as="component" t-key="component.id">
-                                        <button class="o_sn_wsd_component_row btn btn-link text-reset text-decoration-none d-flex justify-content-between gap-2 small border-bottom py-1 px-0 w-100" t-on-click="() => this.openConsumeDialog(workorder, component)">
-                                            <span class="text-truncate text-start" t-out="component.product"/>
-                                            <span class="text-nowrap">
-                                                <t t-out="component.done_qty"/> / <t t-out="component.planned_qty"/> <t t-out="component.uom"/>
-                                            </span>
-                                        </button>
+                                    <t t-foreach="group.rows" t-as="row" t-key="row.id">
+                                        <div class="o_sn_wsd_station_wip_row d-flex flex-wrap gap-2 align-items-center border-bottom py-1"
+                                             t-on-click="() => this.toggleWipRow(row)">
+                                            <span class="badge text-bg-primary" t-out="row.sn"/>
+                                            <span class="small" t-out="row.order_name"/>
+                                            <span class="small text-muted" t-out="row.in_date"/>
+                                            <div t-if="state.station.expandedWipId === row.id"
+                                                 class="ms-auto d-flex gap-2" t-on-click.stop="() => {}">
+                                                <button class="btn btn-success btn-sm" t-on-click="() => this.leaveStationWip(row, 'ok')">OK</button>
+                                                <button class="btn btn-warning btn-sm" t-on-click="() => this.leaveStationWip(row, 'ng')">NG</button>
+                                                <button class="btn btn-dark btn-sm" t-on-click="() => this.leaveStationWip(row, 'scrap')" t-out="labels.scrapBtn"/>
+                                            </div>
+                                            <span t-else="" class="ms-auto small text-muted"><t t-out="labels.tapToAct"/></span>
+                                        </div>
                                     </t>
                                 </div>
+                            </t>
+                            <div t-if="hiddenWipCount" class="small text-muted pt-2">
+                                <t t-out="labels.moreWipHidden"/>: <t t-out="hiddenWipCount"/>
                             </div>
-                            <footer class="border-top p-3 d-flex flex-wrap gap-2 justify-content-end bg-100">
-                                <button class="btn btn-primary" t-on-click="() => this.execute(workorder, 'start')" t-if="workorder.state !== 'progress'">
-                                    <i class="fa fa-play me-1" role="img"/><t t-out="labels.startWork"/>
-                                </button>
-                                <button class="btn btn-secondary" t-on-click="() => this.execute(workorder, 'pause')" t-if="workorder.state === 'progress'">
-                                    <i class="fa fa-pause me-1" role="img"/><t t-out="labels.pauseWork"/>
-                                </button>
-                                <button class="btn btn-secondary" t-on-click="() => this.openQuantityDialog(workorder, false)">
-                                    <i class="fa fa-calculator me-1" role="img"/><t t-out="labels.reportQuantity"/>
-                                </button>
-                                <button class="btn btn-success" t-on-click="() => this.openQuantityDialog(workorder, true)">
-                                    <i class="fa fa-check-circle me-1" role="img"/><t t-out="labels.finish"/>
-                                </button>
-                            </footer>
-                        </article>
-                    </t>
+                        </div>
+                    </div>
                 </div>
             </main>
             <div class="o_sn_wsd_modal_backdrop" t-if="state.quantityDialog.open">
@@ -151,6 +207,116 @@
                     <div class="d-flex justify-content-end gap-2">
                         <button class="btn btn-secondary" t-on-click="() => this.closeConsumeDialog()" t-out="labels.cancel"/>
                         <button class="btn btn-primary" t-on-click="() => this.submitConsume()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.stationReportDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-out="labels.reportQuantity"/>
+                            <div class="text-muted small" t-out="state.stationReportDialog.order.name"/>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.closeStationReportDialog()">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <label class="form-label" t-out="labels.okQtyLabel"/>
+                    <div class="input-group mb-2">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.stationReportDialog.qtyOk"/>
+                    </div>
+                    <label class="form-label" t-out="labels.ngQtyLabel"/>
+                    <div class="input-group mb-2">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.stationReportDialog.qtyNg"/>
+                    </div>
+                    <label class="form-label" t-out="labels.scrapQtyLabel"/>
+                    <div class="input-group mb-2">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.stationReportDialog.qtyScrap"/>
+                    </div>
+                    <div t-if="state.stationReportDialog.qtyScrap &gt; 0">
+                        <label class="form-label" t-out="labels.scrapReasonLabel"/>
+                        <div class="input-group mb-3">
+                            <select class="form-select" t-model="state.stationReportDialog.scrapReasonId">
+                                <option value=""><t t-out="labels.scrapReasonLabel"/></option>
+                                <option t-foreach="state.station.scrapReasons" t-as="r" t-key="r.id"
+                                        t-att-value="r.id" t-out="r.name"/>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="small text-muted mb-3">
+                        <t t-out="labels.reportedLabel"/> <t t-out="state.stationReportDialog.order.op.reported_effective"/> / <t t-out="state.stationReportDialog.order.planned_qty"/> · <t t-out="state.stationReportDialog.order.op.label"/>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeStationReportDialog()" t-out="labels.cancel"/>
+                        <button class="btn btn-primary" t-on-click="() => this.submitStationReport()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.stationDoneDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-out="labels.doneTitle"/>
+                            <div class="text-muted small" t-out="state.stationDoneDialog.order.name"/>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.closeStationDoneDialog()">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <div class="mb-3 small text-muted">
+                        <t t-out="labels.outputQtyLabel"/> <t t-out="state.stationDoneDialog.order.output_qty"/>
+                        · <t t-out="labels.doneLabel"/> <t t-out="state.stationDoneDialog.order.done_qty || 0"/>
+                    </div>
+                    <label class="form-label" t-out="labels.doneQtyLabel"/>
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="number" min="0" step="any" t-model="state.stationDoneDialog.qty"/>
+                    </div>
+                    <label class="form-label" t-out="labels.destinationLabel"/>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="done-dest-stock" value="stock" t-model="state.stationDoneDialog.destination"/>
+                        <label class="form-check-label" for="done-dest-stock" t-out="labels.destinationStock"/>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="done-dest-lineside" value="lineside" t-model="state.stationDoneDialog.destination"/>
+                        <label class="form-check-label" for="done-dest-lineside" t-out="labels.destinationLineside"/>
+                    </div>
+                    <select t-if="state.stationDoneDialog.destination === 'lineside'"
+                            class="form-select mt-2 mb-3"
+                            t-model="state.stationDoneDialog.workshopId">
+                        <option value=""><t t-out="labels.pickWorkshop"/></option>
+                        <option t-foreach="state.stationDoneDialog.order.workshops" t-as="ws" t-key="ws.id" t-att-value="ws.id" t-out="ws.name"/>
+                    </select>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeStationDoneDialog()" t-out="labels.cancel"/>
+                        <button class="btn btn-success" t-on-click="() => this.submitStationDone()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.stationScrapDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-out="labels.scrapConfirmTitle"/>
+                            <div class="text-muted small">
+                                <span class="badge text-bg-primary" t-out="state.stationScrapDialog.row.sn"/>
+                                <t t-out="state.stationScrapDialog.row.order_name"/>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.state.stationScrapDialog.open = false">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <label class="form-label" t-out="labels.scrapReasonLabel"/>
+                    <div class="input-group mb-3">
+                        <select class="form-select" t-model="state.stationScrapDialog.reasonId">
+                            <option value=""><t t-out="labels.scrapReasonLabel"/></option>
+                            <option t-foreach="state.station.scrapReasons" t-as="r" t-key="r.id"
+                                    t-att-value="r.id" t-out="r.name"/>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary" t-on-click="() => this.state.stationScrapDialog.open = false" t-out="labels.cancel"/>
+                        <button class="btn btn-dark" t-on-click="() => this.submitStationScrap()" t-out="labels.confirm"/>
                     </div>
                 </div>
             </div>

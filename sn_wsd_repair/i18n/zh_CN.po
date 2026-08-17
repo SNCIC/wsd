@@ -562,3 +562,200 @@ msgstr "维修切入"
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_process_route_id
 msgid "Repair Process Route"
 msgstr "维修工艺路线"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__active
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__board_sn
+msgid "Board SN"
+msgstr "单板 SN"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__state__cancel
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__company_id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__defect_code_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Defect Code"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_workorder__display_name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_internal_serial__display_name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_quality_issue__display_name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_workorder__id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_internal_serial__id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_quality_issue__id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,help:sn_wsd_repair.field_sn_wsd_repair_order__repair_process_route_id
+msgid "Independent route snapshot; no longer derived from the BOM."
+msgstr "独立路线快照；不再派生自 BOM。"
+
+#. module: sn_wsd_repair
+#: model:ir.model,name:sn_wsd_repair.model_sn_wsd_internal_serial
+msgid "Internal Serial"
+msgstr "内部序列号"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__manufacturing_batch_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Manufacturing Batch"
+msgstr "制造批次"
+
+#. module: sn_wsd_repair
+#: model:ir.model,name:sn_wsd_repair.model_mrp_production
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__note
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_type_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__serial_id
+msgid "Product SN"
+msgstr "产品 SN"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__result__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_form
+msgid "Repair Invalid Scrap"
+msgstr "返修无效报废"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_method
+msgid "Repair Method"
+msgstr "返修方式"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__result__ok
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_form
+msgid "Repair OK"
+msgstr "返修合格"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_production__x_repair_qty_total
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_mrp_workorder__x_repair_qty_total
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_qty
+msgid "Repair Quantity"
+msgstr "返修数量"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__result
+msgid "Repair Result"
+msgstr "返修结果"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_time
+msgid "Repair Time"
+msgstr "返修时间"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Repair User"
+msgstr "返修人"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/sn_wsd_repair.py:0
+msgid "Repair order %s reported quantity rework"
+msgstr "返修单 %s 按数量报工返修"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__state__repairing
+msgid "Repairing"
+msgstr "返修中"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__replacement_sn
+msgid "Replacement Material SN"
+msgstr "换料 SN"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__state__reported
+msgid "Reported"
+msgstr "已报工"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__state__scrapped
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_repair
+#: model:ir.model,name:sn_wsd_repair.model_mrp_workorder
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+msgid "Work Order"
+msgstr "工单"

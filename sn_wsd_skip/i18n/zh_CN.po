@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_skip
 #
@@ -518,12 +518,12 @@ msgid "Skip Request Sequence"
 msgstr "跳站申请序列"
 
 #. module: sn_wsd_skip
+#. odoo-python
+#. odoo-python
 #: model:ir.actions.act_window,name:sn_wsd_skip.action_sn_wsd_skip_request
 #: model:ir.ui.menu,name:sn_wsd_skip.menu_sn_wsd_skip_request
 #: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
-#. odoo-python
 #: code:addons/sn_wsd_skip/models/mrp_production.py:0
-#. odoo-python
 #: code:addons/sn_wsd_skip/models/skip_request.py:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_production_form_sn_wsd_skip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_mrp_workorder_form_sn_wsd_skip
@@ -615,3 +615,49 @@ msgstr "line_ids.workorder_id"
 #: code:addons/sn_wsd_skip/models/mrp_production.py:0
 msgid "production_id"
 msgstr "production_id"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__route_id
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request_line__route_id
+msgid "Independent route snapshot; no longer derived from the BOM."
+msgstr "独立路线快照；不再派生自 BOM。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__manufacturing_batch_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_skip.view_sn_wsd_skip_request_search
+msgid "Manufacturing Batch"
+msgstr "制造批次"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid "Only manufacturing administrators can perform this action."
+msgstr "只有制造管理员可以执行此操作。"
+
+#. module: sn_wsd_skip
+#. odoo-python
+#: code:addons/sn_wsd_skip/models/skip_request.py:0
+msgid ""
+"Operation %(operation)s already has an approved skip request for this "
+"manufacturing batch."
+msgstr "工序 %(operation)s 在该制造批次下已有已批准的跳过申请。"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request__route_id
+#: model:ir.model.fields,field_description:sn_wsd_skip.field_sn_wsd_skip_request_line__route_id
+msgid "Process Route (Independent)"
+msgstr "独立工艺路线"
+
+#. module: sn_wsd_skip
+#: model:ir.model.fields,help:sn_wsd_skip.field_sn_wsd_skip_request__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：截止日期已过\n"
+"今天：活动日期为今天\n"
+"已计划：未来活动。"

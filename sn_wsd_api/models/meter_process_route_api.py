@@ -19,12 +19,10 @@ class MesSnTravel(models.Model):
         workorder = self._resolve_workorder_arg(workorder)
         if workorder and workorder.operation_id and station and workorder.operation_id.workcenter_id == station:
             return workorder.operation_id
-        route = production.x_process_route_id or (workorder.production_id.x_process_route_id if workorder else False)
+        route = production.x_route_id or (workorder.production_id.x_route_id if workorder else False)
         if not route or not station:
             return operation_model
         bom = production.bom_id or (workorder.production_id.bom_id if workorder else False)
-        if not bom:
-            return operation_model
         return operation_model.search([
             ('bom_id', '=', bom.id),
             ('workcenter_id', '=', station.id),

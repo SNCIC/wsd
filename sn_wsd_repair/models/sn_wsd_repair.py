@@ -138,7 +138,7 @@ class SnWsdRepairOrder(models.Model):
     repair_process_route_id = fields.Many2one(
         'sn.wsd.process.route',
         string='Repair Process Route',
-        related='production_id.x_process_route_id',
+        related='production_id.x_route_id',
         readonly=True,
     )
     repair_entry_step_id = fields.Many2one(
@@ -270,7 +270,7 @@ class SnWsdRepairOrder(models.Model):
             record.production_id = record.workorder_id.production_id
             record.manufacturing_batch_id = record.workorder_id.x_manufacturing_batch_id
             record.current_process_step_id = record.workorder_id.x_route_operation_id
-            if record.repair_entry_step_id and record.repair_entry_step_id.route_id != record.production_id.x_process_route_id:
+            if record.repair_entry_step_id and record.repair_entry_step_id.route_id != record.production_id.x_route_id:
                 record.repair_entry_step_id = False
             if record.repair_mode == 'qty' and not record.defect_qty:
                 record.defect_qty = record.workorder_id.x_meter_qty_fail
@@ -281,7 +281,7 @@ class SnWsdRepairOrder(models.Model):
             if (
                 record.repair_entry_step_id
                 and record.production_id
-                and record.repair_entry_step_id.route_id != record.production_id.x_process_route_id
+                and record.repair_entry_step_id.route_id != record.production_id.x_route_id
             ):
                 record.repair_entry_step_id = False
 
@@ -317,7 +317,7 @@ class SnWsdRepairOrder(models.Model):
             if (
                 record.repair_entry_step_id
                 and record.production_id
-                and record.repair_entry_step_id.route_id != record.production_id.x_process_route_id
+                and record.repair_entry_step_id.route_id != record.production_id.x_route_id
             ):
                 raise ValidationError(_('The repair entry step must belong to the manufacturing order route.'))
 

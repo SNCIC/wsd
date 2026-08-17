@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Shop Floor Work Orders',
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.3.0',
     'summary': 'Shop floor execution panel for WSD manufacturing work orders',
     'category': 'Manufacturing',
     'depends': ['sn_wsd_mrp', 'sn_wsd_report', 'barcodes', 'hr_hourly_cost'],

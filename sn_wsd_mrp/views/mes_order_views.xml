@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================================================================
+         MES orders (制令单). Scheduling entry is the wizard ONLY (架构设计
+         3.1): every view here is read-only - creation happens exclusively
+         through [Schedule] on the MO form.
+         ================================================================== -->
+
+    <!-- List (shared by the daily plan report and the shop terminal) -->
+    <record id="view_sn_wsd_mes_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.list</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="date_plan"/>
+                <field name="production_line_id"/>
+                <field name="production_id"/>
+                <field name="product_id" optional="hide"/>
+                <field name="x_side" widget="badge"
+                       decoration-info="x_side in ('top', 'bottom')"
+                       decoration-success="x_side == 'single'"/>
+                <field name="planned_qty" sum="Total Planned"/>
+                <field name="picked_qty" sum="Total Picked"/>
+                <field name="x_input_qty" sum="Total Input"/>
+                <field name="produced_qty" sum="Total Produced"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'released'"
+                       decoration-warning="state == 'picked'"
+                       decoration-success="state == 'done'"
+                       decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form (P4-1): header actions only, every field is read-only -->
+    <record id="view_sn_wsd_mes_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.form</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false">
+                <header>
+                    <button name="action_open_pick_wizard" type="object" string="Pick Material"
+                            class="btn-primary" invisible="state != 'released'"/>
+                    <button name="action_online" type="object" string="Go Online"
+                            class="btn-primary" invisible="x_online_date or state == 'cancelled'"
+                            confirm="Put this MES order online? SNs may then be fed in and the management mode is locked."/>
+                    <button name="action_open_done_wizard" type="object" string="完工入库"
+                            class="btn-primary" invisible="state != 'in_progress' or x_output_qty &lt;= 0"/>
+                    <button name="action_sync_route" type="object" string="Sync Route"
+                            invisible="x_online_date or state == 'cancelled'"/>
+                    <button name="action_cancel" type="object" string="Cancel (Revoke)" class="btn-secondary"
+                            invisible="state != 'released'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="released,picked,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_internal_serials" type="object" class="oe_stat_button" icon="fa-barcode">
+                            <field name="internal_serial_count" widget="statinfo" string="Internal Serials"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Order">
+                            <field name="production_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="production_line_id" readonly="1"/>
+                        </group>
+                        <group string="Schedule">
+                            <field name="x_side" readonly="1" widget="badge"
+                                   decoration-info="x_side in ('top', 'bottom')"
+                                   decoration-success="x_side == 'single'"/>
+                            <field name="date_plan" readonly="1"/>
+                            <field name="planned_qty" readonly="1"/>
+                            <field name="picked_qty" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="工艺路线">
+                        <group>
+                            <field name="x_manage_mode" readonly="x_online_date"/>
+                            <field name="x_online_date" readonly="1"/>
+                            <field name="x_mes_route_id" readonly="1" widget="many2one" options="{'no_open': True}"/>
+                            <field name="x_input_qty" readonly="1"/>
+                            <field name="x_output_qty" readonly="1"/>
+                            <field name="x_workorder_input_qty" readonly="1"/>
+                            <field name="x_done_qty" readonly="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group string="计数工序">
+                            <field name="x_daily_input_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                            <field name="x_daily_output_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                            <field name="x_material_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                        </group>
+                        <group>
+                            <field name="x_workorder_input_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                            <field name="x_aging_start_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                            <field name="x_aging_end_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
+                        </group>
+                    </group>
+                    <div style="margin-top: 8px;">
+                        <widget name="mes_order_route_editor" nolabel="1"/>
+                    </div>
+                    <notebook>
+                        <page string="Material Pickings" name="pickings">
+                            <field name="picking_ids" nolabel="1" readonly="1">
+                                <list create="false" edit="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="scheduled_date" optional="show"/>
+                                    <field name="x_mes_order_qty" string="Units" sum="Total Units"/>
+                                    <field name="origin" optional="hide"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <separator string="工序数量"/>
+                    <field name="x_route_operation_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="sequence" column_invisible="1"/>
+                            <field name="display_label" string="工序"/>
+                            <field name="x_wip_qty" string="在制" sum="合计"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_ok_qty" string="完成数" sum="合计"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_ng_qty" string="不良数" sum="合计"
+                                   decoration-warning="x_ng_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_scrap_qty" string="报废数" sum="合计"
+                                   decoration-danger="x_scrap_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_yield_rate" string="良率" widget="percentage"
+                                   column_invisible="parent.x_manage_mode == 'report'"/>
+                            <field name="x_reported_ok_qty" string="合格" sum="合计"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_ng_qty" string="不良" sum="合计"
+                                   decoration-warning="x_reported_ng_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_scrap_qty" string="报废" sum="合计"
+                                   decoration-danger="x_reported_scrap_qty &gt; 0"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                            <field name="x_reported_qty" string="累计报工" sum="合计"
+                                   decoration-success="x_reported_ok_qty + x_reported_scrap_qty &gt;= parent.planned_qty"
+                                   column_invisible="parent.x_manage_mode != 'report'"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+                <div class="oe_chatter">
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search -->
+    <record id="view_sn_wsd_mes_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.search</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="production_id"/>
+                <field name="production_line_id"/>
+                <field name="product_id"/>
+                <field name="x_side"/>
+                <filter name="f_released" string="Released" domain="[('state', '=', 'released')]"/>
+                <filter name="f_today" string="Today" domain="[('date_plan', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="f_top" string="Top (T)" domain="[('x_side', '=', 'top')]"/>
+                <filter name="f_bottom" string="Bottom (B)" domain="[('x_side', '=', 'bottom')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_date" string="Plan Date" context="{'group_by': 'date_plan'}"/>
+                    <filter name="group_line" string="Production Line" context="{'group_by': 'production_line_id'}"/>
+                    <filter name="group_mo" string="Manufacturing Order" context="{'group_by': 'production_id'}"/>
+                    <filter name="group_side" string="Production Side" context="{'group_by': 'x_side'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Pivot (daily plan reporting) -->
+    <record id="view_sn_wsd_mes_order_pivot" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.pivot</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_plan" interval="day" type="row"/>
+                <field name="production_line_id" type="col"/>
+                <field name="planned_qty" type="measure"/>
+                <field name="picked_qty" type="measure"/>
+                <field name="x_input_qty" type="measure"/>
+                <field name="produced_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Kanban (used by the MES Orders action kanban mode) -->
+    <record id="view_sn_wsd_mes_order_kanban" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.kanban</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <kanban create="false" edit="false" delete="false" default_group_by="production_line_id">
+                <field name="name"/>
+                <field name="date_plan"/>
+                <field name="production_id"/>
+                <field name="product_id"/>
+                <field name="planned_qty"/>
+                <field name="x_side"/>
+                <field name="state"/>
+                <field name="x_partner_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div>
+                            <div class="d-flex mb-1">
+                                <field name="name" class="fw-bold"/>
+                                <field name="x_side" widget="badge" class="ms-1"
+                                       decoration-info="x_side in ('top', 'bottom')"
+                                       decoration-success="x_side == 'single'"/>
+                            </div>
+                            <div><field name="product_id"/></div>
+                            <div class="text-muted" t-if="record.x_partner_id.raw_value">
+                                <field name="x_partner_id"/>
+                            </div>
+                            <div class="text-muted">
+                                <field name="date_plan"/> · <field name="planned_qty"/> <field name="production_id"/>
+                            </div>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'released'"
+                                   decoration-warning="state == 'picked'"
+                                   decoration-success="state == 'done'"
+                                   decoration-muted="state == 'cancelled'"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Calendar (daily plan on a month grid, one color per line) -->
+    <record id="view_sn_wsd_mes_order_calendar" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.calendar</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <calendar date_start="date_plan" mode="month" color="production_line_id"
+                      event_limit="5" hide_time="true"
+                      create="false" edit="false" delete="false">
+                <field name="planned_qty"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Graph (planned vs executed, by date / line) -->
+    <record id="view_sn_wsd_mes_order_graph" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.graph</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <graph type="bar" stacked="1">
+                <field name="date_plan" interval="day"/>
+                <field name="production_line_id"/>
+                <field name="planned_qty" type="measure"/>
+                <field name="picked_qty" type="measure"/>
+                <field name="x_input_qty" type="measure"/>
+                <field name="produced_qty" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Daily plan report (P3): read-only, grouped by date + line -->
+    <record id="action_sn_wsd_mes_daily_plan" model="ir.actions.act_window">
+        <field name="name">Daily Plan</field>
+        <field name="res_model">sn.wsd.mes.order</field>
+        <field name="view_mode">list,calendar,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_mes_order_search"/>
+        <field name="context">{'search_default_group_date': 1, 'search_default_group_line': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No scheduled MES orders yet</p>
+            <p>Schedule from a manufacturing order with the Schedule button.</p>
+        </field>
+    </record>
+
+    <!-- Shop Terminal action/menu superseded by the 车间 module
+         (sn_wsd_workorder full-screen terminal): purge them from
+         existing databases, keep the kanban view for MES Orders -->
+    <delete model="ir.ui.menu" id="menu_sn_wsd_mes_shop_terminal"/>
+    <delete model="ir.actions.act_window" id="action_sn_wsd_mes_shop_terminal"/>
+
+    <!-- Dedicated MES orders page: flat read-only list of every order -->
+    <record id="action_sn_wsd_mes_orders" model="ir.actions.act_window">
+        <field name="name">MES Orders</field>
+        <field name="res_model">sn.wsd.mes.order</field>
+        <field name="view_mode">list,kanban,calendar,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_mes_order_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No MES orders yet</p>
+            <p>MES orders are created by scheduling a manufacturing order.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_mes_root" name="MES Scheduling" parent="mrp.menu_mrp_manufacturing" sequence="4"/>
+    <menuitem id="menu_sn_wsd_mes_daily_plan" name="Daily Plan" action="action_sn_wsd_mes_daily_plan"
+              parent="menu_sn_wsd_mes_root" sequence="10"/>
+    <menuitem id="menu_sn_wsd_mes_orders" name="MES Orders" action="action_sn_wsd_mes_orders"
+              parent="menu_sn_wsd_mes_root" sequence="15"/>
+
+    <!-- ==================================================================
+         Completion wizard (完工入库): backflush + receipt + closure.
+         ================================================================== -->
+    <record id="view_sn_wsd_mes_done_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.done.wizard.form</field>
+        <field name="model">sn.wsd.mes.done.wizard</field>
+        <field name="arch" type="xml">
+            <form string="完工入库">
+                <group>
+                    <group>
+                        <field name="mes_order_id"/>
+                        <field name="output_qty"/>
+                        <field name="done_qty"/>
+                        <field name="qty"/>
+                    </group>
+                    <group>
+                        <field name="destination" widget="radio"/>
+                        <field name="workshop_id"
+                               options="{'no_create': True}"
+                               invisible="destination != 'lineside'"
+                               required="destination == 'lineside'"/>
+                        <field name="available_workshop_ids" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="确认完工" type="object" class="btn-primary"/>
+                    <button string="取消" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================================================================
+         Scheduling wizard (P2-1) - the single scheduling entry point.
+         Board sides are independent; the side dropdown only shows for
+         double-sided products (架构设计 3.1 / SMT 面别设计 3.1).
+         ================================================================== -->
+    <record id="view_sn_wsd_mes_schedule_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.schedule.wizard.form</field>
+        <field name="model">sn.wsd.mes.schedule.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Schedule">
+                <group>
+                    <group string="Manufacturing Order">
+                        <field name="production_id" readonly="1" options="{'no_create': True}"/>
+                        <field name="product_id"/>
+                        <field name="x_board_side" readonly="1"/>
+                        <field name="product_qty"/>
+                        <field name="x_side" readonly="x_board_side != 'double'"/>
+                        <field name="x_side_route_id" readonly="1" options="{'no_create': True, 'no_open': True}"/>
+                        <!-- plain readonly checkboxes: the badge widget on a Boolean
+                             renders the checkbox markup as literal text in Odoo 19 -->
+                        <field name="x_top_route_ok" invisible="x_board_side != 'double'"/>
+                        <field name="x_bottom_route_ok" invisible="x_board_side != 'double'"/>
+                        <field name="x_route_ok" invisible="x_board_side == 'double'"/>
+                    </group>
+                    <group string="Scheduling">
+                        <field name="x_side_scheduled_qty" readonly="1"/>
+                        <field name="x_side_remaining_qty" readonly="1"/>
+                        <field name="production_line_id" options="{'no_create': True}"/>
+                        <field name="date_plan"/>
+                        <field name="qty"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_maintain_route" type="object" string="Maintain Route"
+                            class="btn-secondary" invisible="x_route_ok" data-hotkey="m"/>
+                    <button name="action_schedule" type="object" string="Schedule" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Discard" special="cancel" data-hotkey="x" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_schedule_wizard" model="ir.actions.act_window">
+        <field name="name">Schedule</field>
+        <field name="res_model">sn.wsd.mes.schedule.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Material picking wizard (P4-1 [Pick Material]) -->
+    <record id="view_sn_wsd_mes_pick_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.pick.wizard.form</field>
+        <field name="model">sn.wsd.mes.pick.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pick Material">
+                <group>
+                    <group>
+                        <field name="mes_order_id" invisible="1"/>
+                        <field name="name"/>
+                        <field name="production_id"/>
+                        <field name="planned_qty"/>
+                        <field name="picked_qty"/>
+                        <field name="remaining_qty"/>
+                    </group>
+                    <group>
+                        <field name="qty_this"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_pick" type="object" string="Create Picking" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" data-hotkey="x" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- [Schedule] button on the MO form: the one and only scheduling entry -->
+    <record id="view_mrp_production_form_mes_schedule_button" model="ir.ui.view">
+        <field name="name">mrp.production.form.mes.schedule.button.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_sn_wsd_mes_schedule_wizard)d" type="action" string="Schedule"
+                        class="btn-primary" context="{'default_production_id': id}"
+                        invisible="state in ('done', 'cancel')"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Pre-issue flag on the BOM line (架构设计 2.4): flagged on the BOM
+         itself, no separate management screen -->
+    <record id="view_mrp_bom_form_advance_issue" model="ir.ui.view">
+        <field name="name">mrp.bom.form.advance.issue.sn.wsd.mrp</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='product_qty']" position="after">
+                <field name="x_advance_issue" optional="hide" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Smart button on the material-issue picking back to its MES order -->
+    <record id="view_stock_picking_form_mes_order" model="ir.ui.view">
+        <field name="name">stock.picking.form.mes.order.sn.wsd.mrp</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_mes_order" type="object" class="oe_stat_button"
+                        icon="fa-clipboard-list" invisible="not x_mes_order_id">
+                    <field name="x_mes_order_id" widget="statinfo" string="MES Order"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

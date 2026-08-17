@@ -21,7 +21,7 @@ class SnWsdSkipRequest(models.Model):
         index=True,
     )
     product_id = fields.Many2one(related='production_id.product_id', store=True, readonly=True)
-    route_id = fields.Many2one(related='production_id.x_process_route_id', store=True, readonly=True)
+    route_id = fields.Many2one(related='production_id.x_route_id', store=True, readonly=True)
     applicant_id = fields.Many2one('res.users', string='Applicant', required=True, default=lambda self: self.env.user, tracking=True)
     request_date = fields.Datetime(string='Request Time', required=True, default=fields.Datetime.now, tracking=True)
     reason = fields.Text(string='Reason', required=True, tracking=True)

@@ -5,6 +5,7 @@
     'depends': ['web', 'mrp', 'sn_wsd_mrp'],
     'data': [
         'views/mrp_production_views.xml',
+        'views/mes_order_views.xml',
     ],
     'assets': {
         'web._assets_primary_variables': [

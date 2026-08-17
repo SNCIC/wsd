@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_wip
 #
@@ -406,3 +406,56 @@ msgstr "工单"
 #: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__workorder_name
 msgid "Work Order Reference"
 msgstr "工单参考"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_batch_report_pivot
+msgid "Batch WIP Analysis"
+msgstr "批次在制分析"
+
+#. module: sn_wsd_wip
+#: model:ir.actions.act_window,name:sn_wsd_wip.action_sn_wsd_wip_batch_report
+#: model:ir.ui.menu,name:sn_wsd_wip.menu_sn_wsd_wip_batch_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_batch_report_search
+msgid "Batch WIP Report"
+msgstr "批次在制报表"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_batch_report_graph
+msgid "Batch WIP Visualization"
+msgstr "批次在制可视化"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,help:sn_wsd_wip.field_sn_wsd_wip_snapshot__route_id
+msgid "Independent route snapshot; no longer derived from the BOM."
+msgstr "独立路线快照；不再派生自 BOM。"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_sn_wsd_manufacturing_batch
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_batch_report__manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_report__manufacturing_batch_id
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_snapshot__manufacturing_batch_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_batch_report_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_report_search
+msgid "Manufacturing Batch"
+msgstr "制造批次"
+
+#. module: sn_wsd_wip
+#: model:ir.model,name:sn_wsd_wip.model_sn_wsd_wip_batch_report
+msgid "Manufacturing Batch WIP Report"
+msgstr "制造批次在制报表"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_batch_report__production_count
+msgid "Manufacturing Order Count"
+msgstr "制造订单数量"
+
+#. module: sn_wsd_wip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_manufacturing_batch_wip_form_inherit
+msgid "WIP Steps"
+msgstr "在制工步"
+
+#. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_batch_report__workorder_count
+msgid "Work Order Count"
+msgstr "工单数量"

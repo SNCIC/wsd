@@ -37,7 +37,7 @@ class SnWsdWipSnapshot(models.Model):
     route_id = fields.Many2one(
         'sn.wsd.process.route',
         string='Process Route',
-        related='production_id.x_process_route_id',
+        related='production_id.x_route_id',
         store=True,
         readonly=True,
     )

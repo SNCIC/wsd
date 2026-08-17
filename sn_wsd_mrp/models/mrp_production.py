@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, Command
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
 
@@ -27,13 +27,43 @@ class MrpProduction(models.Model):
         compute='_compute_x_production_actual_dates',
         store=True,
     )
-    x_process_route_id = fields.Many2one(
+    x_route_id = fields.Many2one(
         'sn.wsd.process.route',
-        string='Process Route',
-        related='bom_id.x_process_route_id',
-        store=True,
-        readonly=True,
+        string='Process Route (Independent)',
+        copy=True,
+        tracking=True,
+        help='Independent route snapshot; no longer derived from the BOM.',
     )
+
+    @api.onchange('product_id')
+    def _onchange_x_route_id_from_drawing_no(self):
+        # The route is resolved through the product's 图号 (drawing number):
+        # MO 图号 -> route drawing bindings -> current released route. Seed
+        # x_route_id from that match, but only when it is empty so a
+        # manually chosen route is preserved.
+        for production in self:
+            if production.x_route_id:
+                continue
+            route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
+                production.product_id.x_drawing_no, production.company_id.id)
+            if route:
+                production.x_route_id = route
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        productions = super().create(vals_list)
+        # Snapshot the current effective route for the product's 图号 into
+        # x_route_id at creation (unless explicitly set). The onchange only
+        # fires from the UI form, so programmatic creation (import, ...)
+        # needs this explicit seeding.
+        for production in productions:
+            if not production.x_route_id:
+                route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
+                    production.product_id.x_drawing_no, production.company_id.id)
+                if route:
+                    production.x_route_id = route
+        return productions
+
     x_is_eip_material = fields.Boolean(
         string='EIP',
         related='product_id.is_eip_material',
@@ -57,17 +87,6 @@ class MrpProduction(models.Model):
     x_workshop_id = fields.Many2one(
         'sn.mrp.workshop',
         string='Workshop',
-        compute='_compute_x_process_scope',
-        store=True,
-        readonly=False,
-        precompute=True,
-        check_company=True,
-        tracking=True,
-        index=True,
-    )
-    x_production_line_id = fields.Many2one(
-        'sn.mrp.production.line',
-        string='Production Line',
         compute='_compute_x_process_scope',
         store=True,
         readonly=False,
@@ -381,10 +400,8 @@ class MrpProduction(models.Model):
             bom = production.bom_id
             if not bom:
                 production.x_workshop_id = False
-                production.x_production_line_id = False
                 continue
             production.x_workshop_id = bom.x_workshop_id
-            production.x_production_line_id = False
 
     @api.depends(
         'picking_type_id',
@@ -409,7 +426,12 @@ class MrpProduction(models.Model):
             workshop = production.x_workshop_id
             if not warehouse or not workshop:
                 continue
-            if warehouse.manufacture_steps in ('pbm', 'pbm_sam') and workshop.component_location_id:
+            # The MO always consumes from the workshop line-side location,
+            # whatever the step mode: with one-step manufacturing no native
+            # picking is created at confirm (material requisitions are issued
+            # from the MES orders instead), with multi-step the workshop
+            # locations keep feeding the native chain.
+            if workshop.component_location_id:
                 production.location_src_id = workshop.component_location_id
             if warehouse.manufacture_steps == 'pbm_sam' and workshop.finished_product_location_id:
                 production.location_dest_id = workshop.finished_product_location_id
@@ -482,99 +504,41 @@ class MrpProduction(models.Model):
         for production in self:
             production._compute_x_process_scope()
 
-    @api.onchange('x_production_line_id')
-    def _onchange_x_production_line_id_sync_workshop(self):
+    # NOTE: the production line no longer lives on the MO — it is a
+    # scheduling dimension carried by the MES orders (制令单). Online gating
+    # and uniqueness are therefore workshop-scoped only.
+
+    @api.constrains('x_online_state', 'x_workshop_id', 'company_id')
+    def _check_single_online_order_per_workshop(self):
         for production in self:
-            if production.x_production_line_id:
-                production.x_workshop_id = production.x_production_line_id.workshop_id
-
-    @api.constrains('x_workshop_id', 'x_production_line_id', 'company_id')
-    def _check_production_line_scope(self):
-        for production in self.filtered('x_production_line_id'):
-            if production.x_production_line_id.company_id != production.company_id:
-                raise ValidationError(_('The production line must belong to the same company as the manufacturing order.'))
-            if production.x_workshop_id and production.x_production_line_id.workshop_id != production.x_workshop_id:
-                raise ValidationError(_('The production line must belong to the selected workshop.'))
-
-    def _get_execution_workcenter_for_line(self, workcenter):
-        self.ensure_one()
-        if not workcenter or not self.x_production_line_id:
-            return workcenter
-        if workcenter.x_production_line_id == self.x_production_line_id:
-            return workcenter
-        domain = [
-            ('company_id', '=', self.company_id.id),
-            ('active', '=', True),
-            ('x_workcenter_type', '=', 'line'),
-            ('x_production_line_id', '=', self.x_production_line_id.id),
-        ]
-        if workcenter.code:
-            matched = self.env['mrp.workcenter'].search(domain + [('code', '=', workcenter.code)], limit=1)
-            if matched:
-                return matched
-        return workcenter
-
-    def _sync_workorders_to_execution_line(self):
-        for production in self.filtered('x_production_line_id'):
-            for workorder in production.workorder_ids:
-                target_workcenter = production._get_execution_workcenter_for_line(workorder.workcenter_id)
-                values = {}
-                if target_workcenter and target_workcenter != workorder.workcenter_id:
-                    values['workcenter_id'] = target_workcenter.id
-                    values['x_mes_workcenter_id'] = target_workcenter.id
-                if values:
-                    workorder.with_context(skip_meter_context_sync=True).write(values)
-                workorder._onchange_workcenter_id_sync_meter_station()
-
-    def _check_execution_line_workorders(self):
-        for production in self.filtered('x_production_line_id'):
-            mismatched = production.workorder_ids.filtered(
-                lambda workorder: workorder.workcenter_id
-                and workorder.workcenter_id.x_production_line_id
-                and workorder.workcenter_id.x_production_line_id != production.x_production_line_id
-            )
-            if mismatched:
-                raise ValidationError(_(
-                    'The manufacturing order production line does not match these work order work centers: %s'
-                ) % ', '.join(mismatched.mapped('workcenter_id.display_name')))
-
-    @api.constrains('x_online_state', 'x_workshop_id', 'x_production_line_id', 'company_id')
-    def _check_single_online_order_per_line(self):
-        for production in self:
-            if production.x_online_state != 'online' or not production.x_workshop_id or not production.x_production_line_id:
+            if production.x_online_state != 'online' or not production.x_workshop_id:
                 continue
-            domain = [
+            existing = self.search([
                 ('id', '!=', production.id),
                 ('company_id', '=', production.company_id.id),
                 ('x_online_state', '=', 'online'),
                 ('x_workshop_id', '=', production.x_workshop_id.id),
-                ('x_production_line_id', '=', production.x_production_line_id.id),
                 ('state', 'not in', ['done', 'cancel']),
-            ]
-            existing = self.search(domain, limit=1)
+            ], limit=1)
             if existing:
                 raise ValidationError(_(
-                    'Only one manufacturing order can be online for the same workshop and production line. Current online order: %s'
+                    'Only one manufacturing order can be online for the same workshop. Current online order: %s'
                 ) % existing.display_name)
 
     def _check_can_go_online(self):
         for production in self:
-            if not production.x_workshop_id or not production.x_production_line_id:
-                raise ValidationError(_('Set the workshop and production line before putting the manufacturing order online.'))
-            production._sync_workorders_to_execution_line()
-            production._check_execution_line_workorders()
-            domain = [
+            if not production.x_workshop_id:
+                raise ValidationError(_('Set the workshop before putting the manufacturing order online.'))
+            existing = self.search([
                 ('id', '!=', production.id),
                 ('company_id', '=', production.company_id.id),
                 ('x_online_state', '=', 'online'),
                 ('x_workshop_id', '=', production.x_workshop_id.id),
-                ('x_production_line_id', '=', production.x_production_line_id.id),
                 ('state', 'not in', ['done', 'cancel']),
-            ]
-            existing = self.search(domain, limit=1)
+            ], limit=1)
             if existing:
                 raise ValidationError(_(
-                    'Only one manufacturing order can be online for the same workshop and production line. Current online order: %s'
+                    'Only one manufacturing order can be online for the same workshop. Current online order: %s'
                 ) % existing.display_name)
 
     def action_set_online(self):
@@ -586,19 +550,64 @@ class MrpProduction(models.Model):
         self.write({'x_online_state': 'offline'})
         return True
 
+    def action_cancel(self):
+        res = super().action_cancel()
+        # cascade: cancelling the MO revokes its still-released MES orders
+        # (partially issued batches included, same policy as force close)
+        released_orders = self.x_mes_order_ids.filtered(
+            lambda order: order.state == 'released')
+        if released_orders:
+            released_orders.with_context(mes_force_cancel=True).action_cancel()
+        return res
+
+    def action_force_close(self):
+        """Manual bail-out: close the MO with what actually happened.
+
+        Approved flow (强制关闭): revoke the still-released MES orders
+        (issued partial batches included, their pickings stay on the books),
+        keep the real consumption / production quantities, void the remaining
+        demand WITHOUT creating backorders, then mark the MO done.
+        """
+        for production in self:
+            if production.state in ('done', 'cancel'):
+                raise UserError(_(
+                    'Only open manufacturing orders can be force closed: %s',
+                    production.display_name))
+            released_orders = production.x_mes_order_ids.filtered(
+                lambda order: order.state == 'released')
+            if released_orders:
+                released_orders.with_context(mes_force_cancel=True).action_cancel()
+            # keep whatever actually happened, void the rest (no backorder)
+            for move in production.move_raw_ids.filtered(
+                    lambda m: m.state not in ('done', 'cancel')):
+                if move.quantity:
+                    move.picked = True
+            for move in production.move_finished_ids.filtered(
+                    lambda m: m.state not in ('done', 'cancel')):
+                if move.quantity:
+                    move.picked = True
+            production.with_context(skip_backorder=True)._post_inventory(
+                cancel_backorder=True)
+            remaining_moves = (production.move_raw_ids | production.move_finished_ids).filtered(
+                lambda move: move.state not in ('done', 'cancel'))
+            if remaining_moves:
+                remaining_moves.write({
+                    'state': 'done',
+                    'product_uom_qty': 0.0,
+                })
+            production.write({
+                'date_finished': fields.Datetime.now(),
+                'priority': '0',
+                'is_locked': True,
+                'state': 'done',
+            })
+        return True
+
     def action_confirm(self):
         draft_productions = self.filtered(lambda production: production.state == 'draft')
         draft_productions._apply_workshop_manufacturing_locations()
         draft_productions._check_workshop_manufacturing_locations()
-        result = super().action_confirm()
-        self._sync_workorders_to_execution_line()
-        return result
-
-    def write(self, vals):
-        result = super().write(vals)
-        if {'x_production_line_id', 'x_workshop_id'}.intersection(vals):
-            self._sync_workorders_to_execution_line()
-        return result
+        return super().action_confirm()
 
     def _compute_internal_serial_stats(self):
         for production in self:

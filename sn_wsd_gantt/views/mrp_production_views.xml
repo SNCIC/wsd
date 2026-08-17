@@ -39,7 +39,6 @@
                 <field name="move_raw_ids" string="Component" filter_domain="[('move_raw_ids.product_id', 'ilike', self)]"/>
                 <field name="workcenter_id" string="Work Center" filter_domain="[('workorder_ids.workcenter_id', 'ilike', self)]"/>
                 <field name="x_workshop_id"/>
-                <field name="x_production_line_id"/>
                 <field name="origin"/>
                 <field name="picking_type_id"/>
                 <field name="user_id"/>
@@ -65,7 +64,6 @@
                     <filter string="Product" name="group_product" domain="[]" context="{'group_by': 'product_id'}"/>
                     <filter string="Responsible" name="group_responsible" domain="[]" context="{'group_by': 'user_id'}"/>
                     <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
-                    <filter string="Production Line" name="group_production_line" domain="[]" context="{'group_by': 'x_production_line_id'}"/>
                     <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'state'}"/>
                     <filter string="Material Availability" name="group_reservation_state" domain="[]" context="{'group_by': 'reservation_state'}"/>
                     <filter string="Operation Type" name="group_picking_type" domain="[]" context="{'group_by': 'picking_type_id'}"/>

@@ -55,7 +55,7 @@ class SnSmtPcbPanelApi(models.AbstractModel):
         productions = batch.production_ids.filtered(
             lambda production: production.state not in ('done', 'cancel') and production.x_has_smt_operations
         )
-        online = productions.filtered(lambda production: production.x_online_state == 'online')
+        online = productions._has_online_mes_order()
         if online:
             productions = online
         in_progress = productions.filtered(lambda production: production.state in ('progress', 'to_close'))

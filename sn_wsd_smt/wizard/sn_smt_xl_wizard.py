@@ -134,6 +134,9 @@ class SnSmtXlWizard(models.TransientModel):
             self.production_id.x_smt_online_state = 'draft'
             if hasattr(self.production_id, 'x_online_state') and self.production_id.x_online_state == 'online':
                 self.production_id.action_set_offline()
+                # keep the MES orders (制令单) in sync: a dedicated offline
+                # action is still pending in the execution layer
+                self.production_id.x_mes_order_ids.filtered('x_online_date').write({'x_online_date': False})
         elif self.unload_scope == 'changeover':
             self.production_id.x_smt_online_state = 'changeover'
         self.message = _('Unload completed.')

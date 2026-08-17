@@ -12,6 +12,8 @@
                 <field name="is_eip_material"/>
                 <field name="is_nqi_material"/>
                 <field name="msd_info"/>
+                <field name="x_drawing_no"/>
+                <field name="x_board_side" required="x_drawing_no"/>
             </xpath>
         </field>
     </record>

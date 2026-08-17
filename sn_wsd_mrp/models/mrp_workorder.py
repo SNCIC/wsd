@@ -312,7 +312,9 @@ class MrpWorkorder(models.Model):
         productions = self.mapped('production_id').filtered(lambda production: production.state not in ('done', 'cancel'))
         productions._check_can_go_online()
         result = super().button_start(raise_on_invalid_state=raise_on_invalid_state)
-        productions.filtered(lambda production: production.x_online_state != 'online').action_set_online()
+        # Online (上线) is carried by the MES orders (制令单); the legacy
+        # MO-level online state is no longer written here.
+        productions._action_online_mes_orders()
         return result
 
     def _meter_get_or_create_serial_archive(self, serial_number):

@@ -16,6 +16,9 @@ access_sn_mrp_team_member_user,sn.mrp.team.member user,model_sn_mrp_team_member,
 access_sn_wsd_operation_user,sn.wsd.operation user,model_sn_wsd_operation,base.group_user,1,1,1,1
 access_sn_wsd_process_route_user,sn.wsd.process.route user,model_sn_wsd_process_route,base.group_user,1,1,1,1
 access_sn_wsd_process_route_operation_user,sn.wsd.process.route.operation user,model_sn_wsd_process_route_operation,base.group_user,1,1,1,1
+access_sn_wsd_process_route_drawing_user,sn.wsd.process.route.drawing user,model_sn_wsd_process_route_drawing,base.group_user,1,1,1,1
+access_sn_wsd_route_section_stat_user,sn.wsd.route.section.stat user,model_sn_wsd_route_section_stat,base.group_user,1,1,1,1
+access_sn_wsd_process_route_version_user,sn.wsd.process.route.version user,model_sn_wsd_process_route_version,base.group_user,1,1,1,0
 access_sn_mrp_team_member_add_wizard_user,sn.mrp.team.member.add.wizard user,model_sn_mrp_team_member_add_wizard,base.group_user,1,1,1,1
 access_sn_mrp_team_member_remove_wizard_user,sn.mrp.team.member.remove.wizard user,model_sn_mrp_team_member_remove_wizard,base.group_user,1,1,1,1
 access_mrp_excess_return_user,mrp.excess.return user,model_mrp_excess_return,mrp.group_mrp_user,1,0,0,0
@@ -30,4 +33,15 @@ access_mrp_feeder_line_user,mrp.feeder.line user,model_mrp_feeder_line,mrp.group
 access_mrp_feeder_line_manager,mrp.feeder.line manager,model_mrp_feeder_line,mrp.group_mrp_manager,1,1,1,1
 access_mrp_substitute_wizard_user,mrp.substitute.wizard user,model_mrp_substitute_wizard,mrp.group_mrp_user,1,1,1,1
 access_mrp_feeder_scan_wizard_user,mrp.feeder.scan.wizard user,model_mrp_feeder_scan_wizard,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_mes_order_user,sn.wsd.mes.order user,model_sn_wsd_mes_order,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_mes_order_manager,sn.wsd.mes.order manager,model_sn_wsd_mes_order,mrp.group_mrp_manager,1,1,1,1
 
+access_sn_wsd_mes_schedule_wizard_user,sn.wsd.mes.schedule.wizard user,model_sn_wsd_mes_schedule_wizard,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_mes_pick_wizard_user,sn.wsd.mes.pick.wizard user,model_sn_wsd_mes_pick_wizard,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_mes_route_user,sn.wsd.mes.route user,model_sn_wsd_mes_order_route,base.group_user,1,1,1,0
+access_sn_wsd_mes_route_operation_user,sn.wsd.mes.route.operation user,model_sn_wsd_mes_order_route_operation,base.group_user,1,1,1,1
+access_sn_wsd_serial_operation_history_user,sn.wsd.serial.operation.history user,model_sn_wsd_serial_operation_history,base.group_user,1,1,1,0
+access_sn_wsd_serial_wip_user,sn.wsd.serial.wip user,model_sn_wsd_serial_wip,base.group_user,1,1,1,1
+access_sn_wsd_mes_operation_report_user,sn.wsd.mes.operation.report user,model_sn_wsd_mes_operation_report,base.group_user,1,1,1,0
+access_sn_wsd_mes_done_wizard_user,sn.wsd.mes.done.wizard user,model_sn_wsd_mes_done_wizard,mrp.group_mrp_user,1,0,1,0
+access_sn_wsd_scrap_reason_user,sn.wsd.scrap.reason user,model_sn_wsd_scrap_reason,base.group_user,1,0,0,0

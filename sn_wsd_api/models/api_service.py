@@ -196,7 +196,7 @@ class SnWsdApiService(models.AbstractModel):
                     for workorder in production.workorder_ids
                 )
             )
-        online = candidates.filtered(lambda production: production.x_online_state == 'online')
+        online = candidates._has_online_mes_order()
         if online:
             candidates = online
         in_progress = candidates.filtered(lambda production: production.state in ('progress', 'to_close'))
@@ -751,7 +751,9 @@ class SnWsdApiService(models.AbstractModel):
                 'product_id': production.product_id.id,
                 'product_name': production.product_id.display_name,
                 'workshop_id': production.x_workshop_id.id if production.x_workshop_id else False,
-                'production_line_id': production.x_production_line_id.id if production.x_production_line_id else False,
+                # The production line moved to the MES orders (制令单); the MO
+                # no longer carries it. Kept in the payload for API stability.
+                'production_line_id': False,
                 'online_state': production.x_online_state,
                 'state': production.state,
             },
@@ -799,7 +801,7 @@ class SnWsdApiService(models.AbstractModel):
             )
         if not candidates:
             return self.env['mrp.production']
-        online = candidates.filtered(lambda production: production.x_online_state == 'online')
+        online = candidates._has_online_mes_order()
         if online:
             candidates = online
         in_progress = candidates.filtered(lambda production: production.state in ('progress', 'to_close'))

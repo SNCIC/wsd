@@ -151,6 +151,12 @@ class InternalSerial(models.Model):
             if serial.serial_identity_id.name != serial.serial_no:
                 raise ValidationError(_('The production stage SN must match the physical serial identity.'))
 
+    def action_scrap(self, reason=False):
+        """Mark this serial as scrapped (final state)."""
+        for serial in self:
+            serial.final_result = 'scrap'
+        return True
+
     @api.constrains('manufacturing_batch_id', 'production_id', 'current_production_id', 'company_id', 'product_id')
     def _check_manufacturing_scope(self):
         for serial in self:

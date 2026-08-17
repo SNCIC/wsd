@@ -2,3 +2,6 @@ from . import mrp_team_member_wizard
 from . import mrp_substitute_wizard
 from . import mrp_feeder_scan_wizard
 from . import mrp_production_split
+from . import mes_schedule_wizard
+from . import mes_pick_wizard
+from . import mes_done_wizard
