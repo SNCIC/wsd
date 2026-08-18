@@ -137,6 +137,11 @@ class MesOrderRoute(models.Model):
         existing = RouteOp.search([('mes_route_id', '=', self.id)])
         frozen = existing._has_execution_records()
         by_op = {op.operation_id.id: op for op in existing}
+        common_by_operation = {}
+        if common_route:
+            common_by_operation = {
+                op.operation_id.id: op for op in common_route.route_operation_ids
+            }
 
         node_by_op = {}
         for node in nodes:
@@ -172,6 +177,22 @@ class MesOrderRoute(models.Model):
         removed.unlink()
 
         for op_id, node in node_by_op.items():
+            common_op = common_by_operation.get(op_id)
+            allow_serial_creation = node.get('x_allow_serial_creation')
+            if allow_serial_creation is None and common_op:
+                allow_serial_creation = common_op.x_allow_serial_creation
+            allow_reentry = node.get('x_allow_reentry')
+            if allow_reentry is None and common_op:
+                allow_reentry = common_op.x_allow_reentry
+            allow_repair_return = node.get('x_allow_repair_return')
+            if allow_repair_return is None and common_op:
+                allow_repair_return = common_op.x_allow_repair_return
+            allow_skip_with_override = node.get('x_allow_skip_with_override')
+            if allow_skip_with_override is None and common_op:
+                allow_skip_with_override = common_op.x_allow_skip_with_override
+            ng_retry_limit = node.get('x_ng_retry_limit')
+            if ng_retry_limit in (None, '') and common_op:
+                ng_retry_limit = common_op.x_ng_retry_limit
             vals = {
                 'operation_id': op_id,
                 'name': node.get('name'),
@@ -181,6 +202,11 @@ class MesOrderRoute(models.Model):
                 'time_cycle_manual': node.get('time_cycle_manual') or 0.0,
                 'x_allow_entry': bool(node.get('x_allow_entry')),
                 'x_allow_exit': bool(node.get('x_allow_exit')),
+                'x_allow_serial_creation': bool(allow_serial_creation),
+                'x_allow_reentry': bool(allow_reentry),
+                'x_allow_repair_return': bool(allow_repair_return),
+                'x_allow_skip_with_override': bool(allow_skip_with_override),
+                'x_ng_retry_limit': int(ng_retry_limit or 0),
                 'is_input': bool(node.get('x_allow_entry')),
                 'x_canvas_x': node.get('x'),
                 'x_canvas_y': node.get('y'),
@@ -359,6 +385,27 @@ class MesOrderRouteOperation(models.Model):
              "are fed into the order from operations flagged here.",
     )
     x_allow_exit = fields.Boolean(string='End Operation')
+    x_allow_serial_creation = fields.Boolean(
+        string='Allow Serial Creation',
+        help='Allow the API to create a production-stage serial at this MES order operation.',
+    )
+    x_allow_reentry = fields.Boolean(
+        string='Allow Reentry',
+        help='Allow a serial to be processed again on the same MES order operation.',
+    )
+    x_allow_repair_return = fields.Boolean(
+        string='Allow Repair Return',
+        help='Allow serials returning from a repair station to enter this MES order operation.',
+    )
+    x_allow_skip_with_override = fields.Boolean(
+        string='Allow Skip With Override',
+        help='Allow this MES order operation to be reached with an explicit route override.',
+    )
+    x_ng_retry_limit = fields.Integer(
+        string='NG Retry Limit',
+        default=0,
+        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
+    )
     is_input = fields.Boolean(
         string='Input Operation',
         help="Mirror of x_allow_entry kept for search/execution convenience.",

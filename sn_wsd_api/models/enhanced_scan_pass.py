@@ -55,7 +55,17 @@ class EnhancedScanPassService(models.AbstractModel):
         )
 
     @api.model
-    def _process_nameplate_binding(self, payload: dict, production_id, workorder_id, workcenter_id, operator_code, company_id):
+    def _process_nameplate_binding(
+        self,
+        payload: dict,
+        production_id,
+        workorder_id,
+        workcenter_id,
+        operator_code,
+        company_id,
+        mes_order_id=None,
+        route_operation_id=None,
+    ):
         """Process nameplate binding from M_STR1 field."""
         nameplate_code = self._scan_payload_value(payload, 'M_STR1')
         if not nameplate_code:
@@ -72,6 +82,8 @@ class EnhancedScanPassService(models.AbstractModel):
                 nameplate_code=nameplate_code,
                 company_id=company_id,
                 production_id=production_id,
+                mes_order_id=mes_order_id,
+                route_operation_id=route_operation_id,
                 workcenter_id=workcenter_id,
                 operator_code=operator_code,
                 note='Scan-pass binding',
@@ -81,7 +93,18 @@ class EnhancedScanPassService(models.AbstractModel):
             return None
 
     @api.model
-    def _process_tooling_usage(self, payload: dict, production_id, workorder_id, workcenter_id, operator_code, serial_number, company_id):
+    def _process_tooling_usage(
+        self,
+        payload: dict,
+        production_id,
+        workorder_id,
+        workcenter_id,
+        operator_code,
+        serial_number,
+        company_id,
+        mes_order_id=None,
+        route_operation_id=None,
+    ):
         """Process tooling usage from M_TOOLING field."""
         tooling_input = self._scan_payload_value(payload, 'M_TOOLING')
         if not tooling_input:
@@ -96,7 +119,10 @@ class EnhancedScanPassService(models.AbstractModel):
             tooling_sns=tooling_sns,
             company_id=company_id,
             production_id=production_id,
-            mes_order_id=self.env['mrp.production'].browse(production_id).x_mes_order_ids[:1].id if production_id else False,
+            mes_order_id=mes_order_id or (
+                self.env['mrp.production'].browse(production_id).x_mes_order_ids[:1].id if production_id else False
+            ),
+            route_operation_id=route_operation_id,
             workorder_id=workorder_id,
             workcenter_id=workcenter_id,
             serial_number=serial_number,
@@ -156,7 +182,19 @@ class EnhancedScanPassService(models.AbstractModel):
             return False
 
     @api.model
-    def _process_packaging(self, payload: dict, production_id, workorder_id, workcenter_id, serial_number, operator_code, result, company_id):
+    def _process_packaging(
+        self,
+        payload: dict,
+        production_id,
+        workorder_id,
+        workcenter_id,
+        serial_number,
+        operator_code,
+        result,
+        company_id,
+        mes_order_id=None,
+        route_operation_id=None,
+    ):
         """Process packaging from M_BOX_SN and M_SECOND_SN."""
         box_sn = self._scan_payload_value(payload, 'M_BOX_SN')
         pallet_sn = self._scan_payload_value(payload, 'M_SECOND_SN')
@@ -178,6 +216,8 @@ class EnhancedScanPassService(models.AbstractModel):
             serial_number=serial_number,
             company_id=company_id,
             production_id=production_id,
+            mes_order_id=mes_order_id,
+            route_operation_id=route_operation_id,
             workorder_id=workorder_id,
             workcenter_id=workcenter_id,
             nameplate_code=nameplate_code,
@@ -240,20 +280,16 @@ class EnhancedScanPassService(models.AbstractModel):
         if not work_center:
             return self._aoi_error('Work center not found.', M_WORK_STATIONSN=station_code)
         
-        workorder = self._resolve_scan_workorder(payload)
-        if not workorder:
-            return self._aoi_error(
-                'Active work order not found for the MES order and work center.',
-                M_MO_NUMBER=self._get_first_payload_value(payload, 'M_MO_NUMBER'),
-                M_WORK_STATIONSN=station_code,
-            )
+        mes_order, route_operation, mes_context_error = self._resolve_scan_mes_context(payload, work_center)
+        if mes_context_error:
+            return mes_context_error
 
-        serial, serial_created, serial_prepare_error = self._prepare_scan_serial(
-            serial_number, workorder, payload,
+        serial, serial_created, serial_prepare_error = self._prepare_scan_serial_for_mes_operation(
+            serial_number, mes_order, route_operation, payload,
         )
         if serial_prepare_error:
             return serial_prepare_error
-        serial, serial_error = self._validate_serial_for_workorder(serial_number, workorder)
+        serial, serial_error = self._validate_serial_for_mes_order(serial_number, mes_order)
         if serial_error:
             return serial_error
         box_sn = self._scan_payload_value(payload, 'M_BOX_SN')
@@ -262,21 +298,25 @@ class EnhancedScanPassService(models.AbstractModel):
             self.env['sn.wsd.mes.packaging.record']._check_can_package(
                 serial_number,
                 company.id,
-                production_id=workorder.production_id.id,
+                production_id=mes_order.production_id.id,
             )
-        
-        production_id = workorder.production_id.id if workorder.production_id else None
-        mes_order_id = workorder.env.context.get('mes_order_id') or workorder.production_id.x_mes_order_ids[:1].id
+
+        production_id = mes_order.production_id.id if mes_order.production_id else None
+        mes_order_id = mes_order.id
+        route_operation_id = route_operation.id
         workcenter_id = work_center.id
-        
+
         extra_context = {
             'company_id': company.id,
             'mes_order_id': mes_order_id,
-            'workorder_id': workorder.id,
+            'route_operation_id': route_operation_id,
+            'workorder_id': False,
             'workcenter_id': workcenter_id,
+            'internal_serial_id': serial.id,
             'operator_code': operator_code,
+            'payload': payload,
         }
-        
+
         validation_results = self._validate_process_parameters(
             payload=payload,
             production_id=production_id,
@@ -289,7 +329,7 @@ class EnhancedScanPassService(models.AbstractModel):
                     failed[0].get('error') or 'Parameter validation failed.',
                     validation_errors=validation_results
                 )
-        
+
         external_event_id = self._resolve_scan_external_event_id(payload)
         note = self._scan_test_detail_note(payload)
         metadata_payload = self._prepare_payload_metadata(
@@ -307,76 +347,85 @@ class EnhancedScanPassService(models.AbstractModel):
             })
         elif original_payload is not payload:
             metadata_payload['M_ORIGINAL_SN'] = identifier_context.get('input_code')
-        retry_context = self._prepare_scan_retry_context(serial, workorder, normalized_result)
-        rework_context = self._prepare_scan_rework_context(serial, workorder, normalized_result)
-        
-        if normalized_result == 'pass':
-            result = self.submit_workorder_event(
-                workorder_id=workorder.id,
-                event_type='complete',
-                serial_number=serial_number,
-                operator_code=operator_code,
-                note=note,
-                override_route=override_route,
-                external_event_id=external_event_id,
-                source_system=source_system,
-                payload=metadata_payload,
-            )
-        else:
-            result = self.submit_test_result(
-                workorder_id=workorder.id,
-                serial_number=serial_number,
-                result='fail',
-                operator_code=operator_code,
-                note=note,
-                payload=metadata_payload,
-                external_event_id=external_event_id,
-                source_system=source_system,
-                retry_sequence=retry_context['retry_sequence'],
-                retry_limit=retry_context['retry_limit'],
-                requires_repair=retry_context['requires_repair'],
-            )
-        
+        retry_context = self._prepare_scan_retry_context_for_mes_operation(
+            serial, route_operation, normalized_result,
+        )
+        rework_context = {
+            'is_rework_pass': False,
+            'rework_source_workorder_id': False,
+        }
+
+        result = self._record_mes_order_scan_event(
+            mes_order,
+            route_operation,
+            serial,
+            work_center,
+            normalized_result,
+            operator_code=operator_code,
+            note=note,
+            payload=metadata_payload,
+            external_event_id=external_event_id,
+            source_system=source_system,
+            retry_context=retry_context,
+        )
+
         if result.get('ok'):
             data = dict(result.get('data') or {})
             retry_context, rework_context, test_result_record = self._scan_result_context_from_record(
                 data, retry_context, rework_context,
             )
-            
+
             test_result_id = data.get('test_result_id')
             if test_result_id and metadata_payload.get('M_TEST_DETAIL'):
                 test_result = self.env['sn.wsd.mes.test.result'].browse(test_result_id).exists()
                 if test_result:
                     self._create_test_result_details(test_result, metadata_payload.get('M_TEST_DETAIL'))
-            
+
             if normalized_result == 'pass':
                 self._process_nameplate_binding(
-                    payload, production_id, workorder.id, workcenter_id, operator_code, company.id
+                    payload,
+                    production_id,
+                    False,
+                    workcenter_id,
+                    operator_code,
+                    company.id,
+                    mes_order_id=mes_order_id,
+                    route_operation_id=route_operation_id,
                 )
                 self._process_tooling_usage(
-                    payload, production_id, workorder.id, workcenter_id, operator_code, serial_number, company.id
+                    payload,
+                    production_id,
+                    False,
+                    workcenter_id,
+                    operator_code,
+                    serial_number,
+                    company.id,
+                    mes_order_id=mes_order_id,
+                    route_operation_id=route_operation_id,
                 )
-                
-                packaging_result = self._process_packaging(
-                    payload, production_id, workorder.id, workcenter_id, serial_number, operator_code, normalized_result, company.id
+
+                self._process_packaging(
+                    payload,
+                    production_id,
+                    False,
+                    workcenter_id,
+                    serial_number,
+                    operator_code,
+                    normalized_result,
+                    company.id,
+                    mes_order_id=mes_order_id,
+                    route_operation_id=route_operation_id,
                 )
-                
+
                 if test_result_id:
                     self._sync_to_eip(test_result_id, payload=metadata_payload)
-            elif retry_context['requires_repair']:
-                repair_workorder = self._apply_scan_repair_requirement(
-                    serial,
-                    workorder,
-                    operator_code=operator_code,
-                    note=note,
-                )
-                if repair_workorder:
-                    data['repair_workorder_id'] = repair_workorder.id
-            
+
             data.update({
                 'serial_number': serial_number,
-                'workorder_id': workorder.id,
+                'workorder_id': False,
                 'production_id': production_id,
+                'mes_order_id': mes_order_id,
+                'route_operation_id': route_operation_id,
                 'workcenter_id': workcenter_id,
                 'workcenter_code': work_center.code,
                 'result': normalized_result,
@@ -394,12 +443,12 @@ class EnhancedScanPassService(models.AbstractModel):
                 'is_rework_pass': rework_context['is_rework_pass'],
                 'rework_source_workorder_id': rework_context['rework_source_workorder_id'],
             })
-            
+
             if validation_results:
                 data['validation_results'] = validation_results
-            
+
             return self._aoi_response(data=data)
-        
+
         error = result.get('error') or {}
         return self._aoi_error(
             error.get('message') or 'Scan pass failed.',

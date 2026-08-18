@@ -21,6 +21,13 @@ class MesTestResultBase(models.Model):
         index=True,
         check_company=True,
     )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
     workorder_id = fields.Many2one('mrp.workorder', ondelete='set null', index=True, check_company=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='MES Work Center', ondelete='set null', index=True, check_company=True)
     workshop_id = fields.Many2one('sn.mrp.workshop', ondelete='set null', index=True, check_company=True)
@@ -84,6 +91,10 @@ class MesTestResultBase(models.Model):
         requires_repair=False,
         is_rework_pass=False,
         rework_source_workorder_id=None,
+        mes_order_id=None,
+        route_operation_id=None,
+        travel_event_type=None,
+        travel_result=None,
     ):
         payload = payload or {}
         external_event_id = external_event_id or payload.get('external_event_id') or payload.get('event_id') or False
@@ -105,6 +116,10 @@ class MesTestResultBase(models.Model):
         equipment = self.env['maintenance.equipment']
         workcenter = self.env['mrp.workcenter']
         workorder = self.env['mrp.workorder'].browse(workorder_id).exists() if workorder_id else self.env['mrp.workorder']
+        route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(route_operation_id).exists() if route_operation_id else self.env['sn.wsd.mes.order.route.operation']
+        mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id or payload.get('mes_order_id')).exists() if (mes_order_id or payload.get('mes_order_id')) else self.env['sn.wsd.mes.order']
+        if route_operation and not mes_order:
+            mes_order = route_operation.mes_order_id
         if workorder and workorder.x_meter_equipment_id:
             equipment = workorder.x_meter_equipment_id
         if workcenter_code:
@@ -114,11 +129,13 @@ class MesTestResultBase(models.Model):
         if not workorder and equipment and equipment.x_mes_workcenter_id:
             workorder = self.env['mrp.workorder'].search([('state', 'in', ['ready', 'progress']), ('workcenter_id', '=', equipment.x_mes_workcenter_id.id)], limit=1, order='date_start asc, id asc')
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else workorder.production_id
+        if not production and mes_order:
+            production = mes_order.production_id
         serial = self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(
             serial_number,
-            company=production.company_id or workorder.company_id,
+            company=production.company_id or workorder.company_id or mes_order.company_id,
             production=production,
-            mes_order=(
+            mes_order=mes_order or (
                 workorder.x_mes_order_id
                 if 'x_mes_order_id' in workorder._fields else False
             ),
@@ -126,14 +143,16 @@ class MesTestResultBase(models.Model):
         )
         if not serial:
             return self._mes_error('serial_not_found', serial_number=serial_number)
-        mes_order = serial.mes_order_id
+        mes_order = mes_order or serial.mes_order_id
         test_dt = fields.Datetime.to_datetime(test_time) if test_time else fields.Datetime.now()
-        travel_result = 'pass' if result == 'pass' else 'fail' if result == 'fail' else 'hold'
+        travel_result = travel_result or (
+            'pass' if result == 'pass' else 'fail' if result == 'fail' else 'hold'
+        )
         production_line = workcenter.x_production_line_id or workorder.x_meter_production_line_id
         workshop = workcenter.x_workshop_id or workorder.x_meter_workshop_id
         travel = self.env['sn.wsd.mes.sn.travel'].record_event(
             serial_number=serial_number,
-            event_type='pass' if result == 'pass' else 'fail',
+            event_type=travel_event_type or ('pass' if result == 'pass' else 'fail'),
             workcenter_code=workcenter_code,
             workorder_id=workorder.id if workorder else False,
             production_id=production.id if production else False,
@@ -145,6 +164,8 @@ class MesTestResultBase(models.Model):
             external_event_id=external_event_id,
             request_id=request_id,
             source_system=source_system,
+            mes_order_id=mes_order.id if mes_order else False,
+            route_operation_id=route_operation.id if route_operation else False,
             retry_sequence=retry_sequence,
             retry_limit=retry_limit,
             requires_repair=requires_repair,
@@ -158,6 +179,7 @@ class MesTestResultBase(models.Model):
             'internal_serial_id': serial.id,
             'production_id': production.id if production else False,
             'mes_order_id': mes_order.id if mes_order else False,
+            'route_operation_id': route_operation.id if route_operation else False,
             'workorder_id': workorder.id if workorder else False,
             'workcenter_id': workcenter.id if workcenter else workorder.workcenter_id.id if workorder and workorder.workcenter_id else False,
             'workshop_id': workshop.id if workshop else False,

@@ -102,6 +102,13 @@ class MesProcessParameterValidation(models.Model):
         index=True,
         check_company=True,
     )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        ondelete='cascade',
+        index=True,
+        check_company=True,
+    )
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',
@@ -312,6 +319,7 @@ class MesProcessParameterValidation(models.Model):
                 'production_id': production_id,
                 'mes_order_id': kwargs.get('mes_order_id'),
                 'workorder_id': kwargs.get('workorder_id'),
+                'route_operation_id': kwargs.get('route_operation_id'),
                 'workcenter_id': kwargs.get('workcenter_id'),
                 'internal_serial_id': kwargs.get('internal_serial_id'),
                 'parameter_type': result.get('parameter_type'),

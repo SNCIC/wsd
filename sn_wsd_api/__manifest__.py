@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD API',
-    'version': '19.0.3.2.7',
+    'version': '19.0.3.2.8',
     'summary': 'MES API data ingestion for WSD meter manufacturing',
     'depends': ['sn_wsd_mrp', 'sn_wsd_maintenance', 'sn_wsd_smt', 'sn_wsd_tooling'],
     'data': [

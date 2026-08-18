@@ -122,6 +122,8 @@
                 <field name="box_sn"/>
                 <field name="pallet_sn"/>
                 <field name="production_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
                 <field name="workorder_id" optional="hide"/>
                 <field name="operator_code"/>
                 <field name="active"/>
@@ -150,6 +152,8 @@
                         </group>
                         <group>
                             <field name="production_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
+                            <field name="route_operation_id" readonly="1"/>
                             <field name="workorder_id" readonly="1"/>
                             <field name="workcenter_id" readonly="1"/>
                             <field name="packaging_time" readonly="1"/>
@@ -179,6 +183,8 @@
                 <field name="usage_time"/>
                 <field name="tooling_id"/>
                 <field name="production_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
                 <field name="workorder_id"/>
                 <field name="internal_serial_id"/>
                 <field name="usage_count"/>
@@ -249,6 +255,8 @@
             <list>
                 <field name="validation_time"/>
                 <field name="production_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
                 <field name="internal_serial_id"/>
                 <field name="parameter_type"/>
                 <field name="passed_code"/>

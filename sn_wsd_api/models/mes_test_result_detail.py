@@ -47,6 +47,20 @@ class MesTestResultDetail(models.Model):
         store=True,
         readonly=True,
     )
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='test_result_id.mes_order_id',
+        store=True,
+        readonly=True,
+    )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        related='test_result_id.route_operation_id',
+        store=True,
+        readonly=True,
+    )
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',

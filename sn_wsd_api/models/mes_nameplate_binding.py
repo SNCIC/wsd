@@ -48,6 +48,20 @@ class MesNameplateBinding(models.Model):
         index=True,
         check_company=True,
     )
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',
@@ -109,6 +123,8 @@ class MesNameplateBinding(models.Model):
         nameplate_code: str,
         company_id=None,
         production_id=None,
+        mes_order_id=None,
+        route_operation_id=None,
         workcenter_id=None,
         operator_code=None,
         note=None,
@@ -132,11 +148,12 @@ class MesNameplateBinding(models.Model):
         """
         company = self.env['res.company'].browse(company_id).exists() if company_id else self.env.company
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else self.env['mrp.production']
+        mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id).exists() if mes_order_id else production.x_mes_order_ids[:1]
         serial = self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(
             serial_number,
             company=company,
             production=production,
-            mes_order=production.x_mes_order_ids[:1],
+            mes_order=mes_order,
             product=production.product_id,
         )
         if not serial:
@@ -179,6 +196,8 @@ class MesNameplateBinding(models.Model):
             'internal_serial_id': serial.id,
             'nameplate_code': nameplate_code,
             'production_id': production_id,
+            'mes_order_id': mes_order.id if mes_order else False,
+            'route_operation_id': route_operation_id,
             'operator_code': operator_code,
             'binding_mode': binding_mode,
             'binding_time': fields.Datetime.now(),
@@ -309,6 +328,20 @@ class MesPackagingRecord(models.Model):
         index=True,
         check_company=True,
     )
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',
@@ -399,6 +432,8 @@ class MesPackagingRecord(models.Model):
         serial_number,
         company_id=None,
         production_id=None,
+        mes_order_id=None,
+        route_operation_id=None,
         workorder_id=None,
         workcenter_id=None,
         nameplate_code=None,
@@ -419,11 +454,12 @@ class MesPackagingRecord(models.Model):
         self._check_can_package(serial_number, company.id, production_id=production_id)
 
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else self.env['mrp.production']
+        mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id).exists() if mes_order_id else production.x_mes_order_ids[:1]
         serial = self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(
             serial_number,
             company=company,
             production=production,
-            mes_order=production.x_mes_order_ids[:1],
+            mes_order=mes_order,
             product=production.product_id,
         )
 
@@ -437,6 +473,8 @@ class MesPackagingRecord(models.Model):
             'company_id': company.id,
             'internal_serial_id': serial.id,
             'production_id': production_id,
+            'mes_order_id': mes_order.id if mes_order else False,
+            'route_operation_id': route_operation_id,
             'workorder_id': workorder_id,
             'workcenter_id': workcenter_id,
             'nameplate_code': nameplate_code,

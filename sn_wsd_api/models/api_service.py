@@ -65,6 +65,16 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def _normalize_mes_result(self, result: dict) -> dict:
+        if not result:
+            return self._service_ok({})
+        if result.get('code') and result.get('code') != 200:
+            return self._service_error(
+                result.get('data', {}).get('error_code', 'mes_operation_error'),
+                result.get('message') or 'MES operation failed.',
+                **(result.get('data') or {}),
+            )
+        if result.get('code') == 200:
+            return self._service_ok(result.get('data') or {})
         if result.get('ok'):
             data = {
                 key: value
@@ -859,6 +869,39 @@ class SnWsdApiService(models.AbstractModel):
         return self.env['mrp.workorder']
 
     @api.model
+    def _resolve_scan_mes_context(self, payload: dict, workcenter):
+        mes_order_no = self._scan_payload_value(payload, 'M_MO_NUMBER')
+        if not mes_order_no:
+            return False, False, self._aoi_error(
+                'MES order number is required.',
+                error_code='mes_order_required',
+            )
+        mes_order = self._find_mes_order(mes_order_no)
+        if not mes_order:
+            return False, False, self._aoi_error(
+                'MES order not found.',
+                error_code='mes_order_not_found',
+                M_MO_NUMBER=mes_order_no,
+            )
+        if mes_order.state in ('done', 'cancelled'):
+            return False, False, self._aoi_error(
+                'MES order is closed.',
+                error_code='mes_order_closed',
+                mes_order_id=mes_order.id,
+                state=mes_order.state,
+            )
+        try:
+            route_operation = mes_order._resolve_route_operation(workcenter)
+        except ValidationError as error:
+            return False, False, self._aoi_error(
+                str(error),
+                error_code='route_operation_not_found',
+                mes_order_id=mes_order.id,
+                workcenter_id=workcenter.id,
+            )
+        return mes_order, route_operation, False
+
+    @api.model
     def _normalize_scan_test_result(self, test_result: str | None) -> str | None:
         value = (test_result or '').strip().upper()
         if value == 'OK':
@@ -999,12 +1042,32 @@ class SnWsdApiService(models.AbstractModel):
         return self.env['sn.wsd.internal.serial'].sudo().find_for_workorder_context(serial_number, workorder)
 
     @api.model
+    def _find_internal_serial_for_mes_order(self, serial_number: str, mes_order):
+        if not serial_number or not mes_order:
+            return self.env['sn.wsd.internal.serial']
+        return self.env['sn.wsd.internal.serial'].sudo().find_for_manufacturing_context(
+            serial_number,
+            company=mes_order.company_id,
+            production=mes_order.production_id,
+            mes_order=mes_order,
+            product=mes_order.product_id,
+        )
+
+    @api.model
     def _workorder_allows_serial_creation(self, workorder):
         operation = workorder.operation_id or workorder._find_route_operation()
         return bool(
             operation
             and operation.x_allow_entry
             and operation.x_allow_serial_creation
+        )
+
+    @api.model
+    def _route_operation_allows_serial_creation(self, route_operation):
+        return bool(
+            route_operation
+            and route_operation.x_allow_entry
+            and route_operation.x_allow_serial_creation
         )
 
     @api.model
@@ -1039,6 +1102,38 @@ class SnWsdApiService(models.AbstractModel):
                 error_code='serial_capacity_exceeded' if 'capacity' in str(error).lower() else 'serial_stage_create_failed',
                 serial_number=serial_number,
                 workorder_id=workorder.id,
+            )
+        return serial, created, False
+
+    @api.model
+    def _prepare_scan_serial_for_mes_operation(self, serial_number, mes_order, route_operation, payload):
+        serial = self._find_internal_serial_for_mes_order(serial_number, mes_order)
+        if serial:
+            return serial, False, False
+        if not self._route_operation_allows_serial_creation(route_operation):
+            return serial, False, self._aoi_error(
+                'This operation does not allow serial stage creation.',
+                error_code='serial_stage_creation_not_allowed',
+                serial_number=serial_number,
+                mes_order_id=mes_order.id,
+                route_operation_id=route_operation.id,
+            )
+        try:
+            serial, created = mes_order.production_id.get_or_create_stage_serial(
+                serial_number,
+                workorder=False,
+                allow_create=True,
+                origin_type='external',
+            )
+            if serial and not serial.mes_order_id:
+                serial.mes_order_id = mes_order.id
+        except ValidationError as error:
+            return serial, False, self._aoi_error(
+                str(error),
+                error_code='serial_capacity_exceeded' if 'capacity' in str(error).lower() else 'serial_stage_create_failed',
+                serial_number=serial_number,
+                mes_order_id=mes_order.id,
+                route_operation_id=route_operation.id,
             )
         return serial, created, False
 
@@ -1116,6 +1211,70 @@ class SnWsdApiService(models.AbstractModel):
         return serial, False
 
     @api.model
+    def _validate_serial_for_mes_order(self, serial_number: str, mes_order):
+        serial = self._find_internal_serial_for_mes_order(serial_number, mes_order)
+        if not serial:
+            return serial, self._aoi_error(
+                'Serial number not found.',
+                error_code='serial_not_found',
+                serial_number=serial_number,
+            )
+        if not serial.active:
+            return serial, self._aoi_error(
+                'Serial number is inactive.',
+                error_code='serial_inactive',
+                serial_number=serial_number,
+                internal_serial_id=serial.id,
+            )
+        if serial.product_id != mes_order.product_id:
+            return serial, self._aoi_error(
+                'Serial number product does not match the MES order product.',
+                error_code='serial_product_mismatch',
+                serial_number=serial_number,
+                expected_product_id=mes_order.product_id.id,
+                actual_product_id=serial.product_id.id,
+            )
+        if serial.mes_order_id and serial.mes_order_id != mes_order:
+            return serial, self._aoi_error(
+                'Serial number MES order does not match the request.',
+                error_code='serial_mes_order_mismatch',
+                serial_number=serial_number,
+                expected_mes_order_id=mes_order.id,
+                actual_mes_order_id=serial.mes_order_id.id,
+            )
+        if serial.production_id and serial.production_id != mes_order.production_id:
+            return serial, self._aoi_error(
+                'Serial number manufacturing order does not match the MES order.',
+                error_code='serial_production_mismatch',
+                serial_number=serial_number,
+                expected_production_id=mes_order.production_id.id,
+                actual_production_id=serial.production_id.id,
+            )
+        if serial.current_production_id and serial.current_production_id != mes_order.production_id:
+            return serial, self._aoi_error(
+                'Serial number current manufacturing order does not match the MES order.',
+                error_code='serial_current_production_mismatch',
+                serial_number=serial_number,
+                expected_production_id=mes_order.production_id.id,
+                actual_production_id=serial.current_production_id.id,
+            )
+        if serial.final_result == 'scrap':
+            return serial, self._aoi_error(
+                'Serial number has been scrapped.',
+                error_code='serial_scrapped',
+                serial_number=serial_number,
+                internal_serial_id=serial.id,
+            )
+        if serial.pack_date:
+            return serial, self._aoi_error(
+                'Serial number has already been packed.',
+                error_code='serial_already_packed',
+                serial_number=serial_number,
+                internal_serial_id=serial.id,
+            )
+        return serial, False
+
+    @api.model
     def _get_scan_operation_retry_limit(self, workorder):
         if not workorder:
             return 0
@@ -1140,6 +1299,87 @@ class SnWsdApiService(models.AbstractModel):
             'retry_limit': retry_limit,
             'requires_repair': requires_repair,
         }
+
+    @api.model
+    def _prepare_scan_retry_context_for_mes_operation(self, serial, route_operation, result):
+        retry_limit = max(int(route_operation.x_ng_retry_limit or 0), 0) if route_operation and 'x_ng_retry_limit' in route_operation._fields else 0
+        retry_sequence = 0
+        requires_repair = False
+        if serial and route_operation and result == 'fail':
+            existing_fail_count = self.env['sn.wsd.mes.test.result'].search_count([
+                ('internal_serial_id', '=', serial.id),
+                ('route_operation_id', '=', route_operation.id),
+                ('result', '=', 'fail'),
+            ])
+            retry_sequence = existing_fail_count + 1
+            requires_repair = bool(retry_limit and retry_sequence >= retry_limit)
+        return {
+            'retry_sequence': retry_sequence,
+            'retry_limit': retry_limit,
+            'requires_repair': requires_repair,
+        }
+
+    @api.model
+    def _record_mes_order_scan_event(
+        self,
+        mes_order,
+        route_operation,
+        serial,
+        workcenter,
+        result,
+        operator_code=None,
+        note=None,
+        payload=None,
+        external_event_id=None,
+        source_system=None,
+        retry_context=None,
+    ):
+        retry_context = retry_context or {}
+        serial_identity = serial.serial_identity_id
+        if result == 'pass':
+            if not self.env['sn.wsd.serial.wip'].search([
+                ('serial_identity_id', '=', serial_identity.id),
+                ('mes_order_id', '=', mes_order.id),
+                ('route_operation_id', '=', route_operation.id),
+            ], limit=1):
+                mes_order.enter_station(serial_identity, route_operation, workcenter=workcenter)
+            mes_order.leave_station(serial_identity, 'ok')
+            travel_result = 'pass'
+            event_type = 'complete'
+        else:
+            travel_result = 'fail'
+            event_type = 'fail'
+        test_result = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
+            serial_number=serial.serial_no,
+            test_type=route_operation.x_station_type if route_operation.x_station_type in ('programming', 'inspection', 'aging', 'calibration', 'final_test', 'packaging') else 'final_test',
+            result=result,
+            workcenter_code=workcenter.code,
+            production_id=mes_order.production_id.id,
+            operator_code=operator_code,
+            note=note,
+            payload=payload,
+            external_event_id=False,
+            source_system=source_system,
+            retry_sequence=retry_context.get('retry_sequence', 0),
+            retry_limit=retry_context.get('retry_limit', 0),
+            requires_repair=retry_context.get('requires_repair', False),
+            mes_order_id=mes_order.id,
+            route_operation_id=route_operation.id,
+            travel_event_type=event_type,
+            travel_result=travel_result,
+        )
+        if isinstance(test_result, dict) and test_result.get('error'):
+            return test_result
+        return self._service_ok({
+            'travel_id': test_result.get('travel_id') if isinstance(test_result, dict) else False,
+            'test_result_id': test_result.get('test_result_id') if isinstance(test_result, dict) else False,
+            'mes_order_id': mes_order.id,
+            'route_operation_id': route_operation.id,
+            'workcenter_id': workcenter.id,
+            'workcenter_code': workcenter.code,
+            'serial_number': serial.serial_no,
+            'result': result,
+        })
 
     @api.model
     def _prepare_scan_rework_context(self, serial, workorder, result):
@@ -1240,24 +1480,18 @@ class SnWsdApiService(models.AbstractModel):
         workcenter = self._find_scan_workcenter(station_code, company=company)
         if not workcenter:
             return self._aoi_error('Work center not found.', M_WORK_STATIONSN=station_code)
-        workorder = self._resolve_scan_workorder(payload)
-        if not workorder:
-            return self._aoi_error(
-                'Active work order not found for the MES order and work center.',
-                M_MO_NUMBER=self._get_first_payload_value(payload, 'M_MO_NUMBER'),
-                M_WORK_STATIONSN=station_code,
-            )
-
-        serial, serial_created, serial_prepare_error = self._prepare_scan_serial(serial_number, workorder, payload)
+        mes_order, route_operation, mes_context_error = self._resolve_scan_mes_context(payload, workcenter)
+        if mes_context_error:
+            return mes_context_error
+        serial, serial_created, serial_prepare_error = self._prepare_scan_serial_for_mes_operation(
+            serial_number, mes_order, route_operation, payload,
+        )
         if serial_prepare_error:
             return serial_prepare_error
-        serial, serial_error = self._validate_serial_for_workorder(serial_number, workorder)
+        serial, serial_error = self._validate_serial_for_mes_order(serial_number, mes_order)
         if serial_error:
             return serial_error
 
-        mes_order = self._find_mes_order(
-            self._scan_payload_value(payload, 'M_MO_NUMBER')
-        )
         external_event_id = self._resolve_scan_external_event_id(payload)
         note = self._scan_test_detail_note(payload)
         metadata_payload = self._prepare_payload_metadata(
@@ -1265,53 +1499,30 @@ class SnWsdApiService(models.AbstractModel):
             external_event_id=external_event_id,
             source_system=source_system,
         )
-        retry_context = self._prepare_scan_retry_context(serial, workorder, normalized_result)
-        rework_context = self._prepare_scan_rework_context(serial, workorder, normalized_result)
-        if normalized_result == 'pass':
-            result = self.submit_workorder_event(
-                workorder_id=workorder.id,
-                event_type='complete',
-                serial_number=serial_number,
-                operator_code=operator_code,
-                note=note,
-                override_route=override_route,
-                external_event_id=external_event_id,
-                source_system=source_system,
-                payload=metadata_payload,
-            )
-        else:
-            result = self.submit_test_result(
-                workorder_id=workorder.id,
-                serial_number=serial_number,
-                result='fail',
-                operator_code=operator_code,
-                note=note,
-                payload=metadata_payload,
-                external_event_id=external_event_id,
-                source_system=source_system,
-                retry_sequence=retry_context['retry_sequence'],
-                retry_limit=retry_context['retry_limit'],
-                requires_repair=retry_context['requires_repair'],
-            )
+        retry_context = self._prepare_scan_retry_context_for_mes_operation(
+            serial, route_operation, normalized_result,
+        )
+        result = self._record_mes_order_scan_event(
+            mes_order,
+            route_operation,
+            serial,
+            workcenter,
+            normalized_result,
+            operator_code=operator_code,
+            note=note,
+            payload=metadata_payload,
+            external_event_id=external_event_id,
+            source_system=source_system,
+            retry_context=retry_context,
+        )
         if result.get('ok'):
             data = dict(result.get('data') or {})
-            retry_context, rework_context, test_result = self._scan_result_context_from_record(
-                data, retry_context, rework_context,
-            )
-            if normalized_result == 'fail' and retry_context['requires_repair']:
-                repair_workorder = self._apply_scan_repair_requirement(
-                    serial,
-                    workorder,
-                    operator_code=operator_code,
-                    note=note,
-                )
-                if repair_workorder:
-                    data['repair_workorder_id'] = repair_workorder.id
             data.update({
                 'serial_number': serial_number,
-                'workorder_id': workorder.id,
-                'production_id': workorder.production_id.id,
-                'mes_order_id': mes_order.id if mes_order else False,
+                'workorder_id': False,
+                'production_id': mes_order.production_id.id,
+                'mes_order_id': mes_order.id,
+                'route_operation_id': route_operation.id,
                 'workcenter_id': workcenter.id,
                 'workcenter_code': workcenter.code,
                 'result': normalized_result,
@@ -1321,8 +1532,8 @@ class SnWsdApiService(models.AbstractModel):
                 'retry_sequence': retry_context['retry_sequence'],
                 'retry_limit': retry_context['retry_limit'],
                 'requires_repair': retry_context['requires_repair'],
-                'is_rework_pass': rework_context['is_rework_pass'],
-                'rework_source_workorder_id': rework_context['rework_source_workorder_id'],
+                'is_rework_pass': False,
+                'rework_source_workorder_id': False,
             })
             return self._aoi_response(data=data)
         error = result.get('error') or {}

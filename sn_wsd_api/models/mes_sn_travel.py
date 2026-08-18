@@ -15,6 +15,13 @@ class MesSnTravel(models.Model):
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order', string='MES Order', ondelete='set null', index=True, check_company=True,
     )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
     workorder_id = fields.Many2one('mrp.workorder', ondelete='set null', index=True, check_company=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='MES Work Center', ondelete='set null', index=True, check_company=True)
     workshop_id = fields.Many2one('sn.mrp.workshop', ondelete='set null', index=True, check_company=True)
@@ -64,6 +71,8 @@ class MesSnTravel(models.Model):
         request_id=None,
         source_system=None,
         internal_serial_id=None,
+        mes_order_id=None,
+        route_operation_id=None,
         retry_sequence=0,
         retry_limit=0,
         requires_repair=False,
@@ -90,6 +99,7 @@ class MesSnTravel(models.Model):
         equipment = self.env['maintenance.equipment']
         workcenter = self.env['mrp.workcenter']
         workorder = self.env['mrp.workorder'].browse(workorder_id).exists() if workorder_id else self.env['mrp.workorder']
+        route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(route_operation_id).exists() if route_operation_id else self.env['sn.wsd.mes.order.route.operation']
         if workorder and workorder.x_meter_equipment_id:
             equipment = workorder.x_meter_equipment_id
         if workcenter_code:
@@ -100,9 +110,11 @@ class MesSnTravel(models.Model):
             workorder = self.env['mrp.workorder'].search([('state', 'in', ['ready', 'progress']), ('workcenter_id', '=', equipment.x_mes_workcenter_id.id)], limit=1, order='date_start asc, id asc')
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else workorder.production_id
         mes_order = (
-            self.env['sn.wsd.mes.order'].browse(payload.get('mes_order_id')).exists()
-            if payload.get('mes_order_id') else False
+            self.env['sn.wsd.mes.order'].browse(mes_order_id or payload.get('mes_order_id')).exists()
+            if (mes_order_id or payload.get('mes_order_id')) else False
         )
+        if not mes_order and route_operation:
+            mes_order = route_operation.mes_order_id
         if not mes_order and production:
             mes_order = production.x_mes_order_ids.filtered(
                 lambda order: order.state != 'cancelled'
@@ -126,6 +138,7 @@ class MesSnTravel(models.Model):
             'internal_serial_id': serial.id,
             'production_id': production.id if production else False,
             'mes_order_id': mes_order.id if mes_order else False,
+            'route_operation_id': route_operation.id if route_operation else False,
             'workorder_id': workorder.id if workorder else False,
             'workcenter_id': workcenter.id if workcenter else workorder.workcenter_id.id if workorder and workorder.workcenter_id else False,
             'workshop_id': workshop.id if workshop else False,
@@ -152,6 +165,8 @@ class MesSnTravel(models.Model):
             duplicated=False,
             travel_id=travel.id,
             serial_number=serial.serial_no,
+            mes_order_id=travel.mes_order_id.id,
+            route_operation_id=travel.route_operation_id.id,
             workorder_id=travel.workorder_id.id,
             workcenter_code=travel.workcenter_code,
         )

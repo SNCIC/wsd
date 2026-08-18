@@ -22,6 +22,8 @@
                             <field name="workcenter_code"/>
                             <field name="event_type"/>
                             <field name="result"/>
+                            <field name="mes_order_id"/>
+                            <field name="route_operation_id"/>
                             <field name="retry_sequence" optional="hide"/>
                             <field name="retry_limit" optional="hide"/>
                             <field name="requires_repair" optional="show"/>
@@ -38,6 +40,8 @@
                             <field name="test_time"/>
                             <field name="test_type"/>
                             <field name="result"/>
+                            <field name="mes_order_id"/>
+                            <field name="route_operation_id"/>
                             <field name="retry_sequence" optional="hide"/>
                             <field name="retry_limit" optional="hide"/>
                             <field name="requires_repair" optional="show"/>
