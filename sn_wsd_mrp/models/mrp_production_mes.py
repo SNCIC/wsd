@@ -55,11 +55,11 @@ class MrpProductionMesSchedule(models.Model):
     # Process route check (工艺路线检查视图) -- per-MO answer to "does the
     # product's board side + workshop + drawing match a live route?". The
     # sides required come from the product's board side type; the workshop
-    # from the MO. MOs whose product declares no board side type (legacy)
-    # are out of scope and never flagged.
+    # from the MO. MOs whose product has no 图号 (default_code) are out of
+    # scope and never flagged.
     # ------------------------------------------------------------------
     x_drawing_no = fields.Char(
-        related='product_id.x_drawing_no', string='Drawing No.',
+        related='product_id.default_code', string='Drawing No.',
     )
     x_board_side = fields.Selection(
         related='product_id.x_board_side', string='Board Side Type',
@@ -92,7 +92,7 @@ class MrpProductionMesSchedule(models.Model):
              'live process route.',
     )
 
-    @api.depends('product_id.x_drawing_no', 'product_id.x_board_side', 'x_workshop_id')
+    @api.depends('product_id.default_code', 'product_id.x_board_side', 'x_workshop_id')
     def _compute_x_mes_route_check(self):
         Route = self.env['sn.wsd.process.route']
         # one side map per workshop (None = MO without a workshop: any
@@ -104,21 +104,21 @@ class MrpProductionMesSchedule(models.Model):
                 production)
         maps = {}
         for workshop_id, prods in by_workshop.items():
-            drawings = list({p.product_id.x_drawing_no for p in prods
-                             if p.product_id.x_drawing_no})
+            drawings = list({p.product_id.default_code for p in prods
+                             if p.product_id.default_code})
             maps[workshop_id] = Route._mes_side_route_map(
                 drawings, workshop_id=workshop_id)
         for production in self:
             routes = maps.get(
                 production.x_workshop_id.id or None, {}
-            ).get(production.product_id.x_drawing_no) or {}
+            ).get(production.product_id.default_code) or {}
             production.x_mes_route_single_ok = bool(routes.get('single'))
             production.x_mes_route_top_ok = bool(routes.get('top'))
             production.x_mes_route_bottom_ok = bool(routes.get('bottom'))
             required = board_side_required_sides(
                 production.product_id.x_board_side)
-            if not production.product_id.x_drawing_no:
-                # not a drawing product: out of scope for route matching
+            if not production.product_id.default_code:
+                # no 图号: out of scope for route matching
                 production.x_mes_route_missing_sides = False
                 production.x_mes_route_missing = False
             elif required is None:
@@ -141,7 +141,7 @@ class MrpProductionMesSchedule(models.Model):
         """
         productions = self.search([
             ('state', 'not in', ('done', 'cancel')),
-            ('product_id.x_drawing_no', '!=', False),
+            ('product_id.default_code', '!=', False),
         ])
         missing = productions.filtered(lambda p: p.x_mes_route_missing)
         if operator in ('=', '=='):
@@ -174,7 +174,7 @@ class MrpProductionMesSchedule(models.Model):
     def _mes_open_route_create(self, side):
         self.ensure_one()
         return self.env['sn.wsd.process.route']._mes_open_route_create_action(
-            self.product_id.x_drawing_no, side,
+            self.product_id.default_code, side,
             workshop_id=self.x_workshop_id.id)
 
     def action_mes_add_single_route(self):

@@ -13,9 +13,14 @@
                        decoration-success="x_side == 'single'"/>
                 <field name="x_drawing_no"/>
                 <field name="product_name" readonly="1"/>
+                <field name="product_board_side" readonly="1" widget="badge"
+                       decoration-success="product_board_side == 'single'"
+                       decoration-info="product_board_side == 'double'"/>
                 <field name="product_specification" readonly="1"/>
-                <field name="create_uid" readonly="1" optional="show"/>
-                <field name="create_date" readonly="1" optional="show"/>
+                <field name="create_uid" readonly="1" optional="hide"/>
+                <field name="create_date" readonly="1" optional="hide"/>
+                <field name="write_uid" readonly="1" optional="hide"/>
+                <field name="write_date" readonly="1" optional="hide"/>
                 <field name="company_id" column_invisible="1"/>
             </list>
         </field>
@@ -36,6 +41,7 @@
                         </group>
                         <group string="Brought Out Information">
                             <field name="product_name" readonly="1"/>
+                            <field name="product_board_side" readonly="1"/>
                             <field name="product_specification" readonly="1"/>
                         </group>
                     </group>

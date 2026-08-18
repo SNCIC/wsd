@@ -35,10 +35,6 @@ class ProductTemplate(models.Model):
         string='Rated Current',
         tracking=True,
     )
-    x_drawing_no = fields.Char(
-        string='Drawing No.',
-        tracking=True,
-    )
     x_use_daily_plan = fields.Boolean(
         string='Use Daily Plan',
         default=False,
@@ -62,16 +58,19 @@ class ProductTemplate(models.Model):
              'Defaults to Single; switch to Double for double-sided boards.',
     )
 
+    # 图号唯一载体是原生内部参考 default_code（界面显示"图号"），不再有
+    # 单独的 Drawing No. 字段。
+    #
     # 板面类型是面别排产的源头（设计文档 1.2 required）：有图号必须声明。
-    # 产品变体上的 x_drawing_no / x_board_side 是可写 related，创建变体时
+    # 产品变体上的 default_code / x_board_side 是可写 related，创建变体时
     # 它们逐个写回模板，约束若在中间态触发会误报；因此变体创建期间用
     # 上下文标记抑制，创建完成后在 ProductProduct.create 里显式复检。
-    @api.constrains('x_drawing_no', 'x_board_side')
+    @api.constrains('default_code', 'x_board_side')
     def _check_board_side_declared(self):
         if self.env.context.get('sn_wsd_suppress_board_side_check'):
             return
         for template in self:
-            if template.x_drawing_no and not template.x_board_side:
+            if template.default_code and not template.x_board_side:
                 raise ValidationError(_(
                     'Products with a drawing number must declare their board '
                     'side type (single or double).'))
@@ -107,11 +106,6 @@ class ProductProduct(models.Model):
     )
     rated_current = fields.Float(
         related='product_tmpl_id.rated_current',
-        store=True,
-        readonly=False,
-    )
-    x_drawing_no = fields.Char(
-        related='product_tmpl_id.x_drawing_no',
         store=True,
         readonly=False,
     )

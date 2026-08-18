@@ -277,7 +277,7 @@ class MesOrder(models.Model):
     def _check_side_matches_board(self):
         for order in self:
             board = order.product_id.x_board_side
-            if order.product_id.x_drawing_no and not board:
+            if order.product_id.default_code and not board:
                 raise ValidationError(_(
                     'Product %(product)s has a drawing number but no board '
                     'side type declared. Declare it on the product before '

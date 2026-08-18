@@ -59,7 +59,7 @@
                 <filter name="route_missing" string="Route Not Matched"
                         domain="[('x_mes_route_missing', '=', True)]"/>
                 <filter name="route_matched" string="Route Matched"
-                        domain="[('x_mes_route_missing', '=', False), ('product_id.x_drawing_no', '!=', False)]"/>
+                        domain="[('x_mes_route_missing', '=', False), ('product_id.default_code', '!=', False)]"/>
                 <separator/>
                 <filter name="board_single" string="Single Side"
                         domain="[('product_id.x_board_side', '=', 'single')]"/>
@@ -81,7 +81,7 @@
         <field name="res_model">mrp.production</field>
         <field name="view_mode">list</field>
         <field name="search_view_id" ref="view_sn_wsd_mes_route_check_search"/>
-        <field name="domain">[('state', 'not in', ('done', 'cancel')), ('product_id.x_drawing_no', '!=', False)]</field>
+        <field name="domain">[('state', 'not in', ('done', 'cancel')), ('product_id.default_code', '!=', False)]</field>
         <field name="context">{'search_default_route_missing': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Every manufacturing order matches its routes</p>

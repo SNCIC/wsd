@@ -92,7 +92,7 @@ class MesScheduleWizard(models.TransientModel):
     def _compute_route_status(self):
         Route = self.env['sn.wsd.process.route']
         for wizard in self:
-            drawing = wizard.product_id.x_drawing_no
+            drawing = wizard.product_id.default_code
             company = wizard.production_id.company_id.id
             workshop = wizard.production_line_id.workshop_id.id
             wizard.x_top_route_ok = False
@@ -135,7 +135,7 @@ class MesScheduleWizard(models.TransientModel):
         schedule."""
         self.ensure_one()
         return self.env['sn.wsd.process.route']._mes_open_route_create_action(
-            self.product_id.x_drawing_no, self.x_side,
+            self.product_id.default_code, self.x_side,
             workshop_id=self.production_line_id.workshop_id.id)
 
     def action_schedule(self):
@@ -145,7 +145,7 @@ class MesScheduleWizard(models.TransientModel):
         # -1) board side declaration gate: the board side type is the source
         #     of truth for side-based scheduling -- without it there is
         #     nothing to match against.
-        if self.product_id.x_drawing_no and not self.product_id.x_board_side:
+        if self.product_id.default_code and not self.product_id.x_board_side:
             raise ValidationError(_(
                 'Product %(product)s has a drawing number but no board side '
                 'type declared. Declare it on the product before scheduling.',
@@ -155,7 +155,7 @@ class MesScheduleWizard(models.TransientModel):
         # 0) route gate (架构设计 3.2): scheduling is blocked until the
         #    (workshop + drawing + side) route exists; the [Maintain Route]
         #    button fixes it.
-        drawing = self.product_id.x_drawing_no
+        drawing = self.product_id.default_code
         route = Route._find_current_route_by_drawing_no(
             drawing, production.company_id.id, side=side,
             workshop_id=workshop.id)

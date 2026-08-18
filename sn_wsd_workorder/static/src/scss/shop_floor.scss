@@ -1,0 +1,207 @@
+.o_sn_wsd_shop_floor {
+    background: #f6f7f9;
+
+    .o_sn_wsd_shop_floor_search {
+        width: 220px;
+    }
+
+    .o_sn_wsd_shop_floor_filters {
+        min-width: 0;
+    }
+
+    .o_sn_wsd_shop_floor_scope_select {
+        min-width: 170px;
+    }
+
+    .o_sn_wsd_shop_floor_workcenter_select {
+        min-width: 220px;
+    }
+
+    .o_sn_wsd_shop_floor_employee_select {
+        width: 180px;
+    }
+
+    .o_sn_wsd_shop_floor_pin {
+        width: 96px;
+    }
+
+    .o_sn_wsd_workorder_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 16px;
+        align-items: start;
+    }
+
+    .o_sn_wsd_workorder_card {
+        border-radius: 8px;
+        min-width: 0;
+    }
+
+    .o_sn_wsd_workorder_card_header {
+        background: #fff;
+    }
+
+    .o_sn_wsd_workorder_menu {
+        border-radius: 6px;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
+        inset-inline-end: 0;
+        min-width: 240px;
+        padding: 6px;
+        position: absolute;
+        top: 100%;
+        z-index: 20;
+
+        .dropdown-item {
+            align-items: center;
+            border-radius: 4px;
+            display: flex;
+            gap: 8px;
+            min-height: 36px;
+            padding: 8px 10px;
+            white-space: nowrap;
+        }
+
+        .fa {
+            flex: 0 0 18px;
+            margin-right: 0 !important;
+            text-align: center;
+        }
+    }
+
+    .o_sn_wsd_component_row {
+        min-height: 44px;
+    }
+
+    .o_sn_wsd_shop_floor_empty {
+        display: flex;
+        min-height: 240px;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 18px;
+    }
+
+    .btn {
+        min-height: 40px;
+    }
+
+    .o_sn_wsd_modal_backdrop {
+        align-items: center;
+        background: rgba(17, 24, 39, 0.55);
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 24px;
+        position: fixed;
+        z-index: 1050;
+    }
+
+    .o_sn_wsd_modal {
+        border-radius: 8px;
+        max-width: 520px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_sn_wsd_shop_floor {
+        .o_sn_wsd_workorder_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .o_sn_wsd_shop_floor_search,
+        .o_sn_wsd_shop_floor_employee_select,
+        .o_sn_wsd_shop_floor_pin,
+        .o_sn_wsd_shop_floor_scope_select,
+        .o_sn_wsd_shop_floor_workcenter_select {
+            width: 100%;
+        }
+
+        .o_sn_wsd_shop_floor_header > .ms-auto {
+            width: 100%;
+        }
+    }
+}
+
+// Station passing tab (SN feeding / station leave / operation reporting)
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_station_wc {
+        min-width: 240px;
+        width: auto;
+    }
+
+    .o_sn_wsd_station_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 12px;
+    }
+
+    .o_sn_wsd_station_card {
+        border-radius: 8px;
+        cursor: pointer;
+
+        &.o_selected {
+            box-shadow: 0 0 0 2px rgba(113, 75, 103, 0.55);
+        }
+    }
+
+    .o_sn_wsd_station_snbar {
+        .o_sn_wsd_station_sn_input {
+            flex: 1 1 320px;
+            font-size: 1.05rem;
+        }
+    }
+
+    .o_sn_wsd_station_wip_row:last-child {
+        border-bottom: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_sn_wsd_shop_floor {
+        .o_sn_wsd_station_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .o_sn_wsd_station_wc {
+            width: 100%;
+        }
+    }
+}
+
+// Scan-driven terminal: scan box, current banner, grouped WIP
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_scanbox {
+        .o_sn_wsd_scan_input {
+            font-size: 1.15rem;
+        }
+    }
+
+    .o_sn_wsd_current {
+        border-left: 4px solid #714b67;
+    }
+
+    .o_sn_wsd_other_row {
+        font-size: 0.9rem;
+    }
+
+    .o_sn_wsd_wip_group {
+        padding-left: 6px;
+    }
+
+    .o_sn_wsd_station_wip_row {
+        cursor: pointer;
+    }
+}
+
+// scan mode tints: default OK pass-through, NG/scrap warnings
+.o_sn_wsd_shop_floor {
+    .o_sn_wsd_scanbox.o_scan_mode_ng {
+        border-color: #ffc107 !important;
+        background: #fffbea !important;
+    }
+    .o_sn_wsd_scanbox.o_scan_mode_scrap {
+        border-color: #212529 !important;
+        background: #f1f3f5 !important;
+    }
+}

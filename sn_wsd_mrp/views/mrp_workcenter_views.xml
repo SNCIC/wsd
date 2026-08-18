@@ -41,6 +41,10 @@
                 <field name="x_production_line_id" optional="show"/>
                 <field name="x_operation_id" optional="show"/>
                 <field name="x_workcenter_status" optional="show"/>
+                <field name="create_uid" optional="hide"/>
+                <field name="create_date" optional="hide"/>
+                <field name="write_uid" optional="hide"/>
+                <field name="write_date" optional="hide"/>
             </xpath>
         </field>
     </record>

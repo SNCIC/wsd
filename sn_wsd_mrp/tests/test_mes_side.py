@@ -62,14 +62,15 @@ class TestMesSide(TransactionCase):
     def _make_product(self, drawing, board_side=False, name='P-SIDE'):
         return self.env['product.product'].create({
             'name': name, 'uom_id': self.uom_unit.id,
-            'x_drawing_no': drawing, 'x_board_side': board_side,
+            'default_code': drawing, 'x_board_side': board_side,
         })
 
     def _make_legacy_product(self, drawing, name='P-LEGACY'):
-        """Simulate a pre-default row: drawing number set, board side type
-        NULL (both the field default and the ORM constraint forbid creating
-        those now). Both the template columns and the variant's stored
-        related columns are set, bypassing the ORM like a real legacy row."""
+        """Simulate a pre-default row: drawing number set (the internal
+        reference carries it now), board side type NULL (both the field
+        default and the ORM constraint forbid creating those now). Both the
+        template columns and the variant's stored related columns are set,
+        bypassing the ORM like a real legacy row."""
         product = self.env['product.product'].create({
             'name': name, 'uom_id': self.uom_unit.id,
         })
@@ -78,12 +79,12 @@ class TestMesSide(TransactionCase):
         # would overwrite the SQL update afterwards
         self.env.flush_all()
         self.env.cr.execute(
-            "UPDATE product_template SET x_drawing_no = %s, x_board_side = NULL"
+            "UPDATE product_template SET default_code = %s, x_board_side = NULL"
             " WHERE id = %s", (drawing, tmpl_id))
         self.env.cr.execute(
-            "UPDATE product_product SET x_drawing_no = %s, x_board_side = NULL"
+            "UPDATE product_product SET default_code = %s, x_board_side = NULL"
             " WHERE product_tmpl_id = %s", (drawing, tmpl_id))
-        product.invalidate_recordset(['x_drawing_no', 'x_board_side'])
+        product.invalidate_recordset(['default_code', 'x_board_side'])
         return product
 
     def _make_mo(self, product, qty=1000, workshop=None):
