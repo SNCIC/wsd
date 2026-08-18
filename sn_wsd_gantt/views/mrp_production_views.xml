@@ -37,7 +37,6 @@
                 <field name="product_id"/>
                 <field name="product_variant_attributes"/>
                 <field name="move_raw_ids" string="Component" filter_domain="[('move_raw_ids.product_id', 'ilike', self)]"/>
-                <field name="workcenter_id" string="Work Center" filter_domain="[('workorder_ids.workcenter_id', 'ilike', self)]"/>
                 <field name="x_workshop_id"/>
                 <field name="origin"/>
                 <field name="picking_type_id"/>
@@ -76,55 +75,5 @@
     <record id="mrp.mrp_production_action" model="ir.actions.act_window">
         <field name="view_mode">list,kanban,gantt,form,calendar,pivot,graph,activity</field>
         <field name="search_view_id" ref="mrp_production_gantt_search_view"/>
-    </record>
-
-    <record id="mrp_workorder_gantt_view" model="ir.ui.view">
-        <field name="name">mrp.workorder.gantt</field>
-        <field name="model">mrp.workorder</field>
-        <field name="type">gantt</field>
-        <field name="arch" type="xml">
-            <gantt
-                string="Work Orders Schedule"
-                date_start="date_start"
-                date_stop="date_finished"
-                default_group_by="workcenter_id"
-                default_scale="week"
-                progress="progress"
-                color="state"
-                dependency_field="blocked_by_workorder_ids"
-                dependency_inverted_field="needed_by_workorder_ids"
-                create="0"
-            >
-                <field name="name"/>
-                <field name="production_id"/>
-                <field name="workcenter_id"/>
-                <field name="product_id"/>
-                <field name="qty_production"/>
-                <field name="qty_remaining"/>
-                <field name="qty_produced"/>
-                <field name="product_uom_id"/>
-                <field name="duration_expected"/>
-                <field name="duration"/>
-                <field name="state"/>
-                <field name="production_state"/>
-                <field name="working_state"/>
-            </gantt>
-        </field>
-    </record>
-
-    <record id="mrp.action_mrp_workorder_production_specific" model="ir.actions.act_window">
-        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
-    </record>
-
-    <record id="mrp.action_mrp_workorder_workcenter" model="ir.actions.act_window">
-        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
-    </record>
-
-    <record id="mrp.action_mrp_workorder_production" model="ir.actions.act_window">
-        <field name="view_mode">list,gantt,form,calendar,pivot,graph</field>
-    </record>
-
-    <record id="mrp.mrp_workorder_todo" model="ir.actions.act_window">
-        <field name="view_mode">list,kanban,gantt,form,calendar,pivot,graph</field>
     </record>
 </odoo>

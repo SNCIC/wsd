@@ -1,11 +1,11 @@
-﻿from odoo import api, fields, models
+from odoo import api, fields, models
 from odoo.tools import drop_view_if_exists
 
 
 class SnWsdWipSnapshot(models.Model):
     _name = 'sn.wsd.wip.snapshot'
     _description = 'Manufacturing WIP Snapshot'
-    _order = 'production_id, step_sequence, workorder_id'
+    _order = 'production_id, step_sequence, route_operation_id'
     _check_company_auto = True
 
     production_id = fields.Many2one(
@@ -41,9 +41,9 @@ class SnWsdWipSnapshot(models.Model):
         store=True,
         readonly=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         required=True,
         index=True,
         ondelete='cascade',
@@ -58,7 +58,7 @@ class SnWsdWipSnapshot(models.Model):
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',
-        related='workorder_id.workcenter_id',
+        related='route_operation_id.workcenter_id',
         store=True,
         readonly=True,
     )
@@ -79,8 +79,8 @@ class SnWsdWipSnapshot(models.Model):
     wip_qty = fields.Float(string='WIP Qty')
     snapshot_time = fields.Datetime(string='Snapshot Time', required=True, default=fields.Datetime.now, index=True)
 
-    _production_workorder_uniq = models.Constraint(
-        'unique(production_id, workorder_id)',
+    _production_route_operation_uniq = models.Constraint(
+        'unique(production_id, route_operation_id)',
         'Each work order can only have one active WIP snapshot per manufacturing order.',
     )
 
@@ -89,15 +89,15 @@ class SnWsdWipReport(models.Model):
     _name = 'sn.wsd.wip.report'
     _description = 'Manufacturing WIP Report'
     _auto = False
-    _order = 'production_id, step_sequence, workorder_id'
+    _order = 'production_id, step_sequence, route_operation_id'
 
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=True)
     mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', readonly=True)
     production_name = fields.Char(string='Manufacturing Reference', readonly=True)
     company_id = fields.Many2one('res.company', string='Company', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
-    workorder_id = fields.Many2one('mrp.workorder', string='Work Order', readonly=True)
-    workorder_name = fields.Char(string='Work Order Reference', readonly=True)
+    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='Route Operation', readonly=True)
+    route_operation_name = fields.Char(string='Route Operation Reference', readonly=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', readonly=True)
     route_id = fields.Many2one('sn.wsd.process.route', string='Process Route', readonly=True)
     route_step_id = fields.Many2one('sn.wsd.process.route.operation', string='Process Step', readonly=True)
@@ -129,8 +129,8 @@ class SnWsdWipReport(models.Model):
                     production.name AS production_name,
                     snapshot.company_id,
                     snapshot.product_id,
-                    snapshot.workorder_id,
-                    workorder.name AS workorder_name,
+                    snapshot.route_operation_id,
+                    route_operation.name AS route_operation_name,
                     snapshot.workcenter_id,
                     snapshot.route_id,
                     snapshot.route_step_id,
@@ -148,7 +148,7 @@ class SnWsdWipReport(models.Model):
                     snapshot.snapshot_time
                 FROM sn_wsd_wip_snapshot snapshot
                 JOIN mrp_production production ON production.id = snapshot.production_id
-                JOIN mrp_workorder workorder ON workorder.id = snapshot.workorder_id
+                JOIN sn_wsd_mes_order_route_operation route_operation ON route_operation.id = snapshot.route_operation_id
             )
         """)
 
@@ -167,7 +167,7 @@ class SnWsdWipMesOrderReport(models.Model):
     step_sequence = fields.Integer(string='Step Sequence', readonly=True)
     step_code = fields.Char(string='Step Code', readonly=True)
     step_name = fields.Char(string='Step Name', readonly=True)
-    workorder_count = fields.Integer(string='Work Order Count', readonly=True)
+    route_operation_count = fields.Integer(string='Route Operation Count', readonly=True)
     production_count = fields.Integer(string='Manufacturing Order Count', readonly=True)
     input_qty = fields.Float(string='Input Qty', readonly=True)
     start_qty = fields.Float(string='Start Qty', readonly=True)
@@ -192,7 +192,7 @@ class SnWsdWipMesOrderReport(models.Model):
                     MIN(snapshot.step_sequence) AS step_sequence,
                     MIN(snapshot.step_code) AS step_code,
                     MIN(snapshot.step_name) AS step_name,
-                    COUNT(DISTINCT snapshot.workorder_id) AS workorder_count,
+                    COUNT(DISTINCT snapshot.route_operation_id) AS route_operation_count,
                     COUNT(DISTINCT snapshot.production_id) AS production_count,
                     SUM(snapshot.input_qty) AS input_qty,
                     SUM(snapshot.start_qty) AS start_qty,
@@ -297,16 +297,18 @@ class MrpProduction(models.Model):
             production.x_wip_current_total = sum(lines.mapped('wip_qty'))
             production.x_wip_overview_id = overview_model.search([('production_id', '=', production.id)], limit=1)
 
-    def _build_wip_snapshot_line_values(self, workorders):
+    def _build_wip_snapshot_line_values(self, route_operations):
         self.ensure_one()
         travel_model = self.env['sn.wsd.mes.sn.travel']
         issue_model = self.env['sn.wsd.quality.issue']
         values_list = []
         previous_pass_qty = 0.0
-        ordered_workorders = workorders.sorted(lambda workorder: (workorder.x_route_operation_id.sequence or workorder.sequence, workorder.sequence, workorder.id))
-        for index, workorder in enumerate(ordered_workorders):
-            step = workorder.x_route_operation_id
-            travel_domain = [('workorder_id', '=', workorder.id)]
+        ordered_route_operations = route_operations.sorted(
+            lambda route_operation: (route_operation.sequence, route_operation.id)
+        )
+        for index, route_operation in enumerate(ordered_route_operations):
+            step = route_operation
+            travel_domain = [('route_operation_id', '=', route_operation.id)]
             travel_count = travel_model.search_count(travel_domain)
             if travel_count:
                 data_source = 'sn'
@@ -314,20 +316,18 @@ class MrpProduction(models.Model):
                 pass_qty = travel_model.search_count(travel_domain + [('event_type', 'in', ['complete', 'pass']), ('result', '!=', 'fail')])
                 fail_qty = travel_model.search_count(travel_domain + ['|', ('event_type', '=', 'fail'), ('result', '=', 'fail')])
                 scrap_qty = issue_model.search_count([
-                    ('workorder_id', '=', workorder.id),
+                    ('route_operation_id', '=', route_operation.id),
                     '|',
                     ('disposition', '=', 'scrap'),
                     ('state', '=', 'scrapped'),
                 ])
             else:
                 data_source = 'qty'
-                pass_qty = max(workorder.x_wip_qty_pass_snapshot, workorder.x_meter_qty_pass)
-                fail_qty = max(workorder.x_wip_qty_fail_snapshot, workorder.x_meter_qty_fail)
-                scrap_qty = max(workorder.x_wip_qty_scrap_snapshot, workorder.x_meter_qty_scrap)
+                pass_qty = route_operation.x_ok_qty
+                fail_qty = route_operation.x_ng_qty
+                scrap_qty = route_operation.x_scrap_qty
                 start_qty = max(
-                    workorder.x_wip_qty_start_snapshot,
-                    workorder.x_meter_qty_input,
-                    workorder.qty_producing,
+                    route_operation.x_reported_qty,
                     pass_qty + fail_qty + scrap_qty,
                 )
             input_qty = self.product_qty if index == 0 else previous_pass_qty
@@ -335,11 +335,11 @@ class MrpProduction(models.Model):
             wip_qty = max(input_qty - pass_qty, 0.0)
             values_list.append({
                 'production_id': self.id,
-                'workorder_id': workorder.id,
-                'route_step_id': step.id if step else False,
-                'step_sequence': step.sequence if step else workorder.sequence,
-                'step_code': step.x_step_code if step else (workorder.operation_id.name or workorder.name),
-                'step_name': step.name if step else (workorder.operation_id.name or workorder.name),
+                'route_operation_id': route_operation.id,
+                'route_step_id': False,
+                'step_sequence': step.sequence,
+                'step_code': step.x_step_code or step.operation_id.name or step.name,
+                'step_name': step.name or step.operation_id.name,
                 'data_source': data_source,
                 'input_qty': input_qty,
                 'start_qty': start_qty,
@@ -356,9 +356,11 @@ class MrpProduction(models.Model):
     def action_refresh_wip_snapshot(self):
         snapshot_model = self.env['sn.wsd.wip.snapshot'].sudo()
         for production in self:
-            workorders = production.workorder_ids.sorted(lambda workorder: (workorder.x_route_operation_id.sequence or workorder.sequence, workorder.sequence, workorder.id))
+            route_operations = production.x_mes_order_id.x_route_operation_ids.sorted(
+                lambda route_operation: (route_operation.sequence, route_operation.id)
+            )
             snapshot_model.search([('production_id', '=', production.id)]).unlink()
-            values_list = production._build_wip_snapshot_line_values(workorders)
+            values_list = production._build_wip_snapshot_line_values(route_operations)
             if values_list:
                 snapshot_model.create(values_list)
         return True
@@ -416,80 +418,3 @@ class SnWsdMesOrder(models.Model):
             'context': {'search_default_group_by_step': 1},
         }
 
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_wip_qty_start_snapshot = fields.Float(string='WIP Start Qty Snapshot', copy=False)
-    x_wip_qty_pass_snapshot = fields.Float(string='WIP Pass Qty Snapshot', copy=False)
-    x_wip_qty_fail_snapshot = fields.Float(string='WIP Fail Qty Snapshot', copy=False)
-    x_wip_qty_scrap_snapshot = fields.Float(string='WIP Scrap Qty Snapshot', copy=False)
-    x_wip_qty_pending_snapshot = fields.Float(string='WIP Pending Qty Snapshot', copy=False)
-    x_wip_data_source = fields.Selection(
-        [('sn', 'SN Travel'), ('qty', 'Quantity Reporting')],
-        string='WIP Data Source',
-        copy=False,
-    )
-    x_wip_snapshot_time = fields.Datetime(string='WIP Snapshot Time', copy=False)
-
-    def _get_wip_qty_snapshot_values(self):
-        self.ensure_one()
-        travel_model = self.env['sn.wsd.mes.sn.travel']
-        issue_model = self.env['sn.wsd.quality.issue']
-        travel_domain = [('workorder_id', '=', self.id)]
-        travel_count = travel_model.search_count(travel_domain)
-        if travel_count:
-            data_source = 'sn'
-            start_qty = travel_model.search_count(travel_domain + [('event_type', '=', 'start')])
-            pass_qty = travel_model.search_count(travel_domain + [('event_type', 'in', ['complete', 'pass']), ('result', '!=', 'fail')])
-            fail_qty = travel_model.search_count(travel_domain + ['|', ('event_type', '=', 'fail'), ('result', '=', 'fail')])
-            scrap_qty = issue_model.search_count([
-                ('workorder_id', '=', self.id),
-                '|',
-                ('disposition', '=', 'scrap'),
-                ('state', '=', 'scrapped'),
-            ])
-            input_qty = max(self.x_meter_qty_input, start_qty, pass_qty + fail_qty + scrap_qty)
-        else:
-            data_source = 'qty'
-            pass_qty = self.x_meter_qty_pass
-            fail_qty = self.x_meter_qty_fail
-            scrap_qty = self.x_meter_qty_scrap
-            start_qty = max(
-                self.x_meter_qty_input,
-                self.qty_producing,
-                pass_qty + fail_qty + scrap_qty,
-            )
-            input_qty = start_qty
-        return {
-            'x_wip_qty_start_snapshot': start_qty,
-            'x_wip_qty_pass_snapshot': pass_qty,
-            'x_wip_qty_fail_snapshot': fail_qty,
-            'x_wip_qty_scrap_snapshot': scrap_qty,
-            'x_wip_qty_pending_snapshot': max(input_qty - start_qty, 0.0),
-            'x_wip_data_source': data_source,
-            'x_wip_snapshot_time': fields.Datetime.now(),
-        }
-
-    def action_refresh_wip_qty_snapshot(self):
-        productions = self.env['mrp.production']
-        for workorder in self:
-            workorder.write(workorder._get_wip_qty_snapshot_values())
-            productions |= workorder.production_id
-        if productions:
-            productions.action_refresh_wip_snapshot()
-        return True
-
-    def button_finish(self):
-        result = super().button_finish()
-        self.action_refresh_wip_qty_snapshot()
-        return result
-
-    def action_sync_meter_qty(self):
-        result = super().action_sync_meter_qty()
-        self.action_refresh_wip_qty_snapshot()
-        return result
-
-    def action_meter_scan_complete(self, *args, **kwargs):
-        result = super().action_meter_scan_complete(*args, **kwargs)
-        self.action_refresh_wip_qty_snapshot()
-        return result

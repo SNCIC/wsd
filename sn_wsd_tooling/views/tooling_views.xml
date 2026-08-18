@@ -233,7 +233,7 @@
         <field name="arch" type="xml">
             <list create="0">
                 <field name="tooling_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="mes_order_id"/>
                 <field name="operation_type"/>
                 <field name="operator_id"/>
@@ -249,7 +249,7 @@
         <field name="arch" type="xml">
             <list create="0">
                 <field name="tooling_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="mes_order_id"/>
                 <field name="operator_id"/>
                 <field name="operation_time"/>

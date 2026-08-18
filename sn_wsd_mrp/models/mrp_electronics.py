@@ -179,10 +179,10 @@ class MrpProduction(models.Model):
 
     def _requires_feeder_verification(self):
         self.ensure_one()
-        feeder_workorders = self.workorder_ids.filtered(
-            lambda workorder: workorder.x_meter_operation_type in ('smt', 'dip')
+        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
+            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
         )
-        return bool(feeder_workorders)
+        return bool(feeder_operations)
 
     @api.depends('move_raw_ids.state', 'move_raw_ids.product_uom_qty', 'move_raw_ids.quantity')
     def _compute_can_return_excess(self):
@@ -234,8 +234,6 @@ class MrpProduction(models.Model):
 
     def _generate_feeder_lines(self):
         self.ensure_one()
-        if not self.workorder_ids:
-            return
         if not self._requires_feeder_verification():
             return
         existing_lines = self.feeder_line_ids.filtered(lambda line: line.state != 'returned')
@@ -248,23 +246,20 @@ class MrpProduction(models.Model):
             and move.bom_line_id.x_requires_feeder_verification
             and move.state != 'cancel'
         )
-        feeder_workorders = self.workorder_ids.filtered(
-            lambda workorder: workorder.x_meter_operation_type in ('smt', 'dip')
+        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
+            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
         )
-        bom_feeder_workorders = feeder_workorders.filtered(
-            lambda workorder: workorder.x_meter_operation_type != 'smt'
+        bom_feeder_operations = feeder_operations.filtered(
+            lambda operation: operation.operation_id.x_station_type != 'smt'
         )
-        if not bom_feeder_workorders:
+        if not bom_feeder_operations:
             return
         for feeder_index, move in enumerate(raw_moves, start=1):
-            workorder = move.workorder_id.filtered(
-                lambda item: item.x_meter_operation_type != 'smt'
-                and item.x_meter_operation_type in ('dip',)
-            ) or bom_feeder_workorders[:1]
-            if not workorder:
+            route_operation = bom_feeder_operations[:1]
+            if not route_operation:
                 continue
             commands.append(Command.create({
-                'workorder_id': workorder.id,
+                'route_operation_id': route_operation.id,
                 'production_id': self.id,
                 'feeder_no': f'F{feeder_index:02d}',
                 'expected_product_id': move.product_id.id,
@@ -390,82 +385,6 @@ class MrpProduction(models.Model):
             action['domain'] = [('production_id', '=', self.id)]
             action['context'] = {'default_production_id': self.id}
         return action
-
-
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    feeder_line_ids = fields.One2many(
-        'mrp.feeder.line',
-        'workorder_id',
-        string='Feeder Lines',
-    )
-
-    def _requires_feeder_verification(self):
-        self.ensure_one()
-        return self.x_meter_operation_type in ('smt', 'dip')
-
-    def button_start(self, raise_on_invalid_state=False):
-        for workorder in self:
-            if not workorder._requires_feeder_verification():
-                continue
-            pending_lines = workorder.feeder_line_ids.filtered(lambda line: line.state == 'pending')
-            if pending_lines:
-                raise UserError(_(
-                    'There are still %(count)s feeder positions pending verification.',
-                    count=len(pending_lines),
-                ))
-            incomplete_lines = workorder.feeder_line_ids.filtered(
-                lambda line: line.state == 'verified'
-                and (
-                    not line.actual_product_id
-                    or float_compare(
-                        line.loaded_qty,
-                        0.0,
-                        precision_rounding=line.uom_id.rounding or 0.01,
-                    ) <= 0
-                )
-            )
-            if incomplete_lines:
-                raise UserError(_(
-                    'There are %(count)s verified feeder positions missing actual material or loaded quantity.',
-                    count=len(incomplete_lines),
-                ))
-        result = super().button_start(raise_on_invalid_state=raise_on_invalid_state)
-        for workorder in self.filtered(lambda item: item._requires_feeder_verification()):
-            workorder.feeder_line_ids.filtered(lambda line: line.state == 'verified').write({
-                'state': 'consuming',
-            })
-        return result
-
-    def button_finish(self):
-        res = super().button_finish()
-        for workorder in self:
-            workorder.production_id._sync_feeder_consumption()
-            for line in workorder.feeder_line_ids.filtered(lambda item: item.state == 'verified'):
-                line.state = 'consuming'
-        return res
-
-    def action_register_substitute(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Record Substitute Usage'),
-            'res_model': 'mrp.substitute.wizard',
-            'view_mode': 'form',
-            'views': [(False, 'form')],
-            'target': 'new',
-            'context': {
-                'default_workorder_id': self.id,
-            },
-        }
-
-    def action_scan_next_feeder(self):
-        self.ensure_one()
-        next_line = self.feeder_line_ids.filtered(lambda line: line.state == 'pending')[:1]
-        if not next_line:
-            raise UserError(_('No feeder line is waiting for verification on this work order.'))
-        return next_line.action_scan_feeder()
 
 
 class MrpExcessReturn(models.Model):
@@ -681,9 +600,9 @@ class MrpSubstituteUsage(models.Model):
         readonly=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         readonly=True,
         check_company=True,
     )
@@ -792,13 +711,13 @@ class MrpSubstituteUsage(models.Model):
 class MrpFeederLine(models.Model):
     _name = 'mrp.feeder.line'
     _description = 'SMT Feeder Setup Record'
-    _order = 'workorder_id, feeder_no, id'
+    _order = 'route_operation_id, feeder_no, id'
     _rec_name = 'display_name'
     _check_company_auto = True
 
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         required=True,
         index=True,
         check_company=True,

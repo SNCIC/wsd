@@ -5,40 +5,33 @@ class MesSnTravel(models.Model):
     _inherit = 'sn.wsd.mes.sn.travel'
 
     @api.model
-    def _resolve_workorder_arg(self, workorder=False):
-        if not workorder:
-            return self.env['mrp.workorder']
-        if hasattr(workorder, 'ids'):
-            return workorder.exists()
-        return self.env['mrp.workorder'].browse(int(workorder)).exists()
-
-    @api.model
-    def _resolve_route_operation(self, station, production=False, workorder=False):
-        operation_model = self.env['mrp.routing.workcenter']
+    def _resolve_route_operation(self, station, production=False, route_operation=False):
+        operation_model = self.env['sn.wsd.mes.order.route.operation']
         production = production or self.env['mrp.production']
-        workorder = self._resolve_workorder_arg(workorder)
-        if workorder and workorder.operation_id and station and workorder.operation_id.workcenter_id == station:
-            return workorder.operation_id
-        route = production.x_route_id or (workorder.production_id.x_route_id if workorder else False)
-        if not route or not station:
+        route_operation = route_operation.exists() if hasattr(route_operation, 'exists') else operation_model.browse(route_operation).exists()
+        if route_operation:
+            return route_operation
+        mes_order = production.x_mes_order_id
+        if not mes_order or not station:
             return operation_model
-        bom = production.bom_id or (workorder.production_id.bom_id if workorder else False)
         return operation_model.search([
-            ('bom_id', '=', bom.id),
+            ('mes_order_id', '=', mes_order.id),
             ('workcenter_id', '=', station.id),
-            ('x_route_operation_id', '!=', False),
         ], order='sequence asc, id asc', limit=1)
 
     @api.model
-    def serial_route_guard(self, serial_number, station_code, override_allowed=False, workorder=False, internal_serial_id=None):
+    def serial_route_guard(self, serial_number, station_code, override_allowed=False, route_operation_id=None, internal_serial_id=None):
         station = self.env['mrp.workcenter'].search([('code', '=', station_code)], limit=1)
         if not station:
             return self._mes_error('station_not_found', station_code=station_code)
 
-        workorder = self._resolve_workorder_arg(workorder)
-        internal_serial = self.env['sn.wsd.internal.serial'].browse(internal_serial_id).exists() if internal_serial_id else self.env['sn.wsd.internal.serial'].find_for_workorder_context(serial_number, workorder) if workorder else self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(serial_number)
-        production = workorder.production_id or (internal_serial.production_id if internal_serial else self.env['mrp.production'])
-        operation = self._resolve_route_operation(station, production=production, workorder=workorder)
+        internal_serial = self.env['sn.wsd.internal.serial'].browse(internal_serial_id).exists() if internal_serial_id else self.env['sn.wsd.internal.serial'].search([('serial_no', '=', serial_number)], limit=1)
+        production = internal_serial.production_id if internal_serial else self.env['mrp.production']
+        operation = self._resolve_route_operation(
+            station,
+            production=production,
+            route_operation=self.env['sn.wsd.mes.order.route.operation'].browse(route_operation_id).exists() if route_operation_id else False,
+        )
 
         if not internal_serial:
             if operation:
@@ -69,7 +62,7 @@ class MesSnTravel(models.Model):
             return self._mes_error('route_operation_not_found', station_code=station_code)
 
         latest_station = self.env['mrp.workcenter'].search([('code', '=', latest.get('workcenter_code'))], limit=1)
-        latest_operation = self._resolve_route_operation(latest_station, production=production, workorder=workorder) if latest_station else self.env['mrp.routing.workcenter']
+        latest_operation = self._resolve_route_operation(latest_station, production=production) if latest_station else self.env['sn.wsd.mes.order.route.operation']
 
         if operation and operation.x_station_type == 'repair':
             return self._mes_ok(
@@ -120,7 +113,7 @@ class MesSnTravel(models.Model):
                     station_code=station_code,
                     operation_id=operation.id,
                 )
-            if not operation.blocked_by_operation_ids:
+            if not operation.blocked_by_ids:
                 return self._mes_ok(
                     allowed=bool(operation.x_allow_entry),
                     reason='entry_operation' if operation.x_allow_entry else 'missing_previous_route_operation',
@@ -129,7 +122,7 @@ class MesSnTravel(models.Model):
                     station_code=station_code,
                     operation_id=operation.id,
                 )
-            if latest_operation and latest_operation in operation.blocked_by_operation_ids and latest.get('result') == 'pass':
+            if latest_operation and latest_operation in operation.blocked_by_ids and latest.get('result') == 'pass':
                 return self._mes_ok(
                     allowed=True,
                     reason='previous_route_operation_passed',
@@ -150,7 +143,7 @@ class MesSnTravel(models.Model):
             return self._mes_ok(
                 allowed=False,
                 reason='route_operation_mismatch',
-                expected_previous_operations=operation.blocked_by_operation_ids.mapped('x_step_code') or operation.blocked_by_operation_ids.mapped('name'),
+                expected_previous_operations=operation.blocked_by_ids.mapped('x_step_code') or operation.blocked_by_ids.mapped('display_label'),
                 latest_event=latest,
                 serial_number=serial_number,
                 station_code=station_code,

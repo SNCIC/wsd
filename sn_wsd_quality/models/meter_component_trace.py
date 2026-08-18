@@ -59,9 +59,9 @@ class MeterComponentBinding(models.Model):
         readonly=True,
         index=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         check_company=True,
         index=True,
     )
@@ -192,7 +192,7 @@ class MeterComponentBinding(models.Model):
         return {
             'company_id': internal_serial.company_id.id,
             'internal_serial_id': internal_serial.id,
-            'workorder_id': workorder.id if workorder else False,
+            'route_operation_id': workorder.id if workorder else False,
             'workcenter_id': station.id if station else False,
             'component_type': component_data['component_type'],
             'event_type': component_data.get('event_type', 'bind'),
@@ -294,41 +294,6 @@ class InternalSerial(models.Model):
         }
 
 
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_meter_component_binding_ids = fields.One2many(
-        'sn.wsd.meter.component.binding',
-        'workorder_id',
-        string='Component Bindings',
-        readonly=True,
-    )
-    x_meter_component_binding_count = fields.Integer(
-        string='Component Binding Count',
-        compute='_compute_x_meter_component_binding_count',
-    )
-
-    def _compute_x_meter_component_binding_count(self):
-        for workorder in self:
-            workorder.x_meter_component_binding_count = len(workorder.x_meter_component_binding_ids)
-
-    def action_register_meter_components(self, serial_number, component_bindings, note=None):
-        self.ensure_one()
-        archive = self._meter_get_or_create_serial_archive(serial_number)
-        bindings = self.env['sn.wsd.meter.component.binding'].register_component_bindings(
-            archive,
-            component_bindings,
-            workorder=self,
-        )
-        if note:
-            archive.note = '\n'.join(filter(None, [archive.note, note]))
-        return {
-            'binding_ids': bindings.ids,
-            'binding_count': len(bindings),
-            'internal_serial_id': archive.id,
-        }
-
-
 class MesTestResult(models.Model):
     _inherit = 'sn.wsd.mes.test.result'
 
@@ -346,9 +311,9 @@ class MesTestResult(models.Model):
         binding_model = self.env['sn.wsd.meter.component.binding']
         for record in self:
             bindings = binding_model
-            if record.internal_serial_id and record.workorder_id:
+            if record.internal_serial_id and record.route_operation_id:
                 bindings = record.internal_serial_id.component_binding_ids.filtered(
-                    lambda item: item.workorder_id == record.workorder_id
+                    lambda item: item.route_operation_id == record.route_operation_id
                 )
             record.component_binding_ids = bindings
             record.component_binding_count = len(bindings)
@@ -365,7 +330,7 @@ class MesTestResult(models.Model):
             binding_model.register_component_bindings(
                 record.internal_serial_id,
                 component_bindings,
-                workorder=record.workorder_id,
+                workorder=record.route_operation_id,
                 test_result=record,
             )
         return records

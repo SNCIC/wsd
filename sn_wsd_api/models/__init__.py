@@ -6,8 +6,6 @@ from . import mes_sn_travel
 from . import mes_test_result_base
 from . import mes_test_result
 from . import mes_test_result_detail
-from . import mrp_workorder_mes
-from . import mrp_workorder_api
 from . import mrp_production_api
 from . import internal_serial_api
 from . import mrp_workcenter_api

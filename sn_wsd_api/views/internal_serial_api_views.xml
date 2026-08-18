@@ -9,9 +9,6 @@
                 <field name="travel_count" readonly="1"/>
                 <field name="test_result_count" readonly="1"/>
                 <field name="x_mes_repair_state" readonly="1"/>
-                <field name="x_rework_source_workorder_id" readonly="1"/>
-                <field name="x_rework_entry_workorder_id" readonly="1"/>
-                <field name="x_rework_exit_workorder_id" readonly="1"/>
             </xpath>
             <xpath expr="//page[@name='notes']" position="before">
                 <page name="travel_timeline" string="Travel Timeline">

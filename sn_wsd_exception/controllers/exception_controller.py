@@ -33,7 +33,7 @@ class SnWsdExceptionController(http.Controller):
         }
         mapping = {
             'production_id': 'production_id',
-            'workorder_id': 'workorder_id',
+            'route_operation_id': 'route_operation_id',
             'workcenter_id': 'workcenter_id',
             'route_step_id': 'route_step_id',
             'equipment_id': 'equipment_id',

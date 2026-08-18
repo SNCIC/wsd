@@ -9,7 +9,6 @@
         'data/ir_sequence.xml',
         'views/skip_request_views.xml',
         'views/mrp_production_views.xml',
-        'views/mrp_workorder_views.xml',
         'views/menu_views.xml',
     ],
     'installable': True,

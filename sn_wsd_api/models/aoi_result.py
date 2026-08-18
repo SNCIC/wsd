@@ -28,12 +28,6 @@ class AoiDefectDetail(models.Model):
         readonly=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        related='test_result_id.workorder_id',
-        store=True,
-        readonly=True,
-        check_company=True,
-    )
     mes_order_id = fields.Many2one(
         related='test_result_id.mes_order_id',
         store=True,

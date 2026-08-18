@@ -108,7 +108,12 @@ class SnSmtMaterialConsumption(models.Model):
         'sn.wsd.mes.order', related='production_id.x_mes_order_id',
         store=True, readonly=True, index=True,
     )
-    workorder_id = fields.Many2one('mrp.workorder', required=True, index=True, check_company=True)
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        required=True,
+        index=True,
+        check_company=True,
+    )
     online_material_id = fields.Many2one(
         'sn.smt.online.material', required=True, ondelete='restrict', index=True, check_company=True,
     )
@@ -143,26 +148,27 @@ class SnSmtMaterialConsumption(models.Model):
     note = fields.Char(string='Note')
 
     _smt_consumption_event_unique = models.Constraint(
-        'unique(internal_serial_id, workorder_id, online_material_id, external_event_id)',
+        'unique(internal_serial_id, route_operation_id, online_material_id, external_event_id)',
         'A product serial can only consume one material position per event.',
     )
 
     @api.model
-    def _get_active_lines(self, workorder):
-        return workorder.production_id.x_smt_online_material_ids.filtered(
+    def _get_active_lines(self, route_operation):
+        return route_operation.mes_order_id.production_id.x_smt_online_material_ids.filtered(
             lambda line: line.is_skip != 'Y' and line.is_load == 'Y' and line.loaded_material_lot_id
         )
 
     @api.model
-    def validate_for_serial(self, workorder, internal_serial):
-        if not workorder or workorder.x_meter_operation_type not in ('smt', 'dip'):
+    def validate_for_serial(self, route_operation, internal_serial):
+        if not route_operation or route_operation.operation_id.x_station_type not in ('smt', 'dip'):
             return self.env['sn.smt.online.material']
-        lines = self._get_active_lines(workorder)
-        expected_lines = workorder.production_id.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
+        production = route_operation.mes_order_id.production_id
+        lines = self._get_active_lines(route_operation)
+        expected_lines = production.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
         if len(lines) != len(expected_lines):
             raise ValidationError(_('All SMT material positions must be loaded before the product can pass this station.'))
         if not lines:
-            raise ValidationError(_('No active SMT material positions are available for this work order.'))
+            raise ValidationError(_('No active SMT material positions are available for this route operation.'))
         self.env.cr.execute(
             'SELECT id FROM sn_smt_online_material WHERE id IN %s FOR UPDATE', [tuple(lines.ids)],
         )
@@ -178,14 +184,14 @@ class SnSmtMaterialConsumption(models.Model):
         return lines
 
     @api.model
-    def consume_for_serial(self, workorder, internal_serial, operator_code=None,
+    def consume_for_serial(self, route_operation, internal_serial, operator_code=None,
                            external_event_id=None, source_system=None, note=None):
-        lines = self.validate_for_serial(workorder, internal_serial)
+        lines = self.validate_for_serial(route_operation, internal_serial)
         if not lines:
             return self.env['sn.smt.material.consumption']
         existing_domain = [
             ('internal_serial_id', '=', internal_serial.id),
-            ('workorder_id', '=', workorder.id),
+            ('route_operation_id', '=', route_operation.id),
         ]
         if external_event_id:
             existing_domain.append(('external_event_id', '=', external_event_id))
@@ -198,10 +204,10 @@ class SnSmtMaterialConsumption(models.Model):
             before = line.remaining_qty
             after = before - point_qty
             record = self.create({
-                'company_id': workorder.company_id.id,
+                'company_id': route_operation.company_id.id,
                 'internal_serial_id': internal_serial.id,
-                'production_id': workorder.production_id.id,
-                'workorder_id': workorder.id,
+                'production_id': route_operation.mes_order_id.production_id.id,
+                'route_operation_id': route_operation.id,
                 'online_material_id': line.id,
                 'material_lot_id': line.loaded_material_lot_id.id,
                 'feeder_id': line.loaded_feeder_id.id,
@@ -230,7 +236,7 @@ class SnSmtMaterialConsumption(models.Model):
             'company_id': self.company_id.id,
             'internal_serial_id': self.internal_serial_id.id,
             'production_id': self.production_id.id,
-            'workorder_id': self.workorder_id.id,
+            'route_operation_id': self.route_operation_id.id,
             'online_material_id': self.online_material_id.id,
             'material_lot_id': self.material_lot_id.id,
             'feeder_id': self.feeder_id.id,

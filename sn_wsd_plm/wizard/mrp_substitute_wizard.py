@@ -35,7 +35,7 @@ class MrpSubstituteWizard(models.TransientModel):
 
         usage = self.env['mrp.substitute.usage'].create({
             'production_id': self.production_id.id,
-            'workorder_id': self.workorder_id.id,
+            'route_operation_id': self.route_operation_id.id,
             'bom_id': self.production_id.bom_id.id,
             'bom_line_id': self.bom_line_id.id,
             'substitute_bom_line_id': substitute_bom_line.id,

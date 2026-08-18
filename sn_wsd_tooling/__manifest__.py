@@ -7,7 +7,6 @@
         'security/tooling_security.xml',
         'security/ir.model.access.csv',
         'views/tooling_views.xml',
-        'views/mrp_workorder_views.xml',
         'views/maintenance_request_views.xml',
         'wizard/tooling_maintenance_wizard_views.xml',
         'wizard/tooling_pda_wizard_views.xml',

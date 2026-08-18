@@ -14,7 +14,7 @@
                             <field name="serial_no" invisible="mode != 'single'" required="mode == 'single' and not serial_id"/>
                             <field name="serial_id" invisible="mode != 'single'" required="mode == 'single' and not serial_no"/>
                             <field name="production_id" readonly="mode == 'single'"/>
-                            <field name="workorder_id" domain="[('production_id', '=', production_id)]" required="mode == 'workorder'"/>
+                            <field name="route_operation_id" required="mode == 'route_operation'"/>
                         </group>
                         <group>
                             <field name="freeze_reason" required="mode != 'release'"/>
@@ -26,7 +26,7 @@
                                 <field name="name"/>
                                 <field name="serial_id"/>
                                 <field name="production_id"/>
-                                <field name="workorder_id"/>
+                                <field name="route_operation_id"/>
                                 <field name="freeze_reason"/>
                                 <field name="freeze_time"/>
                             </list>

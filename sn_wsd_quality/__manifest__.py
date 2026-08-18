@@ -13,8 +13,6 @@
         'wizard/serial_freeze_wizard_views.xml',
         'views/quality_inspection_views.xml',
         'views/internal_serial_quality_views.xml',
-        'views/mrp_workorder_quality_views.xml',
-        'views/quality_inspection_inherit_views.xml',
         'views/menu_views.xml',
     ],
     'assets': {

@@ -334,39 +334,38 @@ class Tooling(models.Model):
                 'note': tooling.note,
             })
 
-    def _check_workorder_match(self, workorder):
+    def _check_route_operation_match(self, route_operation):
         self.ensure_one()
-        if self.product_tmpl_id != workorder.product_id.product_tmpl_id:
-            raise UserError(_('Tooling %s does not match the work order product.') % self.display_name)
-        if self.workcenter_id and self.workcenter_id != workorder.workcenter_id:
+        if not route_operation:
+            return
+        mes_order = route_operation.mes_order_id
+        if self.product_tmpl_id != mes_order.product_id.product_tmpl_id:
+            raise UserError(_('Tooling %s does not match the MES order product.') % self.display_name)
+        if self.workcenter_id and route_operation.operation_id.x_workcenter_id and self.workcenter_id != route_operation.operation_id.x_workcenter_id:
             raise UserError(_('Tooling %s is not applicable to the current work center.') % self.display_name)
-        applicable = self.applicability_ids.filtered(lambda line: line._matches_workorder(workorder))
-        if self.applicability_ids and not applicable:
-            raise UserError(_('Tooling %s has no applicability mapping for the current work order.') % self.display_name)
 
-    def _check_can_issue(self, workorder=None):
+    def _check_can_issue(self, route_operation=None):
         self.ensure_one()
         if self.state != 'in_stock':
             raise UserError(_('Only in-stock tooling can be issued.'))
         if self.maintenance_status == 'expired':
             raise UserError(_('Tooling %s has expired maintenance and cannot be issued.') % self.display_name)
-        if workorder:
-            self._check_workorder_match(workorder)
+        self._check_route_operation_match(route_operation)
 
-    def _check_can_online(self, workorder=None):
+    def _check_can_online(self, route_operation=None):
         self.ensure_one()
         if self.state != 'issued':
             raise UserError(_('Only issued tooling can be put online.'))
         if self.maintenance_status == 'expired':
             raise UserError(_('Tooling %s has expired maintenance and cannot be put online.') % self.display_name)
-        if workorder:
-            self._check_workorder_match(workorder)
+        self._check_route_operation_match(route_operation)
 
-    def _create_operation_log(self, operation_type, workorder=False, note=False):
+    def _create_operation_log(self, operation_type, route_operation=False, note=False):
         self.ensure_one()
         return self.env['sn.tooling.operation.log'].create({
             'tooling_id': self.id,
-            'workorder_id': workorder.id if workorder else False,
+            'mes_order_id': route_operation.mes_order_id.id if route_operation else False,
+            'route_operation_id': route_operation.id if route_operation else False,
             'operation_type': operation_type,
             'operator_id': self.env.user.id,
             'operation_time': fields.Datetime.now(),
@@ -451,44 +450,44 @@ class Tooling(models.Model):
             'context': {'default_tooling_ids': self.ids},
         }
 
-    def action_pda_issue(self, workorder=False, note=False):
+    def action_pda_issue(self, route_operation=False, note=False):
         for tooling in self:
-            tooling._check_can_issue(workorder=workorder)
+            tooling._check_can_issue(route_operation=route_operation)
             if tooling.maintenance_status == 'due':
                 tooling.message_post(body=_('Tooling was issued while maintenance status was Due.'))
             tooling.state = 'issued'
-            tooling._create_operation_log('issue', workorder=workorder, note=note)
+            tooling._create_operation_log('issue', route_operation=route_operation, note=note)
 
-    def action_pda_online(self, workorder=False, note=False):
+    def action_pda_online(self, route_operation=False, note=False):
         for tooling in self:
-            tooling._check_can_online(workorder=workorder)
+            tooling._check_can_online(route_operation=route_operation)
             if tooling.maintenance_status == 'due':
                 tooling.message_post(body=_('Tooling was put online while maintenance status was Due.'))
             tooling.state = 'online'
-            tooling._create_operation_log('online', workorder=workorder, note=note)
+            tooling._create_operation_log('online', route_operation=route_operation, note=note)
 
-    def action_pda_offline(self, workorder=False, note=False):
+    def action_pda_offline(self, route_operation=False, note=False):
         for tooling in self:
             if tooling.state != 'online':
                 raise UserError(_('Only online tooling can be taken offline.'))
             tooling.state = 'in_stock'
-            tooling._create_operation_log('offline', workorder=workorder, note=note)
+            tooling._create_operation_log('offline', route_operation=route_operation, note=note)
 
-    def action_pda_cleaning(self, workorder=False, note=False):
+    def action_pda_cleaning(self, route_operation=False, note=False):
         for tooling in self:
             if tooling.state != 'in_stock':
                 raise UserError(_('Only in-stock tooling can be moved to cleaning.'))
             tooling.state = 'cleaning'
-            tooling._create_operation_log('cleaning', workorder=workorder, note=note)
+            tooling._create_operation_log('cleaning', route_operation=route_operation, note=note)
 
-    def action_pda_return(self, workorder=False, note=False):
+    def action_pda_return(self, route_operation=False, note=False):
         for tooling in self:
             if tooling.state != 'issued':
                 raise UserError(_('Only issued tooling can be returned.'))
             tooling.state = 'in_stock'
-            tooling._create_operation_log('return', workorder=workorder, note=note)
+            tooling._create_operation_log('return', route_operation=route_operation, note=note)
 
-    def action_register_usage(self, pass_qty, panel_count=False, workorder=False, note=False):
+    def action_register_usage(self, pass_qty, panel_count=False, route_operation=False, note=False):
         for tooling in self:
             multiplier = panel_count or tooling.panel_count or 1
             usage_qty = int(pass_qty * multiplier)
@@ -500,7 +499,8 @@ class Tooling(models.Model):
             })
             self.env['sn.tooling.usage.log'].create({
                 'tooling_id': tooling.id,
-                'workorder_id': workorder.id if workorder else False,
+                'mes_order_id': route_operation.mes_order_id.id if route_operation else False,
+                'route_operation_id': route_operation.id if route_operation else False,
                 'operator_id': self.env.user.id,
                 'operation_time': fields.Datetime.now(),
                 'pass_qty': pass_qty,
@@ -561,18 +561,6 @@ class ToolingApplicability(models.Model):
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True)
     active = fields.Boolean(default=True)
 
-    def _matches_workorder(self, workorder):
-        self.ensure_one()
-        return (
-            self.active
-            and self.product_tmpl_id == workorder.product_id.product_tmpl_id
-            and (not self.product_id or self.product_id == workorder.product_id)
-            and (not self.bom_id or self.bom_id == workorder.production_bom_id)
-            and (not self.operation_id or self.operation_id == workorder.operation_id)
-            and (not self.workcenter_id or self.workcenter_id == workorder.workcenter_id)
-        )
-
-
 class ToolingOperationLog(models.Model):
     _name = 'sn.tooling.operation.log'
     _description = 'Tooling Operation Log'
@@ -581,15 +569,8 @@ class ToolingOperationLog(models.Model):
 
     tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
     company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True)
-    mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order',
-        string='MES Order',
-        related='workorder_id.x_mes_order_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
+    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='MES Route Operation', check_company=True, index=True)
     operator_id = fields.Many2one('res.users', string='Operator', required=True, default=lambda self: self.env.user)
     operation_type = fields.Selection(OPERATION_TYPE_SELECTION, string='Operation Type', required=True)
     operation_time = fields.Datetime(string='Operation Time', required=True, default=fields.Datetime.now)
@@ -604,15 +585,8 @@ class ToolingUsageLog(models.Model):
 
     tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
     company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True)
-    mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order',
-        string='MES Order',
-        related='workorder_id.x_mes_order_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
+    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='MES Route Operation', check_company=True, index=True)
     operator_id = fields.Many2one('res.users', string='Operator', required=True, default=lambda self: self.env.user)
     operation_time = fields.Datetime(string='Pass Time', required=True, default=fields.Datetime.now)
     pass_qty = fields.Integer(string='Pass Quantity', required=True, default=0)

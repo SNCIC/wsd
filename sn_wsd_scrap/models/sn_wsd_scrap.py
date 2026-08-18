@@ -100,8 +100,8 @@ class SnWsdScrapRecord(models.Model):
         check_company=True,
         tracking=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
         string='Scrap Operation',
         required=True,
         index=True,
@@ -142,16 +142,16 @@ class SnWsdScrapRecord(models.Model):
     )
     stock_scrap_id = fields.Many2one('stock.scrap', string='Stock Scrap', readonly=True, copy=False, check_company=True)
     restore_move_id = fields.Many2one('stock.move', string='Restore Move', readonly=True, copy=False, check_company=True)
-    workorder_report_id = fields.Many2one(
-        'mrp.workorder.report',
-        string='Workorder Report',
+    route_operation_report_id = fields.Many2one(
+        'sn.wsd.mes.operation.report',
+        string='Route Operation Report',
         readonly=True,
         copy=False,
         check_company=True,
     )
     restore_time = fields.Datetime(string='Restore Time', readonly=True, copy=False, tracking=True)
     restore_user_id = fields.Many2one('res.users', string='Restore User', readonly=True, copy=False, tracking=True)
-    resume_workorder_id = fields.Many2one('mrp.workorder', string='Resume Work Order', readonly=True, copy=False, check_company=True)
+    resume_route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='Resume Route Operation', readonly=True, copy=False, check_company=True)
     note = fields.Text(string='Notes')
     previous_meter_state = fields.Char(
         string='Previous Meter State',
@@ -164,7 +164,7 @@ class SnWsdScrapRecord(models.Model):
         readonly=True,
         copy=False,
     )
-    previous_workorder_id = fields.Many2one('mrp.workorder', string='Previous Work Order', readonly=True, copy=False, check_company=True)
+    previous_route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='Previous Route Operation', readonly=True, copy=False, check_company=True)
     previous_quality_hold_state = fields.Selection(
         selection=lambda self: self.env['sn.wsd.internal.serial']._fields['x_quality_hold_state'].selection,
         string='Previous Quality Hold State',
@@ -206,17 +206,15 @@ class SnWsdScrapRecord(models.Model):
                 continue
             record.lot_id = False
             record.production_id = serial.production_id
-            record.workorder_id = serial.current_workorder_id
-            record.process_step_id = serial.current_workorder_id.x_route_operation_id
+            record.route_operation_id = serial.current_route_operation_id
             if serial.product_id and serial.product_id.tracking == 'serial':
                 record.scrap_qty = 1.0
 
-    @api.onchange('workorder_id')
-    def _onchange_workorder_id(self):
+    @api.onchange('route_operation_id')
+    def _onchange_route_operation_id(self):
         for record in self:
-            if record.workorder_id:
-                record.production_id = record.workorder_id.production_id
-                record.process_step_id = record.workorder_id.x_route_operation_id
+            if record.route_operation_id:
+                record.production_id = record.route_operation_id.mes_order_id.production_id
 
     @api.constrains('scrap_qty', 'serial_id')
     def _check_scrap_qty(self):
@@ -226,11 +224,15 @@ class SnWsdScrapRecord(models.Model):
             if record.serial_id and record.product_id.tracking == 'serial' and record.scrap_qty != 1.0:
                 raise ValidationError(_('Serial-tracked scrap records must use quantity 1.'))
 
-    @api.constrains('workorder_id', 'production_id')
-    def _check_workorder_matches_production(self):
+    @api.constrains('route_operation_id', 'production_id')
+    def _check_route_operation_matches_production(self):
         for record in self:
-            if record.workorder_id and record.production_id and record.workorder_id.production_id != record.production_id:
-                raise ValidationError(_('The selected work order must belong to the selected manufacturing order.'))
+            if (
+                record.route_operation_id
+                and record.production_id
+                and record.route_operation_id.mes_order_id.production_id != record.production_id
+            ):
+                raise ValidationError(_('The selected route operation must belong to the selected manufacturing order.'))
 
     @api.constrains('serial_id', 'state')
     def _check_single_active_scrap_per_serial(self):
@@ -250,9 +252,9 @@ class SnWsdScrapRecord(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.scrap.record') or _('New')
             if not vals.get('mes_order_id'):
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('serial_id')).exists() if vals.get('serial_id') else self.env['sn.wsd.internal.serial']
-                workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else serial.current_workorder_id
-                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else serial.production_id or workorder.production_id
-                mes_order = serial.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
+                route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else serial.current_route_operation_id
+                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else serial.production_id or route_operation.mes_order_id.production_id
+                mes_order = serial.mes_order_id or route_operation.mes_order_id or production.x_mes_order_id
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -277,7 +279,6 @@ class SnWsdScrapRecord(models.Model):
             'product_uom_id': self.product_id.uom_id.id,
             'lot_id': self.lot_id.id,
             'production_id': self.production_id.id,
-            'workorder_id': self.workorder_id.id,
             'scrap_qty': self.scrap_qty,
             'origin': self.production_id.name or self.name,
         }
@@ -330,34 +331,36 @@ class SnWsdScrapRecord(models.Model):
                 'scrap_user_id': record.scrap_user_id.id or self.env.user.id,
                 'previous_meter_state': False,
                 'previous_final_result': record.serial_id.final_result,
-                'previous_workorder_id': record.serial_id.current_workorder_id.id,
+                'previous_route_operation_id': record.serial_id.current_route_operation_id.id,
                 'previous_quality_hold_state': record.serial_id.x_quality_hold_state,
                 'previous_issue_state': previous_issue_state,
                 'previous_issue_disposition': previous_issue_disposition,
             })
-            report = record.workorder_id.action_register_terminal_report(
-                source_type='manual',
-                report_type='complete',
-                operator_code=record.scrap_user_id.login or self.env.user.login,
-                external_event_id=f'SCRAP:{record.id}:CONFIRM',
-                event_time=record.scrap_time,
-                qty_in=record.scrap_qty,
-                qty_ok=0.0,
-                qty_ng=0.0,
-                qty_scrap=record.scrap_qty,
-                qty_repair=0.0,
-                qty_rework=0.0,
-                serial_no=record.serial_no,
-                remark=record.note or _('Scrap confirmed by %s') % record.name,
-            ) if record.workorder_id else self.env['mrp.workorder.report']
+            report = self.env['sn.wsd.mes.operation.report']
+            if record.route_operation_id and record.mes_order_id.x_manage_mode == 'report':
+                record.mes_order_id.report_operation_qty(
+                    record.route_operation_id,
+                    qty_ok=0.0,
+                    qty_ng=0.0,
+                    qty_scrap=record.scrap_qty,
+                    scrap_reason=record.scrap_reason_id,
+                )
+                report = self.env['sn.wsd.mes.operation.report'].search(
+                    [
+                        ('mes_order_id', '=', record.mes_order_id.id),
+                        ('route_operation_id', '=', record.route_operation_id.id),
+                    ],
+                    order='id desc',
+                    limit=1,
+                )
             if report:
                 record.with_context(allow_scrap_record_write=True).write({
-                    'workorder_report_id': report.id,
+                    'route_operation_report_id': report.id,
                 })
             record.serial_id.write({
                 'final_result': 'scrap',
                 'x_quality_hold_state': 'scrapped',
-                'current_workorder_id': record.workorder_id.id,
+                'current_route_operation_id': record.route_operation_id.id,
             })
             if record.quality_issue_id:
                 record.quality_issue_id.write({
@@ -366,8 +369,6 @@ class SnWsdScrapRecord(models.Model):
                     'disposition': 'scrap',
                     'closed_time': fields.Datetime.now(),
                 })
-            if record.workorder_id:
-                record.workorder_id.action_sync_meter_qty()
         return True
 
     def action_restore(self):
@@ -386,13 +387,13 @@ class SnWsdScrapRecord(models.Model):
                         'planned': capacity['planned_qty'],
                         'active': capacity['active_serial_qty'],
                     })
-            resume_workorder = record.workorder_id or record.previous_workorder_id
+            resume_route_operation = record.route_operation_id or record.previous_route_operation_id
             move = self.env['stock.move'].create(record._prepare_restore_move_vals())
             move._action_done()
             record.serial_id.write({
                 'final_result': record.previous_final_result or False,
                 'x_quality_hold_state': record.previous_quality_hold_state or 'released',
-                'current_workorder_id': resume_workorder.id,
+                'current_route_operation_id': resume_route_operation.id,
             })
             if record.quality_issue_id:
                 record.quality_issue_id.write({
@@ -403,17 +404,13 @@ class SnWsdScrapRecord(models.Model):
             record.with_context(allow_scrap_record_write=True).write({
                 'state': 'restored',
                 'restore_move_id': move.id,
-                'workorder_report_id': record.workorder_report_id.id,
+                'route_operation_report_id': record.route_operation_report_id.id,
                 'restore_time': fields.Datetime.now(),
                 'restore_user_id': self.env.user.id,
-                'resume_workorder_id': resume_workorder.id,
+                'resume_route_operation_id': resume_route_operation.id,
             })
-            if record.workorder_report_id and record.workorder_report_id.state != 'cancelled':
-                record.workorder_report_id.action_cancel()
-            if resume_workorder:
-                if resume_workorder.state in ('pending', 'done', 'cancel'):
-                    resume_workorder.state = 'ready'
-                resume_workorder.action_sync_meter_qty()
+            if record.route_operation_report_id and record.route_operation_report_id.state != 'cancelled':
+                record.route_operation_report_id.action_cancel()
         return True
 
     def action_restore_and_resume_flow(self):
@@ -422,25 +419,15 @@ class SnWsdScrapRecord(models.Model):
             self.action_restore()
         if self.state != 'restored':
             raise UserError(_('Only restored scrap records can resume flow.'))
-        workorder = self.resume_workorder_id or self.workorder_id or self.previous_workorder_id
-        if not workorder:
-            raise UserError(_('There is no work order available to resume the flow.'))
+        route_operation = self.resume_route_operation_id or self.route_operation_id or self.previous_route_operation_id
+        if not route_operation:
+            raise UserError(_('There is no route operation available to resume the flow.'))
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Resume Scrap Flow'),
-            'res_model': 'sn.wsd.workorder.terminal.wizard',
+            'name': _('Resume MES Order'),
+            'res_model': 'sn.wsd.mes.order',
             'view_mode': 'form',
-            'target': 'new',
-            'context': {
-                'default_workorder_id': workorder.id,
-                'default_workcenter_id': workorder.x_mes_workcenter_id.id,
-                'default_mode': 'manual',
-                'default_report_type': 'start',
-                'default_serial_no': self.serial_no,
-                'default_operator_code': self.scrap_user_id.login or False,
-                'default_remark': _('Resume from scrap record %s') % self.name,
-                'default_qty_in': 1.0,
-            },
+            'res_id': route_operation.mes_order_id.id,
         }
 
     def action_open_stock_scrap(self):
@@ -476,9 +463,8 @@ class InternalSerial(models.Model):
             'domain': [('serial_id', '=', self.id)],
             'context': {
                 'default_serial_id': self.id,
-                'default_workorder_id': self.current_workorder_id.id,
+                'default_route_operation_id': self.current_route_operation_id.id,
                 'default_production_id': self.production_id.id,
-                'default_process_step_id': self.current_workorder_id.x_route_operation_id.id,
             },
         }
 
@@ -492,9 +478,8 @@ class InternalSerial(models.Model):
             'target': 'current',
             'context': {
                 'default_serial_id': self.id,
-                'default_workorder_id': self.current_workorder_id.id,
+                'default_route_operation_id': self.current_route_operation_id.id,
                 'default_production_id': self.production_id.id,
-                'default_process_step_id': self.current_workorder_id.x_route_operation_id.id,
                 'default_scrap_user_id': self.env.user.id,
                 'default_scrap_qty': 1.0,
             },
@@ -527,52 +512,6 @@ class MrpProduction(models.Model):
             'context': {
                 'default_production_id': self.id,
                 'search_default_group_by_reason': 1,
-            },
-        }
-
-
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_scrap_record_ids = fields.One2many('sn.wsd.scrap.record', 'workorder_id', string='Scrap Records', readonly=True)
-    x_scrap_record_count = fields.Integer(string='Scrap Record Count', compute='_compute_x_scrap_record_summary')
-    x_scrap_qty_total = fields.Float(string='Scrap Quantity', compute='_compute_x_scrap_record_summary')
-
-    def _compute_x_scrap_record_summary(self):
-        for workorder in self:
-            active_records = workorder.x_scrap_record_ids.filtered(lambda item: item.state == 'scrapped')
-            workorder.x_scrap_record_count = len(workorder.x_scrap_record_ids)
-            workorder.x_scrap_qty_total = sum(active_records.mapped('scrap_qty'))
-
-    def action_open_scrap_records(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Scrap Records'),
-            'res_model': 'sn.wsd.scrap.record',
-            'view_mode': 'list,form,graph,pivot',
-            'domain': [('workorder_id', '=', self.id)],
-            'context': {
-                'default_workorder_id': self.id,
-                'default_production_id': self.production_id.id,
-                'default_process_step_id': self.x_route_operation_id.id,
-            },
-        }
-
-    def action_create_scrap_record(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('New Scrap Record'),
-            'res_model': 'sn.wsd.scrap.record',
-            'view_mode': 'form',
-            'target': 'current',
-            'context': {
-                'default_workorder_id': self.id,
-                'default_production_id': self.production_id.id,
-                'default_process_step_id': self.x_route_operation_id.id,
-                'default_scrap_user_id': self.env.user.id,
-                'default_scrap_qty': 1.0,
             },
         }
 
@@ -616,7 +555,7 @@ class MeterQualityIssue(models.Model):
             'context': {
                 'default_quality_issue_id': self.id,
                 'default_serial_id': self.internal_serial_id.id,
-                'default_workorder_id': self.workorder_id.id or self.internal_serial_id.current_workorder_id.id,
+                'default_route_operation_id': self.route_operation_id.id or self.internal_serial_id.current_route_operation_id.id,
                 'default_production_id': self.production_id.id or self.internal_serial_id.production_id.id,
             },
         }
@@ -631,9 +570,8 @@ class MeterQualityIssue(models.Model):
             'target': 'current',
             'context': {
                 'default_serial_id': self.internal_serial_id.id,
-                'default_workorder_id': self.workorder_id.id or self.internal_serial_id.current_workorder_id.id,
+                'default_route_operation_id': self.route_operation_id.id or self.internal_serial_id.current_route_operation_id.id,
                 'default_production_id': self.production_id.id or self.internal_serial_id.production_id.id,
-                'default_process_step_id': self.workorder_id.x_route_operation_id.id if self.workorder_id else self.internal_serial_id.current_workorder_id.x_route_operation_id.id,
                 'default_quality_issue_id': self.id,
                 'default_scrap_user_id': self.env.user.id,
                 'default_scrap_qty': 1.0,

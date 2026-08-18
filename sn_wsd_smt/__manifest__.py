@@ -15,7 +15,6 @@
         'wizard/sn_smt_tp_wizard_views.xml',
         'wizard/sn_smt_table_import_wizard_views.xml',
         'views/product_views.xml',
-        'views/mrp_production_views.xml',
         'views/sn_smt_views.xml',
         'views/sn_smt_pcb_panel_views.xml',
         'views/internal_serial_views.xml',

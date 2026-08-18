@@ -8,7 +8,7 @@
                 <field name="name"/>
                 <field name="serial_id"/>
                 <field name="production_id"/>
-                <field name="pack_workorder_id"/>
+                <field name="pack_route_operation_id"/>
                 <field name="seal_no"/>
                 <field name="carton_no"/>
                 <field name="carton_package_id" optional="hide"/>
@@ -34,7 +34,7 @@
                         <group>
                             <field name="serial_id"/>
                             <field name="production_id"/>
-                            <field name="pack_workorder_id"/>
+                            <field name="pack_route_operation_id"/>
                             <field name="operator_code"/>
                         </group>
                         <group>

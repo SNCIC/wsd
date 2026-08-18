@@ -59,7 +59,6 @@ class EnhancedScanPassService(models.AbstractModel):
         self,
         payload: dict,
         production_id,
-        workorder_id,
         workcenter_id,
         operator_code,
         company_id,
@@ -97,7 +96,6 @@ class EnhancedScanPassService(models.AbstractModel):
         self,
         payload: dict,
         production_id,
-        workorder_id,
         workcenter_id,
         operator_code,
         serial_number,
@@ -123,7 +121,6 @@ class EnhancedScanPassService(models.AbstractModel):
                 self.env['mrp.production'].browse(production_id).x_mes_order_ids[:1].id if production_id else False
             ),
             route_operation_id=route_operation_id,
-            workorder_id=workorder_id,
             workcenter_id=workcenter_id,
             serial_number=serial_number,
             operator_code=operator_code,
@@ -186,7 +183,6 @@ class EnhancedScanPassService(models.AbstractModel):
         self,
         payload: dict,
         production_id,
-        workorder_id,
         workcenter_id,
         serial_number,
         operator_code,
@@ -218,7 +214,6 @@ class EnhancedScanPassService(models.AbstractModel):
             production_id=production_id,
             mes_order_id=mes_order_id,
             route_operation_id=route_operation_id,
-            workorder_id=workorder_id,
             workcenter_id=workcenter_id,
             nameplate_code=nameplate_code,
             box_sn=box_sn,
@@ -310,7 +305,6 @@ class EnhancedScanPassService(models.AbstractModel):
             'company_id': company.id,
             'mes_order_id': mes_order_id,
             'route_operation_id': route_operation_id,
-            'workorder_id': False,
             'workcenter_id': workcenter_id,
             'internal_serial_id': serial.id,
             'operator_code': operator_code,
@@ -350,10 +344,7 @@ class EnhancedScanPassService(models.AbstractModel):
         retry_context = self._prepare_scan_retry_context_for_mes_operation(
             serial, route_operation, normalized_result,
         )
-        rework_context = {
-            'is_rework_pass': False,
-            'rework_source_workorder_id': False,
-        }
+        rework_context = {'is_rework_pass': False}
 
         result = self._record_mes_order_scan_event(
             mes_order,
@@ -385,7 +376,6 @@ class EnhancedScanPassService(models.AbstractModel):
                 self._process_nameplate_binding(
                     payload,
                     production_id,
-                    False,
                     workcenter_id,
                     operator_code,
                     company.id,
@@ -395,7 +385,6 @@ class EnhancedScanPassService(models.AbstractModel):
                 self._process_tooling_usage(
                     payload,
                     production_id,
-                    False,
                     workcenter_id,
                     operator_code,
                     serial_number,
@@ -407,7 +396,6 @@ class EnhancedScanPassService(models.AbstractModel):
                 self._process_packaging(
                     payload,
                     production_id,
-                    False,
                     workcenter_id,
                     serial_number,
                     operator_code,
@@ -422,7 +410,6 @@ class EnhancedScanPassService(models.AbstractModel):
 
             data.update({
                 'serial_number': serial_number,
-                'workorder_id': False,
                 'production_id': production_id,
                 'mes_order_id': mes_order_id,
                 'route_operation_id': route_operation_id,
@@ -441,7 +428,6 @@ class EnhancedScanPassService(models.AbstractModel):
                 'retry_limit': retry_context['retry_limit'],
                 'requires_repair': retry_context['requires_repair'],
                 'is_rework_pass': rework_context['is_rework_pass'],
-                'rework_source_workorder_id': rework_context['rework_source_workorder_id'],
             })
 
             if validation_results:

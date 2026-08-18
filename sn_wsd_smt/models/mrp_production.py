@@ -170,9 +170,11 @@ class MrpProduction(models.Model):
                 'SMT online materials cannot be regenerated because SMT operation records already exist.'
             ))
 
-    def _get_smt_workorder_for_feeder_lines(self):
+    def _get_smt_route_operation_for_feeder_lines(self):
         self.ensure_one()
-        return self.workorder_ids.filtered(lambda workorder: workorder.x_meter_operation_type == 'smt')[:1]
+        return self.x_mes_order_id.x_route_operation_ids.filtered(
+            lambda operation: operation.operation_id.x_station_type == 'smt'
+        )[:1]
 
     def _prepare_smt_feeder_line_values(self, online_material, sequence):
         self.ensure_one()
@@ -181,13 +183,13 @@ class MrpProduction(models.Model):
         ], limit=1)
         if not product:
             return False
-        workorder = self._get_smt_workorder_for_feeder_lines()
-        if not workorder:
+        route_operation = self._get_smt_route_operation_for_feeder_lines()
+        if not route_operation:
             return False
         source_move = self._find_matching_raw_moves(product)[:1]
         return {
             'online_material_id': online_material.id,
-            'workorder_id': workorder.id,
+            'route_operation_id': route_operation.id,
             'production_id': self.id,
             'feeder_no': online_material.loadpoint or f'F{sequence:02d}',
             'device_seq': online_material.device_seq,
@@ -204,18 +206,18 @@ class MrpProduction(models.Model):
 
     def _generate_smt_feeder_lines_from_online_materials(self):
         for production in self:
-            workorder = production._get_smt_workorder_for_feeder_lines()
-            if not workorder:
+            route_operation = production._get_smt_route_operation_for_feeder_lines()
+            if not route_operation:
                 continue
             active_lines = production.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
-            protected_lines = workorder.feeder_line_ids.filtered(
+            protected_lines = production.feeder_line_ids.filtered(
                 lambda line: line.state not in ('pending', 'returned')
             )
             if protected_lines:
                 raise ValidationError(_(
                     'SMT feeder lines cannot be regenerated after feeder verification has started.'
                 ))
-            workorder.feeder_line_ids.filtered(lambda line: line.state == 'pending').unlink()
+            production.feeder_line_ids.filtered(lambda line: line.state == 'pending').unlink()
             commands = []
             for sequence, online_material in enumerate(
                 active_lines.sorted(lambda line: (line.device_seq, line.table_no, line.loadpoint, line.id)),

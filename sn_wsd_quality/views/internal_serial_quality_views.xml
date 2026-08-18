@@ -48,7 +48,7 @@
                             <field name="severity"/>
                             <field name="state"/>
                             <field name="disposition"/>
-                            <field name="workorder_id"/>
+                            <field name="route_operation_id"/>
                             <field name="workcenter_id"/>
                             <field name="detected_time"/>
                         </list>
@@ -57,7 +57,7 @@
                         <list create="0" edit="0" delete="0">
                             <field name="name"/>
                             <field name="state"/>
-                            <field name="workorder_id"/>
+                            <field name="route_operation_id"/>
                             <field name="workcenter_id"/>
                             <field name="freeze_reason"/>
                             <field name="freeze_user_id"/>
@@ -84,7 +84,7 @@
                             <field name="imei"/>
                             <field name="esam_no"/>
                             <field name="security_chip_no"/>
-                            <field name="workorder_id"/>
+                            <field name="route_operation_id"/>
                         </list>
                     </field>
                 </page>

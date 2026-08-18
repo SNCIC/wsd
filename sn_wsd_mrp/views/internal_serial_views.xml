@@ -12,7 +12,7 @@
                 <field name="production_id"/>
                 <field name="mes_order_id" optional="show"/>
                 <field name="final_result"/>
-                <field name="current_workorder_id"/>
+                <field name="current_route_operation_id"/>
                 <field name="current_workcenter_id"/>
                 <field name="firmware_version"/>
                 <field name="seal_no"/>
@@ -38,13 +38,13 @@
                             <field name="product_id"/>
                             <field name="production_id"/>
                             <field name="mes_order_id"/>
-                            <field name="current_workorder_id"/>
+                            <field name="current_route_operation_id"/>
                             <field name="current_operation_id"/>
                             <field name="current_workcenter_id"/>
                             <field name="parent_id"/>
                             <field name="source_lot_id" readonly="1"/>
                             <field name="lot_id" readonly="1"/>
-                            <field name="entry_workorder_id" readonly="1"/>
+                            <field name="entry_route_operation_id" readonly="1"/>
                             <field name="entry_time" readonly="1"/>
                             <field name="replaces_serial_id" readonly="1"/>
                             <field name="current_aging_batch_id"/>

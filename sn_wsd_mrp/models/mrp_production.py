@@ -312,7 +312,7 @@ class MrpProduction(models.Model):
             'parent_id': source_serial.id,
             'source_lot_id': source_lot.id,
             'lot_id': lot.id,
-            'entry_workorder_id': workorder.id if workorder else False,
+            'entry_route_operation_id': workorder.operation_id.x_route_operation_id.id if workorder and workorder.operation_id.x_route_operation_id else False,
             'entry_time': fields.Datetime.now(),
             'replaces_serial_id': scrapped_candidate.id,
             'identity_origin_type': origin_type,
@@ -380,25 +380,23 @@ class MrpProduction(models.Model):
         'state',
         'date_start',
         'date_finished',
-        'workorder_ids.time_ids.date_start',
-        'workorder_ids.time_ids.date_end',
     )
     def _compute_x_production_actual_dates(self):
         for production in self:
-            start_times = production.workorder_ids.time_ids.filtered('date_start').mapped('date_start')
-            end_times = production.workorder_ids.time_ids.filtered('date_end').mapped('date_end')
-            if production.state in ('progress', 'to_close', 'done') and not start_times:
-                start_times = [production.date_start] if production.date_start else []
-            if production.state == 'done' and not end_times:
-                end_times = [production.date_finished] if production.date_finished else []
+            start_times = [production.date_start] if production.date_start else []
+            end_times = [production.date_finished] if production.date_finished else []
             production.x_actual_start_date = fields.Date.to_date(min(start_times)) if start_times else False
             production.x_actual_finished_date = fields.Date.to_date(max(end_times)) if end_times else False
 
-    @api.depends('workorder_ids.x_meter_operation_type')
+    @api.depends('x_mes_order_ids.x_route_operation_ids.operation_id.x_station_type')
     def _compute_x_operation_visibility(self):
         smt_operation_types = {'smt', 'dip', 'reflow', 'aoi', 'ict', 'fct', 'pcb_assembly', 'pcb_repair'}
         for production in self:
-            operation_types = set(production.workorder_ids.mapped('x_meter_operation_type'))
+            operation_types = set(
+                production.x_mes_order_ids.x_route_operation_ids.mapped(
+                    'operation_id.x_station_type'
+                )
+            )
             production.x_has_smt_operations = bool(operation_types.intersection(smt_operation_types))
             production.x_has_meter_operations = bool(operation_types.difference(smt_operation_types))
 
@@ -681,13 +679,13 @@ class MrpProduction(models.Model):
                     observed_states.append('verified')
                 if serials.filtered(lambda serial: serial.aging_result == 'pass'):
                     observed_states.append('aging_done')
-                completed_workorders = production.workorder_ids.filtered(
-                    lambda workorder: workorder.state == 'done' or workorder.x_meter_qty_pass > 0
+                completed_operations = production.x_mes_order_ids.x_route_operation_ids.filtered(
+                    lambda operation: operation.x_ok_qty > 0 or operation.x_reported_ok_qty > 0
                 )
                 observed_states.extend(
-                    operation_states[workorder.x_meter_operation_type]
-                    for workorder in completed_workorders
-                    if workorder.x_meter_operation_type in operation_states
+                    operation_states[operation.operation_id.x_station_type]
+                    for operation in completed_operations
+                    if operation.operation_id.x_station_type in operation_states
                 )
                 if observed_states:
                     target_state = max(
@@ -729,15 +727,6 @@ class MrpProduction(models.Model):
                 moves_to_do.with_context(skip_mo_check=True)._action_done(cancel_backorder=True)
             if moves_to_cancel:
                 moves_to_cancel.with_context(skip_mo_check=True)._action_cancel()
-
-            for workorder in production.workorder_ids:
-                if workorder.state not in ('done', 'cancel'):
-                    workorder.duration_expected = workorder._get_duration_expected()
-                if workorder.state == 'cancel':
-                    workorder.duration = 0.0
-                elif workorder.duration == 0.0:
-                    workorder.duration = workorder.duration_expected
-                    workorder.duration_unit = round(workorder.duration / max(workorder.qty_produced, 1), 2)
 
             finished_moves = production.move_finished_ids.filtered(lambda move: move.state not in ('done', 'cancel'))
             main_finished_moves = finished_moves.filtered(lambda move: move.product_id == production.product_id)
@@ -811,7 +800,6 @@ class MrpProduction(models.Model):
             res = meter_productions.pre_button_mark_done()
             if res is not True:
                 return res
-            meter_productions.workorder_ids.button_finish()
             meter_productions._meter_mes_mark_done()
         if other_productions:
             return super(MrpProduction, other_productions).button_mark_done()

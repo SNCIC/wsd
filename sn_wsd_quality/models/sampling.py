@@ -481,8 +481,16 @@ class QualityInspectionScheme(models.Model):
             production = self.env['mrp.production'].browse(values.get('production_id')).exists()
             return int(round(production.product_qty)) if production else 0
         if source == 'workorder_output':
-            workorder = self.env['mrp.workorder'].browse(values.get('workorder_id')).exists()
-            return int(round(workorder.qty_produced or workorder.qty_production or 0.0)) if workorder else 0
+            route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(
+                values.get('route_operation_id')
+            ).exists()
+            if not route_operation:
+                return 0
+            return int(round(
+                route_operation.x_completed_qty
+                or sum(route_operation.report_ids.mapped('qty_ok'))
+                or 0.0
+            ))
         return int(values.get('lot_qty') or 0)
 
     def _get_aql_sampling_values(self, lot_qty):

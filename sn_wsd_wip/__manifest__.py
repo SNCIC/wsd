@@ -7,7 +7,6 @@
         'security/ir.model.access.csv',
         'views/wip_report_views.xml',
         'views/mrp_production_views.xml',
-        'views/mrp_workorder_views.xml',
     ],
     'installable': True,
     'application': False,

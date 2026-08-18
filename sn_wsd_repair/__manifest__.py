@@ -8,7 +8,6 @@
         'security/ir.model.access.csv',
         'views/sn_wsd_repair_views.xml',
         'views/mrp_production_views.xml',
-        'views/mrp_workorder_views.xml',
         'views/meter_quality_views.xml',
         'views/menu_views.xml',
     ],

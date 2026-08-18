@@ -195,6 +195,10 @@ class MesOrderRoute(models.Model):
                 ng_retry_limit = common_op.x_ng_retry_limit
             vals = {
                 'operation_id': op_id,
+                'workcenter_id': (
+                    node.get('workcenter_id')
+                    or (common_op.workcenter_id.id if common_op and common_op.workcenter_id else False)
+                ),
                 'name': node.get('name'),
                 'x_step_code': node.get('step_code'),
                 'x_station_type': node.get('x_station_type'),
@@ -362,6 +366,12 @@ class MesOrderRouteOperation(models.Model):
     )
     operation_id = fields.Many2one(
         'sn.wsd.operation', required=True, index=True, ondelete='restrict',
+    )
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter',
+        string='Work Center',
+        index=True,
+        check_company=True,
     )
     name = fields.Char()
     display_label = fields.Char(compute='_compute_display_label')

@@ -11,7 +11,7 @@
                 <field name="state"/>
                 <field name="occurred_at"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="workcenter_id"/>
                 <field name="equipment_id" optional="hide"/>
                 <field name="internal_serial_id" optional="hide"/>
@@ -67,7 +67,7 @@
                                 <group>
                                     <field name="production_id" readonly="state not in ['pending']"/>
                                     <field name="mes_order_id" readonly="1"/>
-                                    <field name="workorder_id" readonly="state not in ['pending']"/>
+                                    <field name="route_operation_id" readonly="state not in ['pending']"/>
                                     <field name="workcenter_id" readonly="state not in ['pending']"/>
                                     <field name="route_step_id" readonly="state not in ['pending']"/>
                                 </group>
@@ -128,7 +128,7 @@
                 <field name="name"/>
                 <field name="exception_type_id"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="workcenter_id"/>
                 <field name="equipment_id"/>
                 <field name="internal_serial_id"/>

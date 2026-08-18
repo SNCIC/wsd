@@ -57,7 +57,7 @@
                 <field name="serial_id"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="repair_user_id"/>
                 <field name="reported_time"/>
                 <field name="defect_code_id"/>
@@ -69,7 +69,7 @@
                 <group>
                     <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
                     <filter string="MES Order" name="group_by_mes_order" context="{'group_by': 'mes_order_id'}"/>
-                    <filter string="Work Order" name="group_by_workorder" context="{'group_by': 'workorder_id'}"/>
+                    <filter string="Route Operation" name="group_by_route_operation" context="{'group_by': 'route_operation_id'}"/>
                     <filter string="Defect Code" name="group_by_defect" context="{'group_by': 'defect_code_id'}"/>
                     <filter string="Repair User" name="group_by_user" context="{'group_by': 'repair_user_id'}"/>
                     <filter string="Repair Mode" name="group_by_mode" context="{'group_by': 'repair_mode'}"/>
@@ -91,7 +91,7 @@
                 <field name="defect_code_id"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="repair_qty"/>
                 <field name="repair_entry_step_id"/>
                 <field name="repair_user_id"/>
@@ -128,7 +128,7 @@
                         <group>
                             <field name="production_id" readonly="state != 'draft'"/>
                             <field name="mes_order_id" readonly="1"/>
-                            <field name="workorder_id" readonly="state != 'draft'"/>
+                            <field name="route_operation_id" readonly="state != 'draft'"/>
                             <field name="current_process_step_id" readonly="state != 'draft'"/>
                             <field name="defect_code_id" readonly="state != 'draft'"/>
                             <field name="quality_issue_id" readonly="state != 'draft'"/>

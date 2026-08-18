@@ -197,32 +197,24 @@ class StockBarcodeController(http.Controller):
                 'ok': False,
                 'message': _('No online manufacturing order was found for the selected workshop and production line.'),
             }
-        workorder = production._get_current_online_workorder(workcenter=workcenter)
-        if not workorder:
+        route_operation = production._get_current_online_route_operation(workcenter=workcenter)
+        if not route_operation:
             return {
                 'ok': False,
-                'message': _('No active work order was found for the current online manufacturing order.'),
+                'message': _('No active route operation was found for the current online manufacturing order.'),
                 'production_name': production.display_name,
             }
-        result = workorder.action_mes_complete(
-            serial_number=barcode,
-            operator_code=request.env.user.login,
-            note=operation or False,
-        )
-        if result.get('error'):
-            return {
-                'ok': False,
-                'message': request.env['sncic.mes.api.mixin']._mes_user_error_message(result['error']),
-                'error': result['error'],
-                'details': result,
-            }
+        mes_order = route_operation.mes_order_id
+        serial = mes_order.scan_enter(barcode, workcenter)
+        mes_order.leave_station(serial, 'ok')
         return {
             'ok': True,
-            'message': _('Scan linked to manufacturing order %(production)s and work order %(workorder)s.', production=production.display_name, workorder=workorder.display_name),
+            'message': _('Scan linked to MES order %(order)s and route operation %(operation)s.', order=mes_order.display_name, operation=route_operation.display_label),
             'production_id': production.id,
             'production_name': production.display_name,
-            'workorder_id': workorder.id,
-            'workorder_name': workorder.display_name,
+            'mes_order_id': mes_order.id,
+            'route_operation_id': route_operation.id,
+            'route_operation_name': route_operation.display_label,
             'serial_number': barcode,
         }
 

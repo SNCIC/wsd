@@ -9,7 +9,7 @@
                 <page name="smt_consumption" string="SMT Material Consumption">
                     <field name="smt_consumption_ids" readonly="1">
                         <list create="0" delete="0">
-                            <field name="workorder_id"/>
+                            <field name="route_operation_id"/>
                             <field name="required_item_code"/>
                             <field name="actual_item_code"/>
                             <field name="material_sn"/>

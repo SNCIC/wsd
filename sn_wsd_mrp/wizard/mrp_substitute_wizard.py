@@ -6,15 +6,15 @@ class MrpSubstituteWizard(models.TransientModel):
     _name = 'mrp.substitute.wizard'
     _description = 'Substitute Material Wizard'
 
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         required=True,
     )
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',
-        related='workorder_id.production_id',
+        related='route_operation_id.mes_order_id.production_id',
         readonly=True,
     )
     original_product_id = fields.Many2one(
@@ -132,7 +132,7 @@ class MrpSubstituteWizard(models.TransientModel):
 
         usage = self.env['mrp.substitute.usage'].create({
             'production_id': self.production_id.id,
-            'workorder_id': self.workorder_id.id,
+            'route_operation_id': self.route_operation_id.id,
             'bom_id': self.production_id.bom_id.id,
             'bom_line_id': self.bom_line_id.id,
             'substitute_bom_line_id': substitute_bom_line.id,

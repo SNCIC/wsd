@@ -24,7 +24,6 @@
         'views/mrp_production_views.xml',
         'views/mes_order_views.xml',
         'views/mes_route_check_views.xml',
-        'views/mrp_workorder_views.xml',
         'views/product_views.xml',
         'views/menu_views.xml',
         'views/mrp_electronics_views.xml',

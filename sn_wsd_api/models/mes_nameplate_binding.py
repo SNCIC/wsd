@@ -69,13 +69,6 @@ class MesNameplateBinding(models.Model):
         index=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
-        ondelete='set null',
-        index=True,
-        check_company=True,
-    )
     workcenter_code = fields.Char(string='Work Center Code', index=True)
     operator_code = fields.Char(string='Operator Code', index=True)
     binding_time = fields.Datetime(
@@ -349,13 +342,6 @@ class MesPackagingRecord(models.Model):
         index=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
-        ondelete='set null',
-        index=True,
-        check_company=True,
-    )
     workcenter_code = fields.Char(string='Work Center Code', index=True)
     nameplate_code = fields.Char(string='Nameplate Code', index=True)
     box_sn = fields.Char(string='Box SN', index=True)
@@ -434,7 +420,6 @@ class MesPackagingRecord(models.Model):
         production_id=None,
         mes_order_id=None,
         route_operation_id=None,
-        workorder_id=None,
         workcenter_id=None,
         nameplate_code=None,
         box_sn=None,
@@ -475,7 +460,6 @@ class MesPackagingRecord(models.Model):
             'production_id': production_id,
             'mes_order_id': mes_order.id if mes_order else False,
             'route_operation_id': route_operation_id,
-            'workorder_id': workorder_id,
             'workcenter_id': workcenter_id,
             'nameplate_code': nameplate_code,
             'box_sn': box_sn,
@@ -500,16 +484,9 @@ class MesPackagingRecord(models.Model):
     def _sync_meter_pack_record(self):
         """Mirror MES packaging into the meter business packaging record when applicable."""
         pack_model = self.env['sn.wsd.meter.pack.record']
-        workorder_model = self.env['mrp.workorder']
         for record in self:
             serial = record.internal_serial_id
             production = record.production_id
-            workorder = record.workorder_id
-            if not workorder and production and record.workcenter_id:
-                workorder = workorder_model.search([
-                    ('production_id', '=', production.id),
-                    ('workcenter_id', '=', record.workcenter_id.id),
-                ], limit=1)
             archive = serial
             if not archive:
                 continue
@@ -530,7 +507,7 @@ class MesPackagingRecord(models.Model):
                 'active': True,
                 'serial_id': archive.id,
                 'production_id': production.id if production else False,
-                'pack_workorder_id': workorder.id if workorder else False,
+                'pack_route_operation_id': record.route_operation_id.id if record.route_operation_id else False,
                 'carton_no': record.box_sn,
                 'pallet_no': record.pallet_sn,
                 'carton_package_id': carton_package.id,

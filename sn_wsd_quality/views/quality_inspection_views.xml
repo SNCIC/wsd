@@ -301,7 +301,7 @@
                 <field name="sample_checked_qty" optional="show"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="picking_id"/>
                 <field name="product_id"/>
                 <field name="area_sn"/>
@@ -356,7 +356,7 @@
                                 <group>
                                     <field name="production_id"/>
                                     <field name="mes_order_id"/>
-                                    <field name="workorder_id"/>
+                                    <field name="route_operation_id"/>
                                     <field name="workcenter_id"/>
                                     <field name="operation_id"/>
                                 </group>
@@ -530,7 +530,7 @@
                 <field name="scheme_id"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
-                <field name="workorder_id"/>
+                <field name="route_operation_id"/>
                 <field name="product_id"/>
                 <filter name="open" string="Open" domain="[('state', 'in', ['open', 'in_progress'])]"/>
                 <filter name="failed" string="Failed" domain="[('result', 'in', ['fail', 'reject'])]"/>

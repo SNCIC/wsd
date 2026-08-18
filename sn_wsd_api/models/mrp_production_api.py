@@ -28,16 +28,19 @@ class MrpProduction(models.Model):
             return self.env['mrp.production']
         return production
 
-    def _get_current_online_workorder(self, workcenter=None):
+    def _get_current_online_route_operation(self, workcenter=None):
         self.ensure_one()
-        workorders = self.workorder_ids.filtered(lambda wo: wo.state not in ('done', 'cancel'))
+        mes_order = self.x_mes_order_id
+        if not mes_order:
+            return self.env['sn.wsd.mes.order.route.operation']
+        operations = mes_order.x_route_operation_ids
         if workcenter:
-            scoped = workorders.filtered(lambda wo: wo.x_mes_workcenter_id == workcenter or wo.workcenter_id == workcenter)
-            if scoped:
-                ready_scoped = scoped.filtered(lambda wo: wo.state in ('ready', 'progress'))
-                return (ready_scoped or scoped).sorted(lambda wo: (wo.sequence, wo.id))[:1]
-        ready_workorders = workorders.filtered(lambda wo: wo.state in ('ready', 'progress'))
-        return (ready_workorders or workorders).sorted(lambda wo: (wo.sequence, wo.id))[:1]
+            operations = operations.filtered(lambda operation: operation.workcenter_id == workcenter)
+        return operations.filtered(
+            lambda operation: operation.x_wip_qty or operation.x_allow_entry
+        ).sorted(lambda operation: (operation.sequence, operation.id))[:1] or operations.sorted(
+            lambda operation: (operation.sequence, operation.id)
+        )[:1]
 
     def _get_or_create_finished_lot(self, serial_no, panel_no=False):
         self.ensure_one()

@@ -11,7 +11,6 @@
         'views/laser_print_views.xml',
         'views/mrp_workcenter_api_views.xml',
         'views/internal_serial_api_views.xml',
-        'views/mrp_workorder_api_views.xml',
         'views/mes_api_extension_views.xml',
         'views/api_tester_views.xml',
     ],

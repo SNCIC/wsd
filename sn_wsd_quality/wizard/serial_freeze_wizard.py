@@ -9,7 +9,7 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
     mode = fields.Selection(
         [
             ('single', 'Single SN Freeze'),
-            ('workorder', 'Work Order Batch Freeze'),
+            ('route_operation', 'Route Operation Batch Freeze'),
             ('release', 'Batch Release'),
         ],
         required=True,
@@ -32,9 +32,9 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
         string='Manufacturing Order',
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         check_company=True,
     )
     freeze_reason = fields.Text(string='Freeze Reason')
@@ -62,16 +62,8 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
                 'serial_id': serial.id,
                 'serial_no': serial.serial_no,
                 'company_id': serial.company_id.id,
-                'workorder_id': serial.current_workorder_id.id,
+                'route_operation_id': serial.current_route_operation_id.id,
                 'production_id': serial.production_id.id,
-            })
-        elif active_model == 'mrp.workorder' and active_ids:
-            workorder = self.env['mrp.workorder'].browse(active_ids[:1])
-            values.update({
-                'mode': 'workorder',
-                'company_id': workorder.company_id.id,
-                'workorder_id': workorder.id,
-                'production_id': workorder.production_id.id,
             })
         return values
 
@@ -86,7 +78,7 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
         if serial:
             self.company_id = serial.company_id
             self.production_id = serial.production_id
-            self.workorder_id = serial.current_workorder_id
+            self.route_operation_id = serial.current_route_operation_id
 
     @api.onchange('serial_id')
     def _onchange_serial_id(self):
@@ -95,13 +87,13 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
         self.serial_no = self.serial_id.serial_no
         self.company_id = self.serial_id.company_id
         self.production_id = self.serial_id.production_id
-        self.workorder_id = self.serial_id.current_workorder_id
+        self.route_operation_id = self.serial_id.current_route_operation_id
 
-    @api.onchange('workorder_id')
-    def _onchange_workorder_id(self):
-        if self.workorder_id:
-            self.company_id = self.workorder_id.company_id
-            self.production_id = self.workorder_id.production_id
+    @api.onchange('route_operation_id')
+    def _onchange_route_operation_id(self):
+        if self.route_operation_id:
+            self.company_id = self.route_operation_id.company_id
+            self.production_id = self.route_operation_id.mes_order_id.production_id
 
     def _resolve_single_serial(self):
         self.ensure_one()
@@ -118,11 +110,15 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
         self.ensure_one()
         if not self.freeze_reason:
             raise UserError(_('Freeze reason is required.'))
-        workorder = self.workorder_id or serial.current_workorder_id
         return {
             'serial_id': serial.id,
             'company_id': serial.company_id.id,
-            'workorder_id': workorder.id,
+            'mes_order_id': serial.mes_order_id.id,
+            'route_operation_id': (
+                self.route_operation_id.id
+                if self.route_operation_id
+                else serial.current_route_operation_id.id
+            ),
             'freeze_reason': self.freeze_reason,
         }
 
@@ -141,10 +137,16 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
             freeze_model.create(self._prepare_freeze_values(serial))
             return {'type': 'ir.actions.act_window_close'}
 
-        if not self.workorder_id:
-            raise UserError(_('Please select a work order.'))
-        serials = self.workorder_id._get_freezable_internal_serials()
+        if not self.route_operation_id:
+            raise UserError(_('Please select a route operation.'))
+        serials = self.env['sn.wsd.internal.serial'].search([
+            ('mes_order_id', '=', self.route_operation_id.mes_order_id.id),
+            ('current_route_operation_id', '=', self.route_operation_id.id),
+            ('final_result', '!=', 'scrap'),
+            ('pack_date', '=', False),
+            ('x_freeze_state', '!=', 'frozen'),
+        ])
         if not serials:
-            raise UserError(_('No freezable SNs were found on the selected work order.'))
+            raise UserError(_('No freezable SNs were found on the selected route operation.'))
         freeze_model.create([self._prepare_freeze_values(serial) for serial in serials])
         return {'type': 'ir.actions.act_window_close'}

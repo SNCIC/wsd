@@ -107,11 +107,11 @@ class MrpWorkcenter(models.Model):
                 workcenter.company_id = workcenter.x_production_line_id.company_id
 
     def _check_can_deactivate(self):
-        active_workorders = self.env['mrp.workorder'].search_count([
+        active_route_operations = self.env['sn.wsd.mes.order.route.operation'].search_count([
             ('workcenter_id', 'in', self.ids),
-            ('state', '=', 'progress'),
+            ('x_wip_qty', '>', 0),
         ], limit=1)
-        if active_workorders:
+        if active_route_operations:
             raise ValidationError(_('You cannot deactivate a work center with work orders in progress.'))
 
     def write(self, vals):

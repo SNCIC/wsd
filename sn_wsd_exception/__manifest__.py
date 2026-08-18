@@ -11,7 +11,6 @@
         'data/exception_cron.xml',
         'views/exception_type_views.xml',
         'views/exception_record_views.xml',
-        'views/mrp_workorder_views.xml',
         'views/menu_views.xml',
     ],
     'installable': True,

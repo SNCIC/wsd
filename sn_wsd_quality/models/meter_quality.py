@@ -116,9 +116,9 @@ class MeterQualityIssue(models.Model):
         readonly=True,
         index=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Route Operation',
         check_company=True,
         index=True,
         tracking=True,
@@ -385,25 +385,6 @@ class InternalSerial(models.Model):
         return True
 
 
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_quality_issue_ids = fields.One2many(
-        'sn.wsd.quality.issue',
-        'workorder_id',
-        string='Quality Issues',
-        readonly=True,
-    )
-    x_quality_issue_count = fields.Integer(
-        string='Quality Issue Count',
-        compute='_compute_x_quality_issue_count',
-    )
-
-    def _compute_x_quality_issue_count(self):
-        for workorder in self:
-            workorder.x_quality_issue_count = len(workorder.x_quality_issue_ids)
-
-
 class MesTestResult(models.Model):
     _inherit = 'sn.wsd.mes.test.result'
 
@@ -430,7 +411,7 @@ class MesTestResult(models.Model):
     @api.model
     def _find_default_defect_code(self, test_result):
         domain = [('company_id', '=', test_result.company_id.id)]
-        route_operation = test_result.workorder_id.operation_id if test_result.workorder_id else self.env['mrp.routing.workcenter']
+        route_operation = test_result.route_operation_id.operation_id if test_result.route_operation_id else self.env['mrp.routing.workcenter']
         if route_operation and route_operation.x_station_type:
             domain.append(('station_type', '=', route_operation.x_station_type))
         return self.env['sn.wsd.quality.defect.code'].search(domain, order='severity desc, id asc', limit=1)
@@ -451,7 +432,7 @@ class MesTestResult(models.Model):
                 continue
             issue_model.create({
                 'internal_serial_id': internal_serial.id,
-                'workorder_id': record.workorder_id.id,
+                'route_operation_id': record.route_operation_id.id,
                 'test_result_id': record.id,
                 'workcenter_id': record.workcenter_id.id,
                 'defect_code_id': defect_code.id,

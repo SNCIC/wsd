@@ -125,7 +125,7 @@ class SnSmtTpWizard(models.TransientModel):
         self.ensure_one()
         feeder_line = self.production_id.feeder_line_ids.filtered(
             lambda line: line.online_material_id == online_material
-            and line.workorder_id.x_meter_operation_type == 'smt'
+            and line.route_operation_id.operation_id.x_station_type == 'smt'
             and line.state == 'pending'
         )[:1]
         if not feeder_line:

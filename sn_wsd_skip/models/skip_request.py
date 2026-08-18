@@ -114,21 +114,21 @@ class SnWsdSkipRequest(models.Model):
                 scope_domain = [('request_id.mes_order_id', '=', request.mes_order_id.id)]
                 duplicate = line_model.search([
                     ('id', '!=', line.id),
-                    ('workorder_id', '=', line.workorder_id.id),
+                    ('route_operation_id', '=', line.route_operation_id.id),
                     ('request_id.state', '=', 'approved'),
                 ] + scope_domain, limit=1)
                 if duplicate:
                     raise UserError(_(
                         'Operation %(operation)s already has an approved skip request for this MES order.',
-                        operation=line.workorder_id.display_name,
+                        operation=line.route_operation_id.display_name,
                     ))
 
     def _refresh_related_wip(self):
         productions = self.mapped('production_id')
-        workorders = productions.mapped('workorder_ids')
-        if workorders:
-            workorders._compute_qty_ready()
-            workorders._compute_state()
+        route_operations = productions.mapped('x_mes_order_id.x_route_operation_ids')
+        if route_operations:
+            route_operations._compute_qty_ready()
+            route_operations._compute_state()
         if productions and hasattr(productions, 'action_refresh_wip_snapshot'):
             productions.action_refresh_wip_snapshot()
 
@@ -211,63 +211,62 @@ class SnWsdSkipRequestLine(models.Model):
     mes_order_id = fields.Many2one(related='request_id.mes_order_id', store=True, readonly=True, index=True)
     route_id = fields.Many2one(related='request_id.route_id', store=True, readonly=True)
     sequence = fields.Integer(default=10)
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
         string='Operation',
         required=True,
         check_company=True,
         index=True,
-        domain="[('production_id', '=', production_id)]",
+        domain="[('mes_order_id', '=', mes_order_id)]",
     )
-    route_operation_id = fields.Many2one(related='workorder_id.operation_id.x_route_operation_id', store=True, readonly=True, index=True)
-    workcenter_id = fields.Many2one(related='workorder_id.workcenter_id', store=True, readonly=True)
+    workcenter_id = fields.Many2one(related='route_operation_id.workcenter_id', store=True, readonly=True)
     operation_code = fields.Char(related='route_operation_id.x_step_code', store=True, readonly=True)
     state = fields.Selection(related='request_id.state', store=True, readonly=True, index=True)
     is_processed = fields.Boolean(string='Processed', compute='_compute_is_processed')
     note = fields.Char(string='Notes')
 
-    _request_workorder_uniq = models.Constraint(
-        'unique(request_id, workorder_id)',
+    _request_route_operation_uniq = models.Constraint(
+        'unique(request_id, route_operation_id)',
         'The operation must be unique within one skip request.',
     )
 
-    @api.depends('workorder_id')
+    @api.depends('route_operation_id')
     def _compute_is_processed(self):
         for line in self:
-            line.is_processed = line._is_workorder_processed()
+            line.is_processed = line._is_route_operation_processed()
 
-    @api.onchange('workorder_id')
-    def _onchange_workorder_id(self):
+    @api.onchange('route_operation_id')
+    def _onchange_route_operation_id(self):
         for line in self:
-            if line.workorder_id:
-                line.sequence = line.workorder_id.sequence
+            if line.route_operation_id:
+                line.sequence = line.route_operation_id.sequence
 
-    @api.constrains('request_id', 'workorder_id')
-    def _check_workorder_scope(self):
+    @api.constrains('request_id', 'route_operation_id')
+    def _check_route_operation_scope(self):
         for line in self:
-            if line.workorder_id.production_id != line.request_id.production_id:
+            if line.route_operation_id.mes_order_id != line.request_id.mes_order_id:
                 raise ValidationError(_('The skipped operation must belong to the selected manufacturing order.'))
 
-    def _is_workorder_processed(self):
+    def _is_route_operation_processed(self):
         self.ensure_one()
-        if not self.workorder_id:
+        if not self.route_operation_id:
             return False
         return bool(self.env['sn.wsd.mes.sn.travel'].search_count([
-            ('workorder_id', '=', self.workorder_id.id),
+            ('route_operation_id', '=', self.route_operation_id.id),
             ('event_type', 'in', ['start', 'complete', 'pass', 'fail', 'hold', 'repair']),
         ]))
 
     def _check_not_processed(self):
         self.ensure_one()
-        if self._is_workorder_processed():
+        if self._is_route_operation_processed():
             raise UserError(_('This operation has already been processed and cannot be skipped.'))
 
     @api.model
-    def get_approved_skip_workorders(self, production, workorders=False):
-        if not production:
-            return self.env['mrp.workorder']
+    def get_approved_skip_route_operations(self, mes_order, route_operations=False):
+        if not mes_order:
+            return self.env['sn.wsd.mes.order.route.operation']
         domain = [('request_id.state', '=', 'approved')]
-        domain.append(('request_id.mes_order_id', '=', production.x_mes_order_id.id))
-        if workorders:
-            domain.append(('workorder_id', 'in', workorders.ids))
-        return self.search(domain).mapped('workorder_id')
+        domain.append(('request_id.mes_order_id', '=', mes_order.id))
+        if route_operations:
+            domain.append(('route_operation_id', 'in', route_operations.ids))
+        return self.search(domain).mapped('route_operation_id')

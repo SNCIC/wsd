@@ -194,27 +194,8 @@
             <field name="description">Get current online manufacturing context by work center, line, or workshop.</field>
         </record>
 
-        <record id="endpoint_workorder_events" model="sn.wsd.api.endpoint">
-            <field name="name">Submit Workorder Event</field>
-            <field name="code">workorder_events</field>
-            <field name="category">execution</field>
-            <field name="sequence">110</field>
-            <field name="method">POST</field>
-            <field name="path">/api/v1/workorders/events</field>
-            <field name="is_mutating">1</field>
-            <field name="default_body">{
-  "workorder_id": 1,
-  "event_type": "scan",
-  "serial_number": "SN0001",
-  "operator_code": "OP001",
-  "source_system": "ODOO_API_TESTER",
-  "payload": {}
-}</field>
-            <field name="description">Submit a workorder event for MES traceability.</field>
-        </record>
-
         <record id="endpoint_workorder_scan_pass" model="sn.wsd.api.endpoint">
-            <field name="name">Scan Pass</field>
+            <field name="name">MES Order Scan Pass</field>
             <field name="code">workorder_scan_pass</field>
             <field name="category">execution</field>
             <field name="sequence">120</field>
@@ -284,26 +265,6 @@
   "M_PACK_BACK": ""
 }</field>
             <field name="description">Submit a MES scan-pass request. Only documented M_* request parameter names are accepted for this endpoint.</field>
-        </record>
-
-        <record id="endpoint_test_results" model="sn.wsd.api.endpoint">
-            <field name="name">Submit Test Result</field>
-            <field name="code">test_results</field>
-            <field name="category">execution</field>
-            <field name="sequence">130</field>
-            <field name="method">POST</field>
-            <field name="path">/api/v1/test-results</field>
-            <field name="is_mutating">1</field>
-            <field name="default_body">{
-  "workorder_id": 1,
-  "serial_number": "SN0001",
-  "result": "pass",
-  "operator_code": "OP001",
-  "cycle_time_sec": 10,
-  "source_system": "ODOO_API_TESTER",
-  "payload": {}
-}</field>
-            <field name="description">Submit functional, aging, or station test result data.</field>
         </record>
 
         <record id="endpoint_finished_serials" model="sn.wsd.api.endpoint">

@@ -4,16 +4,8 @@ from odoo import models
 class MrpRoutingWorkcenterDailyPlan(models.Model):
     """Suppress standard work-order generation entirely.
 
-    In Odoo 19 work orders are produced by the stored computed field
-    ``mrp.production.workorder_ids`` (``_compute_workorder_ids``). For each BOM
-    operation it calls ``operation._skip_operation_line(product, ...)``; this is
-    the officially intended extension point (its docstring says "can be inherited
-    to add custom control"). Returning ``True`` here means the work order is
-    never created, instead of the previous generate-then-delete approach.
-
-    Going forward there is no work-order concept: station-passing is driven by
-    the process route / daily-order operations (and serial tracking), not by
-    ``mrp.workorder``. So every operation line is skipped for every product.
+    Odoo's routing hook is kept only to prevent standard execution rows from
+    being generated. Station passing is driven by MES order route operations.
 
     Note: the previous override of ``_action_compute_consumption`` was dead code
     -- that method does not exist in Odoo 19, so ``super()`` would raise and the

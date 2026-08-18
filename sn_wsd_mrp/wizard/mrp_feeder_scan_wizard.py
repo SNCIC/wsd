@@ -115,7 +115,7 @@ class MrpFeederScanWizard(models.TransientModel):
         self.ensure_one()
         self.action_verify()
         next_line = self.env['mrp.feeder.line'].search([
-            ('workorder_id', '=', self.feeder_line_id.workorder_id.id),
+            ('route_operation_id', '=', self.feeder_line_id.route_operation_id.id),
             ('state', '=', 'pending'),
         ], order='feeder_no, id', limit=1)
         if next_line:

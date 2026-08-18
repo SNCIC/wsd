@@ -10,7 +10,9 @@ class MesTestResult(models.Model):
                 continue
             archive = record.internal_serial_id
             vals = {
-                'current_workorder_id': record.workorder_id.id,
+                'mes_order_id': record.mes_order_id.id or archive.mes_order_id.id,
+                'current_route_operation_id': record.route_operation_id.id,
+                'current_workcenter_id': record.workcenter_id.id,
                 'production_id': record.production_id.id or archive.production_id.id,
             }
             if record.result == 'pass':
@@ -26,8 +28,6 @@ class MesTestResult(models.Model):
                 vals['verification_date'] = record.test_time
                 vals['final_verification_result'] = 'pass' if record.result == 'pass' else 'fail'
             archive.write({k: v for k, v in vals.items() if v is not False})
-            if record.workorder_id and hasattr(record.workorder_id, 'action_sync_meter_qty'):
-                record.workorder_id.action_sync_meter_qty()
             if archive.production_id:
                 archive.production_id._update_meter_flow_state()
 

@@ -21,7 +21,12 @@ class MeterPackRecord(models.Model):
     )
     serial_id = fields.Many2one('sn.wsd.internal.serial', required=True, index=True, check_company=True)
     production_id = fields.Many2one('mrp.production', index=True, check_company=True)
-    pack_workorder_id = fields.Many2one('mrp.workorder', index=True, check_company=True)
+    pack_route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Pack MES Route Operation',
+        index=True,
+        check_company=True,
+    )
     seal_no = fields.Char(index=True)
     carton_no = fields.Char(index=True)
     carton_seq = fields.Integer()
@@ -45,10 +50,8 @@ class MeterPackRecord(models.Model):
                 'pallet_no': record.pallet_no,
                 'pack_date': record.pack_time,
             })
-            if record.pack_workorder_id:
-                record.serial_id.current_workorder_id = record.pack_workorder_id
-                if hasattr(record.pack_workorder_id, 'action_sync_meter_qty'):
-                    record.pack_workorder_id.action_sync_meter_qty()
+            if record.pack_route_operation_id:
+                record.serial_id.current_route_operation_id = record.pack_route_operation_id
             record.action_sync_stock_package()
 
     def action_sync_stock_package(self):

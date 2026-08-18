@@ -36,13 +36,6 @@ class MesToolingUsageLog(models.Model):
         index=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
-        ondelete='cascade',
-        index=True,
-        check_company=True,
-    )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
         string='MES Route Operation',
@@ -132,7 +125,6 @@ class MesToolingUsageLog(models.Model):
         production_id=None,
         mes_order_id=None,
         route_operation_id=None,
-        workorder_id=None,
         workcenter_id=None,
         serial_number=None,
         operator_code=None,
@@ -150,7 +142,6 @@ class MesToolingUsageLog(models.Model):
         :param production_id: Manufacturing order ID
         :param mes_order_id: MES order ID
         :param route_operation_id: MES route operation ID
-        :param workorder_id: Work order ID
         :param workcenter_id: Work center ID
         :param serial_number: Product SN
         :param operator_code: Operator code
@@ -213,7 +204,6 @@ class MesToolingUsageLog(models.Model):
                 'production_id': production_id,
                 'mes_order_id': mes_order.id if mes_order else False,
                 'route_operation_id': route_operation_id,
-                'workorder_id': workorder_id,
                 'workcenter_id': workcenter_id,
                 'internal_serial_id': internal_serial_id,
                 'usage_count': 1,
@@ -248,7 +238,6 @@ class MesToolingUsageLog(models.Model):
             production_id=kwargs.get('production_id'),
             mes_order_id=kwargs.get('mes_order_id'),
             route_operation_id=kwargs.get('route_operation_id'),
-            workorder_id=kwargs.get('workorder_id'),
             workcenter_id=kwargs.get('workcenter_id'),
             serial_number=kwargs.get('serial_number'),
             operator_code=kwargs.get('operator_code'),

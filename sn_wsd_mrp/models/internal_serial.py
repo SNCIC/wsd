@@ -54,7 +54,12 @@ class InternalSerial(models.Model):
     current_production_id = fields.Many2one(
         'mrp.production', string='Current Manufacturing Order', index=True, check_company=True,
     )
-    current_workorder_id = fields.Many2one('mrp.workorder', index=True, check_company=True)
+    current_route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Current MES Route Operation',
+        index=True,
+        check_company=True,
+    )
     current_operation_id = fields.Many2one('mrp.routing.workcenter', index=True, check_company=True)
     current_workcenter_id = fields.Many2one('mrp.workcenter', index=True, check_company=True)
     parent_id = fields.Many2one('sn.wsd.internal.serial', string='Parent Serial', index=True, check_company=True)
@@ -65,8 +70,12 @@ class InternalSerial(models.Model):
     lot_id = fields.Many2one(
         'stock.lot', string='Product Lot/Serial', index=True, check_company=True, copy=False,
     )
-    entry_workorder_id = fields.Many2one(
-        'mrp.workorder', string='Entry Work Order', index=True, check_company=True, copy=False,
+    entry_route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Entry MES Route Operation',
+        index=True,
+        check_company=True,
+        copy=False,
     )
     entry_time = fields.Datetime(copy=False, index=True)
     replaces_serial_id = fields.Many2one(
@@ -176,13 +185,6 @@ class InternalSerial(models.Model):
                 if mes_order and production != mes_order.production_id:
                     raise ValidationError(_('The manufacturing order must match the internal serial MES order.'))
 
-    def _resolve_workorder_arg(self, workorder=False):
-        if not workorder:
-            return self.env['mrp.workorder']
-        if hasattr(workorder, 'ids'):
-            return workorder.exists()
-        return self.env['mrp.workorder'].browse(int(workorder)).exists()
-
     @api.model
     def _resolve_context_record(self, model_name, value=False):
         if not value:
@@ -263,24 +265,6 @@ class InternalSerial(models.Model):
                 limit=1,
             )
         return self.env['sn.wsd.internal.serial']
-
-    @api.model
-    def find_for_workorder_context(self, serial_no, workorder, active=None):
-        workorder = self._resolve_workorder_arg(workorder)
-        if not workorder:
-            return self.env['sn.wsd.internal.serial']
-        mes_order = self._resolve_context_record(
-            'sn.wsd.mes.order',
-            workorder.env.context.get('mes_order_id'),
-        )
-        return self.find_for_manufacturing_context(
-            serial_no,
-            company=workorder.company_id,
-            production=workorder.production_id,
-            mes_order=mes_order,
-            product=workorder.product_id,
-            active=active,
-        )
 
     def is_confirmed_scrapped(self):
         self.ensure_one()

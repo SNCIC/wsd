@@ -121,9 +121,9 @@ class SnWsdExceptionRecord(models.Model):
         index=True,
         tracking=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
         check_company=True,
         index=True,
         tracking=True,
@@ -221,20 +221,18 @@ class SnWsdExceptionRecord(models.Model):
 
     def write(self, vals):
         result = super().write(vals)
-        if {'workorder_id', 'internal_serial_id', 'serial_lot_id', 'equipment_id'}.intersection(vals):
+        if {'route_operation_id', 'internal_serial_id', 'serial_lot_id', 'equipment_id'}.intersection(vals):
             self._sync_context_from_links()
         return result
 
-    @api.onchange('workorder_id')
-    def _onchange_workorder_id(self):
+    @api.onchange('route_operation_id')
+    def _onchange_route_operation_id(self):
         for record in self:
-            if not record.workorder_id:
+            if not record.route_operation_id:
                 continue
-            record.production_id = record.workorder_id.production_id
-            record.mes_order_id = record.workorder_id.x_mes_order_id
-            record.workcenter_id = record.workorder_id.workcenter_id
-            record.route_step_id = record.workorder_id.x_route_operation_id
-            record.equipment_id = record.workorder_id.x_meter_equipment_id
+            record.mes_order_id = record.route_operation_id.mes_order_id
+            record.production_id = record.route_operation_id.mes_order_id.production_id
+            record.route_step_id = record.route_operation_id.operation_id.x_route_operation_id
 
     @api.onchange('internal_serial_id')
     def _onchange_internal_serial_id(self):
@@ -245,7 +243,7 @@ class SnWsdExceptionRecord(models.Model):
             record.serial_lot_id = False
             record.production_id = record.production_id or serial.production_id
             record.mes_order_id = record.mes_order_id or serial.mes_order_id
-            record.workorder_id = record.workorder_id or serial.current_workorder_id
+            record.route_operation_id = record.route_operation_id or serial.current_route_operation_id
 
     @api.onchange('serial_lot_id')
     def _onchange_serial_lot_id(self):
@@ -260,17 +258,13 @@ class SnWsdExceptionRecord(models.Model):
     def _sync_context_from_links(self):
         for record in self:
             vals = {}
-            if record.workorder_id:
+            if record.route_operation_id:
+                if not record.mes_order_id:
+                    vals['mes_order_id'] = record.route_operation_id.mes_order_id.id
                 if not record.production_id:
-                    vals['production_id'] = record.workorder_id.production_id.id
-                if not record.mes_order_id and record.workorder_id.x_mes_order_id:
-                    vals['mes_order_id'] = record.workorder_id.x_mes_order_id.id
-                if not record.workcenter_id:
-                    vals['workcenter_id'] = record.workorder_id.workcenter_id.id
-                if not record.route_step_id and record.workorder_id.x_route_operation_id:
-                    vals['route_step_id'] = record.workorder_id.x_route_operation_id.id
-                if not record.equipment_id and record.workorder_id.x_meter_equipment_id:
-                    vals['equipment_id'] = record.workorder_id.x_meter_equipment_id.id
+                    vals['production_id'] = record.route_operation_id.mes_order_id.production_id.id
+                if not record.route_step_id and record.route_operation_id.operation_id.x_route_operation_id:
+                    vals['route_step_id'] = record.route_operation_id.operation_id.x_route_operation_id.id
             if record.internal_serial_id:
                 if record.serial_lot_id:
                     vals['serial_lot_id'] = False
@@ -278,8 +272,8 @@ class SnWsdExceptionRecord(models.Model):
                     vals['production_id'] = record.internal_serial_id.production_id.id
                 if not record.mes_order_id and record.internal_serial_id.mes_order_id:
                     vals['mes_order_id'] = record.internal_serial_id.mes_order_id.id
-                if not record.workorder_id:
-                    vals['workorder_id'] = record.internal_serial_id.current_workorder_id.id
+                if not record.route_operation_id:
+                    vals['route_operation_id'] = record.internal_serial_id.current_route_operation_id.id
             if record.serial_lot_id and not record.internal_serial_id:
                 serial = self.env['sn.wsd.internal.serial'].search([
                     ('serial_no', '=', record.serial_lot_id.name),

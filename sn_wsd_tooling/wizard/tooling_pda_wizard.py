@@ -5,7 +5,7 @@ class ToolingPdaWizard(models.TransientModel):
     _name = 'sn.tooling.pda.wizard'
     _description = 'Tooling PDA Wizard'
 
-    workorder_id = fields.Many2one('mrp.workorder', string='Work Order')
+    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='MES Route Operation')
     tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True)
     operation_type = fields.Selection(
         [
@@ -30,7 +30,5 @@ class ToolingPdaWizard(models.TransientModel):
             'cleaning': self.tooling_id.action_pda_cleaning,
             'return': self.tooling_id.action_pda_return,
         }
-        operation_map[self.operation_type](workorder=self.workorder_id, note=self.note)
-        if self.workorder_id and self.operation_type in ('issue', 'online'):
-            self.workorder_id.x_tooling_id = self.tooling_id
+        operation_map[self.operation_type](route_operation=self.route_operation_id, note=self.note)
         return {'type': 'ir.actions.act_window_close'}

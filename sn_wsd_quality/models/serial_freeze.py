@@ -55,9 +55,9 @@ class SnWsdSerialFreeze(models.Model):
         readonly=True,
         index=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Freeze Work Order',
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Freeze Route Operation',
         check_company=True,
         index=True,
         tracking=True,
@@ -65,15 +65,15 @@ class SnWsdSerialFreeze(models.Model):
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Freeze Work Center',
-        related='workorder_id.workcenter_id',
+        compute='_compute_route_context',
         store=True,
         readonly=True,
         index=True,
     )
     operation_id = fields.Many2one(
-        'mrp.routing.workcenter',
-        string='Freeze Operation',
-        related='workorder_id.operation_id',
+        'sn.wsd.operation',
+        string='MES Operation',
+        compute='_compute_route_context',
         store=True,
         readonly=True,
         index=True,
@@ -117,6 +117,13 @@ class SnWsdSerialFreeze(models.Model):
     )
     note = fields.Text(string='Notes')
 
+    @api.depends('route_operation_id', 'route_operation_id.operation_id')
+    def _compute_route_context(self):
+        for record in self:
+            operation = record.route_operation_id.operation_id
+            record.operation_id = operation
+            record.workcenter_id = operation.x_workcenter_ids[:1] if operation else False
+
     @api.constrains('serial_id', 'state')
     def _check_single_active_freeze(self):
         for record in self.filtered(lambda item: item.state == 'frozen'):
@@ -128,14 +135,14 @@ class SnWsdSerialFreeze(models.Model):
             if self.search_count(domain):
                 raise ValidationError(_('Only one active freeze record is allowed for each SN.'))
 
-    @api.constrains('serial_id', 'workorder_id')
+    @api.constrains('serial_id', 'route_operation_id')
     def _check_serial_can_be_frozen(self):
         for record in self.filtered(lambda item: item.state == 'frozen'):
             serial = record.serial_id
             if serial.final_result == 'scrap' or serial.pack_date:
                 raise ValidationError(_('Finished or scrapped SNs cannot be frozen.'))
-            if record.workorder_id and serial.production_id and record.workorder_id.production_id != serial.production_id:
-                raise ValidationError(_('The freeze work order must belong to the same manufacturing order as the SN.'))
+            if record.route_operation_id and record.route_operation_id.mes_order_id != serial.mes_order_id:
+                raise ValidationError(_('The freeze route operation must belong to the same MES order as the SN.'))
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -261,7 +268,7 @@ class InternalSerial(models.Model):
             'domain': [('serial_id', '=', self.id)],
             'context': {
                 'default_serial_id': self.id,
-                'default_workorder_id': self.current_workorder_id.id,
+                'default_route_operation_id': self.current_route_operation_id.id,
                 'default_company_id': self.company_id.id,
             },
         }
@@ -277,81 +284,6 @@ class InternalSerial(models.Model):
             'context': {
                 'default_mode': 'single',
                 'default_serial_id': self.id,
-                'default_workorder_id': self.current_workorder_id.id,
+                'default_route_operation_id': self.current_route_operation_id.id,
             },
         }
-
-
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_freeze_record_ids = fields.One2many(
-        'sn.wsd.serial.freeze',
-        'workorder_id',
-        string='Freeze Records',
-        readonly=True,
-    )
-    x_freeze_record_count = fields.Integer(
-        string='Freeze Record Count',
-        compute='_compute_x_freeze_record_count',
-    )
-
-    def _compute_x_freeze_record_count(self):
-        for workorder in self:
-            workorder.x_freeze_record_count = len(workorder.x_freeze_record_ids)
-
-    def _get_freezable_internal_serials(self):
-        self.ensure_one()
-        return self.env['sn.wsd.internal.serial'].search([
-            ('production_id', '=', self.production_id.id),
-            ('current_workorder_id', '=', self.id),
-            ('final_result', '!=', 'scrap'),
-            ('pack_date', '=', False),
-            ('x_freeze_state', '!=', 'frozen'),
-        ])
-
-    def action_open_freeze_wizard(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Freeze Work Order SNs'),
-            'res_model': 'sn.wsd.serial.freeze.wizard',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': {
-                'default_mode': 'workorder',
-                'default_production_id': self.production_id.id,
-                'default_workorder_id': self.id,
-            },
-        }
-
-    def _mes_validate_execution(self, serial_number=None, allow_restart=False, override_route=False):
-        result = super()._mes_validate_execution(
-            serial_number=serial_number,
-            allow_restart=allow_restart,
-            override_route=override_route,
-        )
-        if result.get('error') or not serial_number:
-            return result
-        serial = self.env['sn.wsd.internal.serial'].search([
-            ('serial_no', '=', serial_number),
-            ('company_id', '=', self.company_id.id),
-        ], limit=1)
-        active_freeze = serial.active_freeze_id if serial else self.env['sn.wsd.serial.freeze']
-        if not active_freeze:
-            return result
-        api = self.env['sncic.mes.api.mixin']
-        return api._mes_error(
-            'serial_frozen',
-            message=_(
-                'SN %(serial)s is frozen. Reason: %(reason)s. Passing is not allowed.',
-                serial=serial_number,
-                reason=active_freeze.freeze_reason or '-',
-            ),
-            serial_number=serial_number,
-            freeze_id=active_freeze.id,
-            freeze_reason=active_freeze.freeze_reason,
-            freeze_user=active_freeze.freeze_user_id.display_name,
-            freeze_time=active_freeze.freeze_time,
-            freeze_workorder_id=active_freeze.workorder_id.id,
-        )

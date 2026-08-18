@@ -177,7 +177,6 @@ class SnWsdRestApiController(http.Controller):
         try:
             result = self._service().submit_aoi_result(
                 payload=body,
-                workorder_id=None,
                 source_system='AOI',
                 override_route=False,
             )
@@ -231,72 +230,6 @@ class SnWsdRestApiController(http.Controller):
             return self._business_error_response(error)
         except Exception:
             _logger.exception('REST API workorder scan pass failed.')
-            return self._error_response(500, MSG_SYSTEM_ERROR, status=500)
-        return self._normalize_service_result(result, success_message=MSG_SAVE_SUCCESS)
-
-    @http.route('/api/v1/workorders/events', type='http', auth='public', methods=['POST'], csrf=False)
-    def workorder_events(self):
-        body, error = self._body_or_error()
-        if error:
-            return error
-        missing = []
-        if not self._has_value(body, 'workorder_id', 'workorderId'):
-            missing.append('workorder_id')
-        if not self._has_value(body, 'event_type', 'eventType'):
-            missing.append('event_type')
-        if missing:
-            return self._required_error(missing)
-        try:
-            result = self._service().submit_workorder_event(
-                workorder_id=self._as_int(body.get('workorder_id') or body.get('workorderId')),
-                event_type=body.get('event_type') or body.get('eventType'),
-                serial_number=body.get('serial_number') or body.get('serialNumber'),
-                operator_code=body.get('operator_code') or body.get('operatorCode'),
-                note=body.get('note'),
-                override_route=self._as_bool(body.get('override_route') or body.get('overrideRoute')),
-                external_event_id=body.get('external_event_id') or body.get('externalEventId'),
-                source_system=body.get('source_system') or body.get('sourceSystem'),
-                payload=body.get('payload') if isinstance(body.get('payload'), dict) else body,
-            )
-        except (UserError, ValidationError) as error:
-            return self._business_error_response(error)
-        except Exception:
-            _logger.exception('REST API workorder event failed.')
-            return self._error_response(500, MSG_SYSTEM_ERROR, status=500)
-        return self._normalize_service_result(result, success_message=MSG_SAVE_SUCCESS)
-
-    @http.route('/api/v1/test-results', type='http', auth='public', methods=['POST'], csrf=False)
-    def test_results(self):
-        body, error = self._body_or_error()
-        if error:
-            return error
-        missing = []
-        if not self._has_value(body, 'workorder_id', 'workorderId'):
-            missing.append('workorder_id')
-        if not self._has_value(body, 'serial_number', 'serialNumber'):
-            missing.append('serial_number')
-        if missing:
-            return self._required_error(missing)
-        try:
-            result = self._service().submit_test_result(
-                workorder_id=self._as_int(body.get('workorder_id') or body.get('workorderId')),
-                serial_number=body.get('serial_number') or body.get('serialNumber'),
-                result=body.get('result') or 'pass',
-                operator_code=body.get('operator_code') or body.get('operatorCode'),
-                cycle_time_sec=body.get('cycle_time_sec') or body.get('cycleTimeSec'),
-                basic_error=body.get('basic_error') or body.get('basicError'),
-                phase_error=body.get('phase_error') or body.get('phaseError'),
-                aging_temp_c=body.get('aging_temp_c') or body.get('agingTempC'),
-                tester_channel=body.get('tester_channel') or body.get('testerChannel'),
-                note=body.get('note'),
-                payload=body.get('payload') if isinstance(body.get('payload'), dict) else body,
-                external_event_id=body.get('external_event_id') or body.get('externalEventId'),
-                source_system=body.get('source_system') or body.get('sourceSystem'),
-            )
-        except (UserError, ValidationError) as error:
-            return self._business_error_response(error)
-        except Exception:
-            _logger.exception('REST API test result failed.')
             return self._error_response(500, MSG_SYSTEM_ERROR, status=500)
         return self._normalize_service_result(result, success_message=MSG_SAVE_SUCCESS)
 

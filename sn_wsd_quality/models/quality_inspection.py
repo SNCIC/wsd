@@ -536,7 +536,7 @@ class QualityInspection(models.Model):
     )
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', check_company=True, index=True)
     mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
-    workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True, index=True)
+    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='Route Operation', check_company=True, index=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True, index=True)
     operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True, index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
@@ -613,20 +613,20 @@ class QualityInspection(models.Model):
             if not vals.get('mes_order_id'):
                 travel = self.env['sn.wsd.mes.sn.travel'].browse(vals.get('evidence_travel_id')).exists() if vals.get('evidence_travel_id') else self.env['sn.wsd.mes.sn.travel']
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('evidence_internal_serial_id')).exists() if vals.get('evidence_internal_serial_id') else travel.internal_serial_id
-                workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else travel.workorder_id
-                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or workorder.production_id
-                mes_order = serial.mes_order_id or travel.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
+                workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else travel.route_operation_id
+                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or (workorder.mes_order_id.production_id if workorder else False)
+                mes_order = serial.mes_order_id or travel.mes_order_id or (workorder.mes_order_id if workorder else False) or production.x_mes_order_id
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
 
     @api.model
-    def _find_scheme(self, inspection_type, product=False, workorder=False, production=False, move_line=False):
+    def _find_scheme(self, inspection_type, product=False, route_operation=False, production=False, move_line=False):
         company = self.env.company
         if production and production.company_id:
             company = production.company_id
-        elif workorder and workorder.company_id:
-            company = workorder.company_id
+        elif route_operation and route_operation.company_id:
+            company = route_operation.company_id
         elif move_line and move_line.company_id:
             company = move_line.company_id
         domain = [
@@ -640,13 +640,13 @@ class QualityInspection(models.Model):
         for scheme in candidates:
             if not scheme._matches_product_scope(product):
                 continue
-            if scheme.workcenter_id and workorder and scheme.workcenter_id not in (workorder.workcenter_id, workorder.x_mes_workcenter_id, workorder.x_meter_workcenter_id):
+            if scheme.workcenter_id and route_operation and scheme.workcenter_id != route_operation.workcenter_id:
                 continue
-            if scheme.operation_id and workorder and scheme.operation_id != workorder.operation_id:
+            if scheme.operation_id and route_operation and scheme.operation_id != route_operation.operation_id:
                 continue
             if scheme.production_line_id:
                 target_line = (
-                    (workorder.x_meter_production_line_id if workorder else False)
+                    (route_operation.mes_order_id.production_line_id if route_operation else False)
                     or (production.x_production_line_id if production else False)
                     or (move_line.picking_id.picking_type_id.warehouse_id if move_line else False)
                 )
@@ -779,7 +779,7 @@ class QualityInspection(models.Model):
                 ], limit=1):
                     issue_model.create({
                         'internal_serial_id': serial.id,
-                        'workorder_id': inspection.workorder_id.id,
+                        'route_operation_id': inspection.route_operation_id.id,
                         'workcenter_id': inspection.workcenter_id.id,
                         'defect_code_id': defect_code.id,
                         'issue_source': inspection.inspection_type,
@@ -792,8 +792,9 @@ class QualityInspection(models.Model):
     @api.model
     def create_fai_for_production(self, production):
         product = production.product_id
-        workorder = production.workorder_ids.filtered(lambda wo: wo.state in ('ready', 'progress'))[:1] or production.workorder_ids[:1]
-        scheme = self._find_scheme('fai', product=product, workorder=workorder, production=production)
+        mes_order = production.x_mes_order_id
+        route_operation = mes_order.x_route_operation_ids.sorted('sequence')[:1] if mes_order else self.env['sn.wsd.mes.order.route.operation']
+        scheme = self._find_scheme('fai', product=product, route_operation=route_operation, production=production)
         if not scheme:
             return self.env['sn.wsd.quality.inspection']
         existing = self.search([
@@ -805,9 +806,8 @@ class QualityInspection(models.Model):
             return existing
         return self.create_from_scheme(scheme, {
             'production_id': production.id,
-            'workorder_id': workorder.id,
-            'workcenter_id': workorder.workcenter_id.id if workorder else False,
-            'operation_id': workorder.operation_id.id if workorder else False,
+            'route_operation_id': route_operation.id,
+            'workcenter_id': route_operation.workcenter_id.id if route_operation else False,
             'production_line_id': production.x_production_line_id.id,
             'product_id': product.id,
             'area_sn': production.x_production_line_id.code,
@@ -830,13 +830,13 @@ class QualityInspection(models.Model):
 
     @api.model
     def create_for_travel(self, inspection_type, travel):
-        if not travel or not travel.workorder_id or not travel.production_id:
+        if not travel or not travel.route_operation_id or not travel.production_id:
             return self.env['sn.wsd.quality.inspection']
-        product = travel.product_id or travel.workorder_id.product_id or travel.production_id.product_id
+        product = travel.product_id or travel.route_operation_id.product_id or travel.production_id.product_id
         scheme = self._find_scheme(
             inspection_type,
             product=product,
-            workorder=travel.workorder_id,
+            route_operation=travel.route_operation_id,
             production=travel.production_id,
         )
         if not scheme:
@@ -858,15 +858,14 @@ class QualityInspection(models.Model):
             ], limit=1)
             if existing:
                 return existing
-        workorder = travel.workorder_id
+        route_operation = travel.route_operation_id
         production = travel.production_id
-        production_line = travel.production_line_id or workorder.x_meter_production_line_id or production.x_production_line_id
-        workcenter = travel.workcenter_id or workorder.workcenter_id
+        production_line = travel.production_line_id or route_operation.mes_order_id.production_line_id or production.x_production_line_id
+        workcenter = travel.workcenter_id or route_operation.workcenter_id
         return self.create_from_scheme(scheme, {
             'production_id': production.id,
-            'workorder_id': workorder.id,
+            'route_operation_id': route_operation.id,
             'workcenter_id': workcenter.id if workcenter else False,
-            'operation_id': workorder.operation_id.id,
             'production_line_id': production_line.id if production_line else False,
             'product_id': product.id if product else False,
             'area_sn': production_line.code if production_line else False,
@@ -883,27 +882,26 @@ class QualityInspection(models.Model):
         return self.browse()
 
     @api.model
-    def create_oqc_for_workorder(self, workorder):
-        product = workorder.product_id
-        scheme = self._find_scheme('oqc', product=product, workorder=workorder, production=workorder.production_id)
+    def create_oqc_for_route_operation(self, route_operation):
+        product = route_operation.mes_order_id.product_id
+        scheme = self._find_scheme('oqc', product=product, route_operation=route_operation, production=route_operation.mes_order_id.production_id)
         if not scheme:
-            raise UserError(_('No effective OQC inspection scheme was found for this work order.'))
+            raise UserError(_('No effective OQC inspection scheme was found for this route operation.'))
         existing = self.search([
             ('inspection_type', '=', 'oqc'),
-            ('workorder_id', '=', workorder.id),
+            ('route_operation_id', '=', route_operation.id),
             ('state', 'in', ('open', 'in_progress')),
         ], limit=1)
         if existing:
             return existing
         return self.create_from_scheme(scheme, {
-            'production_id': workorder.production_id.id,
-            'workorder_id': workorder.id,
-            'workcenter_id': workorder.workcenter_id.id,
-            'operation_id': workorder.operation_id.id,
-            'production_line_id': workorder.x_meter_production_line_id.id,
+            'production_id': route_operation.mes_order_id.production_id.id,
+            'route_operation_id': route_operation.id,
+            'workcenter_id': route_operation.workcenter_id.id,
+            'production_line_id': route_operation.mes_order_id.production_line_id.id,
             'product_id': product.id,
-            'area_sn': workorder.x_meter_production_line_id.code,
-            'model_code': workorder.production_id.x_meter_model or product.default_code,
+            'area_sn': route_operation.mes_order_id.production_line_id.code,
+            'model_code': route_operation.mes_order_id.production_id.x_meter_model or product.default_code,
             'scheduled_time': fields.Datetime.now(),
         })
 
@@ -1174,36 +1172,6 @@ class MrpProduction(models.Model):
         }
 
     def action_create_fai_inspection(self):
-        raise UserError(_('Manual quality inspection creation is disabled. Use OK MES travel events instead.'))
-
-
-class MrpWorkorder(models.Model):
-    _inherit = 'mrp.workorder'
-
-    x_quality_inspection_ids = fields.One2many(
-        'sn.wsd.quality.inspection',
-        'workorder_id',
-        string='Quality Inspections',
-        readonly=True,
-    )
-    x_quality_inspection_count = fields.Integer(string='Quality Inspection Count', compute='_compute_x_quality_inspection_count')
-
-    def _compute_x_quality_inspection_count(self):
-        for workorder in self:
-            workorder.x_quality_inspection_count = len(workorder.x_quality_inspection_ids)
-
-    def action_open_quality_inspections(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Quality Inspections'),
-            'res_model': 'sn.wsd.quality.inspection',
-            'view_mode': 'list,form',
-            'domain': [('workorder_id', '=', self.id)],
-            'context': {'default_workorder_id': self.id},
-        }
-
-    def action_create_oqc_inspection(self):
         raise UserError(_('Manual quality inspection creation is disabled. Use OK MES travel events instead.'))
 
 

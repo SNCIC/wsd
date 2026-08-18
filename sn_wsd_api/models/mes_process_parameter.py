@@ -95,13 +95,6 @@ class MesProcessParameterValidation(models.Model):
         index=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
-        ondelete='cascade',
-        index=True,
-        check_company=True,
-    )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
         string='MES Route Operation',
@@ -214,9 +207,6 @@ class MesProcessParameterValidation(models.Model):
         if production:
             if not product_id:
                 product_id = production.product_id.id
-            if not workcenter_id:
-                workcenter_id = production.mapped('workorder_ids.workcenter_id.id')[:1] if production.workorder_ids else False
-
         candidates = self.env['sn.wsd.mes.process.parameter'].search(domain)
 
         expected_code = None
@@ -243,7 +233,7 @@ class MesProcessParameterValidation(models.Model):
 
         :param payload: Scan-pass payload dict
         :param production_id: Manufacturing order ID
-        :param kwargs: Additional context (company_id, workorder_id, internal_serial_id, etc.)
+        :param kwargs: Additional context (company_id, route_operation_id, internal_serial_id, etc.)
         :return: List of validation results
         """
         if not self._is_validation_enabled(kwargs.get('company_id')):
@@ -318,7 +308,6 @@ class MesProcessParameterValidation(models.Model):
                 'company_id': kwargs.get('company_id') or self.env.company.id,
                 'production_id': production_id,
                 'mes_order_id': kwargs.get('mes_order_id'),
-                'workorder_id': kwargs.get('workorder_id'),
                 'route_operation_id': kwargs.get('route_operation_id'),
                 'workcenter_id': kwargs.get('workcenter_id'),
                 'internal_serial_id': kwargs.get('internal_serial_id'),

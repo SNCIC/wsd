@@ -157,9 +157,16 @@ class MesEipSyncRecord(models.Model):
         index=True,
         check_company=True,
     )
-    workorder_id = fields.Many2one(
-        'mrp.workorder',
-        string='Work Order',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        ondelete='cascade',
+        index=True,
+        check_company=True,
+    )
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
         ondelete='cascade',
         index=True,
         check_company=True,
@@ -306,7 +313,8 @@ class MesEipSyncRecord(models.Model):
             return self.create({
                 'company_id': company_id,
                 'production_id': production.id if production else False,
-                'workorder_id': test_result.workorder_id.id if test_result.workorder_id else False,
+                'mes_order_id': test_result.mes_order_id.id if test_result.mes_order_id else False,
+                'route_operation_id': test_result.route_operation_id.id if test_result.route_operation_id else False,
                 'internal_serial_id': test_result.internal_serial_id.id if test_result.internal_serial_id else False,
                 'workcenter_id': test_result.workcenter_id.id if test_result.workcenter_id else False,
                 'workcenter_code': test_result.workcenter_code,
@@ -333,7 +341,8 @@ class MesEipSyncRecord(models.Model):
             return self.create({
                 'company_id': company_id,
                 'production_id': production.id if production else False,
-                'workorder_id': test_result.workorder_id.id if test_result.workorder_id else False,
+                'mes_order_id': test_result.mes_order_id.id if test_result.mes_order_id else False,
+                'route_operation_id': test_result.route_operation_id.id if test_result.route_operation_id else False,
                 'internal_serial_id': test_result.internal_serial_id.id if test_result.internal_serial_id else False,
                 'workcenter_id': test_result.workcenter_id.id if test_result.workcenter_id else False,
                 'workcenter_code': test_result.workcenter_code,
@@ -351,7 +360,8 @@ class MesEipSyncRecord(models.Model):
         sync_record = self.create({
             'company_id': company_id,
             'production_id': production.id if production else False,
-            'workorder_id': test_result.workorder_id.id if test_result.workorder_id else False,
+            'mes_order_id': test_result.mes_order_id.id if test_result.mes_order_id else False,
+            'route_operation_id': test_result.route_operation_id.id if test_result.route_operation_id else False,
             'internal_serial_id': test_result.internal_serial_id.id if test_result.internal_serial_id else False,
             'workcenter_id': test_result.workcenter_id.id if test_result.workcenter_id else False,
             'workcenter_code': test_result.workcenter_code,

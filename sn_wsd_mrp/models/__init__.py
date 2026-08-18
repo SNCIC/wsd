@@ -10,8 +10,6 @@ from . import mrp_production_mes
 from . import mes_order
 from . import mes_order_route
 from . import scrap_reason
-from . import mrp_workorder
-from . import mrp_workorder_mes_fields
 from . import stock_move
 from . import stock_lot
 from . import stock_package

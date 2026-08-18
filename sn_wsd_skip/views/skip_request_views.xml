@@ -62,7 +62,7 @@
                                 <list editable="bottom" decoration-danger="is_processed">
                                     <field name="sequence" widget="handle"/>
                                     <field name="production_id" column_invisible="1"/>
-                                    <field name="workorder_id"/>
+                                    <field name="route_operation_id"/>
                                     <field name="route_operation_id"/>
                                     <field name="operation_code"/>
                                     <field name="workcenter_id"/>

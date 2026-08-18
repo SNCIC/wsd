@@ -18,7 +18,12 @@ class MeterAgingBatch(models.Model):
         index=True,
     )
     production_id = fields.Many2one('mrp.production', index=True, check_company=True)
-    workorder_id = fields.Many2one('mrp.workorder', index=True, check_company=True)
+    route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='MES Route Operation',
+        index=True,
+        check_company=True,
+    )
     equipment_id = fields.Many2one('maintenance.equipment', index=True, check_company=True)
     aging_cart_no = fields.Char(index=True)
     planned_hours = fields.Float(default=8.0)
@@ -64,8 +69,6 @@ class MeterAgingBatch(models.Model):
                 'aging_result': 'pass', 'current_aging_batch_id': False,
             })
             batch.line_ids.filtered(lambda l: not l.unload_time).write({'unload_time': end_time})
-            if batch.workorder_id and hasattr(batch.workorder_id, 'action_sync_meter_qty'):
-                batch.workorder_id.action_sync_meter_qty()
 
 
 class MeterAgingBatchLine(models.Model):
