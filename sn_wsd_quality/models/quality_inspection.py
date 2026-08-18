@@ -535,7 +535,7 @@ class QualityInspection(models.Model):
         index=True,
     )
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', check_company=True, index=True)
-    manufacturing_batch_id = fields.Many2one('sn.wsd.manufacturing.batch', string='Manufacturing Batch', check_company=True, index=True)
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
     workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True, index=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True, index=True)
     operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True, index=True)
@@ -610,14 +610,14 @@ class QualityInspection(models.Model):
             if vals.get('name', _('New')) == _('New'):
                 inspection_type = vals.get('inspection_type') or 'quality'
                 vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
-            if not vals.get('manufacturing_batch_id'):
+            if not vals.get('mes_order_id'):
                 travel = self.env['sn.wsd.mes.sn.travel'].browse(vals.get('evidence_travel_id')).exists() if vals.get('evidence_travel_id') else self.env['sn.wsd.mes.sn.travel']
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('evidence_internal_serial_id')).exists() if vals.get('evidence_internal_serial_id') else travel.internal_serial_id
                 workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else travel.workorder_id
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or workorder.production_id
-                batch = serial.manufacturing_batch_id or travel.manufacturing_batch_id or workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id
-                if batch:
-                    vals['manufacturing_batch_id'] = batch.id
+                mes_order = serial.mes_order_id or travel.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
+                if mes_order:
+                    vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
 
     @api.model

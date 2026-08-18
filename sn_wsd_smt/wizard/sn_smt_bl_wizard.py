@@ -88,7 +88,7 @@ class SnSmtBlWizard(models.TransientModel):
             raise UserError(_('The feeder is not available for use because maintenance is not valid.'))
         if online_material.chanel_sn and feeder.channel_sn and feeder.channel_sn != online_material.chanel_sn:
             raise UserError(_('The feeder channel does not match the SMT position channel.'))
-        self._check_feeder_batch_scope(feeder, self.production_id)
+        self._check_feeder_mes_order_scope(feeder, self.production_id)
         self.feeder_id = feeder
         return feeder
 

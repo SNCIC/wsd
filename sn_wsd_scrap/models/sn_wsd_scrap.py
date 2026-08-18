@@ -93,9 +93,9 @@ class SnWsdScrapRecord(models.Model):
         check_company=True,
         tracking=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         index=True,
         check_company=True,
         tracking=True,
@@ -248,13 +248,13 @@ class SnWsdScrapRecord(models.Model):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.scrap.record') or _('New')
-            if not vals.get('manufacturing_batch_id'):
+            if not vals.get('mes_order_id'):
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('serial_id')).exists() if vals.get('serial_id') else self.env['sn.wsd.internal.serial']
                 workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else serial.current_workorder_id
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else serial.production_id or workorder.production_id
-                batch = serial.manufacturing_batch_id or workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id
-                if batch:
-                    vals['manufacturing_batch_id'] = batch.id
+                mes_order = serial.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
+                if mes_order:
+                    vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
 
     def write(self, vals):

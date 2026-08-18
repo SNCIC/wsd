@@ -12,8 +12,8 @@ class MesSnTravel(models.Model):
     internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Internal Serial', required=True, ondelete='cascade', index=True, check_company=True)
     product_id = fields.Many2one(related='internal_serial_id.product_id', store=True, index=True)
     production_id = fields.Many2one('mrp.production', ondelete='set null', index=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch', string='Manufacturing Batch', ondelete='set null', index=True, check_company=True,
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order', ondelete='set null', index=True, check_company=True,
     )
     workorder_id = fields.Many2one('mrp.workorder', ondelete='set null', index=True, check_company=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='MES Work Center', ondelete='set null', index=True, check_company=True)
@@ -99,14 +99,21 @@ class MesSnTravel(models.Model):
         if not workorder and equipment and equipment.x_mes_workcenter_id:
             workorder = self.env['mrp.workorder'].search([('state', 'in', ['ready', 'progress']), ('workcenter_id', '=', equipment.x_mes_workcenter_id.id)], limit=1, order='date_start asc, id asc')
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else workorder.production_id
-        batch = production.x_manufacturing_batch_id if production else self.env['sn.wsd.manufacturing.batch']
+        mes_order = (
+            self.env['sn.wsd.mes.order'].browse(payload.get('mes_order_id')).exists()
+            if payload.get('mes_order_id') else False
+        )
+        if not mes_order and production:
+            mes_order = production.x_mes_order_ids.filtered(
+                lambda order: order.state != 'cancelled'
+            )[:1]
         product = production.product_id or workorder.product_id
         event_dt = fields.Datetime.to_datetime(event_time) if event_time else fields.Datetime.now()
         serial = self.env['sn.wsd.internal.serial'].browse(internal_serial_id).exists() if internal_serial_id else self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(
             serial_number,
             company=production.company_id or workorder.company_id or self.env.company,
             production=production,
-            manufacturing_batch=batch,
+            mes_order=mes_order,
             product=product,
         )
         if not serial:
@@ -118,7 +125,7 @@ class MesSnTravel(models.Model):
         travel = self.create({
             'internal_serial_id': serial.id,
             'production_id': production.id if production else False,
-            'manufacturing_batch_id': batch.id if batch else False,
+            'mes_order_id': mes_order.id if mes_order else False,
             'workorder_id': workorder.id if workorder else False,
             'workcenter_id': workcenter.id if workcenter else workorder.workcenter_id.id if workorder and workorder.workcenter_id else False,
             'workshop_id': workshop.id if workshop else False,

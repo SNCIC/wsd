@@ -47,8 +47,9 @@ class InternalSerial(models.Model):
     product_id = fields.Many2one('product.product', required=True, index=True, check_company=True)
     product_tmpl_id = fields.Many2one(related='product_id.product_tmpl_id', store=True)
     production_id = fields.Many2one('mrp.production', index=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch', string='Manufacturing Batch', index=True, check_company=True,
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order', index=True, check_company=True,
+        ondelete='set null',
     )
     current_production_id = fields.Many2one(
         'mrp.production', string='Current Manufacturing Order', index=True, check_company=True,
@@ -137,8 +138,12 @@ class InternalSerial(models.Model):
                     values['production_id'] = production.id
                 if not values.get('current_production_id'):
                     values['current_production_id'] = production.id
-                if not values.get('manufacturing_batch_id'):
-                    values['manufacturing_batch_id'] = production.x_manufacturing_batch_id.id
+                if not values.get('mes_order_id'):
+                    mes_orders = production.x_mes_order_ids.filtered(
+                        lambda order: order.state != 'cancelled'
+                    )
+                    if len(mes_orders) == 1:
+                        values['mes_order_id'] = mes_orders.id
         return super().create(vals_list)
 
     @api.constrains('serial_identity_id', 'serial_no', 'company_id')
@@ -157,19 +162,19 @@ class InternalSerial(models.Model):
             serial.final_result = 'scrap'
         return True
 
-    @api.constrains('manufacturing_batch_id', 'production_id', 'current_production_id', 'company_id', 'product_id')
+    @api.constrains('mes_order_id', 'production_id', 'current_production_id', 'company_id', 'product_id')
     def _check_manufacturing_scope(self):
         for serial in self:
-            batch = serial.manufacturing_batch_id
-            if batch and batch.company_id != serial.company_id:
-                raise ValidationError(_('The manufacturing batch must belong to the same company as the internal serial.'))
-            if batch and batch.product_id != serial.product_id:
-                raise ValidationError(_('The manufacturing batch product must match the internal serial product.'))
+            mes_order = serial.mes_order_id
+            if mes_order and mes_order.company_id != serial.company_id:
+                raise ValidationError(_('The MES order must belong to the same company as the internal serial.'))
+            if mes_order and mes_order.product_id != serial.product_id:
+                raise ValidationError(_('The MES order product must match the internal serial product.'))
             for production in serial.production_id | serial.current_production_id:
                 if production and production.company_id != serial.company_id:
                     raise ValidationError(_('The manufacturing order must belong to the same company as the internal serial.'))
-                if batch and production.x_manufacturing_batch_id and production.x_manufacturing_batch_id != batch:
-                    raise ValidationError(_('The manufacturing order must belong to the internal serial manufacturing batch.'))
+                if mes_order and production != mes_order.production_id:
+                    raise ValidationError(_('The manufacturing order must match the internal serial MES order.'))
 
     def _resolve_workorder_arg(self, workorder=False):
         if not workorder:
@@ -192,7 +197,7 @@ class InternalSerial(models.Model):
         serial_no,
         company=False,
         production=False,
-        manufacturing_batch=False,
+        mes_order=False,
         product=False,
         active=None,
     ):
@@ -201,20 +206,24 @@ class InternalSerial(models.Model):
             return self.env['sn.wsd.internal.serial']
 
         production = self._resolve_context_record('mrp.production', production)
-        manufacturing_batch = self._resolve_context_record('sn.wsd.manufacturing.batch', manufacturing_batch)
+        mes_order = self._resolve_context_record('sn.wsd.mes.order', mes_order)
         product = self._resolve_context_record('product.product', product)
         company = self._resolve_context_record('res.company', company)
 
-        if production and not manufacturing_batch:
-            manufacturing_batch = production.x_manufacturing_batch_id
+        if production and not mes_order:
+            mes_orders = production.x_mes_order_ids.filtered(
+                lambda order: order.state != 'cancelled'
+            )
+            if len(mes_orders) == 1:
+                mes_order = mes_orders
         if production and not product:
             product = production.product_id
         if production and not company:
             company = production.company_id
-        if manufacturing_batch and not product:
-            product = manufacturing_batch.product_id
-        if manufacturing_batch and not company:
-            company = manufacturing_batch.company_id
+        if mes_order and not product:
+            product = mes_order.product_id
+        if mes_order and not company:
+            company = mes_order.company_id
 
         base_domain = [('serial_no', '=', serial_no)]
         if company:
@@ -235,20 +244,15 @@ class InternalSerial(models.Model):
             if serial:
                 return serial
 
-        if manufacturing_batch:
+        if mes_order:
             serials = self.with_context(active_test=False).search(
-                base_domain + [('manufacturing_batch_id', '=', manufacturing_batch.id)],
+                base_domain + [('mes_order_id', '=', mes_order.id)],
                 order='active desc, production_date desc, id desc',
             )
             if production:
                 current = serials.filtered(lambda serial: serial.current_production_id == production)
                 if current:
                     return current[:1]
-                same_origin_batch = serials.filtered(
-                    lambda serial: serial.production_id.x_manufacturing_batch_id == manufacturing_batch
-                )
-                if same_origin_batch:
-                    return same_origin_batch[:1]
             if serials:
                 return serials[:1]
 
@@ -265,11 +269,15 @@ class InternalSerial(models.Model):
         workorder = self._resolve_workorder_arg(workorder)
         if not workorder:
             return self.env['sn.wsd.internal.serial']
+        mes_order = self._resolve_context_record(
+            'sn.wsd.mes.order',
+            workorder.env.context.get('mes_order_id'),
+        )
         return self.find_for_manufacturing_context(
             serial_no,
             company=workorder.company_id,
             production=workorder.production_id,
-            manufacturing_batch=workorder.x_manufacturing_batch_id,
+            mes_order=mes_order,
             product=workorder.product_id,
             active=active,
         )
@@ -304,4 +312,3 @@ class InternalSerial(models.Model):
 
     # Serial lifecycle state transitions were intentionally removed.  MES and
     # quality records keep their own statuses and update traceability fields only.
-

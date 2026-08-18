@@ -6,6 +6,13 @@ from odoo.tools import format_date
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
+    x_mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        compute='_compute_x_mes_order_id',
+        readonly=True,
+        check_company=True,
+    )
     x_customer_id = fields.Many2one(
         'res.partner',
         string='Source Customer',
@@ -157,9 +164,6 @@ class MrpProduction(models.Model):
         tracking=True,
     )
     x_internal_serial_ids = fields.One2many('sn.wsd.internal.serial', 'production_id', string='Origin Internal Serials')
-    x_manufacturing_batch_serial_ids = fields.One2many(
-        'sn.wsd.internal.serial', 'manufacturing_batch_id', string='Batch Internal Serials',
-    )
     x_internal_serial_count = fields.Integer(compute='_compute_internal_serial_stats')
     x_internal_serial_passed = fields.Integer(compute='_compute_internal_serial_stats')
     x_internal_serial_failed = fields.Integer(compute='_compute_internal_serial_stats')
@@ -168,6 +172,14 @@ class MrpProduction(models.Model):
     x_meter_aging_batch_count = fields.Integer(compute='_compute_internal_serial_stats')
     x_meter_pack_record_ids = fields.One2many('sn.wsd.meter.pack.record', 'production_id', string='Pack Records')
     x_meter_pack_record_count = fields.Integer(compute='_compute_internal_serial_stats')
+
+    @api.depends('x_mes_order_ids.state', 'x_mes_order_ids.date_plan')
+    def _compute_x_mes_order_id(self):
+        for production in self:
+            orders = production.x_mes_order_ids.filtered(
+                lambda order: order.state != 'cancelled'
+            ).sorted(lambda order: (order.date_plan, order.id))
+            production.x_mes_order_id = orders[:1]
 
     def _get_active_stage_serials(self):
         self.ensure_one()
@@ -295,7 +307,6 @@ class MrpProduction(models.Model):
             'product_id': self.product_id.id,
             'production_id': self.id,
             'current_production_id': self.id,
-            'manufacturing_batch_id': self.x_manufacturing_batch_id.id,
             'company_id': self.company_id.id,
             'serial_type': 'finished' if self.x_has_meter_operations else 'semifinished',
             'parent_id': source_serial.id,
@@ -611,20 +622,10 @@ class MrpProduction(models.Model):
 
     def _compute_internal_serial_stats(self):
         for production in self:
-            # A batch is shared by the origin MO and its backorders.  Reading the
-            # one2many cache here used to return an empty recordset (and therefore
-            # a count of zero) until the form was manually refreshed.  Build the
-            # set from the persisted relations so the stat button is accurate for
-            # every MO in the batch.
-            if production.x_manufacturing_batch_id:
-                serials = self.env['sn.wsd.internal.serial'].search([
-                    ('manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id),
-                ])
-            else:
-                serials = self.env['sn.wsd.internal.serial'].search([
-                    '|', ('production_id', '=', production.id),
-                    ('current_production_id', '=', production.id),
-                ])
+            serials = self.env['sn.wsd.internal.serial'].search([
+                '|', ('production_id', '=', production.id),
+                ('current_production_id', '=', production.id),
+            ])
             production.x_internal_serial_count = len(serials)
             production.x_internal_serial_passed = len(serials.filtered(lambda s: s.final_result == 'pass'))
             production.x_internal_serial_failed = len(serials.filtered(lambda s: s.final_result == 'fail'))
@@ -967,13 +968,14 @@ class MrpProduction(models.Model):
         return result if result is not None else True
 
     def action_generate_internal_serial_archives(self):
-        batches = self.mapped('x_manufacturing_batch_id')
-        if any(not production.x_manufacturing_batch_id for production in self):
-            raise ValidationError(_('A manufacturing batch is required to generate internal serials.'))
-        result = True
-        for batch in batches:
-            result = batch.action_generate_missing_internal_serials()
-        return result
+        orders = self.mapped('x_mes_order_ids').filtered(
+            lambda order: order.state != 'cancelled'
+        )
+        if not orders:
+            raise ValidationError(_('An MES order is required to generate internal serials.'))
+        for order in orders:
+            order.action_generate_missing_internal_serials()
+        return True
 
     def action_open_internal_serials(self):
         self.ensure_one()
@@ -982,8 +984,8 @@ class MrpProduction(models.Model):
             'name': 'Internal Serials',
             'res_model': 'sn.wsd.internal.serial',
             'view_mode': 'list,form',
-            'domain': [('manufacturing_batch_id', '=', self.x_manufacturing_batch_id.id)] if self.x_manufacturing_batch_id else [('production_id', '=', self.id)],
-            'context': {'default_manufacturing_batch_id': self.x_manufacturing_batch_id.id, 'default_production_id': self.id, 'default_product_id': self.product_id.id},
+            'domain': [('production_id', '=', self.id)],
+            'context': {'default_production_id': self.id, 'default_product_id': self.product_id.id},
         }
 
     def action_open_aging_batches(self):

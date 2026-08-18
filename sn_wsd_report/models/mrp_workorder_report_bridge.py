@@ -176,7 +176,7 @@ class MrpWorkorder(models.Model):
             return existing
         report_vals = {
             'production_id': self.production_id.id,
-            'manufacturing_batch_id': self.x_manufacturing_batch_id.id,
+            'mes_order_id': self.x_mes_order_id.id if self.x_mes_order_id else False,
             'workorder_id': self.id,
             'source_type': source_type,
             'report_type': report_type,

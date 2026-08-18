@@ -81,6 +81,9 @@ class MesOrder(models.Model):
         help='Boards tracked under the parent manufacturing order. Becomes '
              'order-scoped once serials carry their MES order link.',
     )
+    internal_serial_ids = fields.One2many(
+        'sn.wsd.internal.serial', 'mes_order_id', string='Internal Serial Records',
+    )
     company_id = fields.Many2one(
         'res.company', string='Company', required=True,
         default=lambda self: self.env.company, index=True,
@@ -1113,33 +1116,63 @@ class MesOrder(models.Model):
             order.picking_count = len(order.picking_ids)
 
     def _compute_internal_serial_count(self):
-        Serial = self.env['sn.wsd.internal.serial']
         for order in self:
-            production = order.production_id
-            if production.x_manufacturing_batch_id:
-                domain = [('manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id)]
-            else:
-                domain = [('production_id', '=', production.id)]
-            order.internal_serial_count = Serial.search_count(domain)
+            order.internal_serial_count = len(order.internal_serial_ids)
 
     def action_open_internal_serials(self):
         self.ensure_one()
         production = self.production_id
-        if production.x_manufacturing_batch_id:
-            domain = [('manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id)]
-        else:
-            domain = [('production_id', '=', production.id)]
         return {
             'type': 'ir.actions.act_window',
             'name': _('Internal Serials'),
             'res_model': 'sn.wsd.internal.serial',
             'view_mode': 'list,form',
-            'domain': domain,
+            'domain': [('mes_order_id', '=', self.id)],
             'context': {
                 'default_production_id': production.id,
                 'default_product_id': production.product_id.id,
+                'default_mes_order_id': self.id,
             },
         }
+
+    def action_generate_missing_internal_serials(self, quantity=None):
+        self.ensure_one()
+        if self.state in ('cancelled', 'done'):
+            raise ValidationError(_('Internal serials cannot be generated for a closed MES order.'))
+        target_count = int(round(self.planned_qty))
+        if target_count <= 0:
+            raise ValidationError(_('The MES order planned quantity must be a positive whole number.'))
+        active_serials = self.internal_serial_ids.filtered(
+            lambda serial: serial.active and not serial.is_confirmed_scrapped()
+        )
+        missing_count = target_count - len(active_serials)
+        if missing_count <= 0:
+            return active_serials
+        generate_count = min(int(quantity), missing_count) if quantity is not None else missing_count
+        if generate_count <= 0:
+            raise ValidationError(_('The internal serial generation quantity must be positive.'))
+        self.production_id._lock_serial_capacity()
+        values_list = []
+        for _index in range(generate_count):
+            serial_no = (
+                self.env['ir.sequence'].next_by_code('sn.wsd.internal.serial.no')
+                or self.env['ir.sequence'].next_by_code('sn.wsd.internal.serial')
+            )
+            if not serial_no:
+                raise ValidationError(_('No internal serial number sequence is configured.'))
+            values_list.append({
+                'serial_no': serial_no,
+                'barcode': serial_no,
+                'product_id': self.product_id.id,
+                'production_id': self.production_id.id,
+                'current_production_id': self.production_id.id,
+                'mes_order_id': self.id,
+                'company_id': self.company_id.id,
+                'serial_type': 'finished' if self.production_id.x_has_meter_operations else 'semifinished',
+                'firmware_version': self.production_id.x_firmware_version,
+                'customer_batch_no': self.production_id.x_delivery_batch_no,
+            })
+        return self.env['sn.wsd.internal.serial'].create(values_list)
 
 
 class StockPickingMesOrder(models.Model):

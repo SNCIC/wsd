@@ -21,10 +21,10 @@ class SnSmtPcbPanel(models.Model):
         ondelete='cascade',
         copy=False,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -146,8 +146,8 @@ class SnSmtPcbPanel(models.Model):
         return {
             'id': self.id,
             'productNo': self.product_no,
-            'manufacturingBatchId': self.manufacturing_batch_id.id if self.manufacturing_batch_id else False,
-            'manufacturingBatchNo': self.manufacturing_batch_id.name if self.manufacturing_batch_id else False,
+            'mesOrderId': self.mes_order_id.id if self.mes_order_id else False,
+            'mesOrderNo': self.mes_order_id.name if self.mes_order_id else False,
             'productionId': self.production_id.id if self.production_id else False,
             'productionNo': self.production_id.name if self.production_id else False,
             'quantity': self.quantity,

@@ -8,14 +8,6 @@
         <field name="company_id" eval="False"/>
     </record>
 
-    <record id="seq_sn_wsd_manufacturing_batch" model="ir.sequence">
-        <field name="name">WSD Manufacturing Batch</field>
-        <field name="code">sn.wsd.manufacturing.batch</field>
-        <field name="prefix">BATCH%(y)s%(month)s-</field>
-        <field name="padding">5</field>
-        <field name="company_id" eval="False"/>
-    </record>
-
     <record id="seq_sn_wsd_internal_serial_no" model="ir.sequence">
         <field name="name">WSD Internal Serial Number</field>
         <field name="code">sn.wsd.internal.serial.no</field>

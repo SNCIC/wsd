@@ -222,10 +222,10 @@ class SnSmtOnlineMaterial(models.Model):
         ondelete='cascade',
         check_company=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -362,10 +362,10 @@ class SnSmtOfflineMaterial(models.Model):
         store=True,
         readonly=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='online_material_id.manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='online_material_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -514,10 +514,10 @@ class SnSmtOperationRecord(models.Model):
     _check_company_auto = True
 
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -581,10 +581,10 @@ class SnSmtOperationLog(models.Model):
         check_company=True,
     )
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -607,10 +607,10 @@ class SnSmtTraceability(models.Model):
     _check_company_auto = True
 
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -657,9 +657,9 @@ class SnSmtOperationMixin(models.AbstractModel):
         return self._is_config_enabled('SMT020', production.company_id)
 
     @api.model
-    def _get_batch_productions(self, production):
-        batch = production.x_manufacturing_batch_id if production else self.env['sn.wsd.manufacturing.batch']
-        return batch.production_ids if batch else production
+    def _get_mes_order_productions(self, production):
+        mes_order = production.x_mes_order_id if production else self.env['sn.wsd.mes.order']
+        return mes_order.production_id if mes_order else production
 
 
     @api.model
@@ -675,19 +675,19 @@ class SnSmtOperationMixin(models.AbstractModel):
         return candidate_product in required_product.substitute_ids or required_product in candidate_product.substitute_for_ids
 
     @api.model
-    def _check_same_manufacturing_batch(self, source_production, target_production):
-        source_batch = source_production.x_manufacturing_batch_id if source_production else False
-        target_batch = target_production.x_manufacturing_batch_id if target_production else False
-        if source_batch and target_batch and source_batch != target_batch:
-            raise UserError(_('The target manufacturing order must belong to the same manufacturing batch.'))
+    def _check_same_mes_order(self, source_production, target_production):
+        source_order = source_production.x_mes_order_id if source_production else False
+        target_order = target_production.x_mes_order_id if target_production else False
+        if source_order and target_order and source_order != target_order:
+            raise UserError(_('The target manufacturing order must belong to the same MES order.'))
         return True
 
     @api.model
-    def _check_feeder_batch_scope(self, feeder, production):
+    def _check_feeder_mes_order_scope(self, feeder, production):
         if not feeder or not feeder.bound_production_id or feeder.bound_production_id == production:
             return True
-        if feeder.bound_production_id not in self._get_batch_productions(production):
-            raise UserError(_('The feeder is already bound to another manufacturing batch.'))
+        if feeder.bound_production_id not in self._get_mes_order_productions(production):
+            raise UserError(_('The feeder is already bound to another MES order.'))
         return True
 
     @api.model
@@ -812,7 +812,7 @@ class SnSmtOperationMixin(models.AbstractModel):
         if not feeder:
             return
         still_in_use = self.env['sn.smt.online.material'].search([
-            ('production_id', 'in', self._get_batch_productions(production).ids),
+            ('production_id', 'in', self._get_mes_order_productions(production).ids),
             ('loaded_feeder_id', '=', feeder.id),
             ('is_load', '=', 'Y'),
         ], limit=1)

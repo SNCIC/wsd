@@ -51,7 +51,7 @@ class SnSmtPcbPanelController(http.Controller):
         F-002 panel query.
 
         Request example:
-        // Query by manufacturing batch number.
+        // Query by MES order number.
         {"productNo": "BATCH20260525123589"}
 
         // Query by board internal serial number.

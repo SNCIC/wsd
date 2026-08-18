@@ -47,10 +47,10 @@ class SnWsdSerialFreeze(models.Model):
         readonly=True,
         index=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='serial_id.manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='serial_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,

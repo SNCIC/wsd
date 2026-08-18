@@ -98,7 +98,7 @@ class SnSmtChangeWizard(models.TransientModel):
             raise UserError(_('The feeder channel does not match the loadpoint channel.'))
         if target_line.feeder_spec and feeder.feeder_spec and feeder.feeder_spec != target_line.feeder_spec:
             raise UserError(_('The feeder specification does not match the loadpoint feeder requirement.'))
-        self._check_feeder_batch_scope(feeder, self.production_id)
+        self._check_feeder_mes_order_scope(feeder, self.production_id)
         return feeder
 
     def _apply_change(self, target_line, new_lot, new_feeder=False, note='CHANGE'):

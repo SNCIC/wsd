@@ -114,9 +114,9 @@ class SnWsdExceptionRecord(models.Model):
         index=True,
         tracking=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         check_company=True,
         index=True,
         tracking=True,
@@ -231,7 +231,7 @@ class SnWsdExceptionRecord(models.Model):
             if not record.workorder_id:
                 continue
             record.production_id = record.workorder_id.production_id
-            record.manufacturing_batch_id = record.workorder_id.x_manufacturing_batch_id
+            record.mes_order_id = record.workorder_id.x_mes_order_id
             record.workcenter_id = record.workorder_id.workcenter_id
             record.route_step_id = record.workorder_id.x_route_operation_id
             record.equipment_id = record.workorder_id.x_meter_equipment_id
@@ -244,7 +244,7 @@ class SnWsdExceptionRecord(models.Model):
                 continue
             record.serial_lot_id = False
             record.production_id = record.production_id or serial.production_id
-            record.manufacturing_batch_id = record.manufacturing_batch_id or serial.manufacturing_batch_id
+            record.mes_order_id = record.mes_order_id or serial.mes_order_id
             record.workorder_id = record.workorder_id or serial.current_workorder_id
 
     @api.onchange('serial_lot_id')
@@ -263,8 +263,8 @@ class SnWsdExceptionRecord(models.Model):
             if record.workorder_id:
                 if not record.production_id:
                     vals['production_id'] = record.workorder_id.production_id.id
-                if not record.manufacturing_batch_id and record.workorder_id.x_manufacturing_batch_id:
-                    vals['manufacturing_batch_id'] = record.workorder_id.x_manufacturing_batch_id.id
+                if not record.mes_order_id and record.workorder_id.x_mes_order_id:
+                    vals['mes_order_id'] = record.workorder_id.x_mes_order_id.id
                 if not record.workcenter_id:
                     vals['workcenter_id'] = record.workorder_id.workcenter_id.id
                 if not record.route_step_id and record.workorder_id.x_route_operation_id:
@@ -276,8 +276,8 @@ class SnWsdExceptionRecord(models.Model):
                     vals['serial_lot_id'] = False
                 if not record.production_id:
                     vals['production_id'] = record.internal_serial_id.production_id.id
-                if not record.manufacturing_batch_id and record.internal_serial_id.manufacturing_batch_id:
-                    vals['manufacturing_batch_id'] = record.internal_serial_id.manufacturing_batch_id.id
+                if not record.mes_order_id and record.internal_serial_id.mes_order_id:
+                    vals['mes_order_id'] = record.internal_serial_id.mes_order_id.id
                 if not record.workorder_id:
                     vals['workorder_id'] = record.internal_serial_id.current_workorder_id.id
             if record.serial_lot_id and not record.internal_serial_id:

@@ -582,10 +582,10 @@ class ToolingOperationLog(models.Model):
     tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
     company_id = fields.Many2one(related='tooling_id.company_id', store=True)
     workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='workorder_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='workorder_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -605,10 +605,10 @@ class ToolingUsageLog(models.Model):
     tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
     company_id = fields.Many2one(related='tooling_id.company_id', store=True)
     workorder_id = fields.Many2one('mrp.workorder', string='Work Order', check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='workorder_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='workorder_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,

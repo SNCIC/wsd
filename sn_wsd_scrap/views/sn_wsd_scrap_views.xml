@@ -54,7 +54,7 @@
             <search string="Scrap Records">
                 <field name="name"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="serial_id"/>
                 <field name="serial_no"/>
                 <field name="workorder_id"/>
@@ -66,7 +66,7 @@
                 <filter string="Restored" name="filter_restored" domain="[('state', '=', 'restored')]"/>
                 <group>
                     <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
-                    <filter string="Manufacturing Batch" name="group_by_manufacturing_batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                    <filter string="MES Order" name="group_by_mes_order" context="{'group_by': 'mes_order_id'}"/>
                     <filter string="Process" name="group_by_process" context="{'group_by': 'process_step_id'}"/>
                     <filter string="Reason Code" name="group_by_reason" context="{'group_by': 'scrap_reason_id'}"/>
                     <filter string="Scrap User" name="group_by_user" context="{'group_by': 'scrap_user_id'}"/>
@@ -87,7 +87,7 @@
                 <field name="process_step_id"/>
                 <field name="scrap_reason_id"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="workorder_id"/>
                 <field name="scrap_time"/>
                 <field name="scrap_user_id"/>
@@ -117,7 +117,7 @@
                             <field name="serial_no" readonly="1"/>
                             <field name="product_id" readonly="1"/>
                             <field name="production_id" readonly="state != 'draft'"/>
-                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
                             <field name="workorder_id" readonly="state != 'draft'"/>
                             <field name="process_step_id" readonly="state != 'draft'"/>
                         </group>
@@ -186,7 +186,7 @@
         <field name="arch" type="xml">
             <pivot string="Scrap Statistics">
                 <field name="production_id" type="row"/>
-                <field name="manufacturing_batch_id" type="row"/>
+                <field name="mes_order_id" type="row"/>
                 <field name="process_step_id" type="row"/>
                 <field name="scrap_reason_id" type="col"/>
                 <field name="scrap_qty" type="measure"/>

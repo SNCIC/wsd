@@ -88,9 +88,9 @@ class MesProcessParameterValidation(models.Model):
         index=True,
         check_company=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         ondelete='cascade',
         index=True,
         check_company=True,
@@ -310,7 +310,7 @@ class MesProcessParameterValidation(models.Model):
             records |= self.create({
                 'company_id': kwargs.get('company_id') or self.env.company.id,
                 'production_id': production_id,
-                'manufacturing_batch_id': kwargs.get('manufacturing_batch_id'),
+                'mes_order_id': kwargs.get('mes_order_id'),
                 'workorder_id': kwargs.get('workorder_id'),
                 'workcenter_id': kwargs.get('workcenter_id'),
                 'internal_serial_id': kwargs.get('internal_serial_id'),

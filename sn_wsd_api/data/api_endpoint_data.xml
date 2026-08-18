@@ -85,7 +85,7 @@
         </record>
 
         <record id="endpoint_manufacturing_orders_by_work_order" model="sn.wsd.api.endpoint">
-            <field name="name">Search Manufacturing Batches</field>
+            <field name="name">Search MES Orders</field>
             <field name="code">manufacturing_orders_by_work_order</field>
             <field name="category">manufacturing</field>
             <field name="sequence">50</field>
@@ -94,7 +94,7 @@
             <field name="default_body">{
   "keyword": "MO"
 }</field>
-            <field name="description">Search manufacturing batch numbers by keyword. The request field names are kept for device compatibility.</field>
+            <field name="description">Search MES order numbers by keyword.</field>
         </record>
 
         <record id="endpoint_work_centers_search" model="sn.wsd.api.endpoint">
@@ -132,7 +132,7 @@
             <field name="path">/api/v1/laser/print-requests</field>
             <field name="is_mutating">1</field>
             <field name="default_body">{
-  "workOrderNo": "BATCH-TEST-001",
+  "workOrderNo": "MES-ORDER-TEST-001",
   "quantity": 10,
   "drawingNo": "DWG-2026-A01",
   "operator": "OP001"
@@ -225,7 +225,7 @@
   "M_DATA_AUTH": "1",
   "M_SN": "SN0001",
   "M_WORK_STATIONSN": "ST-001",
-  "M_MO_NUMBER": "BATCH-TEST-001",
+  "M_MO_NUMBER": "MES-ORDER-TEST-001",
   "M_EMP": "admin",
   "M_COLLABORATION_EMP": "",
   "M_TEST_RESULT": "OK",
@@ -315,13 +315,13 @@
             <field name="path">/api/v1/finished-serials</field>
             <field name="is_mutating">1</field>
             <field name="default_body">{
-  "production_id": 1,
+  "mes_order_id": 1,
   "serials": [
     "SN0001"
   ],
   "source_system": "ODOO_API_TESTER"
 }</field>
-            <field name="description">Upload finished serial numbers for a manufacturing batch. The public production_id field contains the manufacturing batch ID.</field>
+            <field name="description">Upload finished serial numbers for an MES order. The mes_order_id field contains the MES order ID.</field>
         </record>
 
         <record id="endpoint_serial_trace" model="sn.wsd.api.endpoint">

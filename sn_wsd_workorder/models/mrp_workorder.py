@@ -270,7 +270,7 @@ class MrpWorkorder(models.Model):
                 'uom': production.product_uom_id.display_name,
                 'origin': production.origin,
                 'priority': production.priority,
-                'batch': production.x_manufacturing_batch_id.display_name if 'x_manufacturing_batch_id' in production._fields and production.x_manufacturing_batch_id else False,
+                'mes_order': production.x_mes_order_id.display_name if 'x_mes_order_id' in production._fields and production.x_mes_order_id else False,
             },
             'product': self.product_id.display_name,
             'operation_type': self.x_meter_operation_type if 'x_meter_operation_type' in self._fields else False,

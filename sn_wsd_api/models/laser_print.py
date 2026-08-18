@@ -100,7 +100,7 @@ class LaserPrintRecordLine(models.Model):
                 line.serial_no,
                 company=line.company_id,
                 production=production,
-                manufacturing_batch=production.x_manufacturing_batch_id,
+                mes_order=production.x_mes_order_ids[:1],
                 product=production.product_id,
             )
             if not serial:
@@ -110,7 +110,7 @@ class LaserPrintRecordLine(models.Model):
                     'product_id': production.product_id.id,
                     'production_id': production.id,
                     'current_production_id': production.id,
-                    'manufacturing_batch_id': production.x_manufacturing_batch_id.id,
+                    'mes_order_id': production.x_mes_order_ids[:1].id,
                     'company_id': production.company_id.id,
                     'serial_type': 'semifinished',
                     'identity_origin_type': 'laser',
@@ -266,10 +266,12 @@ class MrpProduction(models.Model):
 
     def _api_request_meter_laser_print(self, quantity, drawing_no, operator_code, request_id, source_system, payload, sn_scope):
         self.ensure_one()
-        batch = self.x_manufacturing_batch_id
-        if not batch:
-            raise ValidationError(_('Meter laser printing requires a manufacturing batch.'))
-        archives = batch._generate_laser_internal_serials(self, quantity)
+        mes_order = self.env['sn.wsd.mes.order'].browse(
+            self.env.context.get('mes_order_id')
+        ).exists() or self.x_mes_order_ids[:1]
+        if not mes_order:
+            raise ValidationError(_('Meter laser printing requires an MES order.'))
+        archives = mes_order.action_generate_missing_internal_serials(quantity=quantity)
         line_commands = []
         serial_numbers = []
         for archive in archives:
@@ -295,10 +297,12 @@ class MrpProduction(models.Model):
 
     def _api_request_smt_laser_print(self, quantity, drawing_no, operator_code, request_id, source_system, payload, sn_scope):
         self.ensure_one()
-        batch = self.x_manufacturing_batch_id
-        if not batch:
-            raise ValidationError(_('SMT laser printing requires a manufacturing batch.'))
-        archives = batch._generate_laser_internal_serials(self, quantity)
+        mes_order = self.env['sn.wsd.mes.order'].browse(
+            self.env.context.get('mes_order_id')
+        ).exists() or self.x_mes_order_ids[:1]
+        if not mes_order:
+            raise ValidationError(_('SMT laser printing requires an MES order.'))
+        archives = mes_order.action_generate_missing_internal_serials(quantity=quantity)
         line_commands = []
         serial_numbers = []
         for archive in archives:

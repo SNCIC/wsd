@@ -51,10 +51,10 @@ class MeterComponentBinding(models.Model):
         store=True,
         readonly=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='internal_serial_id.manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='internal_serial_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,

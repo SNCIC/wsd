@@ -39,29 +39,23 @@ class SnSmtPcbPanelApi(models.AbstractModel):
     @api.model
     def _resolve_production(self, product_no):
         """
-        Resolve the active SMT manufacturing order from a manufacturing batch number.
+        Resolve the active SMT manufacturing order from an MES order number.
 
-        :param product_no: Public order number field. The value is the manufacturing batch reference.
+        :param product_no: Public order number field. The value is the MES order reference.
         :return: mrp.production record or False.
         """
         if not product_no:
             return False
-        batch = self.env['sn.wsd.manufacturing.batch'].search([
+        mes_order = self.env['sn.wsd.mes.order'].search([
             ('name', '=', product_no.strip()),
             ('company_id', 'in', self.env.companies.ids),
         ], limit=1)
-        if not batch:
+        if not mes_order:
             return self.env['mrp.production']
-        productions = batch.production_ids.filtered(
-            lambda production: production.state not in ('done', 'cancel') and production.x_has_smt_operations
-        )
-        online = productions._has_online_mes_order()
-        if online:
-            productions = online
-        in_progress = productions.filtered(lambda production: production.state in ('progress', 'to_close'))
-        if in_progress:
-            productions = in_progress
-        return productions.sorted(lambda production: (production.backorder_sequence, production.date_start or fields.Datetime.now(), production.id))[:1]
+        production = mes_order.production_id
+        if production.state in ('done', 'cancel') or not production.x_has_smt_operations:
+            return self.env['mrp.production']
+        return production.with_context(mes_order_id=mes_order.id)
 
     @api.model
     def _normalize_binding_sn_values(self, bindings):
@@ -82,20 +76,14 @@ class SnSmtPcbPanelApi(models.AbstractModel):
         if duplicate_serials:
             raise ValidationError(_('Duplicate board SN values in bindings: %s') % ', '.join(duplicate_serials))
         existing_boards = self.env['sn.smt.pcb.board'].search([
-            ('panel_id.manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id),
-            ('pro_sn', 'in', serial_numbers),
-            '|',
-            ('state', '=', False),
-            ('state', 'not in', ['voided', 'replaced']),
-        ]) if production.x_manufacturing_batch_id else self.env['sn.smt.pcb.board'].search([
-            ('panel_id.production_id', '=', production.id),
+            ('panel_id.mes_order_id', '=', production.env.context.get('mes_order_id')),
             ('pro_sn', 'in', serial_numbers),
             '|',
             ('state', '=', False),
             ('state', 'not in', ['voided', 'replaced']),
         ])
         if existing_boards:
-            raise ValidationError(_('Board SN values are already bound to this manufacturing batch: %s') % ', '.join(sorted(existing_boards.mapped('pro_sn'))))
+            raise ValidationError(_('Board SN values are already bound to this MES order: %s') % ', '.join(sorted(existing_boards.mapped('pro_sn'))))
 
         if not self.env.registry.get('sn.wsd.laser.print.record.line'):
             raise ValidationError(_('SMT panel binding requires laser-generated board SN records.'))
@@ -103,10 +91,7 @@ class SnSmtPcbPanelApi(models.AbstractModel):
             ('record_id.sn_scope', '=', 'smt_pcb_board'),
             ('serial_no', 'in', serial_numbers),
         ]
-        if production.x_manufacturing_batch_id:
-            laser_domain.append(('production_id.x_manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id))
-        else:
-            laser_domain.append(('production_id', '=', production.id))
+        laser_domain.append(('production_id', '=', production.id))
         laser_lines = self.env['sn.wsd.laser.print.record.line'].search(laser_domain)
         laser_lines._ensure_internal_serials()
         laser_line_by_sn = {line.serial_no: line for line in laser_lines}
@@ -140,7 +125,7 @@ class SnSmtPcbPanelApi(models.AbstractModel):
 
         Operation:
         - Create a panel record.
-        - Input fields: manufacturing batch number, panel quantity, PCB item code, and board SN list.
+        - Input fields: MES order number, panel quantity, PCB item code, and board SN list.
         - Link rule: group board records by panel quantity.
         """
         try:
@@ -195,10 +180,10 @@ class SnSmtPcbPanelApi(models.AbstractModel):
                 except (TypeError, ValueError):
                     return self._service_error(400, _('Binding %s has invalid boardNo.') % idx)
 
-            # productNo keeps the external field name, but its value is the manufacturing batch number.
+            # productNo keeps the external field name and carries the MES order number.
             production = self._resolve_production(product_no)
             if not production:
-                return self._service_error(400, _('Manufacturing batch has no active SMT manufacturing order.'))
+                return self._service_error(400, _('MES order has no active SMT manufacturing order.'))
             if production:
                 production._check_smt_pcb_board_capacity(len(bindings))
             binding_scope = self._validate_board_binding_scope(production, bindings)

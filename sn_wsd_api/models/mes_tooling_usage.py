@@ -29,9 +29,9 @@ class MesToolingUsageLog(models.Model):
         index=True,
         check_company=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         ondelete='cascade',
         index=True,
         check_company=True,
@@ -123,7 +123,7 @@ class MesToolingUsageLog(models.Model):
         tooling_sns: list,
         company_id=None,
         production_id=None,
-        manufacturing_batch_id=None,
+        mes_order_id=None,
         workorder_id=None,
         workcenter_id=None,
         serial_number=None,
@@ -140,7 +140,7 @@ class MesToolingUsageLog(models.Model):
         :param tooling_sns: List of tooling SN strings
         :param company_id: Company ID
         :param production_id: Manufacturing order ID
-        :param manufacturing_batch_id: Manufacturing batch ID
+        :param mes_order_id: MES order ID
         :param workorder_id: Work order ID
         :param workcenter_id: Work center ID
         :param serial_number: Product SN
@@ -161,12 +161,16 @@ class MesToolingUsageLog(models.Model):
         internal_serial_id = False
         if serial_number:
             production = self.env['mrp.production'].browse(production_id).exists() if production_id else self.env['mrp.production']
-            manufacturing_batch = self.env['sn.wsd.manufacturing.batch'].browse(manufacturing_batch_id).exists() if manufacturing_batch_id else production.x_manufacturing_batch_id
+            mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id).exists() if mes_order_id else False
+            if not mes_order and production:
+                mes_order = production.x_mes_order_ids.filtered(
+                    lambda order: order.state != 'cancelled'
+                )[:1]
             serial = self.env['sn.wsd.internal.serial'].find_for_manufacturing_context(
                 serial_number,
                 company=company,
                 production=production,
-                manufacturing_batch=manufacturing_batch,
+                mes_order=mes_order,
                 product=production.product_id,
             )
             if serial:
@@ -198,7 +202,7 @@ class MesToolingUsageLog(models.Model):
                 'company_id': company.id,
                 'tooling_id': tooling.id,
                 'production_id': production_id,
-                'manufacturing_batch_id': manufacturing_batch_id,
+                'mes_order_id': mes_order.id if mes_order else False,
                 'workorder_id': workorder_id,
                 'workcenter_id': workcenter_id,
                 'internal_serial_id': internal_serial_id,
@@ -232,7 +236,7 @@ class MesToolingUsageLog(models.Model):
             tooling_sns=tooling_sns,
             company_id=kwargs.get('company_id'),
             production_id=kwargs.get('production_id'),
-            manufacturing_batch_id=kwargs.get('manufacturing_batch_id'),
+            mes_order_id=kwargs.get('mes_order_id'),
             workorder_id=kwargs.get('workorder_id'),
             workcenter_id=kwargs.get('workcenter_id'),
             serial_number=kwargs.get('serial_number'),

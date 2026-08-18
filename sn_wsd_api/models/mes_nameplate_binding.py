@@ -136,7 +136,7 @@ class MesNameplateBinding(models.Model):
             serial_number,
             company=company,
             production=production,
-            manufacturing_batch=production.x_manufacturing_batch_id,
+            mes_order=production.x_mes_order_ids[:1],
             product=production.product_id,
         )
         if not serial:
@@ -360,7 +360,7 @@ class MesPackagingRecord(models.Model):
             serial_number,
             company=self.env['res.company'].browse(company),
             production=production,
-            manufacturing_batch=production.x_manufacturing_batch_id,
+            mes_order=production.x_mes_order_ids[:1],
             product=production.product_id,
         )
         if not serial:
@@ -423,7 +423,7 @@ class MesPackagingRecord(models.Model):
             serial_number,
             company=company,
             production=production,
-            manufacturing_batch=production.x_manufacturing_batch_id,
+            mes_order=production.x_mes_order_ids[:1],
             product=production.product_id,
         )
 
@@ -486,7 +486,6 @@ class MesPackagingRecord(models.Model):
                     'carton',
                     record.company_id,
                     x_wsd_production_id=production,
-                    x_wsd_manufacturing_batch_id=production.x_manufacturing_batch_id,
                     x_wsd_operator_code=record.operator_code,
                 )
             values = {

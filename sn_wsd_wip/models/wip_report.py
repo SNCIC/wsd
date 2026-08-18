@@ -16,9 +16,9 @@ class SnWsdWipSnapshot(models.Model):
         ondelete='cascade',
         check_company=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch', string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id', store=True, readonly=True, index=True,
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order',
+        related='production_id.x_mes_order_id', store=True, readonly=True, index=True,
     )
     company_id = fields.Many2one(
         'res.company',
@@ -92,7 +92,7 @@ class SnWsdWipReport(models.Model):
     _order = 'production_id, step_sequence, workorder_id'
 
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=True)
-    manufacturing_batch_id = fields.Many2one('sn.wsd.manufacturing.batch', string='Manufacturing Batch', readonly=True)
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', readonly=True)
     production_name = fields.Char(string='Manufacturing Reference', readonly=True)
     company_id = fields.Many2one('res.company', string='Company', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
@@ -125,7 +125,7 @@ class SnWsdWipReport(models.Model):
                 SELECT
                     snapshot.id,
                     snapshot.production_id,
-                    snapshot.manufacturing_batch_id,
+                    snapshot.mes_order_id,
                     production.name AS production_name,
                     snapshot.company_id,
                     snapshot.product_id,
@@ -153,13 +153,13 @@ class SnWsdWipReport(models.Model):
         """)
 
 
-class SnWsdWipBatchReport(models.Model):
-    _name = 'sn.wsd.wip.batch.report'
-    _description = 'Manufacturing Batch WIP Report'
+class SnWsdWipMesOrderReport(models.Model):
+    _name = 'sn.wsd.wip.mes.order.report'
+    _description = 'MES Order WIP Report'
     _auto = False
-    _order = 'manufacturing_batch_id, step_sequence, route_step_id'
+    _order = 'mes_order_id, step_sequence, route_step_id'
 
-    manufacturing_batch_id = fields.Many2one('sn.wsd.manufacturing.batch', string='Manufacturing Batch', readonly=True)
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', readonly=True)
     company_id = fields.Many2one('res.company', string='Company', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
     route_id = fields.Many2one('sn.wsd.process.route', string='Process Route', readonly=True)
@@ -184,7 +184,7 @@ class SnWsdWipBatchReport(models.Model):
             CREATE OR REPLACE VIEW {self._table} AS (
                 SELECT
                     MIN(snapshot.id) AS id,
-                    snapshot.manufacturing_batch_id,
+                    snapshot.mes_order_id,
                     MIN(snapshot.company_id) AS company_id,
                     MIN(snapshot.product_id) AS product_id,
                     MIN(snapshot.route_id) AS route_id,
@@ -203,8 +203,8 @@ class SnWsdWipBatchReport(models.Model):
                     SUM(snapshot.wip_qty) AS wip_qty,
                     MAX(snapshot.snapshot_time) AS snapshot_time
                 FROM sn_wsd_wip_snapshot snapshot
-                WHERE snapshot.manufacturing_batch_id IS NOT NULL
-                GROUP BY snapshot.manufacturing_batch_id, snapshot.route_step_id
+                WHERE snapshot.mes_order_id IS NOT NULL
+                GROUP BY snapshot.mes_order_id, snapshot.route_step_id
             )
         """)
 
@@ -216,7 +216,7 @@ class SnWsdWipProductionOverview(models.Model):
     _order = 'production_name, production_id'
 
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', readonly=True)
-    manufacturing_batch_id = fields.Many2one('sn.wsd.manufacturing.batch', string='Manufacturing Batch', readonly=True)
+    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', readonly=True)
     production_name = fields.Char(string='Manufacturing Reference', readonly=True)
     company_id = fields.Many2one('res.company', string='Company', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True)
@@ -238,7 +238,7 @@ class SnWsdWipProductionOverview(models.Model):
                 SELECT
                     MIN(snapshot.id) AS id,
                     snapshot.production_id,
-                    MIN(snapshot.manufacturing_batch_id) AS manufacturing_batch_id,
+                    MIN(snapshot.mes_order_id) AS mes_order_id,
                     MIN(production.name) AS production_name,
                     MIN(snapshot.company_id) AS company_id,
                     MIN(snapshot.product_id) AS product_id,
@@ -388,31 +388,31 @@ class MrpProduction(models.Model):
         }
 
 
-class SnManufacturingBatch(models.Model):
-    _inherit = 'sn.wsd.manufacturing.batch'
+class SnWsdMesOrder(models.Model):
+    _inherit = 'sn.wsd.mes.order'
 
     x_wip_report_line_count = fields.Integer(string='WIP Step Count', compute='_compute_x_wip_summary')
     x_wip_current_total = fields.Float(string='Current WIP Total', compute='_compute_x_wip_summary')
 
     def _compute_x_wip_summary(self):
-        report_model = self.env['sn.wsd.wip.batch.report']
-        for batch in self:
-            lines = report_model.search([('manufacturing_batch_id', '=', batch.id)])
-            batch.x_wip_report_line_count = len(lines)
-            batch.x_wip_current_total = sum(lines.mapped('wip_qty'))
+        report_model = self.env['sn.wsd.wip.mes.order.report']
+        for mes_order in self:
+            lines = report_model.search([('mes_order_id', '=', mes_order.id)])
+            mes_order.x_wip_report_line_count = len(lines)
+            mes_order.x_wip_current_total = sum(lines.mapped('wip_qty'))
 
     def action_refresh_wip_snapshot(self):
-        self.mapped('production_ids').action_refresh_wip_snapshot()
+        self.mapped('production_id').action_refresh_wip_snapshot()
         return True
 
     def action_open_wip_report(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Batch WIP Report',
-            'res_model': 'sn.wsd.wip.batch.report',
+            'name': 'MES Order WIP Report',
+            'res_model': 'sn.wsd.wip.mes.order.report',
             'view_mode': 'graph,list,pivot',
-            'domain': [('manufacturing_batch_id', '=', self.id)],
+            'domain': [('mes_order_id', '=', self.id)],
             'context': {'search_default_group_by_step': 1},
         }
 
@@ -493,4 +493,3 @@ class MrpWorkorder(models.Model):
         result = super().action_meter_scan_complete(*args, **kwargs)
         self.action_refresh_wip_qty_snapshot()
         return result
-

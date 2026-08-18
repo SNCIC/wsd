@@ -86,7 +86,7 @@ class SnSmtTpWizard(models.TransientModel):
             raise UserError(_('The feeder channel does not match the SMT position channel.'))
         if online_material.feeder_spec and feeder.feeder_spec and feeder.feeder_spec != online_material.feeder_spec:
             raise UserError(_('The feeder specification does not match the SMT position requirement.'))
-        self._check_feeder_batch_scope(feeder, self.production_id)
+        self._check_feeder_mes_order_scope(feeder, self.production_id)
         self.feeder_id = feeder
         return feeder
 

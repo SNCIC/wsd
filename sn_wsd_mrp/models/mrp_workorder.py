@@ -4,6 +4,15 @@ from odoo import api, fields, models, _
 class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
 
+    x_mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
+        store=True,
+        readonly=True,
+        index=True,
+        check_company=True,
+    )
     qty_remaining = fields.Float(string='Quantity To Produce')
     qty_ready = fields.Float(string='WIP Quantity')
 
@@ -71,24 +80,6 @@ class MrpWorkorder(models.Model):
         readonly=True,
         index=True,
     )
-    x_manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
-        store=True,
-        readonly=True,
-        index=True,
-        check_company=True,
-    )
-    x_batch_operation_snapshot_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch.operation',
-        string='Batch Operation Snapshot',
-        compute='_compute_x_batch_operation_snapshot_id',
-        store=True,
-        readonly=True,
-        index=True,
-        check_company=True,
-    )
     x_meter_equipment_id = fields.Many2one('maintenance.equipment', string='Meter Equipment', check_company=True)
     x_meter_workcenter_id = fields.Many2one('mrp.workcenter', string='Meter Work Center', check_company=True)
     x_meter_workshop_id = fields.Many2one('sn.mrp.workshop', string='Workshop', check_company=True)
@@ -120,16 +111,6 @@ class MrpWorkorder(models.Model):
         for workorder in self:
             workorder.x_is_smt_operation = workorder.x_meter_operation_type in ('smt', 'dip')
             workorder.x_is_meter_operation = bool(workorder.x_meter_operation_type)
-
-    @api.depends('x_manufacturing_batch_id.operation_snapshot_ids', 'x_route_operation_id')
-    def _compute_x_batch_operation_snapshot_id(self):
-        for workorder in self:
-            snapshot = self.env['sn.wsd.manufacturing.batch.operation']
-            if workorder.x_manufacturing_batch_id and workorder.x_route_operation_id:
-                snapshot = workorder.x_manufacturing_batch_id.operation_snapshot_ids.filtered(
-                    lambda operation: operation.route_operation_id == workorder.x_route_operation_id
-                )[:1]
-            workorder.x_batch_operation_snapshot_id = snapshot
 
     @api.model
     def _infer_meter_operation_type(self, station=False, operation=False):
@@ -330,7 +311,6 @@ class MrpWorkorder(models.Model):
             'barcode': serial_number,
             'product_id': self.product_id.id,
             'production_id': self.production_id.id,
-            'manufacturing_batch_id': self.x_manufacturing_batch_id.id,
             'company_id': self.company_id.id,
             'current_workorder_id': self.id,
             'current_operation_id': self.operation_id.id,
@@ -400,7 +380,6 @@ class MrpWorkorder(models.Model):
                 'carton',
                 self.company_id,
                 x_wsd_production_id=self.production_id,
-                x_wsd_manufacturing_batch_id=self.x_manufacturing_batch_id,
                 x_wsd_operator_code=operator_code,
             )
         existing = self.x_meter_pack_record_ids.filtered(lambda p: p.serial_id == archive)[:1]
@@ -449,4 +428,3 @@ class MrpWorkorder(models.Model):
     def action_meter_sync_packed_production_quantities(self):
         self._meter_sync_packed_production_quantities()
         return True
-

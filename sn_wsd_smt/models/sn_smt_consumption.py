@@ -104,8 +104,8 @@ class SnSmtMaterialConsumption(models.Model):
     )
     serial_no = fields.Char(related='internal_serial_id.serial_no', store=True, readonly=True, index=True)
     production_id = fields.Many2one('mrp.production', required=True, index=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch', related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', related='production_id.x_mes_order_id',
         store=True, readonly=True, index=True,
     )
     workorder_id = fields.Many2one('mrp.workorder', required=True, index=True, check_company=True)

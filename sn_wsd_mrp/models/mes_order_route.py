@@ -36,7 +36,6 @@ class MesOrderRoute(models.Model):
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
     manage_mode = fields.Selection(
-        [('station', 'Station Tracking'), ('report', 'Operation Reporting')],
         related='mes_order_id.x_manage_mode', store=True, index=True,
     )
     route_id = fields.Many2one(

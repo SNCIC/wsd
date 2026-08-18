@@ -18,7 +18,7 @@
         <field name="arch" type="xml">
             <list create="0" delete="0">
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="mes_order_id" optional="show"/>
                 <field name="operation_type"/>
                 <field name="material_lot_id"/>
                 <field name="old_material_lot_id"/>
@@ -45,7 +45,7 @@
         <field name="arch" type="xml">
             <list create="0" delete="0">
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="mes_order_id" optional="show"/>
                 <field name="event_type"/>
                 <field name="message"/>
                 <field name="create_date"/>
@@ -59,7 +59,7 @@
         <field name="arch" type="xml">
             <list create="0" delete="0">
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="mes_order_id" optional="show"/>
                 <field name="action_type"/>
                 <field name="material_lot_id"/>
                 <field name="old_material_lot_id"/>

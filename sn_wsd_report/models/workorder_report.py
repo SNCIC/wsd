@@ -44,9 +44,9 @@ class MrpWorkorderReport(models.Model):
         index=True,
         check_company=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         index=True,
         check_company=True,
     )
@@ -182,8 +182,8 @@ class MrpWorkorderReport(models.Model):
         for record in self:
             if record.workorder_id.production_id != record.production_id:
                 raise ValidationError(_('The selected work order must belong to the selected manufacturing order.'))
-            if record.manufacturing_batch_id and record.production_id.x_manufacturing_batch_id != record.manufacturing_batch_id:
-                raise ValidationError(_('The selected manufacturing order must belong to the selected manufacturing batch.'))
+            if record.mes_order_id and record.production_id not in record.mes_order_id.production_id:
+                raise ValidationError(_('The selected MES order must belong to the selected manufacturing order.'))
 
     @api.constrains('qty_in', 'qty_ok', 'qty_ng', 'qty_scrap', 'qty_repair', 'qty_rework')
     def _check_quantities(self):
@@ -225,12 +225,12 @@ class MrpWorkorderReport(models.Model):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('mrp.workorder.report') or _('New')
-            if not vals.get('manufacturing_batch_id'):
+            if not vals.get('mes_order_id'):
                 workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else self.env['mrp.workorder']
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else workorder.production_id
-                batch = workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id
-                if batch:
-                    vals['manufacturing_batch_id'] = batch.id
+                mes_order = workorder.x_mes_order_id or production.x_mes_order_id
+                if mes_order:
+                    vals['mes_order_id'] = mes_order.id
             payload = vals.get('payload')
             payload_json = vals.get('payload_json')
             if payload_json and not payload:
@@ -322,10 +322,10 @@ class MrpWorkorderReportLine(models.Model):
         store=True,
         readonly=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='report_id.manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='report_id.mes_order_id',
         store=True,
         readonly=True,
     )

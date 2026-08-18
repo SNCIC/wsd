@@ -8,7 +8,7 @@
                 <field name="name"/>
                 <field name="event_time"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="workorder_id"/>
                 <field name="source_type"/>
                 <field name="report_type"/>
@@ -42,7 +42,7 @@
                         <group>
                             <field name="name" readonly="1"/>
                             <field name="production_id"/>
-                            <field name="manufacturing_batch_id"/>
+                            <field name="mes_order_id"/>
                             <field name="workorder_id"/>
                             <field name="operation_id"/>
                             <field name="workcenter_id"/>
@@ -107,7 +107,7 @@
             <search>
                 <field name="name"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="workorder_id"/>
                 <field name="external_event_id"/>
                 <field name="device_id"/>
@@ -117,7 +117,7 @@
                 <filter string="API" name="filter_api" domain="[('source_type', '=', 'api')]"/>
                 <group>
                     <filter string="Work Order" name="group_by_workorder" context="{'group_by': 'workorder_id'}"/>
-                    <filter string="Manufacturing Batch" name="group_by_manufacturing_batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                    <filter string="MES Order" name="group_by_mes_order" context="{'group_by': 'mes_order_id'}"/>
                     <filter string="Source Type" name="group_by_source_type" context="{'group_by': 'source_type'}"/>
                     <filter string="Event Time" name="group_by_event_time" context="{'group_by': 'event_time:day'}"/>
                 </group>

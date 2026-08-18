@@ -14,9 +14,9 @@ class MesTestResultBase(models.Model):
     internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Internal Serial', required=True, ondelete='cascade', index=True, check_company=True)
     product_id = fields.Many2one(related='internal_serial_id.product_id', store=True, index=True)
     production_id = fields.Many2one('mrp.production', ondelete='set null', index=True, check_company=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         ondelete='set null',
         index=True,
         check_company=True,
@@ -118,12 +118,15 @@ class MesTestResultBase(models.Model):
             serial_number,
             company=production.company_id or workorder.company_id,
             production=production,
-            manufacturing_batch=workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id,
+            mes_order=(
+                workorder.x_mes_order_id
+                if 'x_mes_order_id' in workorder._fields else False
+            ),
             product=production.product_id or workorder.product_id,
         )
         if not serial:
             return self._mes_error('serial_not_found', serial_number=serial_number)
-        manufacturing_batch = serial.manufacturing_batch_id or workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id
+        mes_order = serial.mes_order_id
         test_dt = fields.Datetime.to_datetime(test_time) if test_time else fields.Datetime.now()
         travel_result = 'pass' if result == 'pass' else 'fail' if result == 'fail' else 'hold'
         production_line = workcenter.x_production_line_id or workorder.x_meter_production_line_id
@@ -154,7 +157,7 @@ class MesTestResultBase(models.Model):
         record = self.create({
             'internal_serial_id': serial.id,
             'production_id': production.id if production else False,
-            'manufacturing_batch_id': manufacturing_batch.id if manufacturing_batch else False,
+            'mes_order_id': mes_order.id if mes_order else False,
             'workorder_id': workorder.id if workorder else False,
             'workcenter_id': workcenter.id if workcenter else workorder.workcenter_id.id if workorder and workorder.workcenter_id else False,
             'workshop_id': workshop.id if workshop else False,

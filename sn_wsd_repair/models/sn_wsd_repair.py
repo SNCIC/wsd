@@ -92,9 +92,9 @@ class SnWsdRepairOrder(models.Model):
         index=True,
         tracking=True,
     )
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
         check_company=True,
         index=True,
         tracking=True,
@@ -213,15 +213,11 @@ class SnWsdRepairOrder(models.Model):
     def _get_serial_manufacturing_context(self, serial):
         workorder = serial.current_workorder_id
         production = workorder.production_id or serial.current_production_id or serial.production_id
-        manufacturing_batch = (
-            serial.manufacturing_batch_id
-            or workorder.x_manufacturing_batch_id
-            or production.x_manufacturing_batch_id
-        )
+        mes_order = serial.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
         return {
             'serial_id': serial,
             'production_id': production,
-            'manufacturing_batch_id': manufacturing_batch,
+            'mes_order_id': mes_order,
             'workorder_id': workorder,
             'current_process_step_id': workorder.x_route_operation_id,
         }
@@ -268,7 +264,7 @@ class SnWsdRepairOrder(models.Model):
             if not record.workorder_id:
                 continue
             record.production_id = record.workorder_id.production_id
-            record.manufacturing_batch_id = record.workorder_id.x_manufacturing_batch_id
+            record.mes_order_id = record.workorder_id.x_mes_order_id
             record.current_process_step_id = record.workorder_id.x_route_operation_id
             if record.repair_entry_step_id and record.repair_entry_step_id.route_id != record.production_id.x_route_id:
                 record.repair_entry_step_id = False
@@ -326,13 +322,13 @@ class SnWsdRepairOrder(models.Model):
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.repair.order') or _('New')
-            if not vals.get('manufacturing_batch_id'):
+            if not vals.get('mes_order_id'):
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('serial_id')).exists() if vals.get('serial_id') else self.env['sn.wsd.internal.serial']
                 workorder = self.env['mrp.workorder'].browse(vals.get('workorder_id')).exists() if vals.get('workorder_id') else serial.current_workorder_id
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else serial.production_id or workorder.production_id
-                batch = serial.manufacturing_batch_id or workorder.x_manufacturing_batch_id or production.x_manufacturing_batch_id
-                if batch:
-                    vals['manufacturing_batch_id'] = batch.id
+                mes_order = serial.mes_order_id or workorder.x_mes_order_id or production.x_mes_order_id
+                if mes_order:
+                    vals['mes_order_id'] = mes_order.id
             repair_type = self.env['sn.wsd.repair.type'].browse(vals.get('repair_type_id'))
             if repair_type.mode == 'qty':
                 vals['serial_id'] = False
@@ -407,8 +403,8 @@ class SnWsdRepairOrder(models.Model):
             else:
                 if not record.workorder_id:
                     raise UserError(_('Quantity repair must be linked to the current work order.'))
-                if not record.manufacturing_batch_id:
-                    record.manufacturing_batch_id = record.workorder_id.x_manufacturing_batch_id
+                if not record.mes_order_id:
+                    record.mes_order_id = record.workorder_id.x_mes_order_id
                 if record.repair_qty > record.defect_qty:
                     raise UserError(_('The repair quantity must be less than or equal to the defect quantity.'))
 
@@ -435,7 +431,7 @@ class SnWsdRepairOrder(models.Model):
         step = self.repair_entry_step_id
         if not step or not self.production_id:
             return self.env['mrp.workorder']
-        productions = self.manufacturing_batch_id.production_ids if self.manufacturing_batch_id else self.production_id
+        productions = self.production_id
         return productions.mapped('workorder_ids').filtered(lambda workorder: workorder.x_route_operation_id == step)[:1]
 
     def _get_repair_entry_workorder_or_raise(self):
@@ -565,7 +561,7 @@ class InternalSerial(models.Model):
                 'default_serial_id': self.id,
                 'default_serial_no': self.serial_no,
                 'default_production_id': production.id,
-                'default_manufacturing_batch_id': self.manufacturing_batch_id.id,
+                'default_mes_order_id': self.mes_order_id.id,
                 'default_workorder_id': self.current_workorder_id.id,
                 'default_current_process_step_id': self.current_workorder_id.x_route_operation_id.id,
             },
@@ -584,7 +580,7 @@ class InternalSerial(models.Model):
                 'default_serial_id': self.id,
                 'default_serial_no': self.serial_no,
                 'default_production_id': production.id,
-                'default_manufacturing_batch_id': self.manufacturing_batch_id.id,
+                'default_mes_order_id': self.mes_order_id.id,
                 'default_workorder_id': self.current_workorder_id.id,
                 'default_current_process_step_id': self.current_workorder_id.x_route_operation_id.id,
                 'default_repair_qty': 1.0,

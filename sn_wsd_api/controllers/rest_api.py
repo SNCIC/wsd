@@ -305,11 +305,11 @@ class SnWsdRestApiController(http.Controller):
         body, error = self._body_or_error()
         if error:
             return error
-        if not self._has_value(body, 'production_id', 'productionId'):
-            return self._required_error(['production_id'])
+        if not self._has_value(body, 'mes_order_id', 'mesOrderId'):
+            return self._required_error(['mes_order_id'])
         try:
             result = self._service().upload_finished_serials(
-                production_id=self._as_int(body.get('production_id') or body.get('productionId')),
+                mes_order_id=self._as_int(body.get('mes_order_id') or body.get('mesOrderId')),
                 serials=body.get('serials') or [],
                 source_system=body.get('source_system') or body.get('sourceSystem'),
             )

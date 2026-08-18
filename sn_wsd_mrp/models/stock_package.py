@@ -24,9 +24,6 @@ class StockPackage(models.Model):
     x_wsd_production_id = fields.Many2one(
         'mrp.production', string='Manufacturing Order', index=True, check_company=True, copy=False,
     )
-    x_wsd_manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch', string='Manufacturing Batch', index=True, check_company=True, copy=False,
-    )
     x_wsd_pack_time = fields.Datetime(copy=False, index=True)
     x_wsd_close_time = fields.Datetime(copy=False, index=True)
     x_wsd_operator_code = fields.Char(copy=False, index=True)

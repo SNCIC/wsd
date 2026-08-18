@@ -9,7 +9,6 @@
         'report/internal_serial_label_templates.xml',
         'report/internal_serial_label_reports.xml',
         'views/internal_serial_views.xml',
-        'views/manufacturing_batch_views.xml',
     ],
     'installable': True,
     'application': False,

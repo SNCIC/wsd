@@ -10,6 +10,7 @@
                 <field name="serial_type"/>
                 <field name="product_id"/>
                 <field name="production_id"/>
+                <field name="mes_order_id" optional="show"/>
                 <field name="final_result"/>
                 <field name="current_workorder_id"/>
                 <field name="current_workcenter_id"/>
@@ -36,6 +37,7 @@
                             <field name="barcode"/>
                             <field name="product_id"/>
                             <field name="production_id"/>
+                            <field name="mes_order_id"/>
                             <field name="current_workorder_id"/>
                             <field name="current_operation_id"/>
                             <field name="current_workcenter_id"/>

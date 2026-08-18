@@ -27,6 +27,6 @@ class StockScrapReason(models.Model):
     _inherit = 'stock.scrap'
 
     x_scrap_reason_id = fields.Many2one(
-        'sn.wsd.scrap.reason', string='Scrap Reason', index=True,
+        'sn.wsd.scrap.reason', string='MES Scrap Reason', index=True,
         ondelete='set null',
     )

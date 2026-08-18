@@ -284,12 +284,6 @@
         </field>
     </record>
 
-    <!-- Shop Terminal action/menu superseded by the 车间 module
-         (sn_wsd_workorder full-screen terminal): purge them from
-         existing databases, keep the kanban view for MES Orders -->
-    <delete model="ir.ui.menu" id="menu_sn_wsd_mes_shop_terminal"/>
-    <delete model="ir.actions.act_window" id="action_sn_wsd_mes_shop_terminal"/>
-
     <!-- Dedicated MES orders page: flat read-only list of every order -->
     <record id="action_sn_wsd_mes_orders" model="ir.actions.act_window">
         <field name="name">MES Orders</field>

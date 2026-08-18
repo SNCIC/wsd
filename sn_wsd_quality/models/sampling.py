@@ -29,7 +29,7 @@ LOT_QTY_SOURCE_SELECTION = [
     ('manual', 'Manual'),
     ('move_line', 'Operation Line Quantity'),
     ('picking_product', 'Transfer Product Quantity'),
-    ('manufacturing_batch', 'Manufacturing Batch Quantity'),
+    ('mes_order', 'MES Order Quantity'),
     ('production', 'Manufacturing Order Quantity'),
     ('workorder_output', 'Work Order Output Quantity'),
 ]
@@ -469,16 +469,13 @@ class QualityInspectionScheme(models.Model):
                 return 0
             lines = picking.move_line_ids.filtered(lambda line: line.product_id == product and line.quantity > 0)
             return int(round(sum(lines.mapped('quantity'))))
-        if source == 'manufacturing_batch':
-            batch = self.env['sn.wsd.manufacturing.batch'].browse(values.get('manufacturing_batch_id')).exists()
-            if batch:
-                serial_count = len(batch._get_active_internal_serials()) if hasattr(batch, '_get_active_internal_serials') else 0
-                return serial_count or int(round(batch.planned_qty or batch.produced_qty or 0.0))
-            production = self.env['mrp.production'].browse(values.get('production_id')).exists()
-            batch = production.x_manufacturing_batch_id if production else self.env['sn.wsd.manufacturing.batch']
-            if batch:
-                serial_count = len(batch._get_active_internal_serials()) if hasattr(batch, '_get_active_internal_serials') else 0
-                return serial_count or int(round(batch.planned_qty or batch.produced_qty or 0.0))
+        if source == 'mes_order':
+            mes_order = self.env['sn.wsd.mes.order'].browse(values.get('mes_order_id')).exists()
+            if mes_order:
+                serial_count = len(mes_order.internal_serial_ids.filtered(
+                    lambda serial: serial.active and not serial.is_confirmed_scrapped()
+                ))
+                return serial_count or int(round(mes_order.planned_qty or 0.0))
             return 0
         if source == 'production':
             production = self.env['mrp.production'].browse(values.get('production_id')).exists()
@@ -662,8 +659,8 @@ class QualityInspection(models.Model):
         self.ensure_one()
         serial_model = self.env['sn.wsd.internal.serial'].with_context(active_test=False)
         domain = [('active', '=', True)]
-        if self.manufacturing_batch_id:
-            domain.append(('manufacturing_batch_id', '=', self.manufacturing_batch_id.id))
+        if self.mes_order_id:
+            domain.append(('mes_order_id', '=', self.mes_order_id.id))
         elif self.production_id:
             domain.append(('production_id', '=', self.production_id.id))
         else:

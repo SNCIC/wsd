@@ -96,7 +96,7 @@ class EnhancedScanPassService(models.AbstractModel):
             tooling_sns=tooling_sns,
             company_id=company_id,
             production_id=production_id,
-            manufacturing_batch_id=self.env['mrp.production'].browse(production_id).x_manufacturing_batch_id.id if production_id else False,
+            mes_order_id=self.env['mrp.production'].browse(production_id).x_mes_order_ids[:1].id if production_id else False,
             workorder_id=workorder_id,
             workcenter_id=workcenter_id,
             serial_number=serial_number,
@@ -243,7 +243,7 @@ class EnhancedScanPassService(models.AbstractModel):
         workorder = self._resolve_scan_workorder(payload)
         if not workorder:
             return self._aoi_error(
-                'Active work order not found for the manufacturing batch and work center.',
+                'Active work order not found for the MES order and work center.',
                 M_MO_NUMBER=self._get_first_payload_value(payload, 'M_MO_NUMBER'),
                 M_WORK_STATIONSN=station_code,
             )
@@ -266,12 +266,12 @@ class EnhancedScanPassService(models.AbstractModel):
             )
         
         production_id = workorder.production_id.id if workorder.production_id else None
-        manufacturing_batch_id = workorder.x_manufacturing_batch_id.id if workorder.x_manufacturing_batch_id else None
+        mes_order_id = workorder.env.context.get('mes_order_id') or workorder.production_id.x_mes_order_ids[:1].id
         workcenter_id = work_center.id
         
         extra_context = {
             'company_id': company.id,
-            'manufacturing_batch_id': manufacturing_batch_id,
+            'mes_order_id': mes_order_id,
             'workorder_id': workorder.id,
             'workcenter_id': workcenter_id,
             'operator_code': operator_code,

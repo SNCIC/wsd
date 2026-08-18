@@ -8,7 +8,6 @@
         'views/wip_report_views.xml',
         'views/mrp_production_views.xml',
         'views/mrp_workorder_views.xml',
-        'views/manufacturing_batch_views.xml',
     ],
     'installable': True,
     'application': False,

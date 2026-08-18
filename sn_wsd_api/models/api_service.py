@@ -160,7 +160,7 @@ class SnWsdApiService(models.AbstractModel):
         return self._get_payload_value(payload, field_name)
 
     @api.model
-    def _get_manufacturing_batch_no(self, payload: dict | None):
+    def _get_mes_order_no(self, payload: dict | None):
         return self._get_first_payload_value(
             payload,
             'workOrderNo',
@@ -171,19 +171,19 @@ class SnWsdApiService(models.AbstractModel):
         )
 
     @api.model
-    def _find_manufacturing_batch(self, batch_no: str | None):
-        if not batch_no:
-            return self.env['sn.wsd.manufacturing.batch']
-        return self.env['sn.wsd.manufacturing.batch'].sudo().search([
-            ('name', '=', batch_no),
+    def _find_mes_order(self, order_no: str | None):
+        if not order_no:
+            return self.env['sn.wsd.mes.order']
+        return self.env['sn.wsd.mes.order'].sudo().search([
+            ('name', '=', order_no),
             ('company_id', 'in', self.env.companies.ids),
         ], limit=1)
 
     @api.model
-    def _select_batch_production(self, batch, *, workcenter=False, smt_required=False, meter_required=False):
-        if not batch:
+    def _select_mes_order_production(self, mes_order, *, workcenter=False, smt_required=False, meter_required=False):
+        if not mes_order:
             return self.env['mrp.production']
-        candidates = batch.production_ids.filtered(lambda production: production.state not in ('done', 'cancel'))
+        candidates = mes_order.production_id.filtered(lambda production: production.state not in ('done', 'cancel'))
         if smt_required:
             candidates = candidates.filtered('x_has_smt_operations')
         if meter_required:
@@ -205,9 +205,13 @@ class SnWsdApiService(models.AbstractModel):
         return candidates.sorted(lambda production: (production.backorder_sequence, production.date_start or fields.Datetime.now(), production.id))[:1]
 
     @api.model
-    def _find_production_by_batch_no(self, batch_no: str | None, *, smt_required=False, meter_required=False):
-        batch = self._find_manufacturing_batch(batch_no)
-        return self._select_batch_production(batch, smt_required=smt_required, meter_required=meter_required) if batch else self.env['mrp.production']
+    def _find_production_by_mes_order_no(self, order_no: str | None, *, smt_required=False, meter_required=False):
+        mes_order = self._find_mes_order(order_no)
+        return self._select_mes_order_production(
+            mes_order,
+            smt_required=smt_required,
+            meter_required=meter_required,
+        ) if mes_order else self.env['mrp.production']
 
     @api.model
     def _scan_company_from_payload(self, payload: dict | None):
@@ -289,7 +293,7 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def get_productions_by_work_order(self, payload: dict) -> dict:
-        batch_keyword = (
+        order_keyword = (
             self._get_payload_value(payload, 'keyword')
             or self._get_payload_value(payload, 'manufacturing_order_keyword')
             or self._get_payload_value(payload, 'manufacturingOrderKeyword')
@@ -297,13 +301,13 @@ class SnWsdApiService(models.AbstractModel):
             or self._get_payload_value(payload, 'manufacturingOrderNo')
             or self._get_payload_value(payload, 'work_order')
         )
-        if not batch_keyword:
+        if not order_keyword:
             return self._external_error(MSG_PARAM_EMPTY, data=[])
-        batches = self.env['sn.wsd.manufacturing.batch'].sudo().search([
-            ('name', 'ilike', batch_keyword),
+        orders = self.env['sn.wsd.mes.order'].sudo().search([
+            ('name', 'ilike', order_keyword),
             ('company_id', 'in', self.env.companies.ids),
         ], order='create_date desc, id desc', limit=50)
-        return self._external_success(data=batches.mapped('name'))
+        return self._external_success(data=orders.mapped('name'))
 
     @api.model
     def get_workcenters_by_name(self, payload: dict) -> dict:
@@ -368,7 +372,7 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def _find_laser_production(self, work_order_no: str):
-        return self._find_production_by_batch_no(work_order_no)
+        return self._find_production_by_mes_order_no(work_order_no)
 
     @api.model
     def _prepare_laser_record_response_data(self, record, duplicated=False) -> dict:
@@ -390,9 +394,7 @@ class SnWsdApiService(models.AbstractModel):
         work_order_no = payload.get('workOrderNo')
         production = self._find_laser_production(work_order_no)
         if not production:
-            return self._laser_error('Manufacturing batch not found.')
-        if not production.x_manufacturing_batch_id:
-            return self._laser_error('Manufacturing order is not linked to a manufacturing batch.')
+            return self._laser_error('MES order not found.')
 
         metadata_payload = self._prepare_payload_metadata(
             payload=payload,
@@ -728,26 +730,28 @@ class SnWsdApiService(models.AbstractModel):
         )
         if not production:
             return self._service_ok({
-                'manufacturing_batch': False,
+                'mes_order': False,
                 'production': False,
                 'workorder': False,
             })
         workorder = production._get_current_online_workorder(workcenter=workcenter)
-        batch = production.x_manufacturing_batch_id
+        mes_order = production.x_mes_order_ids.filtered(
+            lambda order: order.state not in ('cancelled', 'done')
+        )[:1]
         return self._service_ok({
-            'manufacturing_batch': {
-                'id': batch.id,
-                'name': batch.name,
-                'product_id': batch.product_id.id,
-                'product_name': batch.product_id.display_name,
-                'planned_qty': batch.planned_qty,
-                'state': batch.state,
-            } if batch else False,
+            'mes_order': {
+                'id': mes_order.id,
+                'name': mes_order.name,
+                'product_id': mes_order.product_id.id,
+                'product_name': mes_order.product_id.display_name,
+                'planned_qty': mes_order.planned_qty,
+                'state': mes_order.state,
+            } if mes_order else False,
             'production': {
                 'id': production.id,
                 'name': production.name,
-                'manufacturing_batch_id': batch.id if batch else False,
-                'manufacturing_batch_no': batch.name if batch else False,
+                'mes_order_id': mes_order.id if mes_order else False,
+                'mes_order_no': mes_order.name if mes_order else False,
                 'product_id': production.product_id.id,
                 'product_name': production.product_id.display_name,
                 'workshop_id': production.x_workshop_id.id if production.x_workshop_id else False,
@@ -779,35 +783,27 @@ class SnWsdApiService(models.AbstractModel):
         return self.env['mrp.workcenter'].sudo().with_context(active_test=False).search(domain, limit=1)
 
     @api.model
-    def _find_scan_production(self, manufacturing_batch_no: str | None, workcenter=None):
-        if not manufacturing_batch_no:
+    def _find_scan_production(self, mes_order_no: str | None, workcenter=None):
+        if not mes_order_no:
             return self.env['mrp.production']._get_current_online_production(workcenter=workcenter)
-        batch = self.env['sn.wsd.manufacturing.batch'].sudo().search([
-            ('name', '=', manufacturing_batch_no),
-            ('company_id', 'in', self.env.companies.ids),
-        ], limit=1)
-        if not batch:
+        mes_order = self._find_mes_order(mes_order_no)
+        if not mes_order:
             return self.env['mrp.production']
-        candidates = batch.production_ids.filtered(
-            lambda production: production.state in ('confirmed', 'progress', 'to_close')
+        production = mes_order.production_id
+        if production.state in ('done', 'cancelled', 'cancel'):
+            return self.env['mrp.production']
+        candidates = production.workorder_ids.filtered(
+            lambda workorder: workorder.state in ('ready', 'progress')
         )
         if workcenter:
             candidates = candidates.filtered(
-                lambda production: any(
-                    workorder.state in ('ready', 'progress')
-                    and workcenter in (workorder.x_mes_workcenter_id | workorder.workcenter_id)
-                    for workorder in production.workorder_ids
+                lambda workorder: workcenter in (
+                    workorder.x_mes_workcenter_id | workorder.workcenter_id
                 )
             )
         if not candidates:
             return self.env['mrp.production']
-        online = candidates._has_online_mes_order()
-        if online:
-            candidates = online
-        in_progress = candidates.filtered(lambda production: production.state in ('progress', 'to_close'))
-        if in_progress:
-            candidates = in_progress
-        return candidates.sorted(lambda production: (production.backorder_sequence, production.id))[:1]
+        return production.with_context(mes_order_id=mes_order.id)
 
     @api.model
     def _resolve_scan_workorder(self, payload: dict):
@@ -818,10 +814,10 @@ class SnWsdApiService(models.AbstractModel):
         workcenter = self._find_scan_workcenter(station_code, company=company) if station_code else self.env['mrp.workcenter']
         if not workcenter:
             return self.env['mrp.workorder']
-        manufacturing_batch_no = self._scan_payload_value(payload, 'M_MO_NUMBER')
+        mes_order_no = self._scan_payload_value(payload, 'M_MO_NUMBER')
         serial_number = self._scan_payload_value(payload, 'M_SN')
-        production = self._find_scan_production(manufacturing_batch_no, workcenter=workcenter) if manufacturing_batch_no else self.env['mrp.production']
-        if manufacturing_batch_no and not production:
+        production = self._find_scan_production(mes_order_no, workcenter=workcenter) if mes_order_no else self.env['mrp.production']
+        if mes_order_no and not production:
             return self.env['mrp.workorder']
         if production:
             workorder = production._get_current_online_workorder(workcenter=workcenter)
@@ -1016,10 +1012,10 @@ class SnWsdApiService(models.AbstractModel):
         serial = self._find_internal_serial_for_workorder(serial_number, workorder)
         if serial:
             return serial, False, False
-        has_explicit_batch = bool(self._get_first_payload_value(payload, 'M_MO_NUMBER'))
-        if not has_explicit_batch:
+        has_explicit_mes_order = bool(self._get_first_payload_value(payload, 'M_MO_NUMBER'))
+        if not has_explicit_mes_order:
             return serial, False, self._aoi_error(
-                'Serial stage was not found. Manufacturing batch number is required at an entry operation.',
+                'Serial stage was not found. MES order number is required at an entry operation.',
                 error_code='serial_stage_not_found',
                 serial_number=serial_number,
             )
@@ -1070,20 +1066,20 @@ class SnWsdApiService(models.AbstractModel):
                 expected_product_id=workorder.product_id.id,
                 actual_product_id=serial.product_id.id,
             )
-        workorder_batch = workorder.x_manufacturing_batch_id
-        if serial.manufacturing_batch_id and workorder_batch and serial.manufacturing_batch_id != workorder_batch:
+        mes_order = self.env['sn.wsd.mes.order'].browse(
+            workorder.env.context.get('mes_order_id')
+        ).exists() if workorder.env.context.get('mes_order_id') else self.env['sn.wsd.mes.order']
+        if mes_order and serial.mes_order_id and serial.mes_order_id != mes_order:
             return serial, self._aoi_error(
-                'Serial number manufacturing batch does not match the work order batch.',
-                error_code='serial_batch_mismatch',
+                'Serial number MES order does not match the work order.',
+                error_code='serial_mes_order_mismatch',
                 serial_number=serial_number,
-                expected_manufacturing_batch_id=workorder_batch.id,
-                actual_manufacturing_batch_id=serial.manufacturing_batch_id.id,
+                expected_mes_order_id=mes_order.id,
+                actual_mes_order_id=serial.mes_order_id.id,
             )
-        serial_production_batch = serial.production_id.x_manufacturing_batch_id if serial.production_id else self.env['sn.wsd.manufacturing.batch']
         if (
             serial.production_id
             and serial.production_id != workorder.production_id
-            and not (workorder_batch and serial_production_batch == workorder_batch)
         ):
             return serial, self._aoi_error(
                 'Serial number manufacturing order does not match the work order.',
@@ -1092,11 +1088,9 @@ class SnWsdApiService(models.AbstractModel):
                 expected_production_id=workorder.production_id.id,
                 actual_production_id=serial.production_id.id,
             )
-        serial_current_production_batch = serial.current_production_id.x_manufacturing_batch_id if serial.current_production_id else self.env['sn.wsd.manufacturing.batch']
         if (
             serial.current_production_id
             and serial.current_production_id != workorder.production_id
-            and not (workorder_batch and serial_current_production_batch == workorder_batch)
         ):
             return serial, self._aoi_error(
                 'Serial number current manufacturing order does not match the work order.',
@@ -1159,7 +1153,7 @@ class SnWsdApiService(models.AbstractModel):
     def _find_scan_repair_workorder(self, serial, source_workorder):
         if not serial or not source_workorder:
             return self.env['mrp.workorder']
-        productions = source_workorder.x_manufacturing_batch_id.production_ids if source_workorder.x_manufacturing_batch_id else source_workorder.production_id
+        productions = source_workorder.production_id
         workorders = productions.mapped('workorder_ids').filtered(
             lambda workorder: (
                 workorder.state not in ('done', 'cancel')
@@ -1249,7 +1243,7 @@ class SnWsdApiService(models.AbstractModel):
         workorder = self._resolve_scan_workorder(payload)
         if not workorder:
             return self._aoi_error(
-                'Active work order not found for the manufacturing batch and work center.',
+                'Active work order not found for the MES order and work center.',
                 M_MO_NUMBER=self._get_first_payload_value(payload, 'M_MO_NUMBER'),
                 M_WORK_STATIONSN=station_code,
             )
@@ -1261,7 +1255,9 @@ class SnWsdApiService(models.AbstractModel):
         if serial_error:
             return serial_error
 
-        manufacturing_batch_id = workorder.x_manufacturing_batch_id.id if workorder.x_manufacturing_batch_id else False
+        mes_order = self._find_mes_order(
+            self._scan_payload_value(payload, 'M_MO_NUMBER')
+        )
         external_event_id = self._resolve_scan_external_event_id(payload)
         note = self._scan_test_detail_note(payload)
         metadata_payload = self._prepare_payload_metadata(
@@ -1315,7 +1311,7 @@ class SnWsdApiService(models.AbstractModel):
                 'serial_number': serial_number,
                 'workorder_id': workorder.id,
                 'production_id': workorder.production_id.id,
-                'manufacturing_batch_id': manufacturing_batch_id,
+                'mes_order_id': mes_order.id if mes_order else False,
                 'workcenter_id': workcenter.id,
                 'workcenter_code': workcenter.code,
                 'result': normalized_result,
@@ -1531,7 +1527,7 @@ class SnWsdApiService(models.AbstractModel):
     @api.model
     def upload_finished_serials(
         self,
-        production_id: int | None,
+        mes_order_id: int | None,
         serials: list[dict] | list[str],
         source_system: str | None = None,
     ) -> dict:
@@ -1542,26 +1538,25 @@ class SnWsdApiService(models.AbstractModel):
         Each item may either be a plain serial string or a mapping with
         keys such as ``serial_no`` and ``panel_no``.
 
-        :param production_id: Manufacturing batch ID. The public field name is kept for device compatibility.
+        :param mes_order_id: MES order ID.
         :param serials: Serial list to upload. Example:
             ``[{'panel_no': 'PANEL001', 'serial_no': 'SN001'}]``.
         :param source_system: External source system name.
         :returns: Upload result containing manufacturing, lot, and archive IDs.
         """
-        batch = self.env['sn.wsd.manufacturing.batch'].browse(production_id).exists() if production_id else self.env['sn.wsd.manufacturing.batch']
-        production = self._select_batch_production(batch, smt_required=True) if batch else self.env['mrp.production']
+        mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id).exists() if mes_order_id else self.env['sn.wsd.mes.order']
+        production = self._select_mes_order_production(mes_order, smt_required=True) if mes_order else self.env['mrp.production']
         if not production:
             return self._service_error(
                 'production_not_found',
-                'SMT manufacturing order was not found for the manufacturing batch.',
-                manufacturing_batch_id=production_id or False,
-                production_id=production_id or False,
+                'SMT manufacturing order was not found for the MES order.',
+                mes_order_id=mes_order_id or False,
             )
         result = production.api_upload_finished_serials(serials)
         data = dict(result)
         data.update({
-            'manufacturing_batch_id': production.x_manufacturing_batch_id.id if production.x_manufacturing_batch_id else False,
-            'manufacturing_batch_no': production.x_manufacturing_batch_id.name if production.x_manufacturing_batch_id else False,
+            'mes_order_id': mes_order.id if mes_order else False,
+            'mes_order_no': mes_order.name if mes_order else False,
         })
         if source_system:
             data['source_system'] = source_system
@@ -1617,7 +1612,7 @@ class SnWsdApiService(models.AbstractModel):
                     'product_id': archive.product_id.id,
                     'product_name': archive.product_id.display_name,
                     'production_id': archive.production_id.id,
-                    'manufacturing_batch_id': archive.manufacturing_batch_id.id,
+                    'mes_order_id': archive.mes_order_id.id,
                     'state': archive.final_result or 'pending',
                     'final_result': archive.final_result,
                     'active': archive.active,

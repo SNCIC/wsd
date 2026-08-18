@@ -7,7 +7,7 @@
             <list create="0">
                 <field name="event_time"/>
                 <field name="internal_serial_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="component_type"/>
                 <field name="event_type"/>
                 <field name="state"/>
@@ -35,7 +35,7 @@
                             <field name="internal_serial_id"/>
                             <field name="internal_serial_id"/>
                             <field name="production_id"/>
-                            <field name="manufacturing_batch_id"/>
+                            <field name="mes_order_id"/>
                             <field name="workorder_id"/>
                             <field name="workcenter_id"/>
                         </group>

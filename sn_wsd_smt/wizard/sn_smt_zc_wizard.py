@@ -43,7 +43,7 @@ class SnSmtZcWizard(models.TransientModel):
             raise UserError(_('The target manufacturing order must be different from the current manufacturing order.'))
         if self.production_id.company_id != self.target_production_id.company_id:
             raise UserError(_('Changeover aborted.'))
-        self._check_same_manufacturing_batch(self.production_id, self.target_production_id)
+        self._check_same_mes_order(self.production_id, self.target_production_id)
         if not self.target_production_id.x_smt_production_line_id:
             self.target_production_id.x_smt_production_line_id = self.production_id.x_smt_production_line_id
         if not self.target_production_id.x_smt_product_side:

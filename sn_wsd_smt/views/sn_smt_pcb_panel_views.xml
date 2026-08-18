@@ -13,7 +13,7 @@
                 <field name="board_count"/>
                 <field name="state"/>
                 <field name="production_name"/>
-                <field name="manufacturing_batch_id" optional="show"/>
+                <field name="mes_order_id" optional="show"/>
             </list>
         </field>
     </record>
@@ -40,7 +40,7 @@
                         </group>
                         <group>
                             <field name="production_id" readonly="1"/>
-                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
                             <field name="state" readonly="1"/>
                         </group>
                     </group>

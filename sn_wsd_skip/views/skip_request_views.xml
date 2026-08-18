@@ -8,7 +8,7 @@
                 <field name="name"/>
                 <field name="state"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="product_id"/>
                 <field name="route_id"/>
                 <field name="applicant_id"/>
@@ -41,7 +41,7 @@
                     <group>
                         <group>
                             <field name="production_id" readonly="state != 'draft'"/>
-                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
                             <field name="product_id" readonly="1"/>
                             <field name="route_id" readonly="1"/>
                             <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
@@ -101,7 +101,7 @@
             <search string="Skip Requests">
                 <field name="name"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="product_id"/>
                 <field name="route_id"/>
                 <field name="applicant_id"/>
@@ -112,7 +112,7 @@
                 <separator/>
                 <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                 <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
-                <filter string="Manufacturing Batch" name="group_by_manufacturing_batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                <filter string="MES Order" name="group_by_mes_order" context="{'group_by': 'mes_order_id'}"/>
                 <filter string="Applicant" name="group_by_applicant" context="{'group_by': 'applicant_id'}"/>
                 <filter string="Request Date" name="group_by_request_date" context="{'group_by': 'request_date:day'}"/>
             </search>

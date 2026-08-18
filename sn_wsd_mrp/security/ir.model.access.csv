@@ -1,9 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sn_wsd_internal_serial_user,sn.wsd.internal.serial user,model_sn_wsd_internal_serial,base.group_user,1,1,1,1
-access_sn_wsd_manufacturing_batch_user,sn.wsd.manufacturing.batch user,model_sn_wsd_manufacturing_batch,mrp.group_mrp_user,1,1,1,0
-access_sn_wsd_manufacturing_batch_manager,sn.wsd.manufacturing.batch manager,model_sn_wsd_manufacturing_batch,mrp.group_mrp_manager,1,1,1,1
-access_sn_wsd_manufacturing_batch_operation_user,sn.wsd.manufacturing.batch.operation user,model_sn_wsd_manufacturing_batch_operation,mrp.group_mrp_user,1,1,1,0
-access_sn_wsd_manufacturing_batch_operation_manager,sn.wsd.manufacturing.batch.operation manager,model_sn_wsd_manufacturing_batch_operation,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_meter_aging_batch_user,sn.wsd.meter.aging.batch user,model_sn_wsd_meter_aging_batch,base.group_user,1,1,1,1
 access_sn_wsd_meter_aging_batch_line_user,sn.wsd.meter.aging.batch.line user,model_sn_wsd_meter_aging_batch_line,base.group_user,1,1,1,1
 access_sn_wsd_meter_pack_record_user,sn.wsd.meter.pack.record user,model_sn_wsd_meter_pack_record,base.group_user,1,1,1,1

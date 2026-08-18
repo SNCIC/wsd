@@ -8,7 +8,7 @@
                 <field name="name"/>
                 <field name="serial_id"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="workorder_id"/>
                 <field name="workcenter_id"/>
                 <field name="freeze_reason"/>
@@ -39,7 +39,7 @@
                             <field name="serial_id" readonly="state != 'frozen'"/>
                             <field name="serial_no" readonly="1"/>
                             <field name="production_id" readonly="1"/>
-                            <field name="manufacturing_batch_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
                             <field name="workorder_id" readonly="state != 'frozen'"/>
                             <field name="workcenter_id" readonly="1"/>
                             <field name="operation_id" readonly="1"/>
@@ -77,13 +77,13 @@
                 <field name="serial_id"/>
                 <field name="serial_no"/>
                 <field name="production_id"/>
-                <field name="manufacturing_batch_id"/>
+                <field name="mes_order_id"/>
                 <field name="workorder_id"/>
                 <field name="workcenter_id"/>
                 <filter name="frozen" string="Frozen" domain="[('state', '=', 'frozen')]"/>
                 <filter name="released" string="Released" domain="[('state', '=', 'released')]"/>
                 <filter name="group_by_production" string="Manufacturing Order" context="{'group_by': 'production_id'}"/>
-                <filter name="group_by_manufacturing_batch" string="Manufacturing Batch" context="{'group_by': 'manufacturing_batch_id'}"/>
+                <filter name="group_by_mes_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
                 <filter name="group_by_workorder" string="Work Order" context="{'group_by': 'workorder_id'}"/>
                 <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
             </search>

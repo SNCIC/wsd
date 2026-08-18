@@ -20,4 +20,3 @@ from . import mrp_workcenter
 from . import mrp_routing_workcenter_daily_plan
 from . import product
 from . import mrp_electronics
-from . import manufacturing_batch

@@ -79,19 +79,9 @@ class MrpWorkorderMes(models.Model):
                     expected_product_id=self.product_id.id,
                     actual_product_id=serial.product_id.id,
                 )
-            workorder_batch = self.x_manufacturing_batch_id
-            if serial.manufacturing_batch_id and workorder_batch and serial.manufacturing_batch_id != workorder_batch:
-                return api._mes_error(
-                    'serial_batch_mismatch',
-                    serial_number=serial_number,
-                    expected_manufacturing_batch_id=workorder_batch.id,
-                    actual_manufacturing_batch_id=serial.manufacturing_batch_id.id,
-                )
-            serial_production_batch = serial.production_id.x_manufacturing_batch_id if serial.production_id else self.env['sn.wsd.manufacturing.batch']
             if (
                 serial.production_id
                 and serial.production_id != self.production_id
-                and not (workorder_batch and serial_production_batch == workorder_batch)
             ):
                 return api._mes_error(
                     'serial_production_mismatch',
@@ -99,11 +89,9 @@ class MrpWorkorderMes(models.Model):
                     expected_production_id=self.production_id.id,
                     actual_production_id=serial.production_id.id,
                 )
-            serial_current_production_batch = serial.current_production_id.x_manufacturing_batch_id if serial.current_production_id else self.env['sn.wsd.manufacturing.batch']
             if (
                 serial.current_production_id
                 and serial.current_production_id != self.production_id
-                and not (workorder_batch and serial_current_production_batch == workorder_batch)
             ):
                 return api._mes_error(
                     'serial_current_production_mismatch',

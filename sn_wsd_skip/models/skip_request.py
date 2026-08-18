@@ -12,10 +12,10 @@ class SnWsdSkipRequest(models.Model):
     name = fields.Char(string='Request No.', default=lambda self: _('New'), readonly=True, copy=False, tracking=True)
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company, index=True)
     production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True, index=True, tracking=True)
-    manufacturing_batch_id = fields.Many2one(
-        'sn.wsd.manufacturing.batch',
-        string='Manufacturing Batch',
-        related='production_id.x_manufacturing_batch_id',
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order',
+        string='MES Order',
+        related='production_id.x_mes_order_id',
         store=True,
         readonly=True,
         index=True,
@@ -111,11 +111,7 @@ class SnWsdSkipRequest(models.Model):
         line_model = self.env['sn.wsd.skip.request.line']
         for request in self:
             for line in request.line_ids:
-                scope_domain = [
-                    ('request_id.manufacturing_batch_id', '=', request.manufacturing_batch_id.id),
-                ] if request.manufacturing_batch_id else [
-                    ('request_id.production_id', '=', request.production_id.id),
-                ]
+                scope_domain = [('request_id.mes_order_id', '=', request.mes_order_id.id)]
                 duplicate = line_model.search([
                     ('id', '!=', line.id),
                     ('workorder_id', '=', line.workorder_id.id),
@@ -123,7 +119,7 @@ class SnWsdSkipRequest(models.Model):
                 ] + scope_domain, limit=1)
                 if duplicate:
                     raise UserError(_(
-                        'Operation %(operation)s already has an approved skip request for this manufacturing batch.',
+                        'Operation %(operation)s already has an approved skip request for this MES order.',
                         operation=line.workorder_id.display_name,
                     ))
 
@@ -212,7 +208,7 @@ class SnWsdSkipRequestLine(models.Model):
     )
     company_id = fields.Many2one(related='request_id.company_id', store=True, readonly=True)
     production_id = fields.Many2one(related='request_id.production_id', store=True, readonly=True, index=True)
-    manufacturing_batch_id = fields.Many2one(related='request_id.manufacturing_batch_id', store=True, readonly=True, index=True)
+    mes_order_id = fields.Many2one(related='request_id.mes_order_id', store=True, readonly=True, index=True)
     route_id = fields.Many2one(related='request_id.route_id', store=True, readonly=True)
     sequence = fields.Integer(default=10)
     workorder_id = fields.Many2one(
@@ -271,10 +267,7 @@ class SnWsdSkipRequestLine(models.Model):
         if not production:
             return self.env['mrp.workorder']
         domain = [('request_id.state', '=', 'approved')]
-        if production.x_manufacturing_batch_id:
-            domain.append(('request_id.manufacturing_batch_id', '=', production.x_manufacturing_batch_id.id))
-        else:
-            domain.append(('request_id.production_id', '=', production.id))
+        domain.append(('request_id.mes_order_id', '=', production.x_mes_order_id.id))
         if workorders:
             domain.append(('workorder_id', 'in', workorders.ids))
         return self.search(domain).mapped('workorder_id')

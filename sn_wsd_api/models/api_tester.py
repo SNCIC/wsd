@@ -26,7 +26,7 @@ STRICT_ENDPOINT_DEFAULT_BODIES = {
         'M_DATA_AUTH': '1',
         'M_SN': 'SN0001',
         'M_WORK_STATIONSN': 'ST-001',
-        'M_MO_NUMBER': 'BATCH-TEST-001',
+        'M_MO_NUMBER': 'MES-ORDER-TEST-001',
         'M_EMP': 'admin',
         'M_COLLABORATION_EMP': '',
         'M_TEST_RESULT': 'OK',
@@ -111,7 +111,7 @@ STRICT_ENDPOINT_DEFAULT_BODIES = {
         'proSn': 'W23350859A01S012624553252',
     },
     'laser_print_requests': {
-        'workOrderNo': 'BATCH-TEST-001',
+        'workOrderNo': 'MES-ORDER-TEST-001',
         'quantity': 10,
         'drawingNo': 'DWG-2026-A01',
         'operator': 'OP001',
