@@ -165,6 +165,7 @@ class MeterProcessRoute(models.Model):
     x_production_side = fields.Selection(
         SIDE_SELECTION,
         string='Production Side',
+        default='single',
         help='Board side this route produces. Scheduling a MES order resolves '
              'the live route by drawing number AND side.',
     )
@@ -1159,6 +1160,8 @@ class ProcessRouteDrawing(models.Model):
         string='Product Name',
         compute='_compute_product_info',
     )
+    # 面别列展示产品板面类型（单/双面），路线的 T/B 生产面由路线自身
+    # （x_production_side）承载，不在绑定行重复显示。
     product_board_side = fields.Selection(
         BOARD_SIDE_SELECTION,
         string='Board Side Type',
@@ -1192,7 +1195,7 @@ class ProcessRouteDrawing(models.Model):
 
     @api.depends('x_drawing_no')
     def _compute_product_info(self):
-        """按图号带出产品信息：产品名称/板面类型/规格。
+        """按图号带出产品信息：产品名称/面别/规格。
 
         图号是 Char 关联键（product.product.default_code，界面上即"图号"
         字段），一个图号正常只对应一个产品；多个匹配时取第一条。

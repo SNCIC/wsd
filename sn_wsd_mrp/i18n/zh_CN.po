@@ -5608,12 +5608,12 @@ msgid "Single: one single-side process route. Double: one Top (T) and one Bottom
 msgstr "单面：需一条单面工艺路线。双面：顶面 (T)、底面 (B) 各一条，按面别独立排产。"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__single model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__single model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_drawing__product_board_side__single model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
 msgid "Single Side"
 msgstr "单面"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__double model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__double model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_drawing__product_board_side__double model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
 msgid "Double Side"
 msgstr "双面"
 
