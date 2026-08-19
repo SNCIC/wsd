@@ -289,10 +289,12 @@
                 </group>
                 <group string="Fault Phenomenon">
                     <field name="fault_phenomenon" nolabel="1"
+                           class="sn_wsd_repair_html"
                            placeholder="Describe the fault phenomenon..."/>
                 </group>
                 <group string="Initial Handling">
                     <field name="initial_handling" nolabel="1"
+                           class="sn_wsd_repair_html"
                            placeholder="Describe what has been checked / tried..."/>
                 </group>
                 <footer>
@@ -365,11 +367,13 @@
                 <group string="False Alarm Check"
                        invisible="repair_type != 'false_alarm'">
                     <field name="investigation_process" nolabel="1"
+                           class="sn_wsd_repair_html"
                            placeholder="Describe the investigation..."/>
                 </group>
                 <group string="On-site Repair"
                        invisible="repair_type != 'onsite'">
                     <field name="repair_process" nolabel="1"
+                           class="sn_wsd_repair_html"
                            placeholder="Describe the repair process..."/>
                 </group>
                 <group invisible="repair_type not in ('outsourced', 'return_factory')">

@@ -1,0 +1,9 @@
+// Rich-text fields of the repair wizards: give the editor area a
+// comfortable minimum height instead of a single-line box that only
+// grows while typing.
+.o_field_html.sn_wsd_repair_html {
+    .note-editable,
+    .odoo-editor-editable {
+        min-height: 150px;
+    }
+}

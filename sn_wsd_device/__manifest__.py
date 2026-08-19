@@ -38,4 +38,9 @@
     'application': True,
     'author': 'SNCIC',
     'license': 'LGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_device/static/src/scss/repair_wizard.scss',
+        ],
+    },
 }
