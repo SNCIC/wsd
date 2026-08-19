@@ -39,4 +39,8 @@ class CalibrationConfigWizard(models.TransientModel):
         self.ensure_one()
         self.env['ir.config_parameter'].sudo().set_param(
             TRIGGER_TIME_KEY, self.trigger_time.strip())
+        # Effective immediately: run the generation once so a trigger time
+        # that already passed today applies right away instead of waiting
+        # for the next cron wake-up (idempotent per plan and date).
+        self.env['sn.wsd.device.cal.plan']._cron_generate_calibration_tasks()
         return {'type': 'ir.actions.act_window_close'}

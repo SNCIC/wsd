@@ -14,14 +14,14 @@
             <field name="value">08:00</field>
         </record>
 
-        <!-- ONE shared generation cron for all plans (hourly wake-up,
+        <!-- ONE shared generation cron for all plans (1-minute wake-up,
              acts once the global trigger time is reached). -->
         <record id="ir_cron_check_task_generation" model="ir.cron">
             <field name="name">Equipment Check: Generate Tasks</field>
             <field name="model_id" ref="model_sn_wsd_device_check_plan"/>
             <field name="state">code</field>
             <field name="code">model._cron_generate_check_tasks()</field>
-            <field name="interval_number">10</field>
+            <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
             <field name="active" eval="True"/>
         </record>

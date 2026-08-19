@@ -2800,3 +2800,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
 msgid "e.g. Temperature check"
 msgstr ""
+
+#. module: sn_wsd_device
+msgid ""
+"Format HH:MM. Once this time is reached, the shared scheduled action "
+"generates the day's spot check tasks for every due plan. Applies to all "
+"plans. Saving runs the generation once immediately when the time has "
+"already passed today."
+msgstr ""
+"格式 HH:MM。到达该时间后，共享定时任务会为每个到期的计划生成当天的点检任务。"
+"适用于所有计划。保存时若当天已过该时间，会立即执行一次生成。"
