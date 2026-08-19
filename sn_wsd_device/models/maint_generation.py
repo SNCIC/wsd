@@ -112,6 +112,16 @@ class MaintenancePlan(models.Model):
             lambda equipment: self._is_equipment_due_today(equipment, today))
         if not equipments:
             return
+        # Claim the day with the generation log BEFORE creating tasks: the
+        # log is the idempotency token, so writing it first prevents a
+        # crashed run from being retried and duplicating tasks.
+        log = log_model.create({
+            'plan_id': self.id,
+            'generation_date': today,
+            'trigger_time': f'{trigger_dt.hour:02d}:{trigger_dt.minute:02d}',
+            'expected_equipment_count': len(equipments),
+            'run_status': 'success',
+        })
         for equipment in equipments:
             expected += 1
             try:
@@ -119,18 +129,18 @@ class MaintenancePlan(models.Model):
                         equipment.last_maintenance_date >= today_start:
                     skipped += 1
                     continue
-                duplicate = task_model.search_count([
-                    ('equipment_id', '=', equipment.id),
-                    ('task_date', '=', today),
-                ])
-                if duplicate:
-                    skipped += 1
-                    continue
                 if not items:
                     failed += 1
                     errors.append(f'{equipment.code}: '
                                   'no maintenance item on the template')
                     continue
+                # Supersede stale work: unfinished tasks of previous days
+                # for this equipment become overdue before the new task.
+                task_model.search([
+                    ('equipment_id', '=', equipment.id),
+                    ('task_status', 'in', ['pending', 'in_progress']),
+                    ('task_date', '<', today),
+                ]).write({'task_status': 'overdue'})
                 line_vals = [Command.create({
                     'name': item.name,
                     'method': item.method,
@@ -158,10 +168,7 @@ class MaintenancePlan(models.Model):
             run_status = 'failed'
         else:
             run_status = 'partial'
-        log_model.create({
-            'plan_id': self.id,
-            'generation_date': today,
-            'trigger_time': f'{trigger_dt.hour:02d}:{trigger_dt.minute:02d}',
+        log.write({
             'expected_equipment_count': expected,
             'generated_count': generated,
             'skipped_count': skipped,
