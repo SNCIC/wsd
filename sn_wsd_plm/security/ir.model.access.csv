@@ -1,5 +1,14 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sn_wsd_bom_substitute_design_wizard_user,sn.wsd.bom.substitute.design.wizard user,model_sn_wsd_bom_substitute_design_wizard,mrp.group_mrp_user,1,1,1,1
-access_sn_wsd_bom_apply_substitute_wizard_user,sn.wsd.bom.apply.substitute.wizard user,model_sn_wsd_bom_apply_substitute_wizard,mrp.group_mrp_user,1,1,1,1
-access_sn_wsd_bom_version_compare_wizard_user,sn.wsd.bom.version.compare.wizard user,model_sn_wsd_bom_version_compare_wizard,mrp.group_mrp_user,1,1,1,1
-access_sn_wsd_bom_version_compare_line_user,sn.wsd.bom.version.compare.line user,model_sn_wsd_bom_version_compare_line,mrp.group_mrp_user,1,1,1,1
+access_model_mrp_eco_approval_template_manager,mrp.eco.approval.template,sn_wsd_plm.model_mrp_eco_approval_template,sn_wsd_plm.group_plm_manager,1,1,1,1
+access_model_mrp_eco_approval_template_user,mrp.eco.approval.template,sn_wsd_plm.model_mrp_eco_approval_template,sn_wsd_plm.group_plm_user,1,0,0,0
+access_model_mrp_eco_approval_user,mrp.eco.approval,sn_wsd_plm.model_mrp_eco_approval,sn_wsd_plm.group_plm_user,1,1,1,1
+access_model_mrp_eco_stage_manager,mrp.eco.stage,sn_wsd_plm.model_mrp_eco_stage,sn_wsd_plm.group_plm_manager,1,1,1,1
+access_model_mrp_eco_stage_user,mrp.eco.stage,sn_wsd_plm.model_mrp_eco_stage,sn_wsd_plm.group_plm_user,1,0,0,0
+access_model_mrp_eco_bom_change_user,mrp.eco.bom.line,sn_wsd_plm.model_mrp_eco_bom_change,sn_wsd_plm.group_plm_user,1,1,1,1
+access_model_mrp_eco_routing_change_user,mrp.eco.routing.line,sn_wsd_plm.model_mrp_eco_routing_change,sn_wsd_plm.group_plm_user,1,1,1,1
+access_mrp_eco_tag_user,mrp.eco.tag,sn_wsd_plm.model_mrp_eco_tag,sn_wsd_plm.group_plm_user,1,1,1,1
+access_mrp_eco_tag_manager,mrp.eco.tag,sn_wsd_plm.model_mrp_eco_tag,sn_wsd_plm.group_plm_manager,1,1,1,1
+access_mrp_eco_type_user,mrp.eco.type,sn_wsd_plm.model_mrp_eco_type,sn_wsd_plm.group_plm_user,1,0,0,0
+access_mrp_eco_type_manager,mrp.eco.type,sn_wsd_plm.model_mrp_eco_type,sn_wsd_plm.group_plm_manager,1,1,1,1
+access_mrp_eco_user,mrp.eco,sn_wsd_plm.model_mrp_eco,sn_wsd_plm.group_plm_user,1,1,1,1
+access_product_template_plm_manager,product.template plm_manager,product.model_product_template,sn_wsd_plm.group_plm_manager,1,0,0,0

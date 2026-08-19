@@ -1,185 +1,340 @@
 ﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* sn_wsd_plm
+# * sn_wsd_plm
 #
+# Translators:
+# Martin Trigaux, 2022
+# Tony Peng <umingpeng@gmail.com>, 2022
+# Jeffery CHEN <jeffery9@gmail.com>, 2022
+# "Tiffany Chang (tic)" <tic@odoo.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
+"Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 03:06+0000\n"
-"PO-Revision-Date: 2026-07-21 03:06+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2026-04-10 18:45+0000\n"
+"PO-Revision-Date: 2025-11-16 13:42+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://translate.odoo.com/projects/odoo-19/sn_wsd_plm/zh_Hans/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__document_count
+msgid "# Attachments"
+msgstr "#附件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__eco_count
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_product__eco_count
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_template__eco_count
+msgid "# ECOs"
+msgstr "#工程变更指令（ECO）"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "%(product)s x %(qty)s"
-msgstr "%(product)s x %(qty)s"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "%(approval_name)s %(approver_name)s %(approval_status)s this ECO"
+msgstr "%(approval_name)s %(approver_name)s %(approval_status)s工程变更指令（ECO）"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
 msgid ""
-"%(sub)s cannot replace %(org)s. Configure the substitute on the product "
-"first."
-msgstr "%(sub)s 无法替代 %(org)s。请先在物料/产品上配置该替代料。"
+"<i class=\"fa fa-envelope-o\" role=\"img\" aria-label=\"Domain alias\" "
+"title=\"Domain alias\"/>&amp;nbsp;"
+msgstr ""
+"<i class=\"fa fa-envelope-o\" role=\"img\" aria-label=\"Domain alias\" "
+"title=\"Domain alias\"/>&amp;nbsp;"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
-msgid "A component cannot substitute itself."
-msgstr "元件/物料不能替代其自身。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
 msgid ""
-"A new revision can only be created when the linked process route is not "
-"released. Release a new revision of the route first."
-msgstr "创建新版本时，关联的工艺路线不能已发布。请先发布新版本的工艺路线。"
+"<p class=\"o_view_nocontent_smiling_face\">\n"
+"                        Upload files to your ECO, that will be applied to the product later\n"
+"                    </p><p>\n"
+"                        Use this feature to store any files, like drawings or specifications.\n"
+"                    </p>"
+msgstr ""
+"<p class=\"o_view_nocontent_smiling_face\">\n"
+"                    上传文件至工程变更指令（ECO），之后将应用于产品\n"
+"                   </p><p>\n"
+"                    使用该功能保存任何文件，如图纸或规范。\n"
+"                    </p>"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "A production BoM must have a process route before release."
-msgstr "制造BOM在发布前必须配置工艺路线。"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.sn_wsd_plm_production_form_view
+msgid "<span class=\"o_stat_text\">ECO(S)</span>"
+msgstr "<span class=\"o_stat_text\">ECO(s) 工程变更指令</span>"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__added_count
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__add
-msgid "Added"
-msgstr "新增"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "<span class=\"o_stat_text\">Revision</span>"
+msgstr "<span class=\"o_stat_text\">修订</span>"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Allow Entry"
-msgstr "允许首站进入"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Allow Reentry"
-msgstr "允许重复进入"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Allow Repair Return"
-msgstr "允许维修返回"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Allow Skip With Override"
-msgstr "允许授权跳站"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__substitute_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
-msgid "Allowed Substitutes"
-msgstr "允许的替代料"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
-msgid "Apply"
-msgstr "应用"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_apply_substitute_wizard
-msgid "Apply BoM Substitute Wizard"
-msgstr "应用BOM替代料向导"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Apply Substitute"
-msgstr "应用替代料"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_defaults
 msgid ""
-"Apply substitutes on the original component line, not on a substitute line."
-msgstr "请在主料（原始元件）行上应用替代料，而非在替代料行上执行。"
+"A Python dictionary that will be evaluated to provide default values when "
+"creating new records for this alias."
+msgstr "为该别名创建新记录时评估以提供默认值的Python字典。"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_bom_ids
-msgid "Available Bom"
-msgstr "可用 BOM"
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "A user cannot be assigned more than once to the same stage"
+msgstr "同一用户不可被分配至同一阶段多于一次"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__original_qty
-msgid "Available Qty"
-msgstr "可用用量"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_needaction
+msgid "Action Needed"
+msgstr "所需操作"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__available_route_ids
-msgid "Available Route"
-msgstr "可用路线"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__active
+msgid "Active"
+msgstr "有效"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__available_substitute_ids
-msgid "Available Substitute"
-msgstr "可用替代料"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_ids
+msgid "Activities"
+msgstr "活动"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_duration
-msgid "Base Duration (min)"
-msgstr "基准工时（分钟）"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常标示"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_operation
-msgid "Base Operation"
-msgstr "基准工序"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_state
+msgid "Activity State"
+msgstr "活动状态"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_dependency
-msgid "Base Predecessors"
-msgstr "基准前置工序"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_qty
-msgid "Base Qty"
-msgstr "基准用量"
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_bom_change__change_type__add
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_routing_change__change_type__add
+msgid "Add"
+msgstr "添加"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__base_bom_id
-msgid "Base Revision"
-msgstr "基准版本"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "Add a description..."
+msgstr "添加描述......"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__base_route_id
-msgid "Base Route Revision"
-msgstr "基准路线版本"
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_tag_action
+msgid "Add a new tag"
+msgstr "添加新标签"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_sequence
-msgid "Base Sequence"
-msgstr "基准顺序"
+#: model:res.groups,name:sn_wsd_plm.group_plm_manager
+msgid "Administrator"
+msgstr "管理员"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_uom_id
-msgid "Base Unit"
-msgstr "基准单位"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_id
+msgid "Alias"
+msgstr "别名"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_value
-msgid "Base Value"
-msgstr "基准值"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_contact
+msgid "Alias Contact Security"
+msgstr "别名授权于"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__old_workcenter
-msgid "Base Work Center"
-msgstr "基准工作中心"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_domain_id
+msgid "Alias Domain"
+msgstr "别名域"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_domain
+msgid "Alias Domain Name"
+msgstr "别名域名"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_full_name
+msgid "Alias Email"
+msgstr "别名电子邮件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_name
+msgid "Alias Name"
+msgstr "别名"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_status
+msgid "Alias Status"
+msgstr "别名状态"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_status
+msgid "Alias status assessed on the last message received."
+msgstr "根据收到的最后一条消息评估的别名状态。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_model_id
+msgid "Aliased Model"
+msgstr "有别名的模型"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
+msgid "All Validations"
+msgstr "全部验证"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__allow_change_kanban_state
+msgid "Allow Change Kanban State"
+msgstr "允许更改看板状态"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__allow_change_stage
+msgid "Allow Change Stage"
+msgstr "允许更改阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__allow_apply_change
+msgid "Allow to apply changes"
+msgstr "允许应用变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__allow_apply_change
+msgid "Allow to apply changes from this stage."
+msgstr "允许应用该阶段的变更。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_tree
+msgid "Apply Changes"
+msgstr "应用变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Apply Rebase"
+msgstr "应用变基"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__type
+msgid "Apply on"
+msgstr "应用于"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__approval_date
+msgid "Approval Date"
+msgstr "批核日期"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__approval_roles
+msgid "Approval Roles"
+msgstr "批核角色"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__template_stage_id
+msgid "Approval Stage"
+msgstr "批核阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__approval_type
+msgid "Approval Type"
+msgstr "批核类型"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__approval_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__approval_template_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Approvals"
+msgstr "批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__approval_ids
+msgid "Approvals by stage"
+msgstr "按阶段批核"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Approve"
+msgstr "批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__kanban_state__done
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval__status__approved
+msgid "Approved"
+msgstr "已批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__user_id
+msgid "Approved by"
+msgstr "批核人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval_template__approval_type__optional
+msgid "Approves, but the approval is optional"
+msgstr "批准，但批核可选"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__effectivity__asap
+msgid "As soon as possible"
+msgstr "尽快"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__effectivity__date
+msgid "At Date"
+msgstr "于日期"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__document_ids
+msgid "Attachments"
+msgstr "附件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__awaiting_my_validation
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Awaiting My Validation"
+msgstr "等待我的验证"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Awaiting Validation"
+msgstr "等待验证"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_report_mrp_report_bom_structure
+msgid "BOM Overview Report"
+msgstr "物料清单（BOM）概述报表"
+
+#. module: sn_wsd_plm
+#: model:mrp.eco.type,name:sn_wsd_plm.ecotype_bom_update
+msgid "BOM Updates"
+msgstr "BOM 更新"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__upd_time_mode_batch
+msgid "Batch count Change"
+msgstr "批次数目变更"
 
 #. module: sn_wsd_plm
 #: model:ir.model,name:sn_wsd_plm.model_mrp_bom
@@ -192,1011 +347,1715 @@ msgid "Bill of Material Line"
 msgstr "物料清单行"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__bom_id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__bom_id
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_wizard__comparison_mode__bom
-msgid "BoM"
-msgstr "物料清单(BOM)"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__bom_line_id
-msgid "BoM Line"
-msgstr "BOM明细行"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_mrp_bom_line_substitute
-msgid "BoM Line Substitute Material"
-msgstr "物料清单行替代物料"
-
-#. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "BoM Quantity"
-msgstr "BOM数量"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_bom_action_kanban
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__bom_id
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_boms
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Bill of Materials"
+msgstr "物料清单"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "BoM Revision"
-msgstr "BOM升版/修订"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__setting
-msgid "BoM Settings"
-msgstr "BOM基本信息"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_substitute_design_wizard
-msgid "BoM Substitute Design Wizard"
-msgstr "BOM替代料设计向导"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "BoM Unit"
-msgstr "BOM单位"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_bom_stage_type
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "BoM Usage"
-msgstr "BOM用途分类"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_version_compare_wizard
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "BoM Version Comparison"
-msgstr "BOM版本对比"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_bom_version_compare_line
-msgid "BoM Version Comparison Line"
-msgstr "BOM 版本对比行"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_electronics_legacy.py:0
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_bom_action_kanban
 msgid ""
-"BoM-line substitute design is deprecated. Maintain allowed substitutes on "
-"the product through engineering BoMs instead."
-msgstr "已弃用直接在BOM行设计替代料的方式。请改通过设计BOM(EBOM)在物料主数据上维护可用的替代料。"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "By-product Differences"
-msgstr "联副产品差异"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__byproduct
-msgid "By-products"
-msgstr "联副产品"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_apply_substitute_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Cancel"
-msgstr "取消"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__cancelled
-msgid "Cancelled"
-msgstr "已取消"
+"Bills of materials allow you to define the list of required components\n"
+"              used to make a finished product; through a manufacturing\n"
+"              order or a pack of products."
+msgstr ""
+"通过物料清单，可以定义制造成品\n"
+"              所需组件的清单；通过制造订单\n"
+"              或产品包。"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "Cancelled BoMs cannot be copied into a new revision."
-msgstr "已取消的BOM不能复制创建新版本。"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__kanban_state__blocked
+#: model:mrp.eco.stage,legend_blocked:sn_wsd_plm.ecostage_bom_update_effective
+#: model:mrp.eco.stage,legend_blocked:sn_wsd_plm.ecostage_bom_update_new
+#: model:mrp.eco.stage,legend_blocked:sn_wsd_plm.ecostage_bom_update_progress
+#: model:mrp.eco.stage,legend_blocked:sn_wsd_plm.ecostage_bom_update_validated
+msgid "Blocked"
+msgstr "已阻止"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__category
-msgid "Category"
-msgstr "类别"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__is_blocking
+msgid "Blocking Stage"
+msgstr "阻止阶段"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__updated_count
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__update
-msgid "Changed"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__byproduct_id
+msgid "BoM By-Product"
+msgstr "物料清单副产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__bom_line_id
+msgid "BoM Line"
+msgstr "物料清单（BOM）行"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__bom_rebase_ids
+msgid "BoM Rebase"
+msgstr "物料清单（BOM）变基"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__new_bom_revision
+msgid "BoM Revision"
+msgstr "物料清单（BOM）修订"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_production.py:0
+msgid "BoM Suggestions from %(mo_name)s"
+msgstr "来自%(mo_name)s的 BoM 建议"
+
+#. module: sn_wsd_plm
+#. odoo-javascript
+#: code:addons/sn_wsd_plm/static/src/components/bom_overview_table/mrp_bom_overview_table.xml:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.report_mrp_bom_inherit_sn_wsd_plm
+msgid "BoM Version"
+msgstr "物料清单（BOM）版本"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_kanban
+msgid "BoM:"
+msgstr "物料清单（BOM）："
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "By-Product Changes"
+msgstr "副产品变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_bom_byproduct
+msgid "Byproduct"
+msgstr "副产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__user_can_approve
+msgid "Can Approve"
+msgstr "可以批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__user_can_reject
+msgid "Can Reject"
+msgstr "可以拒绝"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_production.py:0
+msgid ""
+"Cannot create an ECO if the Manufacturing Order doesn't use a Bill of "
+"Materials"
+msgstr "如果制造订单未使用物料清单，则无法创建工程变更指令  ECO"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_changes
+msgid "Changes"
 msgstr "变更"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Close"
-msgstr "关闭"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Changes made in previous eco"
+msgstr "上一工程变更指令（ECO）的变更"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Changes made on old bill of materials"
+msgstr "旧物料清单的变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Changes made on the new revision bill of materials"
+msgstr "物料清单新版本的变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Changes made on the operation."
+msgstr "作业变更。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__color
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__color
+msgid "Color"
+msgstr "颜色"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__color
+msgid "Color Index"
+msgstr "颜色指数"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval__status__comment
+msgid "Commented"
+msgstr "已评论"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval_template__approval_type__comment
+msgid "Comments only"
+msgstr "仅评论"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__company_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
 msgid "Company"
 msgstr "公司"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Compare"
-msgstr "开始对比"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Component Changes"
+msgstr "组件变更"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_sn_wsd_process_route_form_plm_compare
-msgid "Compare Versions"
-msgstr "版本对比"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Component Rebase"
+msgstr "组件变基"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__line_ids
-msgid "Comparison Lines"
-msgstr "对比明细"
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_configuration
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
+msgid "Configuration"
+msgstr "配置"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__comparison_mode
-msgid "Comparison Mode"
-msgstr "对比模式"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__conflict
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__state__conflict
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Conflict"
+msgstr "冲突"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__product_id
-msgid "Component"
-msgstr "元件/物料"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Conflict Resolved"
+msgstr "已解决的冲突"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Component Differences"
-msgstr "组件差异"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__component
-msgid "Components"
-msgstr "组件"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Computed On Last: %s"
-msgstr "基于最近记录数：%s"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__operation_change
 msgid "Consumed in Operation"
-msgstr "消耗工序"
+msgstr "在作业中消耗"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Cost Based On: %s"
-msgstr "成本依据：%s"
+#: model:ir.actions.server,name:sn_wsd_plm.action_production_order_create_eco
+msgid "Create ECO"
+msgstr "创建 ECO"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Create Production BoM"
-msgstr "生成制造BOM"
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_stage_action
+msgid "Create a new ECO stage"
+msgstr "创建新的工程变更指令（ECO）阶段"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__create_uid
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_type_action_dashboard
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_type_action_form
+msgid "Create a new ECO type"
+msgstr "创建新的工程变更指令（ECO）类别"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__create_uid
 msgid "Created by"
 msgstr "创建人"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__create_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__create_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__create_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__create_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__create_date
 msgid "Created on"
-msgstr "创建时间"
+msgstr "创建日期"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_is_current_revision
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "Current Revision"
-msgstr "当前有效版本"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_bounced_content
+msgid "Custom Bounced Message"
+msgstr "自定义弹回消息"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Data Definitions: %s"
-msgstr "采集项定义：%s"
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__effectivity
+msgid "Date on which the changes should be applied. For reference only."
+msgstr "应用变更的日期。 仅供参考。"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,help:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_uom_id
-msgid "Default unit of measure used for all stock operations."
-msgstr "所有库存作业使用的默认计量单位。"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_defaults
+msgid "Default Values"
+msgstr "默认值"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__change_type
-msgid "Difference"
-msgstr "差异类型"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Define the approval roles on the ECO stages."
+msgstr "为工程变更指令（ECO）阶段规定批核角色。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_kanban
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_document_file_kanban_sn_wsd_plm
+msgid "Delete"
+msgstr "删除"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__description
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Description"
+msgstr "描述"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__description
+msgid "Description and tooltips of the stage states."
+msgstr "阶段状态描述和工具提示。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Description of the change and its reason."
+msgstr "变更及理由描述。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__bom_change_ids
+msgid "Difference between old BoM and new BoM revision"
+msgstr "旧物料清单（BOM）与新物料清单版本的区别"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__routing_change_ids
+msgid "Difference between old operation and new operation revision"
+msgstr "旧作业与新作业修订的区别"
 
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_byproduct__display_name
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line_substitute__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_substitute_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_routing_workcenter__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_document__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_product__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_report_mrp_report_bom_structure__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__draft
-msgid "Draft"
-msgstr "草稿"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__displayed_image_id
+msgid "Displayed Image"
+msgstr "显示的图像"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Documents"
+msgstr "文件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__eco_id
+msgid "ECO"
+msgstr "工程变更指令（ECO）"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_graph
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_pivot
+msgid "ECO Analysis"
+msgstr "工程变更指令（ECO）分析"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Duration Computation: %s"
-msgstr "工时计算方式：%s"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_approval
+msgid "ECO Approval"
+msgstr "工程变更指令（ECO）批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_approval_template
+msgid "ECO Approval Template"
+msgstr "工程变更指令（ECO）批核模板"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__bom_change_ids
+msgid "ECO BoM Changes"
+msgstr "工程变更指令（ECO）物料清单（BOM）变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__bom_change_ids_on_byproduct
+msgid "ECO BoM Changes - By-Product"
+msgstr "工程变更指令（ECO）用料清单变更 - 副产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__bom_change_ids_on_line
+msgid "ECO BoM Changes - Component"
+msgstr "工程变更指令（ECO）用料清单变更 - 组件"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_bom_change
+msgid "ECO BoM changes"
+msgstr "工程变更指令（ECO）物料清单（BOM）变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__eco_rebase_id
+msgid "ECO Rebase"
+msgstr "工程变更指令（ECO）变基"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__routing_change_ids
+msgid "ECO Routing Changes"
+msgstr "工程变更指令（ECO）工艺路线变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_stage
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__eco_stage_id
+msgid "ECO Stage"
+msgstr "工程变更指令（ECO）阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_stage_action
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_eco_stages
+msgid "ECO Stages"
+msgstr "工程变更指令（ECO）阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_tag_action
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_tag
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_eco_tag
+msgid "ECO Tags"
+msgstr "工程变更指令（ECO）标签"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_type
+msgid "ECO Type"
+msgstr "工程变更指令（ECO）类型"
+
+#. module: sn_wsd_plm
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_type_action_form
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_eco_types
+msgid "ECO Types"
+msgstr "工程变更指令（ECO）类型"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_stage_action
+msgid "ECO stages give the different stages for the Engineering Change Orders"
+msgstr "工程变更指令（ECO）阶段为工程变更单提供不同阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__eco_ids
+msgid "ECO to be applied"
+msgstr "待应用工程变更指令（ECO）"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_bom_view_form_inherit_plm
+msgid "ECO(s)"
+msgstr "工程变更指令（ECO）"
+
+#. module: sn_wsd_plm
+#. odoo-javascript
+#: code:addons/sn_wsd_plm/static/src/components/bom_overview_line/mrp_bom_overview_line.js:0
+#: code:addons/sn_wsd_plm/static/src/components/bom_overview_table/mrp_bom_overview_table.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__nb_ecos
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_production__eco_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_product__eco_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_template__eco_ids
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_eco_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_calendar
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.product_product_view_form_inherit_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.product_template_view_form_inherit_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.report_mrp_bom_inherit_sn_wsd_plm
+msgid "ECOs"
+msgstr "工程变更指令（ECO）"
+
+#. module: sn_wsd_plm
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_report
+msgid "ECOs Analysis"
+msgstr "工程变更指令（ECO）分析"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_effective_date
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "Eco"
+msgstr "工程变更指令（ECO）"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "Eco BoM"
+msgstr "工程变更指令（ECO）物料清单（BOM）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_production__eco_count
+msgid "Eco Count"
+msgstr "ECO 计数"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco_routing_change
+msgid "Eco Routing changes"
+msgstr "工程变更指令（ECO）工艺路线变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_kanban
+msgid "Edit Task"
+msgstr "编辑任务"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__effectivity
+#: model:mrp.eco.stage,name:sn_wsd_plm.ecostage_bom_update_effective
+msgid "Effective"
+msgstr "实际"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__effectivity_date
 msgid "Effective Date"
 msgstr "生效日期"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_bom_stage_type__engineering
-msgid "Engineering"
-msgstr "设计BOM(EBOM)"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_email
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_view_form
+msgid "Email Alias"
+msgstr "电子邮箱别名"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "Engineering BoM"
-msgstr "设计BOM"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__email_cc
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Email cc"
+msgstr "电子邮件抄送"
 
 #. module: sn_wsd_plm
-#: model:ir.actions.act_window,name:sn_wsd_plm.action_engineering_bom
-#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_engineering_bom
-msgid "Engineering BoMs"
-msgstr "设计BOM"
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_domain
+msgid "Email domain e.g. 'example.com' in 'odoo@example.com'"
+msgstr "电子邮件域名，例如 'odoo@example.com' 中的 'example.com'"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "Engineering BoMs cannot reference a source engineering BoM."
-msgstr "设计BOM不能再引用源设计BOM。"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__eco_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__eco_id
+msgid "Engineering Change"
+msgstr "工程变更"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_expire_date
-msgid "Expiration Date"
-msgstr "失效日期"
+#: model:ir.model,name:sn_wsd_plm.model_mrp_eco
+msgid "Engineering Change Order (ECO)"
+msgstr "工程变更指令（ECO）"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_apply_substitute_wizard__substitution_mode__full
-msgid "Full"
-msgstr "全额替代"
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_approval
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_approval_my
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_late
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_main
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_action_product_tmpl
+msgid "Engineering Change Orders"
+msgstr "工程变更指令"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
+msgid "Engineering Changes"
+msgstr "工程变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Extra Info"
+msgstr "额外信息"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__final_stage
+msgid "Final Stage"
+msgstr "最终阶段"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__folded
+msgid "Folded in kanban view"
+msgstr "在看板视图中折叠"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome图标，例如：fa-tasks"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__effectivity_date
+msgid "For reference only."
+msgstr "仅供参考。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Future Activities"
+msgstr "未来活动"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__legend_done
+msgid "Green Kanban Label"
+msgstr "绿色看板标签"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__legend_normal
+msgid "Grey Kanban Label"
+msgstr "灰色看板标签"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__has_message
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__priority__1
+msgid "High"
+msgstr "高"
 
 #. module: sn_wsd_plm
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_byproduct__id
 #: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line_substitute__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_substitute_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_routing_workcenter__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_document__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_report_mrp_report_bom_structure__id
 msgid "ID"
 msgstr "ID"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__review
-msgid "In Review"
-msgstr "审核中"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__item_name
-msgid "Item"
-msgstr "对比项目"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__write_uid
-msgid "Last Updated by"
-msgstr "最后更新人"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__write_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_substitute_design_wizard__write_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__write_date
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__write_date
-msgid "Last Updated on"
-msgstr "最后更新时间"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__product_id
-msgid "Material"
-msgstr "物料"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__product_code
-msgid "Material Code"
-msgstr "物料编码"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_sn_wsd_process_route
-msgid "Meter Process Route"
-msgstr "电表工艺路线"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Meter Product Type"
-msgstr "电表产品类型"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitution_mode
-msgid "Mode"
-msgstr "替代模式"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "New Revision"
-msgstr "升版/创建新版本"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "No other revision is available for comparison."
-msgstr "当前BOM没有其他可对比的历史版本。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/process_route.py:0
-msgid "No other route revision is available for comparison."
-msgstr "当前工艺路线没有其他可对比的历史版本。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_parent_thread_id
 msgid ""
-"No substitute-enabled BoM line exists for the selected original product on "
-"this manufacturing order."
-msgstr "在该制造订单中，所选主料未找到已启用替代功能的BOM明细行。"
+"ID of the parent record holding the alias (example: project holding the task"
+" creation alias)"
+msgstr "有别名的上级记录ID（例如：有任务创建别名的项目）"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__none
-msgid "None"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__message_needaction
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选此项，则需要查看新消息。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__message_has_error
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__message_has_error
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选此项， 某些消息将出现发送错误。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_bounced_content
+msgid ""
+"If set, this content will automatically be sent out to unauthorized users "
+"instead of the default message."
+msgstr "如果设置，将自动向未经授权用户发送该内容而非默认消息。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__active
+msgid ""
+"If the active field is set to False, it will allow you to hide the "
+"engineering change order without removing it."
+msgstr "如果有效字段设置为假，将隐藏而非删除工程变更指令。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__will_update_version
+msgid ""
+"If unchecked, the version of the product/BoM will remain unchanged once the "
+"ECO is applied"
+msgstr "如果未勾选此项，应用工程变更指令后产品/BOM将保持不变"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__image_128
+msgid "Image 128"
+msgstr "图像128"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__kanban_state__normal
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__state__progress
+#: model:mrp.eco.stage,legend_normal:sn_wsd_plm.ecostage_bom_update_effective
+#: model:mrp.eco.stage,legend_normal:sn_wsd_plm.ecostage_bom_update_new
+#: model:mrp.eco.stage,legend_normal:sn_wsd_plm.ecostage_bom_update_progress
+#: model:mrp.eco.stage,legend_normal:sn_wsd_plm.ecostage_bom_update_validated
+#: model:mrp.eco.stage,name:sn_wsd_plm.ecostage_bom_update_progress
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__is_approved
+msgid "Is Approved"
+msgstr "已批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__is_closed
+msgid "Is Closed"
+msgstr "已关闭"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__is_rejected
+msgid "Is Rejected"
+msgstr "已拒绝"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval_template__approval_type__mandatory
+msgid "Is required to approve"
+msgstr "须批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__legend_blocked
+msgid "Kanban Blocked Explanation"
+msgstr "看板阻止说明"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__legend_normal
+msgid "Kanban Ongoing Explanation"
+msgstr "看板持续说明"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__kanban_state
+msgid "Kanban State"
+msgstr "看板状态"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__kanban_state_label
+msgid "Kanban State Label"
+msgstr "看板状态标签"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__legend_done
+msgid "Kanban Valid Explanation"
+msgstr "看板有效解释"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__write_uid
+msgid "Last Updated by"
+msgstr "上一更新人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__write_date
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Late Activities"
+msgstr "最近活动"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_production__latest_bom_id
+msgid "Latest Bom"
+msgstr "最新物料清单（BOM）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_incoming_local
+msgid "Local-part based incoming detection"
+msgstr "收件时检测本地的别名域"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_approval
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_approval_my
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_late
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_main
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_product_tmpl
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_report
+msgid ""
+"Manage your products and bills of materials changes with the ECO's.\n"
+"              Gather the related documentation and receive the necessary approvals\n"
+"              before applying your changes."
+msgstr ""
+"通过工程变更指令（ECO）管理产品和物料清单。\n"
+"              在应用变更前，\n"
+"              收集相关文件，并获得必要批核。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__upd_time_cycle_manual
+msgid "Manual Duration Change"
+msgstr "手动时长变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_production
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__production_id
+msgid "Manufacturing Orders"
+msgstr "制造订单"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_master_data
+msgid "Master Data"
+msgstr "主数据"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__upd_time_mode
+msgid "Mode Change"
+msgstr "模式变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_tag_view_search
+msgid "Mrp Eco Tags"
+msgstr "MRP工程变更指令（ECO）标签"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "My Activities"
+msgstr "我的活动"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "My Change Orders"
+msgstr "我的变更指令"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
+msgid "My Validations"
+msgstr "我的验证"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_plm
+#: model:mrp.eco.stage,name:sn_wsd_plm.ecostage_bom_update_new
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_document_file_kanban_sn_wsd_plm
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__new_bom_id
+msgid "New Bill of Materials"
+msgstr "新物料清单"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_production.py:0
+msgid "New BoM from %(mo_name)s"
+msgstr "来自%(mo_name)s的新BoM"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__current_bom_id
+msgid "New Bom"
+msgstr "新物料清单（BOM ）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__new_operation_id
+msgid "New Consumed in Operation"
+msgstr "作业中的新消耗"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__new_uom_id
+msgid "New Product UoM"
+msgstr "新的产品计量单位"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__new_product_qty
+msgid "New revision quantity"
+msgstr "新修订数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "下一活动日历事件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止日期"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_bom_action_kanban
+msgid "No bill of materials found. Let's create one!"
+msgstr "无物料清单（BOM）。请创建！"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_approval
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_approval_my
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_late
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_main
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_product_tmpl
+#: model_terms:ir.actions.act_window,help:sn_wsd_plm.mrp_eco_action_report
+msgid "No engineering change order found"
+msgstr "未找到工程变更指令"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__priority__0
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval__status__none
+msgid "Not Yet"
 msgstr "无"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__obsolete
-msgid "Obsolete"
-msgstr "已废弃"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Note"
+msgstr "注"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "出现发送错误的消息的数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__final_stage
+msgid "Once the changes are applied, the ECOs will be moved to this stage."
+msgstr "变更应用后，工程变更指令（ECO）将移至该阶段。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Open Component"
+msgstr "开启组件"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Open Operation"
+msgstr "开启操作"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__operation_name
 msgid "Operation"
-msgstr "工序"
+msgstr "作业"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__operation_code
-msgid "Operation Code"
-msgstr "工序编码"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Operation Changes"
+msgstr "作业变更"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Operation Differences"
-msgstr "工序差异"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__operation_id
+msgid "Operation Id"
+msgstr "操作识别码"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__operation
-msgid "Operations"
-msgstr "工序"
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_force_thread_id
+msgid ""
+"Optional ID of a thread (record) to which all incoming messages will be "
+"attached, even if they did not reply to it. If set, this will disable the "
+"creation of new records completely."
+msgstr "所有传入消息将附至线程（记录）的可选ID，即使消息无回复。如果设置，将禁止创建新记录。"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_origin_line_id
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__bom_line_id
-msgid "Original BoM Line"
-msgstr "原始BOM明细行"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_document__origin_attachment_id
+msgid "Origin Attachment"
+msgstr "原附件"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__original_product_id
-msgid "Original Component"
-msgstr "原始主料元件"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_document__origin_res_model
+msgid "Origin Model"
+msgstr "原始模型"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_original_product_id
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__original
-msgid "Original Material"
-msgstr "原始主料"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_document__origin_res_name
+msgid "Origin Name"
+msgstr "原始名称"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__product_uom_id
-msgid "Original UoM"
-msgstr "主料单位"
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__legend_blocked
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__legend_blocked
+msgid ""
+"Override the default value displayed for the blocked state for kanban "
+"selection, when the ECO is in that stage."
+msgstr "当工程变更指令（ECO）处于该阶段时，覆盖选择看板时受阻状态显示的默认值。"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__legend_done
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__legend_done
+msgid ""
+"Override the default value displayed for the done state for kanban "
+"selection, when the ECO is in that stage."
+msgstr "当工程变更指令（ECO）处于该阶段时，覆盖选择看板时已完成状态显示的默认值。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__legend_normal
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_stage__legend_normal
+msgid ""
+"Override the default value displayed for the normal state for kanban "
+"selection, when the ECO is in that stage."
+msgstr "当工程变更指令（ECO）处于该阶段时，覆盖选择看板时正常状态显示的默认值。"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_dashboard
 msgid "Overview"
-msgstr "概览"
+msgstr "概述"
 
 #. module: sn_wsd_plm
 #: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_root
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
+#: model:res.groups.privilege,name:sn_wsd_plm.res_groups_privilege_plm
 msgid "PLM"
-msgstr "生命周期管理 (PLM)"
+msgstr "PLM"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_plm_state
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "PLM Status"
-msgstr "PLM状态"
+#: model:ir.actions.act_window,name:sn_wsd_plm.mrp_eco_type_action_dashboard
+msgid "PLM Overview"
+msgstr "产品生命周期（PLM）概述"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_apply_substitute_wizard__substitution_mode__partial
-msgid "Partial"
-msgstr "部分替代"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_parent_model_id
+msgid "Parent Model"
+msgstr "上级模型"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_previous_bom_id
-msgid "Previous Revision"
-msgstr "上一版本"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_parent_thread_id
+msgid "Parent Record Thread ID"
+msgstr "上级记录线程ID"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_parent_model_id
+msgid ""
+"Parent model holding the alias. The model holding the alias reference is not"
+" necessarily the model given by alias_model_id (example: project "
+"(parent_model) and task (model))"
+msgstr "有别名的上级模型。有别名参考号的模型不一定是alias_model_id给出的模型（例如：项目（parent_model）和任务（模型））"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_contact
+msgid ""
+"Policy to post a message on the document using the mailgateway.\n"
+"- everyone: everyone can post\n"
+"- partners: only authenticated partners\n"
+"- followers: only followers of the related document or members of following channels\n"
+msgstr ""
+"通过邮件网关在单据中留言的政策。\n"
+"- 所有人：所有人均可留言\n"
+"- 合作伙伴：仅经认证合作伙伴可留言\n"
+"- 关注者：仅相关单据关注者或以下频道成员可留言\n"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__previous_bom_id
+msgid "Previous BoM"
+msgstr "之前物料清单（BOM）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__old_operation_id
+msgid "Previous Consumed in Operation"
+msgstr "之前作业中的消耗"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__previous_change_ids
+msgid "Previous ECO Changes"
+msgstr "之前工程变更指令（ECO）变更"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Previous Eco Component Changes"
+msgstr "之前工程变更指令（ECO）组件变更"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__old_uom_id
+msgid "Previous Product UoM"
+msgstr "之前产品计量单位（UoM）"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__old_product_qty
+msgid "Previous revision quantity"
+msgstr "之前修订数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__priority
+msgid "Priority"
+msgstr "优先级"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Produced in Operation"
+msgstr "在作业口已生产"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_product_template
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__product_tmpl_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_product_document
+msgid "Product Document"
+msgstr "产品文件"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_process_route_id
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_wizard__comparison_mode__route
-msgid "Process Route"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "Product Only"
+msgstr "仅产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_product_product
+msgid "Product Variant"
+msgstr "产品变体"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Production"
+msgstr "生产"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__active
+msgid "Production Ready"
+msgstr "生产准备就绪"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_products
+msgid "Products"
+msgstr "产品"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__upd_product_qty
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__rating_ids
+msgid "Ratings"
+msgstr "评分"
+
+#. module: sn_wsd_plm
+#. odoo-python
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+#: model:mrp.eco.stage,legend_done:sn_wsd_plm.ecostage_bom_update_effective
+#: model:mrp.eco.stage,legend_done:sn_wsd_plm.ecostage_bom_update_new
+#: model:mrp.eco.stage,legend_done:sn_wsd_plm.ecostage_bom_update_progress
+#: model:mrp.eco.stage,legend_done:sn_wsd_plm.ecostage_bom_update_validated
+msgid "Ready"
+msgstr "准备就绪"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__rebase_id
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__state__rebase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Rebase"
+msgstr "变基"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Rebase new revision of BoM with previous eco bom and old bom changes."
+msgstr "根据之前工程变更指令（ECO）物料清单（BOM）和旧物料清单变更变基物料清单新版本。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__alias_force_thread_id
+msgid "Record Thread ID"
+msgstr "记录线程ID"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__legend_blocked
+msgid "Red Kanban Label"
+msgstr "红色看板标签"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__name
+msgid "Reference"
+msgstr "参考号"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Reject"
+msgstr "拒绝"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_approval__status__rejected
+msgid "Rejected"
+msgstr "已拒绝"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__displayed_image_attachment_id
+msgid "Related attachment"
+msgstr "相关附件"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_bom_change__change_type__remove
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_routing_change__change_type__remove
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_document_file_kanban_sn_wsd_plm
+msgid "Remove"
+msgstr "移除"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_reporting
+msgid "Reporting"
+msgstr "报表"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__required_user_ids
+msgid "Requested Users"
+msgstr "请求用户"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__user_id
+msgid "Responsible"
+msgstr "负责人"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__name
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__name
+msgid "Role"
+msgstr "角色"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Routing"
 msgstr "工艺路线"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Process Route Differences"
-msgstr "工艺路线差异"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__route_operation
-msgid "Process Route Operations"
-msgstr "工艺路线工序"
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_search
+msgid "Search"
+msgstr "搜索"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__category__route_setting
-msgid "Process Route Settings"
-msgstr "工艺路线基本信息"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__sequence
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__sequence
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__sequence
+msgid "Sequence"
+msgstr "序列"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/process_route.py:0
-msgid "Process Route Version Comparison"
-msgstr "工艺路线版本对比"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_kanban
+msgid "Set Cover Image"
+msgstr "设置封面图片"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_bom_stage_type__production
-msgid "Production"
-msgstr "制造BOM(MBOM)"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__allow_apply_change
+msgid "Show Apply Change"
+msgstr "显示应用变更"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "Production BoM"
-msgstr "制造BOM"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Show all records whose next activity date is past"
+msgstr "显示所有逾期未完成活动的记录"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_production_bom_count
-msgid "Production BoM Count"
-msgstr "制造BOM数量"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__stage_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__stage_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Stage"
+msgstr "阶段"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: model:ir.actions.act_window,name:sn_wsd_plm.action_production_bom
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_production_bom_ids
-#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_production_bom
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Production BoMs"
-msgstr "制造BOM"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "Stage Description and Tooltips"
+msgstr "阶段描述和工具提示"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "Production BoMs can only be generated from engineering BoMs."
-msgstr "制造BOM只能由设计BOM生成。"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__stage_ids
+msgid "Stages"
+msgstr "阶段"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Release"
-msgstr "发布"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Start Revision"
+msgstr "开始修订"
 
 #. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Release Information"
-msgstr "发布信息"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "State"
+msgstr "状态"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom__x_plm_state__released
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_filter_sn_wsd_plm
-msgid "Released"
-msgstr "已发布"
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__state
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__status
+msgid "Status"
+msgstr "状态"
 
 #. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_released_by
-msgid "Released By"
-msgstr "发布人"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_released_date
-msgid "Released On"
-msgstr "发布时间"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__activity_state
 msgid ""
-"Released or obsolete BoM lines cannot be changed directly. Create a new "
-"revision instead."
-msgstr "已发布或已废弃的BOM明细行无法直接修改，请通过创建新版本进行变更。"
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：超出到期日期\n"
+"今天：活动日期是今天\n"
+"计划：未来活动。"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "Successfully Rebased!"
+msgstr "变基成功！"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
 msgid ""
-"Released or obsolete BoM lines cannot be deleted directly. Create a new "
-"revision instead."
-msgstr "已发布或已废弃的BOM明细行无法直接删除，请通过创建新版本进行变更。"
+"System will automatically resolved the conflict(s) and apply changes. Do you"
+" agree"
+msgstr "系统将自动处理冲突并应用更改。是否同意？"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_tag__name
+msgid "Tag Name"
+msgstr "标签名称"
+
+#. module: sn_wsd_plm
+#: model:ir.model.constraint,message:sn_wsd_plm.constraint_mrp_eco_tag_name_uniq
+msgid "Tag name already exists!"
+msgstr "标签名称已存在！"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__tag_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_tag_view_tree
+msgid "Tags"
+msgstr "标签"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "Task in progress. Click to block or set as done."
+msgstr "任务正在进行。点击，以阻止任务或设置为已完成。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "Task is blocked. Click to unblock or set as done."
+msgstr "任务已阻止。点击，以取消阻止或设置为已完成。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__user_can_approve
+msgid "Technical field to check if approval by current user is required"
+msgstr "技术字段，已检查该用户是否需要审批"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__user_can_reject
+msgid "Technical field to check if reject by current user is possible"
+msgstr "查看当前用户能否拒绝的技术字段"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval__approval_template_id
+msgid "Template"
+msgstr "模板"
+
+#. module: sn_wsd_plm
+#: model:res.groups,comment:sn_wsd_plm.group_plm_manager
+msgid "The PLM manager manages products lifecycle management"
+msgstr "产品生命周期管理（PLM）经理负责产品生命周期管理"
+
+#. module: sn_wsd_plm
+#: model:res.groups,comment:sn_wsd_plm.group_plm_user
+msgid "The PLM user uses products lifecycle management"
+msgstr "产品生命周期管理（PLM）用户使用产品生命周期管理"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_product_product__version
+#: model:ir.model.fields,help:sn_wsd_plm.field_product_template__version
+msgid "The current version of the product."
+msgstr "产品当前版本."
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_model_id
 msgid ""
-"Released or obsolete BoMs cannot be changed directly. Create a new revision "
-"instead."
-msgstr "已发布或已废弃的BOM无法直接修改，请通过创建新版本进行变更。"
+"The model (Odoo Document Kind) to which this alias corresponds. Any incoming"
+" email that does not reply to an existing record will cause the creation of "
+"a new record of this model (e.g. a Project Task)"
+msgstr "该别名对应的模型（Odoo单据种类）。任何非回复已有记录的传入电子邮件将导致为该模型创建新记录（例如：项目任务）。"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__alias_name
 msgid ""
-"Released or obsolete BoMs cannot receive new lines directly. Create a new "
-"revision instead."
-msgstr "已发布或已废弃的BOM无法直接新增明细行，请通过创建新版本进行变更。"
+"The name of the email alias, e.g. 'jobs' if you want to catch emails for "
+"<jobs@example.odoo.com>"
+msgstr "电子邮箱别名名称，例如：如果希望为<jobs@example.odoo.com>捕获电子邮件，别名应为“jobs”"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "This step is done. Click to block or set in progress."
+msgstr "该步骤已完成。点击，以阻止或设置为进行中。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__nb_validation
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_dashboard_view_kanban
+msgid "To Apply"
+msgstr "待应用"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco__state__confirmed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "To Do"
+msgstr "待办"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_search
+msgid "Today Activities"
+msgstr "今日活动"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__type_id
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__change_type
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__change_type
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_stage__type_ids
+msgid "Types"
+msgstr "类型"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_document_file_kanban_sn_wsd_plm
+msgid "Undo"
+msgstr "取消"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_bom_change__uom_change
+msgid "Unit"
+msgstr "单元"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_bom_change__change_type__update
+#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_eco_routing_change__change_type__update
+msgid "Update"
+msgstr "更新"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__will_update_version
+msgid "Update Version"
+msgstr "更新版本"
+
+#. module: sn_wsd_plm
+#: model:res.groups,name:sn_wsd_plm.group_plm_user
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_approval_template__user_ids
+msgid "Users"
+msgstr "用户"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "V"
+msgstr ""
+
+#. module: sn_wsd_plm
+#: model:mrp.eco.stage,name:sn_wsd_plm.ecostage_bom_update_validated
+msgid "Validated"
+msgstr "已验证"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_document_file_kanban_sn_wsd_plm
+msgid "Variant"
+msgstr "变体"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__version
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_product__version
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_product_template__version
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_bom_view_form_inherit_plm
+msgid "Version"
+msgstr "版本"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "Visible to all"
+msgstr "对所有人可见"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__nb_approvals
+msgid "Waiting Approvals"
+msgstr "等待批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__nb_approvals_my
+msgid "Waiting my Approvals"
+msgstr "等待我的批核"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_type__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_plm.field_mrp_eco_type__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_plm
+#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_eco_routing_change__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_plm
+#: model:ir.model,name:sn_wsd_plm.model_mrp_routing_workcenter
+msgid "Work Center Usage"
+msgstr "工作中心使用情况"
+
+#. module: sn_wsd_plm
+#: model:ir.ui.menu,name:sn_wsd_plm.menu_sn_wsd_plm_workcenters
+msgid "Work Centers"
+msgstr "工作中心"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
 msgid ""
-"Released or obsolete engineering BoMs cannot be changed directly. Create a "
-"new revision instead."
-msgstr "已发布或已废弃的设计BOM无法直接修改，请通过创建新版本进行变更。"
+"You can also add a description to help your coworkers understand the meaning"
+" and purpose of the stage."
+msgstr "也可以添加描述，帮助同事理解该阶段的意义和目的。"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
 msgid ""
-"Released or obsolete production BoMs cannot be changed directly. Create a "
-"new revision instead."
-msgstr "已发布或已废弃的制造BOM无法直接修改，请通过创建新版本进行变更。"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__removed_count
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__remove
-msgid "Removed"
-msgstr "删除"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Reset to Draft"
-msgstr "重置为草稿"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_revision
-msgid "Revision"
-msgstr "版本号"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_revision_count
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_process_route__x_revision_count
-msgid "Revision Count"
-msgstr "版本数量"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Revision Information"
-msgstr "版本信息"
+"You can define here labels that will be displayed for the state instead\n"
+"                            of the default labels."
+msgstr ""
+"可以在此处定义显示的状态标签，而非\n"
+"                            默认标签。"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Code"
-msgstr "路线编码"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "You cannot change the stage, as approvals are required in the process."
+msgstr "不能更改该阶段，因为需要批核。"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Control: %s"
-msgstr "路线控制：%s"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "You cannot change the stage, as approvals are still required."
+msgstr "不能更改该阶段，因为仍需批核。"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_view_form
+msgid "alias"
+msgstr "别名"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_view_form
+msgid "e.g. Awesome Product 2.0"
+msgstr "例如：Awesome Product 2.0"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_stage_view_form
+msgid "e.g. Engineering Department"
+msgstr "例如：工程部"
+
+#. module: sn_wsd_plm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_type_view_form
+msgid "e.g. mycompany.com"
+msgstr "e.g. mycompany.com"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Effective Date"
-msgstr "路线生效日期"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "product"
+msgstr "产品"
 
 #. module: sn_wsd_plm
 #. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Expiration Date"
-msgstr "路线失效日期"
+#: code:addons/sn_wsd_plm/models/mrp_eco.py:0
+msgid "res_model"
+msgstr "res_model"
 
 #. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Name"
-msgstr "路线名称"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.mrp_eco_kanban
+msgid "text-danger"
+msgstr "text-danger"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Route Notes"
-msgstr "路线备注"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Select two different revisions to compare."
-msgstr "请选择两个不同的版本进行对比。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Select two different route revisions to compare."
-msgstr "请选择两个不同的工艺路线版本进行对比。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Select two revisions to compare."
-msgstr "请选择两个版本进行对比。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Select two route revisions to compare."
-msgstr "请选择两个工艺路线版本进行对比。"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__setting_change_count
-msgid "Setting Changes"
-msgstr "基础信息变更"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__show_unchanged
-msgid "Show Unchanged Items"
-msgstr "显示无变化项"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom__x_source_engineering_bom_id
-msgid "Source Engineering BoM"
-msgstr "来源设计BOM"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Stage & Origin"
-msgstr "阶段与来源"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid ""
-"Submit or release the engineering BoM before generating a production BoM."
-msgstr "生成制造BOM前，必须先提交或发布对应的设计BOM。"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_id
-msgid "Substitute Component"
-msgstr "替代物料元件"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_substitute_design_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Substitute Design"
-msgstr "替代料设计"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_substitute_line_ids
-msgid "Substitute Lines"
-msgstr "替代料明细行"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_substitute_product_id
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__mrp_bom_line__x_substitution_role__substitute
-msgid "Substitute Material"
-msgstr "替代物料"
-
-#. module: sn_wsd_plm
-#: model:ir.model,name:sn_wsd_plm.model_mrp_substitute_wizard
-msgid "Substitute Material Wizard"
-msgstr "替代物料向导"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_qty
-msgid "Substitute Qty"
-msgstr "替代数量"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_apply_substitute_wizard__substitute_product_uom_id
-msgid "Substitute UoM"
-msgstr "替代料单位"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
-msgid "Substitute design is only available on engineering BoMs."
-msgstr "替代料设计仅适用于设计BOM(EBOM)。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "Substitute for %(product)s x %(qty)s"
-msgstr "替代 %(product)s x %(qty)s"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
-msgid "Substitute products must belong to the same company as the component."
-msgstr "替代物料必须与主料元件属于同一公司。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "Substituted by %(items)s"
-msgstr "已被 %(items)s 替代"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid "Substitutes can only be applied on production BoMs."
-msgstr "替代料仅可应用在制造BOM(MBOM)上。"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_note
-msgid "Substitution Note"
-msgstr "替代说明/备注"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_qty
-msgid "Substitution Qty"
-msgstr "替代用量"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_mrp_bom_line__x_substitution_role
-msgid "Substitution Role"
-msgstr "替代角色"
-
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Swap Revisions"
-msgstr "交换对比方向"
+#~ msgid "# ECOs in progress"
+#~ msgstr "# 进行中 ECOs "
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_duration
-msgid "Target Duration (min)"
-msgstr "对比工时（分钟）"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_operation
-msgid "Target Operation"
-msgstr "对比工序"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_dependency
-msgid "Target Predecessors"
-msgstr "对比前置工序"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_qty
-msgid "Target Qty"
-msgstr "对比用量"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__target_bom_id
-msgid "Target Revision"
-msgstr "对比版本"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__target_route_id
-msgid "Target Route Revision"
-msgstr "对比路线版本"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_sequence
-msgid "Target Sequence"
-msgstr "对比顺序"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_uom_id
-msgid "Target Unit"
-msgstr "对比单位"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_value
-msgid "Target Value"
-msgstr "对比值"
-
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__new_workcenter
-msgid "Target Work Center"
-msgstr "对比工作中心"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
-msgid "The component must match the selected BoM line."
-msgstr "所选元件必须与指定的BOM明细行相符。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "The effective date must be earlier than the expiration date."
-msgstr "生效日期必须早于失效日期。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid "The original component must match the selected BoM line."
-msgstr "原始主料元件必须与所选的BOM明细行相符。"
+#~ msgid "<span>Revision</span><br/>"
+#~ msgstr "<span>修订版</span><br/>"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid ""
-"The process route must belong to the same company as the bill of material."
-msgstr "工艺路线必须与物料清单属于同一公司。"
-
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
-msgid "The scanned substitute product could not be identified."
-msgstr "无法识别扫描的替代物料/产品。"
+#~ msgid "Alias domain"
+#~ msgstr "域名别名"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-#: code:addons/sn_wsd_plm/wizard/bom_substitute_design_wizard.py:0
-msgid "The selected BoM line does not belong to the selected BoM."
-msgstr "所选的BOM明细行不属于当前的BOM。"
+#~ msgid "All"
+#~ msgstr "全部"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid "The selected product is not configured as an allowed substitute."
-msgstr "所选物料未被配置为合法的允许替代料。"
+#~ msgid "BoM Changes"
+#~ msgstr "BOM变更"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "The selected revisions must belong to the same BoM revision family."
-msgstr "所选版本必须属于同一个BOM版本族。"
+#~ msgid "Duration"
+#~ msgstr "时长"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid ""
-"The selected revisions must belong to the same process route revision "
-"family."
-msgstr "所选版本必须属于同一个工艺路线版本族。"
+#~ msgid "ECO details"
+#~ msgstr "ECO 详情"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "The source BoM must be an engineering BoM."
-msgstr "源BOM必须为设计BOM(EBOM)。"
+#~ msgid "Filters"
+#~ msgstr "筛选器"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/mrp_substitute_wizard.py:0
-msgid ""
-"The substitute product is not present on the manufacturing order. Update the"
-" production BoM and regenerate the order before recording usage."
-msgstr "替代料不存在于该制造订单。请更新生产 BOM 并重新生成订单后再记录用量。"
+#~ msgid "Group by..."
+#~ msgstr "分组方式...…"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid ""
-"The substitute quantity cannot exceed the current original line quantity."
-msgstr "替代数量不能超过当前主料行的用量。"
+#~ msgid "Helps you manage your product's lifecycles."
+#~ msgstr "协助管理产品生命周期."
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid "The substitute quantity cannot exceed the original component quantity."
-msgstr "替代数量不能超过原始主料元件的用量。"
+#~ msgid "In #{kanban_getcolorname(record.color.raw_value)}"
+#~ msgstr "在 #{kanban_getcolorname(record.color.raw_value)}"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid "The substitute quantity must be positive."
-msgstr "替代数量必须大于零。"
+#~ msgid "New Product Introduction"
+#~ msgstr "新的产品介绍"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_apply_substitute_wizard.py:0
-msgid ""
-"The substitute unit of measure must be in the same category as the original "
-"component unit."
-msgstr "替代料的计量单位必须与原主料的单位属于同一类别。"
+#~ msgid "New manual duration"
+#~ msgstr "新手动时长"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__total_change_count
-msgid "Total Changes"
-msgstr "差异总数"
+#~ msgid "New or Previous Operation"
+#~ msgstr "新的或以前的操作"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__unchanged_count
-#: model:ir.model.fields.selection,name:sn_wsd_plm.selection__sn_wsd_bom_version_compare_line__change_type__unchanged
-msgid "Unchanged"
-msgstr "无变化"
+#~ msgid "Number of messages which requires an action"
+#~ msgstr "需要采取动作消息数量"
 
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-msgid "Validity Period"
-msgstr "有效期"
+#~ msgid "Old manual duration"
+#~ msgstr "旧手动时长"
 
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_mrp_bom_form_sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_sn_wsd_process_route_form_plm_compare
-msgid "Versions"
-msgstr "历史版本"
+#~ msgid "Operation not supported"
+#~ msgstr "不支持该作业"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_line__wizard_id
-msgid "Wizard"
-msgstr "向导"
+#~ msgid "Owner"
+#~ msgstr "所有者"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/wizard/bom_version_compare_wizard.py:0
-msgid "Workshop"
-msgstr "车间"
+#~ msgid "Previous Eco Bom Changes"
+#~ msgstr "前一个 Eco Bom变化"
 
-#. module: sn_wsd_plm
-#. odoo-python
-#: code:addons/sn_wsd_plm/models/mrp_bom.py:0
-msgid "x_source_engineering_bom_id"
-msgstr "x_source_engineering_bom_id"
+#~ msgid "Production Document"
+#~ msgstr "生产文档"
 
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Comparison Scope"
-msgstr "对比范围"
+#~ msgid "Production Order"
+#~ msgstr "生产订单"
 
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Summary"
-msgstr "汇总"
+#~ msgid "Show all records which has next action date is before today"
+#~ msgstr "显示所有的在今天之前的下一个动作日期的记录"
 
-#. module: sn_wsd_plm
-#: model_terms:ir.ui.view,arch_db:sn_wsd_plm.view_bom_version_compare_wizard_form
-msgid "Process Route Operation Differences"
-msgstr "工艺路线工序差异"
+#~ msgid ""
+#~ "The owner of records created upon receiving emails on this alias. If this "
+#~ "field is not set the system will attempt to find the right owner based on "
+#~ "the sender (From) address, or will use the Administrator account if no "
+#~ "system user is found for that address."
+#~ msgstr ""
+#~ "基于此别名接收到的邮件，创建记录的所有人。若此字段没有设置，系统将试图根据发送者(From)地址来查找正确的所有者，如果对于那个地址没有系统用户被找到，将使用系统管理员账户。"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__byproduct_line_ids
-msgid "By-product Lines"
-msgstr "副产品行"
+#~ msgid "Unit of Measure"
+#~ msgstr "计量单位"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__component_line_ids
-msgid "Component Lines"
-msgstr "组件行"
+#~ msgid "Update BoM"
+#~ msgstr "更新BoM"
 
-#. module: sn_wsd_plm
-#: model:ir.model.fields,field_description:sn_wsd_plm.field_sn_wsd_bom_version_compare_wizard__route_operation_line_ids
-msgid "Process Route Operation Lines"
-msgstr "工艺路线工序行"
+#~ msgid "oe_kanban_text_red"
+#~ msgstr "oe_kanban_text_red"
