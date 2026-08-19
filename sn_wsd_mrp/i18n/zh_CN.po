@@ -704,9 +704,95 @@ msgid "Current Workorder"
 msgstr "当前工单"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_customer_display_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_customer_display_name
 msgid "Customer"
 msgstr "客户"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_list_sn_wsd_mrp model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid "Manufacturing Order No."
+msgstr "制造订单号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_online_log_ids
+msgid "Online Log"
+msgstr "上下线日志"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_online_by
+msgid "Online By"
+msgstr "上线人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__name
+msgid "MES Order No."
+msgstr "制令单号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:sn_wsd_mrp/models/mes_order.py:0
+msgid "Go Online"
+msgstr "上线"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:sn_wsd_mrp/models/mes_order.py:0
+msgid "Go Offline"
+msgstr "下线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__action
+msgid "Action"
+msgstr "操作"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__user_id
+msgid "User"
+msgstr "操作人"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__date
+msgid "Date"
+msgstr "时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__mes_order_id
+msgid "Mes Order"
+msgstr "制令单"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_order_online model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_order_online model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_online_list
+msgid "Online MES Orders"
+msgstr "在线制令单"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_online_list
+msgid "Take this MES order offline? SN feeding stops immediately."
+msgstr "确定下线该制令单？将立即停止过站投入。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is not online."
+msgstr "制令单 %(name)s 未上线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s still has %(count)s board(s) in progress; let them leave "
+"their stations before going offline."
+msgstr "制令单 %(name)s 还有 %(count)s 块板在制；请先让它们出站再下线。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__date_start model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid "Planned Start Date"
+msgstr "计划开始日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__date_deadline model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid "Planned End Date"
+msgstr "计划结束日期"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__customer_batch_no
@@ -2517,7 +2603,7 @@ msgid "Ratings"
 msgstr "点评"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__name model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__name model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__name model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__name
 msgid "Reference"
 msgstr "参考号"
 
@@ -3815,7 +3901,7 @@ msgid "Workorder Report"
 msgstr "工单报表"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_workshop_id model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_workshop_id model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom__x_workshop_id model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_production_line_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_workshop_id
 msgid "Workshop"
 msgstr "车间"
 
@@ -4310,7 +4396,7 @@ msgid "Parent Serial"
 msgstr "父序列号"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__produced_qty model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__produced_qty
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__produced_qty model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__produced_qty model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_produced_qty
 msgid "Produced Quantity"
 msgstr "产出数量"
 
@@ -4729,9 +4815,14 @@ msgid "Each operation appears at most once in a MES order route."
 msgstr "一张制令单的工艺路线中，每个工序最多出现一次。"
 
 #. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order_log__action__online model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
 msgid "Go Online"
 msgstr "上线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order_log__action__offline model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_online_list
+msgid "Go Offline"
+msgstr "下线"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_route_operation__is_input
