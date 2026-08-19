@@ -360,8 +360,8 @@ class MrpProduction(models.Model):
                 reference_customers = production.reference_ids.sale_ids.partner_id
                 if len(reference_customers) == 1:
                     customer = reference_customers
-            if not customer:
-                sale_lines = production.move_dest_ids.filtered(lambda move: 'sale_line_id' in move._fields).sale_line_id
+            if not customer and 'sale_line_id' in production.move_dest_ids._fields:
+                sale_lines = production.move_dest_ids.sale_line_id
                 destination_customers = sale_lines.order_partner_id
                 if len(destination_customers) == 1:
                     customer = destination_customers

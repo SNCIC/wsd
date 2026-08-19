@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_cal_plan_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.plan.list</field>
+        <field name="model">sn.wsd.device.cal.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="equipment_code"/>
+                <field name="equipment_name"/>
+                <field name="equipment_model" optional="show"/>
+                <field name="cycle_type"/>
+                <field name="cycle_count"/>
+                <field name="advance_days" optional="show"/>
+                <field name="is_certified"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cal_plan_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.plan.form</field>
+        <field name="model">sn.wsd.device.cal.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="equipment_id"
+                                   options="{'no_create': True}" required="1"/>
+                            <field name="is_certified"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="cycle_type"/>
+                            <field name="cycle_count"/>
+                            <field name="advance_days"/>
+                            <field name="initial_cal_date"/>
+                        </group>
+                    </group>
+                    <group string="Redundant Equipment Info">
+                        <group>
+                            <field name="equipment_code"/>
+                            <field name="equipment_name"/>
+                            <field name="equipment_model"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cal_plan" model="ir.actions.act_window">
+        <field name="name">Calibration Plans</field>
+        <field name="res_model">sn.wsd.device.cal.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No calibration plan yet
+            </p>
+            <p>
+                One or two plans per equipment: a certified one and a
+                non-certified one, each with its own cycle.
+            </p>
+        </field>
+    </record>
+
+</odoo>

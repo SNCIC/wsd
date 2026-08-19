@@ -32,7 +32,7 @@ export class WorkshopOperationAction extends Component {
         this.action = useService("action");
         this.notification = useService("notification");
         this.barcodeService = useService("barcode");
-        this.mobileService = useService("mobile");
+        this.mobileService = useService("sn_wsd_barcode_mobile");
         this.scanMutex = new Mutex();
         this.operationMode = this.props.action.context?.operation_mode || "smt";
         this.state = useState({

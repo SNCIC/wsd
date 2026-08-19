@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== Import wizard ===== -->
+
+    <record id="view_cal_line_import_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.line.import.wizard.form</field>
+        <field name="model">sn.wsd.device.cal.line.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Calibration Lines">
+                <group>
+                    <group>
+                        <field name="task_id" invisible="1"/>
+                        <field name="file" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_parse" type="object"
+                            string="Parse" class="btn-primary"/>
+                    <button name="action_import" type="object"
+                            string="Import to Task" class="btn-primary"
+                            invisible="not preview_line_ids"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+                <field name="preview_line_ids" invisible="not preview_line_ids">
+                    <list readonly="1">
+                        <field name="item_name"/>
+                        <field name="before_value"/>
+                        <field name="after_value"/>
+                        <field name="line_note"/>
+                    </list>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cal_line_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Calibration Lines</field>
+        <field name="res_model">sn.wsd.device.cal.line.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_cal_task_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.task.list</field>
+        <field name="model">sn.wsd.device.cal.task</field>
+        <field name="arch" type="xml">
+            <list decoration-info="task_status == 'pending'"
+                  decoration-warning="task_status == 'in_progress'"
+                  decoration-danger="task_status == 'overdue'"
+                  decoration-muted="task_status == 'completed'">
+                <field name="name"/>
+                <field name="equipment_code"/>
+                <field name="equipment_name" optional="show"/>
+                <field name="equipment_model" optional="hide"/>
+                <field name="is_certified" optional="show"/>
+                <field name="task_date"/>
+                <field name="task_status"/>
+                <field name="overall_result" optional="show"/>
+                <field name="is_latest" optional="show"/>
+                <field name="responsible_user_id" optional="show"/>
+                <field name="cert_number" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cal_task_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.task.form</field>
+        <field name="model">sn.wsd.device.cal.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object"
+                            string="Start Execution" class="btn-primary"
+                            invisible="task_status not in ['pending', 'overdue']"/>
+                    <button name="action_submit" type="object"
+                            string="Submit Task" class="btn-primary"
+                            invisible="task_status == 'completed'"
+                            confirm="Submit this task? The ledger calibration dates will be updated."/>
+                    <field name="task_status" widget="statusbar"
+                           statusbar_visible="pending,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="plan_id" readonly="1"/>
+                            <field name="equipment_id" readonly="1"/>
+                            <field name="equipment_code" readonly="1"/>
+                            <field name="equipment_name" readonly="1"/>
+                            <field name="equipment_model" readonly="1"/>
+                            <field name="is_certified" readonly="1"/>
+                            <field name="is_latest" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="task_date" readonly="1"/>
+                            <field name="responsible_user_id" readonly="1"/>
+                            <field name="overall_result"
+                                   readonly="task_status == 'completed'"/>
+                            <field name="executor_id" readonly="1"/>
+                            <field name="executed_time" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Calibration Lines">
+                            <div class="mb-2">
+                                <a class="btn btn-secondary"
+                                   href="/sn_wsd_device/calibration_line_template.xlsx">
+                                    <i class="fa fa-download"/> Download Template</a>
+                                <button name="%(action_cal_line_import_wizard)d"
+                                        type="action" class="btn btn-secondary ms-2"
+                                        context="{'default_task_id': id}">
+                                    <i class="fa fa-upload"/> Import Lines</button>
+                            </div>
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_name"
+                                           readonly="parent.task_status == 'completed'"/>
+                                    <field name="before_value"
+                                           readonly="parent.task_status == 'completed'"/>
+                                    <field name="after_value"
+                                           readonly="parent.task_status == 'completed'"/>
+                                    <field name="line_note"
+                                           readonly="parent.task_status == 'completed'"/>
+                                    <field name="task_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Certificate">
+                            <group>
+                                <group>
+                                    <field name="cert_number"
+                                           readonly="task_status == 'completed'"/>
+                                    <field name="cert_completion_date"
+                                           readonly="task_status == 'completed'"/>
+                                    <field name="cert_valid_until"
+                                           readonly="task_status == 'completed'"/>
+                                </group>
+                                <group>
+                                    <field name="cert_file" filename="cert_filename"
+                                           readonly="task_status == 'completed'"/>
+                                    <field name="cert_filename" invisible="1"/>
+                                    <button name="action_download_certificate"
+                                            type="object" icon="fa-download"
+                                            title="Download Certificate"
+                                            invisible="not cert_file"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cal_task_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.task.search</field>
+        <field name="model">sn.wsd.device.cal.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="equipment_code"/>
+                <field name="equipment_name"/>
+                <field name="responsible_user_id"/>
+                <filter string="My Tasks" name="filter_my_tasks"
+                        domain="[('responsible_user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Pending" name="filter_pending"
+                        domain="[('task_status', '=', 'pending')]"/>
+                <filter string="Overdue" name="filter_overdue"
+                        domain="[('task_status', '=', 'overdue')]"/>
+                <filter string="Completed" name="filter_completed"
+                        domain="[('task_status', '=', 'completed')]"/>
+                <filter string="Certified" name="filter_certified"
+                        domain="[('is_certified', '=', True)]"/>
+                <filter string="Latest" name="filter_latest"
+                        domain="[('is_latest', '=', True)]"/>
+                <group>
+                    <filter string="Task Status" name="group_status"
+                            context="{'group_by': 'task_status'}"/>
+                    <filter string="Equipment" name="group_equipment"
+                            context="{'group_by': 'equipment_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cal_task" model="ir.actions.act_window">
+        <field name="name">Calibration Tasks</field>
+        <field name="res_model">sn.wsd.device.cal.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_cal_task_search"/>
+    </record>
+
+</odoo>

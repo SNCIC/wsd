@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_equipment_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.list</field>
+        <field name="model">sn.wsd.device.equipment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="equipment_kind" optional="show"/>
+                <field name="equipment_type_id"/>
+                <field name="equipment_status"/>
+                <field name="is_state_grid_bid" optional="show"/>
+                <field name="is_southern_grid_bid" optional="show"/>
+                <field name="department_id" optional="hide"/>
+                <field name="location_id" optional="hide"/>
+                <field name="document_count" string="Documents" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_equipment_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.form</field>
+        <field name="model">sn.wsd.device.equipment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_doc_sync_wizard)d" type="action"
+                                string="Sync Documents" class="btn-secondary"
+                                icon="fa-files-o"/>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="equipment_status not in 'scrapped'"/>
+                    <field name="image" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'image'}"/>
+                    <div class="oe_title">
+                        <h1><field name="code" placeholder="EQ001"/></h1>
+                        <h2><field name="name" placeholder="Equipment name"/></h2>
+                    </div>
+                    <notebook>
+                        <page string="Basic Information">
+                            <group>
+                                <group string="Identification">
+                                    <field name="equipment_kind"/>
+                                    <field name="equipment_type_id"/>
+                                    <field name="equipment_class"/>
+                                    <field name="equipment_status"/>
+                                    <field name="applicable_product_category_id"/>
+                                </group>
+                                <group string="Grid (State / Southern) Naming">
+                                    <field name="is_state_grid_bid"/>
+                                    <field name="name_sgcc" invisible="not is_state_grid_bid"/>
+                                    <field name="model_sgcc" invisible="not is_state_grid_bid"/>
+                                    <field name="is_southern_grid_bid"/>
+                                    <field name="name_csg" invisible="not is_southern_grid_bid"/>
+                                    <field name="model_csg" invisible="not is_southern_grid_bid"/>
+                                </group>
+                                <group string="Model">
+                                    <field name="model"/>
+                                    <field name="position_count"/>
+                                </group>
+                                <group string="Dimensions">
+                                    <label for="length_cm" string="Size L x W x H (cm)"/>
+                                    <div class="o_row">
+                                        <field name="length_cm"/> x
+                                        <field name="width_cm"/> x
+                                        <field name="height_cm"/>
+                                    </div>
+                                    <field name="weight_kg"/>
+                                </group>
+                                <group string="Invoice &amp; Contract">
+                                    <field name="invoice_number"/>
+                                    <field name="invoice_equipment_name"/>
+                                    <field name="contract_number"/>
+                                    <field name="contract_equipment_name"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Manufacturer">
+                            <group>
+                                <group string="Manufacturer">
+                                    <field name="manufacturer"/>
+                                    <field name="serial_no"/>
+                                    <field name="manufacture_date"/>
+                                </group>
+                                <group string="State Grid">
+                                    <field name="manufacturer_sgcc"/>
+                                    <field name="serial_no_sgcc"/>
+                                </group>
+                                <group string="Southern Grid">
+                                    <field name="manufacturer_csg"/>
+                                    <field name="serial_no_csg"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Purchase">
+                            <group>
+                                <group>
+                                    <field name="original_value"/>
+                                    <field name="supplier_id"/>
+                                    <field name="commissioning_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Location &amp; Ownership">
+                            <group>
+                                <group>
+                                    <field name="department_id"/>
+                                    <field name="location_id"/>
+                                </group>
+                                <group>
+                                    <field name="usage_user_id"/>
+                                    <field name="maintenance_user_id"/>
+                                    <field name="calibration_user_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Technical Parameters">
+                            <group>
+                                <group>
+                                    <field name="total_power_kw"/>
+                                    <field name="air_consumption"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Maintenance Parameters">
+                            <group>
+                                <group>
+                                    <field name="last_internal_calibration_date"/>
+                                    <field name="last_external_calibration_date"/>
+                                </group>
+                                <group>
+                                    <field name="last_spot_check_date"/>
+                                    <field name="last_maintenance_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Equipment Documents">
+                            <field name="document_ids" context="{'default_equipment_id': id}">
+                                <list editable="bottom">
+                                    <field name="name" placeholder="Defaults to the uploaded file name"/>
+                                    <field name="doc_type_id"
+                                           options="{'no_create': False, 'no_open': False}"/>
+                                    <field name="file" filename="file_name" widget="binary"/>
+                                    <field name="file_name" column_invisible="1"/>
+                                    <field name="archived_by" readonly="1"/>
+                                    <field name="archived_at" readonly="1"/>
+                                    <field name="note"/>
+                                    <button name="action_download" type="object"
+                                            icon="fa-download" title="Download"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_equipment_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.search</field>
+        <field name="model">sn.wsd.device.equipment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="equipment_type_id"/>
+                <field name="equipment_status"/>
+                <field name="is_state_grid_bid"/>
+                <field name="is_southern_grid_bid"/>
+                <filter string="State Grid Bid" name="filter_sgcc_bid"
+                        domain="[('is_state_grid_bid', '=', True)]"/>
+                <filter string="Southern Grid Bid" name="filter_csg_bid"
+                        domain="[('is_southern_grid_bid', '=', True)]"/>
+                <separator/>
+                <filter string="In Use" name="filter_in_use"
+                        domain="[('equipment_status', '=', 'enabled')]"/>
+                <filter string="Under Repair" name="filter_repair"
+                        domain="[('equipment_status', '=', 'repair')]"/>
+                <separator/>
+                <filter string="My Usage Responsibility" name="filter_my_usage"
+                        domain="[('usage_user_id', '=', uid)]"/>
+                <group>
+                    <filter string="Equipment Status" name="group_status"
+                            context="{'group_by': 'equipment_status'}"/>
+                    <filter string="Equipment Type" name="group_type"
+                            context="{'group_by': 'equipment_type_id'}"/>
+                    <filter string="Department" name="group_department"
+                            context="{'group_by': 'department_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_equipment_ledger" model="ir.actions.act_window">
+        <field name="name">Equipment Ledger</field>
+        <field name="res_model">sn.wsd.device.equipment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_equipment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No equipment yet
+            </p>
+            <p>
+                Register every shop-floor device here: identification,
+                manufacturer, purchase, ownership and its documents.
+            </p>
+        </field>
+    </record>
+
+</odoo>

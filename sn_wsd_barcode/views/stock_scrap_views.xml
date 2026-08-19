@@ -60,7 +60,7 @@
                 <div class="row justify-content-center justify-content-md-start">
                     <div class="col-12 col-sm-10 col-md-8 my-2 ms-md-5 align-items-baseline"
                         invisible="tracking == 'serial'">
-                        <widget name="digipad" field_to_edit="scrap_qty"/>
+                        <widget name="sn_wsd_barcode_digipad" field_to_edit="scrap_qty"/>
                     </div>
                 </div>
                 <div class="row" groups="stock.group_stock_multi_locations">

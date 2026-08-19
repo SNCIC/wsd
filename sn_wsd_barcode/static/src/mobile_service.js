@@ -74,4 +74,6 @@ export const mobileService = {
     },
 };
 
-registry.category("services").add("mobile", mobileService);
+// Key must differ from web_mobile's "mobile" service: both live in
+// web.assets_backend and a duplicate key crashes the webclient at boot.
+registry.category("services").add("sn_wsd_barcode_mobile", mobileService);
