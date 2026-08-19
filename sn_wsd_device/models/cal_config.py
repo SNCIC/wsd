@@ -16,7 +16,9 @@ class CalibrationConfigWizard(models.TransientModel):
         string='Daily Trigger Time', required=True,
         help='Format HH:MM. Once this time is reached, the shared scheduled '
              'action scans the calibration plans and generates the due '
-             'tasks.')
+             'tasks. Each plan runs at most once per day: plans that '
+             'already ran today are not re-run when the time is changed '
+             '(delete the day\'s generation logs to re-test).')
 
     @api.model
     def default_get(self, fields_list):
