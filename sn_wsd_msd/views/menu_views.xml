@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_sn_wsd_msd_root" name="MSD Management" parent="mrp.menu_mrp_root" sequence="95"/>
+    <menuitem id="menu_sn_wsd_msd_root" name="MSD Management" parent="stock.menu_stock_root" sequence="95"/>
     <menuitem id="menu_sn_wsd_msd_report" name="MSD Material Report" parent="menu_sn_wsd_msd_root" action="action_sn_msd_lot_report" sequence="10"/>
     <menuitem id="menu_sn_wsd_msd_config" name="Configuration" parent="menu_sn_wsd_msd_root" sequence="90"/>
     <menuitem id="menu_sn_wsd_msd_level" name="MSL Levels" parent="menu_sn_wsd_msd_config" action="action_sn_msd_level" sequence="10"/>

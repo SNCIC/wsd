@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Move the shared quality root menu to the application root. -->
+    <record id="sn_wsd_mrp.menu_sn_quality_root" model="ir.ui.menu">
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">178</field>
+        <field name="web_icon">sn_wsd_quality,static/description/icon.png</field>
+    </record>
+
     <!-- Quality Configuration Submenu -->
     <menuitem id="menu_sn_wsd_quality_inspection_scheme" name="Inspection Schemes" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_inspection_scheme" sequence="30"/>
     <menuitem id="menu_sn_wsd_quality_sampling_standard" name="Sampling Standards" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_quality_sampling_standard" sequence="31"/>
