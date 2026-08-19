@@ -31,7 +31,11 @@ class MesTestResultBase(models.Model):
     workcenter_id = fields.Many2one('mrp.workcenter', string='MES Work Center', ondelete='set null', index=True, check_company=True)
     workshop_id = fields.Many2one('sn.mrp.workshop', ondelete='set null', index=True, check_company=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', ondelete='set null', index=True, check_company=True)
-    equipment_id = fields.Many2one('maintenance.equipment', ondelete='set null', index=True, check_company=True)
+    equipment_id = fields.Many2one(
+        'sn.wsd.device.equipment',
+        ondelete='set null',
+        index=True,
+    )
     line_code = fields.Char(index=True)
     workcenter_code = fields.Char(index=True)
     test_type = fields.Selection(
@@ -91,6 +95,7 @@ class MesTestResultBase(models.Model):
         route_operation_id=None,
         travel_event_type=None,
         travel_result=None,
+        equipment_id=None,
     ):
         payload = payload or {}
         external_event_id = external_event_id or payload.get('external_event_id') or payload.get('event_id') or False
@@ -109,7 +114,7 @@ class MesTestResultBase(models.Model):
                     serial_number=existing.internal_serial_id.serial_no,
                     result=existing.result,
                 )
-        equipment = self.env['maintenance.equipment']
+        equipment = self.env['sn.wsd.device.equipment'].browse(equipment_id).exists() if equipment_id else self.env['sn.wsd.device.equipment']
         workcenter = self.env['mrp.workcenter']
         route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(route_operation_id).exists() if route_operation_id else self.env['sn.wsd.mes.order.route.operation']
         mes_order = self.env['sn.wsd.mes.order'].browse(mes_order_id or payload.get('mes_order_id')).exists() if (mes_order_id or payload.get('mes_order_id')) else self.env['sn.wsd.mes.order']
@@ -117,8 +122,6 @@ class MesTestResultBase(models.Model):
             mes_order = route_operation.mes_order_id
         if workcenter_code:
             workcenter = workcenter.search([('code', '=', workcenter_code)], limit=1)
-        elif equipment and equipment.x_mes_workcenter_id:
-            workcenter = equipment.x_mes_workcenter_id
         production = self.env['mrp.production'].browse(production_id).exists() if production_id else mes_order.production_id
         if not production and mes_order:
             production = mes_order.production_id
@@ -153,6 +156,7 @@ class MesTestResultBase(models.Model):
             source_system=source_system,
             mes_order_id=mes_order.id if mes_order else False,
             route_operation_id=route_operation.id if route_operation else False,
+            equipment_id=equipment.id if equipment else False,
             retry_sequence=retry_sequence,
             retry_limit=retry_limit,
             requires_repair=requires_repair,

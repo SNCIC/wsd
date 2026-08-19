@@ -2,7 +2,7 @@
     'name': 'SN WSD SMT',
     'version': '19.0.3.2.2',
     'summary': 'SMT material table and online loading management',
-    'depends': ['mrp', 'maintenance', 'sn_wsd_mrp', 'sn_wsd_maintenance', 'web'],
+    'depends': ['mrp', 'sn_wsd_mrp', 'web'],
     'data': [
         'security/ir.model.access.csv',
         'views/sn_smt_config_views.xml',

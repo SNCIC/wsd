@@ -52,10 +52,6 @@ class SnSmtBlWizard(models.TransientModel):
         self.ensure_one()
         production = self._validate_production()
         device_seq, table_no = self._parse_device_table()
-        device_links = self.workcenter_id.x_smt_device_ids
-        device_link = device_links.filtered(lambda line: line.device_seq == device_seq)[:1]
-        if device_links and not device_link:
-            raise UserError(_('No matching device sequence was found for the current work center.'))
         target = production.x_smt_online_material_ids.filtered(
             lambda line: line.device_seq == device_seq and line.table_no == table_no and line.loadpoint == self.loadpoint_input
         )[:1]
@@ -73,7 +69,7 @@ class SnSmtBlWizard(models.TransientModel):
 
     def _validate_feeder(self, online_material):
         self.ensure_one()
-        if not self.workcenter_id.x_smt_is_feeder_control or online_material.is_tray == 'Y':
+        if online_material.is_tray == 'Y':
             self.feeder_id = False
             return self.env['sn.smt.feeder']
         feeder = self.env['sn.smt.feeder'].search([
