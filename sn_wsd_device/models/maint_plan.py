@@ -66,3 +66,25 @@ class MaintenancePlan(models.Model):
         if month_index % months_step:
             return False
         return start + relativedelta(months=month_index) == today
+
+    def _is_equipment_due_today(self, equipment, today):
+        """Per-equipment due rule.
+
+        Daily plans are due every day (the same-day-done skip in the
+        generation loop keeps one task per day). Weekly plans anchor on
+        the equipment's last maintenance date: due 7 days after it, so
+        the rhythm follows the actual completion date; equipment never
+        maintained falls back to the plan start date. Other cycle types
+        stay anchored on the plan start date.
+        """
+        self.ensure_one()
+        start = self.start_date
+        if today < start:
+            return False
+        if self.cycle_type == 'daily':
+            return True
+        if self.cycle_type == 'weekly':
+            last = equipment.last_maintenance_date
+            anchor = last.date() if last else start
+            return (today - anchor).days % 7 == 0
+        return self._is_due_today(today)

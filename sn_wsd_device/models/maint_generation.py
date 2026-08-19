@@ -74,8 +74,8 @@ class MaintenancePlan(models.Model):
             ])
             if already_logged:
                 continue
-            if not plan._is_due_today(today):
-                continue
+            # Per-equipment due rules apply inside the generation loop
+            # (weekly plans may be due for one equipment and not another).
             plan._generate_tasks_for_today(today, now, trigger_dt,
                                            log_model, task_model)
 
@@ -93,6 +93,10 @@ class MaintenancePlan(models.Model):
             ('equipment_type_id', '=', self.equipment_type_id.id),
             ('equipment_status', 'in', ['enabled', 'repair']),
         ])
+        equipments = equipments.filtered(
+            lambda equipment: self._is_equipment_due_today(equipment, today))
+        if not equipments:
+            return
         for equipment in equipments:
             expected += 1
             try:
