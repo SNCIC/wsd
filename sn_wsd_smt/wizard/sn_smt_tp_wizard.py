@@ -33,7 +33,7 @@ class SnSmtTpWizard(models.TransientModel):
         self.ensure_one()
         if not self.production_id:
             raise UserError(_('Input value is empty.'))
-        if self.production_id.x_online_state != 'online' or self.production_id.x_smt_online_state != 'online':
+        if self.production_id.x_smt_online_state != 'online':
             raise UserError(_('The manufacturing order is not online for SMT loading.'))
         if not self.production_id.x_smt_product_side:
             raise UserError(_('The manufacturing order is missing the SMT product side.'))

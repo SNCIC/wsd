@@ -236,11 +236,11 @@ class MrpProductionShopFloor(models.Model):
 
     def action_open_sn_shop_floor(self):
         self.ensure_one()
-        action = self.env['ir.actions.actions']._for_xmlid(
-            'sn_wsd_workorder.action_sn_wsd_shop_floor')
-        context = dict(action.get('context') or {})
-        context['production_id'] = self.id
-        # work orders are gone: the terminal picks its own default station
-        context['workcenter_id'] = False
-        action['context'] = context
-        return action
+        # direct client action dict: ir.actions.actions lost _for_xmlid in 19
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'sn_wsd_shop_floor',
+            'name': _('Shop Floor'),
+            'target': 'fullscreen',
+            'context': {'production_id': self.id},
+        }

@@ -23,7 +23,7 @@ class MesOrder(models.Model):
     _check_company_auto = True
 
     name = fields.Char(
-        string='Reference', required=True, copy=False, readonly=True,
+        string='MES Order No.', required=True, copy=False, readonly=True,
         default=lambda self: _('New'), index=True,
     )
     production_id = fields.Many2one(
@@ -103,6 +103,18 @@ class MesOrder(models.Model):
         string='Online Since', readonly=True, copy=False,
         help='Set by the "Go Online" action. SNs may only be fed in after it.',
     )
+    x_online_log_ids = fields.One2many(
+        'sn.wsd.mes.order.log', 'mes_order_id', string='Online Log',
+    )
+    # 冗余车间（来自产线）：在线制令单等列表直接展示/分组
+    x_workshop_id = fields.Many2one(
+        'sn.mrp.workshop', related='production_line_id.workshop_id',
+        string='Workshop', store=True, index=True,
+    )
+    x_online_by = fields.Many2one(
+        'res.users', string='Online By', compute='_compute_x_online_by',
+        help='User of the latest "go online" log line.')
+
     x_mes_route_id = fields.Many2one(
         'sn.wsd.mes.order.route', string='MES Route', readonly=True, copy=False,
         index=True, ondelete='set null',
@@ -376,6 +388,39 @@ class MesOrder(models.Model):
             order.x_online_date = fields.Datetime.now()
             if order.state == 'released':
                 order.state = 'in_progress'
+            self.env['sn.wsd.mes.order.log'].create(
+                {'mes_order_id': order.id, 'action': 'online'})
+
+    def action_offline(self):
+        """Take the order offline: SN feeding stops from this moment on.
+
+        Blocked while boards are still in progress on this order -- going
+        offline hides the order from the stations, and in-progress boards
+        would lose their exit station. A log line keeps who/when."""
+        Wip = self.env['sn.wsd.serial.wip']
+        for order in self:
+            if not order.x_online_date:
+                raise ValidationError(_(
+                    'MES order %(name)s is not online.', name=order.name))
+            wip_sn = Wip.search_count([('mes_order_id', '=', order.id)])
+            if wip_sn:
+                raise ValidationError(_(
+                    'MES order %(name)s still has %(count)s board(s) in '
+                    'progress; let them leave their stations before going '
+                    'offline.', name=order.name, count=wip_sn))
+            order.x_online_date = False
+            self.env['sn.wsd.mes.order.log'].create(
+                {'mes_order_id': order.id, 'action': 'offline'})
+
+    @api.depends('x_online_date')
+    def _compute_x_online_by(self):
+        # the log is ordered date desc: the first online line is the latest
+        Log = self.env['sn.wsd.mes.order.log']
+        for order in self:
+            order.x_online_by = Log.search([
+                ('mes_order_id', '=', order.id),
+                ('action', '=', 'online'),
+            ], limit=1).user_id
 
     def action_sync_route(self):
         """Re-sync the private route from the current common route.
@@ -1243,4 +1288,30 @@ class StockWarehouseMesIssue(models.Model):
         copy=False,
         help='Internal operation type used by MES-order completion receipts; '
              'created on first use.',
+    )
+
+
+class MesOrderOnlineLog(models.Model):
+    """Who put a MES order online / offline, and when (上下线日志)."""
+
+    _name = 'sn.wsd.mes.order.log'
+    _description = 'MES Order Online Log'
+    _order = 'date desc, id desc'
+
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', required=True, ondelete='cascade', index=True,
+        check_company=True,
+    )
+    action = fields.Selection(
+        [('online', 'Go Online'), ('offline', 'Go Offline')],
+        string='Action', required=True, index=True,
+    )
+    user_id = fields.Many2one(
+        'res.users', string='User', default=lambda self: self.env.user,
+        required=True, index=True,
+    )
+    date = fields.Datetime(string='Date', default=fields.Datetime.now,
+                           required=True, index=True)
+    company_id = fields.Many2one(
+        'res.company', related='mes_order_id.company_id', store=True,
     )
