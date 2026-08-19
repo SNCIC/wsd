@@ -310,6 +310,10 @@
             <form string="Accept Repair Order">
                 <group>
                     <group>
+                        <!-- The parent field must be present so the
+                             default_repair_order_id context value applies and
+                             the related report fields below get populated. -->
+                        <field name="repair_order_id" readonly="1"/>
                         <field name="equipment_id"/>
                         <field name="equipment_code"/>
                         <field name="equipment_name"/>
@@ -346,7 +350,7 @@
             <form string="Record Repair">
                 <group>
                     <group>
-                        <field name="repair_order_id"/>
+                        <field name="repair_order_id" readonly="1"/>
                         <field name="equipment_code"/>
                         <field name="equipment_name"/>
                     </group>
