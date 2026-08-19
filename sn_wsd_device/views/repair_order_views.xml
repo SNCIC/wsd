@@ -87,12 +87,10 @@
                             <field name="responsible_user_id"/>
                         </group>
                     </group>
-                    <group string="Fault Phenomenon">
-                        <field name="fault_phenomenon" nolabel="1"/>
-                    </group>
-                    <group string="Initial Handling">
-                        <field name="initial_handling" nolabel="1"/>
-                    </group>
+                    <separator string="Fault Phenomenon"/>
+                    <field name="fault_phenomenon" nolabel="1"/>
+                    <separator string="Initial Handling"/>
+                    <field name="initial_handling" nolabel="1"/>
                     <notebook>
                         <page string="Repair Records">
                             <field name="record_ids" readonly="1">
@@ -124,16 +122,14 @@
                                                    invisible="repair_type not in ('outsourced', 'return_factory')"/>
                                         </group>
                                     </group>
-                                    <group string="Investigation Process"
-                                           invisible="repair_type != 'false_alarm'">
-                                        <field name="investigation_process"
-                                               nolabel="1"/>
-                                    </group>
-                                    <group string="Repair Process"
-                                           invisible="repair_type != 'onsite'">
-                                        <field name="repair_process"
-                                               nolabel="1"/>
-                                    </group>
+                                    <separator string="Investigation Process"
+                                               invisible="repair_type != 'false_alarm'"/>
+                                    <field name="investigation_process" nolabel="1"
+                                           invisible="repair_type != 'false_alarm'"/>
+                                    <separator string="Repair Process"
+                                               invisible="repair_type != 'onsite'"/>
+                                    <field name="repair_process" nolabel="1"
+                                           invisible="repair_type != 'onsite'"/>
                                 </form>
                             </field>
                         </page>
@@ -183,14 +179,14 @@
                                    invisible="repair_type not in ('outsourced', 'return_factory')"/>
                         </group>
                     </group>
-                    <group string="Investigation Process"
-                           invisible="repair_type != 'false_alarm'">
-                        <field name="investigation_process" nolabel="1"/>
-                    </group>
-                    <group string="Repair Process"
-                           invisible="repair_type != 'onsite'">
-                        <field name="repair_process" nolabel="1"/>
-                    </group>
+                    <separator string="Investigation Process"
+                               invisible="repair_type != 'false_alarm'"/>
+                    <field name="investigation_process" nolabel="1"
+                           invisible="repair_type != 'false_alarm'"/>
+                    <separator string="Repair Process"
+                               invisible="repair_type != 'onsite'"/>
+                    <field name="repair_process" nolabel="1"
+                           invisible="repair_type != 'onsite'"/>
                 </sheet>
             </form>
         </field>
@@ -287,16 +283,14 @@
                         <field name="fault_time"/>
                     </group>
                 </group>
-                <group string="Fault Phenomenon">
-                    <field name="fault_phenomenon" nolabel="1"
-                           class="sn_wsd_repair_html"
-                           placeholder="Describe the fault phenomenon..."/>
-                </group>
-                <group string="Initial Handling">
-                    <field name="initial_handling" nolabel="1"
-                           class="sn_wsd_repair_html"
-                           placeholder="Describe what has been checked / tried..."/>
-                </group>
+                <separator string="Fault Phenomenon"/>
+                <field name="fault_phenomenon" nolabel="1"
+                       class="sn_wsd_repair_html"
+                       placeholder="Describe the fault phenomenon..."/>
+                <separator string="Initial Handling"/>
+                <field name="initial_handling" nolabel="1"
+                       class="sn_wsd_repair_html"
+                       placeholder="Describe what has been checked / tried..."/>
                 <footer>
                     <button name="action_submit" type="object"
                             string="Submit Report" class="btn-primary"
@@ -329,12 +323,10 @@
                         <field name="fault_time"/>
                     </group>
                 </group>
-                <group string="Fault Phenomenon">
-                    <field name="fault_phenomenon" nolabel="1"/>
-                </group>
-                <group string="Initial Handling">
-                    <field name="initial_handling" nolabel="1"/>
-                </group>
+                <separator string="Fault Phenomenon"/>
+                <field name="fault_phenomenon" nolabel="1"/>
+                <separator string="Initial Handling"/>
+                <field name="initial_handling" nolabel="1"/>
                 <footer>
                     <button name="action_confirm" type="object"
                             string="Confirm Acceptance" class="btn-primary"
@@ -364,18 +356,18 @@
                         <field name="record_time"/>
                     </group>
                 </group>
-                <group string="False Alarm Check"
-                       invisible="repair_type != 'false_alarm'">
-                    <field name="investigation_process" nolabel="1"
-                           class="sn_wsd_repair_html"
-                           placeholder="Describe the investigation..."/>
-                </group>
-                <group string="On-site Repair"
-                       invisible="repair_type != 'onsite'">
-                    <field name="repair_process" nolabel="1"
-                           class="sn_wsd_repair_html"
-                           placeholder="Describe the repair process..."/>
-                </group>
+                <separator string="False Alarm Check"
+                           invisible="repair_type != 'false_alarm'"/>
+                <field name="investigation_process" nolabel="1"
+                       class="sn_wsd_repair_html"
+                       placeholder="Describe the investigation..."
+                       invisible="repair_type != 'false_alarm'"/>
+                <separator string="On-site Repair"
+                           invisible="repair_type != 'onsite'"/>
+                <field name="repair_process" nolabel="1"
+                       class="sn_wsd_repair_html"
+                       placeholder="Describe the repair process..."
+                       invisible="repair_type != 'onsite'"/>
                 <group invisible="repair_type not in ('outsourced', 'return_factory')">
                     <group>
                         <field name="vendor_company"
