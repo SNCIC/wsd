@@ -69,7 +69,7 @@ class SnSmtTpWizard(models.TransientModel):
 
     def _validate_feeder(self, online_material):
         self.ensure_one()
-        if not self.workcenter_id.x_smt_is_feeder_control or online_material.is_tray == 'Y':
+        if online_material.is_tray == 'Y':
             self.feeder_id = False
             return self.env['sn.smt.feeder']
         feeder = self.env['sn.smt.feeder'].search([

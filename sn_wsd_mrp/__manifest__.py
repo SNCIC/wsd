@@ -2,7 +2,7 @@
     'name': 'SN WSD MRP',
     'version': '19.0.7.0.6',
     'summary': 'Manufacturing and internal serial extensions built on Odoo MRP',
-    'depends': ['product', 'mrp', 'stock', 'purchase', 'maintenance', 'hr', 'mail'],
+    'depends': ['product', 'mrp', 'stock', 'purchase', 'hr', 'mail', 'sn_wsd_device'],
     'data': [
         'data/stock_package_type.xml',
         'data/scrap_reason_data.xml',

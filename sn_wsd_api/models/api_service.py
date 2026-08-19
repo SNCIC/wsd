@@ -501,14 +501,16 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def _find_aoi_equipment_and_workcenter(self, machine_name: str):
-        equipment = self.env['maintenance.equipment'].search([('name', '=', machine_name)], limit=1)
-        workcenter = equipment.x_mes_workcenter_id if equipment and equipment.x_mes_workcenter_id else self.env['mrp.workcenter']
-        if not workcenter:
-            workcenter = self.env['mrp.workcenter'].search([
-                '|',
-                ('name', '=', machine_name),
-                ('code', '=', machine_name),
-            ], limit=1)
+        equipment = self.env['sn.wsd.device.equipment'].search([
+            '|',
+            ('name', '=', machine_name),
+            ('code', '=', machine_name),
+        ], limit=1)
+        workcenter = self.env['mrp.workcenter'].search([
+            '|',
+            ('name', '=', machine_name),
+            ('code', '=', machine_name),
+        ], limit=1)
         return equipment, workcenter
 
     @api.model
@@ -612,6 +614,7 @@ class SnWsdApiService(models.AbstractModel):
             external_event_id=external_event_id,
             request_id=False,
             source_system=source_system,
+            equipment_id=equipment.id if equipment else False,
         )
         if ingest_result.get('error'):
             return self._strict_external_error(ingest_result.get('message') or ingest_result.get('error'))

@@ -25,7 +25,11 @@ class MesSnTravel(models.Model):
     workcenter_id = fields.Many2one('mrp.workcenter', string='MES Work Center', ondelete='set null', index=True, check_company=True)
     workshop_id = fields.Many2one('sn.mrp.workshop', ondelete='set null', index=True, check_company=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', ondelete='set null', index=True, check_company=True)
-    equipment_id = fields.Many2one('maintenance.equipment', ondelete='set null', index=True, check_company=True)
+    equipment_id = fields.Many2one(
+        'sn.wsd.device.equipment',
+        ondelete='set null',
+        index=True,
+    )
     line_code = fields.Char(index=True)
     workcenter_code = fields.Char(index=True)
     event_type = fields.Selection(
@@ -74,6 +78,7 @@ class MesSnTravel(models.Model):
         retry_limit=0,
         requires_repair=False,
         is_rework_pass=False,
+        equipment_id=None,
     ):
         payload = payload or {}
         external_event_id = external_event_id or payload.get('external_event_id') or payload.get('event_id') or False
@@ -93,13 +98,11 @@ class MesSnTravel(models.Model):
                     route_operation_id=existing.route_operation_id.id,
                     workcenter_code=existing.workcenter_code,
                 )
-        equipment = self.env['maintenance.equipment']
+        equipment = self.env['sn.wsd.device.equipment'].browse(equipment_id).exists() if equipment_id else self.env['sn.wsd.device.equipment']
         workcenter = self.env['mrp.workcenter']
         route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(route_operation_id).exists() if route_operation_id else self.env['sn.wsd.mes.order.route.operation']
         if workcenter_code:
             workcenter = workcenter.search([('code', '=', workcenter_code)], limit=1)
-        elif equipment and equipment.x_mes_workcenter_id:
-            workcenter = equipment.x_mes_workcenter_id
         mes_order = (
             self.env['sn.wsd.mes.order'].browse(mes_order_id or payload.get('mes_order_id')).exists()
             if (mes_order_id or payload.get('mes_order_id')) else False

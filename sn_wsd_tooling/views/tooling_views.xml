@@ -148,9 +148,6 @@
                         <button class="oe_stat_button" type="object" name="action_view_maintenance_logs" icon="fa-wrench">
                             <field name="maintenance_log_count" widget="statinfo" string="Maintenance Logs"/>
                         </button>
-                        <button class="oe_stat_button" type="object" name="action_view_maintenance_requests" icon="fa-life-ring">
-                            <field name="maintenance_request_count" widget="statinfo" string="Maintenance Requests"/>
-                        </button>
                     </div>
                     <group>
                         <group>
@@ -170,7 +167,6 @@
                             <field name="acceptance_date"/>
                             <field name="panel_count"/>
                             <field name="safe_stock_qty"/>
-                            <field name="maintenance_equipment_id" readonly="1"/>
                         </group>
                     </group>
                     <group>

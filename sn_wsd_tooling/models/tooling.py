@@ -158,12 +158,6 @@ class Tooling(models.Model):
         tracking=True,
     )
     vendor_id = fields.Many2one('res.partner', string='Vendor', check_company=True, tracking=True)
-    maintenance_equipment_id = fields.Many2one(
-        'maintenance.equipment',
-        string='Maintenance Equipment',
-        check_company=True,
-        copy=False,
-    )
     manufacture_date = fields.Date(string='Manufacture Date')
     acceptance_date = fields.Date(string='Acceptance Date')
     state = fields.Selection(TOOL_STATE_SELECTION, string='State', default='draft', required=True, tracking=True)
@@ -209,7 +203,6 @@ class Tooling(models.Model):
     operation_count = fields.Integer(compute='_compute_counters')
     usage_count = fields.Integer(compute='_compute_counters')
     maintenance_log_count = fields.Integer(compute='_compute_counters')
-    maintenance_request_count = fields.Integer(compute='_compute_counters')
 
     _name_company_uniq = models.Constraint(
         'unique(name, company_id)',
@@ -258,13 +251,12 @@ class Tooling(models.Model):
             tooling.cycle_maintenance_status = cycle_status
             tooling.maintenance_status = max((count_status, cycle_status), key=lambda status: severity_rank[status])
 
-    @api.depends('operation_log_ids', 'usage_log_ids', 'maintenance_log_ids', 'maintenance_equipment_id.maintenance_ids')
+    @api.depends('operation_log_ids', 'usage_log_ids', 'maintenance_log_ids')
     def _compute_counters(self):
         for tooling in self:
             tooling.operation_count = len(tooling.operation_log_ids)
             tooling.usage_count = len(tooling.usage_log_ids)
             tooling.maintenance_log_count = len(tooling.maintenance_log_ids)
-            tooling.maintenance_request_count = len(tooling.maintenance_equipment_id.maintenance_ids)
 
     @api.constrains('panel_count')
     def _check_panel_count(self):
@@ -284,15 +276,11 @@ class Tooling(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        records = super().create([self._prepare_vals_from_template(vals) for vals in vals_list])
-        records._ensure_maintenance_equipment()
-        return records
+        return super().create([self._prepare_vals_from_template(vals) for vals in vals_list])
 
     def write(self, vals):
         vals = self._prepare_vals_from_template(vals, partial=True)
-        result = super().write(vals)
-        self._ensure_maintenance_equipment()
-        return result
+        return super().write(vals)
 
     def _prepare_vals_from_template(self, vals, partial=False):
         template_id = vals.get('template_id')
@@ -319,20 +307,6 @@ class Tooling(models.Model):
             if key not in vals or (not partial and vals.get(key) in (False, None, '')):
                 vals.setdefault(key, value)
         return vals
-
-    def _ensure_maintenance_equipment(self):
-        category = self.env['maintenance.equipment.category'].search([('name', '=', 'Tooling')], limit=1)
-        for tooling in self.filtered(lambda record: not record.maintenance_equipment_id):
-            tooling.maintenance_equipment_id = self.env['maintenance.equipment'].create({
-                'name': tooling.name,
-                'category_id': category.id if category else False,
-                'company_id': tooling.company_id.id,
-                'owner_user_id': self.env.user.id,
-                'serial_no': tooling.name,
-                'partner_id': tooling.vendor_id.id,
-                'effective_date': tooling.acceptance_date or fields.Date.context_today(self),
-                'note': tooling.note,
-            })
 
     def _check_route_operation_match(self, route_operation):
         self.ensure_one()
@@ -427,17 +401,6 @@ class Tooling(models.Model):
             'view_mode': 'list,form',
             'domain': [('tooling_id', '=', self.id)],
             'context': {'default_tooling_id': self.id},
-        }
-
-    def action_view_maintenance_requests(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Maintenance Requests'),
-            'res_model': 'maintenance.request',
-            'view_mode': 'list,form',
-            'domain': [('equipment_id', '=', self.maintenance_equipment_id.id)],
-            'context': {'default_equipment_id': self.maintenance_equipment_id.id},
         }
 
     def action_open_maintenance_wizard(self):

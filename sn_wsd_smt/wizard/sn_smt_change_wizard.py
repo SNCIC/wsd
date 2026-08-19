@@ -77,7 +77,7 @@ class SnSmtChangeWizard(models.TransientModel):
 
     def _get_new_feeder(self, target_line):
         self.ensure_one()
-        if not self.workcenter_id.x_smt_is_feeder_control or target_line.is_tray == 'Y':
+        if target_line.is_tray == 'Y':
             return self.env['sn.smt.feeder']
         feeder_required = self._is_config_enabled('SMT018', self.production_id.company_id)
         if not self.feeder_input and feeder_required:

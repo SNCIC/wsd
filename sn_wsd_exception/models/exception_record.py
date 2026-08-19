@@ -141,9 +141,8 @@ class SnWsdExceptionRecord(models.Model):
         index=True,
     )
     equipment_id = fields.Many2one(
-        'maintenance.equipment',
+        'sn.wsd.device.equipment',
         string='Equipment',
-        check_company=True,
         index=True,
         tracking=True,
     )

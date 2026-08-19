@@ -24,7 +24,10 @@ class MeterAgingBatch(models.Model):
         index=True,
         check_company=True,
     )
-    equipment_id = fields.Many2one('maintenance.equipment', index=True, check_company=True)
+    equipment_id = fields.Many2one(
+        'sn.wsd.device.equipment',
+        index=True,
+    )
     aging_cart_no = fields.Char(index=True)
     planned_hours = fields.Float(default=8.0)
     actual_hours = fields.Float()
