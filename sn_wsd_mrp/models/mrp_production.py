@@ -52,7 +52,7 @@ class MrpProduction(models.Model):
             if production.x_route_id:
                 continue
             route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
-                production.product_id.x_drawing_no, production.company_id.id)
+                production.product_id.default_code, production.company_id.id)
             if route:
                 production.x_route_id = route
 
@@ -66,7 +66,7 @@ class MrpProduction(models.Model):
         for production in productions:
             if not production.x_route_id:
                 route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
-                    production.product_id.x_drawing_no, production.company_id.id)
+                    production.product_id.default_code, production.company_id.id)
                 if route:
                     production.x_route_id = route
         return productions

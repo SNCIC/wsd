@@ -2992,7 +2992,7 @@ msgid "MO Quantity"
 msgstr "制造订单数量"
 
 #. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_list model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__x_drawing_no model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_drawing_no model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__x_drawing_no model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_drawing_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_search model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_list model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_drawing_no model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__x_drawing_no model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_drawing_no
 msgid "Drawing No."
 msgstr "图号"
 
@@ -5472,11 +5472,6 @@ msgid "Split Production Detail"
 msgstr "拆分生产明细"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_drawing_no
-msgid "Stable drawing number linking this route to its product. This is the joining key shared with the BOM (both resolve via 图号)."
-msgstr "稳定的图号，用于关联路线与产品。是与 BOM 共用的关联键（都通过图号解析）。"
-
-#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_station_type model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__station_type model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_station_type model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
 msgid "Station Type"
 msgstr "工位类型"
@@ -5603,7 +5598,7 @@ msgid "X Wsd Pack Time"
 msgstr "打包时间"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_board_side model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_board_side model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__product_board_side model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
 msgid "Board Side Type"
 msgstr "板面类型"
 
@@ -5613,12 +5608,12 @@ msgid "Single: one single-side process route. Double: one Top (T) and one Bottom
 msgstr "单面：需一条单面工艺路线。双面：顶面 (T)、底面 (B) 各一条，按面别独立排产。"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__single model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__single model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_drawing__product_board_side__single model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
 msgid "Single Side"
 msgstr "单面"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__double model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__product_template__x_board_side__double model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route_drawing__product_board_side__double model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
 msgid "Double Side"
 msgstr "双面"
 

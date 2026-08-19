@@ -84,11 +84,19 @@ class MesOrderRoute(models.Model):
     def _resolve_common_route(self, mes_order):
         """Resolve the common route for the order's product drawing number.
 
+        Matched by 车间 + 图号 + 面别 (same key as the scheduling wizard);
+        a double-sided drawing carries one route per side, so the order's
+        own side selects which one to snapshot.
+
         Fail hard — no fallback (same policy as the cycle gate)."""
-        drawing = mes_order.product_id.x_drawing_no
+        drawing = mes_order.product_id.default_code
         workshop = mes_order.production_line_id.workshop_id
+        # legacy products without a board side type keep the side-agnostic
+        # lookup (a side filter would miss their side-less routes)
+        side = mes_order.x_side if mes_order.product_id.x_board_side else None
         route = self.env['sn.wsd.process.route']._find_current_route_by_drawing_no(
-            drawing, mes_order.company_id.id, workshop_id=workshop.id)
+            drawing, mes_order.company_id.id, side=side,
+            workshop_id=workshop.id)
         if not route:
             raise ValidationError(_(
                 'No released process route is bound to drawing number "%(drawing)s". '

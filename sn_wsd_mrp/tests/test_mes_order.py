@@ -72,7 +72,7 @@ class TestMesOrder(TransactionCase):
 
     def _make_mo(self, qty=10000):
         product = self.env['product.product'].create({
-            'name': 'P-MES', 'uom_id': self.uom_unit.id, 'x_drawing_no': 'DWG-MES-TEST',
+            'name': 'P-MES', 'uom_id': self.uom_unit.id, 'default_code': 'DWG-MES-TEST',
             'x_board_side': 'single',
         })
         return self.env['mrp.production'].create({
@@ -210,7 +210,7 @@ class TestMesOrder(TransactionCase):
     def _make_bom_mo(self, qty=10):
         """MO backed by a BOM with one component line (2 per finished unit)."""
         product = self.env['product.product'].create({
-            'name': 'P-MES-BOM', 'uom_id': self.uom_unit.id, 'x_drawing_no': 'DWG-MES-TEST',
+            'name': 'P-MES-BOM', 'uom_id': self.uom_unit.id, 'default_code': 'DWG-MES-TEST',
             'x_board_side': 'single',
         })
         component = self.env['product.product'].create({
@@ -335,7 +335,7 @@ class TestMesOrder(TransactionCase):
     # --- F5 R1 / D8: pre-issue materials are excluded from pickings ---
     def test_18_advance_issue_excluded(self):
         self._set_line_side()
-        product = self.env['product.product'].create({'name': 'P-ADV', 'uom_id': self.uom_unit.id, 'x_drawing_no': 'DWG-MES-TEST', 'x_board_side': 'single'})
+        product = self.env['product.product'].create({'name': 'P-ADV', 'uom_id': self.uom_unit.id, 'default_code': 'DWG-MES-TEST', 'x_board_side': 'single'})
         comp_a = self.env['product.product'].create({'name': 'COMP-A', 'uom_id': self.uom_unit.id})
         comp_b = self.env['product.product'].create({'name': 'COMP-B', 'uom_id': self.uom_unit.id})
         bom = self.env['mrp.bom'].create({
@@ -761,7 +761,7 @@ class TestMesOrder(TransactionCase):
         order_b = self._make_order(mo, 4, line=other_line)  # line LB2
         order_b.action_online()
         wc_in, _wc_out = self._done_workcenters()  # bound to LA
-        Station = env = self.env['sn.wsd.mes.order']
+        Station = self.env['sn.wsd.mes.order']
         data = Station.sn_station_floor_data(wc_in.id)
         self.assertEqual([o['name'] for o in data['orders']], [order_a.name])
         # order barcode switches nothing here (B is another line, not listed)
