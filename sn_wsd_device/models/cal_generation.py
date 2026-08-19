@@ -31,6 +31,15 @@ class CalibrationGenerationLog(models.Model):
     error_detail = fields.Text(string='Error Detail')
     execution_time = fields.Datetime(string='Execution Time')
 
+
+    @api.model
+    def _parameter_trigger_time_display(self):
+        """The configured business trigger time (local wall clock), as
+        shown on generation logs."""
+        raw = self.env['ir.config_parameter'].sudo().get_param(
+            'equipment_cal_trigger_time', '08:00')
+        return (raw or '08:00').strip()
+
     @api.model
     def _parameter_trigger_datetime(self, now):
         raw = self.env['ir.config_parameter'].sudo().get_param(
@@ -126,7 +135,7 @@ class CalibrationPlan(models.Model):
         log_model.create({
             'plan_id': self.id,
             'generation_date': today,
-            'trigger_time': f'{trigger_dt.hour:02d}:{trigger_dt.minute:02d}',
+            'trigger_time': log_model._parameter_trigger_time_display(),
             'due_date': due_date,
             'task_creation_date': creation_date,
             'generated_count': generated,
