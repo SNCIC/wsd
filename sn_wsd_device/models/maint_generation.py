@@ -148,12 +148,11 @@ class MaintenancePlan(models.Model):
                     errors.append(f'{equipment.code}: '
                                   'no maintenance item on the template')
                     continue
-                # Supersede stale work: unfinished tasks of previous days
-                # for this equipment become overdue before the new task.
+                # Supersede stale work: ALL unfinished tasks of this
+                # equipment (any date) become overdue before the new task.
                 task_model.search([
                     ('equipment_id', '=', equipment.id),
                     ('task_status', 'in', ['pending', 'in_progress']),
-                    ('task_date', '<', today),
                 ]).write({'task_status': 'overdue'})
                 line_vals = [Command.create({
                     'name': item.name,
