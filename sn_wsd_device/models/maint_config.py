@@ -17,10 +17,9 @@ class MaintenanceConfigWizard(models.TransientModel):
         string='Daily Trigger Time', required=True,
         help='Format HH:MM. Once this time is reached, the shared scheduled '
              'action generates the day\'s maintenance tasks for every due '
-             'plan. Applies to all maintenance plans. Each plan runs at most '
-             'once per day: plans that already ran today are not re-run when '
-             'the time is changed (delete the day\'s generation logs to '
-             're-test).')
+             'plan. Applies to all maintenance plans. Idempotency is per '
+             'equipment: a device already maintained today, or one that '
+             'already has today\'s task, is not duplicated.')
 
     @api.model
     def default_get(self, fields_list):

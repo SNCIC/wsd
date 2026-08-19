@@ -78,9 +78,9 @@ class MaintenancePlan(models.Model):
     @api.model
     def _cron_generate_maintenance_tasks(self):
         """Single shared cron for every maintenance plan. Wakes up every
-        10 minutes, waits until the maintenance trigger time, then marks
-        previous unfinished tasks overdue and generates today's tasks
-        once per plan (the log is the idempotency token)."""
+        minute, waits until the maintenance trigger time, then marks
+        previous unfinished tasks overdue and creates the day's task for
+        every due equipment (idempotency is per equipment)."""
         now = fields.Datetime.now()
         today = fields.Date.context_today(self)
         trigger_dt = self.env[
@@ -92,14 +92,9 @@ class MaintenancePlan(models.Model):
         log_model = self.env['sn.wsd.device.maint.generation.log']
         task_model = self.env['sn.wsd.device.maint.task']
         for plan in self.search([('active', '=', True)]):
-            already_logged = log_model.search_count([
-                ('plan_id', '=', plan.id),
-                ('generation_date', '=', today),
-            ])
-            if already_logged:
-                continue
-            # Per-equipment due rules apply inside the generation loop
-            # (weekly plans may be due for one equipment and not another).
+            # No plan-level once-per-day gate: idempotency is per
+            # equipment (done today / already has today's task), so every
+            # wake-up re-evaluates each device's condition.
             plan._generate_tasks_for_today(today, now, trigger_dt,
                                            log_model, task_model)
 
@@ -121,21 +116,18 @@ class MaintenancePlan(models.Model):
             lambda equipment: self._is_equipment_due_today(equipment, today))
         if not equipments:
             return
-        # Claim the day with the generation log BEFORE creating tasks: the
-        # log is the idempotency token, so writing it first prevents a
-        # crashed run from being retried and duplicating tasks.
-        log = log_model.create({
-            'plan_id': self.id,
-            'generation_date': today,
-            'trigger_time': log_model._parameter_trigger_time_display(),
-            'expected_equipment_count': len(equipments),
-            'run_status': 'success',
-        })
         for equipment in equipments:
             expected += 1
             try:
                 if equipment.last_maintenance_date and \
                         equipment.last_maintenance_date >= today_start:
+                    skipped += 1
+                    continue
+                duplicate = task_model.search_count([
+                    ('equipment_id', '=', equipment.id),
+                    ('task_date', '=', today),
+                ])
+                if duplicate:
                     skipped += 1
                     continue
                 if not items:
@@ -171,13 +163,20 @@ class MaintenancePlan(models.Model):
             except Exception as exc:  # noqa: BLE001 - logged, not fatal
                 failed += 1
                 errors.append(f'{equipment.code}: {exc}')
+        # Only log runs that produced something: pure-skip wake-ups (every
+        # minute once tasks exist) must not flood the generation log.
+        if not generated and not failed:
+            return
         if failed == 0:
             run_status = 'success'
         elif generated == 0:
             run_status = 'failed'
         else:
             run_status = 'partial'
-        log.write({
+        log_model.create({
+            'plan_id': self.id,
+            'generation_date': today,
+            'trigger_time': log_model._parameter_trigger_time_display(),
             'expected_equipment_count': expected,
             'generated_count': generated,
             'skipped_count': skipped,

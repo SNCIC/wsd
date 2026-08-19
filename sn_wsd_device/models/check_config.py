@@ -19,10 +19,9 @@ class CheckConfigWizard(models.TransientModel):
         help='Format HH:MM. Once this time is reached, the shared scheduled '
              'action generates the day\'s spot check tasks for every due '
              'plan. Applies to all plans. Saving runs the generation once '
-             'immediately when the time has already passed today. Each plan '
-             'runs at most once per day: plans that already ran today are '
-             'not re-run when the time is changed (delete the day\'s '
-             'generation logs to re-test).')
+             'immediately when the time has already passed today. '
+             'Idempotency is per equipment: a device already checked today, '
+             'or one that already has today\'s task, is not duplicated.')
 
     @api.model
     def default_get(self, fields_list):
