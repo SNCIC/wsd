@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== Equipment type dictionary ===== -->
+
+    <record id="view_equipment_type_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.type.list</field>
+        <field name="model">sn.wsd.device.equipment.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_equipment_type_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.type.form</field>
+        <field name="model">sn.wsd.device.equipment.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_equipment_type" model="ir.actions.act_window">
+        <field name="name">Equipment Types</field>
+        <field name="res_model">sn.wsd.device.equipment.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===== Device location tree ===== -->
+
+    <record id="view_device_location_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.location.list</field>
+        <field name="model">sn.wsd.device.location</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="display_name" string="Location"/>
+                <field name="kind"/>
+                <field name="code" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_device_location_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.location.form</field>
+        <field name="model">sn.wsd.device.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="kind"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_device_location" model="ir.actions.act_window">
+        <field name="name">Device Locations</field>
+        <field name="res_model">sn.wsd.device.location</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===== Document sync wizard ===== -->
+
+    <record id="view_doc_sync_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.doc.sync.wizard.form</field>
+        <field name="model">sn.wsd.device.doc.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync Equipment Documents">
+                <group>
+                    <group>
+                        <field name="source_equipment_id"
+                               options="{'no_create': True}"/>
+                        <field name="source_document_count"/>
+                        <field name="target_equipment_id"
+                               options="{'no_create': True}"/>
+                        <field name="sync_mode" widget="radio"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_sync" type="object"
+                            string="Sync" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_doc_sync_wizard" model="ir.actions.act_window">
+        <field name="name">Sync Documents</field>
+        <field name="res_model">sn.wsd.device.doc.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sn_wsd_device_equipment"/>
+    </record>
+
+</odoo>

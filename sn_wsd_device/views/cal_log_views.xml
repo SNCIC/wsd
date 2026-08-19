@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_cal_generation_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.generation.log.list</field>
+        <field name="model">sn.wsd.device.cal.generation.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false"
+                  decoration-success="run_status == 'success'"
+                  decoration-warning="run_status == 'partial'"
+                  decoration-danger="run_status == 'failed'">
+                <field name="generation_date"/>
+                <field name="plan_equipment"/>
+                <field name="trigger_time"/>
+                <field name="due_date" optional="show"/>
+                <field name="task_creation_date" optional="show"/>
+                <field name="generated_count" sum="1"/>
+                <field name="skipped_count" sum="1"/>
+                <field name="failed_count" sum="1"/>
+                <field name="run_status"/>
+                <field name="execution_time" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cal_generation_log_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.cal.generation.log.form</field>
+        <field name="model">sn.wsd.device.cal.generation.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="plan_id"/>
+                            <field name="plan_equipment"/>
+                            <field name="generation_date"/>
+                            <field name="trigger_time"/>
+                <field name="due_date" optional="show"/>
+                <field name="task_creation_date" optional="show"/>
+                            <field name="run_status"/>
+                        </group>
+                        <group>
+                            <field name="generated_count"/>
+                            <field name="skipped_count"/>
+                            <field name="failed_count"/>
+                            <field name="execution_time"/>
+                        </group>
+                    </group>
+                    <group string="Error Detail">
+                        <field name="error_detail" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cal_generation_log" model="ir.actions.act_window">
+        <field name="name">Calibration Generation Logs</field>
+        <field name="res_model">sn.wsd.device.cal.generation.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
