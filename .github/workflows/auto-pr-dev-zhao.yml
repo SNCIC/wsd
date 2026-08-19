@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - dev-zhao
+      - dev-x
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: auto-pr-dev-zhao
+  group: auto-pr-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -28,6 +29,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          SOURCE_BRANCH: ${{ github.ref_name }}
         shell: bash
         run: |
           if [ "$(git rev-list --count origin/main..HEAD)" -eq 0 ]; then
@@ -37,7 +39,7 @@ jobs:
 
           pr_number="$(gh pr list \
             --base main \
-            --head dev-zhao \
+            --head "$SOURCE_BRANCH" \
             --state open \
             --json number \
             --jq '.[0].number // ""')"
@@ -50,6 +52,6 @@ jobs:
 
           gh pr create \
             --base main \
-            --head dev-zhao \
-            --title "Merge dev-zhao into main" \
-            --body "This pull request was created automatically after commits were pushed to dev-zhao."
+            --head "$SOURCE_BRANCH" \
+            --title "Merge ${SOURCE_BRANCH} into main" \
+            --body "This pull request was created automatically after commits were pushed to ${SOURCE_BRANCH}."
