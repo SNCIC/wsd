@@ -19,11 +19,11 @@
                   decoration-info="state == 'pending'"
                   decoration-warning="state == 'repairing'"
                   decoration-muted="state == 'done'">
-                <control>
+                <header>
                     <button name="%(action_repair_create_wizard)d"
                             type="action" string="New Repair Order"
-                            class="btn-primary"/>
-                </control>
+                            display="always" class="btn-primary"/>
+                </header>
                 <field name="name"/>
                 <field name="equipment_code" optional="hide"/>
                 <field name="equipment_name"/>
