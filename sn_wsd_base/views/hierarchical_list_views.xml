@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//search" position="inside">
                 <searchpanel>
-                    <field name="categ_id" string="Categories" icon="fa-th-list" enable_counters="1" expand="1"/>
+                    <field name="categ_id" string="Categories" icon="fa-th-list" enable_counters="1" limit="0"/>
                 </searchpanel>
             </xpath>
         </field>
@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <xpath expr="//search" position="inside">
                 <searchpanel>
-                    <field name="parent_id" string="Categories" icon="fa-th-list" enable_counters="1" expand="1"/>
+                    <field name="parent_id" string="Categories" icon="fa-th-list" enable_counters="1" limit="0"/>
                 </searchpanel>
             </xpath>
         </field>
@@ -33,7 +33,7 @@
         <field name="arch" type="xml">
             <xpath expr="//search" position="inside">
                 <searchpanel>
-                    <field name="location_id" string="Locations" icon="fa-sitemap" enable_counters="1" expand="1"/>
+                    <field name="location_id" string="Locations" icon="fa-sitemap" enable_counters="1" limit="0"/>
                 </searchpanel>
             </xpath>
         </field>
