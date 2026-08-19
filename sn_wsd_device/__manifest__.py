@@ -2,14 +2,15 @@
     'name': "Device Management",
     'summary': "Device data collection (reflow soldering, etc.)",
     'category': 'Manufacturing/Device Management',
-    'version': '19.0.1.0.0',
+    'version': '19.0.3.0.0',
     'depends': ['base', 'product', 'hr'],
     'data': [
         'security/ir.model.access.csv',
+        'security/company_rules.xml',
         'views/reflow_data_views.xml',
         'views/wave_data_views.xml',
         'views/device_doc_views.xml',
-        
+
         'views/equipment_config_views.xml',
         'views/equipment_views.xml',
         'views/maint_template_views.xml',
@@ -28,6 +29,10 @@
         'views/cal_task_views.xml',
         'views/cal_log_views.xml',
         'views/cal_config_views.xml',
+        'data/repair_sequence.xml',
+        'views/repair_order_views.xml',
+        'data/knowledge_sequence.xml',
+        'views/knowledge_views.xml',
         'data/equipment_seed.xml',
         'views/menu_views.xml',
     ],
@@ -35,4 +40,9 @@
     'application': True,
     'author': 'SNCIC',
     'license': 'LGPL-3',
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_device/static/src/scss/repair_wizard.scss',
+        ],
+    },
 }

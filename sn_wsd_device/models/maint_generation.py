@@ -1,4 +1,7 @@
+from datetime import timedelta, timezone
+
 from odoo import api, fields, models
+from odoo.fields import Command
 
 
 class MaintenanceGenerationLog(models.Model):
@@ -30,6 +33,15 @@ class MaintenanceGenerationLog(models.Model):
     error_detail = fields.Text(string='Error Detail')
     execution_time = fields.Datetime(string='Execution Time')
 
+
+    @api.model
+    def _parameter_trigger_time_display(self):
+        """The configured business trigger time (local wall clock), as
+        shown on generation logs."""
+        raw = self.env['ir.config_parameter'].sudo().get_param(
+            'equipment_maintenance_trigger_time', '08:30')
+        return (raw or '08:30').strip()
+
     @api.model
     def _parameter_trigger_datetime(self, now):
         """Parse the maintenance trigger time parameter (independent of
@@ -42,7 +54,21 @@ class MaintenanceGenerationLog(models.Model):
             assert 0 <= hour <= 23 and 0 <= minute <= 59
         except (ValueError, AssertionError):
             hour, minute = 8, 30
-        return now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        # The parameter is a business wall-clock time: interpret it in the
+        # current user timezone (falling back to the administrator's, then
+        # UTC for cron runs) and convert back to UTC, because `now` and the
+        # stored datetimes are UTC.
+        tz_name = (
+            self.env.context.get('tz')
+            or self.env.user.tz
+            or self.env.ref('base.user_admin').sudo().tz
+            or 'UTC')
+        local_now = fields.Datetime.context_timestamp(
+            self.with_context(tz=tz_name), now)
+        trigger_local = local_now.replace(
+            hour=hour, minute=minute, second=0, microsecond=0)
+        return trigger_local.astimezone(
+            timezone.utc).replace(tzinfo=None)
 
 
 class MaintenancePlan(models.Model):
@@ -53,27 +79,36 @@ class MaintenancePlan(models.Model):
     @api.model
     def _cron_generate_maintenance_tasks(self):
         """Single shared cron for every maintenance plan. Wakes up every
-        10 minutes, waits until the maintenance trigger time, then marks
-        previous unfinished tasks overdue and generates today's tasks
-        once per plan (the log is the idempotency token)."""
+        minute, waits until the maintenance trigger time, then marks
+        previous unfinished tasks overdue and creates the day's task for
+        every due equipment (idempotency is per equipment)."""
         now = fields.Datetime.now()
         today = fields.Date.context_today(self)
         trigger_dt = self.env[
             'sn.wsd.device.maint.generation.log']._parameter_trigger_datetime(now)
         if now < trigger_dt:
             return
+        # Once-per-day semantics: the scheduled pass executes only on the
+        # wake-ups shortly after the daily trigger time (the first tick at
+        # or after it); later wake-ups stay no-ops until tomorrow.
+        if now > trigger_dt + timedelta(minutes=15):
+            return
         self.env[
             'sn.wsd.device.maint.task']._mark_previous_unfinished_overdue()
         log_model = self.env['sn.wsd.device.maint.generation.log']
         task_model = self.env['sn.wsd.device.maint.task']
+        trigger_display = log_model._parameter_trigger_time_display()
         for plan in self.search([('active', '=', True)]):
-            already_logged = log_model.search_count([
+            # Execution latch: one run per plan per day per configured
+            # trigger time. Repeated wake-ups inside the window cannot
+            # duplicate tasks, while changing the trigger time re-arms
+            # the day (the new time gets its own single run).
+            already_ran = log_model.search_count([
                 ('plan_id', '=', plan.id),
                 ('generation_date', '=', today),
+                ('trigger_time', '=', trigger_display),
             ])
-            if already_logged:
-                continue
-            if not plan._is_due_today(today):
+            if already_ran:
                 continue
             plan._generate_tasks_for_today(today, now, trigger_dt,
                                            log_model, task_model)
@@ -85,33 +120,41 @@ class MaintenancePlan(models.Model):
             ('equipment_type_id', '=', self.equipment_type_id.id)])
         items = template.maintenance_item_ids if template else \
             self.env['sn.wsd.device.maint.item']
-        today_start = fields.Datetime.to_datetime(today)
         expected = generated = skipped = failed = 0
         errors = []
         equipments = self.env['sn.wsd.device.equipment'].search([
             ('equipment_type_id', '=', self.equipment_type_id.id),
             ('equipment_status', 'in', ['enabled', 'repair']),
         ])
+        equipments = equipments.filtered(
+            lambda equipment: self._is_equipment_due_today(equipment, today))
+        if not equipments:
+            return
+        # Claim the run: this log is the day's execution latch (matched by
+        # plan + date + trigger time in the cron loop), so the wake-ups
+        # that follow inside the window cannot run the plan twice.
+        log = log_model.create({
+            'plan_id': self.id,
+            'generation_date': today,
+            'trigger_time': log_model._parameter_trigger_time_display(),
+            'expected_equipment_count': len(equipments),
+            'run_status': 'success',
+        })
         for equipment in equipments:
             expected += 1
             try:
-                if equipment.last_maintenance_date and \
-                        equipment.last_maintenance_date >= today_start:
-                    skipped += 1
-                    continue
-                duplicate = task_model.search_count([
-                    ('equipment_id', '=', equipment.id),
-                    ('task_date', '=', today),
-                ])
-                if duplicate:
-                    skipped += 1
-                    continue
                 if not items:
                     failed += 1
                     errors.append(f'{equipment.code}: '
                                   'no maintenance item on the template')
                     continue
-                line_vals = [(0, 0, {
+                # Supersede stale work: ALL unfinished tasks of this
+                # equipment (any date) become overdue before the new task.
+                task_model.search([
+                    ('equipment_id', '=', equipment.id),
+                    ('task_status', 'in', ['pending', 'in_progress']),
+                ]).write({'task_status': 'overdue'})
+                line_vals = [Command.create({
                     'name': item.name,
                     'method': item.method,
                     'guide_file': item.guide_file,
@@ -138,10 +181,7 @@ class MaintenancePlan(models.Model):
             run_status = 'failed'
         else:
             run_status = 'partial'
-        log_model.create({
-            'plan_id': self.id,
-            'generation_date': today,
-            'trigger_time': f'{trigger_dt.hour:02d}:{trigger_dt.minute:02d}',
+        log.write({
             'expected_equipment_count': expected,
             'generated_count': generated,
             'skipped_count': skipped,

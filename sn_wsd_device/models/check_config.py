@@ -18,7 +18,10 @@ class CheckConfigWizard(models.TransientModel):
         string='Daily Trigger Time', required=True,
         help='Format HH:MM. Once this time is reached, the shared scheduled '
              'action generates the day\'s spot check tasks for every due '
-             'plan. Applies to all plans; takes effect the next day.')
+             'plan. Applies to all plans. Saving runs the generation once '
+             'immediately when the time has already passed today. '
+             'Idempotency is per equipment: a device already checked today, '
+             'or one that already has today\'s task, is not duplicated.')
 
     @api.model
     def default_get(self, fields_list):
@@ -41,4 +44,8 @@ class CheckConfigWizard(models.TransientModel):
         self.ensure_one()
         self.env['ir.config_parameter'].sudo().set_param(
             TRIGGER_TIME_KEY, self.trigger_time.strip())
+        # Effective immediately: run the generation once so a trigger time
+        # that already passed today applies right away instead of waiting
+        # for the next cron wake-up (idempotent per plan and date).
+        self.env['sn.wsd.device.check.plan']._cron_generate_check_tasks()
         return {'type': 'ir.actions.act_window_close'}

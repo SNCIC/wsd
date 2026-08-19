@@ -1,4 +1,7 @@
+from datetime import timedelta, timezone
+
 from odoo import api, fields, models
+from odoo.fields import Command
 
 
 class CheckGenerationLog(models.Model):
@@ -31,6 +34,15 @@ class CheckGenerationLog(models.Model):
     execution_time = fields.Datetime(string='Execution Time')
 
     # The generation cron itself lives on the plan model.
+
+    @api.model
+    def _parameter_trigger_time_display(self):
+        """The configured business trigger time (local wall clock), as
+        shown on generation logs."""
+        raw = self.env['ir.config_parameter'].sudo().get_param(
+            'equipment_inspection_trigger_time', '08:00')
+        return (raw or '08:00').strip()
+
     @api.model
     def _parameter_trigger_datetime(self, now):
         """Parse the global trigger time parameter into today's datetime."""
@@ -42,7 +54,21 @@ class CheckGenerationLog(models.Model):
             assert 0 <= hour <= 23 and 0 <= minute <= 59
         except (ValueError, AssertionError):
             hour, minute = 8, 0
-        return now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        # The parameter is a business wall-clock time: interpret it in the
+        # current user timezone (falling back to the administrator's, then
+        # UTC for cron runs) and convert back to UTC, because `now` and the
+        # stored datetimes are UTC.
+        tz_name = (
+            self.env.context.get('tz')
+            or self.env.user.tz
+            or self.env.ref('base.user_admin').sudo().tz
+            or 'UTC')
+        local_now = fields.Datetime.context_timestamp(
+            self.with_context(tz=tz_name), now)
+        trigger_local = local_now.replace(
+            hour=hour, minute=minute, second=0, microsecond=0)
+        return trigger_local.astimezone(
+            timezone.utc).replace(tzinfo=None)
 
 
 class CheckPlan(models.Model):
@@ -54,9 +80,10 @@ class CheckPlan(models.Model):
     def _cron_generate_check_tasks(self):
         """Single shared cron for every plan.
 
-        Wakes up hourly, waits until the global trigger time, then
-        generates today's tasks for every due plan exactly once (the
-        generation log is the idempotency token: one log per plan+date).
+        Wakes up every minute, waits until the global trigger time, then
+        creates the day's task for every due equipment. Idempotency is
+        per equipment (done today / already has today's task), so wake-ups
+        after the first one are no-ops until conditions change.
         """
         now = fields.Datetime.now()
         today = fields.Date.context_today(self)
@@ -64,19 +91,28 @@ class CheckPlan(models.Model):
             'sn.wsd.device.check.generation.log']._parameter_trigger_datetime(now)
         if now < trigger_dt:
             return
+        # Once-per-day semantics: the scheduled pass executes only on the
+        # wake-ups shortly after the daily trigger time (the first tick at
+        # or after it); later wake-ups stay no-ops until tomorrow.
+        if now > trigger_dt + timedelta(minutes=15):
+            return
         # Overdue rule: when the next generation starts, any uncompleted
         # task from a previous day becomes overdue.
         self.env['sn.wsd.device.check.task']._mark_previous_unfinished_overdue()
         log_model = self.env['sn.wsd.device.check.generation.log']
         task_model = self.env['sn.wsd.device.check.task']
+        trigger_display = log_model._parameter_trigger_time_display()
         for plan in self.search([('active', '=', True)]):
-            already_logged = log_model.search_count([
+            # Execution latch: one run per plan per day per configured
+            # trigger time. Repeated wake-ups inside the window cannot
+            # duplicate tasks, while changing the trigger time re-arms
+            # the day (the new time gets its own single run).
+            already_ran = log_model.search_count([
                 ('plan_id', '=', plan.id),
                 ('generation_date', '=', today),
+                ('trigger_time', '=', trigger_display),
             ])
-            if already_logged:
-                continue
-            if not plan._is_due_today(today):
+            if already_ran:
                 continue
             plan._generate_tasks_for_today(today, now, trigger_dt,
                                            log_model, task_model)
@@ -88,33 +124,41 @@ class CheckPlan(models.Model):
             ('equipment_type_id', '=', self.equipment_type_id.id)])
         spot_items = template.spot_check_item_ids if template else \
             self.env['sn.wsd.device.maint.item']
-        today_start = fields.Datetime.to_datetime(today)
         expected = generated = skipped = failed = 0
         errors = []
         equipments = self.env['sn.wsd.device.equipment'].search([
             ('equipment_type_id', '=', self.equipment_type_id.id),
             ('equipment_status', 'in', ['enabled', 'repair']),
         ])
+        equipments = equipments.filtered(
+            lambda equipment: self._is_equipment_due_today(equipment, today))
+        if not equipments:
+            return
+        # Claim the run: this log is the day's execution latch (matched by
+        # plan + date + trigger time in the cron loop), so the wake-ups
+        # that follow inside the window cannot run the plan twice.
+        log = log_model.create({
+            'plan_id': self.id,
+            'generation_date': today,
+            'trigger_time': log_model._parameter_trigger_time_display(),
+            'expected_equipment_count': len(equipments),
+            'run_status': 'success',
+        })
         for equipment in equipments:
             expected += 1
             try:
-                if equipment.last_spot_check_date and \
-                        equipment.last_spot_check_date >= today_start:
-                    skipped += 1
-                    continue
-                duplicate = task_model.search_count([
-                    ('equipment_id', '=', equipment.id),
-                    ('task_date', '=', today),
-                ])
-                if duplicate:
-                    skipped += 1
-                    continue
                 if not spot_items:
                     failed += 1
                     errors.append(_mark_error(
                         equipment.code, 'no spot check item on the template'))
                     continue
-                line_vals = [(0, 0, {
+                # Supersede stale work: ALL unfinished tasks of this
+                # equipment (any date) become overdue before the new task.
+                task_model.search([
+                    ('equipment_id', '=', equipment.id),
+                    ('task_status', 'in', ['pending', 'in_progress']),
+                ]).write({'task_status': 'overdue'})
+                line_vals = [Command.create({
                     'name': item.name,
                     'method': item.method,
                     'guide_file': item.guide_file,
@@ -140,10 +184,7 @@ class CheckPlan(models.Model):
             run_status = 'failed'
         else:
             run_status = 'partial'
-        log_model.create({
-            'plan_id': self.id,
-            'generation_date': today,
-            'trigger_time': f'{trigger_dt.hour:02d}:{trigger_dt.minute:02d}',
+        log.write({
             'expected_equipment_count': expected,
             'generated_count': generated,
             'skipped_count': skipped,

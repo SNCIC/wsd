@@ -18,6 +18,39 @@ def migrate(cr, version):
     if not version:
         return
 
+    def _column_exists(table, column):
+        cr.execute("""
+            SELECT 1 FROM information_schema.columns
+             WHERE table_name = %s AND column_name = %s
+        """, (table, column))
+        return bool(cr.fetchone())
+
+    # Databases upgraded from versions that never had the production-side
+    # columns do not have them yet (pre-migrate runs before the new fields
+    # are created): create x_production_side with the field default so the
+    # statements below stay valid.
+    if not _column_exists('sn_wsd_process_route', 'x_production_side'):
+        cr.execute("""
+            ALTER TABLE sn_wsd_process_route
+                ADD COLUMN x_production_side varchar DEFAULT 'single'
+        """)
+        _logger.info(
+            "sn_wsd_mrp 19.0.7.0.4: created sn_wsd_process_route."
+            "x_production_side with default 'single' on older databases")
+
+    # Without the drawing table (introduced after the installed version)
+    # there are no bindings yet: nothing to backfill, skip.
+    if not _column_exists('sn_wsd_process_route_drawing', 'route_id'):
+        _logger.info(
+            "sn_wsd_mrp 19.0.7.0.4: sn_wsd_process_route_drawing absent, "
+            "nothing to backfill")
+        return
+    if not _column_exists('sn_wsd_process_route_drawing', 'x_side'):
+        cr.execute("""
+            ALTER TABLE sn_wsd_process_route_drawing
+                ADD COLUMN x_side varchar
+        """)
+
     cr.execute("""
         UPDATE sn_wsd_process_route r
            SET x_production_side = 'single'

@@ -10,6 +10,9 @@ class EquipmentDocument(models.Model):
     equipment_id = fields.Many2one(
         'sn.wsd.device.equipment', string='Equipment',
         required=True, index=True, ondelete='cascade')
+    company_id = fields.Many2one(
+        related='equipment_id.company_id', store=True,
+        string='Company', index=True)
     name = fields.Char(string='Document Name', required=True)
     doc_type_id = fields.Many2one(
         'sn.wsd.device.doc.type', string='Document Type', index=True)

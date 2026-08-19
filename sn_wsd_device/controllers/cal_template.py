@@ -2,12 +2,19 @@ import io
 
 import xlsxwriter
 
-from odoo import http
+from odoo import _, http
 from odoo.http import request
 
-# Columns of the import template, shared by the download controller and
-# the import wizard.
-TEMPLATE_HEADERS = ['项目名称', '校准前检测值', '校准后检测值', '单项备注']
+
+def get_template_headers():
+    """Template column headers, translated at call time so the downloaded
+    Excel follows the requesting user's language."""
+    return [
+        _('Item Name'),
+        _('Before Calibration Value'),
+        _('After Calibration Value'),
+        _('Line Note'),
+    ]
 
 
 class CalibrationTemplateController(http.Controller):
@@ -20,7 +27,7 @@ class CalibrationTemplateController(http.Controller):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         sheet = workbook.add_worksheet('calibration')
         header_format = workbook.add_format({'bold': True, 'bg_color': '#D9D9D9'})
-        for column, header in enumerate(TEMPLATE_HEADERS):
+        for column, header in enumerate(get_template_headers()):
             sheet.write(0, column, header, header_format)
             sheet.set_column(column, column, 24)
         sheet.write(1, 0, 'Example: voltage measurement')

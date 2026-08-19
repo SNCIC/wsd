@@ -17,7 +17,9 @@ class MaintenanceConfigWizard(models.TransientModel):
         string='Daily Trigger Time', required=True,
         help='Format HH:MM. Once this time is reached, the shared scheduled '
              'action generates the day\'s maintenance tasks for every due '
-             'plan. Applies to all maintenance plans.')
+             'plan. Applies to all maintenance plans. Idempotency is per '
+             'equipment: a device already maintained today, or one that '
+             'already has today\'s task, is not duplicated.')
 
     @api.model
     def default_get(self, fields_list):
@@ -40,4 +42,8 @@ class MaintenanceConfigWizard(models.TransientModel):
         self.ensure_one()
         self.env['ir.config_parameter'].sudo().set_param(
             TRIGGER_TIME_KEY, self.trigger_time.strip())
+        # Effective immediately: run the generation once so a trigger time
+        # that already passed today applies right away instead of waiting
+        # for the next cron wake-up (idempotent per plan and date).
+        self.env['sn.wsd.device.maint.plan']._cron_generate_maintenance_tasks()
         return {'type': 'ir.actions.act_window_close'}

@@ -5,8 +5,16 @@
     <menuitem id="menu_device_root"
               name="Device Management"
               web_icon="sn_wsd_device,static/description/icon.png"
-              sequence="60"/>
+              sequence="179"/>
 
+    <!-- Equipment knowledge base -->
+    <menuitem id="menu_knowledge"
+              name="Equipment Knowledge Base"
+              parent="menu_device_info"
+              action="action_knowledge"
+              sequence="40"/>
+
+    <!-- Data collection section -->
     <menuitem id="menu_device_data_collection"
               name="Data Collection"
               parent="menu_device_root"
@@ -35,47 +43,71 @@
               action="action_equipment_ledger"
               sequence="10"/>
 
-    <menuitem id="menu_maint_template"
-              name="Spot Check / Maintenance Items"
-              parent="menu_device_info"
-              action="action_maint_template"
-              sequence="20"/>
-
-    <menuitem id="menu_check_plan"
-              name="Spot Check Plans"
-              parent="menu_device_info"
-              action="action_check_plan"
-              sequence="30"/>
-
-    <menuitem id="menu_check_task"
-              name="Spot Check Tasks"
-              parent="menu_device_info"
-              action="action_check_task"
-              sequence="40"/>
-
-    <menuitem id="menu_maint_plan"
-              name="Maintenance Plans"
-              parent="menu_device_info"
-              action="action_maint_plan"
-              sequence="50"/>
-
-    <menuitem id="menu_maint_task"
-              name="Maintenance Tasks"
-              parent="menu_device_info"
-              action="action_maint_task"
-              sequence="60"/>
+    <!-- Calibration section -->
+    <menuitem id="menu_cal_section"
+              name="Equipment Calibration"
+              parent="menu_device_root"
+              sequence="8"/>
 
     <menuitem id="menu_cal_plan"
               name="Calibration Plans"
-              parent="menu_device_info"
+              parent="menu_cal_section"
               action="action_cal_plan"
-              sequence="70"/>
+              sequence="10"/>
 
     <menuitem id="menu_cal_task"
               name="Calibration Tasks"
-              parent="menu_device_info"
+              parent="menu_cal_section"
               action="action_cal_task"
-              sequence="80"/>
+              sequence="20"/>
+
+    <!-- Check & maintenance section -->
+    <menuitem id="menu_check_maint_section"
+              name="Check &amp; Maintenance"
+              parent="menu_device_root"
+              sequence="6"/>
+
+    <menuitem id="menu_maint_template"
+              name="Spot Check / Maintenance Items"
+              parent="menu_check_maint_section"
+              action="action_maint_template"
+              sequence="10"/>
+
+    <menuitem id="menu_check_plan"
+              name="Spot Check Plans"
+              parent="menu_check_maint_section"
+              action="action_check_plan"
+              sequence="20"/>
+
+    <menuitem id="menu_check_task"
+              name="Spot Check Tasks"
+              parent="menu_check_maint_section"
+              action="action_check_task"
+              sequence="30"/>
+
+    <menuitem id="menu_maint_plan"
+              name="Maintenance Plans"
+              parent="menu_check_maint_section"
+              action="action_maint_plan"
+              sequence="40"/>
+
+    <menuitem id="menu_maint_task"
+              name="Maintenance Tasks"
+              parent="menu_check_maint_section"
+              action="action_maint_task"
+              sequence="50"/>
+
+    <!-- Equipment repair section -->
+    <menuitem id="menu_repair_section"
+              name="Equipment Repair"
+              parent="menu_device_root"
+              sequence="7"/>
+
+    <menuitem id="menu_repair_order"
+              name="Repair Orders"
+              parent="menu_repair_section"
+              action="action_repair_order"
+              sequence="10"/>
 
     <menuitem id="menu_device_config"
               name="Configuration"

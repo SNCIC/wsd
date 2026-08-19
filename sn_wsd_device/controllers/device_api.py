@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timezone
 
 from odoo import http
+from odoo.fields import Command
 from odoo.http import request
 
 # Limits guarding the public endpoints against malformed payloads.
@@ -16,7 +17,7 @@ class DeviceDataController(http.Controller):
         POST /api/device/reflow  -> reflow soldering packets
         POST /api/device/wave    -> wave soldering packets
         body:  {"device_sn": str, "collect_time": ISO datetime, "zones": {name: number}}
-        200 -> {"code": 200, "message": "保存成功"}
+        200 -> {"code": 200, "message": "Saved successfully"}
         400 -> {"code": 400, "message": "<english reason>"}
     """
 
@@ -69,7 +70,7 @@ class DeviceDataController(http.Controller):
                 return self._error(
                     400, f'invalid temperature for zone {name!r}, '
                          'expected a number')
-            zone_vals.append((0, 0, {
+            zone_vals.append(Command.create({
                 'zone_name': name,
                 'temperature': float(temperature),
             }))
@@ -79,7 +80,8 @@ class DeviceDataController(http.Controller):
             'collect_time': collect_dt,
             'zone_line_ids': zone_vals,
         })
-        return request.make_json_response({'code': 200, 'message': '保存成功'})
+        return request.make_json_response(
+            {'code': 200, 'message': 'Saved successfully'})
 
     @staticmethod
     def _parse_collect_time(raw):
