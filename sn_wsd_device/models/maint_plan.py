@@ -48,43 +48,34 @@ class MaintenancePlan(models.Model):
                 raise ValidationError(_(
                     'The custom cycle must be at least 1 day.'))
 
-    def _is_due_today(self, today):
-        """Calendar-aware due computation from the start date."""
-        self.ensure_one()
-        start = self.start_date
-        if today < start:
-            return False
-        if self.cycle_type == 'daily':
-            return True
-        if self.cycle_type == 'weekly':
-            return (today - start).days % 7 == 0
-        if self.cycle_type == 'custom':
-            return (today - start).days % self.custom_cycle_days == 0
-        months_step = 1 if self.cycle_type == 'monthly' else 3
-        month_index = ((today.year - start.year) * 12
-                       + (today.month - start.month))
-        if month_index % months_step:
-            return False
-        return start + relativedelta(months=month_index) == today
-
     def _is_equipment_due_today(self, equipment, today):
-        """Per-equipment due rule.
+        """Per-equipment due rule, anchored on the last execution.
 
-        Daily plans are due every day (the same-day-done skip in the
-        generation loop keeps one task per day). Weekly plans anchor on
-        the equipment's last maintenance date: due 7 days after it, so
-        the rhythm follows the actual completion date; equipment never
-        maintained falls back to the plan start date. Other cycle types
-        stay anchored on the plan start date.
+        The anchor is the equipment's last maintenance date, falling
+        back to the plan start date when the equipment was never
+        maintained:
+        - Daily: due every day (the same-day-done skip in the generation
+          loop keeps one task per day).
+        - Weekly / Custom N days: due once an integer number of cycle
+          days has elapsed since the anchor.
+        - Monthly / Quarterly: due in due months, on the anchor's
+          day-of-month (calendar-aware).
         """
         self.ensure_one()
         start = self.start_date
         if today < start:
             return False
+        last = equipment.last_maintenance_date
+        anchor = last.date() if last else start
         if self.cycle_type == 'daily':
             return True
         if self.cycle_type == 'weekly':
-            last = equipment.last_maintenance_date
-            anchor = last.date() if last else start
             return (today - anchor).days % 7 == 0
-        return self._is_due_today(today)
+        if self.cycle_type == 'custom':
+            return (today - anchor).days % self.custom_cycle_days == 0
+        months_step = 1 if self.cycle_type == 'monthly' else 3
+        month_index = ((today.year - anchor.year) * 12
+                       + (today.month - anchor.month))
+        if month_index % months_step:
+            return False
+        return anchor + relativedelta(months=month_index) == today
