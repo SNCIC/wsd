@@ -37,3 +37,13 @@ filestore/
 sessions/
 *.zip
 *.tar.gz
+
+# Local Odoo configs (machine-specific, contain DB credentials)
+odoo.local.conf
+odoo.community.conf
+
+# Browser automation leftovers and local notes
+.edge-profile/
+.edge-pid
+.console_check.mjs
+项目提示词.txt

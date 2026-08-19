@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_reflow_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.reflow.record.list</field>
+        <field name="model">sn.wsd.device.reflow.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="device_sn"/>
+                <field name="collect_time"/>
+                <field name="create_date" string="Created on" optional="show"/>
+                <field name="zone_count" string="Zones" optional="show"/>
+                <field name="zone_line_ids">
+                    <list>
+                        <field name="zone_name"/>
+                        <field name="temperature"/>
+                    </list>
+                </field>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_reflow_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.reflow.record.form</field>
+        <field name="model">sn.wsd.device.reflow.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="device_sn"/>
+                            <field name="collect_time"/>
+                        </group>
+                        <group>
+                            <field name="create_date" string="Created on" readonly="1"/>
+                            <field name="zone_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Temperature Data">
+                            <field name="zone_line_ids">
+                                <list editable="bottom">
+                                    <field name="zone_name"/>
+                                    <field name="temperature"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_reflow_record_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.reflow.record.search</field>
+        <field name="model">sn.wsd.device.reflow.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="device_sn"/>
+                <field name="collect_time"/>
+                <filter string="Today" name="filter_today"
+                        domain="[('collect_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reflow_data" model="ir.actions.act_window">
+        <field name="name">Reflow Data Collection</field>
+        <field name="res_model">sn.wsd.device.reflow.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reflow data yet
+            </p>
+            <p>
+                Records appear automatically when devices push data to
+                POST /api/device/reflow.
+            </p>
+        </field>
+    </record>
+
+</odoo>

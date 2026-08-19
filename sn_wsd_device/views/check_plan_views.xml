@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_check_plan_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.check.plan.list</field>
+        <field name="model">sn.wsd.device.check.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="equipment_type_code" optional="show"/>
+                <field name="equipment_type_name"/>
+                <field name="cycle_type"/>
+                <field name="custom_cycle_days"
+                       invisible="cycle_type != 'custom'"/>
+                <field name="start_date"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_check_plan_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.check.plan.form</field>
+        <field name="model">sn.wsd.device.check.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="equipment_type_id"
+                                   options="{'no_create': True}"
+                                   required="1"/>
+                            <field name="cycle_type"/>
+                            <field name="custom_cycle_days"
+                                   invisible="cycle_type != 'custom'"
+                                   required="cycle_type == 'custom'"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                                        <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Redundant Type Info">
+                        <group>
+                            <field name="equipment_type_code"/>
+                            <field name="equipment_type_name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_check_plan_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.check.plan.search</field>
+        <field name="model">sn.wsd.device.check.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="equipment_type_id"/>
+                <filter string="Archived" name="inactive"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Equipment Type" name="group_type"
+                            context="{'group_by': 'equipment_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_check_plan" model="ir.actions.act_window">
+        <field name="name">Spot Check Plans</field>
+        <field name="res_model">sn.wsd.device.check.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No spot check plan yet
+            </p>
+            <p>
+                One plan per equipment type: cycle, start date and daily
+                deadline. A single shared scheduled action generates the
+                tasks after the global trigger time.
+            </p>
+        </field>
+    </record>
+
+</odoo>

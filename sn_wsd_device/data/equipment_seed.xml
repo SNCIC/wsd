@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="equipment_type_production" model="sn.wsd.device.equipment.type">
+            <field name="name">Production Equipment</field>
+            <field name="code">PROD</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="equipment_type_inspection" model="sn.wsd.device.equipment.type">
+            <field name="name">Inspection Equipment</field>
+            <field name="code">INSP</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="equipment_type_auxiliary" model="sn.wsd.device.equipment.type">
+            <field name="name">Auxiliary Equipment</field>
+            <field name="code">AUX</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

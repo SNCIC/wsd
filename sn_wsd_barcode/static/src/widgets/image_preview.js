@@ -30,4 +30,4 @@ export const imageClickEnlarge = {
     component: ImagePreviewField,
 };
 
-registry.category("fields").add("image_preview", imageClickEnlarge);
+registry.category("fields").add("sn_wsd_barcode_image_preview", imageClickEnlarge);

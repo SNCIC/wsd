@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root app: shows in the apps bar / home menu. -->
+    <menuitem id="menu_device_root"
+              name="Device Management"
+              web_icon="sn_wsd_device,static/description/icon.png"
+              sequence="60"/>
+
+    <menuitem id="menu_device_data_collection"
+              name="Data Collection"
+              parent="menu_device_root"
+              sequence="10"/>
+
+    <menuitem id="menu_device_reflow_data"
+              name="Reflow Data Collection"
+              parent="menu_device_data_collection"
+              action="action_reflow_data"
+              sequence="10"/>
+
+    <menuitem id="menu_device_wave_data"
+              name="Wave Soldering Data Collection"
+              parent="menu_device_data_collection"
+              action="action_wave_data"
+              sequence="20"/>
+
+    <menuitem id="menu_device_info"
+              name="Equipment Information"
+              parent="menu_device_root"
+              sequence="5"/>
+
+    <menuitem id="menu_equipment_ledger"
+              name="Equipment Ledger"
+              parent="menu_device_info"
+              action="action_equipment_ledger"
+              sequence="10"/>
+
+    <menuitem id="menu_maint_template"
+              name="Spot Check / Maintenance Items"
+              parent="menu_device_info"
+              action="action_maint_template"
+              sequence="20"/>
+
+    <menuitem id="menu_check_plan"
+              name="Spot Check Plans"
+              parent="menu_device_info"
+              action="action_check_plan"
+              sequence="30"/>
+
+    <menuitem id="menu_check_task"
+              name="Spot Check Tasks"
+              parent="menu_device_info"
+              action="action_check_task"
+              sequence="40"/>
+
+    <menuitem id="menu_maint_plan"
+              name="Maintenance Plans"
+              parent="menu_device_info"
+              action="action_maint_plan"
+              sequence="50"/>
+
+    <menuitem id="menu_maint_task"
+              name="Maintenance Tasks"
+              parent="menu_device_info"
+              action="action_maint_task"
+              sequence="60"/>
+
+    <menuitem id="menu_cal_plan"
+              name="Calibration Plans"
+              parent="menu_device_info"
+              action="action_cal_plan"
+              sequence="70"/>
+
+    <menuitem id="menu_cal_task"
+              name="Calibration Tasks"
+              parent="menu_device_info"
+              action="action_cal_task"
+              sequence="80"/>
+
+    <menuitem id="menu_device_config"
+              name="Configuration"
+              parent="menu_device_root"
+              sequence="90"/>
+
+    <menuitem id="menu_check_config"
+              name="Spot Check Settings"
+              parent="menu_device_config"
+              action="action_check_config"
+              sequence="5"/>
+
+    <menuitem id="menu_device_doc_type"
+              name="Document Types"
+              parent="menu_device_config"
+              action="action_doc_type"
+              sequence="10"/>
+
+    <menuitem id="menu_equipment_type"
+              name="Equipment Types"
+              parent="menu_device_config"
+              action="action_equipment_type"
+              sequence="20"/>
+
+    <menuitem id="menu_device_location"
+              name="Device Locations"
+              parent="menu_device_config"
+              action="action_device_location"
+              sequence="30"/>
+
+    <menuitem id="menu_check_generation_log"
+              name="Check Task Generation Logs"
+              parent="menu_device_config"
+              action="action_check_generation_log"
+              sequence="40"/>
+
+    <menuitem id="menu_maint_config"
+              name="Maintenance Settings"
+              parent="menu_device_config"
+              action="action_maint_config"
+              sequence="6"/>
+
+    <menuitem id="menu_maint_generation_log"
+              name="Maintenance Generation Logs"
+              parent="menu_device_config"
+              action="action_maint_generation_log"
+              sequence="45"/>
+
+    <menuitem id="menu_cal_config"
+              name="Calibration Settings"
+              parent="menu_device_config"
+              action="action_cal_config"
+              sequence="7"/>
+
+    <menuitem id="menu_cal_generation_log"
+              name="Calibration Generation Logs"
+              parent="menu_device_config"
+              action="action_cal_generation_log"
+              sequence="50"/>
+
+</odoo>

@@ -9,10 +9,27 @@
 ## 仓库与运行环境
 
 - 本目录（`wsd/`）是独立 git 仓库（github.com/SNCIC/wsd），作为 Odoo 19 的 addons 路径之一挂载。
-- 运行环境：Odoo 19，Python 3.12。
-- **本地开发**用 `../odoo.local.conf`（连本地 docker `odoo19-db`，已开 `dev_mode = reload`）。
-- `odoo-bin` 在上级目录：`D:\workspace\odoo\odoo-19.0\odoo-bin`。
-- **启动命令** `.venv/Scripts/python.exe D:\workspace\odoo\odoo-19.0\odoo-bin -c odoo.local.conf -d mes`
+- 运行环境：Odoo 19，Python 3.12（`D:\ProgramDatas\Anaconda\envs\odoo19\python.exe`）。
+- 两套并行环境，共用同一 PostgreSQL（localhost:5432，用户 `odoo19`）：
+
+| | 企业版（现状） | 社区版（开发目标） |
+|---|---|---|
+| 源码 | `D:\odoo19e20250921-f`（企业模块混在 `odoo\addons` 内） | `D:\odoo19-community`（junction/hardlink 镜像，仅 659 个社区模块） |
+| conf | `D:\wsd\odoo.local.conf` | `D:\wsd\odoo.community.conf` |
+| 端口 | 8069 | 8070 |
+| 数据库 | `mes` | `mes_community`（28 个 wsd/muk 模块全部可装，0 企业模块） |
+| 日志 | `D:\wsd\odoo-server.log` | `D:\wsd\odoo-community-server.log` |
+
+- **企业版启动** `D:\ProgramDatas\Anaconda\envs\odoo19\python.exe D:\odoo19e20250921-f\odoo-bin -c D:\wsd\odoo.local.conf -d mes`
+- **社区版启动** `D:\ProgramDatas\Anaconda\envs\odoo19\python.exe D:\odoo19-community\odoo-bin -c D:\wsd\odoo.community.conf`（访问 http://localhost:8070）
+- 社区版升级模块把 odoo-bin 路径换成社区版并加 `-u <MOD> --stop-after-init`（库用 `-d mes_community`）。
+
+### 社区版环境要点（务必遵守）
+
+1. **必须用 `D:\odoo19-community\odoo-bin` 启动社区版**：Odoo 会把运行包自身的 `odoo\addons` 无条件加入模块搜索路径。用企业版源码的 odoo-bin 启动时，即使 conf 里写了社区 addons 路径，`web_enterprise` 等企业模块仍会被自动装上（auto_install）。
+2. `D:\odoo19-community` 是由 `D:\odoo19e20250921-f\odoo` 按 manifest `license`（OEEL-1/OPL-1 = 企业版）过滤生成的 junction/hardlink 镜像，**不要在里面改代码**（改了等于改企业版源码）；原企业版源码目录保持不动，8069 实例不受影响。
+3. 社区版开发时**不要新增对企业版模块的依赖**：`mrp.workorder`、`mrp.workcenter.productivity` 模型和工单视图在 Odoo 19 社区版 `mrp` 模块里就有，可直接用；甘特图用自带的 `sn_wsd_gantt`（已移植企业 `web_gantt` 的完整 JS），**不要**依赖 `web_gantt`/`web_enterprise`。
+4. `sn_wsd_barcode` 的路由路径刻意避开企业版 `stock_barcode` 占用的 `barcode`/`barcode-operations` 路径，保持两版兼容，改动时勿破坏。
 
 ## 核心原则：源码全英文，翻译靠 .po，数据库不存中文
 
