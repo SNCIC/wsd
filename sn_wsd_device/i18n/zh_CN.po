@@ -927,7 +927,7 @@ msgstr "设备图片"
 
 #. module: sn_wsd_device
 #: model:ir.actions.act_window,name:sn_wsd_device.action_repair_order
-#: model:ir.ui.menu,name:sn_wsd_device.menu_repair_order
+#: model:ir.ui.menu,name:sn_wsd_device.menu_repair_section
 msgid "Equipment Repair"
 msgstr "设备维修"
 
@@ -2881,3 +2881,13 @@ msgid ""
 msgstr ""
 "格式 HH:MM。到达该时间后，共享定时任务会扫描校准计划并生成到期任务。"
 "幂等按设备判断：当天已校准或当天已有任务的设备不会重复生成。"
+
+#. module: sn_wsd_device
+#: model:ir.ui.menu,name:sn_wsd_device.menu_check_maint_section
+msgid "Check & Maintenance"
+msgstr "点检保养"
+
+#. module: sn_wsd_device
+#: model:ir.ui.menu,name:sn_wsd_device.menu_repair_order
+msgid "Repair Orders"
+msgstr "维修单"
