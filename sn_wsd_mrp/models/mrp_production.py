@@ -34,6 +34,10 @@ class MrpProduction(models.Model):
         compute='_compute_x_production_actual_dates',
         store=True,
     )
+    # native schedule dates relabelled for the workshop vocabulary:
+    # date_start = 计划开始日期, date_deadline = 计划结束日期
+    date_start = fields.Datetime(string='Planned Start Date')
+    date_deadline = fields.Datetime(string='Planned End Date')
     x_route_id = fields.Many2one(
         'sn.wsd.process.route',
         string='Process Route (Independent)',
@@ -99,18 +103,6 @@ class MrpProduction(models.Model):
         readonly=False,
         precompute=True,
         check_company=True,
-        tracking=True,
-        index=True,
-    )
-    x_online_state = fields.Selection(
-        [
-            ('draft', 'Draft'),
-            ('online', 'Online'),
-            ('offline', 'Offline'),
-        ],
-        string='Online Stage',
-        default='draft',
-        copy=False,
         tracking=True,
         index=True,
     )
@@ -513,51 +505,9 @@ class MrpProduction(models.Model):
         for production in self:
             production._compute_x_process_scope()
 
-    # NOTE: the production line no longer lives on the MO — it is a
-    # scheduling dimension carried by the MES orders (制令单). Online gating
-    # and uniqueness are therefore workshop-scoped only.
-
-    @api.constrains('x_online_state', 'x_workshop_id', 'company_id')
-    def _check_single_online_order_per_workshop(self):
-        for production in self:
-            if production.x_online_state != 'online' or not production.x_workshop_id:
-                continue
-            existing = self.search([
-                ('id', '!=', production.id),
-                ('company_id', '=', production.company_id.id),
-                ('x_online_state', '=', 'online'),
-                ('x_workshop_id', '=', production.x_workshop_id.id),
-                ('state', 'not in', ['done', 'cancel']),
-            ], limit=1)
-            if existing:
-                raise ValidationError(_(
-                    'Only one manufacturing order can be online for the same workshop. Current online order: %s'
-                ) % existing.display_name)
-
-    def _check_can_go_online(self):
-        for production in self:
-            if not production.x_workshop_id:
-                raise ValidationError(_('Set the workshop before putting the manufacturing order online.'))
-            existing = self.search([
-                ('id', '!=', production.id),
-                ('company_id', '=', production.company_id.id),
-                ('x_online_state', '=', 'online'),
-                ('x_workshop_id', '=', production.x_workshop_id.id),
-                ('state', 'not in', ['done', 'cancel']),
-            ], limit=1)
-            if existing:
-                raise ValidationError(_(
-                    'Only one manufacturing order can be online for the same workshop. Current online order: %s'
-                ) % existing.display_name)
-
-    def action_set_online(self):
-        self._check_can_go_online()
-        self.write({'x_online_state': 'online'})
-        return True
-
-    def action_set_offline(self):
-        self.write({'x_online_state': 'offline'})
-        return True
+    # NOTE: the production line and the online stage no longer live on the
+    # MO — going online is a MES-order (制令单) action (x_online_date +
+    # action_online in the execution layer).
 
     def action_cancel(self):
         res = super().action_cancel()

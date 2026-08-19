@@ -5,18 +5,17 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
         <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='name']" position="attributes">
+                <attribute name="string">Manufacturing Order No.</attribute>
+            </xpath>
             <xpath expr="//search/field[@name='workcenter_id']" position="after">
                 <field name="x_workshop_id"/>
             </xpath>
             <xpath expr="//search/filter[@name='filter_in_progress']" position="after">
                 <separator/>
-                <filter string="Online" name="online" domain="[('x_online_state', '=', 'online'), ('state', 'not in', ['done', 'cancel'])]"/>
-                <filter string="Offline" name="offline" domain="[('x_online_state', '=', 'offline')]"/>
-                <filter string="Not Online" name="not_online" domain="[('x_online_state', '!=', 'online')]"/>
             </xpath>
             <xpath expr="//search/group" position="inside">
                 <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
-                <filter string="Online Stage" name="group_online_stage" domain="[]" context="{'group_by': 'x_online_state'}"/>
             </xpath>
         </field>
     </record>
@@ -26,6 +25,12 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Manufacturing Order No.</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
             <xpath expr="//field[@name='date_start']" position="attributes">
                 <attribute name="widget">datetime</attribute>
                 <attribute name="options">{'show_time': false}</attribute>
@@ -48,7 +53,6 @@
             <xpath expr="//field[@name='bom_id']" position="after">
                 <field name="x_route_id" optional="show" groups="mrp.group_mrp_routings"/>
                 <field name="x_workshop_id" optional="show"/>
-                <field name="x_online_state" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='components_availability']" position="attributes">
                 <attribute name="string">Kit Status</attribute>
@@ -72,6 +76,30 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Manufacturing Order No.</attribute>
+                <attribute name="placeholder">Manufacturing Order No.</attribute>
+            </xpath>
+            <!-- work-order scheduling is retired: execution scheduling lives
+                 on the MES orders (排产), hide the native plan/unplan buttons -->
+            <xpath expr="//button[@name='button_plan']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_unplan']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- unify the schedule date labels and surface the planned end
+                 date next to the start -->
+            <xpath expr="//label[@name='scheduled_date']" position="attributes">
+                <attribute name="string">Planned Start Date</attribute>
+            </xpath>
+            <xpath expr="//label[@name='start_date']" position="attributes">
+                <attribute name="string">Planned Start Date</attribute>
+            </xpath>
+            <xpath expr="//div[@name='date_start']" position="after">
+                <label for="date_deadline" string="Planned End Date"/>
+                <field name="date_deadline" nolabel="1"/>
+            </xpath>
             <xpath expr="//header" position="inside">
                 <!-- Force close (强制关闭): manual bail-out for abandoned MOs;
                      the normal closure path is all-MES-orders-done -> auto. -->
@@ -207,14 +235,5 @@
                 </page>
             </xpath>
         </field>
-    </record>
-
-    <record id="action_sn_mrp_online_production" model="ir.actions.act_window">
-        <field name="name">Online Manufacturing Orders</field>
-        <field name="res_model">mrp.production</field>
-        <field name="view_mode">list,kanban,form,calendar,pivot,graph,activity</field>
-        <field name="search_view_id" ref="mrp.view_mrp_production_filter"/>
-        <field name="domain">[('x_online_state', '=', 'online'), ('state', 'not in', ('done', 'cancel'))]</field>
-        <field name="context">{'search_default_online': 1}</field>
     </record>
 </odoo>

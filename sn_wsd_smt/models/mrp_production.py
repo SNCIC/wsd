@@ -259,28 +259,6 @@ class MrpProduction(models.Model):
         production._generate_smt_feeder_lines_from_online_materials()
         return production.x_smt_online_material_ids
 
-    def action_set_online(self):
-        for production in self:
-            if production.x_has_smt_operations:
-                production._prepare_smt_online_materials()
-        result = super().action_set_online()
-        self.filtered(lambda production: production.x_has_smt_operations).write({
-            'x_smt_online_state': 'online',
-        })
-        return result
-
-    def action_set_offline(self):
-        for production in self:
-            if production.x_has_smt_operations and production.x_smt_online_material_ids.filtered(lambda line: line.is_load == 'Y'):
-                raise ValidationError(_(
-                    'SMT materials are still loaded. Complete SMT unload before taking the manufacturing order offline.'
-                ))
-        result = super().action_set_offline()
-        self.filtered(lambda production: production.x_has_smt_operations).write({
-            'x_smt_online_state': 'draft',
-        })
-        return result
-
     def action_smt_online(self):
         for production in self:
             if not production.x_smt_production_line_id:

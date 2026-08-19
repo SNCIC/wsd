@@ -780,6 +780,28 @@ class TestMesOrder(TransactionCase):
         result = Station.sn_station_scan(wc_in.id, order_a.name)
         self.assertEqual(result['action'], 'select_order')
 
+    def test_48_online_offline_log(self):
+        """Going online/offline keeps a who/when log; offline is blocked
+        while boards are still in progress."""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 4)
+        order.action_online()
+        log = order.x_online_log_ids
+        self.assertEqual(len(log), 1)
+        self.assertEqual(log.action, 'online')
+        self.assertEqual(log.user_id, self.env.user)
+        # a board in progress blocks the offline
+        wc_in, _wc_out = self._done_workcenters()
+        serial = order.scan_enter('SN-LOG-001', wc_in)
+        with self.assertRaises(ValidationError):
+            order.action_offline()
+        # leave the station -> offline succeeds and is logged
+        order.leave_station(serial, 'ng')
+        order.action_offline()
+        self.assertFalse(order.x_online_date)
+        self.assertEqual(order.x_online_log_ids.mapped('action'), ['offline', 'online'])
+
     def test_45_station_leave_scrap(self):
         """Station mode: leaving with result Scrap is terminal -- the SN is
         sealed, components are scrapped through a native scrap order."""

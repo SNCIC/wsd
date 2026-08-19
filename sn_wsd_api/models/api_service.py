@@ -717,7 +717,9 @@ class SnWsdApiService(models.AbstractModel):
                 # The production line moved to the MES orders (制令单); the MO
                 # no longer carries it. Kept in the payload for API stability.
                 'production_line_id': False,
-                'online_state': production.x_online_state,
+                # Online gating moved to the MES orders (制令单); kept in
+                # the payload as False for API stability.
+                'online_state': False,
                 'state': production.state,
             },
             'route_operation': False,

@@ -5,13 +5,6 @@
     </record>
 
     <menuitem id="menu_sn_mrp_base_config" name="Meter MES" parent="mrp.menu_mrp_configuration" sequence="85"/>
-    <menuitem
-        id="menu_sn_mrp_online_production"
-        name="Online Manufacturing Orders"
-        parent="mrp.menu_mrp_manufacturing"
-        action="action_sn_mrp_online_production"
-        sequence="15"
-    />
     <menuitem id="menu_sn_quality_root" name="Quality Management" parent="mrp.menu_mrp_root" sequence="70"/>
     <menuitem id="menu_sn_quality_config" name="Quality Configuration" parent="menu_sn_quality_root" sequence="1"/>
     <menuitem id="menu_sn_quality_operation" name="Quality Operations" parent="menu_sn_quality_root" sequence="2"/>

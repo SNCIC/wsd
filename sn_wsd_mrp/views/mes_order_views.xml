@@ -46,12 +46,15 @@
                     <button name="action_online" type="object" string="Go Online"
                             class="btn-primary" invisible="x_online_date or state == 'cancelled'"
                             confirm="Put this MES order online? SNs may then be fed in and the management mode is locked."/>
-                    <button name="action_open_done_wizard" type="object" string="完工入库"
-                            class="btn-primary" invisible="state != 'in_progress' or x_output_qty &lt;= 0"/>
                     <button name="action_sync_route" type="object" string="Sync Route"
                             invisible="x_online_date or state == 'cancelled'"/>
                     <button name="action_cancel" type="object" string="Cancel (Revoke)" class="btn-secondary"
                             invisible="state != 'released'"/>
+                    <!-- 完工入库: same engine as the shop-floor terminal
+                         (action_complete), kept visible on every live state;
+                         the wizard/backend carry the quantity gates -->
+                    <button name="action_open_done_wizard" type="object" string="完工入库"
+                            class="btn-primary" invisible="state not in ('released', 'picked', 'in_progress')"/>
                     <field name="state" widget="statusbar" statusbar_visible="released,picked,in_progress,done"/>
                 </header>
                 <sheet>
@@ -145,6 +148,16 @@
                             <field name="x_reported_qty" string="累计报工" sum="合计"
                                    decoration-success="x_reported_ok_qty + x_reported_scrap_qty &gt;= parent.planned_qty"
                                    column_invisible="parent.x_manage_mode != 'report'"/>
+                        </list>
+                    </field>
+                    <separator string="上下线日志"/>
+                    <field name="x_online_log_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="action" widget="badge"
+                                   decoration-success="action == 'online'"
+                                   decoration-warning="action == 'offline'"/>
+                            <field name="user_id"/>
+                            <field name="date" widget="datetime"/>
                         </list>
                     </field>
                 </sheet>
@@ -301,6 +314,64 @@
               parent="menu_sn_wsd_mes_root" sequence="10"/>
     <menuitem id="menu_sn_wsd_mes_orders" name="MES Orders" action="action_sn_wsd_mes_orders"
               parent="menu_sn_wsd_mes_root" sequence="15"/>
+
+    <record id="view_sn_wsd_mes_order_online_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.online.search</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="production_line_id"/>
+                <field name="production_id"/>
+                <group>
+                    <filter name="group_line" string="Production Line"
+                            context="{'group_by': 'production_line_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_order_online_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.online.list</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="x_workshop_id"/>
+                <field name="production_line_id"/>
+                <field name="production_id"/>
+                <field name="x_online_by"/>
+                <field name="x_online_date" widget="datetime"/>
+                <field name="x_side"/>
+                <field name="state" widget="badge" decoration-info="state == 'in_progress'"
+                       decoration-success="state == 'done'"/>
+                <button name="action_offline" type="object" string="Go Offline"
+                        icon="oi-power" confirm="Take this MES order offline? SN feeding stops immediately."
+                        invisible="not x_online_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_order_online" model="ir.actions.act_window">
+        <field name="name">Online MES Orders</field>
+        <field name="res_model">sn.wsd.mes.order</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_mes_order_online_search"/>
+        <field name="domain">[('x_online_date', '!=', False), ('state', 'not in', ('done', 'cancelled'))]</field>
+        <field name="view_ids">
+            <record id="action_sn_wsd_mes_order_online_view_list" model="ir.actions.act_window.view">
+                <field name="sequence" eval="1"/>
+                <field name="view_mode">list</field>
+                <field name="view_id" ref="view_sn_wsd_mes_order_online_list"/>
+            </record>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_mes_order_online" name="Online MES Orders"
+              action="action_sn_wsd_mes_order_online"
+              parent="menu_sn_wsd_mes_root" sequence="12"/>
 
     <!-- ==================================================================
          Completion wizard (完工入库): backflush + receipt + closure.
