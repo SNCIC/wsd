@@ -1,5 +1,6 @@
 from odoo import api, fields, models
 from odoo.fields import Command
+from datetime import timezone
 
 
 class MaintenanceGenerationLog(models.Model):
@@ -43,7 +44,21 @@ class MaintenanceGenerationLog(models.Model):
             assert 0 <= hour <= 23 and 0 <= minute <= 59
         except (ValueError, AssertionError):
             hour, minute = 8, 30
-        return now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        # The parameter is a business wall-clock time: interpret it in the
+        # current user timezone (falling back to the administrator's, then
+        # UTC for cron runs) and convert back to UTC, because `now` and the
+        # stored datetimes are UTC.
+        tz_name = (
+            self.env.context.get('tz')
+            or self.env.user.tz
+            or self.env.ref('base.user_admin').sudo().tz
+            or 'UTC')
+        local_now = fields.Datetime.context_timestamp(
+            self.with_context(tz=tz_name), now)
+        trigger_local = local_now.replace(
+            hour=hour, minute=minute, second=0, microsecond=0)
+        return trigger_local.astimezone(
+            timezone.utc).replace(tzinfo=None)
 
 
 class MaintenancePlan(models.Model):
