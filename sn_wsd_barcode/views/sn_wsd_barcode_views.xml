@@ -5,7 +5,9 @@
 
     <record id="sn_wsd_barcode_action_main_menu" model="ir.actions.client">
         <field name="name">Barcode</field>
-        <field name="path">barcode</field>
+        <!-- 'barcode' path is reserved by enterprise stock_barcode (unique constraint
+             ir_act_client_path_unique); use 'wsd-barcode' to coexist with it. -->
+        <field name="path">wsd-barcode</field>
         <field name="tag">sn_wsd_barcode_main_menu</field>
         <field name="target">fullscreen</field>
     </record>
@@ -31,7 +33,8 @@
         <field name="res_model">stock.picking</field>
         <field name="view_mode">kanban,form</field>
         <field name="view_id" ref="sn_wsd_barcode.stock_picking_view_kanban"/>
-        <field name="path">barcode-operations</field>
+        <!-- 'barcode-operations' path is taken by enterprise stock_barcode (ir_act_window_path_unique) -->
+        <field name="path">wsd-barcode-operations</field>
         <field name="target">fullscreen</field>
         <field name="context">{
             'contact_display': 'partner_address',

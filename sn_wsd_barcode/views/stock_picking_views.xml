@@ -128,11 +128,9 @@
         </field>
     </record>
 
-    <!-- If Barcode is installed, don't show the "Install Barcode" footer -->
-    <template id="barcode_help_message_template" inherit_id="stock.help_message_template">
-        <xpath expr="//p[@name='footer_help_message']" position="replace">
-            <t></t>
-        </xpath>
-    </template>
+    <!-- The "Install Barcode" footer (stock.help_message_template //p[@name='footer_help_message'])
+         is already removed by enterprise stock_barcode's own barcode_help_message_template view.
+         Do NOT redefine it here: an identical xpath on the same parent view fails to locate the
+         node (already replaced) and breaks later inherits such as sale_stock's. -->
 
 </data></odoo>

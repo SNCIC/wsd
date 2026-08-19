@@ -188,4 +188,4 @@ export const digipad = {
         fulfilledAt: attrs.fulfilled_at,
     }),
 };
-registry.category("view_widgets").add("digipad", digipad);
+registry.category("view_widgets").add("sn_wsd_barcode_digipad", digipad);

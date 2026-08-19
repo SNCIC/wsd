@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col-3" invisible="not image_1920">
-                    <field name="image_1920" class="oe_avatar" widget="image_preview"/>
+                    <field name="image_1920" class="oe_avatar" widget="sn_wsd_barcode_image_preview"/>
                 </div>
             </div>
             <div name="quantity" class="row my-2">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div name="digipad" class="row">
-                <widget name="digipad" field_to_edit="qty_done" fulfilled_at="quantity"
+                <widget name="sn_wsd_barcode_digipad" field_to_edit="qty_done" fulfilled_at="quantity"
                         invisible="tracking == 'serial' and (not hide_lot_name or not hide_lot)"/>
             </div>
             <div name="location_src" class="row" groups="stock.group_stock_multi_locations" invisible="picking_code == 'incoming'">

@@ -39,4 +39,4 @@ export const setReservedQuantityButton = {
     },
 };
 
-registry.category("fields").add("set_reserved_qty_button", setReservedQuantityButton);
+registry.category("fields").add("sn_wsd_barcode_set_reserved_qty_button", setReservedQuantityButton);

@@ -124,7 +124,7 @@ class MainComponent extends Component {
         useBus(this.barcodeService.bus, "barcode_scanned", (ev) =>
             this.onBarcodeScanned(ev.detail.barcode)
         );
-        this.mobileService = useService("mobile");
+        this.mobileService = useService("sn_wsd_barcode_mobile");
         useBus(this.mobileService.bus, "mobile_reader_scanned", (ev) =>
             this.onMobileReaderScanned(ev.detail.data)
         );
