@@ -7,6 +7,14 @@
               web_icon="sn_wsd_device,static/description/icon.png"
               sequence="60"/>
 
+    <!-- Equipment knowledge base -->
+    <menuitem id="menu_knowledge"
+              name="Equipment Knowledge Base"
+              parent="menu_device_root"
+              action="action_knowledge"
+              sequence="9"/>
+
+    <!-- Data collection section -->
     <menuitem id="menu_device_data_collection"
               name="Data Collection"
               parent="menu_device_root"

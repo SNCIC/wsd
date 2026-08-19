@@ -272,6 +272,73 @@ def repair_loop():
 
 T('维修', '报修→接单→记录×2→完成→只读', repair_loop)
 
+# ---------- 6.7 设备知识库 ----------
+def knowledge_loop():
+    KB = env['sn.wsd.device.knowledge']
+    KB.search([]).unlink()
+    # R1 编号 + 故障案例
+    k1 = KB.create({
+        'name': 'TEST-主轴异响案例', 'knowledge_type': 'case',
+        'content': '<p>TEST case content</p>',
+        'fault_phenomenon': '<p>noise</p>', 'fault_cause': '<p>bearing</p>',
+        'solution': '<p>replace bearing</p>',
+        'equipment_id': cache['eq'].id,
+    })
+    assert k1.kb_code and k1.kb_code.startswith('KB'), '知识编号未生成'
+    # R2 故障案例缺解决方案应报错
+    try:
+        with env.cr.savepoint():
+            KB.create({'name': 'TEST-bad', 'knowledge_type': 'case',
+                       'content': '<p>x</p>',
+                       'fault_phenomenon': '<p>a</p>', 'fault_cause': '<p>b</p>'})
+        raise AssertionError('故障案例缺解决方案应报错')
+    except ValidationError:
+        pass
+    # R3 SOP 无步骤应报错,带步骤成功
+    try:
+        with env.cr.savepoint():
+            KB.create({'name': 'TEST-sop', 'knowledge_type': 'sop',
+                       'content': '<p>x</p>'})
+        raise AssertionError('SOP缺步骤应报错')
+    except ValidationError:
+        pass
+    k2 = KB.create({'name': 'TEST-换模SOP', 'knowledge_type': 'sop',
+                    'content': '<p>SOP content</p>',
+                    'sop_step_ids': [Command.create({'description': 'step 1'})]})
+    assert len(k2.sop_step_ids) == 1
+    # R4 FAQ
+    k3 = KB.create({'name': 'TEST-FAQ', 'knowledge_type': 'faq',
+                    'content': '<p>question?</p>', 'faq_answer': '<p>answer</p>'})
+    # R5/R6 点赞/收藏每用户一次(m2m 去重),再点为取消
+    # (OdooBot 在 Odoo 19 中 active=False 会被 m2m 的 active 过滤滤掉,
+    #  因此用活跃的 admin 用户执行)
+    admin = env.ref('base.user_admin')
+    ka = k1.with_user(admin)
+    ka.action_toggle_like(); ka.invalidate_recordset()
+    assert ka.like_count == 1 and ka.liked_by_me, '点赞失败'
+    ka.action_toggle_like(); ka.invalidate_recordset()
+    assert ka.like_count == 0, '取消点赞失败'
+    ka.action_toggle_like()
+    ka.action_toggle_favorite(); ka.invalidate_recordset()
+    assert ka.favorite_count == 1 and ka.favorited_by_me, '收藏失败'
+    k1.invalidate_recordset()
+    # R7 浏览量自动累加
+    v0 = k1.view_count
+    k1.web_read({'name': {}})
+    k1.invalidate_recordset()
+    assert k1.view_count == v0 + 1, '浏览量未累加'
+    # 版本
+    act = k1.action_new_version()
+    new_k = KB.browse(act['res_id'])
+    new_k.invalidate_recordset()
+    assert new_k.parent_id.id == k1.id and new_k.version == '1.1', '新版本失败'
+    assert new_k.kb_code != k1.kb_code, '新版本编号未重新生成'
+    return 'KB %s(case) %s(sop) %s(faq) %s(v1.1) 赞%d 藏%d 浏览%d' % (
+        k1.kb_code, k2.kb_code, k3.kb_code, new_k.kb_code,
+        k1.like_count, k1.favorite_count, k1.view_count)
+
+T('知识库', '四类型+R1编号+R2-R4条件必填+R5R6赞藏+R7浏览+版本', knowledge_loop)
+
 # ---------- 7. 逾期标记逻辑 ----------
 T('逻辑', '昨日未完成任务自动逾期', lambda: (
     env['sn.wsd.device.check.task']._mark_previous_unfinished_overdue()) and 'ok')

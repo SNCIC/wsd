@@ -2,7 +2,7 @@
     'name': "Device Management",
     'summary': "Device data collection (reflow soldering, etc.)",
     'category': 'Manufacturing/Device Management',
-    'version': '19.0.2.0.0',
+    'version': '19.0.3.0.0',
     'depends': ['base', 'product', 'hr'],
     'data': [
         'security/ir.model.access.csv',
@@ -31,6 +31,8 @@
         'views/cal_config_views.xml',
         'data/repair_sequence.xml',
         'views/repair_order_views.xml',
+        'data/knowledge_sequence.xml',
+        'views/knowledge_views.xml',
         'data/equipment_seed.xml',
         'views/menu_views.xml',
     ],

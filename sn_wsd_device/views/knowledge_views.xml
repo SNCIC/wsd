@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== List ===== -->
+    <record id="view_knowledge_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.knowledge.list</field>
+        <field name="model">sn.wsd.device.knowledge</field>
+        <field name="arch" type="xml">
+            <list decoration-info="knowledge_type == 'sop'"
+                  decoration-warning="knowledge_type == 'case'">
+                <field name="kb_code"/>
+                <field name="name"/>
+                <field name="knowledge_type" widget="badge"
+                       decoration-info="knowledge_type == 'sop'"
+                       decoration-warning="knowledge_type == 'case'"
+                       decoration-success="knowledge_type == 'tip'"
+                       decoration-muted="knowledge_type == 'faq'"/>
+                <field name="equipment_code" optional="hide"/>
+                <field name="equipment_type_id" optional="show"/>
+                <field name="version"/>
+                <field name="view_count" optional="show"/>
+                <field name="like_count" optional="show"/>
+                <field name="favorite_count" optional="hide"/>
+                <field name="create_uid" optional="hide"/>
+                <field name="create_date" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== Form ===== -->
+    <record id="view_knowledge_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.knowledge.form</field>
+        <field name="model">sn.wsd.device.knowledge</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_new_version" type="object"
+                            string="New Version" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_toggle_like" type="object"
+                                class="oe_stat_button" icon="fa-thumbs-o-up"
+                                invisible="liked_by_me">
+                            <field name="like_count" widget="statinfo"
+                                   string="Likes"/>
+                        </button>
+                        <button name="action_toggle_like" type="object"
+                                class="oe_stat_button" icon="fa-thumbs-up"
+                                invisible="not liked_by_me">
+                            <field name="like_count" widget="statinfo"
+                                   string="Likes"/>
+                        </button>
+                        <button name="action_toggle_favorite" type="object"
+                                class="oe_stat_button" icon="fa-star-o"
+                                invisible="favorited_by_me">
+                            <field name="favorite_count" widget="statinfo"
+                                   string="Favorites"/>
+                        </button>
+                        <button name="action_toggle_favorite" type="object"
+                                class="oe_stat_button" icon="fa-star"
+                                invisible="not favorited_by_me">
+                            <field name="favorite_count" widget="statinfo"
+                                   string="Favorites"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="kb_code" readonly="1"/></h1>
+                        <h2><field name="name" placeholder="Knowledge title..."/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="knowledge_type"/>
+                            <field name="equipment_id"
+                                   options="{'no_create': True}"/>
+                            <field name="equipment_type_id"
+                                   options="{'no_create': True}"/>
+                            <field name="repair_order_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"/>
+                            <field name="version"/>
+                            <field name="parent_id" readonly="1"
+                                   options="{'no_create': True}"/>
+                            <field name="view_count"/>
+                            <field name="summary"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content">
+                            <group>
+                                <field name="content" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                        </page>
+                        <page string="Fault Case"
+                              invisible="knowledge_type != 'case'">
+                            <group string="Fault Phenomenon">
+                                <field name="fault_phenomenon" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                            <group string="Fault Cause">
+                                <field name="fault_cause" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                            <group string="Solution">
+                                <field name="solution" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                            <group string="Preventive Measures">
+                                <field name="preventive_measures" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                        </page>
+                        <page string="SOP"
+                              invisible="knowledge_type != 'sop'">
+                            <field name="sop_step_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="image" widget="image"
+                                           options="{'preview_image': 'image'}"/>
+                                </list>
+                            </field>
+                            <group>
+                                <group>
+                                    <field name="sop_tools"/>
+                                    <field name="sop_spare_parts"/>
+                                </group>
+                                <group string="Safety Notes">
+                                    <field name="sop_safety_notes" nolabel="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Tip"
+                              invisible="knowledge_type != 'tip'">
+                            <group>
+                                <group>
+                                    <field name="tip_scenario"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="FAQ"
+                              invisible="knowledge_type != 'faq'">
+                            <group string="Answer">
+                                <field name="faq_answer" nolabel="1"
+                                       class="sn_wsd_repair_html"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Search ===== -->
+    <record id="view_knowledge_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.knowledge.search</field>
+        <field name="model">sn.wsd.device.knowledge</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Knowledge Title"/>
+                <field name="kb_code" string="Knowledge Reference"/>
+                <field name="summary"/>
+                <filter name="filter_case" string="Fault Case"
+                        domain="[('knowledge_type', '=', 'case')]"/>
+                <filter name="filter_sop" string="Standard Operating Procedure"
+                        domain="[('knowledge_type', '=', 'sop')]"/>
+                <filter name="filter_tip" string="Repair Tip"
+                        domain="[('knowledge_type', '=', 'tip')]"/>
+                <filter name="filter_faq" string="FAQ"
+                        domain="[('knowledge_type', '=', 'faq')]"/>
+                <separator/>
+                <filter name="filter_my_favorites" string="My Favorites"
+                        domain="[('favorite_user_ids', 'in', uid)]"/>
+                <filter name="filter_my_likes" string="My Likes"
+                        domain="[('like_user_ids', 'in', uid)]"/>
+                <group>
+                    <filter name="group_type" string="Knowledge Type"
+                            context="{'group_by': 'knowledge_type'}"/>
+                    <filter name="group_equipment_type" string="Equipment Type"
+                            context="{'group_by': 'equipment_type_id'}"/>
+                    <filter name="group_equipment" string="Equipment"
+                            context="{'group_by': 'equipment_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===== Action ===== -->
+    <record id="action_knowledge" model="ir.actions.act_window">
+        <field name="name">Equipment Knowledge</field>
+        <field name="res_model">sn.wsd.device.knowledge</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_knowledge_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No knowledge entry yet
+            </p>
+            <p>
+                Distill fault cases, standard operating procedures, repair
+                tips and FAQs from daily maintenance work.
+            </p>
+        </field>
+    </record>
+
+</odoo>
