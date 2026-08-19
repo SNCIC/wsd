@@ -1,5 +1,6 @@
+from datetime import timedelta, timezone
+
 from odoo import api, fields, models
-from datetime import timezone
 
 
 class CalibrationGenerationLog(models.Model):
@@ -75,25 +76,26 @@ class CalibrationPlan(models.Model):
     @api.model
     def _cron_generate_calibration_tasks(self):
         """Single shared cron for every calibration plan. Wakes up every
-        10 minutes, waits until the calibration trigger time, then for
-        each plan whose task creation date is reached: marks previous
-        unfinished same-kind tasks overdue and generates a new task
-        (one run per plan per day, the log is the idempotency token)."""
+        minute; the scheduled pass executes once per day, shortly after
+        the calibration trigger time, and for each plan whose task
+        creation date is reached: marks previous unfinished same-kind
+        tasks overdue and generates a new task."""
         now = fields.Datetime.now()
         today = fields.Date.context_today(self)
         trigger_dt = self.env[
             'sn.wsd.device.cal.generation.log']._parameter_trigger_datetime(now)
         if now < trigger_dt:
             return
+        # Once-per-day semantics: the scheduled pass executes only on the
+        # wake-ups shortly after the daily trigger time (the first tick at
+        # or after it); later wake-ups stay no-ops until tomorrow.
+        if now > trigger_dt + timedelta(minutes=15):
+            return
         log_model = self.env['sn.wsd.device.cal.generation.log']
         task_model = self.env['sn.wsd.device.cal.task']
         for plan in self.search([('active', '=', True)]):
-            already_logged = log_model.search_count([
-                ('plan_id', '=', plan.id),
-                ('generation_date', '=', today),
-            ])
-            if already_logged:
-                continue
+            # No plan-level log gate: the once-per-day window above decides
+            # whether the scheduled pass runs at all.
             plan._generate_task_for_today(today, now, trigger_dt,
                                           log_model, task_model)
 

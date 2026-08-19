@@ -1,6 +1,7 @@
+from datetime import timedelta, timezone
+
 from odoo import api, fields, models
 from odoo.fields import Command
-from datetime import timezone
 
 
 class MaintenanceGenerationLog(models.Model):
@@ -86,6 +87,11 @@ class MaintenancePlan(models.Model):
         trigger_dt = self.env[
             'sn.wsd.device.maint.generation.log']._parameter_trigger_datetime(now)
         if now < trigger_dt:
+            return
+        # Once-per-day semantics: the scheduled pass executes only on the
+        # wake-ups shortly after the daily trigger time (the first tick at
+        # or after it); later wake-ups stay no-ops until tomorrow.
+        if now > trigger_dt + timedelta(minutes=15):
             return
         self.env[
             'sn.wsd.device.maint.task']._mark_previous_unfinished_overdue()

@@ -1,6 +1,7 @@
+from datetime import timedelta, timezone
+
 from odoo import api, fields, models
 from odoo.fields import Command
-from datetime import timezone
 
 
 class CheckGenerationLog(models.Model):
@@ -89,6 +90,11 @@ class CheckPlan(models.Model):
         trigger_dt = self.env[
             'sn.wsd.device.check.generation.log']._parameter_trigger_datetime(now)
         if now < trigger_dt:
+            return
+        # Once-per-day semantics: the scheduled pass executes only on the
+        # wake-ups shortly after the daily trigger time (the first tick at
+        # or after it); later wake-ups stay no-ops until tomorrow.
+        if now > trigger_dt + timedelta(minutes=15):
             return
         # Overdue rule: when the next generation starts, any uncompleted
         # task from a previous day becomes overdue.

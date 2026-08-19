@@ -118,9 +118,14 @@ for rm in [m.model for m in dev_models if m.model.endswith('.record')]:
 
 # ---------- 4/5/6. 点检/保养/校准 闭环 ----------
 # 触发时间提前到 00:01,让 cron 逻辑当下即可生成
-env['ir.config_parameter'].sudo().set_param('equipment_inspection_trigger_time', '00:01')
-env['ir.config_parameter'].sudo().set_param('equipment_maintenance_trigger_time', '00:01')
-env['ir.config_parameter'].sudo().set_param('equipment_cal_trigger_time', '00:01')
+# 触发时间设为"当前时间"，保证生成走的是当天触发窗口内（每天一次语义）
+_admin = env.ref('base.user_admin')
+_now_local = fields.Datetime.context_timestamp(
+    _admin.with_context(tz=_admin.tz), fields.Datetime.now())
+_hhmm = _now_local.strftime('%H:%M')
+env['ir.config_parameter'].sudo().set_param('equipment_inspection_trigger_time', _hhmm)
+env['ir.config_parameter'].sudo().set_param('equipment_maintenance_trigger_time', _hhmm)
+env['ir.config_parameter'].sudo().set_param('equipment_cal_trigger_time', _hhmm)
 
 # 保养模板(保养/点检生成时会引用): 必须同时有保养条目和点检条目,
 # 否则任务生成会记为 'no spot check item on the template' 失败
