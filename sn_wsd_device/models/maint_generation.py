@@ -97,10 +97,19 @@ class MaintenancePlan(models.Model):
             'sn.wsd.device.maint.task']._mark_previous_unfinished_overdue()
         log_model = self.env['sn.wsd.device.maint.generation.log']
         task_model = self.env['sn.wsd.device.maint.task']
+        trigger_display = log_model._parameter_trigger_time_display()
         for plan in self.search([('active', '=', True)]):
-            # No plan-level once-per-day gate: idempotency is per
-            # equipment (done today / already has today's task), so every
-            # wake-up re-evaluates each device's condition.
+            # Execution latch: one run per plan per day per configured
+            # trigger time. Repeated wake-ups inside the window cannot
+            # duplicate tasks, while changing the trigger time re-arms
+            # the day (the new time gets its own single run).
+            already_ran = log_model.search_count([
+                ('plan_id', '=', plan.id),
+                ('generation_date', '=', today),
+                ('trigger_time', '=', trigger_display),
+            ])
+            if already_ran:
+                continue
             plan._generate_tasks_for_today(today, now, trigger_dt,
                                            log_model, task_model)
 
@@ -111,7 +120,6 @@ class MaintenancePlan(models.Model):
             ('equipment_type_id', '=', self.equipment_type_id.id)])
         items = template.maintenance_item_ids if template else \
             self.env['sn.wsd.device.maint.item']
-        today_start = fields.Datetime.to_datetime(today)
         expected = generated = skipped = failed = 0
         errors = []
         equipments = self.env['sn.wsd.device.equipment'].search([
@@ -122,20 +130,19 @@ class MaintenancePlan(models.Model):
             lambda equipment: self._is_equipment_due_today(equipment, today))
         if not equipments:
             return
+        # Claim the run: this log is the day's execution latch (matched by
+        # plan + date + trigger time in the cron loop), so the wake-ups
+        # that follow inside the window cannot run the plan twice.
+        log = log_model.create({
+            'plan_id': self.id,
+            'generation_date': today,
+            'trigger_time': log_model._parameter_trigger_time_display(),
+            'expected_equipment_count': len(equipments),
+            'run_status': 'success',
+        })
         for equipment in equipments:
             expected += 1
             try:
-                if equipment.last_maintenance_date and \
-                        equipment.last_maintenance_date >= today_start:
-                    skipped += 1
-                    continue
-                duplicate = task_model.search_count([
-                    ('equipment_id', '=', equipment.id),
-                    ('task_date', '=', today),
-                ])
-                if duplicate:
-                    skipped += 1
-                    continue
                 if not items:
                     failed += 1
                     errors.append(f'{equipment.code}: '
@@ -169,20 +176,13 @@ class MaintenancePlan(models.Model):
             except Exception as exc:  # noqa: BLE001 - logged, not fatal
                 failed += 1
                 errors.append(f'{equipment.code}: {exc}')
-        # Only log runs that produced something: pure-skip wake-ups (every
-        # minute once tasks exist) must not flood the generation log.
-        if not generated and not failed:
-            return
         if failed == 0:
             run_status = 'success'
         elif generated == 0:
             run_status = 'failed'
         else:
             run_status = 'partial'
-        log_model.create({
-            'plan_id': self.id,
-            'generation_date': today,
-            'trigger_time': log_model._parameter_trigger_time_display(),
+        log.write({
             'expected_equipment_count': expected,
             'generated_count': generated,
             'skipped_count': skipped,

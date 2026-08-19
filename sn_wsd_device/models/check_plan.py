@@ -58,29 +58,39 @@ class CheckPlan(models.Model):
         """Per-equipment due rule, anchored on the last execution.
 
         The anchor is the equipment's last spot check date, falling back
-        to the plan start date when the equipment was never checked:
-        - Daily: due every day (the same-day-done skip in the generation
-          loop keeps one task per day).
-        - Weekly / Custom N days: due once an integer number of cycle
-          days has elapsed since the anchor.
-        - Monthly / Quarterly: due in due months, on the anchor's
-          day-of-month (calendar-aware).
+        to the plan start date when the equipment was never checked. The
+        distance to the anchor must be a multiple of the cycle:
+        - a device EXECUTED today is never due again today (a full cycle
+          must elapse from the last execution);
+        - a device never executed is due on the plan start day itself
+          and on every cycle multiple from it.
         """
         self.ensure_one()
         start = self.start_date
         if today < start:
             return False
         last = equipment.last_spot_check_date
-        anchor = last.date() if last else start
+        if last:
+            anchor = last.date()
+            require_full_cycle = True
+        else:
+            anchor = start
+            require_full_cycle = False
         if self.cycle_type == 'daily':
-            return True
+            days = (today - anchor).days
+            return days >= (1 if require_full_cycle else 0)
         if self.cycle_type == 'weekly':
-            return (today - anchor).days % 7 == 0
+            days = (today - anchor).days
+            return days % 7 == 0 and (not require_full_cycle or days >= 7)
         if self.cycle_type == 'custom':
-            return (today - anchor).days % self.custom_cycle_days == 0
+            days = (today - anchor).days
+            cycle = self.custom_cycle_days
+            return days % cycle == 0 and                 (not require_full_cycle or days >= cycle)
         months_step = 1 if self.cycle_type == 'monthly' else 3
         month_index = ((today.year - anchor.year) * 12
                        + (today.month - anchor.month))
         if month_index % months_step:
+            return False
+        if require_full_cycle and month_index < months_step:
             return False
         return anchor + relativedelta(months=month_index) == today
