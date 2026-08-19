@@ -35,17 +35,23 @@
               action="action_equipment_ledger"
               sequence="10"/>
 
+    <!-- Calibration section -->
+    <menuitem id="menu_cal_section"
+              name="Equipment Calibration"
+              parent="menu_device_root"
+              sequence="8"/>
+
     <menuitem id="menu_cal_plan"
               name="Calibration Plans"
-              parent="menu_device_info"
+              parent="menu_cal_section"
               action="action_cal_plan"
-              sequence="20"/>
+              sequence="10"/>
 
     <menuitem id="menu_cal_task"
               name="Calibration Tasks"
-              parent="menu_device_info"
+              parent="menu_cal_section"
               action="action_cal_task"
-              sequence="30"/>
+              sequence="20"/>
 
     <!-- Check & maintenance section -->
     <menuitem id="menu_check_maint_section"
