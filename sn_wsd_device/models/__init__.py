@@ -18,3 +18,5 @@ from . import cal_task
 from . import cal_generation
 from . import cal_config
 from . import cal_import_wizard
+from . import repair_order
+from . import repair_wizard

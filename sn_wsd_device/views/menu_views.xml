@@ -77,6 +77,12 @@
               action="action_cal_task"
               sequence="80"/>
 
+    <menuitem id="menu_repair_order"
+              name="Equipment Repair"
+              parent="menu_device_info"
+              action="action_repair_order"
+              sequence="90"/>
+
     <menuitem id="menu_device_config"
               name="Configuration"
               parent="menu_device_root"

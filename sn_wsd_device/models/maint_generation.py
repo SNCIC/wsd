@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.fields import Command
 
 
 class MaintenanceGenerationLog(models.Model):
@@ -111,7 +112,7 @@ class MaintenancePlan(models.Model):
                     errors.append(f'{equipment.code}: '
                                   'no maintenance item on the template')
                     continue
-                line_vals = [(0, 0, {
+                line_vals = [Command.create({
                     'name': item.name,
                     'method': item.method,
                     'guide_file': item.guide_file,

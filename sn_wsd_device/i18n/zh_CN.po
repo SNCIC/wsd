@@ -1,319 +1,320 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_device
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0\n"
-"Language: zh_CN\n"
+"Project-Id-Version: Odoo Server 19.0+e-20250921\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-19 03:17+0000\n"
+"PO-Revision-Date: 2026-08-19 03:17+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
+
 
 #. module: sn_wsd_device
-#: model:ir.module.category,name:sn_wsd_device.module_category_device_management
-msgid "Manufacturing/Device Management"
-msgstr "制造/设备管理"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
+msgid "%(count)s document(s) synced to %(code)s."
+msgstr "已同步 %(count)s 份文档到 %(code)s。"
 
 #. module: sn_wsd_device
-#: model:ir.module.module,summary:sn_wsd_device.module_meta_information
-msgid "Device data collection (reflow soldering, etc.)"
-msgstr "设备数据采集(回流焊/波峰焊等)"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid "%(parent)s / %(own)s"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.module.module,name:sn_wsd_device.module_meta_information
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_root
-msgid "Device Management"
-msgstr "设备管理"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "%(type)s by %(user)s at %(time)s"
+msgstr "%(user)s 于 %(time)s %(type)s"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_data_collection
-msgid "Data Collection"
-msgstr "数据采集"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
+msgid "08:00"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_reflow_data
-#: model:ir.actions.act_window,name:sn_wsd_device.action_reflow_data
-msgid "Reflow Data Collection"
-msgstr "回流焊数据采集"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
+msgid "08:30"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_wave_data
-#: model:ir.actions.act_window,name:sn_wsd_device.action_wave_data
-msgid "Wave Soldering Data Collection"
-msgstr "波峰焊数据采集"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "<i class=\"fa fa-download\"/> Download Template"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_reflow_record
-msgid "Reflow Soldering Data Record"
-msgstr "回流焊数据记录"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "<i class=\"fa fa-upload\"/> Import Lines"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_reflow_zone
-msgid "Reflow Soldering Zone Temperature"
-msgstr "回流焊温区温度"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_list
+msgid "Accept"
+msgstr "接单"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_wave_record
-msgid "Wave Soldering Data Record"
-msgstr "波峰焊数据记录"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__accept_duration_hours
+msgid "Accept Duration (h)"
+msgstr "接单用时(小时)"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_wave_zone
-msgid "Wave Soldering Zone Temperature"
-msgstr "波峰焊温区温度"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
+msgid "Accept Repair Order"
+msgstr "接单"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__device_sn
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__device_sn
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__file_name
-msgid "Device SN"
-msgstr "设备SN"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__accept_time
+msgid "Accept Time"
+msgstr "接单时间"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__collect_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__collect_time
-msgid "Collection Time"
-msgstr "采集时间"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Acceptance"
+msgstr "接单信息"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__zone_line_ids
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__zone_line_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_form
-msgid "Temperature Data"
-msgstr "温度数据"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__accept_user_id
+msgid "Accepted By"
+msgstr "接单人"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__zone_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__zone_count
-msgid "Zone Count"
-msgstr "温区数量"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__reflow_record_id
-msgid "Reflow Record"
-msgstr "回流焊记录"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__wave_record_id
-msgid "Wave Record"
-msgstr "波峰焊记录"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__zone_name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__zone_name
-msgid "Zone"
-msgstr "温区"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__temperature
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__temperature
-msgid "Temperature"
-msgstr "温度"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_list
-msgid "Created on"
-msgstr "创建时间"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_list
-msgid "Zones"
-msgstr "温区数"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_search
-msgid "Today"
-msgstr "今天"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_config
-msgid "Configuration"
-msgstr "配置"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_doc_type
-#: model:ir.actions.act_window,name:sn_wsd_device.action_doc_type
-msgid "Document Types"
-msgstr "文档类型"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_doc_type
-msgid "Device Document Type"
-msgstr "设备文档类型"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__name
-msgid "Name"
-msgstr "名称"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__code
-msgid "Code"
-msgstr "编码"
-
-#. module: sn_wsd_device
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__sequence
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__sequence
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__sequence
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__sequence
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__sequence
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__sequence
-msgid "Sequence"
-msgstr "排序"
-
-#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__active
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__active
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__active
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__active
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__active
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__active
 msgid "Active"
 msgstr "启用"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__note
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__note
-msgid "Notes"
-msgstr "备注"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__advance_days
+msgid "Advance Days"
+msgstr "提前天数"
 
 #. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/controllers/cal_template.py:0
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__after_value
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__after_value
+msgid "After Calibration Value"
+msgstr "校准后检测值"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__air_consumption
+msgid "Air Consumption (m3/h)"
+msgstr "每小时用气量(m³/h)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__applicable_product_category_id
+msgid "Applicable Product"
+msgstr "适用产品"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_plan_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_plan_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_plan_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_type_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_plan_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_plan_search
 msgid "Archived"
 msgstr "已归档"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_info
-msgid "Equipment Information"
-msgstr "设备信息"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__archived_at
+msgid "Archived At"
+msgstr "归档时间"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_equipment_ledger
-#: model:ir.actions.act_window,name:sn_wsd_device.action_equipment_ledger
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment
-msgid "Equipment Ledger"
-msgstr "设备台账"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__archived_by
+msgid "Archived By"
+msgstr "归档人员"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_type_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__equipment_type_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__equipment_type_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__equipment_type_id
-msgid "Equipment Type"
-msgstr "设备类型"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "At least one maintenance item or spot check item is required."
+msgstr "至少需要配置一个保养项目或点检项目。"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_equipment_type
-#: model:ir.actions.act_window,name:sn_wsd_device.action_equipment_type
-msgid "Equipment Types"
-msgstr "设备类型"
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_task__is_latest
+msgid "Automatically set on submit: the latest completed task of this equipment for this certification kind."
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_location
-msgid "Device Location"
-msgstr "设备位置"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Basic Information"
+msgstr "基础信息"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_device_location
-#: model:ir.actions.act_window,name:sn_wsd_device.action_device_location
-msgid "Device Locations"
-msgstr "设备位置"
+#. odoo-python
+#: code:addons/sn_wsd_device/controllers/cal_template.py:0
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__before_value
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__before_value
+msgid "Before Calibration Value"
+msgstr "校准前检测值"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment_document
-msgid "Equipment Document"
-msgstr "设备文档"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_generation_log
+msgid "Calibration Generation Log"
+msgstr "校准任务生成日志"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_doc_sync_wizard
-msgid "Equipment Document Sync"
-msgstr "设备文档同步"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_generation_log
+#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_generation_log
+msgid "Calibration Generation Logs"
+msgstr "校准任务生成日志"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_code
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_code
-msgid "Equipment Code"
-msgstr "设备编码"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_line_import_wizard
+msgid "Calibration Line Import"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_name
-msgid "Equipment Name"
-msgstr "设备名称"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_line_import_wizard_line
+msgid "Calibration Line Import Preview Row"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_kind
-msgid "Equipment Kind"
-msgstr "设备种类"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "Calibration Lines"
+msgstr "校准明细"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_kind__device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__equipment_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_id
-msgid "Equipment"
-msgstr "设备"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__plan_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__plan_id
+msgid "Calibration Plan"
+msgstr "校准计划"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_kind__tooling
-msgid "Tooling"
-msgstr "工装"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_plan
+#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_plan
+msgid "Calibration Plans"
+msgstr "校准计划"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name_sgcc
-msgid "State Grid Equipment Name"
-msgstr "国网设备名称"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__calibration_user_id
+msgid "Calibration Responsible"
+msgstr "校准责任人"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name_csg
-msgid "Southern Grid Equipment Name"
-msgstr "南网设备名称"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_config
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_config
+#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_config
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
+msgid "Calibration Settings"
+msgstr "校准设置"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_model
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_model
-msgid "Equipment Model"
-msgstr "设备型号"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__task_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__task_id
+msgid "Calibration Task"
+msgstr "校准任务"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model_sgcc
-msgid "State Grid Equipment Model"
-msgstr "国网设备型号"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_task
+#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_task
+msgid "Calibration Tasks"
+msgstr "校准任务"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model_csg
-msgid "Southern Grid Equipment Model"
-msgstr "南网设备型号"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "Cancel"
+msgstr "取消"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__is_state_grid_bid
-msgid "State Grid Bid Equipment"
-msgstr "是否国网投标设备"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "Certificate"
+msgstr "证书"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__is_southern_grid_bid
-msgid "Southern Grid Bid Equipment"
-msgstr "是否南网投标设备"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_completion_date
+msgid "Certificate Completion Date"
+msgstr "校准证书完成日期"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_class
-msgid "Equipment Class"
-msgstr "设备类别"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_file
+msgid "Certificate File"
+msgstr "校准证书文件"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_filename
+msgid "Certificate Filename"
+msgstr "校准证书文件名"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_number
+msgid "Certificate Number"
+msgstr "校准证书编号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_valid_until
+msgid "Certificate Valid Until"
+msgstr "校准证书有效期"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+msgid "Certified"
+msgstr "取证"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__is_certified
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__is_certified
+msgid "Certified Calibration"
+msgstr "是否取证"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+msgid "Check Lines"
+msgstr "点检明细"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__check_photo
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__check_photo
+msgid "Check Photo"
+msgstr "点检照片"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__plan_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__plan_id
+msgid "Check Plan"
+msgstr "点检计划"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__task_id
+msgid "Check Task"
+msgstr "点检任务"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_check_generation_log
+#: model:ir.ui.menu,name:sn_wsd_device.menu_check_generation_log
+msgid "Check Task Generation Logs"
+msgstr "点检任务生成日志"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__child_ids
+msgid "Child Locations"
+msgstr "下级位置"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_class__a
@@ -331,130 +332,17 @@ msgid "Class C (General)"
 msgstr "C类(一般设备)"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_status
-msgid "Equipment Status"
-msgstr "设备状态"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__code
+msgid "Code"
+msgstr "编码"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__enabled
-msgid "In Use"
-msgstr "启用"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__repair
-msgid "Under Repair"
-msgstr "维修中"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__sealed
-msgid "Sealed"
-msgstr "封存"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__scrapped
-msgid "Scrapped"
-msgstr "报废"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__image
-msgid "Equipment Picture"
-msgstr "设备图片"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__length_cm
-msgid "Length (cm)"
-msgstr "长(CM)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__width_cm
-msgid "Width (cm)"
-msgstr "宽(CM)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__height_cm
-msgid "Height (cm)"
-msgstr "高(CM)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__weight_kg
-msgid "Weight (kg)"
-msgstr "设备重量(Kg)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__applicable_product_category_id
-msgid "Applicable Product"
-msgstr "适用产品"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__invoice_number
-msgid "Invoice Number"
-msgstr "设备发票编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__invoice_equipment_name
-msgid "Invoice Equipment Name"
-msgstr "发票设备名称"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__contract_number
-msgid "Contract Number"
-msgstr "合同编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__contract_equipment_name
-msgid "Contract Equipment Name"
-msgstr "合同设备名称"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__position_count
-msgid "Meter Position Count"
-msgstr "表位数量"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Manufacturer"
-msgstr "生产厂商信息"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer_sgcc
-msgid "State Grid Manufacturer"
-msgstr "国网制造厂商"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer_csg
-msgid "Southern Grid Manufacturer"
-msgstr "南网制造厂商"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no
-msgid "Factory Serial Number"
-msgstr "出厂编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no_sgcc
-msgid "State Grid Serial Number"
-msgstr "国网出厂编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no_csg
-msgid "Southern Grid Serial Number"
-msgstr "南网出厂编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacture_date
-msgid "Manufacture Date"
-msgstr "出厂年月"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__original_value
-msgid "Original Value (CNY)"
-msgstr "设备原值(元)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__supplier_id
-msgid "Supplier"
-msgstr "供应商"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__collect_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__collect_time
+msgid "Collection Time"
+msgstr "采集时间"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__commissioning_date
@@ -462,59 +350,511 @@ msgid "Commissioning Date"
 msgstr "投产时间"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__department_id
-msgid "Usage Department"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__complete_name
+msgid "Complete Name"
+msgstr "完整名称"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "Complete Repair"
+msgstr "完成维修"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__completed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__completed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__completed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Completed"
+msgstr "已完成"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Completed repair orders cannot be deleted."
+msgstr "已完成的维修单不可删除。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Completed repair orders cannot be modified."
+msgstr "已完成的维修单不可修改。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Completion"
+msgstr "完成信息"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__completion_time
+msgid "Completion Time"
+msgstr "完成维修时间"
+
+#. module: sn_wsd_device
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_config
+msgid "Configuration"
+msgstr "配置"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_template
+msgid "Configure the standard maintenance and spot check items of\n                each equipment type. Tasks generated later reuse these\n                templates automatically."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
+msgid "Confirm Acceptance"
+msgstr "确认接单"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__contact_person
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__contact_person
+msgid "Contact Person"
+msgstr "联系人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__contact_phone
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__contact_phone
+msgid "Contact Phone"
+msgstr "联系电话"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Contact person and phone are required for outsourced and return-to-factory repairs."
+msgstr "委外维修和返厂维修必须填写联系人和联系电话。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__contract_equipment_name
+msgid "Contract Equipment Name"
+msgstr "合同设备名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__contract_number
+msgid "Contract Number"
+msgstr "合同编号"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_import_wizard.py:0
+msgid "Could not read the file. Please upload a valid xlsx generated from the template."
+msgstr "无法读取文件,请上传按模板生成的 xlsx。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__create_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_list
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_level__critical
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_level__critical
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Critical"
+msgstr "严重"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__custom
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__custom
+msgid "Custom"
+msgstr "自定义"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__custom_cycle_days
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__custom_cycle_days
+msgid "Custom Cycle (days)"
+msgstr "自定义周期天数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_count
+msgid "Cycle Count"
+msgstr "周期数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__cycle_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__cycle_type
+msgid "Cycle Type"
+msgstr "执行周期"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__daily
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__daily
+msgid "Daily"
+msgstr "每日"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__trigger_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__trigger_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__trigger_time
+msgid "Daily Trigger Time"
+msgstr "每日触发时间"
+
+#. module: sn_wsd_device
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_data_collection
+msgid "Data Collection"
+msgstr "数据采集"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__responsible_user_id
+msgid "Defaults to the equipment maintenance responsible and may be reselected."
+msgstr "默认取设备台账的保养负责人，可重新选择。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Defaults to the uploaded file name"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "Department"
 msgstr "使用部门"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__location_id
-msgid "Installation Location"
-msgstr "安装地点"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+msgid "Describe the fault phenomenon..."
+msgstr "描述故障现象..."
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__usage_user_id
-msgid "Usage Responsible"
-msgstr "使用责任人"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "Describe the investigation..."
+msgstr "描述排查过程..."
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__maintenance_user_id
-msgid "Maintenance Responsible"
-msgstr "维修责任人"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "Describe the repair process..."
+msgstr "描述维修过程..."
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__calibration_user_id
-msgid "Calibration Responsible"
-msgstr "校准责任人"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+msgid "Describe what has been checked / tried..."
+msgstr "描述已做的检查/初步处理..."
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__total_power_kw
-msgid "Total Power (kW)"
-msgstr "总功率(kW)"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_doc_type
+msgid "Device Document Type"
+msgstr "设备文档类型"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__air_consumption
-msgid "Air Consumption (m³/h)"
-msgstr "每小时用气量(m³/h)"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_location
+msgid "Device Location"
+msgstr "设备位置"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_internal_calibration_date
-msgid "Last Internal Calibration"
-msgstr "设备上次内部校准时间"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_device_location
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_location
+msgid "Device Locations"
+msgstr "设备位置"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_external_calibration_date
-msgid "Last Certified Calibration"
-msgstr "设备上次取证校准时间"
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_root
+msgid "Device Management"
+msgstr "设备管理"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_spot_check_date
-msgid "Last Spot Check"
-msgstr "设备上次点检时间"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__device_sn
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__device_sn
+msgid "Device SN"
+msgstr "设备SN"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_maintenance_date
-msgid "Last Maintenance"
-msgstr "设备上次保养时间"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Dimensions"
+msgstr "尺寸重量"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__document_count
+msgid "Document Count"
+msgstr "文档数量"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__name
+msgid "Document Name"
+msgstr "设备文档名"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
+msgid "Document Sync"
+msgstr "文档同步"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__doc_type_id
+msgid "Document Type"
+msgstr "设备文档类型"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_doc_type
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_doc_type
+msgid "Document Types"
+msgstr "文档类型"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_list
+msgid "Documents"
+msgstr "文档数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Download"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "Download Certificate"
+msgstr "下载证书"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Download Guide"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__is_downtime
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__is_downtime
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__is_downtime
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Downtime"
+msgstr "是否停机"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__due_date
+msgid "Due Date"
+msgstr "应校准日期"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
+msgid "Duplicate"
+msgstr "复制"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "EQ001"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_repair_order__accept_duration_hours
+msgid "Elapsed time between the fault time and the accept time."
+msgstr "接单时间与故障发生时间之间的间隔时长。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_repair_order__repair_duration_hours
+msgid "Elapsed time between the fault time and the completion time."
+msgstr "完成维修时间与故障发生时间之间的间隔时长。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_type__electrical
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_type__electrical
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Electrical Fault"
+msgstr "电气故障"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_id
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_kind__device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_plan
+msgid "Equipment Calibration Plan"
+msgstr "设备校准计划"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_task
+msgid "Equipment Calibration Task"
+msgstr "设备校准任务"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_task_line
+msgid "Equipment Calibration Task Line"
+msgstr "校准任务明细"
+
+#. module: sn_wsd_device
+#: model:ir.actions.server,name:sn_wsd_device.ir_cron_cal_task_generation_ir_actions_server
+msgid "Equipment Calibration: Generate Tasks"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.actions.server,name:sn_wsd_device.ir_cron_check_task_generation_ir_actions_server
+msgid "Equipment Check: Generate Tasks"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_class
+msgid "Equipment Class"
+msgstr "设备类别"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__equipment_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Equipment Code"
+msgstr "设备编码"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment_document
+msgid "Equipment Document"
+msgstr "设备文档"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_doc_sync_wizard
+msgid "Equipment Document Sync"
+msgstr "设备文档同步"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__document_ids
@@ -523,440 +863,103 @@ msgid "Equipment Documents"
 msgstr "设备文档"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__document_count
-msgid "Document Count"
-msgstr "文档数量"
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_info
+msgid "Equipment Information"
+msgstr "设备信息"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_list
-msgid "Documents"
-msgstr "文档数"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_kind
+msgid "Equipment Kind"
+msgstr "设备种类"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__name
-msgid "Document Name"
-msgstr "设备文档名"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_equipment_ledger
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment
+#: model:ir.ui.menu,name:sn_wsd_device.menu_equipment_ledger
+msgid "Equipment Ledger"
+msgstr "设备台账"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__doc_type_id
-msgid "Document Type"
-msgstr "设备文档类型"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_plan
+msgid "Equipment Maintenance Plan"
+msgstr "设备保养计划"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__file
-msgid "File"
-msgstr "文件"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_task
+msgid "Equipment Maintenance Task"
+msgstr "设备保养任务"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__file_name
-msgid "File Name"
-msgstr "文件名"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_task_line
+msgid "Equipment Maintenance Task Line"
+msgstr "保养任务明细"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__archived_by
-msgid "Archived By"
-msgstr "归档人员"
+#: model:ir.actions.server,name:sn_wsd_device.ir_cron_maint_task_generation_ir_actions_server
+msgid "Equipment Maintenance: Generate Tasks"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__archived_at
-msgid "Archived At"
-msgstr "归档时间"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_model
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_model
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model
+msgid "Equipment Model"
+msgstr "设备型号"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__parent_id
-msgid "Parent Location"
-msgstr "上级位置"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__equipment_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Equipment Name"
+msgstr "设备名称"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__child_ids
-msgid "Child Locations"
-msgstr "下级位置"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__image
+msgid "Equipment Picture"
+msgstr "设备图片"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__kind
-msgid "Location Kind"
-msgstr "位置类型"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_repair_order
+#: model:ir.ui.menu,name:sn_wsd_device.menu_repair_order
+msgid "Equipment Repair"
+msgstr "设备维修"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__complete_name
-msgid "Complete Name"
-msgstr "完整名称"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_repair_accept_wizard
+msgid "Equipment Repair Acceptance"
+msgstr "设备维修接单"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__factory
-msgid "Factory"
-msgstr "工厂"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_repair_order
+msgid "Equipment Repair Order"
+msgstr "设备维修单"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__workshop
-msgid "Workshop"
-msgstr "车间"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_repair_record
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_repair_record_wizard
+msgid "Equipment Repair Record"
+msgstr "设备维修记录"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__line
-msgid "Production Line"
-msgstr "产线"
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_repair_create_wizard
+msgid "Equipment Repair Report"
+msgstr "设备报修"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__station
-msgid "Work Station"
-msgstr "工位"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__source_equipment_id
-msgid "Source Equipment"
-msgstr "源设备"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__target_equipment_id
-msgid "Target Equipment"
-msgstr "目标设备"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__sync_mode
-msgid "Sync Mode"
-msgstr "同步模式"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_doc_sync_wizard__sync_mode__overwrite
-msgid "Overwrite"
-msgstr "覆盖模式"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_doc_sync_wizard__sync_mode__skip
-msgid "Skip Existing"
-msgstr "跳过模式"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__source_document_count
-msgid "Source Documents"
-msgstr "源设备文档数"
-
-#. module: sn_wsd_device
-#: model:ir.actions.act_window,name:sn_wsd_device.action_doc_sync_wizard
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Sync Documents"
-msgstr "文档同步"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
-msgid "Sync Equipment Documents"
-msgstr "同步设备文档"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Basic Information"
-msgstr "基础信息"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Identification"
-msgstr "标识信息"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Grid (State / Southern) Naming"
-msgstr "国网/南网命名"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Model"
-msgstr "型号"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Dimensions"
-msgstr "尺寸重量"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Size L x W x H (cm)"
-msgstr "尺寸 长×宽×高(CM)"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Invoice & Contract"
-msgstr "发票与合同"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "State Grid"
-msgstr "国网"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Southern Grid"
-msgstr "南网"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Purchase"
-msgstr "采购信息"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Location & Ownership"
-msgstr "位置与归属信息"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Technical Parameters"
-msgstr "技术参数"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
-msgid "Maintenance Parameters"
-msgstr "维护参数"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
-msgid "State Grid Bid"
-msgstr "国网投标设备"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
-msgid "Southern Grid Bid"
-msgstr "南网投标设备"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
-msgid "My Usage Responsibility"
-msgstr "我负责使用的设备"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
-msgid "Department"
-msgstr "使用部门"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
-msgid "Sync"
-msgstr "同步"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
-msgid "Cancel"
-msgstr "取消"
-
-#. module: sn_wsd_device
-msgid "Source and target equipment must differ."
-msgstr "源设备和目标设备不能相同。"
-
-#. module: sn_wsd_device
-msgid "Source equipment has no document to sync."
-msgstr "源设备没有任何文档可同步。"
-
-#. module: sn_wsd_device
-msgid "Equipment code must be unique: %s"
-msgstr "设备编码必须唯一:%s"
-
-#. module: sn_wsd_device
-msgid "Synced by %(user)s on %(date)s from equipment %(code)s"
-msgstr "由 %(user)s 于 %(date)s 从设备 %(code)s 同步"
-
-#. module: sn_wsd_device
-msgid "%(count)s document(s) synced to %(code)s."
-msgstr "已同步 %(count)s 份文档到 %(code)s。"
-
-#. module: sn_wsd_device
-msgid "Document Sync"
-msgstr "文档同步"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_template
-#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_template
-msgid "Spot Check / Maintenance Items"
-msgstr "点检保养项目"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_template
-msgid "Spot Check / Maintenance Template"
-msgstr "点检保养项目配置"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_item
-msgid "Spot Check / Maintenance Item"
-msgstr "点检保养项目行"
-
-#. module: sn_wsd_device
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__maintenance_item_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
-msgid "Maintenance Items"
-msgstr "保养项目"
-
-#. module: sn_wsd_device
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__spot_check_item_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
-msgid "Spot Check Items"
-msgstr "点检项目"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__maintenance_count
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
-msgid "Maintenance Item Count"
-msgstr "保养项目数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__spot_check_count
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
-msgid "Spot Check Item Count"
-msgstr "点检项目数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__template_id
-msgid "Template"
-msgstr "配置"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__item_type
-msgid "Item Type"
-msgstr "项目类型"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__item_type__maintenance
-msgid "Maintenance"
-msgstr "保养"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__item_type__spot_check
-msgid "Spot Check"
-msgstr "点检"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__name
-msgid "Item Description"
-msgstr "项目描述"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__method
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__method
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__method
-msgid "Maintenance Method"
-msgstr "维护方法"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__guide_file
-msgid "Guide Media"
-msgstr "维护指导图片/视频"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__guide_filename
-msgid "Guide Media Filename"
-msgstr "指导媒体文件名"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__planned_hours
-msgid "Planned Hours (h)"
-msgstr "计划工时(时)"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__value_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__value_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__value_type
-msgid "Value Type"
-msgstr "值类型"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__range
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__range
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__range
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__range
-msgid "Range Value"
-msgstr "范围值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__fixed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__fixed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__fixed
-msgid "Fixed Value"
-msgstr "固定值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__status
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__status
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__status
-msgid "Status Value"
-msgstr "状态值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__upper_limit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__upper_limit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__upper_limit
-msgid "Upper Limit"
-msgstr "上限值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__lower_limit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__lower_limit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__lower_limit
-msgid "Lower Limit"
-msgstr "下限值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__unit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__unit
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__unit
-msgid "Unit"
-msgstr "单位"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
-msgid "Duplicate"
-msgstr "复制"
-
-#. module: sn_wsd_device
-msgid "At least one maintenance item or spot check item is required."
-msgstr "至少需要配置一个保养项目或点检项目。"
-
-#. module: sn_wsd_device
-msgid "Only one template per equipment type is allowed."
-msgstr "一个设备类型只能有一条配置记录。"
-
-#. module: sn_wsd_device
-msgid ""
-"Item \"%s\": both the upper limit and the lower limit are required for a "
-"range value."
-msgstr "项目“%s”:范围值必须同时填写上限值和下限值。"
-
-#. module: sn_wsd_device
-msgid "Item \"%s\": the lower limit must not exceed the upper limit."
-msgstr "项目“%s”:下限值不能大于上限值。"
-
-#. module: sn_wsd_device
-msgid "Item \"%s\": the upper limit is required for a fixed value."
-msgstr "项目“%s”:固定值必须填写上限值。"
-
-#. module: sn_wsd_device
-msgid "Item \"%s\": the lower limit must stay empty for a fixed value."
-msgstr "项目“%s”:固定值的下限值必须为空。"
-
-#. module: sn_wsd_device
-msgid "Item \"%s\": both limits must stay empty for a status value."
-msgstr "项目“%s”:状态值的上限值和下限值必须为空。"
-
-#. module: sn_wsd_device
-msgid "Draft"
-msgstr "草稿"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_check_plan
-#: model:ir.actions.act_window,name:sn_wsd_device.action_check_plan
 #: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_plan
-msgid "Spot Check Plans"
+msgid "Equipment Spot Check Plan"
 msgstr "点检计划"
 
 #. module: sn_wsd_device
 #: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_task
-#: model:ir.ui.menu,name:sn_wsd_device.menu_check_task
-#: model:ir.actions.act_window,name:sn_wsd_device.action_check_task
-msgid "Spot Check Tasks"
+msgid "Equipment Spot Check Task"
 msgstr "点检任务"
 
 #. module: sn_wsd_device
@@ -965,9 +968,23 @@ msgid "Equipment Spot Check Task Line"
 msgstr "点检任务明细"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_generation_log
-msgid "Spot Check Generation Log"
-msgstr "点检任务生成日志"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "Equipment Status"
+msgstr "设备状态"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_equipment_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__equipment_type_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__equipment_type_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__equipment_type_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__equipment_type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_plan_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_plan_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_search
+msgid "Equipment Type"
+msgstr "设备类型"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__equipment_type_code
@@ -984,173 +1001,210 @@ msgid "Equipment Type Name"
 msgstr "设备类型名称"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__cycle_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__cycle_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_type
-msgid "Cycle Type"
-msgstr "执行周期"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_equipment_type
+#: model:ir.ui.menu,name:sn_wsd_device.menu_equipment_type
+msgid "Equipment Types"
+msgstr "设备类型"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__daily
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__daily
-msgid "Daily"
-msgstr "每日"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid "Equipment code must be unique: %s"
+msgstr "设备编码必须唯一:%s"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__weekly
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__weekly
-msgid "Weekly"
-msgstr "每周"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Equipment name"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__monthly
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__monthly
-msgid "Monthly"
-msgstr "每月"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__error_detail
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__error_detail
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__error_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_generation_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_generation_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_generation_log_form
+msgid "Error Detail"
+msgstr "错误详情"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__quarterly
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__quarterly
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_plan__cycle_type__quarterly
-msgid "Quarterly"
-msgstr "每季度"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__custom
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__custom
-msgid "Custom"
-msgstr "自定义"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__custom_cycle_days
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__custom_cycle_days
-msgid "Custom Cycle (days)"
-msgstr "自定义周期天数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__start_date
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__start_date
-msgid "Start Date"
-msgstr "开始计算日期"
-
-#. module: sn_wsd_device
-msgid "Only one spot check plan per equipment type is allowed."
-msgstr "一个设备类型只能有一个点检计划。"
-
-#. module: sn_wsd_device
-msgid "The custom cycle must be at least 1 day."
-msgstr "自定义周期至少为 1 天。"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__name
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__name
-msgid "Task Number"
-msgstr "任务编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__plan_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__plan_id
-msgid "Check Plan"
-msgstr "点检计划"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__task_date
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__task_date
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__task_date
-msgid "Task Date"
-msgstr "任务日期"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__task_status
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__task_status
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__task_status
-msgid "Task Status"
-msgstr "任务状态"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__pending
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__pending
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__pending
-msgid "Pending"
-msgstr "待执行"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__in_progress
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__in_progress
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__in_progress
-msgid "In Progress"
-msgstr "执行中"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__completed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__completed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__completed
-msgid "Completed"
-msgstr "已完成"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__overdue
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__overdue
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__overdue
-msgid "Overdue"
-msgstr "已逾期"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__responsible_user_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__responsible_user_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__responsible_user_id
-msgid "Responsible"
-msgstr "责任人"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__executor_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__executor_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__executor_id
-msgid "Executor"
-msgstr "实际执行人"
-
-#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__executed_time
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__executed_time
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__executed_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__executed_time
 msgid "Executed Time"
 msgstr "实际执行时间"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__overall_result
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__overall_result
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__overall_result
-msgid "Overall Result"
-msgstr "整体结果"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__execution_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__execution_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__execution_time
+msgid "Execution Time"
+msgstr "执行时间"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__line_ids
-msgid "Check Lines"
-msgstr "点检明细"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__executor_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__executor_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__executor_id
+msgid "Executor"
+msgstr "实际执行人"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__overall_result__pass
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__line_result__pass
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__overall_result__pass
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__line_result__pass
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__overall_result__pass
-msgid "Pass"
-msgstr "合格"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__expected_completion_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__expected_completion_time
+msgid "Expected Completion Time"
+msgstr "预计维修完成时间"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__expected_equipment_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__expected_equipment_count
+msgid "Expected Equipment Count"
+msgstr "应生成设备数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__factory
+msgid "Factory"
+msgstr "工厂"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no
+msgid "Factory Serial Number"
+msgstr "出厂编号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__overall_result__fail
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__overall_result__fail
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__line_result__fail
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__overall_result__fail
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__line_result__fail
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__overall_result__fail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
 msgid "Fail"
 msgstr "不合格"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__task_id
-msgid "Check Task"
-msgstr "点检任务"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__failed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__failed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__failed
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__failed_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__failed_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__failed_count
+msgid "Failed Count"
+msgstr "失败数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record__repair_type__false_alarm
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record_wizard__repair_type__false_alarm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "False Alarm Check"
+msgstr "误报维修"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Fault"
+msgstr "故障"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__equipment_id
+msgid "Fault Equipment"
+msgstr "故障设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__fault_level
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__fault_level
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__fault_level
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Fault Level"
+msgstr "故障级别"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__fault_phenomenon
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__fault_phenomenon
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__fault_phenomenon
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Fault Phenomenon"
+msgstr "故障现象"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__fault_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__fault_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__fault_time
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Fault Time"
+msgstr "故障发生时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__fault_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__fault_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__fault_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Fault Type"
+msgstr "故障类型"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__file
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__file
+msgid "File"
+msgstr "文件"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__file_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__file_name
+msgid "File Name"
+msgstr "文件名"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__fixed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__fixed
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__fixed
+msgid "Fixed Value"
+msgstr "固定值"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_maint_config__trigger_time
+msgid "Format HH:MM. Once this time is reached, the shared scheduled action generates the day's maintenance tasks for every due plan. Applies to all maintenance plans."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_check_config__trigger_time
+msgid "Format HH:MM. Once this time is reached, the shared scheduled action generates the day's spot check tasks for every due plan. Applies to all plans; takes effect the next day."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_config__trigger_time
+msgid "Format HH:MM. Once this time is reached, the shared scheduled action scans the calibration plans and generates the due tasks."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_level__general
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_level__general
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "General"
+msgstr "一般"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__generated_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__generated_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__generated_count
+msgid "Generated Count"
+msgstr "实际生成数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__generation_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__generation_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__generation_date
+msgid "Generation Date"
+msgstr "生成日期"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Grid (State / Southern) Naming"
+msgstr "国网/南网命名"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__guide_file
@@ -1171,22 +1225,337 @@ msgid "Guide File Type"
 msgstr "文件类型"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__guide_file
+msgid "Guide Media"
+msgstr "维护指导图片/视频"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__guide_filename
+msgid "Guide Media Filename"
+msgstr "指导媒体文件名"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__height_cm
+msgid "Height (cm)"
+msgstr "高(CM)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__id
+msgid "ID"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Identification"
+msgstr "标识信息"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__is_certified
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_task__is_certified
+msgid "If set, submitting the task requires a certificate file, number and validity date."
+msgstr ""
+
+#. module: sn_wsd_device
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__guide_file_type__image
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__guide_file_type__image
 msgid "Image"
 msgstr "图片"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__guide_file_type__video
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__guide_file_type__video
-msgid "Video"
-msgstr "视频"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_line_import_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
+msgid "Import Calibration Lines"
+msgstr "导入校准明细"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__measured_value
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__measured_value
-msgid "Measured Value"
-msgstr "实际检测值"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
+msgid "Import to Task"
+msgstr "导入到任务"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__in_progress
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__in_progress
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__in_progress
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "In Progress"
+msgstr "执行中"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__enabled
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "In Use"
+msgstr "启用"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__initial_cal_date
+msgid "Initial Calibration Date"
+msgstr "初始校准日期"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__initial_handling
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__initial_handling
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__initial_handling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Initial Handling"
+msgstr "初步处理过程"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__location_id
+msgid "Installation Location"
+msgstr "安装地点"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_type_form
+msgid "Internal notes..."
+msgstr ""
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_config.py:0
+#: code:addons/sn_wsd_device/models/check_config.py:0
+#: code:addons/sn_wsd_device/models/maint_config.py:0
+msgid "Invalid time format: %s. Expected HH:MM (00:00-23:59)."
+msgstr "时间格式无效:%s。应为 HH:MM(00:00-23:59)."
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__investigation_process
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__investigation_process
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_form
+msgid "Investigation Process"
+msgstr "排查过程"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Invoice & Contract"
+msgstr "发票与合同"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__invoice_equipment_name
+msgid "Invoice Equipment Name"
+msgstr "发票设备名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__invoice_number
+msgid "Invoice Number"
+msgstr "设备发票编号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__is_latest
+msgid "Is Latest Calibration"
+msgstr "是否最新一次校准"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Item \"%s\": both limits must stay empty for a status value."
+msgstr "项目“%s”:状态值的上限值和下限值必须为空。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Item \"%s\": both the upper limit and the lower limit are required for a range value."
+msgstr "项目“%s”:范围值必须同时填写上限值和下限值。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Item \"%s\": the lower limit must not exceed the upper limit."
+msgstr "项目“%s”:下限值不能大于上限值。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Item \"%s\": the lower limit must stay empty for a fixed value."
+msgstr "项目“%s”:固定值的下限值必须为空。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/maint_template.py:0
+msgid "Item \"%s\": the upper limit is required for a fixed value."
+msgstr "项目“%s”:固定值必须填写上限值。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__name
+msgid "Item Description"
+msgstr "项目描述"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/controllers/cal_template.py:0
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__item_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__item_name
+msgid "Item Name"
+msgstr "项目名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__item_type
+msgid "Item Type"
+msgstr "项目类型"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_external_calibration_date
+msgid "Last Certified Calibration"
+msgstr "设备上次取证校准时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_internal_calibration_date
+msgid "Last Internal Calibration"
+msgstr "设备上次内部校准时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_maintenance_date
+msgid "Last Maintenance"
+msgstr "设备上次保养时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_repair_date
+msgid "Last Repair"
+msgstr "最近维修"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__last_spot_check_date
+msgid "Last Spot Check"
+msgstr "设备上次点检时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+msgid "Latest"
+msgstr "最新一次"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__length_cm
+msgid "Length (cm)"
+msgstr "长(CM)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__line_count
+msgid "Line Count"
+msgstr ""
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/controllers/cal_template.py:0
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__line_note
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__line_note
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__line_note
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__line_note
+msgid "Line Note"
+msgstr "单项备注"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__line_result
@@ -1195,205 +1564,36 @@ msgid "Line Result"
 msgstr "单项结果"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__line_note
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__line_note
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__line_note
-msgid "Line Note"
-msgstr "单项备注"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_device_location_list
+msgid "Location"
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__check_photo
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__check_photo
-msgid "Check Photo"
-msgstr "点检照片"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Location & Ownership"
+msgstr "位置与归属信息"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__plan_equipment_type
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__plan_equipment_type
-msgid "Plan Equipment Type"
-msgstr "计划设备类型"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__kind
+msgid "Location Kind"
+msgstr "位置类型"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__generation_date
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__generation_date
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__generation_date
-msgid "Generation Date"
-msgstr "生成日期"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__lower_limit
+msgid "Lower Limit"
+msgstr "下限值"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__trigger_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__trigger_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__trigger_time
-msgid "Trigger Time"
-msgstr "触发时间"
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_doc_type
+msgid "Maintain the list of device document types here. They show up\n                as dropdown options on documents that reference them."
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__expected_equipment_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__expected_equipment_count
-msgid "Expected Equipment Count"
-msgstr "应生成设备数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__generated_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__generated_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__generated_count
-msgid "Generated Count"
-msgstr "实际生成数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__skipped_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__skipped_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__skipped_count
-msgid "Skipped Count"
-msgstr "跳过数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__failed_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__failed_count
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__failed_count
-msgid "Failed Count"
-msgstr "失败数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__run_status
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__run_status
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__run_status
-msgid "Run Status"
-msgstr "执行状态"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__success
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__success
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__success
-msgid "Success"
-msgstr "成功"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__partial
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__partial
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__partial
-msgid "Partial"
-msgstr "部分成功"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__failed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__failed
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__failed
-msgid "Failed"
-msgstr "失败"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__error_detail
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__error_detail
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__error_detail
-msgid "Error Detail"
-msgstr "错误详情"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__execution_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__execution_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__execution_time
-msgid "Execution Time"
-msgstr "执行时间"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_check_generation_log
-#: model:ir.actions.act_window,name:sn_wsd_device.action_check_generation_log
-msgid "Check Task Generation Logs"
-msgstr "点检任务生成日志"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_plan_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_plan_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_plan_form
-msgid "Redundant Type Info"
-msgstr "设备类型冗余信息"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Start Execution"
-msgstr "开始执行"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Submit Task"
-msgstr "提交任务"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
-msgid "My Tasks"
-msgstr "我的任务"
-
-#. module: sn_wsd_device
-msgid "Task %s: items without a result: %s"
-msgstr "任务 %s:以下项目还没有判定结果:%s"
-
-#. module: sn_wsd_device
-msgid "Submit this task? Results cannot be edited afterwards."
-msgstr "确认提交此任务?提交后结果不可修改。"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_check_config
-#: model:ir.actions.act_window,name:sn_wsd_device.action_check_config
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_config
-msgid "Spot Check Settings"
-msgstr "点检设置"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__trigger_time
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__trigger_time
-msgid "Daily Trigger Time"
-msgstr "每日触发时间"
-
-#. module: sn_wsd_device
-msgid "Invalid time format: %s. Expected HH:MM (00:00-23:59)."
-msgstr "时间格式无效:%s。应为 HH:MM(00:00-23:59)."
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_plan
-#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_plan
-msgid "Maintenance Plans"
-msgstr "保养计划"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_task
-#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_task
-msgid "Maintenance Tasks"
-msgstr "保养任务"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_config
-#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_config
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_config
-msgid "Maintenance Settings"
-msgstr "保养设置"
-
-#. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_generation_log
-#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_generation_log
-msgid "Maintenance Generation Logs"
-msgstr "保养任务生成日志"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_plan
-msgid "Equipment Maintenance Plan"
-msgstr "设备保养计划"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_task
-msgid "Equipment Maintenance Task"
-msgstr "设备保养任务"
-
-#. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_task_line
-msgid "Equipment Maintenance Task Line"
-msgstr "保养任务明细"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__item_type__maintenance
+msgid "Maintenance"
+msgstr "保养"
 
 #. module: sn_wsd_device
 #: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_generation_log
@@ -1401,15 +1601,22 @@ msgid "Maintenance Generation Log"
 msgstr "保养任务生成日志"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__plan_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__plan_id
-msgid "Maintenance Plan"
-msgstr "保养计划"
+#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_generation_log
+#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_generation_log
+msgid "Maintenance Generation Logs"
+msgstr "保养任务生成日志"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__task_id
-msgid "Maintenance Task"
-msgstr "保养任务"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__maintenance_count
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
+msgid "Maintenance Item Count"
+msgstr "保养项目数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__maintenance_item_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "Maintenance Items"
+msgstr "保养项目"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__line_ids
@@ -1418,174 +1625,308 @@ msgid "Maintenance Lines"
 msgstr "保养明细"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__method
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__method
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__method
+msgid "Maintenance Method"
+msgstr "维护方法"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Maintenance Parameters"
+msgstr "维护参数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__plan_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__plan_id
+msgid "Maintenance Plan"
+msgstr "保养计划"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_plan
+#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_plan
+msgid "Maintenance Plans"
+msgstr "保养计划"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__maintenance_user_id
+msgid "Maintenance Responsible"
+msgstr "维修责任人"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_config
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_config
+#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_config
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
+msgid "Maintenance Settings"
+msgstr "保养设置"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__task_id
+msgid "Maintenance Task"
+msgstr "保养任务"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_task
+#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_task
+msgid "Maintenance Tasks"
+msgstr "保养任务"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacture_date
+msgid "Manufacture Date"
+msgstr "出厂年月"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Manufacturer"
+msgstr "生产厂商信息"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__measured_value
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__measured_value
+msgid "Measured Value"
+msgstr "实际检测值"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_type__mechanical
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_type__mechanical
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Mechanical Fault"
+msgstr "机械故障"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__position_count
+msgid "Meter Position Count"
+msgstr "表位数量"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_level__minor
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_level__minor
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Minor"
+msgstr "轻微"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Model"
+msgstr "型号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__monthly
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__monthly
+msgid "Monthly"
+msgstr "每月"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "My Tasks"
+msgstr "我的任务"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "My Usage Responsibility"
+msgstr "我负责使用的设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_repair_create_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_list
+msgid "New Repair Order"
+msgstr "新建维修单"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_cal_plan
+msgid "No calibration plan yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_import_wizard.py:0
+msgid "No data row found in the file."
+msgstr "文件里没有数据行。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_doc_type
+msgid "No document type yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_equipment_ledger
+msgid "No equipment yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_reflow_data
+msgid "No reflow data yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_repair_order
+msgid "No repair order yet"
+msgstr "还没有维修单"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_check_plan
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_plan
+msgid "No spot check plan yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_check_task
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_task
+msgid "No spot check task yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_template
+msgid "No template configured yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_wave_data
+msgid "No wave soldering data yet"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__note
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__note
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_type_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_count
+msgid "Number of cycle units between two calibrations. E.g. Quarterly x 2 = every 180 days."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record__repair_type__onsite
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record_wizard__repair_type__onsite
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "On-site Repair"
+msgstr "现场维修"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_cal_plan
+msgid "One or two plans per equipment: a certified one and a\n                non-certified one, each with its own cycle."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_check_plan
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_plan
+msgid "One plan per equipment type: cycle, start date and daily\n                deadline. A single shared scheduled action generates the\n                tasks after the global trigger time."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.constraint,message:sn_wsd_device.constraint_sn_wsd_device_cal_plan_equipment_cert_unique
+msgid "Only one certified and one non-certified calibration plan are allowed per equipment."
+msgstr "每台设备只允许一个取证计划和一个非取证计划。"
+
+#. module: sn_wsd_device
+#: model:ir.model.constraint,message:sn_wsd_device.constraint_sn_wsd_device_maint_plan_equipment_type_unique
 msgid "Only one maintenance plan per equipment type is allowed."
 msgstr "一个设备类型只能有一个保养计划。"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
-msgid "Save"
-msgstr "保存"
+#: model:ir.model.constraint,message:sn_wsd_device.constraint_sn_wsd_device_check_plan_equipment_type_unique
+msgid "Only one spot check plan per equipment type is allowed."
+msgstr "一个设备类型只能有一个点检计划。"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_plan
-#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_plan
-msgid "Calibration Plans"
-msgstr "校准计划"
+#: model:ir.model.constraint,message:sn_wsd_device.constraint_sn_wsd_device_maint_template_equipment_type_unique
+msgid "Only one template per equipment type is allowed."
+msgstr "一个设备类型只能有一条配置记录。"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_task
-#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_task
-msgid "Calibration Tasks"
-msgstr "校准任务"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Only pending repair orders can be accepted."
+msgstr "只有待接单的维修单可以接单。"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_config
-#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_config
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_config
-msgid "Calibration Settings"
-msgstr "校准设置"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Only repairing orders can be completed."
+msgstr "只有维修中的维修单可以完成维修。"
 
 #. module: sn_wsd_device
-#: model:ir.ui.menu,name:sn_wsd_device.menu_cal_generation_log
-#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_generation_log
-msgid "Calibration Generation Logs"
-msgstr "校准任务生成日志"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "Only repairing orders can record repairs."
+msgstr "只有维修中的维修单可以记录维修。"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_plan
-msgid "Equipment Calibration Plan"
-msgstr "设备校准计划"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__original_value
+msgid "Original Value (CNY)"
+msgstr "设备原值(元)"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_task
-msgid "Equipment Calibration Task"
-msgstr "设备校准任务"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_type__other
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_type__other
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Other Fault"
+msgstr "其他故障"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_task_line
-msgid "Equipment Calibration Task Line"
-msgstr "校准任务明细"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__vendor_company
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__vendor_company
+msgid "Outsourced Company"
+msgstr "委外方公司"
 
 #. module: sn_wsd_device
-#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_generation_log
-msgid "Calibration Generation Log"
-msgstr "校准任务生成日志"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record__repair_type__outsourced
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record_wizard__repair_type__outsourced
+msgid "Outsourced Repair"
+msgstr "委外维修"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__plan_id
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__plan_id
-msgid "Calibration Plan"
-msgstr "校准计划"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__overall_result
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__overall_result
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__overall_result
+msgid "Overall Result"
+msgstr "整体结果"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__task_id
-msgid "Calibration Task"
-msgstr "校准任务"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__overdue
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__overdue
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__overdue
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Overdue"
+msgstr "已逾期"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__line_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Calibration Lines"
-msgstr "校准明细"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_doc_sync_wizard__sync_mode__overwrite
+msgid "Overwrite"
+msgstr "覆盖模式"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_plan__cycle_type__yearly
-msgid "Yearly"
-msgstr "每年"
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__sync_mode
+msgid "Overwrite: delete every document of the target equipment, then copy all documents of the source equipment.\nSkip Existing: documents already on the target with the same name are kept; the missing ones are copied."
+msgstr ""
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_count
-msgid "Cycle Count"
-msgstr "周期数"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__parent_id
+msgid "Parent Location"
+msgstr "上级位置"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__initial_cal_date
-msgid "Initial Calibration Date"
-msgstr "初始校准日期"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__advance_days
-msgid "Advance Days"
-msgstr "提前天数"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__is_certified
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__is_certified
-msgid "Certified Calibration"
-msgstr "是否取证"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__is_latest
-msgid "Is Latest Calibration"
-msgstr "是否最新一次校准"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_number
-msgid "Certificate Number"
-msgstr "校准证书编号"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_completion_date
-msgid "Certificate Completion Date"
-msgstr "校准证书完成日期"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_valid_until
-msgid "Certificate Valid Until"
-msgstr "校准证书有效期"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_file
-msgid "Certificate File"
-msgstr "校准证书文件"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__cert_filename
-msgid "Certificate Filename"
-msgstr "校准证书文件名"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__item_name
-msgid "Item Name"
-msgstr "项目名称"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__before_value
-msgid "Before Calibration Value"
-msgstr "校准前检测值"
-
-#. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__after_value
-msgid "After Calibration Value"
-msgstr "校准后检测值"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Download Template"
-msgstr "下载模板"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Import Lines"
-msgstr "导入明细"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Certificate"
-msgstr "证书"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
-msgid "Download Certificate"
-msgstr "下载证书"
-
-#. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
-#: model:ir.actions.act_window,name:sn_wsd_device.action_cal_line_import_wizard
-msgid "Import Calibration Lines"
-msgstr "导入校准明细"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__parent_path
+msgid "Parent Path"
+msgstr ""
 
 #. module: sn_wsd_device
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
@@ -1593,14 +1934,38 @@ msgid "Parse"
 msgstr "解析"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_line_import_wizard_form
-msgid "Import to Task"
-msgstr "导入到任务"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__partial
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__partial
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__partial
+msgid "Partial"
+msgstr "部分成功"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_plan_form
-msgid "Redundant Equipment Info"
-msgstr "设备冗余信息"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__overall_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__overall_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__line_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__overall_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__line_result__pass
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_task__task_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task__task_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task__task_status__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Pending"
+msgstr "待执行"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__state__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Pending Acceptance"
+msgstr "待接单"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__plan_equipment
@@ -1608,14 +1973,471 @@ msgid "Plan Equipment"
 msgstr "计划设备"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__due_date
-msgid "Due Date"
-msgstr "应校准日期"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__plan_equipment_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__plan_equipment_type
+msgid "Plan Equipment Type"
+msgstr "计划设备类型"
 
 #. module: sn_wsd_device
-#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__task_creation_date
-msgid "Task Creation Date"
-msgstr "任务创建日期"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__planned_hours
+msgid "Planned Hours (h)"
+msgstr "计划工时(时)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__preview_line_ids
+msgid "Preview Lines"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__line
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Progress"
+msgstr "进展"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Purchase"
+msgstr "采购信息"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_plan__cycle_type__quarterly
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__quarterly
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__quarterly
+msgid "Quarterly"
+msgstr "每季度"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__range
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__range
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__range
+msgid "Range Value"
+msgstr "范围值"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
+msgid "Record Repair"
+msgstr "记录维修"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__record_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__record_time
+msgid "Record Time"
+msgstr "记录时间"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_reflow_data
+msgid "Records appear automatically when devices push data to\n                POST /api/device/reflow."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_wave_data
+msgid "Records appear automatically when devices push data to\n                POST /api/device/wave."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_plan_form
+msgid "Redundant Equipment Info"
+msgstr "设备冗余信息"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_plan_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_plan_form
+msgid "Redundant Type Info"
+msgstr "设备类型冗余信息"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_reflow_data
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_reflow_data
+msgid "Reflow Data Collection"
+msgstr "回流焊数据采集"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__reflow_record_id
+msgid "Reflow Record"
+msgstr "回流焊记录"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_reflow_record
+msgid "Reflow Soldering Data Record"
+msgstr "回流焊数据记录"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_reflow_zone
+msgid "Reflow Soldering Zone Temperature"
+msgstr "回流焊温区温度"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_equipment_ledger
+msgid "Register every shop-floor device here: identification,\n                manufacturer, purchase, ownership and its documents."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_list
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__repair_duration_hours
+msgid "Repair Duration (h)"
+msgstr "维修用时(小时)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__repair_order_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__repair_order_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__repair_order_id
+msgid "Repair Order"
+msgstr "维修单"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__repair_process
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__repair_process
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_form
+msgid "Repair Process"
+msgstr "维修过程"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__record_count
+msgid "Repair Record Count"
+msgstr "维修记录数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__record_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
+msgid "Repair Records"
+msgstr "维修记录"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Repair Reference"
+msgstr "维修单号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__responsible_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__responsible_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__responsible_user_id
+msgid "Repair Responsible"
+msgstr "维修责任人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__repair_time
+msgid "Repair Time"
+msgstr "维修时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__repair_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__repair_type
+msgid "Repair Type"
+msgstr "维修类型"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__repair_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__repair_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__repair_user_id
+msgid "Repair User"
+msgstr "维修人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__state__repairing
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Repairing"
+msgstr "维修中"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_repair_order
+msgid "Report an equipment fault, accept it, record the repair\n                interventions and close the loop."
+msgstr "报修设备故障、接单、记录维修过程并完成闭环。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__reported_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__reported_user_id
+msgid "Reported By"
+msgstr "报修人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__responsible_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__responsible_user_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__responsible_user_id
+msgid "Responsible"
+msgstr "责任人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record__repair_type__return_factory
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_record_wizard__repair_type__return_factory
+msgid "Return to Factory Repair"
+msgstr "返厂维修"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__run_status
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__run_status
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__run_status
+msgid "Run Status"
+msgstr "执行状态"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
+msgid "Save"
+msgstr "保存"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__scrapped
+msgid "Scrapped"
+msgstr "报废"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__sealed
+msgid "Sealed"
+msgstr "封存"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "Select an equipment type..."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+msgid "Select the faulty equipment..."
+msgstr "选择故障设备..."
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__sequence
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__sequence
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__sequence
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__sequence
+msgid "Sequence"
+msgstr "排序"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Size L x W x H (cm)"
+msgstr "尺寸 长×宽×高(CM)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_doc_sync_wizard__sync_mode__skip
+msgid "Skip Existing"
+msgstr "跳过模式"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__skipped_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__skipped_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__skipped_count
+msgid "Skipped Count"
+msgstr "跳过数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_create_wizard__fault_type__software
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_repair_order__fault_type__software
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Software Fault"
+msgstr "软件故障"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__source_document_count
+msgid "Source Documents"
+msgstr "源设备文档数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__source_equipment_id
+msgid "Source Equipment"
+msgstr "源设备"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
+msgid "Source and target equipment must differ."
+msgstr "源设备和目标设备不能相同。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
+msgid "Source equipment has no document to sync."
+msgstr "源设备没有任何文档可同步。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Southern Grid"
+msgstr "南网"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "Southern Grid Bid"
+msgstr "南网投标设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__is_southern_grid_bid
+msgid "Southern Grid Bid Equipment"
+msgstr "是否南网投标设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model_csg
+msgid "Southern Grid Equipment Model"
+msgstr "南网设备型号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name_csg
+msgid "Southern Grid Equipment Name"
+msgstr "南网设备名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer_csg
+msgid "Southern Grid Manufacturer"
+msgstr "南网制造厂商"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no_csg
+msgid "Southern Grid Serial Number"
+msgstr "南网出厂编号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__item_type__spot_check
+msgid "Spot Check"
+msgstr "点检"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_item
+msgid "Spot Check / Maintenance Item"
+msgstr "点检保养项目行"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_maint_template
+#: model:ir.ui.menu,name:sn_wsd_device.menu_maint_template
+msgid "Spot Check / Maintenance Items"
+msgstr "点检保养项目"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_maint_template
+msgid "Spot Check / Maintenance Template"
+msgstr "点检保养项目配置"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_generation_log
+msgid "Spot Check Generation Log"
+msgstr "点检任务生成日志"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__spot_check_count
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_list
+msgid "Spot Check Item Count"
+msgstr "点检项目数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__spot_check_item_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "Spot Check Items"
+msgstr "点检项目"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_check_plan
+#: model:ir.ui.menu,name:sn_wsd_device.menu_check_plan
+msgid "Spot Check Plans"
+msgstr "点检计划"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_check_config
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_check_config
+#: model:ir.ui.menu,name:sn_wsd_device.menu_check_config
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
+msgid "Spot Check Settings"
+msgstr "点检设置"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_check_task
+#: model:ir.ui.menu,name:sn_wsd_device.menu_check_task
+msgid "Spot Check Tasks"
+msgstr "点检任务"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__start_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__start_date
+msgid "Start Date"
+msgstr "开始计算日期"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Start Execution"
+msgstr "开始执行"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "State Grid"
+msgstr "国网"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "State Grid Bid"
+msgstr "国网投标设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__is_state_grid_bid
+msgid "State Grid Bid Equipment"
+msgstr "是否国网投标设备"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model_sgcc
+msgid "State Grid Equipment Model"
+msgstr "国网设备型号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name_sgcc
+msgid "State Grid Equipment Name"
+msgstr "国网设备名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__manufacturer_sgcc
+msgid "State Grid Manufacturer"
+msgstr "国网制造厂商"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__serial_no_sgcc
+msgid "State Grid Serial Number"
+msgstr "国网出厂编号"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__value_type__status
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_item__value_type__status
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__value_type__status
+msgid "Status Value"
+msgstr "状态值"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
+msgid "Submit Report"
+msgstr "提交报修"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Submit Task"
+msgstr "提交任务"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Submit this task? Results cannot be edited afterwards."
+msgstr "确认提交此任务?提交后结果不可修改。"
 
 #. module: sn_wsd_device
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
@@ -1623,55 +2445,358 @@ msgid "Submit this task? The ledger calibration dates will be updated."
 msgstr "确认提交此任务?台账的校准日期将被更新。"
 
 #. module: sn_wsd_device
-msgid "Task %s: the overall result (Pass/Fail) is required."
-msgstr "任务 %s:必须先选择整体结果(合格/不合格)。"
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_generation_log__run_status__success
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_generation_log__run_status__success
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_generation_log__run_status__success
+msgid "Success"
+msgstr "成功"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
+msgid "Sync"
+msgstr "同步"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_doc_sync_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Sync Documents"
+msgstr "文档同步"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
+msgid "Sync Equipment Documents"
+msgstr "同步设备文档"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__sync_mode
+msgid "Sync Mode"
+msgstr "同步模式"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
+msgid "Synced by %(user)s on %(date)s from equipment %(code)s"
+msgstr "由 %(user)s 于 %(date)s 从设备 %(code)s 同步"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__target_equipment_id
+msgid "Target Equipment"
+msgstr "目标设备"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_task.py:0
 msgid "Task %s is a certified calibration, missing: %s."
 msgstr "任务 %s 是取证校准,缺少:%s。"
 
 #. module: sn_wsd_device
-msgid "certificate file"
-msgstr "校准证书文件"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/check_task.py:0
+#: code:addons/sn_wsd_device/models/maint_task.py:0
+msgid "Task %s: items without a result: %s"
+msgstr "任务 %s:以下项目还没有判定结果:%s"
 
 #. module: sn_wsd_device
-msgid "certificate number"
-msgstr "校准证书编号"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_task.py:0
+msgid "Task %s: the overall result (Pass/Fail) is required."
+msgstr "任务 %s:必须先选择整体结果(合格/不合格)。"
 
 #. module: sn_wsd_device
-msgid "certificate validity date"
-msgstr "校准证书有效期"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__task_creation_date
+msgid "Task Creation Date"
+msgstr "任务创建日期"
 
 #. module: sn_wsd_device
-msgid ""
-"Only one certified and one non-certified calibration plan are allowed per "
-"equipment."
-msgstr "每台设备只允许一个取证计划和一个非取证计划。"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__task_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__task_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__task_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Task Date"
+msgstr "任务日期"
 
 #. module: sn_wsd_device
-msgid "The cycle count must be at least 1."
-msgstr "周期数至少为 1。"
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__name
+msgid "Task Number"
+msgstr "任务编号"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__task_status
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__task_status
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__task_status
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+msgid "Task Status"
+msgstr "任务状态"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_check_task
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_maint_task
+msgid "Tasks are generated automatically by the spot check plans.\n                Open one, start it, fill in the measured values and submit."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Technical Parameters"
+msgstr "技术参数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__temperature
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__temperature
+msgid "Temperature"
+msgstr "温度"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__zone_line_ids
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__zone_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_form
+msgid "Temperature Data"
+msgstr "温度数据"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__template_id
+msgid "Template"
+msgstr "配置"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_plan.py:0
 msgid "The advance days cannot be negative."
 msgstr "提前天数不能为负数。"
 
 #. module: sn_wsd_device
-msgid ""
-"Could not read the file. Please upload a valid xlsx generated from the "
-"template."
-msgstr "无法读取文件,请上传按模板生成的 xlsx。"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/check_plan.py:0
+#: code:addons/sn_wsd_device/models/maint_plan.py:0
+msgid "The custom cycle must be at least 1 day."
+msgstr "自定义周期至少为 1 天。"
 
 #. module: sn_wsd_device
-msgid "No data row found in the file."
-msgstr "文件里没有数据行。"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_plan.py:0
+msgid "The cycle count must be at least 1."
+msgstr "周期数至少为 1。"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
-msgid "Certified"
-msgstr "取证"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "The expected completion time is required for outsourced and return-to-factory repairs."
+msgstr "委外维修和返厂维修必须填写预计维修完成时间。"
 
 #. module: sn_wsd_device
-#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_search
-msgid "Latest"
-msgstr "最新一次"
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "The investigation process is required for a false alarm check."
+msgstr "误报维修必须填写排查过程。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/repair_order.py:0
+msgid "The repair process is required for an on-site repair."
+msgstr "现场维修必须填写维修过程。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__advance_days
+msgid "The task is generated this many days before the due date."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_reflow_record__collect_time
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_wave_record__collect_time
+msgid "Timestamp reported by the device (stored as UTC)."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_kind__tooling
+msgid "Tooling"
+msgstr "工装"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__total_power_kw
+msgid "Total Power (kW)"
+msgstr "总功率(kW)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__trigger_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__trigger_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__trigger_time
+msgid "Trigger Time"
+msgstr "触发时间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_status__repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_search
+msgid "Under Repair"
+msgstr "维修中"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__unit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__unit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__unit
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__upper_limit
+msgid "Upper Limit"
+msgstr "上限值"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__department_id
+msgid "Usage Department"
+msgstr "使用部门"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__usage_user_id
+msgid "Usage Responsible"
+msgstr "使用责任人"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__initial_cal_date
+msgid "Used as the last calibration date when the equipment ledger has no calibration date of this kind yet."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_check_plan__custom_cycle_days
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_maint_plan__custom_cycle_days
+msgid "Used when the cycle type is Custom: the plan is due every N days starting from the start date."
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__value_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__value_type
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__value_type
+msgid "Value Type"
+msgstr "值类型"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_task_line__guide_file_type__video
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_task_line__guide_file_type__video
+msgid "Video"
+msgstr "视频"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_list
+msgid "View"
+msgstr "查看"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__wave_record_id
+msgid "Wave Record"
+msgstr "波峰焊记录"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_wave_data
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_wave_data
+msgid "Wave Soldering Data Collection"
+msgstr "波峰焊数据采集"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_wave_record
+msgid "Wave Soldering Data Record"
+msgstr "波峰焊数据记录"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_wave_zone
+msgid "Wave Soldering Zone Temperature"
+msgstr "波峰焊温区温度"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_check_plan__cycle_type__weekly
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_maint_plan__cycle_type__weekly
+msgid "Weekly"
+msgstr "每周"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__weight_kg
+msgid "Weight (kg)"
+msgstr "设备重量(Kg)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__width_cm
+msgid "Width (cm)"
+msgstr "宽(CM)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__station
+msgid "Work Station"
+msgstr "工位"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_location__kind__workshop
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_cal_plan__cycle_type__yearly
+msgid "Yearly"
+msgstr "每年"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__zone_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__zone_name
+msgid "Zone"
+msgstr "温区"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__zone_count
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__zone_count
+msgid "Zone Count"
+msgstr "温区数量"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_reflow_record_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_wave_record_list
+msgid "Zones"
+msgstr "温区数"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_task.py:0
+msgid "certificate file"
+msgstr "校准证书文件"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_task.py:0
+msgid "certificate number"
+msgstr "校准证书编号"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/cal_task.py:0
+msgid "certificate validity date"
+msgstr "校准证书有效期"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "e.g. Lubrication system check"
+msgstr ""
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "e.g. Temperature check"
+msgstr ""

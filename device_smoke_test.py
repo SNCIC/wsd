@@ -3,6 +3,8 @@
 import traceback
 from datetime import date, timedelta
 from odoo import fields
+from odoo.exceptions import UserError, ValidationError
+from odoo.fields import Command
 
 PASS, FAIL = [], []
 
@@ -42,8 +44,8 @@ def fill_required(model, rec_cache, overrides):
         if spec.get('readonly') and not spec.get('store', True):
             continue
         t = spec['type']
-        if t == 'char' or t == 'text':
-            vals[fname] = 'TEST-' + fname
+        if t == 'char' or t == 'text' or t == 'html':
+            vals[fname] = '<p>TEST</p>' if t == 'html' else 'TEST-' + fname
         elif t == 'selection':
             opts = [o[0] for o in spec['selection']]
             pick = 'daily' if 'daily' in opts else opts[0]
@@ -54,7 +56,9 @@ def fill_required(model, rec_cache, overrides):
             vals[fname] = str(fields.Datetime.now())
         elif t == 'many2one':
             rel = spec['relation']
-            if 'equipment_type' in rel:
+            if rel == 'res.company':
+                vals[fname] = env.company.id
+            elif 'equipment_type' in rel:
                 vals[fname] = rec_cache['type'].id
             elif rel.endswith('location'):
                 vals[fname] = rec_cache['loc'].id
@@ -132,7 +136,7 @@ for tm in tmpl_models:
         for f, s in fgs.items():
             if s['type'] == 'one2many' and s['relation'] == 'sn.wsd.device.maint.item':
                 kind = 'spot_check' if 'spot' in f else 'maintenance'
-                ov[f] = [(0, 0, {'name': 'TEST-' + kind, 'item_type': kind})]
+                ov[f] = [Command.create({'name': 'TEST-' + kind, 'item_type': kind})]
         rec = smart_create(tm, cache, ov)
         return '模板#%d(保养%d条/点检%d条)' % (rec.id, len(rec.maintenance_item_ids), len(rec.spot_check_item_ids))
     T('保养', tm + ' 建模板', make_template)
@@ -191,6 +195,77 @@ T('校准', '计划→生成→执行→提交',
                            'cycle_count': 1, 'initial_cal_date': str(today - timedelta(days=400)),
                            'advance_days': 30},
                           log_model='sn.wsd.device.cal.generation.log'))
+
+# ---------- 6.5 设备维修闭环 ----------
+def repair_loop():
+    RO = 'sn.wsd.device.repair.order'
+    env[RO].search([('equipment_id', '=', cache['eq'].id)]).with_context(
+        allow_repair_order_write=True).unlink()
+    # 报修(模拟新建维修单向导提交)
+    wiz = env['sn.wsd.device.repair.create.wizard'].create({
+        'equipment_id': cache['eq'].id,
+        'fault_phenomenon': '<p>TEST 运行异响随即停机</p>',
+        'initial_handling': '<p>TEST 检查电源与主轴</p>',
+        'is_downtime': True,
+        'fault_type': 'mechanical',
+        'fault_level': 'critical',
+    })
+    wiz.action_submit()
+    order = env[RO].search(
+        [('equipment_id', '=', cache['eq'].id)], limit=1, order='id desc')
+    assert order and order.state == 'pending', '提交后状态=%s' % order.state
+    assert order.name and order.name != '/', '维修单号未生成'
+    assert order.company_id == cache['eq'].company_id, '公司未随设备带出'
+    # 接单(任何人都可接,走接单向导)
+    env['sn.wsd.device.repair.accept.wizard'].create(
+        {'repair_order_id': order.id}).action_confirm()
+    order.invalidate_recordset()
+    assert order.state == 'repairing', '接单后状态=%s' % order.state
+    assert order.accept_user_id and order.accept_time, '接单人/时间未写入'
+    assert order.accept_duration_hours >= 0, '接单用时未计算'
+    # 记录维修 1: 现场维修(只记录不完成)
+    env['sn.wsd.device.repair.record.wizard'].create({
+        'repair_order_id': order.id, 'repair_type': 'onsite',
+        'repair_process': '<p>TEST 更换主轴轴承</p>',
+    }).action_save_record()
+    order.invalidate_recordset()
+    assert len(order.record_ids) == 1, '维修记录未生成'
+    assert order.repair_user_id and order.repair_time, '维修人/时间未随记录更新'
+    # 委外维修缺联系人必须被 R13 拦截(savepoint 模拟 web 请求的整体回滚,
+    # 否则约束抛错前已 INSERT 的行会留在 shell 事务里)
+    try:
+        with env.cr.savepoint():
+            env['sn.wsd.device.repair.record.wizard'].create({
+                'repair_order_id': order.id, 'repair_type': 'outsourced',
+                'vendor_company': 'TEST-外协厂',
+            }).action_save_record()
+        raise AssertionError('委外缺联系人/电话/预计完成时间应报错')
+    except ValidationError:
+        pass
+    # 记录维修 2 + 完成维修: 委外
+    env['sn.wsd.device.repair.record.wizard'].create({
+        'repair_order_id': order.id, 'repair_type': 'outsourced',
+        'vendor_company': 'TEST-外协厂', 'contact_person': 'TEST-张三',
+        'contact_phone': '13800000000',
+        'expected_completion_time': fields.Datetime.now(),
+    }).action_complete_repair()
+    order.invalidate_recordset()
+    assert order.state == 'done', '完成后状态=%s' % order.state
+    assert len(order.record_ids) == 2, '完成时记录数=%d' % len(order.record_ids)
+    assert order.completion_time and order.repair_duration_hours >= 0, '完成信息未写入'
+    cache['eq'].invalidate_recordset()
+    assert cache['eq'].last_repair_date == order.completion_time, '台账未回写最近维修'
+    # R12 完成后只读
+    try:
+        order.write({'fault_level': 'minor'})
+        raise AssertionError('完成后应禁止修改')
+    except UserError:
+        pass
+    return '单%s %s 记录%d条 接单%.2fh 维修%.2fh' % (
+        order.name, order.state, len(order.record_ids),
+        order.accept_duration_hours, order.repair_duration_hours)
+
+T('维修', '报修→接单→记录×2→完成→只读', repair_loop)
 
 # ---------- 7. 逾期标记逻辑 ----------
 T('逻辑', '昨日未完成任务自动逾期', lambda: (

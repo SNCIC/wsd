@@ -1,4 +1,5 @@
 from odoo import _, api, fields, models
+from odoo.fields import Command
 from odoo.exceptions import ValidationError
 
 
@@ -74,10 +75,10 @@ class MaintenanceTemplate(models.Model):
         new_template = self.create({
             'equipment_type_id': False,
             'maintenance_item_ids': [
-                (0, 0, item.copy_data()[0])
+                Command.create(item.copy_data()[0])
                 for item in self.maintenance_item_ids],
             'spot_check_item_ids': [
-                (0, 0, item.copy_data()[0])
+                Command.create(item.copy_data()[0])
                 for item in self.spot_check_item_ids],
         })
         return {

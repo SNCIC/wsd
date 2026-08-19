@@ -4,9 +4,7 @@ from openpyxl import load_workbook
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-
-from odoo.addons.sn_wsd_device.controllers.cal_template import (
-    TEMPLATE_HEADERS)
+from odoo.fields import Command
 
 
 class CalibrationLineImportWizard(models.TransientModel):
@@ -28,8 +26,8 @@ class CalibrationLineImportWizard(models.TransientModel):
         self.preview_line_ids.unlink()
         rows = self._parse_xlsx()
         self.write({'preview_line_ids': [
-            (0, 0, {'item_name': item, 'before_value': before,
-                    'after_value': after, 'line_note': note})
+            Command.create({'item_name': item, 'before_value': before,
+                            'after_value': after, 'line_note': note})
             for item, before, after, note in rows]})
         return {
             'type': 'ir.actions.act_window',
@@ -42,7 +40,7 @@ class CalibrationLineImportWizard(models.TransientModel):
     def action_import(self):
         self.ensure_one()
         self.task_id.write({'line_ids': [
-            (0, 0, {
+            Command.create({
                 'item_name': line.item_name,
                 'before_value': line.before_value,
                 'after_value': line.after_value,

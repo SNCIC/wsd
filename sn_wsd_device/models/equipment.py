@@ -58,6 +58,7 @@ class Equipment(models.Model):
     _description = 'Equipment Ledger'
     _order = 'code'
     _rec_name = 'code'
+    _check_company_auto = True
 
     # ===== Group 1: basic information =====
     code = fields.Char(string='Equipment Code', required=True, index=True)
@@ -113,24 +114,31 @@ class Equipment(models.Model):
     original_value = fields.Float(
         string='Original Value (CNY)', digits=(16, 2))
     supplier_id = fields.Many2one(
-        'res.partner', string='Supplier', index=True,
-        domain=['|', ('supplier_rank', '>', 0), ('is_company', '=', True)])
+        'res.partner', string='Supplier', index=True, check_company=True,
+        # Keep the domain valid on base-only databases: supplier_rank
+        # only exists when the account module is installed.
+        domain=[('is_company', '=', True)])
     commissioning_date = fields.Date(string='Commissioning Date')
 
     # ===== Group 4: location and ownership =====
-    department_id = fields.Many2one('hr.department', string='Usage Department')
+    company_id = fields.Many2one(
+        'res.company', string='Company', required=True, index=True,
+        default=lambda self: self.env.company)
+    department_id = fields.Many2one(
+        'hr.department', string='Usage Department', check_company=True)
     location_id = fields.Many2one(
         'sn.wsd.device.location', string='Installation Location', index=True)
-    usage_user_id = fields.Many2one('res.users', string='Usage Responsible')
+    usage_user_id = fields.Many2one(
+        'res.users', string='Usage Responsible', check_company=True)
     maintenance_user_id = fields.Many2one(
-        'res.users', string='Maintenance Responsible')
+        'res.users', string='Maintenance Responsible', check_company=True)
     calibration_user_id = fields.Many2one(
-        'res.users', string='Calibration Responsible')
+        'res.users', string='Calibration Responsible', check_company=True)
 
     # ===== Group 5: technical parameters =====
     total_power_kw = fields.Float(string='Total Power (kW)', digits=(10, 2))
     air_consumption = fields.Float(
-        string='Air Consumption (m³/h)', digits=(10, 2))
+        string='Air Consumption (m3/h)', digits=(10, 2))
 
     # ===== Group 6: maintenance parameters (read-only, filled by other modules) =====
     last_internal_calibration_date = fields.Datetime(
@@ -141,6 +149,8 @@ class Equipment(models.Model):
         string='Last Spot Check', readonly=True)
     last_maintenance_date = fields.Datetime(
         string='Last Maintenance', readonly=True)
+    last_repair_date = fields.Datetime(
+        string='Last Repair', readonly=True)
 
     # ===== documents =====
     document_ids = fields.One2many(

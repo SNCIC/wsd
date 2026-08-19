@@ -8,6 +8,7 @@
             <list>
                 <field name="code"/>
                 <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
                 <field name="equipment_kind" optional="show"/>
                 <field name="equipment_type_id"/>
                 <field name="equipment_status"/>
@@ -43,6 +44,7 @@
                         <page string="Basic Information">
                             <group>
                                 <group string="Identification">
+                                    <field name="company_id" groups="base.group_multi_company"/>
                                     <field name="equipment_kind"/>
                                     <field name="equipment_type_id"/>
                                     <field name="equipment_class"/>
@@ -134,6 +136,7 @@
                                 <group>
                                     <field name="last_spot_check_date"/>
                                     <field name="last_maintenance_date"/>
+                                    <field name="last_repair_date"/>
                                 </group>
                             </group>
                         </page>

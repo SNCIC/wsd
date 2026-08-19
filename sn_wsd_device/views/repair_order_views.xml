@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action of the report wizard: defined first, referenced by the
+         list header button below. -->
+    <record id="action_repair_create_wizard" model="ir.actions.act_window">
+        <field name="name">New Repair Order</field>
+        <field name="res_model">sn.wsd.device.repair.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ===== Repair order list ===== -->
+    <record id="view_repair_order_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.order.list</field>
+        <field name="model">sn.wsd.device.repair.order</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false"
+                  decoration-info="state == 'pending'"
+                  decoration-warning="state == 'repairing'"
+                  decoration-muted="state == 'done'">
+                <header>
+                    <button name="%(action_repair_create_wizard)d"
+                            type="action" string="New Repair Order"
+                            class="btn-primary"/>
+                </header>
+                <field name="name"/>
+                <field name="equipment_code" optional="hide"/>
+                <field name="equipment_name"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       optional="hide"/>
+                <field name="fault_type"/>
+                <field name="fault_level"/>
+                <field name="reported_user_id"/>
+                <field name="responsible_user_id"/>
+                <field name="fault_time" optional="hide" widget="date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'pending'"
+                       decoration-warning="state == 'repairing'"
+                       decoration-success="state == 'done'"/>
+                <button name="action_view_form" type="object" string="View"
+                        icon="fa-search"/>
+                <button name="action_open_accept_wizard" type="object"
+                        string="Accept" icon="fa-handshake-o"
+                        invisible="state != 'pending'"/>
+                <button name="action_open_record_wizard" type="object"
+                        string="Repair" icon="fa-wrench"
+                        invisible="state != 'repairing'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== Repair order form (read-only, mutations go through wizards) ===== -->
+    <record id="view_repair_order_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.order.form</field>
+        <field name="model">sn.wsd.device.repair.order</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <header>
+                    <button name="action_open_accept_wizard" type="object"
+                            string="Accept" class="btn-primary"
+                            invisible="state != 'pending'"/>
+                    <button name="action_open_record_wizard" type="object"
+                            string="Repair" class="btn-primary"
+                            invisible="state != 'repairing'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,repairing,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Equipment">
+                            <field name="equipment_id"/>
+                            <field name="equipment_code"/>
+                            <field name="equipment_name"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Fault">
+                            <field name="fault_type"/>
+                            <field name="fault_level"/>
+                            <field name="is_downtime"/>
+                            <field name="fault_time"/>
+                            <field name="reported_user_id"/>
+                            <field name="responsible_user_id"/>
+                        </group>
+                    </group>
+                    <group string="Fault Phenomenon">
+                        <field name="fault_phenomenon" nolabel="1"/>
+                    </group>
+                    <group string="Initial Handling">
+                        <field name="initial_handling" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Repair Records">
+                            <field name="record_ids" readonly="1">
+                                <list>
+                                    <field name="record_time"/>
+                                    <field name="repair_type"/>
+                                    <field name="repair_user_id"/>
+                                    <field name="vendor_company"/>
+                                    <field name="contact_person"
+                                           optional="hide"/>
+                                    <field name="contact_phone"
+                                           optional="hide"/>
+                                    <field name="expected_completion_time"
+                                           optional="hide"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="repair_type"/>
+                                            <field name="repair_user_id"/>
+                                            <field name="record_time"/>
+                                            <field name="vendor_company"
+                                                   invisible="repair_type != 'outsourced'"/>
+                                            <field name="contact_person"
+                                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                                            <field name="contact_phone"
+                                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                                            <field name="expected_completion_time"
+                                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                                        </group>
+                                    </group>
+                                    <group string="Investigation Process"
+                                           invisible="repair_type != 'false_alarm'">
+                                        <field name="investigation_process"
+                                               nolabel="1"/>
+                                    </group>
+                                    <group string="Repair Process"
+                                           invisible="repair_type != 'onsite'">
+                                        <field name="repair_process"
+                                               nolabel="1"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Progress">
+                            <group>
+                                <group string="Acceptance">
+                                    <field name="accept_user_id"/>
+                                    <field name="accept_time"/>
+                                    <field name="accept_duration_hours"/>
+                                </group>
+                                <group string="Completion">
+                                    <field name="repair_user_id"/>
+                                    <field name="repair_time"/>
+                                    <field name="completion_time"/>
+                                    <field name="repair_duration_hours"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Repair record form (standalone, opened from logs) ===== -->
+    <record id="view_repair_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.record.form</field>
+        <field name="model">sn.wsd.device.repair.record</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="repair_order_id"/>
+                            <field name="repair_type"/>
+                            <field name="repair_user_id"/>
+                            <field name="record_time"/>
+                        </group>
+                        <group>
+                            <field name="vendor_company"
+                                   invisible="repair_type != 'outsourced'"/>
+                            <field name="contact_person"
+                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                            <field name="contact_phone"
+                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                            <field name="expected_completion_time"
+                                   invisible="repair_type not in ('outsourced', 'return_factory')"/>
+                        </group>
+                    </group>
+                    <group string="Investigation Process"
+                           invisible="repair_type != 'false_alarm'">
+                        <field name="investigation_process" nolabel="1"/>
+                    </group>
+                    <group string="Repair Process"
+                           invisible="repair_type != 'onsite'">
+                        <field name="repair_process" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Search ===== -->
+    <record id="view_repair_order_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.order.search</field>
+        <field name="model">sn.wsd.device.repair.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Repair Reference"/>
+                <field name="equipment_code" string="Equipment Code"/>
+                <field name="equipment_name" string="Equipment Name"/>
+                <filter name="filter_pending" string="Pending Acceptance"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter name="filter_repairing" string="Repairing"
+                        domain="[('state', '=', 'repairing')]"/>
+                <filter name="filter_done" string="Done"
+                        domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="filter_mechanical" string="Mechanical Fault"
+                        domain="[('fault_type', '=', 'mechanical')]"/>
+                <filter name="filter_electrical" string="Electrical Fault"
+                        domain="[('fault_type', '=', 'electrical')]"/>
+                <filter name="filter_software" string="Software Fault"
+                        domain="[('fault_type', '=', 'software')]"/>
+                <filter name="filter_other" string="Other Fault"
+                        domain="[('fault_type', '=', 'other')]"/>
+                <separator/>
+                <filter name="filter_minor" string="Minor"
+                        domain="[('fault_level', '=', 'minor')]"/>
+                <filter name="filter_general" string="General"
+                        domain="[('fault_level', '=', 'general')]"/>
+                <filter name="filter_critical" string="Critical"
+                        domain="[('fault_level', '=', 'critical')]"/>
+                <separator/>
+                <filter name="filter_fault_time" string="Fault Time"
+                        date="fault_time"/>
+                <separator/>
+                <filter name="filter_downtime" string="Downtime"
+                        domain="[('is_downtime', '=', True)]"/>
+                <group>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_equipment" string="Equipment"
+                            context="{'group_by': 'equipment_id'}"/>
+                    <filter name="group_fault_type" string="Fault Type"
+                            context="{'group_by': 'fault_type'}"/>
+                    <filter name="group_fault_level" string="Fault Level"
+                            context="{'group_by': 'fault_level'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===== Action ===== -->
+    <record id="action_repair_order" model="ir.actions.act_window">
+        <field name="name">Equipment Repair</field>
+        <field name="res_model">sn.wsd.device.repair.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_repair_order_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No repair order yet
+            </p>
+            <p>
+                Report an equipment fault, accept it, record the repair
+                interventions and close the loop.
+            </p>
+        </field>
+    </record>
+
+    <!-- ===== Wizard: new repair order (fault report) ===== -->
+    <record id="view_repair_create_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.create.wizard.form</field>
+        <field name="model">sn.wsd.device.repair.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="New Repair Order">
+                <group>
+                    <group>
+                        <field name="equipment_id"
+                               options="{'no_create': True}"
+                               placeholder="Select the faulty equipment..."/>
+                        <field name="equipment_code"/>
+                        <field name="equipment_name"/>
+                        <field name="responsible_user_id"
+                               options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="fault_type"/>
+                        <field name="fault_level"/>
+                        <field name="is_downtime" widget="boolean_toggle"/>
+                        <field name="fault_time"/>
+                    </group>
+                </group>
+                <group string="Fault Phenomenon">
+                    <field name="fault_phenomenon" nolabel="1"
+                           placeholder="Describe the fault phenomenon..."/>
+                </group>
+                <group string="Initial Handling">
+                    <field name="initial_handling" nolabel="1"
+                           placeholder="Describe what has been checked / tried..."/>
+                </group>
+                <footer>
+                    <button name="action_submit" type="object"
+                            string="Submit Report" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Wizard: accept ===== -->
+    <record id="view_repair_accept_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.accept.wizard.form</field>
+        <field name="model">sn.wsd.device.repair.accept.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Accept Repair Order">
+                <group>
+                    <group>
+                        <field name="equipment_id"/>
+                        <field name="equipment_code"/>
+                        <field name="equipment_name"/>
+                        <field name="reported_user_id"/>
+                        <field name="responsible_user_id"/>
+                    </group>
+                    <group>
+                        <field name="fault_type"/>
+                        <field name="fault_level"/>
+                        <field name="is_downtime"/>
+                        <field name="fault_time"/>
+                    </group>
+                </group>
+                <group string="Fault Phenomenon">
+                    <field name="fault_phenomenon" nolabel="1"/>
+                </group>
+                <group string="Initial Handling">
+                    <field name="initial_handling" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object"
+                            string="Confirm Acceptance" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Wizard: record repair ===== -->
+    <record id="view_repair_record_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.repair.record.wizard.form</field>
+        <field name="model">sn.wsd.device.repair.record.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Record Repair">
+                <group>
+                    <group>
+                        <field name="repair_order_id"/>
+                        <field name="equipment_code"/>
+                        <field name="equipment_name"/>
+                    </group>
+                    <group>
+                        <field name="repair_type"/>
+                        <field name="repair_user_id"/>
+                        <field name="record_time"/>
+                    </group>
+                </group>
+                <group string="False Alarm Check"
+                       invisible="repair_type != 'false_alarm'">
+                    <field name="investigation_process" nolabel="1"
+                           placeholder="Describe the investigation..."/>
+                </group>
+                <group string="On-site Repair"
+                       invisible="repair_type != 'onsite'">
+                    <field name="repair_process" nolabel="1"
+                           placeholder="Describe the repair process..."/>
+                </group>
+                <group invisible="repair_type not in ('outsourced', 'return_factory')">
+                    <group>
+                        <field name="vendor_company"
+                               invisible="repair_type != 'outsourced'"/>
+                        <field name="expected_completion_time"/>
+                    </group>
+                    <group>
+                        <field name="contact_person"/>
+                        <field name="contact_phone"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_save_record" type="object"
+                            string="Record Repair" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button name="action_complete_repair" type="object"
+                            string="Complete Repair" class="btn-primary"
+                            data-hotkey="c"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
