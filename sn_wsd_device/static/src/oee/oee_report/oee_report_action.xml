@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_device.OeeReportAction">
+        <Layout className="'o_sn_wsd_oee_report'">
+            <t t-set-slot="default">
+                <div class="o_report_shell">
+
+                    <!-- ===== Toolbar ===== -->
+                    <div class="o_report_toolbar d-flex flex-wrap align-items-center gap-3">
+                        <h4 class="o_report_title mb-0">
+                            <i class="fa fa-tachometer"/>
+                            <span t-esc="labels.title"/>
+                        </h4>
+                        <div class="btn-group">
+                            <button t-foreach="ranges" t-as="range" t-key="range.days"
+                                    type="button" class="btn btn-sm"
+                                    t-att-class="state.rangeDays === range.days ? 'btn-primary' : 'btn-outline-secondary'"
+                                    t-on-click="() => this.setRange(range.days)"
+                                    t-esc="range.label"/>
+                        </div>
+                        <select class="form-select form-select-sm w-auto"
+                                t-on-change="onEquipmentChange">
+                            <option value="0" t-esc="labels.allEquipments"/>
+                            <option t-foreach="state.equipments" t-as="equipment"
+                                    t-key="equipment.id" t-att-value="equipment.id"
+                                    t-att-selected="state.equipmentId === equipment.id ? 'selected' : undefined"
+                                    t-esc="equipment.code ? equipment.code + ' · ' + equipment.name : equipment.name"/>
+                        </select>
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                t-on-click="loadData">
+                            <i class="fa fa-refresh"/>
+                            <span t-esc="labels.refresh"/>
+                        </button>
+                        <span t-if="state.loading" class="spinner-border spinner-border-sm text-primary"
+                              role="status" aria-hidden="true"/>
+                    </div>
+
+                    <!-- ===== Empty state ===== -->
+                    <div t-if="isEmpty" class="o_report_empty text-muted text-center">
+                        <i class="fa fa-bar-chart fa-3x mb-3 d-block opacity-50"/>
+                        <span t-esc="labels.empty"/>
+                    </div>
+
+                    <!-- ===== Dashboard ===== -->
+                    <div t-else="" class="o_report_dashboard">
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_hero">
+                                    <div class="o_kpi_label" t-esc="labels.avgOee"/>
+                                    <div class="o_kpi_value">
+                                        <span t-esc="pct(kpis.oee)"/>%
+                                    </div>
+                                    <div class="o_kpi_sub">
+                                        <span class="badge" t-att-class="levelBadgeClass(kpis.oee)">
+                                            <t t-esc="levelLabel(kpis.oee)"/>
+                                        </span>
+                                        <span class="o_kpi_world ms-1">
+                                            (<t t-esc="labels.worldClass"/> ≥ 85%)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card">
+                                    <div class="o_kpi_label" t-esc="labels.availability"/>
+                                    <div class="o_kpi_value o_kpi_value-sm">
+                                        <span t-esc="pct(kpis.availability)"/>%
+                                    </div>
+                                    <div class="o_progress">
+                                        <div t-attf-style="width: {{kpis.availability}}%;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card">
+                                    <div class="o_kpi_label" t-esc="labels.performance"/>
+                                    <div class="o_kpi_value o_kpi_value-sm">
+                                        <span t-esc="pct(kpis.performance)"/>%
+                                    </div>
+                                    <div class="o_progress">
+                                        <div t-attf-style="width: {{kpis.performance}}%;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card">
+                                    <div class="o_kpi_label" t-esc="labels.quality"/>
+                                    <div class="o_kpi_value o_kpi_value-sm">
+                                        <span t-esc="pct(kpis.quality)"/>%
+                                    </div>
+                                    <div class="o_progress">
+                                        <div t-attf-style="width: {{kpis.quality}}%;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip o_kpi_chip_success">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-trophy me-1"/>
+                                        <span t-esc="labels.bestEquipment"/>
+                                    </div>
+                                    <t t-if="kpis.best">
+                                        <div class="o_kpi_chip_main" t-esc="kpis.best.equipment_code || kpis.best.equipment_name"/>
+                                        <div class="o_kpi_chip_sub">
+                                            OEE <span t-esc="pct(kpis.best.oee)"/>%
+                                        </div>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="o_kpi_chip_sub" t-esc="labels.noData"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip o_kpi_chip_danger">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-warning me-1"/>
+                                        <span t-esc="labels.attentionEquipment"/>
+                                    </div>
+                                    <t t-if="kpis.worst">
+                                        <div class="o_kpi_chip_main" t-esc="kpis.worst.equipment_code || kpis.worst.equipment_name"/>
+                                        <div class="o_kpi_chip_sub">
+                                            OEE <span t-esc="pct(kpis.worst.oee)"/>%
+                                        </div>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="o_kpi_chip_sub" t-esc="labels.noData"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-database me-1"/>
+                                        <span t-esc="labels.records"/>
+                                    </div>
+                                    <div class="o_kpi_chip_main" t-esc="number(kpis.record_count)"/>
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-industry me-1"/>
+                                        <span t-esc="labels.equipmentCount"/>
+                                    </div>
+                                    <div class="o_kpi_chip_main" t-esc="number(kpis.equipment_count)"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-xl-8">
+                                <div class="o_chart_card">
+                                    <h6 class="o_chart_title">
+                                        <i class="fa fa-line-chart me-1"/>
+                                        <span t-esc="labels.trend"/>
+                                    </h6>
+                                    <div class="o_chart_box">
+                                        <canvas t-ref="trendCanvas"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                                <div class="o_chart_card">
+                                    <h6 class="o_chart_title">
+                                        <i class="fa fa-chart-pie me-1"/>
+                                        <span t-esc="labels.distribution"/>
+                                    </h6>
+                                    <div class="o_chart_box">
+                                        <canvas t-ref="distributionCanvas"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-xl-8">
+                                <div class="o_chart_card">
+                                    <h6 class="o_chart_title">
+                                        <i class="fa fa-bar-chart me-1"/>
+                                        <span t-esc="labels.comparison"/>
+                                    </h6>
+                                    <div class="o_chart_box o_chart_box_tall">
+                                        <canvas t-ref="comparisonCanvas"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                                <div class="o_chart_card">
+                                    <h6 class="o_chart_title">
+                                        <i class="fa fa-bullseye me-1"/>
+                                        <span t-esc="labels.radar"/>
+                                    </h6>
+                                    <div class="o_chart_box o_chart_box_tall">
+                                        <canvas t-ref="radarCanvas"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="o_chart_card">
+                            <h6 class="o_chart_title">
+                                <i class="fa fa-sort-amount-desc me-1"/>
+                                <span t-esc="labels.ranking"/>
+                            </h6>
+                            <div class="table-responsive">
+                                <table class="o_rank_table table align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th t-esc="labels.rank"/>
+                                            <th t-esc="labels.equipment"/>
+                                            <th t-esc="labels.model"/>
+                                            <th t-esc="labels.oee"/>
+                                            <th class="text-end" t-esc="labels.availability"/>
+                                            <th class="text-end" t-esc="labels.performance"/>
+                                            <th class="text-end" t-esc="labels.quality"/>
+                                            <th class="text-end" t-esc="labels.recordsCol"/>
+                                            <th class="text-end" t-esc="labels.output"/>
+                                            <th class="text-end" t-esc="labels.downtime"/>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="perEquipment" t-as="item"
+                                            t-key="item.equipment_id">
+                                            <td class="o_rank_number" t-esc="item_index + 1"/>
+                                            <td>
+                                                <div class="fw-bold" t-esc="item.equipment_code || item.equipment_name"/>
+                                                <div class="text-muted small" t-esc="item.equipment_name"/>
+                                            </td>
+                                            <td class="text-muted" t-esc="item.equipment_model || '—'"/>
+                                            <td>
+                                                <div class="o_rank_oee d-flex align-items-center gap-2">
+                                                    <div class="o_progress">
+                                                        <div t-attf-style="width: {{item.oee}}%; background-color: {{levelColor(item.oee)}};"/>
+                                                    </div>
+                                                    <span class="o_rank_value fw-bold"
+                                                          t-esc="pct(item.oee) + '%'"/>
+                                                </div>
+                                            </td>
+                                            <td class="text-end" t-esc="pct(item.availability) + '%'"/>
+                                            <td class="text-end" t-esc="pct(item.performance) + '%'"/>
+                                            <td class="text-end" t-esc="pct(item.quality) + '%'"/>
+                                            <td class="text-end" t-esc="number(item.record_count)"/>
+                                            <td class="text-end" t-esc="number(item.output_total)"/>
+                                            <td class="text-end" t-esc="number(item.downtime_total)"/>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>

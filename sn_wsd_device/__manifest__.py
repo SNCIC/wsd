@@ -2,7 +2,7 @@
     'name': "Device Management",
     'summary': "Device data collection (reflow soldering, etc.)",
     'category': 'Manufacturing/Device Management',
-    'version': '19.0.3.0.0',
+    'version': '19.0.4.0.0',
     'depends': ['base', 'product', 'hr'],
     'data': [
         'security/ir.model.access.csv',
@@ -33,6 +33,8 @@
         'views/repair_order_views.xml',
         'data/knowledge_sequence.xml',
         'views/knowledge_views.xml',
+        'data/oee_sequence.xml',
+        'views/oee_views.xml',
         'data/equipment_seed.xml',
         'views/menu_views.xml',
     ],
@@ -43,6 +45,12 @@
     'assets': {
         'web.assets_backend': [
             'sn_wsd_device/static/src/scss/repair_wizard.scss',
+            'sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js',
+            'sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.xml',
+            'sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.scss',
+            'sn_wsd_device/static/src/oee/oee_report/oee_report_action.js',
+            'sn_wsd_device/static/src/oee/oee_report/oee_report_action.xml',
+            'sn_wsd_device/static/src/oee/oee_report/oee_report.scss',
         ],
     },
 }
