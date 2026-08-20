@@ -14,6 +14,24 @@
               action="action_knowledge"
               sequence="40"/>
 
+    <!-- Equipment OEE section -->
+    <menuitem id="menu_oee"
+              name="OEE"
+              parent="menu_device_root"
+              sequence="9"/>
+
+    <menuitem id="menu_oee_entry"
+              name="OEE Entry"
+              parent="menu_oee"
+              action="action_oee_record"
+              sequence="10"/>
+
+    <menuitem id="menu_oee_report"
+              name="OEE Report"
+              parent="menu_oee"
+              action="action_oee_report"
+              sequence="20"/>
+
     <!-- Data collection section -->
     <menuitem id="menu_device_data_collection"
               name="Data Collection"

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== List ===== -->
+    <record id="view_oee_record_list" model="ir.ui.view">
+        <field name="name">sn.wsd.device.oee.record.list</field>
+        <field name="model">sn.wsd.device.oee.record</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'draft'">
+                <field name="name" optional="hide"/>
+                <field name="date"/>
+                <field name="shift" widget="badge"
+                       decoration-info="shift == 'day'"
+                       decoration-warning="shift == 'night'"/>
+                <field name="equipment_code"/>
+                <field name="equipment_id" optional="show"/>
+                <field name="planned_time" optional="hide"/>
+                <field name="downtime_hours" optional="hide"/>
+                <field name="run_hours" optional="hide"/>
+                <field name="actual_output" optional="show"/>
+                <field name="qualified_qty" optional="hide"/>
+                <field name="availability_rate" optional="hide"/>
+                <field name="performance_rate" optional="hide"/>
+                <field name="quality_rate" optional="hide"/>
+                <field name="oee_value" widget="badge"
+                       decoration-success="oee_value &gt;= 85"
+                       decoration-info="oee_value &gt;= 70 and oee_value &lt; 85"
+                       decoration-warning="oee_value &gt;= 55 and oee_value &lt; 70"
+                       decoration-danger="oee_value &lt; 55"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'done'"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== Form ===== -->
+    <record id="view_oee_record_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.oee.record.form</field>
+        <field name="model">sn.wsd.device.oee.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_compute_oee" type="object"
+                            string="Compute OEE" class="btn-primary"
+                            icon="fa-calculator"/>
+                    <button name="action_open_batch_wizard" type="object"
+                            string="Batch Entry Data" class="btn-secondary"
+                            icon="fa-table"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group name="entry" string="Entry">
+                            <field name="equipment_id"
+                                   options="{'no_create': True}"
+                                   placeholder="Pick an equipment..."/>
+                            <field name="date"/>
+                            <field name="shift"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group name="equipment_info" string="Equipment">
+                            <field name="equipment_code"/>
+                            <field name="equipment_name"/>
+                            <field name="equipment_model"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Inputs">
+                            <group>
+                                <group string="Time">
+                                    <field name="planned_time"/>
+                                    <field name="downtime_hours"/>
+                                    <field name="run_hours"/>
+                                </group>
+                                <group string="Output">
+                                    <field name="design_capacity"/>
+                                    <field name="theoretical_output"/>
+                                    <field name="actual_output"/>
+                                    <field name="qualified_qty"/>
+                                    <field name="unqualified_qty"/>
+                                </group>
+                            </group>
+                            <separator string="Downtime Details"/>
+                            <field name="downtime_ids">
+                                <list editable="bottom">
+                                    <field name="reason" widget="badge"
+                                           decoration-danger="reason == 'breakdown'"
+                                           decoration-warning="reason in ['changeover', 'material']"
+                                           decoration-info="reason == 'maintenance'"
+                                           decoration-muted="reason == 'other'"/>
+                                    <field name="hours" sum="Total"/>
+                                    <field name="remark"
+                                           placeholder="Optional remark..."/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="OEE Results">
+                            <group>
+                                <group string="Rates">
+                                    <field name="availability_rate" widget="badge"
+                                           decoration-success="availability_rate &gt;= 90"
+                                           decoration-warning="availability_rate &gt;= 70 and availability_rate &lt; 90"
+                                           decoration-danger="availability_rate &lt; 70"/>
+                                    <field name="performance_rate" widget="badge"
+                                           decoration-success="performance_rate &gt;= 95"
+                                           decoration-warning="performance_rate &gt;= 85 and performance_rate &lt; 95"
+                                           decoration-danger="performance_rate &lt; 85"/>
+                                    <field name="quality_rate" widget="badge"
+                                           decoration-success="quality_rate &gt;= 98"
+                                           decoration-warning="quality_rate &gt;= 95 and quality_rate &lt; 98"
+                                           decoration-danger="quality_rate &lt; 95"/>
+                                </group>
+                                <group string="Overall Equipment Effectiveness">
+                                    <field name="oee_value" widget="badge"
+                                           decoration-success="oee_value &gt;= 85"
+                                           decoration-info="oee_value &gt;= 70 and oee_value &lt; 85"
+                                           decoration-warning="oee_value &gt;= 55 and oee_value &lt; 70"
+                                           decoration-danger="oee_value &lt; 55"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Trend">
+                            <field name="trend_data" nolabel="1"
+                                   widget="sn_wsd_oee_trend_chart"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Search ===== -->
+    <record id="view_oee_record_search" model="ir.ui.view">
+        <field name="name">sn.wsd.device.oee.record.search</field>
+        <field name="model">sn.wsd.device.oee.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="equipment_id"/>
+                <field name="name"/>
+                <filter name="filter_done" string="Computed"
+                        domain="[('state', '=', 'done')]"/>
+                <filter name="filter_draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <filter name="filter_world_class" string="World Class (OEE &gt;= 85%)"
+                        domain="[('state', '=', 'done'), ('oee_value', '&gt;=', 85)]"/>
+                <filter name="filter_low_oee" string="Low OEE (&lt; 70%)"
+                        domain="[('state', '=', 'done'), ('oee_value', '&lt;', 70)]"/>
+                <group>
+                    <filter name="group_by_equipment" string="Equipment"
+                            context="{'group_by': 'equipment_id'}"/>
+                    <filter name="group_by_date" string="Date"
+                            context="{'group_by': 'date'}"/>
+                    <filter name="group_by_shift" string="Shift"
+                            context="{'group_by': 'shift'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===== Batch entry wizard ===== -->
+    <record id="view_oee_batch_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.oee.batch.wizard.form</field>
+        <field name="model">sn.wsd.device.oee.batch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="OEE Batch Entry">
+                <div class="mb-3">
+                    <p class="text-muted mb-0">
+                        One line per day of the month is pre-filled (up to
+                        today). Leave "Actual Output" empty on a day to skip
+                        it. Existing records of the same equipment, shift
+                        and date are replaced. All created records stay
+                        editable afterwards.
+                    </p>
+                </div>
+                <group>
+                    <group>
+                        <field name="equipment_id"
+                               options="{'no_create': True}"/>
+                        <field name="month"/>
+                        <field name="shift"/>
+                    </group>
+                    <group>
+                        <field name="planned_time"/>
+                        <field name="design_capacity"/>
+                    </group>
+                </group>
+                <separator string="Daily Lines"/>
+                <field name="line_ids">
+                    <list editable="bottom" create="0">
+                        <field name="date" readonly="1"/>
+                        <field name="planned_time"/>
+                        <field name="downtime_hours"/>
+                        <field name="design_capacity"/>
+                        <field name="actual_output"/>
+                        <field name="qualified_qty"/>
+                        <field name="run_hours" optional="hide"/>
+                        <field name="theoretical_output" optional="hide"/>
+                        <field name="unqualified_qty" optional="hide"/>
+                        <field name="availability_rate" optional="hide"/>
+                        <field name="performance_rate" optional="hide"/>
+                        <field name="quality_rate" optional="hide"/>
+                        <field name="oee_value" widget="badge"
+                               decoration-success="oee_value &gt;= 85"
+                               decoration-info="oee_value &gt;= 70 and oee_value &lt; 85"
+                               decoration-warning="oee_value &gt;= 55 and oee_value &lt; 70"
+                               decoration-danger="oee_value &lt; 55"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_create_records" type="object"
+                            string="Create Records" class="btn-primary"
+                            icon="fa-check"/>
+                    <button string="Cancel" special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Actions ===== -->
+    <record id="action_oee_record" model="ir.actions.act_window">
+        <field name="name">OEE Entry</field>
+        <field name="res_model">sn.wsd.device.oee.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_oee_record_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first OEE entry
+            </p>
+            <p>
+                Pick an equipment, a date and a shift, enter the working
+                time, output and capacity, then click "Compute OEE".
+            </p>
+        </field>
+    </record>
+
+    <record id="action_oee_report" model="ir.actions.client">
+        <field name="name">OEE Report</field>
+        <field name="tag">sn_wsd_device_oee_report</field>
+    </record>
+
+</odoo>

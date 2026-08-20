@@ -34,14 +34,28 @@ def migrate(cr, version):
     _logger.info("route_flow_json: migrated %d route(s)", migrated_json)
 
     migrated_draw = 0
-    for route in routes:
-        drawing_no = (route.x_drawing_no or '').strip()
-        if not drawing_no:
-            continue
+    # The legacy column only exists on databases that already ran a version
+    # defining it; probe it in SQL instead of the ORM (the field is gone
+    # from the model in this version).
+    cr.execute(
+        "SELECT 1 FROM information_schema.columns "
+        "WHERE table_name = 'sn_wsd_process_route' "
+        "AND column_name = 'x_drawing_no'")
+    legacy_drawings = {}
+    if cr.fetchone():
+        cr.execute(
+            "SELECT id, x_drawing_no FROM sn_wsd_process_route "
+            "WHERE x_drawing_no IS NOT NULL AND x_drawing_no <> ''")
+        legacy_drawings = {
+            route_id: drawing_no.strip()
+            for route_id, drawing_no in cr.fetchall()
+            if drawing_no.strip()
+        }
+    for route_id, drawing_no in legacy_drawings.items():
         already = Drawing.search_count([
-            ('route_id', '=', route.id), ('x_drawing_no', '=', drawing_no),
+            ('route_id', '=', route_id), ('x_drawing_no', '=', drawing_no),
         ])
         if not already:
-            Drawing.create({'route_id': route.id, 'x_drawing_no': drawing_no})
+            Drawing.create({'route_id': route_id, 'x_drawing_no': drawing_no})
             migrated_draw += 1
     _logger.info("route drawings: migrated %d binding(s)", migrated_draw)

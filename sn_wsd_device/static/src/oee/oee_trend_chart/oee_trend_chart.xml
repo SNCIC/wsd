@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_device.OeeTrendChartField">
+        <div class="o_sn_wsd_oee_trend_chart">
+            <div class="o_trend_toolbar d-flex align-items-center gap-2 mb-2">
+                <i class="fa fa-line-chart text-muted"/>
+                <span class="fw-bold" t-esc="labels.title"/>
+                <div class="btn-group ms-auto">
+                    <button type="button" class="btn btn-sm"
+                            t-att-class="state.range === 7 ? 'btn-primary' : 'btn-outline-secondary'"
+                            t-on-click="() => this.setRange(7)"
+                            t-esc="labels.days7"/>
+                    <button type="button" class="btn btn-sm"
+                            t-att-class="state.range === 30 ? 'btn-primary' : 'btn-outline-secondary'"
+                            t-on-click="() => this.setRange(30)"
+                            t-esc="labels.days30"/>
+                </div>
+            </div>
+            <div t-if="isEmpty" class="o_trend_empty text-muted text-center py-5">
+                <i class="fa fa-area-chart fa-2x mb-2 d-block opacity-50"/>
+                <span t-esc="labels.empty"/>
+            </div>
+            <div t-else="" class="o_trend_canvas_wrapper">
+                <canvas t-ref="canvas"/>
+            </div>
+        </div>
+    </t>
+</templates>
