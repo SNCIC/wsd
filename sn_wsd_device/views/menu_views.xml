@@ -26,6 +26,18 @@
               action="action_oee_record"
               sequence="10"/>
 
+    <menuitem id="menu_oee_batch_entry"
+              name="OEE Batch Entry"
+              parent="menu_oee"
+              action="action_oee_batch_wizard"
+              sequence="15"/>
+
+    <menuitem id="menu_oee_import"
+              name="OEE Import"
+              parent="menu_oee"
+              action="action_oee_import_wizard"
+              sequence="16"/>
+
     <menuitem id="menu_oee_report"
               name="OEE Report"
               parent="menu_oee"

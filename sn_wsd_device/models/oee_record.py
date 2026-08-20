@@ -297,24 +297,6 @@ class OeeRecord(models.Model):
         self.ensure_one()
         return dict(SHIFT_SELECTION).get(self.shift, self.shift)
 
-    def action_open_batch_wizard(self):
-        """Open the batch entry wizard pre-filled for this equipment."""
-        self.ensure_one()
-        wizard = self.env['sn.wsd.device.oee.batch.wizard'].create({
-            'equipment_id': self.equipment_id.id,
-            'shift': self.shift or 'all',
-            'planned_time': self.planned_time or 8.0,
-            'design_capacity': self.design_capacity or 0.0,
-        })
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('OEE Batch Entry'),
-            'res_model': wizard._name,
-            'res_id': wizard.id,
-            'view_mode': 'form',
-            'target': 'new',
-        }
-
     # ===== report data =====
     @api.model
     def get_report_data(self, date_from, date_to, equipment_ids=None):
