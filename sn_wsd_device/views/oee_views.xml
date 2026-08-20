@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- ===== Batch entry wizard action (direct entry, no carrier record) ===== -->
+    <record id="action_oee_batch_wizard" model="ir.actions.act_window">
+        <field name="name">OEE Batch Entry</field>
+        <field name="res_model">sn.wsd.device.oee.batch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ===== Import wizard action ===== -->
+    <record id="action_oee_import_wizard" model="ir.actions.act_window">
+        <field name="name">OEE Import</field>
+        <field name="res_model">sn.wsd.device.oee.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
     <!-- ===== List ===== -->
     <record id="view_oee_record_list" model="ir.ui.view">
         <field name="name">sn.wsd.device.oee.record.list</field>
         <field name="model">sn.wsd.device.oee.record</field>
         <field name="arch" type="xml">
             <list decoration-muted="state == 'draft'">
+                <header>
+                    <button name="%(action_oee_batch_wizard)d" type="action"
+                            string="Batch Entry" icon="fa-table"/>
+                    <button name="%(action_oee_import_wizard)d" type="action"
+                            string="Import Records" icon="fa-upload"/>
+                </header>
                 <field name="name" optional="hide"/>
                 <field name="date"/>
                 <field name="shift" widget="badge"
@@ -46,9 +68,6 @@
                     <button name="action_compute_oee" type="object"
                             string="Compute OEE" class="btn-primary"
                             icon="fa-calculator"/>
-                    <button name="action_open_batch_wizard" type="object"
-                            string="Batch Entry Data" class="btn-secondary"
-                            icon="fa-table"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,done"/>
                 </header>
@@ -176,11 +195,7 @@
             <form string="OEE Batch Entry">
                 <div class="mb-3">
                     <p class="text-muted mb-0">
-                        One line per day of the month is pre-filled (up to
-                        today). Leave "Actual Output" empty on a day to skip
-                        it. Existing records of the same equipment, shift
-                        and date are replaced. All created records stay
-                        editable afterwards.
+                        One line per day of the month is pre-filled (up to today). Leave "Actual Output" empty on a day to skip it. Existing records of the same equipment, shift and date are replaced. All created records stay editable afterwards.
                     </p>
                 </div>
                 <group>
@@ -193,12 +208,18 @@
                     <group>
                         <field name="planned_time"/>
                         <field name="design_capacity"/>
+                        <field name="random_data"/>
                     </group>
                 </group>
+                <div class="mb-3" invisible="not random_data">
+                    <p class="text-muted mb-0">
+                        Random data is on: every day of the month is filled with plausible values derived from the design capacity. Only the design capacity (and optionally the planned working time) is needed.
+                    </p>
+                </div>
                 <separator string="Daily Lines"/>
                 <field name="line_ids">
                     <list editable="bottom" create="0">
-                        <field name="date" readonly="1"/>
+                        <field name="date"/>
                         <field name="planned_time"/>
                         <field name="downtime_hours"/>
                         <field name="design_capacity"/>
@@ -220,6 +241,40 @@
                 <footer>
                     <button name="action_create_records" type="object"
                             string="Create Records" class="btn-primary"
+                            icon="fa-check"/>
+                    <button string="Cancel" special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== Import wizard ===== -->
+    <record id="view_oee_import_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.device.oee.import.wizard.form</field>
+        <field name="model">sn.wsd.device.oee.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="OEE Import">
+                <div class="mb-3">
+                    <p class="text-muted mb-0">
+                        Upload the template file filled with one row per equipment and day. Rows matching an existing record (same equipment, date and shift) replace it when "Overwrite Existing Records" is checked.
+                    </p>
+                    <p class="mb-0">
+                        <a class="btn btn-secondary"
+                           href="/sn_wsd_device/oee_import_template.xlsx"
+                           download="oee_import_template.xlsx">Download Template</a>
+                    </p>
+                </div>
+                <group>
+                    <group>
+                        <field name="file" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                        <field name="overwrite"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_import_records" type="object"
+                            string="Import Records" class="btn-primary"
                             icon="fa-check"/>
                     <button string="Cancel" special="cancel"
                             class="btn-secondary"/>
