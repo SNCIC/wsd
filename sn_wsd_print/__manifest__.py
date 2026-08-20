@@ -8,6 +8,7 @@
         'wizard/internal_serial_generate_print_wizard_views.xml',
         'report/internal_serial_label_templates.xml',
         'report/internal_serial_label_reports.xml',
+        'views/mes_order_views.xml',
         'views/internal_serial_views.xml',
     ],
     'installable': True,

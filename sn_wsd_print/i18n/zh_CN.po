@@ -1,4 +1,4 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * sn_wsd_print
 #
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-28 00:00+0000\n"
-"PO-Revision-Date: 2026-07-28 00:00+0000\n"
+"PO-Revision-Date: 2026-08-20 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_print
-#: model:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_manufacturing_batch_form_print_inherit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_mes_order_form_print
 #: model:ir.actions.act_window,name:sn_wsd_print.action_sn_wsd_internal_serial_generate_print_wizard
 #: model:ir.model,name:sn_wsd_print.model_sn_wsd_internal_serial_generate_print_wizard
 msgid "Generate and Print Factory Serial Numbers"
 msgstr "生成并打印厂内序列号"
 
 #. module: sn_wsd_print
-#: model:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
 msgid "Generate and Print"
 msgstr "生成并打印"
 
@@ -56,11 +56,6 @@ msgid ""
 msgstr "生成数量不能超过剩余可生成数量 %(remaining)s。"
 
 #. module: sn_wsd_print
-#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_internal_serial_generate_print_wizard__batch_id
-msgid "Manufacturing Batch"
-msgstr "制造批次"
-
-#. module: sn_wsd_print
 #: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_internal_serial_generate_print_wizard__product_id
 msgid "Product"
 msgstr "产品"
@@ -76,6 +71,11 @@ msgid "Active Internal Serial Count"
 msgstr "有效厂内序列号数量"
 
 #. module: sn_wsd_print
-#: model:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_sn_wsd_internal_serial_generate_print_wizard_form
 msgid "Cancel"
 msgstr "取消"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_mes_order__can_generate_internal_serials
+msgid "Can Generate Internal Serials"
+msgstr "可生成厂内序列号"
