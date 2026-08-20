@@ -488,7 +488,7 @@
                                 </form>
                             </field>
                         </page>
-                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['iqc', 'oqc', 'fai', 'ipqc']">
                             <group>
                                 <field name="sample_size"/>
                                 <field name="sample_checked_qty" readonly="1"/>
