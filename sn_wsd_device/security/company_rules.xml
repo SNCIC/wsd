@@ -47,5 +47,11 @@
             <field name="model_id" ref="model_sn_wsd_device_knowledge"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+
+        <record id="rule_sn_wsd_device_oee_record_company" model="ir.rule">
+            <field name="name">Equipment OEE Record Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_device_oee_record"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>
