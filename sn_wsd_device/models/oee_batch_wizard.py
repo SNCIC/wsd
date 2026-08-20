@@ -1,4 +1,5 @@
 import calendar
+import random
 from datetime import date
 
 from dateutil.relativedelta import relativedelta
@@ -30,8 +31,14 @@ class OeeBatchWizard(models.TransientModel):
     design_capacity = fields.Float(
         string='Design Capacity (pcs/h)', digits=(10, 1),
         help='Default value used when the daily lines are generated.')
+    random_data = fields.Boolean(
+        string='Random Data',
+        help='Fill every day with plausible random values. Only the design '
+             'capacity (and optionally the planned working time) is needed.')
     line_ids = fields.One2many(
-        'sn.wsd.device.oee.batch.line', 'wizard_id', string='Daily Lines')
+        'sn.wsd.device.oee.batch.line', 'wizard_id', string='Daily Lines',
+        compute='_compute_line_ids', precompute=True, readonly=False,
+        store=True)
 
     @api.model
     def _selection_month(self):
@@ -55,29 +62,47 @@ class OeeBatchWizard(models.TransientModel):
             return []
         return [date(year, month, day) for day in range(1, last.day + 1)]
 
-    def _fill_days(self):
-        """Rebuild one line per day of the month with the wizard defaults."""
-        self.line_ids = [
-            Command.create({
-                'date': day,
-                'planned_time': self.planned_time,
-                'design_capacity': self.design_capacity,
-            })
-            for day in self._month_days()
-        ]
+    @api.depends('month', 'random_data', 'planned_time', 'design_capacity')
+    def _compute_line_ids(self):
+        """Rebuild one line per day of the month with the wizard defaults.
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        wizards = super().create(vals_list)
-        for wizard in wizards:
-            if not wizard.line_ids:
-                wizard._fill_days()
-        return wizards
+        When random data is requested, every line also gets plausible
+        downtime/output/qualified figures derived from the design capacity.
+        Computed with precompute/readonly=False so the grid regenerates both
+        on saved wizards and inside the not-yet-saved dialog.
+        """
+        for wizard in self:
+            wizard.line_ids = [Command.clear()] + [
+                Command.create({
+                    'date': day,
+                    'planned_time': wizard.planned_time,
+                    'design_capacity': wizard.design_capacity,
+                    **(wizard._random_line_values()
+                       if wizard.random_data else {}),
+                })
+                for day in wizard._month_days()
+            ]
 
-    @api.onchange('month')
-    def _onchange_month(self):
-        """Changing the month rebuilds the daily lines."""
-        self._fill_days()
+    def _random_line_values(self):
+        """Plausible daily figures: availability >= 80%, performance
+        80-98%, quality 93-99.5% — the kind of OEE spread that looks good
+        on the report dashboard."""
+        self.ensure_one()
+        planned_time = self.planned_time or 8.0
+        capacity = self.design_capacity or 0.0
+        downtime_hours = round(random.uniform(
+            planned_time * 0.05, planned_time * 0.2), 2)
+        performance = random.uniform(0.80, 0.98)
+        quality = random.uniform(0.93, 0.995)
+        run_hours = planned_time - downtime_hours
+        theoretical_output = run_hours * capacity
+        actual_output = int(round(theoretical_output * performance))
+        qualified_qty = int(round(actual_output * quality))
+        return {
+            'downtime_hours': downtime_hours,
+            'actual_output': actual_output,
+            'qualified_qty': qualified_qty,
+        }
 
     def action_create_records(self):
         """Create one OEE record per filled line.
@@ -86,6 +111,9 @@ class OeeBatchWizard(models.TransientModel):
         same equipment, shift and date are replaced.
         """
         self.ensure_one()
+        if self.random_data and self.design_capacity <= 0:
+            raise UserError(_(
+                'Enter a positive design capacity to generate random data.'))
         record_model = self.env['sn.wsd.device.oee.record']
         to_create = []
         skipped = 0
@@ -112,6 +140,11 @@ class OeeBatchWizard(models.TransientModel):
                     'Line of %(date)s: qualified qty cannot exceed the '
                     'actual output.', date=fields.Date.to_string(line.date)))
             to_create.append(line)
+
+        if not to_create:
+            raise UserError(_(
+                'Fill in the actual output of at least one day to create '
+                'OEE records.'))
 
         dates = [line.date for line in to_create]
         replaced = 0

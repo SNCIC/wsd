@@ -35,7 +35,11 @@ export class OeeTrendChartField extends Component {
             () => {
                 this.renderChart();
             },
-            () => [JSON.stringify(this.props.value ?? null), this.state.range]
+            () => [
+                JSON.stringify(
+                    this.props.record.data[this.props.name] ?? null),
+                this.state.range,
+            ]
         );
         onWillDestroy(() => this.destroyChart());
     }
@@ -56,7 +60,7 @@ export class OeeTrendChartField extends Component {
     }
 
     get points() {
-        const value = this.props.value;
+        const value = this.props.record.data[this.props.name];
         const data = Array.isArray(value) ? value : [];
         return data.slice(-this.state.range);
     }
@@ -150,4 +154,8 @@ export class OeeTrendChartField extends Component {
     }
 }
 
-registry.category("fields").add("sn_wsd_oee_trend_chart", OeeTrendChartField);
+registry.category("fields").add("sn_wsd_oee_trend_chart", {
+    component: OeeTrendChartField,
+    displayName: _t("OEE Trend Chart"),
+    supportedTypes: ["json"],
+});
