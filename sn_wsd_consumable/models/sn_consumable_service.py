@@ -44,10 +44,20 @@ class SnConsumableService(models.AbstractModel):
             'id': info.id,
             'sn': info.sn,
             'template_code': info.template_code,
-            'consumable_type': info.consumable_type,
+            'type': info.type_id.name or '',
             'aux_state': info.aux_state,
             'expiry_date': fields.Date.to_string(info.expiry_date) if info.expiry_date else False,
         }
+
+    @api.model
+    def issue(self, sn):
+        self._resolve_info(sn).action_issue()
+        return _('Consumable %s issued.', sn)
+
+    @api.model
+    def return_(self, sn):
+        self._resolve_info(sn).action_return()
+        return _('Consumable %s returned.', sn)
 
     @api.model
     def thaw_start(self, sn):

@@ -1,21 +1,14 @@
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-
-TOOL_TYPE_SELECTION = [
-    ('stencil', 'Stencil'),
-    ('squeegee', 'Squeegee'),
-    ('mold', 'Mold'),
-]
-
 TOOL_STATE_SELECTION = [
-    ('draft', 'Draft'),
-    ('in_stock', 'In Stock'),
+    ('idle', 'Idle'),
     ('issued', 'Issued'),
     ('online', 'Online'),
-    ('cleaning', 'Cleaning'),
+    ('maintaining', 'Maintaining'),
+    ('repairing', 'Repairing'),
     ('disabled', 'Disabled'),
     ('scrapped', 'Scrapped'),
 ]
@@ -26,12 +19,17 @@ MAINTENANCE_STATUS_SELECTION = [
     ('expired', 'Expired'),
 ]
 
-OPERATION_TYPE_SELECTION = [
+RECORD_ACTION_SELECTION = [
     ('issue', 'Issue'),
-    ('online', 'Online'),
-    ('offline', 'Offline'),
-    ('cleaning', 'Cleaning'),
     ('return', 'Return'),
+    ('online', 'Put Online'),
+    ('offline', 'Take Offline'),
+    ('usage', 'Usage'),
+    ('maintain', 'Maintain'),
+    ('repair', 'Repair'),
+    ('disable', 'Disable'),
+    ('enable', 'Enable'),
+    ('scrap', 'Scrap'),
 ]
 
 MAINTENANCE_RESULT_SELECTION = [
@@ -41,65 +39,128 @@ MAINTENANCE_RESULT_SELECTION = [
 ]
 
 
-class ToolingTemplate(models.Model):
+class SnToolingType(models.Model):
+    _name = 'sn.tooling.type'
+    _description = 'Tooling Type'
+    _inherit = ['mail.thread']
+    _order = 'name, id'
+    _check_company_auto = True
+
+    name = fields.Char(string='Type Name', required=True, tracking=True)
+    code = fields.Char(string='Type Code')
+    has_tension = fields.Boolean(
+        string='Enable Tension',
+        help='Show the tension parameter on templates and tooling of this type.')
+    has_thickness = fields.Boolean(
+        string='Enable Thickness',
+        help='Show the thickness parameter on templates and tooling of this type.')
+    has_flatness = fields.Boolean(
+        string='Enable Flatness',
+        help='Show the flatness parameter on templates and tooling of this type.')
+    active = fields.Boolean(default=True)
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        index=True,
+    )
+
+    _sn_tooling_type_name_unique = models.Constraint(
+        'unique(company_id, name)',
+        'The tooling type name must be unique per company.',
+    )
+    _sn_tooling_type_code_unique = models.Constraint(
+        'unique(company_id, code)',
+        'The tooling type code must be unique per company.',
+    )
+
+
+class SnToolingTemplate(models.Model):
     _name = 'sn.tooling.template'
     _description = 'Tooling Template'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _inherit = ['mail.thread']
     _order = 'code, id'
     _check_company_auto = True
 
-    name = fields.Char(string='Template Name', required=True, tracking=True)
-    code = fields.Char(string='Template Code', required=True, tracking=True)
-    active = fields.Boolean(default=True)
-    company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)
-    tool_type = fields.Selection(TOOL_TYPE_SELECTION, string='Tool Type', required=True, default='stencil', tracking=True)
-    product_tmpl_id = fields.Many2one('product.template', string='Tool Product', required=True, check_company=True, tracking=True)
-    product_id = fields.Many2one(
-        'product.product',
-        string='Product Variant',
-        domain="[('product_tmpl_id', '=', product_tmpl_id)]",
+    code = fields.Char(string='Tooling Code', required=True, index=True, tracking=True)
+    name = fields.Char(string='Tooling Name', required=True, tracking=True)
+    spec = fields.Char(string='Specification')
+    type_id = fields.Many2one(
+        'sn.tooling.type',
+        string='Tooling Type',
+        required=True,
+        index=True,
+        ondelete='restrict',
         check_company=True,
         tracking=True,
     )
-    spec = fields.Char(string='Specification', tracking=True)
-    panel_count = fields.Integer(string='Panel Count', default=1, tracking=True)
-    safe_stock_qty = fields.Integer(string='Safe Stock', default=0, tracking=True)
-    maintenance_by_count = fields.Boolean(string='Enable Count Maintenance', default=True, tracking=True)
+    supplier_id = fields.Many2one(
+        'res.partner', string='Supplier', check_company=True, tracking=True)
+    maintenance_by_count = fields.Boolean(string='Maintenance by Count', default=True)
     maintenance_count_limit = fields.Integer(string='Maintenance Count Limit', default=0, tracking=True)
-    maintenance_count_reminder = fields.Integer(string='Count Reminder Threshold', default=0, tracking=True)
-    maintenance_by_cycle = fields.Boolean(string='Enable Cycle Maintenance', default=False, tracking=True)
-    maintenance_cycle_days = fields.Integer(string='Maintenance Cycle Days', default=0, tracking=True)
-    maintenance_cycle_reminder_days = fields.Integer(string='Cycle Reminder Days', default=0, tracking=True)
-    maintenance_item_ids = fields.One2many('sn.tooling.template.maintenance.item', 'template_id', string='Maintenance Items')
-    note = fields.Html(string='Notes')
+    maintenance_count_reminder = fields.Integer(string='Count Reminder Threshold', default=0)
+    maintenance_by_cycle = fields.Boolean(string='Maintenance by Cycle', default=False)
+    maintenance_cycle_days = fields.Integer(string='Maintenance Cycle (days)', default=0, tracking=True)
+    maintenance_cycle_reminder_days = fields.Integer(string='Cycle Reminder (days)', default=0)
+    maintenance_item_ids = fields.One2many(
+        'sn.tooling.template.maintenance.item', 'template_id', string='Maintenance Items')
+    default_tension = fields.Float(string='Default Tension')
+    default_thickness = fields.Float(string='Default Thickness (μm)')
+    default_flatness = fields.Float(string='Default Flatness (μm)')
+    note = fields.Text(string='Notes')
+    active = fields.Boolean(default=True)
     tooling_ids = fields.One2many('sn.tooling', 'template_id', string='Tooling')
-    tooling_count = fields.Integer(compute='_compute_tooling_count')
-
-    _code_company_uniq = models.Constraint(
-        'unique(code, company_id)',
-        'Template code must be unique per company.',
+    tooling_count = fields.Integer(string='Tooling', compute='_compute_tooling_count')
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        index=True,
     )
+
+    _sn_tooling_template_code_unique = models.Constraint(
+        'unique(company_id, code)',
+        'The tooling code must be unique per company.',
+    )
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for template in self:
+            template.display_name = ' - '.join(
+                part for part in (template.code, template.name) if part)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
 
     @api.depends('tooling_ids')
     def _compute_tooling_count(self):
         for template in self:
             template.tooling_count = len(template.tooling_ids)
 
-    @api.constrains('panel_count')
-    def _check_panel_count(self):
-        for template in self:
-            if template.panel_count <= 0:
-                raise ValidationError(_('Panel count must be greater than zero.'))
-
-    @api.constrains('maintenance_count_limit', 'maintenance_count_reminder', 'maintenance_cycle_days', 'maintenance_cycle_reminder_days')
+    @api.constrains(
+        'maintenance_count_limit',
+        'maintenance_count_reminder',
+        'maintenance_cycle_days',
+        'maintenance_cycle_reminder_days')
     def _check_maintenance_params(self):
         for template in self:
             if template.maintenance_count_reminder < 0 or template.maintenance_cycle_reminder_days < 0:
                 raise ValidationError(_('Maintenance reminder values cannot be negative.'))
-            if template.maintenance_count_limit and template.maintenance_count_reminder > template.maintenance_count_limit:
-                raise ValidationError(_('Count reminder cannot exceed maintenance count limit.'))
-            if template.maintenance_cycle_days and template.maintenance_cycle_reminder_days > template.maintenance_cycle_days:
-                raise ValidationError(_('Cycle reminder cannot exceed maintenance cycle days.'))
+            if template.maintenance_count_limit and \
+                    template.maintenance_count_reminder > template.maintenance_count_limit:
+                raise ValidationError(_(
+                    'The count reminder threshold cannot exceed the maintenance count limit.'))
+            if template.maintenance_cycle_days and \
+                    template.maintenance_cycle_reminder_days > template.maintenance_cycle_days:
+                raise ValidationError(_(
+                    'The cycle reminder days cannot exceed the maintenance cycle days.'))
 
     def action_view_tooling(self):
         self.ensure_one()
@@ -113,119 +174,100 @@ class ToolingTemplate(models.Model):
         }
 
 
-class ToolingTemplateMaintenanceItem(models.Model):
+class SnToolingTemplateMaintenanceItem(models.Model):
     _name = 'sn.tooling.template.maintenance.item'
     _description = 'Tooling Template Maintenance Item'
     _order = 'sequence, id'
 
     sequence = fields.Integer(default=10)
-    template_id = fields.Many2one('sn.tooling.template', required=True, ondelete='cascade')
+    template_id = fields.Many2one(
+        'sn.tooling.template', required=True, ondelete='cascade', index=True)
     name = fields.Char(string='Item Name', required=True)
-    default_result = fields.Selection(MAINTENANCE_RESULT_SELECTION, string='Default Result', default='done', required=True)
+    default_result = fields.Selection(
+        MAINTENANCE_RESULT_SELECTION, string='Default Result', default='done', required=True)
     note = fields.Char(string='Instruction')
 
 
-class Tooling(models.Model):
+class SnTooling(models.Model):
     _name = 'sn.tooling'
     _description = 'Tooling'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'name, id'
+    _inherit = ['mail.thread']
+    _order = 'sn, id'
+    _rec_name = 'sn'
     _check_company_auto = True
 
-    name = fields.Char(string='Tooling Code', required=True, tracking=True)
-    active = fields.Boolean(default=True)
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company, required=True)
-    template_id = fields.Many2one('sn.tooling.template', string='Tooling Template', check_company=True, tracking=True)
-    tool_type = fields.Selection(TOOL_TYPE_SELECTION, string='Tool Type', required=True, default='stencil', tracking=True)
-    product_tmpl_id = fields.Many2one('product.template', string='Tool Product', required=True, check_company=True, tracking=True)
-    product_id = fields.Many2one(
-        'product.product',
-        string='Product Variant',
-        domain="[('product_tmpl_id', '=', product_tmpl_id)]",
+    sn = fields.Char(string='Tooling SN', required=True, index=True, tracking=True)
+    template_id = fields.Many2one(
+        'sn.tooling.template',
+        string='Tooling Code',
+        required=True,
+        ondelete='restrict',
+        index=True,
         check_company=True,
         tracking=True,
     )
-    spec = fields.Char(string='Specification', tracking=True)
-    panel_count = fields.Integer(string='Panel Count', default=1, tracking=True)
-    safe_stock_qty = fields.Integer(string='Safe Stock', default=0, tracking=True)
-    bom_id = fields.Many2one('mrp.bom', string='BoM', check_company=True, tracking=True)
-    workcenter_id = fields.Many2one('mrp.workcenter', string='Default Work Center', check_company=True, tracking=True)
+    type_id = fields.Many2one(
+        related='template_id.type_id', store=True, index=True)
+    spec = fields.Char(related='template_id.spec')
+    tension = fields.Float(string='Tension')
+    thickness = fields.Float(string='Thickness (μm)')
+    flatness = fields.Float(string='Flatness (μm)')
     location_id = fields.Many2one(
         'stock.location',
         string='Location',
         domain="[('usage', '=', 'internal')]",
         check_company=True,
-        tracking=True,
     )
-    vendor_id = fields.Many2one('res.partner', string='Vendor', check_company=True, tracking=True)
-    manufacture_date = fields.Date(string='Manufacture Date')
-    acceptance_date = fields.Date(string='Acceptance Date')
-    state = fields.Selection(TOOL_STATE_SELECTION, string='State', default='draft', required=True, tracking=True)
-    maintenance_by_count = fields.Boolean(string='Enable Count Maintenance', default=True, tracking=True)
-    maintenance_count_limit = fields.Integer(string='Maintenance Count Limit', default=0, tracking=True)
-    maintenance_count_reminder = fields.Integer(string='Count Reminder Threshold', default=0, tracking=True)
-    maintenance_by_cycle = fields.Boolean(string='Enable Cycle Maintenance', default=False, tracking=True)
-    maintenance_cycle_days = fields.Integer(string='Maintenance Cycle Days', default=0, tracking=True)
-    maintenance_cycle_reminder_days = fields.Integer(string='Cycle Reminder Days', default=0, tracking=True)
-    last_maintenance_date = fields.Date(string='Last Maintenance Date', tracking=True)
+    manufacture_date = fields.Date(string='Manufacture Date', default=fields.Date.today)
+    total_usage_count = fields.Integer(
+        string='Total Usage Count', default=0, copy=False, tracking=True)
+    cycle_usage_count = fields.Integer(
+        string='Cycle Usage Count', default=0, copy=False)
+    last_maintenance_date = fields.Date(string='Last Maintenance Date', copy=False)
     maintenance_status = fields.Selection(
         MAINTENANCE_STATUS_SELECTION,
         string='Maintenance Status',
         compute='_compute_maintenance_status',
         store=True,
-        tracking=True,
+        index=True,
     )
-    count_maintenance_status = fields.Selection(
-        MAINTENANCE_STATUS_SELECTION,
-        string='Count Maintenance Status',
-        compute='_compute_maintenance_status',
-        store=True,
-    )
-    cycle_maintenance_status = fields.Selection(
-        MAINTENANCE_STATUS_SELECTION,
-        string='Cycle Maintenance Status',
-        compute='_compute_maintenance_status',
-        store=True,
-    )
-    current_usage_count = fields.Integer(string='Current Usage Count', default=0, tracking=True)
-    total_usage_count = fields.Integer(string='Total Usage Count', default=0, tracking=True)
-    next_count_maintenance_at = fields.Integer(string='Next Count Maintenance Threshold', compute='_compute_next_maintenance_metrics', store=True)
-    next_cycle_maintenance_date = fields.Date(string='Next Cycle Maintenance Date', compute='_compute_next_maintenance_metrics', store=True)
-    disabled_reason = fields.Char(string='Disable Reason')
-    scrap_reason = fields.Char(string='Scrap Reason', tracking=True)
-    scrap_user_id = fields.Many2one('res.users', string='Scrapped By', readonly=True)
-    scrap_date = fields.Datetime(string='Scrap Date', readonly=True)
-    note = fields.Html(string='Notes')
-    applicability_ids = fields.One2many('sn.tooling.applicability', 'tooling_id', string='Applicability')
-    operation_log_ids = fields.One2many('sn.tooling.operation.log', 'tooling_id', string='Operation Logs')
-    usage_log_ids = fields.One2many('sn.tooling.usage.log', 'tooling_id', string='Usage Logs')
-    maintenance_log_ids = fields.One2many('sn.tooling.maintenance.log', 'tooling_id', string='Maintenance Logs')
-    operation_count = fields.Integer(compute='_compute_counters')
-    usage_count = fields.Integer(compute='_compute_counters')
-    maintenance_log_count = fields.Integer(compute='_compute_counters')
-
-    _name_company_uniq = models.Constraint(
-        'unique(name, company_id)',
-        'Tooling code must be unique per company.',
+    issued_user_id = fields.Many2one('res.users', string='Issued By')
+    issued_date = fields.Datetime(string='Issued Date')
+    disable_reason = fields.Char(string='Disable Reason')
+    scrap_reason = fields.Char(string='Scrap Reason')
+    state = fields.Selection(
+        TOOL_STATE_SELECTION, string='Status', default='idle', required=True, index=True, tracking=True)
+    record_ids = fields.One2many('sn.tooling.record', 'tooling_id', string='History')
+    record_count = fields.Integer(compute='_compute_record_count')
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        index=True,
     )
 
-    @api.depends('current_usage_count', 'maintenance_count_limit', 'last_maintenance_date', 'maintenance_cycle_days')
-    def _compute_next_maintenance_metrics(self):
-        for tooling in self:
-            tooling.next_count_maintenance_at = tooling.maintenance_count_limit or 0
-            if tooling.last_maintenance_date and tooling.maintenance_cycle_days > 0:
-                tooling.next_cycle_maintenance_date = tooling.last_maintenance_date + relativedelta(days=tooling.maintenance_cycle_days)
-            else:
-                tooling.next_cycle_maintenance_date = False
+    _sn_tooling_sn_unique = models.Constraint(
+        'unique(company_id, sn)',
+        'The tooling SN must be unique per company.',
+    )
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        if name:
+            domain = list(domain or []) + [
+                '|', ('sn', operator, name), ('template_id.name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
 
     @api.depends(
-        'current_usage_count',
-        'maintenance_by_count',
-        'maintenance_count_limit',
-        'maintenance_count_reminder',
-        'maintenance_by_cycle',
-        'maintenance_cycle_days',
-        'maintenance_cycle_reminder_days',
+        'cycle_usage_count',
+        'template_id.maintenance_by_count',
+        'template_id.maintenance_count_limit',
+        'template_id.maintenance_count_reminder',
+        'template_id.maintenance_by_cycle',
+        'template_id.maintenance_cycle_days',
+        'template_id.maintenance_cycle_reminder_days',
         'last_maintenance_date',
     )
     def _compute_maintenance_status(self):
@@ -234,361 +276,328 @@ class Tooling(models.Model):
         for tooling in self:
             count_status = 'normal'
             cycle_status = 'normal'
-            if tooling.maintenance_by_count and tooling.maintenance_count_limit > 0:
-                due_start = max(tooling.maintenance_count_limit - tooling.maintenance_count_reminder, 0)
-                if tooling.current_usage_count >= tooling.maintenance_count_limit:
+            template = tooling.template_id
+            if template.maintenance_by_count and template.maintenance_count_limit > 0:
+                due_start = max(
+                    template.maintenance_count_limit - template.maintenance_count_reminder, 0)
+                if tooling.cycle_usage_count >= template.maintenance_count_limit:
                     count_status = 'expired'
-                elif tooling.current_usage_count >= due_start:
+                elif tooling.cycle_usage_count >= due_start:
                     count_status = 'due'
-            if tooling.maintenance_by_cycle and tooling.maintenance_cycle_days > 0 and tooling.last_maintenance_date:
-                due_date = tooling.last_maintenance_date + relativedelta(days=tooling.maintenance_cycle_days)
-                remind_date = due_date - relativedelta(days=tooling.maintenance_cycle_reminder_days or 0)
+            if template.maintenance_by_cycle and template.maintenance_cycle_days > 0 \
+                    and tooling.last_maintenance_date:
+                due_date = tooling.last_maintenance_date + relativedelta(
+                    days=template.maintenance_cycle_days)
+                remind_date = due_date - relativedelta(
+                    days=template.maintenance_cycle_reminder_days or 0)
                 if today >= due_date:
                     cycle_status = 'expired'
                 elif today >= remind_date:
                     cycle_status = 'due'
-            tooling.count_maintenance_status = count_status
-            tooling.cycle_maintenance_status = cycle_status
-            tooling.maintenance_status = max((count_status, cycle_status), key=lambda status: severity_rank[status])
+            tooling.maintenance_status = max(
+                (count_status, cycle_status), key=lambda status: severity_rank[status])
 
-    @api.depends('operation_log_ids', 'usage_log_ids', 'maintenance_log_ids')
-    def _compute_counters(self):
+    @api.depends('record_ids')
+    def _compute_record_count(self):
         for tooling in self:
-            tooling.operation_count = len(tooling.operation_log_ids)
-            tooling.usage_count = len(tooling.usage_log_ids)
-            tooling.maintenance_log_count = len(tooling.maintenance_log_ids)
-
-    @api.constrains('panel_count')
-    def _check_panel_count(self):
-        for tooling in self:
-            if tooling.panel_count <= 0:
-                raise ValidationError(_('Panel count must be greater than zero.'))
-
-    @api.constrains('maintenance_count_limit', 'maintenance_count_reminder', 'maintenance_cycle_days', 'maintenance_cycle_reminder_days')
-    def _check_maintenance_params(self):
-        for tooling in self:
-            if tooling.maintenance_count_reminder < 0 or tooling.maintenance_cycle_reminder_days < 0:
-                raise ValidationError(_('Maintenance reminder values cannot be negative.'))
-            if tooling.maintenance_count_limit and tooling.maintenance_count_reminder > tooling.maintenance_count_limit:
-                raise ValidationError(_('Count reminder cannot exceed maintenance count limit.'))
-            if tooling.maintenance_cycle_days and tooling.maintenance_cycle_reminder_days > tooling.maintenance_cycle_days:
-                raise ValidationError(_('Cycle reminder cannot exceed maintenance cycle days.'))
+            tooling.record_count = len(tooling.record_ids)
 
     @api.model_create_multi
     def create(self, vals_list):
-        return super().create([self._prepare_vals_from_template(vals) for vals in vals_list])
+        for vals in vals_list:
+            template = self.env['sn.tooling.template'].browse(vals.get('template_id'))
+            if template:
+                # The web client submits untouched numeric fields as 0, so an
+                # empty value also falls back to the template default.
+                for param in ('tension', 'thickness', 'flatness'):
+                    if not vals.get(param):
+                        vals[param] = template[f'default_{param}']
+        return super().create(vals_list)
 
-    def write(self, vals):
-        vals = self._prepare_vals_from_template(vals, partial=True)
-        return super().write(vals)
+    # ------------------------------------------------------------------
+    # Guards
+    # ------------------------------------------------------------------
 
-    def _prepare_vals_from_template(self, vals, partial=False):
-        template_id = vals.get('template_id')
-        if not template_id:
-            return vals
-        template = self.env['sn.tooling.template'].browse(template_id)
-        if not template:
-            return vals
-        defaults = {
-            'tool_type': template.tool_type,
-            'product_tmpl_id': template.product_tmpl_id.id,
-            'product_id': template.product_id.id,
-            'spec': template.spec,
-            'panel_count': template.panel_count,
-            'safe_stock_qty': template.safe_stock_qty,
-            'maintenance_by_count': template.maintenance_by_count,
-            'maintenance_count_limit': template.maintenance_count_limit,
-            'maintenance_count_reminder': template.maintenance_count_reminder,
-            'maintenance_by_cycle': template.maintenance_by_cycle,
-            'maintenance_cycle_days': template.maintenance_cycle_days,
-            'maintenance_cycle_reminder_days': template.maintenance_cycle_reminder_days,
-        }
-        for key, value in defaults.items():
-            if key not in vals or (not partial and vals.get(key) in (False, None, '')):
-                vals.setdefault(key, value)
-        return vals
+    def _ensure_not_expired(self):
+        for tooling in self:
+            if tooling.maintenance_status == 'expired':
+                raise UserError(_(
+                    'The tooling %s has expired maintenance. Maintain it first.',
+                    tooling.sn))
 
-    def _check_route_operation_match(self, route_operation):
-        self.ensure_one()
-        if not route_operation:
-            return
-        mes_order = route_operation.mes_order_id
-        if self.product_tmpl_id != mes_order.product_id.product_tmpl_id:
-            raise UserError(_('Tooling %s does not match the MES order product.') % self.display_name)
-        if self.workcenter_id and route_operation.operation_id.x_workcenter_id and self.workcenter_id != route_operation.operation_id.x_workcenter_id:
-            raise UserError(_('Tooling %s is not applicable to the current work center.') % self.display_name)
-
-    def _check_can_issue(self, route_operation=None):
-        self.ensure_one()
-        if self.state != 'in_stock':
-            raise UserError(_('Only in-stock tooling can be issued.'))
-        if self.maintenance_status == 'expired':
-            raise UserError(_('Tooling %s has expired maintenance and cannot be issued.') % self.display_name)
-        self._check_route_operation_match(route_operation)
-
-    def _check_can_online(self, route_operation=None):
-        self.ensure_one()
-        if self.state != 'issued':
-            raise UserError(_('Only issued tooling can be put online.'))
-        if self.maintenance_status == 'expired':
-            raise UserError(_('Tooling %s has expired maintenance and cannot be put online.') % self.display_name)
-        self._check_route_operation_match(route_operation)
-
-    def _create_operation_log(self, operation_type, route_operation=False, note=False):
-        self.ensure_one()
-        return self.env['sn.tooling.operation.log'].create({
+    def _record(self, action, qty=False, fault=False, reason=False, line_vals=False):
+        return self.env['sn.tooling.record'].create({
             'tooling_id': self.id,
-            'mes_order_id': route_operation.mes_order_id.id if route_operation else False,
-            'route_operation_id': route_operation.id if route_operation else False,
-            'operation_type': operation_type,
-            'operator_id': self.env.user.id,
-            'operation_time': fields.Datetime.now(),
-            'note': note,
+            'action': action,
+            'qty': qty,
+            'fault': fault,
+            'reason': reason,
+            'line_ids': line_vals or [],
         })
 
-    def action_disable(self):
+    # ------------------------------------------------------------------
+    # Lifecycle: issue / online / offline / return
+    # ------------------------------------------------------------------
+
+    def action_issue(self):
         for tooling in self:
-            if tooling.state != 'in_stock':
-                raise UserError(_('Only in-stock tooling can be disabled.'))
-        self.write({'state': 'disabled'})
+            if tooling.state != 'idle':
+                raise UserError(_('Only an idle tooling can be issued.'))
+            tooling._ensure_not_expired()
+            tooling.write({
+                'state': 'issued',
+                'issued_user_id': self.env.user.id,
+                'issued_date': fields.Datetime.now(),
+            })
+            tooling._record('issue')
+        return True
+
+    def action_online(self):
+        for tooling in self:
+            if tooling.state != 'issued':
+                raise UserError(_('Only an issued tooling can be put online.'))
+            tooling._ensure_not_expired()
+            tooling.write({'state': 'online'})
+            tooling._record('online')
+        return True
+
+    def action_offline(self):
+        for tooling in self:
+            if tooling.state != 'online':
+                raise UserError(_('Only an online tooling can be taken offline.'))
+            tooling.write({'state': 'issued'})
+            tooling._record('offline')
+        return True
+
+    def action_return(self):
+        for tooling in self:
+            if tooling.state != 'issued':
+                raise UserError(_('Only an issued tooling can be returned.'))
+            tooling.write({
+                'state': 'idle',
+                'issued_user_id': False,
+                'issued_date': False,
+            })
+            tooling._record('return')
+        return True
+
+    # ------------------------------------------------------------------
+    # Lifecycle: maintenance (two step)
+    # ------------------------------------------------------------------
+
+    def action_maintain_start(self):
+        for tooling in self:
+            if tooling.state != 'idle':
+                raise UserError(_('Only an idle tooling can start maintenance.'))
+            tooling.write({'state': 'maintaining'})
+            tooling._record('maintain')
+        return True
+
+    def action_maintain_done(self, line_vals=False, params=False):
+        today = fields.Date.context_today(self)
+        for tooling in self:
+            if tooling.state != 'maintaining':
+                raise UserError(_('The tooling %s is not under maintenance.', tooling.sn))
+            values = {
+                'state': 'idle',
+                'last_maintenance_date': today,
+                'cycle_usage_count': 0,
+            }
+            params = params or {}
+            for param in ('tension', 'thickness', 'flatness'):
+                if params.get(param) is not None:
+                    values[param] = params[param]
+            tooling.write(values)
+            tooling._record('maintain', line_vals=line_vals or [])
+        return True
+
+    # ------------------------------------------------------------------
+    # Lifecycle: repair (two step, done may scrap)
+    # ------------------------------------------------------------------
+
+    def action_repair_start(self, fault):
+        for tooling in self:
+            if tooling.state != 'idle':
+                raise UserError(_('Only an idle tooling can start repair.'))
+            if not fault:
+                raise UserError(_('A fault description is required to start repair.'))
+            tooling.write({'state': 'repairing'})
+            tooling._record('repair', fault=fault)
+        return True
+
+    def action_repair_done(self, outcome, reason=False):
+        for tooling in self:
+            if tooling.state != 'repairing':
+                raise UserError(_('The tooling %s is not under repair.', tooling.sn))
+            if outcome == 'scrap':
+                if not reason:
+                    raise UserError(_('A scrap reason is required to scrap the tooling.'))
+                tooling.write({'state': 'scrapped', 'scrap_reason': reason})
+            else:
+                tooling.write({'state': 'idle'})
+            tooling._record('repair', reason=reason or _('Repaired'))
+        return True
+
+    # ------------------------------------------------------------------
+    # Lifecycle: disable / enable / scrap
+    # ------------------------------------------------------------------
+
+    def action_disable(self, reason=False):
+        for tooling in self:
+            if tooling.state != 'idle':
+                raise UserError(_('Only an idle tooling can be disabled.'))
+            if not reason:
+                raise UserError(_('A disable reason is required.'))
+            tooling.write({'state': 'disabled', 'disable_reason': reason})
+            tooling._record('disable', reason=reason)
+        return True
 
     def action_enable(self):
         for tooling in self:
             if tooling.state != 'disabled':
-                raise UserError(_('Only disabled tooling can be enabled.'))
-        self.write({'state': 'in_stock', 'disabled_reason': False})
+                raise UserError(_('Only a disabled tooling can be enabled.'))
+            tooling.write({'state': 'idle', 'disable_reason': False})
+            tooling._record('enable')
+        return True
 
-    def action_scrap(self):
+    def action_scrap(self, reason=False):
         for tooling in self:
-            if tooling.state == 'online':
-                raise UserError(_('Online tooling must be taken offline before scrapping.'))
-            if not tooling.scrap_reason:
-                raise UserError(_('A scrap reason is required before scrapping.'))
-        self.write({
-            'state': 'scrapped',
-            'scrap_user_id': self.env.user.id,
-            'scrap_date': fields.Datetime.now(),
-        })
+            if tooling.state not in ('idle', 'disabled'):
+                raise UserError(_(
+                    'The tooling %s must be returned or its maintenance/repair finished before scrapping.',
+                    tooling.sn))
+            if not reason:
+                raise UserError(_('A scrap reason is required.'))
+            tooling.write({'state': 'scrapped', 'scrap_reason': reason})
+            tooling._record('scrap', reason=reason)
+        return True
 
-    def action_view_operation_logs(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Operation Logs'),
-            'res_model': 'sn.tooling.operation.log',
-            'view_mode': 'list,form',
-            'domain': [('tooling_id', '=', self.id)],
-            'context': {'default_tooling_id': self.id},
-        }
+    # ------------------------------------------------------------------
+    # Usage counting (external modules drive it by SN)
+    # ------------------------------------------------------------------
 
-    def action_view_usage_logs(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Usage Logs'),
-            'res_model': 'sn.tooling.usage.log',
-            'view_mode': 'list,form',
-            'domain': [('tooling_id', '=', self.id)],
-            'context': {'default_tooling_id': self.id},
-        }
-
-    def action_view_maintenance_logs(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Maintenance Logs'),
-            'res_model': 'sn.tooling.maintenance.log',
-            'view_mode': 'list,form',
-            'domain': [('tooling_id', '=', self.id)],
-            'context': {'default_tooling_id': self.id},
-        }
-
-    def action_open_maintenance_wizard(self):
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Batch Maintenance'),
-            'res_model': 'sn.tooling.maintenance.wizard',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': {'default_tooling_ids': self.ids},
-        }
-
-    def action_pda_issue(self, route_operation=False, note=False):
-        for tooling in self:
-            tooling._check_can_issue(route_operation=route_operation)
-            if tooling.maintenance_status == 'due':
-                tooling.message_post(body=_('Tooling was issued while maintenance status was Due.'))
-            tooling.state = 'issued'
-            tooling._create_operation_log('issue', route_operation=route_operation, note=note)
-
-    def action_pda_online(self, route_operation=False, note=False):
-        for tooling in self:
-            tooling._check_can_online(route_operation=route_operation)
-            if tooling.maintenance_status == 'due':
-                tooling.message_post(body=_('Tooling was put online while maintenance status was Due.'))
-            tooling.state = 'online'
-            tooling._create_operation_log('online', route_operation=route_operation, note=note)
-
-    def action_pda_offline(self, route_operation=False, note=False):
+    def register_usage(self, qty):
         for tooling in self:
             if tooling.state != 'online':
-                raise UserError(_('Only online tooling can be taken offline.'))
-            tooling.state = 'in_stock'
-            tooling._create_operation_log('offline', route_operation=route_operation, note=note)
-
-    def action_pda_cleaning(self, route_operation=False, note=False):
-        for tooling in self:
-            if tooling.state != 'in_stock':
-                raise UserError(_('Only in-stock tooling can be moved to cleaning.'))
-            tooling.state = 'cleaning'
-            tooling._create_operation_log('cleaning', route_operation=route_operation, note=note)
-
-    def action_pda_return(self, route_operation=False, note=False):
-        for tooling in self:
-            if tooling.state != 'issued':
-                raise UserError(_('Only issued tooling can be returned.'))
-            tooling.state = 'in_stock'
-            tooling._create_operation_log('return', route_operation=route_operation, note=note)
-
-    def action_register_usage(self, pass_qty, panel_count=False, route_operation=False, note=False):
-        for tooling in self:
-            multiplier = panel_count or tooling.panel_count or 1
-            usage_qty = int(pass_qty * multiplier)
-            if usage_qty <= 0:
-                raise UserError(_('Usage quantity must be greater than zero.'))
+                raise UserError(_(
+                    'Only an online tooling can register usage (%s).', tooling.sn))
+            if not isinstance(qty, int) or qty <= 0:
+                raise UserError(_('The usage quantity must be a positive integer.'))
             tooling.write({
-                'total_usage_count': tooling.total_usage_count + usage_qty,
-                'current_usage_count': tooling.current_usage_count + usage_qty,
+                'total_usage_count': tooling.total_usage_count + qty,
+                'cycle_usage_count': tooling.cycle_usage_count + qty,
             })
-            self.env['sn.tooling.usage.log'].create({
-                'tooling_id': tooling.id,
-                'mes_order_id': route_operation.mes_order_id.id if route_operation else False,
-                'route_operation_id': route_operation.id if route_operation else False,
-                'operator_id': self.env.user.id,
-                'operation_time': fields.Datetime.now(),
-                'pass_qty': pass_qty,
-                'panel_count': multiplier,
-                'usage_qty': usage_qty,
-                'note': note,
-            })
+            tooling._record('usage', qty=qty)
+        return True
 
-    def action_finish_maintenance(self, item_results):
-        now = fields.Datetime.now()
-        today = fields.Date.context_today(self)
-        for tooling in self:
-            if tooling.maintenance_status not in ('due', 'expired'):
-                raise UserError(_('Only due or expired tooling can be maintained.'))
-            log = self.env['sn.tooling.maintenance.log'].create({
-                'tooling_id': tooling.id,
-                'maintenance_time': now,
-                'maintenance_user_id': self.env.user.id,
-                'before_status': tooling.maintenance_status,
-                'before_current_usage_count': tooling.current_usage_count,
-            })
-            for item in item_results.get(tooling.id, []):
-                self.env['sn.tooling.maintenance.log.line'].create({
-                    'log_id': log.id,
-                    'name': item['name'],
-                    'result': item['result'],
-                    'note': item.get('note'),
-                })
-            tooling.write({
-                'last_maintenance_date': today,
-                'current_usage_count': 0,
-                'state': 'in_stock' if tooling.state not in ('scrapped', 'disabled') else tooling.state,
-            })
-            log.write({
-                'after_status': tooling.maintenance_status,
-                'after_current_usage_count': tooling.current_usage_count,
-            })
+    def action_view_records(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Tooling Records'),
+            'res_model': 'sn.tooling.record',
+            'view_mode': 'list,form',
+            'domain': [('tooling_id', '=', self.id)],
+            'context': {'default_tooling_id': self.id},
+        }
+
+    # ------------------------------------------------------------------
+    # Wizards
+    # ------------------------------------------------------------------
+
+    def action_open_maintain_done(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.tooling.maintain.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_tooling.action_sn_tooling_maintain_wizard').name,
+            'context': {'default_tooling_id': self.id},
+        }
+
+    def action_open_repair_start(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.tooling.repair.start.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_tooling.action_sn_tooling_repair_start_wizard').name,
+            'context': {'default_tooling_id': self.id},
+        }
+
+    def action_open_repair_done(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.tooling.repair.done.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_tooling.action_sn_tooling_repair_done_wizard').name,
+            'context': {'default_tooling_id': self.id},
+        }
+
+    def action_open_disable(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.tooling.disable.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_tooling.action_sn_tooling_disable_wizard').name,
+            'context': {'default_tooling_id': self.id},
+        }
+
+    def action_open_scrap(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.tooling.scrap.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_tooling.action_sn_tooling_scrap_wizard').name,
+            'context': {'default_tooling_id': self.id},
+        }
 
 
-class ToolingApplicability(models.Model):
-    _name = 'sn.tooling.applicability'
-    _description = 'Tooling Applicability'
-    _order = 'sequence, id'
+class SnToolingRecord(models.Model):
+    _name = 'sn.tooling.record'
+    _description = 'Tooling Record'
+    _order = 'tooling_id, id desc'
     _check_company_auto = True
 
-    sequence = fields.Integer(default=10)
-    company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    tooling_id = fields.Many2one('sn.tooling', required=True, ondelete='cascade')
-    product_tmpl_id = fields.Many2one('product.template', string='Product', required=True, check_company=True)
-    product_id = fields.Many2one(
-        'product.product',
-        string='Product Variant',
-        domain="[('product_tmpl_id', '=', product_tmpl_id)]",
+    tooling_id = fields.Many2one(
+        'sn.tooling',
+        string='Tooling SN',
+        required=True,
+        ondelete='cascade',
+        index=True,
         check_company=True,
     )
-    bom_id = fields.Many2one('mrp.bom', string='BoM', check_company=True)
-    operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True)
-    workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True)
-    active = fields.Boolean(default=True)
-
-class ToolingOperationLog(models.Model):
-    _name = 'sn.tooling.operation.log'
-    _description = 'Tooling Operation Log'
-    _order = 'operation_time desc, id desc'
-    _check_company_auto = True
-
-    tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
-    company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
-    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='MES Route Operation', check_company=True, index=True)
-    operator_id = fields.Many2one('res.users', string='Operator', required=True, default=lambda self: self.env.user)
-    operation_type = fields.Selection(OPERATION_TYPE_SELECTION, string='Operation Type', required=True)
-    operation_time = fields.Datetime(string='Operation Time', required=True, default=fields.Datetime.now)
-    note = fields.Char(string='Note')
+    template_id = fields.Many2one(
+        'sn.tooling.template', related='tooling_id.template_id', store=True, index=True)
+    action = fields.Selection(RECORD_ACTION_SELECTION, string='Action', required=True, index=True)
+    qty = fields.Integer(string='Quantity')
+    fault = fields.Char(string='Fault')
+    reason = fields.Char(string='Reason')
+    line_ids = fields.One2many('sn.tooling.record.line', 'record_id', string='Check Items')
+    user_id = fields.Many2one(
+        'res.users', string='User', default=lambda self: self.env.user, required=True)
+    occurred_at = fields.Datetime(string='Occurred At', default=fields.Datetime.now, required=True)
+    company_id = fields.Many2one(
+        'res.company', related='tooling_id.company_id', store=True, index=True)
 
 
-class ToolingUsageLog(models.Model):
-    _name = 'sn.tooling.usage.log'
-    _description = 'Tooling Usage Log'
-    _order = 'operation_time desc, id desc'
-    _check_company_auto = True
+class SnToolingRecordLine(models.Model):
+    _name = 'sn.tooling.record.line'
+    _description = 'Tooling Record Line'
+    _order = 'record_id, sequence, id'
 
-    tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
-    company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    mes_order_id = fields.Many2one('sn.wsd.mes.order', string='MES Order', check_company=True, index=True)
-    route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='MES Route Operation', check_company=True, index=True)
-    operator_id = fields.Many2one('res.users', string='Operator', required=True, default=lambda self: self.env.user)
-    operation_time = fields.Datetime(string='Pass Time', required=True, default=fields.Datetime.now)
-    pass_qty = fields.Integer(string='Pass Quantity', required=True, default=0)
-    panel_count = fields.Integer(string='Panel Count', required=True, default=1)
-    usage_qty = fields.Integer(string='Usage Quantity', required=True, default=1)
-    note = fields.Char(string='Note')
-
-    @api.constrains('panel_count', 'usage_qty')
-    def _check_usage(self):
-        for log in self:
-            if log.panel_count <= 0:
-                raise ValidationError(_('Panel count must be greater than zero.'))
-            if log.usage_qty <= 0:
-                raise ValidationError(_('Usage count must be greater than zero.'))
-
-
-class ToolingMaintenanceLog(models.Model):
-    _name = 'sn.tooling.maintenance.log'
-    _description = 'Tooling Maintenance Log'
-    _order = 'maintenance_time desc, id desc'
-    _check_company_auto = True
-
-    tooling_id = fields.Many2one('sn.tooling', string='Tooling', required=True, check_company=True)
-    company_id = fields.Many2one(related='tooling_id.company_id', store=True)
-    maintenance_time = fields.Datetime(string='Maintenance Time', required=True, default=fields.Datetime.now)
-    maintenance_user_id = fields.Many2one('res.users', string='Maintained By', required=True, default=lambda self: self.env.user)
-    before_status = fields.Selection(MAINTENANCE_STATUS_SELECTION, string='Status Before Maintenance')
-    after_status = fields.Selection(MAINTENANCE_STATUS_SELECTION, string='Status After Maintenance')
-    before_current_usage_count = fields.Integer(string='Current Usage Before Maintenance')
-    after_current_usage_count = fields.Integer(string='Current Usage After Maintenance')
-    line_ids = fields.One2many('sn.tooling.maintenance.log.line', 'log_id', string='Maintenance Items')
-
-
-class ToolingMaintenanceLogLine(models.Model):
-    _name = 'sn.tooling.maintenance.log.line'
-    _description = 'Tooling Maintenance Log Line'
-    _order = 'id'
-
-    log_id = fields.Many2one('sn.tooling.maintenance.log', required=True, ondelete='cascade')
+    record_id = fields.Many2one(
+        'sn.tooling.record', required=True, ondelete='cascade', index=True)
+    sequence = fields.Integer(default=10)
     name = fields.Char(string='Item Name', required=True)
-    result = fields.Selection(MAINTENANCE_RESULT_SELECTION, string='Result', default='done', required=True)
+    result = fields.Selection(
+        MAINTENANCE_RESULT_SELECTION, string='Result', default='done', required=True)
     note = fields.Char(string='Note')

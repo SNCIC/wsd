@@ -60,7 +60,7 @@ class MesToolingUsageLog(models.Model):
     )
     tooling_code = fields.Char(
         string='Tooling Code',
-        related='tooling_id.name',
+        related='tooling_id.sn',
         store=True,
         readonly=True,
     )
@@ -181,13 +181,13 @@ class MesToolingUsageLog(models.Model):
 
         for tooling_sn in tooling_sns:
             tooling = self.env['sn.tooling'].search([
-                ('name', '=', tooling_sn),
+                ('sn', '=', tooling_sn),
                 ('company_id', '=', company.id),
             ], limit=1)
 
             if not tooling:
                 tooling = self.env['sn.tooling'].search([
-                    ('name', '=', tooling_sn),
+                    ('sn', '=', tooling_sn),
                 ], limit=1)
 
             if not tooling:
@@ -195,7 +195,7 @@ class MesToolingUsageLog(models.Model):
 
             tooling.write({
                 'total_usage_count': tooling.total_usage_count + 1,
-                'current_usage_count': tooling.current_usage_count + 1,
+                'cycle_usage_count': tooling.cycle_usage_count + 1,
             })
 
             log_vals = {

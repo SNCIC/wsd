@@ -1,26 +1,9 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-CONSUMABLE_TYPE_SELECTION = [
-    ('solder_paste', 'Solder Paste'),
-    ('red_glue', 'Red Glue'),
-    ('solder_wire', 'Solder Wire'),
-    ('solder_bar', 'Solder Bar'),
-    ('flux', 'Flux'),
-    ('conformal_coating', 'Conformal Coating'),
-]
-
-# Per-type thaw duration defaults (min minutes, max minutes) prefilled on the
-# template when the consumable type is selected; sourced from the legacy
-# system's type rule table.
-TYPE_THAW_DEFAULTS = {
-    'solder_paste': (0, 120),
-    'red_glue': (0, 133),
-}
-TYPE_THAW_FALLBACK = (0, 480)
-
 AUX_STATE_SELECTION = [
     ('normal', 'In Stock'),
+    ('issued', 'Issued'),
     ('thawing', 'Thawing'),
     ('ready', 'Ready'),
     ('in_use', 'In Use'),
@@ -30,6 +13,8 @@ AUX_STATE_SELECTION = [
 ]
 
 RECORD_ACTION_SELECTION = [
+    ('issue', 'Issue'),
+    ('return', 'Return'),
     ('thaw_start', 'Thaw Start'),
     ('thaw_end', 'Thaw End'),
     ('stir_start', 'Stir Start'),
@@ -51,6 +36,50 @@ EXPIRY_STATE_SELECTION = [
 TERMINAL_STATES = ('exhausted', 'scrapped')
 
 
+class SnConsumableType(models.Model):
+    _name = 'sn.consumable.type'
+    _description = 'Consumable Type'
+    _order = 'name, id'
+    _check_company_auto = True
+
+    name = fields.Char(string='Type Name', required=True)
+    active = fields.Boolean(default=True)
+    thaw_duration_min = fields.Integer(string='Thaw Duration Min (min)', default=0)
+    thaw_duration_max = fields.Integer(string='Thaw Duration Max (min)', default=0)
+    thaw_count_limit = fields.Integer(
+        string='Thaw Count Limit',
+        help='When exceeded the consumable must be scrapped.')
+    stir_control = fields.Boolean(string='Stir Control')
+    stir_duration_min = fields.Integer(string='Stir Duration Min (min)', default=0)
+    stir_duration_max = fields.Integer(string='Stir Duration Max (min)', default=0)
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        index=True,
+    )
+
+    _sn_consumable_type_name_unique = models.Constraint(
+        'unique(company_id, name)',
+        'The consumable type name must be unique per company.',
+    )
+
+    @api.constrains('thaw_duration_min', 'thaw_duration_max')
+    def _check_thaw_duration(self):
+        for consumable_type in self:
+            if consumable_type.thaw_duration_min and consumable_type.thaw_duration_max \
+                    and consumable_type.thaw_duration_min > consumable_type.thaw_duration_max:
+                raise ValidationError(_('Thaw duration min cannot be greater than thaw duration max.'))
+
+    @api.constrains('stir_duration_min', 'stir_duration_max')
+    def _check_stir_duration(self):
+        for consumable_type in self:
+            if consumable_type.stir_duration_min and consumable_type.stir_duration_max \
+                    and consumable_type.stir_duration_min > consumable_type.stir_duration_max:
+                raise ValidationError(_('Stir duration min cannot be greater than stir duration max.'))
+
+
 class SnConsumableTemplate(models.Model):
     _name = 'sn.consumable.template'
     _description = 'Consumable Template'
@@ -61,8 +90,15 @@ class SnConsumableTemplate(models.Model):
     code = fields.Char(string='Consumable Code', required=True, index=True, tracking=True)
     name = fields.Char(string='Consumable Name', required=True, tracking=True)
     spec = fields.Char(string='Consumable Spec')
-    consumable_type = fields.Selection(
-        CONSUMABLE_TYPE_SELECTION, string='Consumable Type', required=True, index=True, tracking=True)
+    type_id = fields.Many2one(
+        'sn.consumable.type',
+        string='Consumable Type',
+        required=True,
+        index=True,
+        ondelete='restrict',
+        check_company=True,
+        tracking=True,
+    )
     thaw_duration_min = fields.Integer(string='Thaw Duration Min (min)', default=0)
     thaw_duration_max = fields.Integer(string='Thaw Duration Max (min)', default=0)
     thaw_count_limit = fields.Integer(
@@ -108,12 +144,23 @@ class SnConsumableTemplate(models.Model):
         for template in self:
             template.info_count = len(template.info_ids)
 
-    @api.onchange('consumable_type')
-    def _onchange_consumable_type(self):
-        if self.consumable_type and not self.thaw_duration_min and not self.thaw_duration_max:
-            low, high = TYPE_THAW_DEFAULTS.get(self.consumable_type, TYPE_THAW_FALLBACK)
-            self.thaw_duration_min = low
-            self.thaw_duration_max = high
+    @api.onchange('type_id')
+    def _onchange_type_id(self):
+        # Prefill copies the type defaults only onto untouched fields, so
+        # re-selecting a type never overwrites values the user already set.
+        consumable_type = self.type_id
+        if not consumable_type:
+            return
+        if not self.thaw_duration_min and not self.thaw_duration_max:
+            self.thaw_duration_min = consumable_type.thaw_duration_min
+            self.thaw_duration_max = consumable_type.thaw_duration_max
+        if not self.thaw_count_limit:
+            self.thaw_count_limit = consumable_type.thaw_count_limit
+        if not self.stir_control:
+            self.stir_control = consumable_type.stir_control
+            if not self.stir_duration_min and not self.stir_duration_max:
+                self.stir_duration_min = consumable_type.stir_duration_min
+                self.stir_duration_max = consumable_type.stir_duration_max
 
     @api.constrains('thaw_duration_min', 'thaw_duration_max')
     def _check_thaw_duration(self):
@@ -140,14 +187,14 @@ class SnConsumableInfo(models.Model):
     sn = fields.Char(string='Consumable SN', required=True, index=True)
     template_id = fields.Many2one(
         'sn.consumable.template',
-        string='Consumable Template',
+        string='Consumable Code',
         required=True,
         ondelete='restrict',
         index=True,
         check_company=True,
     )
     template_code = fields.Char(related='template_id.code', store=True, index=True)
-    consumable_type = fields.Selection(related='template_id.consumable_type', store=True, index=True)
+    type_id = fields.Many2one(related='template_id.type_id', store=True, index=True)
     stir_control = fields.Boolean(related='template_id.stir_control')
     aux_state = fields.Selection(
         AUX_STATE_SELECTION, string='Status', default='normal', required=True, index=True)
@@ -161,6 +208,8 @@ class SnConsumableInfo(models.Model):
     weight_g = fields.Float(string='Weight (g)')
     location_id = fields.Many2one('stock.location', string='Location', check_company=True)
     thaw_count = fields.Integer(string='Thaw Count', default=0, copy=False)
+    issued_user_id = fields.Many2one('res.users', string='Issued By')
+    issued_date = fields.Datetime(string='Issued Date')
     thaw_start = fields.Datetime(string='Last Thaw Start', copy=False, readonly=True)
     thaw_end = fields.Datetime(string='Last Thaw End', copy=False, readonly=True)
     thaw_minutes = fields.Float(string='Thaw Minutes (last)', copy=False, readonly=True)
@@ -255,10 +304,35 @@ class SnConsumableInfo(models.Model):
     # Lifecycle
     # ------------------------------------------------------------------
 
-    def action_thaw_start(self):
+    def action_issue(self):
         for info in self:
             if info.aux_state != 'normal':
-                raise UserError(_('Only an in-stock consumable can start thawing.'))
+                raise UserError(_('Only an in-stock consumable can be issued.'))
+            info._ensure_not_expired()
+            info.write({
+                'aux_state': 'issued',
+                'issued_user_id': self.env.user.id,
+                'issued_date': fields.Datetime.now(),
+            })
+            info._record('issue')
+        return True
+
+    def action_return(self):
+        for info in self:
+            if info.aux_state != 'issued':
+                raise UserError(_('Only an issued consumable can be returned.'))
+            info.write({
+                'aux_state': 'normal',
+                'issued_user_id': False,
+                'issued_date': False,
+            })
+            info._record('return')
+        return True
+
+    def action_thaw_start(self):
+        for info in self:
+            if info.aux_state != 'issued':
+                raise UserError(_('Only an issued consumable can start thawing.'))
             info._ensure_not_expired()
             limit = info.template_id.thaw_count_limit
             if limit and info.thaw_count + 1 > limit:
@@ -344,7 +418,7 @@ class SnConsumableInfo(models.Model):
                 raise UserError(_('The consumable %s is not in use.', info.sn))
             last_load = Record.search(
                 [('info_id', '=', info.id), ('action', '=', 'load')], order='id desc', limit=1)
-            info.write({'aux_state': 'normal'})
+            info.write({'aux_state': 'issued'})
             info._record('unload', mes_order=last_load.mes_order_id)
         return True
 

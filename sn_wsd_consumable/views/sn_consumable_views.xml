@@ -10,7 +10,7 @@
                     <field name="code"/>
                     <field name="name"/>
                     <field name="spec" optional="hide"/>
-                    <field name="consumable_type"/>
+                    <field name="type_id"/>
                     <field name="thaw_duration_min" optional="hide"/>
                     <field name="thaw_duration_max" optional="hide"/>
                     <field name="thaw_count_limit" optional="hide"/>
@@ -32,7 +32,7 @@
                                 <field name="code"/>
                                 <field name="name"/>
                                 <field name="spec"/>
-                                <field name="consumable_type"/>
+                                <field name="type_id"/>
                                 <field name="company_id" groups="base.group_multi_company"/>
                             </group>
                             <group string="Control Rules">
@@ -73,7 +73,7 @@
                     <field name="name"/>
                     <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
                     <group>
-                        <filter name="group_by_type" string="Consumable Type" context="{'group_by': 'consumable_type'}"/>
+                        <filter name="group_by_type" string="Consumable Type" context="{'group_by': 'type_id'}"/>
                     </group>
                 </search>
             </field>
@@ -94,10 +94,10 @@
                 <list>
                     <field name="sn"/>
                     <field name="template_id"/>
-                    <field name="consumable_type" optional="show"/>
+                    <field name="type_id" optional="show"/>
                     <field name="aux_state" widget="badge"
                            decoration-success="aux_state in ('normal', 'ready', 'in_use')"
-                           decoration-info="aux_state == 'thawing'"
+                           decoration-info="aux_state in ('issued', 'thawing')"
                            decoration-muted="aux_state in ('disabled', 'exhausted', 'scrapped')"/>
                     <field name="production_date" optional="hide"/>
                     <field name="expiry_date"/>
@@ -106,6 +106,8 @@
                            decoration-warning="expiry_state == 'remind'"
                            decoration-danger="expiry_state == 'expired'"/>
                     <field name="thaw_count"/>
+                    <field name="issued_user_id" optional="show"/>
+                    <field name="issued_date" optional="hide"/>
                     <field name="supplier_id" optional="hide"/>
                     <field name="company_id" groups="base.group_multi_company"/>
                 </list>
@@ -118,8 +120,10 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
+                        <button name="action_issue" type="object" string="Issue"
+                                invisible="aux_state != 'normal'"/>
                         <button name="action_thaw_start" type="object" string="Thaw Start"
-                                invisible="aux_state != 'normal'"
+                                invisible="aux_state != 'issued'"
                                 confirm="Thawing counts one thaw cycle. Continue?"/>
                         <button name="action_thaw_end" type="object" string="Thaw End"
                                 invisible="aux_state != 'thawing'"/>
@@ -131,6 +135,8 @@
                                 invisible="aux_state != 'ready'"/>
                         <button name="action_unload" type="object" string="Unload"
                                 invisible="aux_state != 'in_use'"/>
+                        <button name="action_return" type="object" string="Return"
+                                invisible="aux_state != 'issued'"/>
                         <button name="action_exhaust" type="object" string="Exhaust"
                                 invisible="aux_state in ('exhausted', 'scrapped')"
                                 confirm="Mark this consumable as exhausted?"/>
@@ -141,7 +147,7 @@
                                 confirm="Disable this consumable?"/>
                         <button name="action_enable" type="object" string="Enable"
                                 invisible="aux_state != 'disabled'"/>
-                        <field name="aux_state" widget="statusbar" statusbar_visible="normal,thawing,ready,in_use"/>
+                        <field name="aux_state" widget="statusbar" statusbar_visible="normal,issued,thawing,ready,in_use"/>
                     </header>
                     <sheet>
                         <group>
@@ -173,6 +179,12 @@
                                 <field name="stir_minutes"/>
                             </group>
                         </group>
+                        <group string="Issue Info">
+                            <group>
+                                <field name="issued_user_id"/>
+                                <field name="issued_date"/>
+                            </group>
+                        </group>
                         <notebook>
                             <page string="History">
                                 <field name="record_ids" readonly="1">
@@ -202,6 +214,7 @@
                     <field name="template_id"/>
                     <field name="supplier_id"/>
                     <filter name="filter_normal" string="In Stock" domain="[('aux_state', '=', 'normal')]"/>
+                    <filter name="filter_issued" string="Issued" domain="[('aux_state', '=', 'issued')]"/>
                     <filter name="filter_thawing" string="Thawing" domain="[('aux_state', '=', 'thawing')]"/>
                     <filter name="filter_ready" string="Ready" domain="[('aux_state', '=', 'ready')]"/>
                     <filter name="filter_in_use" string="In Use" domain="[('aux_state', '=', 'in_use')]"/>
@@ -212,7 +225,7 @@
                     <group>
                         <filter name="group_by_state" string="Status" context="{'group_by': 'aux_state'}"/>
                         <filter name="group_by_template" string="Consumable Template" context="{'group_by': 'template_id'}"/>
-                        <filter name="group_by_type" string="Consumable Type" context="{'group_by': 'consumable_type'}"/>
+                        <filter name="group_by_type" string="Consumable Type" context="{'group_by': 'type_id'}"/>
                     </group>
                 </search>
             </field>
@@ -320,11 +333,79 @@
             <field name="target">new</field>
         </record>
 
+        <!-- Consumable type -->
+        <record id="view_sn_consumable_type_list" model="ir.ui.view">
+            <field name="name">sn.consumable.type.list</field>
+            <field name="model">sn.consumable.type</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="thaw_duration_min" optional="hide"/>
+                    <field name="thaw_duration_max" optional="hide"/>
+                    <field name="thaw_count_limit" optional="hide"/>
+                    <field name="stir_control" optional="show"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_type_form" model="ir.ui.view">
+            <field name="name">sn.consumable.type.form</field>
+            <field name="model">sn.consumable.type</field>
+            <field name="arch" type="xml">
+                <form string="Consumable Type">
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="thaw_duration_min"/>
+                                <field name="thaw_duration_max"/>
+                                <field name="thaw_count_limit"/>
+                            </group>
+                            <group>
+                                <field name="stir_control"/>
+                                <field name="stir_duration_min" invisible="not stir_control"/>
+                                <field name="stir_duration_max" invisible="not stir_control"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sn_consumable_type_search" model="ir.ui.view">
+            <field name="name">sn.consumable.type.search</field>
+            <field name="model">sn.consumable.type</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sn_consumable_type" model="ir.actions.act_window">
+            <field name="name">Consumable Types</field>
+            <field name="res_model">sn.consumable.type</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
         <!-- Menus -->
         <menuitem id="menu_sn_consumable_root"
                   name="Consumables"
                   parent="mrp.menu_mrp_root"
                   sequence="45"/>
+
+        <menuitem id="menu_sn_consumable_type"
+                  name="Consumable Types"
+                  parent="menu_sn_consumable_root"
+                  action="action_sn_consumable_type"
+                  sequence="5"
+                  groups="mrp.group_mrp_manager"/>
 
         <menuitem id="menu_sn_consumable_template"
                   name="Consumable Templates"
