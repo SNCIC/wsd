@@ -3,9 +3,10 @@
     'version': '19.0.2.4.0',
     'summary': 'Shop floor station terminal for WSD MES orders',
     'category': 'Manufacturing',
-    'depends': ['sn_wsd_mrp', 'barcodes'],
+    'depends': ['sn_wsd_mrp', 'barcodes', 'sn_wsd_device'],
     'data': [
         'security/security_groups.xml',
+        'security/ir.model.access.csv',
         'views/mrp_workcenter_views.xml',
         'views/mrp_production_views.xml',
         'views/menu_views.xml',

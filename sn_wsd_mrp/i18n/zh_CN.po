@@ -780,9 +780,9 @@ msgstr "制令单 %(name)s 未上线。"
 #. odoo-python
 #: code:sn_wsd_mrp/models/mes_order.py:0
 msgid ""
-"MES order %(name)s still has %(count)s board(s) in progress; let them leave "
-"their stations before going offline."
-msgstr "制令单 %(name)s 还有 %(count)s 块板在制；请先让它们出站再下线。"
+"MES order %(name)s is offline: new SNs cannot be fed in. Boards already in "
+"progress keep flowing until they leave the end operation."
+msgstr "制令单 %(name)s 已下线：无法投入新 SN。已投入的板会继续流转至结束工序产出。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__date_start model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp

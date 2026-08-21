@@ -392,27 +392,19 @@ class MesOrder(models.Model):
                 {'mes_order_id': order.id, 'action': 'online'})
 
     def action_offline(self):
-        """Take the order offline: SN feeding stops from this moment on.
-
-        Blocked while boards are still in progress on this order -- going
-        offline hides the order from the stations, and in-progress boards
-        would lose their exit station. A log line keeps who/when."""
-        Wip = self.env['sn.wsd.serial.wip']
+        """Take the order offline: feeding NEW SNs at start operations
+        stops from this moment on. Boards already in progress stay bound
+        to this order and keep flowing until they leave the end operation
+        (产出不需要在线); a log line keeps who/when."""
         for order in self:
             if not order.x_online_date:
                 raise ValidationError(_(
                     'MES order %(name)s is not online.', name=order.name))
-            wip_sn = Wip.search_count([('mes_order_id', '=', order.id)])
-            if wip_sn:
-                raise ValidationError(_(
-                    'MES order %(name)s still has %(count)s board(s) in '
-                    'progress; let them leave their stations before going '
-                    'offline.', name=order.name, count=wip_sn))
             order.x_online_date = False
             self.env['sn.wsd.mes.order.log'].create(
                 {'mes_order_id': order.id, 'action': 'offline'})
 
-    @api.depends('x_online_date')
+
     def _compute_x_online_by(self):
         # the log is ordered date desc: the first online line is the latest
         Log = self.env['sn.wsd.mes.order.log']
@@ -482,9 +474,9 @@ class MesOrder(models.Model):
 
         station mode: pass the SN; report mode: omit it."""
         self.ensure_one()
-        if not self.x_online_date:
-            raise ValidationError(_(
-                'MES order %(name)s is not online yet.', name=self.name))
+        # no online gate here: going online only gates *feeding* new SNs at
+        # start operations -- boards already fed keep flowing (and reporting
+        # keeps running) after the order goes offline
         ops = self.x_mes_route_id.operation_ids
         return ops._reachable_operations(self, serial_identity)
 
@@ -576,9 +568,13 @@ class MesOrder(models.Model):
             raise ValidationError(_(
                 'MES order %(name)s is managed by operation reporting; SN '
                 'station tracking is not available.', name=self.name))
-        if not self.x_online_date:
+        if route_operation.x_allow_entry and not self.x_online_date:
+            # feeding a new SN into a start operation requires the order to
+            # be online; boards already in flow keep moving between stations
             raise ValidationError(_(
-                'MES order %(name)s is not online yet.', name=self.name))
+                'MES order %(name)s is offline: new SNs cannot be fed in. '
+                'Boards already in progress keep flowing until they leave '
+                'the end operation.', name=self.name))
         Wip = self.env['sn.wsd.serial.wip']
         current = Wip.search([('serial_identity_id', '=', serial_identity.id)], limit=1)
         if current:

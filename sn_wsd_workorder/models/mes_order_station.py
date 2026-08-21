@@ -50,7 +50,9 @@ class MesOrderStationServices(models.Model):
         operation = workcenter.x_operation_id
         order_domain = [
             ('state', 'not in', ('cancelled', 'done')),
-            ('x_online_date', '!=', False),
+            # offline orders stay listed: their in-progress boards must keep
+            # flowing to the end operation; only feeding is gated (offline
+            # orders reject new SNs inside scan_enter)
             ('x_mes_route_id.operation_ids.operation_id', '=', operation.id),
         ]
         # a line-bound work center serves exactly its own line's order
