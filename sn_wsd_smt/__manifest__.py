@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD SMT',
-    'version': '19.0.3.2.2',
+    'version': '19.0.3.4.0',
     'summary': 'SMT material table and online loading management',
     'depends': ['mrp', 'sn_wsd_mrp', 'web'],
     'data': [
@@ -20,7 +20,13 @@
         'views/internal_serial_views.xml',
         'views/stock_lot_views.xml',
         'views/menu_views.xml',
+        'views/sn_smt_feeder_care_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_smt/static/src/feeder_care/**/*',
+        ],
+    },
     'installable': True,
     'application': False,
     'author': 'SNCIC',

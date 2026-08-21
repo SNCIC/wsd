@@ -727,3 +727,54 @@ msgstr "SN 已判 OK 出站。"
 msgid "More WIP hidden — scanning still works"
 msgstr "更多在制未显示（扫码操作不受影响）"
 
+#. module: sn_wsd_workorder
+#: model:ir.model,name:sn_wsd_workorder.model_sn_wsd_workcenter_equipment
+msgid "Work Center Equipment"
+msgstr "工作中心设备"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__sequence
+msgid "Sequence"
+msgstr "顺序"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_workorder
+#: model_terms:ir.ui.view,arch_db:sn_wsd_workorder.view_mrp_workcenter_form_sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_mrp_workcenter__sn_equipment_ids
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__equipment_code
+msgid "Equipment Code"
+msgstr "设备编号"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__equipment_name
+msgid "Equipment Name"
+msgstr "设备名称"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,field_description:sn_wsd_workorder.field_sn_wsd_workcenter_equipment__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_workorder
+#: model:ir.model.fields,help:sn_wsd_workorder.field_mrp_workcenter__sn_equipment_ids
+msgid ""
+"Equipment assigned to this work center; the hand-typed sequence gives the "
+"process order of the machines."
+msgstr "分配给该工作中心的设备；手工录入的顺序表示机器的工艺顺序。"
+
+#. module: sn_wsd_workorder
+#: code:addons/sn_wsd_workorder/models/workcenter_equipment.py:0
+msgid ""
+"Equipment %(equipment)s is already assigned to work center "
+"%(workcenter)s. Remove it there first."
+msgstr "设备 %(equipment)s 已分配给工作中心 %(workcenter)s，请先在那里移除。"
+

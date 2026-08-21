@@ -97,7 +97,7 @@ class SnSmtXlWizard(models.TransientModel):
             if not self.cart_input:
                 raise UserError(_('The input value is empty.'))
             cart = self.env['sn.smt.cart'].search([
-                ('name', '=', self.cart_input),
+                ('cart_sn', '=', self.cart_input),
                 ('company_id', '=', self.production_id.company_id.id),
             ], limit=1)
             if not cart:

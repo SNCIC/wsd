@@ -9,6 +9,18 @@
             <xpath expr="//field[@name='costs_hour']" position="after">
                 <field name="sn_shop_floor_enabled"/>
             </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Equipment" name="sn_equipment">
+                    <field name="sn_equipment_ids">
+                        <list editable="bottom">
+                            <field name="sequence"/>
+                            <field name="equipment_id"/>
+                            <field name="equipment_code"/>
+                            <field name="equipment_name"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
         </field>
     </record>
 

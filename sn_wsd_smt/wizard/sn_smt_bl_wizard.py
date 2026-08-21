@@ -73,16 +73,16 @@ class SnSmtBlWizard(models.TransientModel):
             self.feeder_id = False
             return self.env['sn.smt.feeder']
         feeder = self.env['sn.smt.feeder'].search([
-            ('name', '=', self.feeder_input),
+            ('feeder_sn', '=', self.feeder_input),
             ('company_id', '=', self.production_id.company_id.id),
         ], limit=1)
         if not feeder:
             raise UserError(_('The feeder SN does not exist.'))
-        if feeder.status not in ('1', '2'):
+        if feeder.status not in ('normal', 'in_use'):
             raise UserError(_('The feeder status is invalid.'))
         if not feeder.maintenance_ok:
             raise UserError(_('The feeder is not available for use because maintenance is not valid.'))
-        if online_material.chanel_sn and feeder.channel_sn and feeder.channel_sn != online_material.chanel_sn:
+        if online_material.chanel_sn and feeder.channel_ids and online_material.chanel_sn not in feeder.channel_ids.mapped('channel_sn'):
             raise UserError(_('The feeder channel does not match the SMT position channel.'))
         self._check_feeder_mes_order_scope(feeder, self.production_id)
         self.feeder_id = feeder
@@ -94,12 +94,12 @@ class SnSmtBlWizard(models.TransientModel):
             self.cart_id = False
             return self.env['sn.smt.cart']
         cart = self.env['sn.smt.cart'].search([
-            ('name', '=', self.cart_input),
+            ('cart_sn', '=', self.cart_input),
             ('company_id', '=', self.production_id.company_id.id),
         ], limit=1)
         if not cart:
             cart = self.env['sn.smt.cart'].create({
-                'name': self.cart_input,
+                'cart_sn': self.cart_input,
                 'company_id': self.production_id.company_id.id,
             })
         self.cart_id = cart
@@ -151,9 +151,9 @@ class SnSmtBlWizard(models.TransientModel):
             'action_type': '5',
         })
         if feeder:
-            feeder.write({'status': '2', 'bound_production_id': self.production_id.id})
+            feeder.write({'status': 'in_use', 'bound_production_id': self.production_id.id})
         if cart:
-            cart.status = '1'
+            cart.status = 'loaded'
         self._create_operation_bundle(
             self.production_id,
             online_material=online_material,

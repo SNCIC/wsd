@@ -98,7 +98,7 @@ class SnSmtZcWizard(models.TransientModel):
             })
             if target_line.loaded_feeder_id:
                 target_line.loaded_feeder_id.write({
-                    'status': '2',
+                    'status': 'in_use',
                     'bound_production_id': self.target_production_id.id,
                 })
             self._create_operation_bundle(

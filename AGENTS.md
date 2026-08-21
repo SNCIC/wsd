@@ -3,8 +3,12 @@
 本文件是 ZCode（以及所有贡献者）在本仓库开发 `sn_wsd_*` / `muk_web_*` 模块时必须遵守的规则。
 
 ## 注意
-**1.注意多公司，在处理任何业务时，首先考虑到多公司**
-**2.不允许考虑降级处理，现在是开发阶段，如果有问题处理老旧数据，也不能为了老旧数据给逻辑变更**
+
+**1.多公司是 Odoo 默认行为，无需额外开发；但自定义模型必须遵守：① 加 `company_id` 字段（含 default）；② 唯一约束带 `company_id`（如 `unique(company_id, sn)`）；③ 跨公司关联字段加 `check_company=True`。**
+**2.不允许考虑降级处理，现在是开发阶段，如果有问题处理老旧数据，也不能为了老旧数据给逻辑变更.**
+**3.skill odoo-19  作为开发手册，指导odoo开发**
+**4.所有确定的决策和文档都统一放在路径 `D:\workspace\odoo\odoo-19.0\wsd-doc`下。**
+
 
 ## 仓库与运行环境
 
@@ -12,13 +16,13 @@
 - 运行环境：Odoo 19，Python 3.12（`D:\ProgramDatas\Anaconda\envs\odoo19\python.exe`）。
 - 两套并行环境，共用同一 PostgreSQL（localhost:5432，用户 `odoo19`）：
 
-| | 企业版（现状） | 社区版（开发目标） |
-|---|---|---|
-| 源码 | `D:\odoo19e20250921-f`（企业模块混在 `odoo\addons` 内） | `D:\odoo19-community`（junction/hardlink 镜像，仅 659 个社区模块） |
-| conf | `D:\wsd\odoo.local.conf` | `D:\wsd\odoo.community.conf` |
-| 端口 | 8069 | 8070 |
-| 数据库 | `mes` | `mes_community`（28 个 wsd/muk 模块全部可装，0 企业模块） |
-| 日志 | `D:\wsd\odoo-server.log` | `D:\wsd\odoo-community-server.log` |
+|        | 企业版（现状）                                              | 社区版（开发目标）                                                   |
+| ------ | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| 源码   | `D:\odoo19e20250921-f`（企业模块混在 `odoo\addons` 内） | `D:\odoo19-community`（junction/hardlink 镜像，仅 659 个社区模块） |
+| conf   | `D:\wsd\odoo.local.conf`                                  | `D:\wsd\odoo.community.conf`                                       |
+| 端口   | 8069                                                        | 8070                                                                 |
+| 数据库 | `mes`                                                     | `mes_community`（28 个 wsd/muk 模块全部可装，0 企业模块）          |
+| 日志   | `D:\wsd\odoo-server.log`                                  | `D:\wsd\odoo-community-server.log`                                 |
 
 - **企业版启动** `D:\ProgramDatas\Anaconda\envs\odoo19\python.exe D:\odoo19e20250921-f\odoo-bin -c D:\wsd\odoo.local.conf -d mes`
 - **社区版启动** `D:\ProgramDatas\Anaconda\envs\odoo19\python.exe D:\odoo19-community\odoo-bin -c D:\wsd\odoo.community.conf`（访问 http://localhost:8070）
@@ -53,6 +57,7 @@
 5. **菜单** —— `<menuitem name="Shop Floor"/>` ✅ ／ `name="车间"` ❌。
 6. **Data / 记录规则 / 模板** —— `ir.rule` 的 name、邮件模板 subject/body、报表标题等英文。
 7. **JS / OWL / QWeb 模板** —— 前端显示文本英文，走 `_t()` / `_()` 翻译。
+8. **po 引用行格式**：字段标签用 `model:ir.model.fields,field_description:模块.字段；` **视图/菜单等结构化翻译必须用** `model_terms`: 前缀（如 model_terms:ir.ui.view,arch_db:模块.视图id），写成 model: 会被静默丢弃且无报错。新增视图后优先用 Odoo 导出翻译（设置→翻译→导出）生成引用行，不要手写。
 
 ### 允许中文的位置
 

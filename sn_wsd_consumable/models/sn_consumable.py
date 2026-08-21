@@ -1,510 +1,442 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
-
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 CONSUMABLE_TYPE_SELECTION = [
     ('solder_paste', 'Solder Paste'),
     ('red_glue', 'Red Glue'),
+    ('solder_wire', 'Solder Wire'),
+    ('solder_bar', 'Solder Bar'),
     ('flux', 'Flux'),
     ('conformal_coating', 'Conformal Coating'),
-    ('solder_bar', 'Solder Bar'),
-    ('solder_wire', 'Solder Wire'),
 ]
 
+# Per-type thaw duration defaults (min minutes, max minutes) prefilled on the
+# template when the consumable type is selected; sourced from the legacy
+# system's type rule table.
+TYPE_THAW_DEFAULTS = {
+    'solder_paste': (0, 120),
+    'red_glue': (0, 133),
+}
+TYPE_THAW_FALLBACK = (0, 480)
 
-class SnConsumableBarcodeRule(models.Model):
-    _name = 'sn.consumable.barcode.rule'
-    _description = 'Consumable Barcode Rule'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'name'
-    _check_company_auto = True
+AUX_STATE_SELECTION = [
+    ('normal', 'In Stock'),
+    ('thawing', 'Thawing'),
+    ('ready', 'Ready'),
+    ('in_use', 'In Use'),
+    ('disabled', 'Disabled'),
+    ('exhausted', 'Exhausted'),
+    ('scrapped', 'Scrapped'),
+]
 
-    name = fields.Char(string='Rule Name', required=True, tracking=True)
-    code = fields.Char(string='Rule Code', required=True, tracking=True)
-    active = fields.Boolean(default=True)
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        default=lambda self: self.env.company,
-        required=True,
-    )
-    prefix = fields.Char(string='Prefix', tracking=True)
-    date_token = fields.Selection(
-        [
-            ('none', 'No Date'),
-            ('yymmdd', 'YYMMDD'),
-            ('yyyymmdd', 'YYYYMMDD'),
-            ('ym', 'YYMM'),
-            ('yyyymm', 'YYYYMM'),
-        ],
-        string='Date Segment',
-        default='yyyymmdd',
-        required=True,
-    )
-    sequence_padding = fields.Integer(string='Sequence Padding', default=4, required=True)
-    sequence_id = fields.Many2one(
-        'ir.sequence',
-        string='Sequence',
-        readonly=True,
-        copy=False,
-    )
-    note = fields.Text(string='Description')
+RECORD_ACTION_SELECTION = [
+    ('thaw_start', 'Thaw Start'),
+    ('thaw_end', 'Thaw End'),
+    ('stir_start', 'Stir Start'),
+    ('stir_end', 'Stir End'),
+    ('load', 'Load'),
+    ('unload', 'Unload'),
+    ('exhaust', 'Exhaust'),
+    ('scrap', 'Scrap'),
+    ('disable', 'Disable'),
+    ('enable', 'Enable'),
+]
 
-    _code_company_uniq = models.Constraint(
-        'unique(code, company_id)',
-        'Barcode rule code must be unique per company.',
-    )
+EXPIRY_STATE_SELECTION = [
+    ('ok', 'Valid'),
+    ('remind', 'Expiring Soon'),
+    ('expired', 'Expired'),
+]
 
-    @api.constrains('sequence_padding')
-    def _check_sequence_padding(self):
-        for record in self:
-            if record.sequence_padding <= 0:
-                raise ValidationError(_('Sequence padding must be greater than zero.'))
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        records._ensure_sequence()
-        return records
-
-    def write(self, vals):
-        result = super().write(vals)
-        self._ensure_sequence()
-        sequence_values = {}
-        if 'prefix' in vals or 'date_token' in vals:
-            sequence_values['prefix'] = self._build_sequence_prefix()
-        if 'sequence_padding' in vals:
-            sequence_values['padding'] = self.sequence_padding
-        if sequence_values:
-            for record in self.filtered('sequence_id'):
-                record.sequence_id.write({
-                    'prefix': record._build_sequence_prefix(),
-                    'padding': record.sequence_padding,
-                })
-        return result
-
-    def _ensure_sequence(self):
-        sequence_model = self.env['ir.sequence']
-        for record in self.filtered(lambda item: not item.sequence_id):
-            record.sequence_id = sequence_model.create({
-                'name': f'{record.name} Sequence',
-                'code': f'sn.consumable.barcode.rule.{record.id}',
-                'implementation': 'no_gap',
-                'prefix': record._build_sequence_prefix(),
-                'padding': record.sequence_padding,
-                'company_id': record.company_id.id,
-            })
-
-    def _build_sequence_prefix(self):
-        self.ensure_one()
-        token_map = {
-            'none': '',
-            'yymmdd': '%(y)s%(month)s%(day)s',
-            'yyyymmdd': '%(year)s%(month)s%(day)s',
-            'ym': '%(y)s%(month)s',
-            'yyyymm': '%(year)s%(month)s',
-        }
-        return f'{self.prefix or ""}{token_map[self.date_token]}'
-
-    def generate_barcode(self):
-        self.ensure_one()
-        self._ensure_sequence()
-        return self.sequence_id.next_by_id()
+TERMINAL_STATES = ('exhausted', 'scrapped')
 
 
 class SnConsumableTemplate(models.Model):
     _name = 'sn.consumable.template'
-    _description = 'Consumable Control Template'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'consumable_code, id'
-    _rec_name = 'display_name'
+    _description = 'Consumable Template'
+    _inherit = ['mail.thread']
+    _order = 'code, id'
     _check_company_auto = True
 
+    code = fields.Char(string='Consumable Code', required=True, index=True, tracking=True)
+    name = fields.Char(string='Consumable Name', required=True, tracking=True)
+    spec = fields.Char(string='Consumable Spec')
+    consumable_type = fields.Selection(
+        CONSUMABLE_TYPE_SELECTION, string='Consumable Type', required=True, index=True, tracking=True)
+    thaw_duration_min = fields.Integer(string='Thaw Duration Min (min)', default=0)
+    thaw_duration_max = fields.Integer(string='Thaw Duration Max (min)', default=0)
+    thaw_count_limit = fields.Integer(
+        string='Thaw Count Limit',
+        help='When exceeded the consumable must be scrapped.')
+    stir_control = fields.Boolean(string='Stir Control')
+    stir_duration_min = fields.Integer(string='Stir Duration Min (min)', default=0)
+    stir_duration_max = fields.Integer(string='Stir Duration Max (min)', default=0)
+    shelf_life_days = fields.Integer(string='Shelf Life (days)', required=True)
+    expiry_remind_days = fields.Integer(string='Expiry Remind (days)', required=True)
     active = fields.Boolean(default=True)
+    info_ids = fields.One2many('sn.consumable.info', 'template_id', string='Consumable Info')
+    info_count = fields.Integer(compute='_compute_info_count')
     company_id = fields.Many2one(
         'res.company',
         string='Company',
+        required=True,
         default=lambda self: self.env.company,
-        required=True,
-    )
-    product_tmpl_id = fields.Many2one(
-        'product.template',
-        string='Product',
-        required=True,
-        check_company=True,
-        tracking=True,
-        domain="[('active', '=', True), ('type', '=', 'consu')]",
-    )
-    product_id = fields.Many2one(
-        'product.product',
-        string='Product Variant',
-        related='product_tmpl_id.product_variant_id',
-        store=True,
-        readonly=True,
-    )
-    consumable_code = fields.Char(string='Consumable Code', required=True, tracking=True)
-    consumable_type = fields.Selection(
-        CONSUMABLE_TYPE_SELECTION,
-        string='Consumable Type',
-        required=True,
-        tracking=True,
-    )
-    consumable_name = fields.Char(string='Consumable Name', tracking=True)
-    safety_stock = fields.Float(string='Safety Stock', required=True, default=0.0, tracking=True)
-    barcode_rule_id = fields.Many2one(
-        'sn.consumable.barcode.rule',
-        string='Barcode Rule',
-        required=True,
-        check_company=True,
-        tracking=True,
-    )
-    specification = fields.Char(string='Specification')
-    safety_stock_uom_id = fields.Many2one(
-        'uom.uom',
-        string='Safety Stock Unit',
-        required=True,
-    )
-    vendor_id = fields.Many2one(
-        'res.partner',
-        string='Vendor',
-        check_company=True,
-        tracking=True,
-    )
-    paste_red_glue_control = fields.Selection(
-        [
-            ('none', 'No Check'),
-            ('full', 'Check Warm-up, Stirring, Adhesion Test, Opening, and Shelf Life'),
-        ],
-        string='Solder Paste and Red Glue Control',
-        default='none',
-        required=True,
-    )
-    expiry_control = fields.Selection(
-        [
-            ('none', 'No Check'),
-            ('check', 'Check Shelf Life'),
-        ],
-        string='Shelf Life Control',
-        default='check',
-        required=True,
-    )
-    batch_control = fields.Selection(
-        [
-            ('none', 'No Check'),
-            ('check', 'Check Batch'),
-        ],
-        string='Batch Control',
-        default='check',
-        required=True,
-    )
-    warmup_duration_min = fields.Integer(string='Minimum Warm-up Duration (min)')
-    warmup_duration_max = fields.Integer(string='Maximum Warm-up Duration (min)', required=True)
-    stirring_duration_min = fields.Integer(string='Minimum Stirring Duration (min)')
-    stirring_duration_max = fields.Integer(string='Maximum Stirring Duration (min)')
-    shelf_life_days = fields.Integer(string='Shelf Life (Days)', required=True)
-    expiry_reminder_days = fields.Integer(string='Expiry Reminder Days', required=True)
-    max_warmup_count = fields.Integer(string='Warm-up Count')
-    stirring_control = fields.Boolean(string='Stirring Control')
-    adhesion_control = fields.Boolean(string='Adhesion Control')
-    info_ids = fields.One2many(
-        'sn.consumable.info',
-        'template_id',
-        string='Consumable Info',
-    )
-    info_count = fields.Integer(
-        string='Consumable Quantity',
-        compute='_compute_info_count',
-    )
-    display_name = fields.Char(
-        string='Display Name',
-        compute='_compute_display_name',
+        index=True,
     )
 
-    _product_type_company_uniq = models.Constraint(
-        'unique(product_tmpl_id, consumable_type, company_id)',
-        'Only one consumable template is allowed for the same product and consumable type in a company.',
+    _sn_consumable_code_unique = models.Constraint(
+        'unique(company_id, code)',
+        'The consumable code must be unique per company.',
     )
 
-    @api.depends('consumable_code', 'consumable_name')
+    @api.depends('code', 'name')
     def _compute_display_name(self):
-        for record in self:
-            record.display_name = ' - '.join(
-                item for item in [record.consumable_code, record.consumable_name] if item
-            )
+        for template in self:
+            template.display_name = ' - '.join(
+                part for part in (template.code, template.name) if part)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
 
     @api.depends('info_ids')
     def _compute_info_count(self):
-        for record in self:
-            record.info_count = len(record.info_ids)
+        for template in self:
+            template.info_count = len(template.info_ids)
 
-    @api.onchange('product_tmpl_id')
-    def _onchange_product_tmpl_id(self):
-        for record in self:
-            product = record.product_tmpl_id
-            if not product:
-                continue
-            record.consumable_code = product.default_code or False
-            record.consumable_name = product.name or False
-            if not record.safety_stock_uom_id:
-                record.safety_stock_uom_id = product.uom_id
-            if not record.vendor_id and product.seller_ids:
-                record.vendor_id = product.seller_ids[:1].partner_id
+    @api.onchange('consumable_type')
+    def _onchange_consumable_type(self):
+        if self.consumable_type and not self.thaw_duration_min and not self.thaw_duration_max:
+            low, high = TYPE_THAW_DEFAULTS.get(self.consumable_type, TYPE_THAW_FALLBACK)
+            self.thaw_duration_min = low
+            self.thaw_duration_max = high
 
-    @api.constrains(
-        'safety_stock',
-        'warmup_duration_min',
-        'warmup_duration_max',
-        'stirring_duration_min',
-        'stirring_duration_max',
-        'shelf_life_days',
-        'expiry_reminder_days',
-        'max_warmup_count',
-    )
-    def _check_numeric_values(self):
-        for record in self:
-            numeric_values = {
-                _('Safety stock'): record.safety_stock,
-                _('Warm-up duration min'): record.warmup_duration_min,
-                _('Warm-up duration max'): record.warmup_duration_max,
-                _('Stirring duration min'): record.stirring_duration_min,
-                _('Stirring duration max'): record.stirring_duration_max,
-                _('Shelf life days'): record.shelf_life_days,
-                _('Expiry reminder days'): record.expiry_reminder_days,
-                _('Max warm-up count'): record.max_warmup_count,
-            }
-            for label, value in numeric_values.items():
-                if value and value < 0:
-                    raise ValidationError(_('%s cannot be negative.', label))
-            if record.warmup_duration_min and record.warmup_duration_max and record.warmup_duration_min > record.warmup_duration_max:
-                raise ValidationError(_('Warm-up duration min cannot be greater than warm-up duration max.'))
-            if record.stirring_duration_min and record.stirring_duration_max and record.stirring_duration_min > record.stirring_duration_max:
-                raise ValidationError(_('Stirring duration min cannot be greater than stirring duration max.'))
+    @api.constrains('thaw_duration_min', 'thaw_duration_max')
+    def _check_thaw_duration(self):
+        for template in self:
+            if template.thaw_duration_min and template.thaw_duration_max \
+                    and template.thaw_duration_min > template.thaw_duration_max:
+                raise ValidationError(_('Thaw duration min cannot be greater than thaw duration max.'))
 
-    def action_view_infos(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Consumable Info'),
-            'res_model': 'sn.consumable.info',
-            'view_mode': 'list,form',
-            'domain': [('template_id', '=', self.id)],
-            'context': {'default_template_id': self.id},
-        }
+    @api.constrains('stir_duration_min', 'stir_duration_max')
+    def _check_stir_duration(self):
+        for template in self:
+            if template.stir_duration_min and template.stir_duration_max \
+                    and template.stir_duration_min > template.stir_duration_max:
+                raise ValidationError(_('Stir duration min cannot be greater than stir duration max.'))
 
 
 class SnConsumableInfo(models.Model):
     _name = 'sn.consumable.info'
     _description = 'Consumable Info'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'create_date desc, id desc'
-    _rec_name = 'name'
+    _order = 'sn, id'
+    _rec_name = 'sn'
     _check_company_auto = True
 
-    name = fields.Char(string='Consumable SN', required=True, copy=False, default=lambda self: _('New'), tracking=True)
-    active = fields.Boolean(default=True)
+    sn = fields.Char(string='Consumable SN', required=True, index=True)
+    template_id = fields.Many2one(
+        'sn.consumable.template',
+        string='Consumable Template',
+        required=True,
+        ondelete='restrict',
+        index=True,
+        check_company=True,
+    )
+    template_code = fields.Char(related='template_id.code', store=True, index=True)
+    consumable_type = fields.Selection(related='template_id.consumable_type', store=True, index=True)
+    stir_control = fields.Boolean(related='template_id.stir_control')
+    aux_state = fields.Selection(
+        AUX_STATE_SELECTION, string='Status', default='normal', required=True, index=True)
+    production_date = fields.Date(string='Production Date')
+    expiry_date = fields.Date(
+        string='Expiry Date', compute='_compute_expiry_date', store=True, index=True)
+    expiry_state = fields.Selection(
+        EXPIRY_STATE_SELECTION, string='Expiry State', compute='_compute_expiry_state')
+    supplier_id = fields.Many2one('res.partner', string='Supplier', check_company=True)
+    purchase_ref = fields.Char(string='Purchase Order')
+    weight_g = fields.Float(string='Weight (g)')
+    location_id = fields.Many2one('stock.location', string='Location', check_company=True)
+    thaw_count = fields.Integer(string='Thaw Count', default=0, copy=False)
+    thaw_start = fields.Datetime(string='Last Thaw Start', copy=False, readonly=True)
+    thaw_end = fields.Datetime(string='Last Thaw End', copy=False, readonly=True)
+    thaw_minutes = fields.Float(string='Thaw Minutes (last)', copy=False, readonly=True)
+    stir_start = fields.Datetime(string='Last Stir Start', copy=False, readonly=True)
+    stir_end = fields.Datetime(string='Last Stir End', copy=False, readonly=True)
+    stir_minutes = fields.Float(string='Stir Minutes (last)', copy=False, readonly=True)
+    record_ids = fields.One2many('sn.consumable.record', 'info_id', string='History')
+    record_count = fields.Integer(compute='_compute_record_count')
     company_id = fields.Many2one(
         'res.company',
         string='Company',
-        default=lambda self: self.env.company,
         required=True,
+        default=lambda self: self.env.company,
+        index=True,
+    )
+
+    _sn_consumable_sn_unique = models.Constraint(
+        'unique(company_id, sn)',
+        'The consumable SN must be unique per company.',
+    )
+
+    @api.depends('production_date', 'template_id.shelf_life_days')
+    def _compute_expiry_date(self):
+        for info in self:
+            if info.production_date and info.template_id.shelf_life_days:
+                info.expiry_date = fields.Date.add(
+                    info.production_date, days=info.template_id.shelf_life_days)
+            else:
+                info.expiry_date = False
+
+    @api.depends('expiry_date', 'template_id.expiry_remind_days', 'aux_state')
+    def _compute_expiry_state(self):
+        today = fields.Date.context_today(self)
+        for info in self:
+            if info.aux_state in TERMINAL_STATES:
+                # An exhausted/scrapped consumable has no meaningful expiry.
+                info.expiry_state = False
+            elif not info.expiry_date:
+                info.expiry_state = 'ok'
+            elif info.expiry_date < today:
+                info.expiry_state = 'expired'
+            elif info.expiry_date <= fields.Date.add(
+                    today, days=info.template_id.expiry_remind_days or 0):
+                info.expiry_state = 'remind'
+            else:
+                info.expiry_state = 'ok'
+
+    @api.depends('record_ids')
+    def _compute_record_count(self):
+        for info in self:
+            info.record_count = len(info.record_ids)
+
+    # ------------------------------------------------------------------
+    # Guards
+    # ------------------------------------------------------------------
+
+    def _ensure_not_terminal(self):
+        for info in self:
+            if info.aux_state in TERMINAL_STATES:
+                raise UserError(_('The consumable %s is already in a terminal state.', info.sn))
+
+    def _ensure_not_expired(self):
+        today = fields.Date.context_today(self)
+        for info in self:
+            if info.expiry_date and info.expiry_date < today:
+                raise UserError(_(
+                    'The consumable %s expired on %s. Scrap it.',
+                    info.sn, fields.Date.to_string(info.expiry_date)))
+
+    def _ensure_stir_done(self):
+        for info in self:
+            # Datetime columns only carry second precision, so a stir started
+            # in the same second the thaw ended still counts as "after".
+            if info.stir_control and (not info.stir_start or not info.stir_end
+                                      or not info.thaw_end
+                                      or info.stir_start < info.thaw_end):
+                raise UserError(_(
+                    'The consumable %s must be stirred after the current thaw before loading.',
+                    info.sn))
+
+    def _record(self, action, mes_order=False, duration=False, reason=False):
+        return self.env['sn.consumable.record'].create({
+            'info_id': self.id,
+            'action': action,
+            'mes_order_id': mes_order.id if mes_order else False,
+            'duration_minutes': duration,
+            'thaw_count': self.thaw_count,
+            'scrap_reason': reason,
+        })
+
+    # ------------------------------------------------------------------
+    # Lifecycle
+    # ------------------------------------------------------------------
+
+    def action_thaw_start(self):
+        for info in self:
+            if info.aux_state != 'normal':
+                raise UserError(_('Only an in-stock consumable can start thawing.'))
+            info._ensure_not_expired()
+            limit = info.template_id.thaw_count_limit
+            if limit and info.thaw_count + 1 > limit:
+                raise UserError(_(
+                    'The consumable %s reached the thaw count limit (%s). Scrap it.',
+                    info.sn, limit))
+            info.write({
+                'thaw_count': info.thaw_count + 1,
+                'thaw_start': fields.Datetime.now(),
+                'thaw_end': False,
+                'aux_state': 'thawing',
+            })
+            info._record('thaw_start')
+        return True
+
+    def action_thaw_end(self):
+        for info in self:
+            if info.aux_state != 'thawing':
+                raise UserError(_('The consumable %s is not thawing.', info.sn))
+            minutes = info._minutes_since(info.thaw_start)
+            template = info.template_id
+            if template.thaw_duration_min and minutes < template.thaw_duration_min:
+                raise UserError(_(
+                    'The thaw duration of %s is only %s min, at least %s min is required. Keep waiting.',
+                    info.sn, round(minutes), template.thaw_duration_min))
+            if template.thaw_duration_max and minutes > template.thaw_duration_max:
+                raise UserError(_(
+                    'The thaw duration of %s is %s min and exceeded the limit of %s min. Scrap it.',
+                    info.sn, round(minutes), template.thaw_duration_max))
+            info.write({
+                'thaw_end': fields.Datetime.now(),
+                'thaw_minutes': minutes,
+                'aux_state': 'ready',
+            })
+            info._record('thaw_end', duration=minutes)
+        return True
+
+    def action_stir_start(self):
+        for info in self:
+            if not info.template_id.stir_control:
+                raise UserError(_('Stir control is not enabled for %s.', info.template_id.code))
+            if info.aux_state != 'ready':
+                raise UserError(_('The consumable %s must finish thawing before stirring.', info.sn))
+            info.write({'stir_start': fields.Datetime.now(), 'stir_end': False})
+            info._record('stir_start')
+        return True
+
+    def action_stir_end(self):
+        for info in self:
+            if not info.stir_start:
+                raise UserError(_('The consumable %s is not stirring.', info.sn))
+            minutes = info._minutes_since(info.stir_start)
+            template = info.template_id
+            if template.stir_duration_min and minutes < template.stir_duration_min:
+                raise UserError(_(
+                    'The stir duration of %s is only %s min, at least %s min is required. Keep stirring.',
+                    info.sn, round(minutes), template.stir_duration_min))
+            if template.stir_duration_max and minutes > template.stir_duration_max:
+                raise UserError(_(
+                    'The stir duration of %s is %s min and exceeded the limit of %s min. Scrap it.',
+                    info.sn, round(minutes), template.stir_duration_max))
+            info.write({
+                'stir_end': fields.Datetime.now(),
+                'stir_minutes': minutes,
+            })
+            info._record('stir_end', duration=minutes)
+        return True
+
+    def action_load(self, mes_order):
+        for info in self:
+            if info.aux_state != 'ready':
+                raise UserError(_('The consumable %s is not ready to load.', info.sn))
+            info._ensure_not_expired()
+            info._ensure_stir_done()
+            info.write({'aux_state': 'in_use'})
+            info._record('load', mes_order=mes_order)
+        return True
+
+    def action_unload(self):
+        Record = self.env['sn.consumable.record']
+        for info in self:
+            if info.aux_state != 'in_use':
+                raise UserError(_('The consumable %s is not in use.', info.sn))
+            last_load = Record.search(
+                [('info_id', '=', info.id), ('action', '=', 'load')], order='id desc', limit=1)
+            info.write({'aux_state': 'normal'})
+            info._record('unload', mes_order=last_load.mes_order_id)
+        return True
+
+    def action_exhaust(self):
+        for info in self:
+            info._ensure_not_terminal()
+            info.write({'aux_state': 'exhausted'})
+            info._record('exhaust')
+        return True
+
+    def action_scrap(self, reason=False):
+        for info in self:
+            info._ensure_not_terminal()
+            info.write({'aux_state': 'scrapped'})
+            info._record('scrap', reason=reason)
+        return True
+
+    def action_disable(self):
+        for info in self:
+            info._ensure_not_terminal()
+            info.write({'aux_state': 'disabled'})
+            info._record('disable')
+        return True
+
+    def action_enable(self):
+        for info in self:
+            if info.aux_state != 'disabled':
+                raise UserError(_('Only a disabled consumable can be enabled.'))
+            info.write({'aux_state': 'normal'})
+            info._record('enable')
+        return True
+
+    # ------------------------------------------------------------------
+    # Wizards
+    # ------------------------------------------------------------------
+
+    def action_open_load(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.consumable.load.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_consumable.action_sn_consumable_load_wizard').name,
+            'context': {'default_info_id': self.id},
+        }
+
+    def action_open_scrap(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.consumable.scrap.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': self.env.ref('sn_wsd_consumable.action_sn_consumable_scrap_wizard').name,
+            'context': {'default_info_id': self.id},
+        }
+
+    def _minutes_since(self, start):
+        if not start:
+            return 0.0
+        return round((fields.Datetime.now() - start).total_seconds() / 60.0, 2)
+
+
+class SnConsumableRecord(models.Model):
+    _name = 'sn.consumable.record'
+    _description = 'Consumable Record'
+    _order = 'info_id, id desc'
+    _check_company_auto = True
+
+    info_id = fields.Many2one(
+        'sn.consumable.info',
+        string='Consumable SN',
+        required=True,
+        ondelete='cascade',
+        index=True,
+        check_company=True,
     )
     template_id = fields.Many2one(
         'sn.consumable.template',
-        string='Consumable Control Template',
-        required=True,
-        check_company=True,
-        tracking=True,
-    )
-    status = fields.Selection(
-        [
-            ('draft', 'Draft'),
-            ('in_stock', 'In Stock'),
-            ('reserved', 'Reserved'),
-            ('warming', 'Warming'),
-            ('stirred', 'Stirred'),
-            ('issued', 'Issued'),
-            ('opened', 'Opened'),
-            ('recycled', 'Recycled'),
-            ('exhausted', 'Exhausted'),
-            ('expired', 'Expired'),
-            ('scrapped', 'Scrapped'),
-        ],
-        string='Status',
-        default='draft',
-        required=True,
-        tracking=True,
-    )
-    is_second_recycled = fields.Boolean(string='Second Recycled', tracking=True)
-    consumable_code = fields.Char(string='Consumable Code', related='template_id.consumable_code', store=True, readonly=True)
-    consumable_name = fields.Char(string='Consumable Name', related='template_id.consumable_name', store=True, readonly=True)
-    specification = fields.Char(string='Specification', related='template_id.specification', store=True, readonly=True)
-    consumable_type = fields.Selection(
-        related='template_id.consumable_type',
-        string='Consumable Type',
+        related='info_id.template_id',
         store=True,
-        readonly=True,
+        index=True,
     )
-    vendor_id = fields.Many2one(
-        'res.partner',
-        string='Vendor',
-        related='template_id.vendor_id',
-        store=True,
-        readonly=True,
-    )
-    max_warmup_count = fields.Integer(string='Maximum Warm-up Count', related='template_id.max_warmup_count', store=True, readonly=True)
-    warmup_count = fields.Integer(string='Warm-up Count', default=0, tracking=True)
-    production_lot_no = fields.Char(string='Production Lot No.', tracking=True)
-    production_date = fields.Date(string='Production Date', tracking=True)
-    expiry_date = fields.Date(string='Expiry Date', tracking=True)
-    open_datetime = fields.Datetime(string='Opening Time', tracking=True)
-    reserve_datetime = fields.Datetime(string='Reservation Time', tracking=True)
-    issue_datetime = fields.Datetime(string='Issue Time', tracking=True)
-    unload_datetime = fields.Datetime(string='Unload Time', tracking=True)
-    warmup_start_datetime = fields.Datetime(string='Warm-up Start Time', tracking=True)
-    warmup_end_datetime = fields.Datetime(string='Warm-up End Time', tracking=True)
-    stirring_datetime = fields.Datetime(string='Stirring Time', tracking=True)
-    adhesion_test_result = fields.Selection(
-        [('pass', 'Pass'), ('fail', 'Fail')],
-        string='Adhesion Test',
-        tracking=True,
-    )
-    product_tmpl_id = fields.Many2one(
-        'product.template',
-        string='Product',
-        related='template_id.product_tmpl_id',
-        store=True,
-        readonly=True,
-    )
-    note = fields.Text(string='Notes')
-    is_expired = fields.Boolean(
-        string='Expired',
-        compute='_compute_is_expired',
-        store=True,
-    )
-
-    _name_company_uniq = models.Constraint(
-        'unique(name, company_id)',
-        'Consumable SN must be unique per company.',
-    )
-
-    @api.depends('expiry_date')
-    def _compute_is_expired(self):
-        today = fields.Date.context_today(self)
-        for record in self:
-            record.is_expired = bool(record.expiry_date and record.expiry_date < today)
-
-    @api.onchange('template_id')
-    def _onchange_template_id(self):
-        for record in self:
-            if record.template_id and not record.expiry_date and record.production_date and record.template_id.shelf_life_days:
-                record.expiry_date = fields.Date.add(
-                    record.production_date,
-                    days=record.template_id.shelf_life_days,
-                )
-
-    @api.onchange('production_date', 'template_id')
-    def _onchange_production_date(self):
-        for record in self:
-            if record.production_date and record.template_id.shelf_life_days:
-                record.expiry_date = fields.Date.add(
-                    record.production_date,
-                    days=record.template_id.shelf_life_days,
-                )
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            template = False
-            if vals.get('template_id'):
-                template = self.env['sn.consumable.template'].browse(vals['template_id'])
-            if vals.get('name', _('New')) == _('New') and template and template.barcode_rule_id:
-                vals['name'] = template.barcode_rule_id.generate_barcode()
-            if not vals.get('expiry_date') and vals.get('production_date') and template and template.shelf_life_days:
-                production_date = fields.Date.to_date(vals['production_date'])
-                vals['expiry_date'] = fields.Date.add(production_date, days=template.shelf_life_days)
-        records = super().create(vals_list)
-        records._update_expired_status()
-        return records
-
-    def write(self, vals):
-        result = super().write(vals)
-        if {'expiry_date', 'status'} & set(vals):
-            self._update_expired_status()
-        return result
-
-    def _update_expired_status(self):
-        today = fields.Date.context_today(self)
-        for record in self:
-            if record.expiry_date and record.expiry_date < today and record.status not in ('scrapped', 'recycled'):
-                record.status = 'expired'
-
-    @api.constrains('warmup_count', 'max_warmup_count')
-    def _check_warmup_count(self):
-        for record in self:
-            if record.warmup_count < 0:
-                raise ValidationError(_('Warm-up count cannot be negative.'))
-            if record.max_warmup_count and record.warmup_count > record.max_warmup_count:
-                raise ValidationError(_('Warm-up count cannot exceed the configured max warm-up count.'))
-
-    @api.constrains('production_date', 'expiry_date')
-    def _check_dates(self):
-        for record in self:
-            if record.production_date and record.expiry_date and record.expiry_date < record.production_date:
-                raise ValidationError(_('Expiry date cannot be earlier than production date.'))
-
-    def action_mark_in_stock(self):
-        self.write({'status': 'in_stock'})
-
-    def action_reserve(self):
-        self.write({
-            'status': 'reserved',
-            'reserve_datetime': fields.Datetime.now(),
-        })
-
-    def action_start_warmup(self):
-        self.write({
-            'status': 'warming',
-            'warmup_start_datetime': fields.Datetime.now(),
-        })
-
-    def action_finish_warmup(self):
-        for record in self:
-            record.write({
-                'status': 'stirred' if record.template_id.stirring_control else 'issued',
-                'warmup_end_datetime': fields.Datetime.now(),
-            })
-        return True
-
-    def action_stir(self):
-        self.write({
-            'status': 'stirred',
-            'stirring_datetime': fields.Datetime.now(),
-        })
-
-    def action_issue(self):
-        self.write({
-            'status': 'issued',
-            'issue_datetime': fields.Datetime.now(),
-        })
-
-    def action_open(self):
-        self.write({
-            'status': 'opened',
-            'open_datetime': fields.Datetime.now(),
-        })
-
-    def action_unload(self):
-        self.write({
-            'status': 'issued',
-            'unload_datetime': fields.Datetime.now(),
-        })
-
-    def action_mark_recycled(self):
-        self.write({'status': 'recycled', 'is_second_recycled': True})
-
-    def action_mark_exhausted(self):
-        self.write({'status': 'exhausted'})
-
-    def action_mark_scrapped(self):
-        self.write({'status': 'scrapped'})
-        return True
+    action = fields.Selection(RECORD_ACTION_SELECTION, string='Action', required=True, index=True)
+    mes_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='MES Order', index=True, check_company=True)
+    duration_minutes = fields.Float(string='Duration (min)')
+    thaw_count = fields.Integer(string='Thaw Count')
+    scrap_reason = fields.Char(string='Scrap Reason')
+    user_id = fields.Many2one(
+        'res.users', string='User', default=lambda self: self.env.user, required=True)
+    occurred_at = fields.Datetime(string='Occurred At', default=fields.Datetime.now, required=True)
+    company_id = fields.Many2one(
+        'res.company', related='info_id.company_id', store=True, index=True)

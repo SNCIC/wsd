@@ -791,16 +791,21 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(len(log), 1)
         self.assertEqual(log.action, 'online')
         self.assertEqual(log.user_id, self.env.user)
-        # a board in progress blocks the offline
-        wc_in, _wc_out = self._done_workcenters()
+        wc_in, wc_out = self._done_workcenters()
         serial = order.scan_enter('SN-LOG-001', wc_in)
-        with self.assertRaises(ValidationError):
-            order.action_offline()
-        # leave the station -> offline succeeds and is logged
-        order.leave_station(serial, 'ng')
+        # a board in progress does NOT block going offline: feeding new SNs
+        # is what online gates, the flow itself keeps running
         order.action_offline()
         self.assertFalse(order.x_online_date)
-        self.assertEqual(order.x_online_log_ids.mapped('action'), ['offline', 'online'])
+        # feeding a new SN into the start operation is refused offline
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-LOG-002', wc_in)
+        # the in-progress board keeps flowing: it leaves and re-enters fine
+        order.leave_station(serial, 'ok')
+        order.scan_enter('SN-LOG-001', wc_out)
+        order.leave_station(serial, 'ok')  # produced through the end op
+        self.assertEqual(order.x_online_log_ids.mapped('action'),
+                         ['offline', 'online'])
 
     def test_45_station_leave_scrap(self):
         """Station mode: leaving with result Scrap is terminal -- the SN is

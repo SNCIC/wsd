@@ -15,7 +15,38 @@ class SnSmtOnlineMaterialExtension(models.Model):
     )
     required_item_code = fields.Char(
         string='Main Item Code',
-        related='required_product_id.default_code',
+        index=True,
+        tracking=False,
+    )
+
+    @api.onchange('required_item_code')
+    def _onchange_required_item_code(self):
+        # 主料料号是手工录入入口，同步到 item_code 后由
+        # _compute_required_product_id 反查产品带出名称/规格。
+        if self.required_item_code:
+            self.item_code = self.required_item_code
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # item_code 不在视图中，onchange 的同步客户端不会回传，落库前强制对齐。
+        for vals in vals_list:
+            if vals.get('required_item_code') and not vals.get('item_code'):
+                vals['item_code'] = vals['required_item_code']
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if vals.get('required_item_code') and not vals.get('item_code'):
+            vals['item_code'] = vals['required_item_code']
+        return super().write(vals)
+    required_product_name = fields.Char(
+        string='Main Material Name',
+        related='required_product_id.name',
+        store=True,
+        readonly=True,
+    )
+    required_product_spec = fields.Char(
+        string='Main Material Specification',
+        related='required_product_id.material_specification',
         store=True,
         readonly=True,
     )
@@ -56,9 +87,12 @@ class SnSmtOnlineMaterialExtension(models.Model):
     def _compute_required_product_id(self):
         product_model = self.env['product.product']
         for line in self:
-            line.required_product_id = product_model.search(
-                [('default_code', '=', line.item_code)], limit=1,
-            )
+            if line.item_code:
+                line.required_product_id = product_model.search(
+                    [('default_code', '=', line.item_code)], limit=1,
+                )
+            else:
+                line.required_product_id = False
 
     @api.depends('consumption_ids.consumed_qty', 'loaded_qty', 'scrap_qty')
     def _compute_smt_quantities(self):

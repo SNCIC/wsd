@@ -1,8 +1,8 @@
 {
     'name': 'SN WSD Consumable Control',
-    'version': '19.0.1.0.0',
-    'summary': 'Consumable control for electric meter manufacturing',
-    'depends': ['mrp', 'product', 'mail','sn_wsd_mrp'],
+    'version': '19.0.2.0.0',
+    'summary': 'SMT auxiliary material lifecycle control',
+    'depends': ['sn_wsd_mrp', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'views/sn_consumable_views.xml',

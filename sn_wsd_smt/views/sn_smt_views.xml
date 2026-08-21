@@ -27,10 +27,10 @@
                 <field name="table_name"/>
                 <field name="table_type"/>
                 <field name="model_code"/>
-                <field name="model_ver"/>
                 <field name="product_side"/>
                 <field name="track_type"/>
                 <field name="item_count"/>
+                <field name="total_point_qty"/>
                 <field name="detail_count"/>
                 <field name="is_valid"/>
             </list>
@@ -48,21 +48,21 @@
                             string="Import Details"
                             class="btn-secondary"/>
                 </header>
-                <sheet>
-                    <group>
+                    <sheet>
                         <group>
-                            <field name="table_name"/>
-                            <field name="table_type"/>
-                            <field name="model_code"/>
-                            <field name="model_ver"/>
+                            <group>
+                                <field name="table_name"/>
+                                <field name="table_type"/>
+                                <field name="model_code"/>
+                            </group>
+                            <group>
+                                <field name="product_side"/>
+                                <field name="track_type"/>
+                                <field name="item_count"/>
+                                <field name="total_point_qty"/>
+                                <field name="is_valid"/>
+                            </group>
                         </group>
-                        <group>
-                            <field name="product_side"/>
-                            <field name="track_type"/>
-                            <field name="item_count"/>
-                            <field name="is_valid"/>
-                        </group>
-                    </group>
                     <notebook>
                         <page string="Production Lines">
                             <field name="line_link_ids" nolabel="1" context="{'default_table_id': id}">
@@ -109,26 +109,28 @@
         <field name="name">sn.smt.online.material.list</field>
         <field name="model">sn.smt.online.material</field>
         <field name="arch" type="xml">
-            <list create="0" delete="0">
-                <field name="mo_number"/>
-                <field name="mes_order_id" optional="show"/>
-                <field name="production_line_id"/>
+            <list>
+                <field name="mes_order_id"/>
+                <field name="model_code"/>
                 <field name="process_face"/>
+                <field name="production_line_id"/>
                 <field name="device_seq"/>
                 <field name="table_no"/>
                 <field name="loadpoint"/>
+                <field name="track_type"/>
                 <field name="chanel_sn"/>
-                <field name="loaded_material_lot_id" string="Material SN" optional="show"/>
-                <field name="item_code"/>
-                <field name="required_item_code" string="Main Item Code" optional="show"/>
-                <field name="loaded_product_id" string="Actual Material" optional="show"/>
+                <field name="required_item_code"/>
+                <field name="required_product_name"/>
+                <field name="required_product_spec"/>
                 <field name="point_qty"/>
-                <field name="loaded_qty" optional="show"/>
-                <field name="consumed_qty" optional="show"/>
-                <field name="remaining_qty" optional="show"/>
-                <field name="last_operation_type" optional="show"/>
-                <field name="is_skip"/>
+                <field name="point_location"/>
                 <field name="is_load"/>
+                <field name="is_skip"/>
+                <field name="is_tray"/>
+                <field name="create_uid"/>
+                <field name="create_date"/>
+                <field name="write_uid"/>
+                <field name="write_date"/>
             </list>
         </field>
     </record>
@@ -141,44 +143,30 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="production_id" readonly="1"/>
-                            <field name="mes_order_id" readonly="1"/>
-                            <field name="mo_number" readonly="1"/>
-                            <field name="production_line_id" readonly="1"/>
-                            <field name="process_face" readonly="1"/>
-                            <field name="mt_id" readonly="1"/>
-                        </group>
-                        <group>
+                            <field name="mes_order_id"/>
+                            <field name="model_code"/>
+                            <field name="process_face"/>
+                            <field name="production_line_id"/>
                             <field name="device_seq"/>
                             <field name="table_no"/>
                             <field name="loadpoint"/>
+                            <field name="track_type"/>
                             <field name="chanel_sn"/>
+                            <field name="required_item_code"/>
+                            <field name="required_product_name"/>
+                            <field name="required_product_spec"/>
+                        </group>
+                        <group>
+                            <field name="point_qty"/>
+                            <field name="point_location"/>
                             <field name="is_load"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group>
-                            <field name="loaded_material_lot_id" readonly="1"/>
-                            <field name="required_item_code" readonly="1"/>
-                            <field name="loaded_product_id" readonly="1"/>
-                            <field name="item_code"/>
-                            <field name="feeder_spec"/>
-                        </group>
-                        <group>
-                        <field name="point_qty"/>
-                        <field name="loaded_qty"/>
-                        <field name="consumed_qty"/>
-                        <field name="remaining_qty"/>
-                        <field name="last_operation_type"/>
-                        <field name="last_consumed_serial_id"/>
-                        <field name="last_consumed_at"/>
                             <field name="is_skip"/>
                             <field name="is_tray"/>
-                            <field name="is_qc_test"/>
+                            <field name="create_uid"/>
+                            <field name="create_date"/>
+                            <field name="write_uid"/>
+                            <field name="write_date"/>
                         </group>
-                    </group>
-                    <group>
-                        <field name="point_location" nolabel="1"/>
                     </group>
                 </sheet>
             </form>
@@ -195,14 +183,52 @@
         <field name="name">sn.smt.feeder.list</field>
         <field name="model">sn.smt.feeder</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
-                <field name="channel_sn"/>
+            <list decoration-warning="care_state == 'remind'"
+                  decoration-danger="care_state in ('maintain_due', 'usage_expired')"
+                  decoration-muted="status == 'scrapped'">
+                <field name="feeder_sn"/>
                 <field name="feeder_spec"/>
-                <field name="status"/>
-                <field name="maintenance_ok"/>
-                <field name="bound_production_id"/>
+                <field name="channel_type" widget="badge"
+                       decoration-info="channel_type == 'single'"
+                       decoration-warning="channel_type == 'dual'"
+                       decoration-danger="channel_type == 'triple'"/>
+                <field name="channel_sn_summary"/>
+                <field name="status" widget="badge"
+                       decoration-success="status in ('normal', 'in_use')"
+                       decoration-warning="status == 'in_repair'"
+                       decoration-danger="status == 'scrapped'"/>
+                <field name="care_state" widget="badge"
+                       decoration-success="care_state == 'ok'"
+                       decoration-warning="care_state == 'remind'"
+                       decoration-danger="care_state in ('maintain_due', 'usage_expired')"/>
+                <field name="usage_count" optional="show"/>
+                <field name="maintenance_ok" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
             </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_feeder_search" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.search</field>
+        <field name="model">sn.smt.feeder</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="feeder_sn"/>
+                <field name="feeder_spec"/>
+                <filter name="filter_maintain_due" string="Maintenance Due" domain="[('care_state', '=', 'maintain_due')]"/>
+                <filter name="filter_remind" string="Remind" domain="[('care_state', '=', 'remind')]"/>
+                <filter name="filter_usage_expired" string="Usage Expired" domain="[('care_state', '=', 'usage_expired')]"/>
+                <filter name="filter_pending_care" string="Pending Care" domain="[('care_state', '!=', 'ok')]"/>
+                <separator/>
+                <filter name="filter_scrapped" string="Scrapped" domain="[('status', '=', 'scrapped')]"/>
+                <filter name="filter_in_repair" string="In Repair" domain="[('status', '=', 'in_repair')]"/>
+                <filter name="filter_disabled" string="Disabled" domain="[('status', '=', 'disabled')]"/>
+                <group>
+                    <filter name="group_by_status" string="Status" domain="[]" context="{'group_by': 'status'}"/>
+                    <filter name="group_by_care_state" string="Care State" domain="[]" context="{'group_by': 'care_state'}"/>
+                    <filter name="group_by_channel_type" string="Channel Type" domain="[]" context="{'group_by': 'channel_type'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -211,20 +237,61 @@
         <field name="model">sn.smt.feeder</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_disable" type="object" string="Disable" confirm="Disable this feeder?" invisible="status != 'normal'"/>
+                    <button name="action_enable" type="object" string="Enable" invisible="status != 'disabled'"/>
+                    <button name="action_open_report_repair" type="object" string="Report Repair" invisible="status != 'normal'"/>
+                    <button name="action_open_complete_repair" type="object" string="Complete Repair" invisible="status != 'in_repair'"/>
+                    <button name="action_open_scrap" type="object" string="Scrap" invisible="status == 'scrapped'"/>
+                    <button name="action_maintenance" type="object" string="Perform Maintenance" confirm="Perform maintenance on this feeder? Usage count will be reset." invisible="status == 'scrapped'" class="btn-secondary"/>
+                    <field name="status" widget="statusbar" statusbar_visible="normal,in_use,in_repair,disabled,scrapped"/>
+                    <field name="care_state" widget="badge"
+                           decoration-success="care_state == 'ok'"
+                           decoration-warning="care_state == 'remind'"
+                           decoration-danger="care_state in ('maintain_due', 'usage_expired')"/>
+                </header>
                 <sheet>
                     <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="channel_sn"/>
+                        <group name="identity">
+                            <field name="feeder_sn"/>
                             <field name="feeder_spec"/>
+                            <field name="channel_type"/>
+                            <field name="production_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
                         </group>
-                        <group>
+                        <group name="lifecycle">
                             <field name="status"/>
-                            <field name="maintenance_ok"/>
+                            <field name="care_state"/>
+                            <field name="cart_id" readonly="1"/>
                             <field name="usage_count"/>
-                            <field name="bound_production_id"/>
+                            <field name="maintenance_ok"/>
+                            <field name="last_maintenance_date"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Channel SN">
+                            <field name="channel_ids">
+                                <list editable="bottom">
+                                    <field name="channel_no"/>
+                                    <field name="channel_sn"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Care Thresholds">
+                            <group>
+                                <group string="Count Thresholds">
+                                    <field name="usage_count_limit"/>
+                                    <field name="maintenance_count"/>
+                                    <field name="remind_count"/>
+                                </group>
+                                <group string="Period Thresholds (Days)">
+                                    <field name="usage_days_limit"/>
+                                    <field name="maintenance_days"/>
+                                    <field name="remind_days"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -240,9 +307,17 @@
         <field name="name">sn.smt.cart.list</field>
         <field name="model">sn.smt.cart</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
-                <field name="status"/>
+            <list decoration-muted="status in ('idle', 'disabled', 'scrapped')">
+                <field name="cart_sn"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'mounted'"
+                       decoration-info="status == 'loaded'"
+                       decoration-muted="status in ('idle', 'disabled', 'scrapped')"/>
+                <field name="mounted_workcenter_id" optional="show"/>
+                <field name="mounted_at" optional="hide"/>
+                <field name="unmounted_at" optional="hide"/>
+                <field name="feeder_count" string="Feeders"/>
+                <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
     </record>
@@ -252,36 +327,133 @@
         <field name="model">sn.smt.cart</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_open_mount" type="object" string="Mount"
+                            invisible="status not in ('idle', 'loaded')"
+                            confirm="Mount this cart on a workcenter?"/>
+                    <button name="action_unmount" type="object" string="Unmount"
+                            invisible="status != 'mounted'"
+                            confirm="Unmount this cart from the workcenter?"/>
+                    <button name="action_clear_lines" type="object" string="Clear Feeders"
+                            invisible="status != 'loaded' or feeder_count == 0"
+                            confirm="Unbind all feeders from this cart?"/>
+                    <button name="action_disable" type="object" string="Disable"
+                            invisible="status not in ('idle', 'loaded')"
+                            confirm="Disable this cart?"/>
+                    <button name="action_enable" type="object" string="Enable"
+                            invisible="status != 'disabled'"/>
+                    <button name="action_scrap" type="object" string="Scrap"
+                            invisible="status == 'scrapped'"
+                            confirm="Scrap this cart? This cannot be undone."/>
+                    <field name="status" widget="statusbar" statusbar_visible="idle,loaded,mounted"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="status"/>
+                            <field name="cart_sn" readonly="status == 'scrapped'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="mounted_workcenter_id" readonly="1"/>
+                            <field name="mounted_at" readonly="1"/>
+                            <field name="unmounted_at" readonly="1"/>
                         </group>
                     </group>
-                    <group string="Offline Materials">
-                        <field name="offline_material_ids" readonly="1">
-                            <list create="0" delete="0">
-                                <field name="production_id"/>
-                                <field name="mes_order_id" optional="show"/>
-                                <field name="device_seq"/>
-                                <field name="table_no"/>
-                                <field name="loadpoint"/>
-                                <field name="material_lot_id"/>
-                                <field name="feeder_id"/>
-                                <field name="is_online"/>
-                            </list>
-                        </field>
-                    </group>
+                    <notebook>
+                        <page string="Feeders">
+                            <field name="active_line_ids">
+                                <list editable="bottom">
+                                    <field name="slot_no"/>
+                                    <field name="feeder_id" domain="[('status', '=', 'normal')]"/>
+                                    <field name="material_lot_id"/>
+                                    <field name="mes_order_id"/>
+                                    <field name="installed_at" readonly="1" optional="hide"/>
+                                    <button name="action_unbind" type="object" string="Unbind" icon="fa-chain-broken"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="History">
+                            <field name="line_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="slot_no"/>
+                                    <field name="feeder_id"/>
+                                    <field name="material_lot_id"/>
+                                    <field name="mes_order_id"/>
+                                    <field name="installed_at"/>
+                                    <field name="removed_at"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Offline Materials">
+                            <field name="offline_material_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="production_id"/>
+                                    <field name="mes_order_id" optional="show"/>
+                                    <field name="device_seq"/>
+                                    <field name="table_no"/>
+                                    <field name="loadpoint"/>
+                                    <field name="material_lot_id"/>
+                                    <field name="feeder_id"/>
+                                    <field name="is_online"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
 
+    <record id="view_sn_smt_cart_search" model="ir.ui.view">
+        <field name="name">sn.smt.cart.search</field>
+        <field name="model">sn.smt.cart</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="cart_sn"/>
+                <field name="mounted_workcenter_id"/>
+                <filter name="filter_idle" string="Idle" domain="[('status', '=', 'idle')]"/>
+                <filter name="filter_loaded" string="Loaded" domain="[('status', '=', 'loaded')]"/>
+                <filter name="filter_mounted" string="Mounted" domain="[('status', '=', 'mounted')]"/>
+                <filter name="filter_disabled" string="Disabled" domain="[('status', '=', 'disabled')]"/>
+                <filter name="filter_scrapped" string="Scrapped" domain="[('status', '=', 'scrapped')]"/>
+                <group>
+                    <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>
+                    <filter name="group_by_workcenter" string="Mounted Workcenter" context="{'group_by': 'mounted_workcenter_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_smt_cart" model="ir.actions.act_window">
-        <field name="name">SMT Carts</field>
+        <field name="name">SMT Cart</field>
         <field name="res_model">sn.smt.cart</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_smt_cart_search"/>
+    </record>
+
+    <record id="view_sn_smt_cart_mount_wizard_form" model="ir.ui.view">
+        <field name="name">sn.smt.cart.mount.wizard.form</field>
+        <field name="model">sn.smt.cart.mount.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="cart_id" readonly="1"/>
+                    <field name="workcenter_id"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_cart_mount_wizard" model="ir.actions.act_window">
+        <field name="name">Mount Cart</field>
+        <field name="res_model">sn.smt.cart.mount.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
     </record>
 
     <record id="action_sn_smt_table_import_wizard" model="ir.actions.act_window">

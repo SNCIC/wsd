@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_smt.FeederCareAction">
+        <div class="o_feeder_care_action d-flex flex-column h-100">
+            <ul class="nav nav-tabs px-3 pt-2" role="tablist">
+                <li class="nav-item" t-foreach="tabs" t-as="tab" t-key="tab.id">
+                    <button type="button" role="tab"
+                            class="nav-link"
+                            t-att-class="{ active: state.activeTab === tab.id }"
+                            t-att-selected="state.activeTab === tab.id ? 'true' : undefined"
+                            t-on-click="() => this.setActiveTab(tab)"
+                            t-esc="tab.label"/>
+                </li>
+            </ul>
+            <div class="o_feeder_care_content flex-grow-1 d-flex flex-column">
+                <t t-foreach="tabs" t-as="tab" t-key="'view_' + tab.id">
+                    <View t-if="state.activeTab === tab.id" class="flex-grow-1" t-props="tab.props"/>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -6,3 +6,5 @@ from . import sn_smt_lcsl_wizard
 from . import sn_smt_xl_wizard
 from . import sn_smt_zc_wizard
 from . import sn_smt_change_wizard
+from . import sn_smt_feeder_action_wizard
+from . import sn_smt_cart_mount_wizard
