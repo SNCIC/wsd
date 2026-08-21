@@ -6,22 +6,19 @@ from datetime import datetime
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+from odoo.addons.sn_wsd_mrp.models.constants import SIDE_SELECTION
+
 
 TRACK_TYPE_SELECTION = [
     ('single', 'Single Track'),
     ('dual', 'Dual Track'),
 ]
 
-PRODUCT_SIDE_SELECTION = [
-    ('top', 'T Side'),
-    ('bottom', 'B Side'),
-    ('single', 'Single Side'),
-]
+# 产品面别与工艺路线 sn.wsd.process_route.x_production_side 共用同一套 key。
+PRODUCT_SIDE_SELECTION = SIDE_SELECTION
 
 TABLE_TYPE_SELECTION = [
     ('smt', 'SMT Material Table'),
-    ('feeder', 'Feeder Table'),
-    ('other', 'Other'),
 ]
 
 YN_SELECTION = [
@@ -33,17 +30,18 @@ YN_SELECTION = [
 class SnSmtMaterialTable(models.Model):
     _name = 'sn.smt.material.table'
     _description = 'SMT Material Table'
-    _order = 'model_code, product_side, model_ver, id desc'
+    _order = 'model_code, product_side, id desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _check_company_auto = True
 
     name = fields.Char(compute='_compute_name', store=True)
     table_name = fields.Char(string='TABLE_NAME', required=True, tracking=True)
     table_type = fields.Selection(TABLE_TYPE_SELECTION, string='TABLE_TYPE', default='smt', required=True)
+    # 产品料号：取产品上的图号（product.default_code）
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True, tracking=True)
-    model_ver = fields.Char(string='MODEL_VER', index=True)
     product_side = fields.Selection(PRODUCT_SIDE_SELECTION, string='PRODUCT_SIDE', required=True, index=True, tracking=True)
     item_count = fields.Integer(string='ITEM_COUNT')
+    total_point_qty = fields.Integer(compute='_compute_total_point_qty', string='Total Points')
     track_type = fields.Selection(TRACK_TYPE_SELECTION, string='TRACK_TYPE', default='single', required=True)
     is_valid = fields.Selection(YN_SELECTION, string='IS_VALID', default='Y', required=True, tracking=True)
     note = fields.Text(string='Note')
@@ -71,17 +69,22 @@ class SnSmtMaterialTable(models.Model):
         'The material table name must be unique per company.',
     )
 
-    @api.depends('table_name', 'model_code', 'product_side', 'model_ver')
+    @api.depends('table_name', 'model_code', 'product_side')
     def _compute_name(self):
         for record in self:
             record.name = record.table_name or ' / '.join(
-                item for item in [record.model_code, record.product_side, record.model_ver] if item
+                item for item in [record.model_code, record.product_side] if item
             )
 
     @api.depends('detail_ids')
     def _compute_detail_count(self):
         for record in self:
             record.detail_count = len(record.detail_ids)
+
+    @api.depends('detail_ids.point_qty')
+    def _compute_total_point_qty(self):
+        for record in self:
+            record.total_point_qty = sum(record.detail_ids.mapped('point_qty'))
 
     @api.constrains('line_link_ids')
     def _check_has_line_link(self):
@@ -99,15 +102,8 @@ class SnSmtMaterialTable(models.Model):
             ('product_side', '=', production.x_smt_product_side),
             ('is_valid', '=', 'Y'),
             ('line_link_ids.production_line_id', '=', production.x_smt_production_line_id.id),
-        ])
-        if not candidates:
-            return self.env['sn.smt.material.table']
-        if production.x_smt_model_ver:
-            exact = candidates.filtered(lambda table: table.model_ver == production.x_smt_model_ver)
-            if exact:
-                return exact[:1]
-        blank_ver = candidates.filtered(lambda table: not table.model_ver)
-        return (blank_ver or candidates)[:1]
+        ], limit=1)
+        return candidates
 
     def _prepare_online_material_vals(self, production):
         self.ensure_one()
@@ -116,13 +112,14 @@ class SnSmtMaterialTable(models.Model):
             values.append({
                 'mt_id': self.id,
                 'production_id': production.id,
-                'mo_number': production.name,
+                'mes_order_id': production.x_mes_order_id.id,
                 'project_id': production.origin,
                 'model_code': production.product_id.default_code,
                 'area_sn': production.x_smt_production_line_id.code,
                 'production_line_id': production.x_smt_production_line_id.id,
                 'process_face': production.x_smt_product_side,
                 'item_code': detail.item_code,
+                'required_item_code': detail.item_code,
                 'program_name': self.table_name,
                 'device_seq': detail.device_seq,
                 'table_no': detail.table_no,
@@ -218,25 +215,21 @@ class SnSmtOnlineMaterial(models.Model):
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',
-        required=True,
         ondelete='cascade',
         check_company=True,
     )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='production_id.x_mes_order_id',
-        store=True,
-        readonly=True,
         index=True,
+        check_company=True,
     )
-    mo_number = fields.Char(string='MO_NUMBER', required=True, index=True)
     project_id = fields.Char(string='PROJECT_ID')
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True)
-    area_sn = fields.Char(string='AREA_SN', required=True, index=True)
+    area_sn = fields.Char(string='AREA_SN', index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True)
     process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE', required=True)
-    item_code = fields.Char(string='ITEM_CODE', required=True)
+    item_code = fields.Char(string='ITEM_CODE', index=True)
     program_name = fields.Char(string='PROGRAM_NAME')
     device_seq = fields.Integer(string='DEVICE_SEQ', required=True)
     table_no = fields.Char(string='TABLE_NO', required=True)
@@ -300,46 +293,6 @@ class SnSmtOnlineMaterial(models.Model):
     def _compute_loaded_product_id(self):
         for record in self:
             record.loaded_product_id = record.loaded_material_lot_id.product_id
-
-
-class SnSmtFeeder(models.Model):
-    _name = 'sn.smt.feeder'
-    _description = 'SMT Feeder'
-    _order = 'name, id'
-    _check_company_auto = True
-
-    name = fields.Char(string='Feeder SN', required=True, index=True)
-    channel_sn = fields.Char(string='Channel')
-    feeder_spec = fields.Char(string='Feeder Spec')
-    status = fields.Selection(
-        [
-            ('1', 'Normal'),
-            ('2', 'In Use'),
-            ('9', 'Disabled'),
-        ],
-        string='Status',
-        default='1',
-        required=True,
-    )
-    maintenance_ok = fields.Boolean(string='Maintenance OK', default=True)
-    usage_count = fields.Integer(string='Usage Count', default=0)
-    bound_production_id = fields.Many2one(
-        'mrp.production',
-        string='Bound Manufacturing Order',
-        check_company=True,
-    )
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
-
-    _sn_smt_feeder_name_unique = models.Constraint(
-        'unique(company_id, name)',
-        'The feeder SN must be unique per company.',
-    )
 
 
 class SnSmtOfflineMaterial(models.Model):
@@ -437,41 +390,6 @@ class SnSmtOfflineMaterial(models.Model):
     _sn_smt_offline_material_unique = models.Constraint(
         'unique(online_material_id)',
         'The same SMT position can only have one active offline preparation record.',
-    )
-
-
-class SnSmtCart(models.Model):
-    _name = 'sn.smt.cart'
-    _description = 'SMT Material Cart'
-    _order = 'name, id'
-    _check_company_auto = True
-
-    name = fields.Char(string='Cart SN', required=True, index=True)
-    status = fields.Selection(
-        [
-            ('0', 'Idle'),
-            ('1', 'In Use'),
-        ],
-        string='Status',
-        default='0',
-        required=True,
-    )
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
-    offline_material_ids = fields.One2many(
-        'sn.smt.offline.material',
-        'cart_id',
-        string='Offline Materials',
-    )
-
-    _sn_smt_cart_name_unique = models.Constraint(
-        'unique(company_id, name)',
-        'The cart SN must be unique per company.',
     )
 
 
@@ -818,11 +736,11 @@ class SnSmtOperationMixin(models.AbstractModel):
         ], limit=1)
         if still_in_use:
             feeder.write({
-                'status': '2',
+                'status': 'in_use',
                 'bound_production_id': still_in_use.production_id.id,
             })
         elif release_enabled:
-            feeder.write({'status': '1', 'bound_production_id': False})
+            feeder.write({'status': 'normal', 'bound_production_id': False})
 
     @api.model
     def _sync_production_after_smt_change(self, production):

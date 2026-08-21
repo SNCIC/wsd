@@ -38,7 +38,7 @@ class SnSmtLcslWizard(models.TransientModel):
         if not waiting_lines:
             raise UserError(_('The current device TABLE does not need loading.'))
         cart = self.env['sn.smt.cart'].search([
-            ('name', '=', self.cart_input),
+            ('cart_sn', '=', self.cart_input),
             ('company_id', '=', self.production_id.company_id.id),
         ], limit=1)
         if not cart or not cart.offline_material_ids:
@@ -71,7 +71,7 @@ class SnSmtLcslWizard(models.TransientModel):
             line.is_online = 'Y'
             if line.feeder_id:
                 line.feeder_id.write({
-                    'status': '2',
+                    'status': 'in_use',
                     'bound_production_id': self.production_id.id,
                 })
             self._create_operation_bundle(
@@ -84,7 +84,7 @@ class SnSmtLcslWizard(models.TransientModel):
                 is_online='Y',
                 note='LCSL',
             )
-        self.cart_id.status = '1'
+        self.cart_id.status = 'loaded'
         self._sync_production_after_smt_change(self.production_id)
         self.message = _('Cart loading saved successfully.')
         return {'type': 'ir.actions.act_window_close'}

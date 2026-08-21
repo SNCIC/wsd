@@ -2,6 +2,8 @@ from . import mrp_production
 from . import mrp_production_extend
 from . import mrp_feeder_line
 from . import sn_smt_material_table
+from . import sn_smt_feeder
+from . import sn_smt_cart
 from . import sn_smt_consumption
 from . import stock_lot
 from . import sn_smt_pcb_panel

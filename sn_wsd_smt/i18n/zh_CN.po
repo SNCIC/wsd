@@ -154,8 +154,8 @@ msgstr "单板"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__bottom
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__bottom
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__bottom
-msgid "B Side"
-msgstr "B面"
+msgid "Bottom (B)"
+msgstr "底面 (B)"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__bound_production_id
@@ -183,6 +183,8 @@ msgstr "CSV文件"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_tp_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_xl_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_zc_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_action_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_mount_wizard_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -308,6 +310,10 @@ msgstr "代码"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__company_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__company_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__company_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_channel__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -324,6 +330,8 @@ msgstr "配置"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_change_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_action_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_mount_wizard_form
 msgid "Confirm"
 msgstr "确认"
 
@@ -453,6 +461,10 @@ msgstr "料台"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__9
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__disabled
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__disabled
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 msgid "Disabled"
 msgstr "已禁用"
 
@@ -513,7 +525,7 @@ msgstr "事件类型"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__feeder_spec
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__feeder_spec
 msgid "FEEDER_SPEC"
-msgstr "点位"
+msgstr "飞达规格"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__feeder_id
@@ -521,8 +533,13 @@ msgstr "点位"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__feeder_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__feeder_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_channel__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__feeder_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_action_wizard__feeder_id
 msgid "Feeder"
-msgstr "飞达"
+msgstr "FEEDER_SN"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_workorder_form_sn_smt
@@ -548,14 +565,11 @@ msgid "Feeder Spec"
 msgstr "飞达规格"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__feeder
-msgid "Feeder Table"
-msgstr "飞达排位表"
-
-#. module: sn_wsd_smt
 #: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_list
 msgid "Feeders"
-msgstr "飞达"
+msgstr "Feeder"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__import_filename
@@ -615,7 +629,7 @@ msgstr "ID"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_load
 msgid "IS_LOAD"
-msgstr "是否上料"
+msgstr "上料状态"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__is_online
@@ -636,13 +650,13 @@ msgstr "是否重复"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__is_skip
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_skip
 msgid "IS_SKIP"
-msgstr "是否跳过"
+msgstr "跳过标志"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__is_tray
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__is_tray
 msgid "IS_TRAY"
-msgstr "Tray料站位"
+msgstr "TRAY盘物料"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__is_valid
@@ -677,6 +691,8 @@ msgstr "指示异常活动的图标。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__0
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__idle
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 msgid "Idle"
 msgstr "空闲"
 
@@ -709,6 +725,7 @@ msgstr "导入 SMT 详情"
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__1
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__2
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__in_use
 msgid "In Use"
 msgstr "使用中"
 
@@ -750,7 +767,7 @@ msgstr "键"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__loadpoint
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loadpoint
 msgid "LOADPOINT"
-msgstr "站位"
+msgstr "料站"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__write_uid
@@ -849,23 +866,25 @@ msgstr "制造订单号"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__model_code
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__model_code
 msgid "MODEL_CODE"
-msgstr "机型编码"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__model_ver
-msgid "MODEL_VER"
-msgstr "机型版本"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__mo_number
-msgid "MO_NUMBER"
-msgstr "工单号"
+msgstr "产品料号"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__mt_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__mt_id
 msgid "MT_ID"
 msgstr "料表ID"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_log__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_traceability__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__mes_order_id
+msgid "MES Order"
+msgstr "制令单号"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_xl_wizard__unload_scope__machine
@@ -908,6 +927,7 @@ msgstr "料车"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__material_lot_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__material_lot_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__material_lot_id
 msgid "Material Lot"
 msgstr "物料批次"
 
@@ -942,7 +962,7 @@ msgstr "点检有料表"
 #. module: sn_wsd_smt
 #: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_material_table
 msgid "Material Tables"
-msgstr "机型料表"
+msgstr "料站表设置"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -1061,6 +1081,7 @@ msgstr "未找到与当前工作中心匹配的设备序列。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__1
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__normal
 msgid "Normal"
 msgstr "正常"
 
@@ -1158,7 +1179,7 @@ msgstr "在线物料"
 #: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_online_material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
 msgid "Online Materials"
-msgstr "在线料位"
+msgstr "在线料表"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -1201,11 +1222,6 @@ msgstr "订单号（productNo）不能为空。"
 #: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_panel__product_no
 msgid "Order number mapped to the manufacturing order number."
 msgstr "映射到制造订单号的订单号。"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__other
-msgid "Other"
-msgstr "其他"
 
 #. module: sn_wsd_smt
 #: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_pcb_board
@@ -1256,7 +1272,7 @@ msgstr "PCB 序列号 [%s] 已存在（拼板 ID：%s）。"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__point_location
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__point_location
 msgid "POINT_LOCATION"
-msgstr "位号"
+msgstr "点位"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__point_qty
@@ -1267,7 +1283,7 @@ msgstr "点数"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__process_face
 msgid "PROCESS_FACE"
-msgstr "加工面"
+msgstr "生产面别"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__product_side
@@ -1468,12 +1484,12 @@ msgstr "SMT 系统配置"
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder
 msgid "SMT Feeder"
-msgstr "SMT 供料器"
+msgstr "SMT Feeder"
 
 #. module: sn_wsd_smt
 #: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder
 msgid "SMT Feeders"
-msgstr "SMT 供料器"
+msgstr "SMT Feeder"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_mrp_production_form_inherit_sn_smt
@@ -1527,11 +1543,6 @@ msgstr "SMT 料表"
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_traceability
 msgid "SMT Material Traceability"
 msgstr "SMT 物料追溯"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_model_ver
-msgid "SMT Model Version"
-msgstr "SMT 机型版本"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_production__x_smt_offline_material_ids
@@ -1740,7 +1751,7 @@ msgstr "面"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__single
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__single
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__single
-msgid "Single Side"
+msgid "Single"
 msgstr "单面"
 
 #. module: sn_wsd_smt
@@ -1759,6 +1770,7 @@ msgstr "料站"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__status
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__status
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 msgid "Status"
 msgstr "状态"
 
@@ -1807,7 +1819,7 @@ msgstr "料表名称"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_offline_material__table_no
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__table_no
 msgid "TABLE_NO"
-msgstr "TABLE序号"
+msgstr "TABLE"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__table_type
@@ -1819,12 +1831,17 @@ msgstr "料表类型"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__track_type
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__track_type
 msgid "TRACK_TYPE"
-msgstr "轨道类型"
+msgstr "轨道"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__target_production_id
 msgid "Target Manufacturing Order"
 msgstr "目标制造订单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__total_point_qty
+msgid "Total Points"
+msgstr "总点数"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_bl_wizard__online_material_id
@@ -2236,8 +2253,8 @@ msgstr "目标制造订单必须不同于当前制造订单。"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__mrp_production__x_smt_product_side__top
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__top
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__process_face__top
-msgid "T Side"
-msgstr "T面"
+msgid "Top (T)"
+msgstr "顶面 (T)"
 
 #. module: sn_wsd_smt
 #: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_traceability
@@ -2335,6 +2352,7 @@ msgstr "网站沟通记录"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_tp_wizard__workcenter_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_xl_wizard__workcenter_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_zc_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_mount_wizard__workcenter_id
 msgid "Work Center"
 msgstr "工作中心"
 
@@ -2390,6 +2408,16 @@ msgstr "主料"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__required_item_code
 msgid "Main Item Code"
 msgstr "主料料号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__required_product_name
+msgid "Main Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__required_product_spec
+msgid "Main Material Specification"
+msgstr "物料规格"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_operation_record__actual_item_code
@@ -2764,3 +2792,712 @@ msgstr "如有需要，填写方向说明。"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
 msgid "Enter an additional placement location description when required."
 msgstr "如有需要，填写补充的点位位置说明。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__feeder_sn
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__feeder_id
+msgid "FEEDER_SN"
+msgstr "FEEDER_SN"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__channel_type
+msgid "Channel Type"
+msgstr "通道类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__channel_ids
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__channel_sn_summary
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_channel__channel_sn
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Channel SN"
+msgstr "通道SN"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_channel__channel_no
+msgid "Channel No"
+msgstr "通道号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__production_date
+msgid "Production Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__usage_count_limit
+msgid "Usage Count Limit"
+msgstr "使用点数上限"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__maintenance_count
+msgid "Maintenance Count"
+msgstr "保养点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__remind_count
+msgid "Remind Count"
+msgstr "提醒点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__usage_days_limit
+msgid "Usage Days Limit"
+msgstr "使用周期上限(天)"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__maintenance_days
+msgid "Maintenance Days"
+msgstr "保养周期(天)"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__remind_days
+msgid "Remind Days"
+msgstr "提醒周期(天)"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__last_maintenance_date
+msgid "Last Maintenance Date"
+msgstr "上次保养日期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__care_state
+msgid "Care State"
+msgstr "保养状态"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__fault_desc
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_action_wizard__fault_desc
+msgid "Fault Description"
+msgstr "故障描述"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__reported_by
+msgid "Reported By"
+msgstr "报修人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__reported_at
+msgid "Reported At"
+msgstr "报修时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__done_at
+msgid "Completed At"
+msgstr "完成时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__result
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_action_wizard__result
+msgid "Repair Result"
+msgstr "处理结果"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__reason
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_action_wizard__reason
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__trigger
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__trigger
+msgid "Trigger"
+msgstr "触发类型"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__scrapped_by
+msgid "Scrapped By"
+msgstr "报废人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__scrapped_at
+msgid "Scrapped At"
+msgstr "报废时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__maintained_by
+msgid "Maintained By"
+msgstr "保养人"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__maintained_at
+msgid "Maintained At"
+msgstr "保养时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_maintenance__snapshot_usage_count
+msgid "Snapshot Usage Count"
+msgstr "保养前点数"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_action_wizard__action
+msgid "Action"
+msgstr "操作"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_channel
+msgid "SMT Feeder Channel"
+msgstr "SMT 飞达通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_repair
+msgid "SMT Feeder Repair Record"
+msgstr "SMT 飞达报修记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_scrap
+msgid "SMT Feeder Scrap Record"
+msgstr "SMT 飞达报废记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_maintenance
+msgid "SMT Feeder Maintenance Record"
+msgstr "SMT 飞达保养记录"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_action_wizard
+msgid "SMT Feeder Lifecycle Action"
+msgstr "SMT 飞达生命周期操作"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__channel_type__single
+msgid "Single Channel"
+msgstr "单通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__channel_type__dual
+msgid "Dual Channel"
+msgstr "双通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__channel_type__triple
+msgid "Triple Channel"
+msgstr "三通道"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__in_repair
+msgid "In Repair"
+msgstr "报修中"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__scrapped
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__scrapped
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__care_state__ok
+msgid "OK"
+msgstr "正常"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__care_state__remind
+msgid "Remind"
+msgstr "已提醒"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__care_state__maintain_due
+msgid "Maintenance Due"
+msgstr "待保养"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__care_state__usage_expired
+msgid "Usage Expired"
+msgstr "已达使用上限"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_scrap__trigger__manual
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_maintenance__trigger__manual
+msgid "Manual"
+msgstr "手动"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_scrap__trigger__usage_limit
+msgid "Usage Limit"
+msgstr "使用上限到期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_maintenance__trigger__count_due
+msgid "Count Due"
+msgstr "点数到期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_maintenance__trigger__period_due
+msgid "Period Due"
+msgstr "周期到期"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_action_wizard__action__report_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Report Repair"
+msgstr "报修"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_action_wizard__action__complete_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Complete Repair"
+msgstr "修复完成"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_action_wizard__action__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_care
+#: model:ir.actions.client,name:sn_wsd_smt.action_sn_smt_feeder_care
+msgid "Feeder Care"
+msgstr "Feeder维护"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder_pending_care
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_pending_care
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_search
+#: code:addons/sn_wsd_smt/static/src/feeder_care/feeder_care.js:0
+#. odoo-javascript
+msgid "Pending Care"
+msgstr "待保养"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder_repair
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_repair
+#: code:addons/sn_wsd_smt/static/src/feeder_care/feeder_care.js:0
+#. odoo-javascript
+msgid "Repair Records"
+msgstr "报修记录"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder_scrap
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_scrap
+#: code:addons/sn_wsd_smt/static/src/feeder_care/feeder_care.js:0
+#. odoo-javascript
+msgid "Scrap Records"
+msgstr "报废记录"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder_maintenance
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_feeder_maintenance
+#: code:addons/sn_wsd_smt/static/src/feeder_care/feeder_care.js:0
+#. odoo-javascript
+msgid "Maintenance Records"
+msgstr "保养记录"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder_action_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_action_wizard_form
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Feeder Action"
+msgstr "Feeder操作"
+
+#. module: sn_wsd_smt
+#: model:ir.cron,name:sn_wsd_smt.ir_cron_sn_smt_feeder_care_state
+msgid "SMT Feeder: Refresh Care State"
+msgstr "SMT 飞达：刷新保养状态"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Disable"
+msgstr "禁用"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Enable"
+msgstr "解禁"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Disable this feeder?"
+msgstr "禁用这台飞达？"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Perform Maintenance"
+msgstr "执行保养"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Perform maintenance on this feeder? Usage count will be reset."
+msgstr "确认执行保养？使用点数将清零。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Care Thresholds"
+msgstr "保养阈值"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Count Thresholds"
+msgstr "点数阈值"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_form
+msgid "Period Thresholds (Days)"
+msgstr "周期阈值(天)"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Only a normal feeder can be disabled."
+msgstr "只有正常状态的飞达才能禁用。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Only a disabled feeder can be enabled."
+msgstr "只有已禁用的飞达才能解禁。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Only a normal feeder can be reported for repair."
+msgstr "只有正常状态的飞达才能报修。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Only a feeder in repair can be completed."
+msgstr "只有报修中的飞达才能修复完成。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder is already scrapped."
+msgstr "飞达已报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "A scrapped feeder cannot be maintained."
+msgstr "已报废的飞达不能保养。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder reached its usage limit and must be scrapped, not maintained."
+msgstr "飞达已达使用上限，应报废而不是保养。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The channel number must be 1, 2 or 3."
+msgstr "通道号必须是 1、2 或 3。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder \\"%(sn)s\\" is bound to manufacturing order %(order)s. Unload it first."
+msgstr "飞达\\"%(sn)s\\"已绑定制造订单 %(order)s，请先下料。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder \\"%(sn)s\\" must have exactly %(expected)s channel SN line(s) for its channel type."
+msgstr "飞达\\"%(sn)s\\"的通道类型要求恰好 %(expected)s 条通道SN。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_feeder_channel_sn_smt_channel_sn_unique
+msgid "The channel SN must be unique per company."
+msgstr "通道SN必须在公司内唯一。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder SN \\"%s\\" is ambiguous."
+msgstr "飞达SN\\"%s\\"不唯一。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The channel SN \\"%s\\" is ambiguous."
+msgstr "通道SN\\"%s\\"不唯一。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Invalid usage item: %(item)s"
+msgstr "无效的点数条目：%(item)s"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "No feeder found for SN \\"%s\\"."
+msgstr "未找到SN为\\"%s\\"的飞达。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Usage count or usage period limit reached."
+msgstr "使用点数或使用周期已达上限。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "Manual scrap."
+msgstr "手动报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/wizard/sn_smt_feeder_action_wizard.py:0
+msgid "The fault description is required."
+msgstr "故障描述必填。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder SN \"%s\" is scrapped."
+msgstr "飞达SN\"%s\"已报废。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__loaded
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
+msgid "Loaded"
+msgstr "已备料"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__mounted
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
+msgid "Mounted"
+msgstr "在线"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__mounted_workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
+msgid "Mounted Workcenter"
+msgstr "所在贴片机"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__mounted_at
+msgid "Mounted At"
+msgstr "上车时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__unmounted_at
+msgid "Unmounted At"
+msgstr "下车时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__slot_no
+msgid "Station No"
+msgstr "料站号"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__installed_at
+msgid "Installed At"
+msgstr "装车时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__removed_at
+msgid "Removed At"
+msgstr "解绑时间"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__cart_sn
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__cart_id
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_mount_wizard__cart_id
+msgid "CART_SN"
+msgstr "CART_SN"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_cart
+msgid "SMT Cart"
+msgstr "SMT 料车"
+
+#. module: sn_wsd_smt
+#: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_cart
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder__cart_id
+msgid "Feeder Cart"
+msgstr "料车"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_cart_line
+msgid "SMT Cart Feeder Line"
+msgstr "料车明细"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_smt_cart_mount_wizard
+msgid "SMT Cart Mount Wizard"
+msgstr "料车上车向导"
+
+#. module: sn_wsd_smt
+#: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_cart_mount_wizard
+msgid "Mount Cart"
+msgstr "上车"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Mount"
+msgstr "上车"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Unmount"
+msgstr "下车"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Clear Feeders"
+msgstr "清车"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Unbind"
+msgstr "解绑"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "History"
+msgstr "历史"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
+msgid "Group By"
+msgstr "分组"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Mount this cart on a workcenter?"
+msgstr "确认将料车上车？"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Unmount this cart from the workcenter?"
+msgstr "确认将料车下车？"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Unbind all feeders from this cart?"
+msgstr "确认解绑料车上全部feeder？"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Disable this cart?"
+msgstr "确认停用该料车？"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
+msgid "Scrap this cart? This cannot be undone."
+msgstr "确认报废该料车？此操作不可逆。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart is scrapped and cannot be disabled."
+msgstr "该料车已报废，无法停用。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart must be unmounted before it can be disabled."
+msgstr "料车必须先下车才能停用。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Only a disabled cart can be enabled."
+msgstr "只有停用的料车才能解禁。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart is already scrapped."
+msgstr "该料车已报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart must be unmounted before it can be scrapped."
+msgstr "料车必须先下车才能报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart must be empty before it can be scrapped."
+msgstr "料车必须清空后才能报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Cart %s scrapped."
+msgstr "料车 %s 已报废。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart status is invalid."
+msgstr "料车状态无效。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart is already mounted on %s."
+msgstr "该料车已上车：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart holds feeders with an invalid status: %s."
+msgstr "料车上有状态异常的feeder：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Cart %s mounted on %s."
+msgstr "料车 %s 已上车：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Stations required by the MES order but not on the cart: %s."
+msgstr "制令单需要但车上未备的料站：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Stations on the cart but not required by the MES order: %s."
+msgstr "车上有但制令单不需要的料站：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "station %s: %s loaded, %s required."
+msgstr "料站 %s：已装 %s，要求 %s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart cannot be mounted because materials conflict with the MES order requirements: %s"
+msgstr "料车无法上车，物料与制令单料站需求冲突：%s"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart is not mounted on any workcenter."
+msgstr "该料车未上机。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Cart %s unmounted from %s."
+msgstr "料车 %s 已从 %s 下车。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart must be unmounted before it can be cleared."
+msgstr "料车必须先下车才能清车。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "Cart %s cleared: %s feeder(s) unbound."
+msgstr "料车 %s 已清车：解绑 %s 把feeder。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The feeder %s is not available for cart loading."
+msgstr "feeder %s 当前状态无法装车。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The feeder %s is already on cart %s."
+msgstr "feeder %s 已在料车 %s 上。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The station %s on cart %s is already occupied."
+msgstr "料车 %s 的料站 %s 已被占用。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The material %s is already mounted on a cart."
+msgstr "物料 %s 已装在其他车上。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The cart %s is prepared for MES order %s. All feeder lines must target the same MES order."
+msgstr "料车 %s 已为制令单 %s 备料，全部明细必须指向同一张制令单。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The station %s is not required by MES order %s."
+msgstr "料站 %s 不在制令单 %s 的料站需求中。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
+msgid "The material %s does not match station %s. Required item code: %s."
+msgstr "物料 %s 与料站 %s 不符，要求的产品编码：%s。"
+
+#. module: sn_wsd_smt
+#: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
+msgid "The feeder \"%(sn)s\" is still on cart %(cart)s. Unbind it from the cart first."
+msgstr "feeder \"%(sn)s\" 仍在料车 %(cart)s 上，请先解绑。"
+
+
+

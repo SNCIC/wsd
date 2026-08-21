@@ -1,6 +1,8 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+from odoo.addons.sn_wsd_mrp.models.constants import SIDE_SELECTION
+
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
@@ -11,16 +13,12 @@ class MrpProduction(models.Model):
         check_company=True,
         tracking=True,
     )
+    # 面别与工艺路线 sn.wsd.process.route.x_production_side 共用同一套 key
     x_smt_product_side = fields.Selection(
-        [
-            ('top', 'T Side'),
-            ('bottom', 'B Side'),
-            ('single', 'Single Side'),
-        ],
+        SIDE_SELECTION,
         string='SMT Product Side',
         tracking=True,
     )
-    x_smt_model_ver = fields.Char(string='SMT Model Version')
     x_smt_online_state = fields.Selection(
         [
             ('draft', 'Draft'),

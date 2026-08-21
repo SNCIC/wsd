@@ -85,16 +85,16 @@ class SnSmtChangeWizard(models.TransientModel):
         if not self.feeder_input:
             return target_line.loaded_feeder_id or self.env['sn.smt.feeder']
         feeder = self.env['sn.smt.feeder'].search([
-            ('name', '=', self.feeder_input),
+            ('feeder_sn', '=', self.feeder_input),
             ('company_id', '=', self.production_id.company_id.id),
         ], limit=1)
         if not feeder:
             raise UserError(_('The feeder SN does not exist.'))
-        if feeder.status not in ('1', '2'):
+        if feeder.status not in ('normal', 'in_use'):
             raise UserError(_('The feeder status is invalid.'))
         if not feeder.maintenance_ok:
             raise UserError(_('The feeder maintenance status is expired and cannot be used.'))
-        if target_line.chanel_sn and feeder.channel_sn and feeder.channel_sn != target_line.chanel_sn:
+        if target_line.chanel_sn and feeder.channel_ids and target_line.chanel_sn not in feeder.channel_ids.mapped('channel_sn'):
             raise UserError(_('The feeder channel does not match the loadpoint channel.'))
         if target_line.feeder_spec and feeder.feeder_spec and feeder.feeder_spec != target_line.feeder_spec:
             raise UserError(_('The feeder specification does not match the loadpoint feeder requirement.'))
@@ -115,7 +115,7 @@ class SnSmtChangeWizard(models.TransientModel):
         })
         target_line._set_loaded_quantity(new_lot)
         if new_feeder:
-            new_feeder.write({'status': '2', 'bound_production_id': self.production_id.id})
+            new_feeder.write({'status': 'in_use', 'bound_production_id': self.production_id.id})
         old_trace = self.env['sn.smt.traceability'].search([
             ('production_id', '=', self.production_id.id),
             ('online_material_id', '=', target_line.id),
