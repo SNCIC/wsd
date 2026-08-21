@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Quality',
-    'version': '19.0.3.1.8',
+    'version': '19.0.3.1.9',
     'summary': 'Quality management for WSD meter manufacturing',
     'depends': ['sn_wsd_api', 'mail'],
     'data': [

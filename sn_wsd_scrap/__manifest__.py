@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Scrap',
-    'version': '19.0.3.2.0',
+    'version': '19.0.3.2.1',
     'summary': 'Scrap record management for SN-based manufacturing',
     'depends': ['mrp', 'stock', 'mail', 'sn_wsd_mrp', 'sn_wsd_quality', 'sn_wsd_report'],
     'data': [

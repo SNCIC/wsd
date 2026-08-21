@@ -504,7 +504,7 @@
         </record>
 
         <!-- Menus -->
-        <menuitem id="menu_sn_tooling_root" name="Tooling Management" parent="mrp.menu_mrp_root" sequence="46" groups="mrp.group_mrp_user"/>
+        <menuitem id="menu_sn_tooling_root" name="Tooling Management" parent="sn_wsd_smt.menu_sn_smt_root" sequence="96" groups="mrp.group_mrp_user"/>
         <menuitem id="menu_sn_tooling_type" name="Tooling Types" parent="menu_sn_tooling_root" action="action_sn_tooling_type" sequence="5"/>
         <menuitem id="menu_sn_tooling_template" name="Tooling Templates" parent="menu_sn_tooling_root" action="action_sn_tooling_template" sequence="10"/>
         <menuitem id="menu_sn_tooling" name="Tooling" parent="menu_sn_tooling_root" action="action_sn_tooling" sequence="20"/>

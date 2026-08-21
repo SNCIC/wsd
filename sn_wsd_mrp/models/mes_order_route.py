@@ -383,6 +383,20 @@ class MesOrderRouteOperation(models.Model):
     )
     name = fields.Char()
     display_label = fields.Char(compute='_compute_display_label')
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # display_label is a non-stored compute: search the underlying
+        # operation name/code instead so m2o lookups keep working.
+        if name:
+            domain = list(domain or []) + [
+                '|', '|',
+                ('name', operator, name),
+                ('operation_id.name', operator, name),
+                ('operation_id.code', operator, name),
+            ]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
     x_step_code = fields.Char()
     x_station_type = fields.Selection(
         related='operation_id.x_station_type', store=True,

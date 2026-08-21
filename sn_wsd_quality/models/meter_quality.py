@@ -11,6 +11,21 @@ class MeterQualityDefectCode(models.Model):
     name = fields.Char(string='Defect Name', required=True)
     code = fields.Char(string='Defect Code', required=True, index=True)
     active = fields.Boolean(default=True)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # Scan-friendly: match by code as well as by name.
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = ' - '.join(
+                part for part in (record.code, record.name) if part)
     company_id = fields.Many2one(
         'res.company',
         string='Company',

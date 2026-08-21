@@ -23,12 +23,13 @@
                     <field name="repair_order_ids" nolabel="1" readonly="1">
                         <list create="0" edit="0" delete="0">
                             <field name="name"/>
-                            <field name="repair_type_id"/>
                             <field name="defect_code_id"/>
                             <field name="repair_method"/>
                             <field name="replacement_sn"/>
+                            <field name="defect_location" optional="hide"/>
+                            <field name="failure_cause_id" optional="hide"/>
                             <field name="board_sn"/>
-                            <field name="repair_entry_step_id"/>
+                            <field name="repair_entry_route_operation_id"/>
                             <field name="repair_user_id"/>
                             <field name="repair_time"/>
                             <field name="state"/>
