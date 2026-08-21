@@ -66,6 +66,7 @@ msgstr "辅料报废"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__code
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_id
 msgid "Consumable Code"
 msgstr "辅料料号"
 
@@ -80,29 +81,59 @@ msgid "Consumable Spec"
 msgstr "辅料规格"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__consumable_type
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__consumable_type
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_type
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_type
+msgid "Consumable Types"
+msgstr "辅料类型"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_type
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__type_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__type_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
 msgid "Consumable Type"
 msgstr "辅料类型"
 
 #. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+msgid "Type Name"
+msgstr "类型名称"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable type name must be unique per company."
+msgstr "辅料类型名称在同一公司内必须唯一。"
+
+#. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_min
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_min
 msgid "Thaw Duration Min (min)"
 msgstr "回温时长下限(min)"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_max
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_max
 msgid "Thaw Duration Max (min)"
 msgstr "回温时长上限(min)"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_count_limit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_count_limit
 msgid "Thaw Count Limit"
 msgstr "回温次数上限"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_control
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__stir_control
 msgid "Stir Control"
 msgstr "搅拌管控"
 
@@ -138,7 +169,6 @@ msgstr "辅料SN"
 #: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_template
 #: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_template
 #: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_template
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
 msgid "Consumable Template"
 msgstr "辅料建档"
@@ -265,6 +295,8 @@ msgstr "用户"
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__company_id
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__company_id
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__company_id
 msgid "Company"
 msgstr "组织机构"
 
@@ -456,6 +488,8 @@ msgstr "辅料数量"
 
 #. module: sn_wsd_consumable
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_search
 msgid "Archived"
 msgstr "已归档"
 
@@ -686,3 +720,60 @@ msgstr "%s 已停用。"
 #: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
 msgid "%s enabled."
 msgstr "%s 已解禁。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__issued
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Issued"
+msgstr "领用中"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__issue
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Issue"
+msgstr "领用"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__return
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Return"
+msgstr "归还"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an in-stock consumable can be issued."
+msgstr "仅在库状态的辅料可以领用。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an issued consumable can be returned."
+msgstr "仅领用中的辅料可以归还。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Consumable %s issued."
+msgstr "辅料 %s 已领用。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Consumable %s returned."
+msgstr "辅料 %s 已归还。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__issued_user_id
+msgid "Issued By"
+msgstr "领用人"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__issued_date
+msgid "Issued Date"
+msgstr "领用时间"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Issue Info"
+msgstr "领用信息"

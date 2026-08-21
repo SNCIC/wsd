@@ -6,561 +6,38 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 01:55+0000\n"
-"PO-Revision-Date: 2026-06-15 01:55+0000\n"
+"POT-Creation-Date: 2026-08-21 01:00+0000\n"
+"PO-Revision-Date: 2026-08-21 01:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "A scrap reason is required before scrapping."
-msgstr "报废前必须填写报废原因。"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/mrp_workorder.py:0
-msgid "A tooling selection is required before starting this work order."
-msgstr "在开始此工单前，必须先选择制具。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__acceptance_date
-msgid "Acceptance Date"
-msgstr "验收日期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_needaction
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_needaction
-msgid "Action Needed"
-msgstr "需要采取行动"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__active
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__active
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__active
-msgid "Active"
-msgstr "架构中"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_ids
-msgid "Activities"
-msgstr "活动"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_exception_decoration
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_exception_decoration
-msgid "Activity Exception Decoration"
-msgstr "活动异常徽章"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_state
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_state
-msgid "Activity State"
-msgstr "活动状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_type_icon
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_type_icon
-msgid "Activity Type Icon"
-msgstr "活动类型图标"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__applicability_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Applicability"
-msgstr "适用范围"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_attachment_count
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_attachment_count
-msgid "Attachment Count"
-msgstr "附件数量"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/mrp_workorder.py:0
-msgid "Automatically issued from work order start"
-msgstr "开工时自动领用"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/mrp_workorder.py:0
-msgid "Automatically put online from work order start"
-msgstr "开工时自动上线"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/mrp_workorder.py:0
-msgid "Automatically taken offline from work order completion"
-msgstr "完工时自动下线"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__x_available_tooling_ids
-msgid "Available Tooling"
-msgstr "可用制具"
+msgid "A disable reason is required."
+msgstr "禁用必须填写原因。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintenance_wizard_form
-msgid "Batch Maintenance"
-msgstr "批量保养"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__bom_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__bom_id
-msgid "BoM"
-msgstr "物料清单"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintenance_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_pda_wizard_form
-msgid "Cancel"
-msgstr "取消"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__cleaning
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_operation_log__operation_type__cleaning
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_pda_wizard__operation_type__cleaning
-msgid "Cleaning"
-msgstr "清洗中"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__company_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__company_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__company_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__company_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__company_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__company_id
-msgid "Company"
-msgstr "公司"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintenance_wizard_form
-msgid "Confirm Maintenance"
-msgstr "确认保养"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__count_maintenance_status
-msgid "Count Maintenance Status"
-msgstr "计次保养状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_count_reminder
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_count_reminder
-msgid "Count Reminder Threshold"
-msgstr "计次提醒阈值"
+msgid "A fault description is required to start repair."
+msgstr "开始维修必须填写故障描述。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Count reminder cannot exceed maintenance count limit."
-msgstr "计次提醒值不能超过保养次数限制。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__create_uid
-msgid "Created by"
-msgstr "创建人"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__create_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__create_date
-msgid "Created on"
-msgstr "创建时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__after_current_usage_count
-msgid "Current Usage After Maintenance"
-msgstr "保养后当前使用次数"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__before_current_usage_count
-msgid "Current Usage Before Maintenance"
-msgstr "保养前当前使用次数"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__current_usage_count
-msgid "Current Usage Count"
-msgstr "当前使用次数"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__cycle_maintenance_status
-msgid "Cycle Maintenance Status"
-msgstr "周期保养状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_cycle_reminder_days
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_cycle_reminder_days
-msgid "Cycle Reminder Days"
-msgstr "周期提醒天数"
+msgid "A scrap reason is required to scrap the tooling."
+msgstr "制具转报废必须填写报废原因。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Cycle reminder cannot exceed maintenance cycle days."
-msgstr "周期提醒天数不能超过周期保养天数限制。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__default_result
-msgid "Default Result"
-msgstr "默认结果"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__workcenter_id
-msgid "Default Work Center"
-msgstr "默认工作中心"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Disable"
-msgstr "禁用"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__disabled_reason
-msgid "Disable Reason"
-msgstr "禁用原因"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__disabled
-msgid "Disabled"
-msgstr "已禁用"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_maintenance_request__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__display_name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__display_name
-msgid "Display Name"
-msgstr "显示名称"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log_line__result__done
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_wizard_line__result__done
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__done
-msgid "Done"
-msgstr "完成"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__draft
-msgid "Draft"
-msgstr "草稿"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__count_maintenance_status__due
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__cycle_maintenance_status__due
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__due
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__after_status__due
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__before_status__due
-msgid "Due"
-msgstr "到期"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Enable"
-msgstr "启用"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_by_count
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_by_count
-msgid "Enable Count Maintenance"
-msgstr "启用计次保养"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_by_cycle
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_by_cycle
-msgid "Enable Cycle Maintenance"
-msgstr "启用周期保养"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_pda_wizard_form
-msgid "Execute"
-msgstr "执行"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__count_maintenance_status__expired
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__cycle_maintenance_status__expired
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__expired
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__after_status__expired
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__before_status__expired
-msgid "Expired"
-msgstr "超期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_follower_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_follower_ids
-msgid "Followers"
-msgstr "关注者"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_partner_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_partner_ids
-msgid "Followers (Partners)"
-msgstr "关注者(业务伙伴)"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__activity_type_icon
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__activity_type_icon
-msgid "Font awesome icon e.g. fa-tasks"
-msgstr "Font Awesome 图标，例如 fa-tasks"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__has_message
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__has_message
-msgid "Has Message"
-msgstr "有消息"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_maintenance_request__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__id
-msgid "ID"
-msgstr "ID"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_exception_icon
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_exception_icon
-msgid "Icon"
-msgstr "图标"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__activity_exception_icon
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__activity_exception_icon
-msgid "Icon to indicate an exception activity."
-msgstr "指示异常活动的图标。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_needaction
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_needaction
-msgid "If checked, new messages require your attention."
-msgstr "若勾选，则新消息需要您的关注。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_error
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_sms_error
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_error
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_sms_error
-msgid "If checked, some messages have a delivery error."
-msgstr "若勾选，则某些消息存在发送错误。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__in_stock
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "In Stock"
-msgstr "在库"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__note
-msgid "Instruction"
-msgstr "作业说明"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_is_follower
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_is_follower
-msgid "Is Follower"
-msgstr "是关注者"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_operation_log__operation_type__issue
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_pda_wizard__operation_type__issue
-msgid "Issue"
-msgstr "领用"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log_line__result__issue
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_wizard_line__result__issue
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__issue
-msgid "Issue Found"
-msgstr "发现问题"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__issued
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Issued"
-msgstr "已领用"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__name
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__name
-msgid "Item Name"
-msgstr "检查项名称"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__last_maintenance_date
-msgid "Last Maintenance Date"
-msgstr "上次保养日期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__write_uid
-msgid "Last Updated by"
-msgstr "最后更新人"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__write_date
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__write_date
-msgid "Last Updated on"
-msgstr "最后更新时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__location_id
-msgid "Location"
-msgstr "位置"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__log_id
-msgid "Log"
-msgstr "日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__maintenance_user_id
-msgid "Maintained By"
-msgstr "保养人"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_count_limit
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_count_limit
-msgid "Maintenance Count Limit"
-msgstr "保养次数限制"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_cycle_days
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_cycle_days
-msgid "Maintenance Cycle Days"
-msgstr "保养周期天数"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Maintenance Due"
-msgstr "待保养"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_equipment_id
-msgid "Maintenance Equipment"
-msgstr "保养设备"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Maintenance Expired"
-msgstr "保养超期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__line_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__line_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_item_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
-msgid "Maintenance Items"
-msgstr "保养检查项"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_log_count
-msgid "Maintenance Log Count"
-msgstr "保养日志数量"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_log_ids
-#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_maintenance_log
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Maintenance Logs"
-msgstr "保养日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_maintenance_request
-msgid "Maintenance Request"
-msgstr "保养请求"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_request_count
-msgid "Maintenance Request Count"
-msgstr "保养请求数量"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Maintenance Requests"
-msgstr "保养请求"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Maintenance Rules"
-msgstr "保养规则"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_status
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Maintenance Status"
-msgstr "保养状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__maintenance_time
-msgid "Maintenance Time"
-msgstr "保养工时"
+msgid "A scrap reason is required."
+msgstr "报废必须填写原因。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
@@ -569,606 +46,247 @@ msgid "Maintenance reminder values cannot be negative."
 msgstr "保养提醒值不能为负数。"
 
 #. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__manufacture_date
-msgid "Manufacture Date"
-msgstr "制造日期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_error
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_error
-msgid "Message Delivery error"
-msgstr "消息投递错误"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_ids
-msgid "Messages"
-msgstr "消息"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__tool_type__mold
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template__tool_type__mold
-msgid "Mold"
-msgstr "模具"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__my_activity_date_deadline
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__my_activity_date_deadline
-msgid "My Activity Deadline"
-msgstr "我的活动截止时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_date_deadline
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_date_deadline
-msgid "Next Activity Deadline"
-msgstr "下一活动截止时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_summary
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_summary
-msgid "Next Activity Summary"
-msgstr "下一活动摘要"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_type_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_type_id
-msgid "Next Activity Type"
-msgstr "下一活动类型"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__next_count_maintenance_at
-msgid "Next Count Maintenance Threshold"
-msgstr "下次计次保养阈值"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__next_cycle_maintenance_date
-msgid "Next Cycle Maintenance Date"
-msgstr "下次周期保养日期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__count_maintenance_status__normal
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__cycle_maintenance_status__normal
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__normal
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__after_status__normal
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log__before_status__normal
-msgid "Normal"
-msgstr "正常"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__note
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__note
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__note
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__note
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__note
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__note
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
-msgid "Notes"
-msgstr "备注"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_needaction_counter
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_needaction_counter
-msgid "Number of Actions"
-msgstr "行动数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_error_counter
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_error_counter
-msgid "Number of errors"
-msgstr "错误数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_needaction_counter
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_needaction_counter
-msgid "Number of messages requiring action"
-msgstr "需要采取行动的消息数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_error_counter
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_error_counter
-msgid "Number of messages with delivery error"
-msgstr "发送错误的消息数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_operation_log__operation_type__offline
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_pda_wizard__operation_type__offline
-msgid "Offline"
-msgstr "下线"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__online
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_operation_log__operation_type__online
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_pda_wizard__operation_type__online
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Online"
-msgstr "上线"
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid "The count reminder threshold cannot exceed the maintenance count limit."
+msgstr "次数提醒阈值不能超过保养次数上限。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Online tooling must be taken offline before scrapping."
-msgstr "上线状态的制具在报废前必须先下线。"
+msgid "The cycle reminder days cannot exceed the maintenance cycle days."
+msgstr "周期提醒天数不能超过保养周期天数。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only disabled tooling can be enabled."
-msgstr "只有已禁用的制具才能被启用。"
+msgid "The tooling code must be unique per company."
+msgstr "制具料号在同一公司内必须唯一。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only due or expired tooling can be maintained."
-msgstr "只有到期或过期的制具才能进行保养。"
+msgid "The tooling SN must be unique per company."
+msgstr "制具编号在同一公司内必须唯一。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only in-stock tooling can be disabled."
-msgstr "只有在库的制具才能被禁用。"
+msgid "The tooling type code must be unique per company."
+msgstr "制具类型编码在同一公司内必须唯一。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only in-stock tooling can be issued."
-msgstr "只有在库的制具才能领用。"
+msgid "The tooling type name must be unique per company."
+msgstr "制具类型名称在同一公司内必须唯一。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only in-stock tooling can be moved to cleaning."
-msgstr "只有在库的制具才能转入清洗。"
+msgid "The tooling %s has expired maintenance. Maintain it first."
+msgstr "制具 %s 保养已超期，请先保养。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only issued tooling can be put online."
-msgstr "只有已领用的制具才能上线。"
+msgid "The tooling %s is not under maintenance."
+msgstr "制具 %s 不在保养中。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only issued tooling can be returned."
-msgstr "只有已领用的制具才能归还。"
+msgid "The tooling %s is not under repair."
+msgstr "制具 %s 不在维修中。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Only online tooling can be taken offline."
-msgstr "只有上线状态的制具才能下线。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__operation_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__operation_type
-msgid "Operation"
-msgstr "工序/操作"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__operation_count
-msgid "Operation Count"
-msgstr "操作次数"
+msgid "The tooling %s must be returned or its maintenance/repair finished before scrapping."
+msgstr "制具 %s 必须先归还或完成保养/维修后才能报废。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__operation_log_ids
-#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_operation_log
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Operation Logs"
-msgstr "操作日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__operation_time
-msgid "Operation Time"
-msgstr "操作时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__operation_type
-msgid "Operation Type"
-msgstr "操作类型"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__operator_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__operator_id
-msgid "Operator"
-msgstr "操作员"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_mrp_workorder_form_tooling
-msgid "PDA Operation"
-msgstr "PDA 操作"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__panel_count
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__panel_count
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__panel_count
-msgid "Panel Count"
-msgstr "拼板数"
+msgid "Only an idle tooling can be issued."
+msgstr "仅空闲状态的制具可以领用。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Panel count must be greater than zero."
-msgstr "拼板数必须大于零。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__pass_qty
-msgid "Pass Quantity"
-msgstr "通过数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__operation_time
-msgid "Pass Time"
-msgstr "通过时间"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__product_tmpl_id
-msgid "Product"
-msgstr "产品"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__product_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__product_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__product_id
-msgid "Product Variant"
-msgstr "产品变体"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__rating_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__rating_ids
-msgid "Ratings"
-msgstr "评价"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__activity_user_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__activity_user_id
-msgid "Responsible User"
-msgstr "负责人"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log_line__result
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__result
-msgid "Result"
-msgstr "结果"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_operation_log__operation_type__return
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_pda_wizard__operation_type__return
-msgid "Return"
-msgstr "归还"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_sms_error
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "短信发送错误"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__safe_stock_qty
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__safe_stock_qty
-msgid "Safe Stock"
-msgstr "安全库存"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Scrap"
-msgstr "报废"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__scrap_date
-msgid "Scrap Date"
-msgstr "报废日期"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__scrap_reason
-msgid "Scrap Reason"
-msgstr "报废原因"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__scrapped
-msgid "Scrapped"
-msgstr "已报废"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__scrap_user_id
-msgid "Scrapped By"
-msgstr "报废人"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__sequence
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__sequence
-msgid "Sequence"
-msgstr "序号"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_log_line__result__skipped
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintenance_wizard_line__result__skipped
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__skipped
-msgid "Skipped"
-msgstr "已跳过"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__spec
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__spec
-msgid "Specification"
-msgstr "规格"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__tool_type__squeegee
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template__tool_type__squeegee
-msgid "Squeegee"
-msgstr "刮刀"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__state
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "State"
-msgstr "状态"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "State Details"
-msgstr "状态详情"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__after_status
-msgid "Status After Maintenance"
-msgstr "保养后状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__before_status
-msgid "Status Before Maintenance"
-msgstr "保养前状态"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__activity_state
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__activity_state
-msgid ""
-"Status based on activities\n"
-"Overdue: Due date is already passed\n"
-"Today: Activity date is today\n"
-"Planned: Future activities."
-msgstr ""
-"基于活动的状态：\n"
-"逾期：到期日期已过\n"
-"今天：活动日期为今天\n"
-"计划：未来的活动。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__tool_type__stencil
-#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template__tool_type__stencil
-msgid "Stencil"
-msgstr "钢网"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__template_id
-msgid "Template"
-msgstr "模板"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__code
-msgid "Template Code"
-msgstr "模板编码"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__name
-msgid "Template Name"
-msgstr "模板名称"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.constraint,message:sn_wsd_tooling.constraint_sn_tooling_template_code_company_uniq
-msgid "Template code must be unique per company."
-msgstr "每个公司的模板编码必须是唯一的。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__product_tmpl_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__product_tmpl_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__product_tmpl_id
-msgid "Tool Product"
-msgstr "制具产品"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__tool_type
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tool_type
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
-msgid "Tool Type"
-msgstr "制具类型"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__total_usage_count
-msgid "Total Usage Count"
-msgstr "总使用次数"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__activity_exception_decoration
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__activity_exception_decoration
-msgid "Type of the exception activity on record."
-msgstr "记录中异常活动的类型。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__usage_count
-msgid "Usage Count"
-msgstr "使用次数"
-
-#. module: sn_wsd_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Usage Counters"
-msgstr "使用计数器"
+msgid "Only an issued tooling can be put online."
+msgstr "仅领用中的制具可以上线。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__usage_log_ids
-#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_usage_log
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
-msgid "Usage Logs"
-msgstr "使用日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__usage_qty
-msgid "Usage Quantity"
-msgstr "使用数量"
+msgid "Only an online tooling can be taken offline."
+msgstr "仅使用中的制具可以下线。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Usage count must be greater than zero."
-msgstr "使用次数必须大于零。"
+msgid "Only an issued tooling can be returned."
+msgstr "仅领用中的制具可以归还。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Usage quantity must be greater than zero."
-msgstr "使用数量必须大于零。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__vendor_id
-msgid "Vendor"
-msgstr "供应商"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__website_message_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__website_message_ids
-msgid "Website Messages"
-msgstr "网站消息"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__website_message_ids
-#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__website_message_ids
-msgid "Website communication history"
-msgstr "网站沟通历史"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard_line__wizard_id
-msgid "Wizard"
-msgstr "向导"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__workcenter_id
-msgid "Work Center"
-msgstr "工作中心"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_mrp_workorder
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__workorder_id
-msgid "Work Order"
-msgstr "工单"
+msgid "Only an idle tooling can start maintenance."
+msgstr "仅空闲状态的制具可以开始保养。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "equipment_id"
-msgstr "equipment_id"
+msgid "Only an idle tooling can start repair."
+msgstr "仅空闲状态的制具可以开始维修。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "template_id"
-msgstr "template_id"
+msgid "Only an idle tooling can be disabled."
+msgstr "仅空闲状态的制具可以禁用。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "tooling_id"
-msgstr "tooling_id"
+msgid "Only a disabled tooling can be enabled."
+msgstr "仅已禁用的制具可以解禁。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid "Only an online tooling can register usage (%s)."
+msgstr "仅使用中的制具可以登记使用次数（%s）。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid "The usage quantity must be a positive integer."
+msgstr "使用数量必须是正整数。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling SN %s does not exist."
+msgstr "制具 SN %s 不存在。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s issued."
+msgstr "制具 %s 已领用。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s returned."
+msgstr "制具 %s 已归还。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s put online."
+msgstr "制具 %s 已上线。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s taken offline."
+msgstr "制具 %s 已下线。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s maintenance started."
+msgstr "制具 %s 已开始保养。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s maintenance done."
+msgstr "制具 %s 保养完成。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s repair started."
+msgstr "制具 %s 已开始维修。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s scrapped after repair."
+msgstr "制具 %s 维修后报废。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s repaired."
+msgstr "制具 %s 维修完成。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s disabled."
+msgstr "制具 %s 已禁用。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s enabled."
+msgstr "制具 %s 已解禁。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s scrapped."
+msgstr "制具 %s 已报废。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling_service.py:0
+msgid "Tooling %s: registered %s usages."
+msgstr "制具 %s：已登记使用 %s 次。"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
 #: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_maintenance_request__x_tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__x_tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_applicability__tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_log__tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintenance_wizard__tooling_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_operation_log__tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_pda_wizard__tooling_id
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_ids
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_usage_log__tooling_id
 #: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_mrp_workorder_form_tooling
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_count
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
 msgid "Tooling"
-msgstr "制具"
+msgstr "制具信息"
 
 #. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_record
+#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_record
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_record
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling %s does not match the work order product."
-msgstr "制具 %s 与工单产品不匹配。"
+msgid "Tooling Records"
+msgstr "制具履历"
 
 #. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling %s has expired maintenance and cannot be issued."
-msgstr "制具 %s 的保养已过期，无法领用。"
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_template
+#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_template
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_template
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__template_id
+msgid "Tooling Template"
+msgstr "制具建档"
 
 #. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling %s has expired maintenance and cannot be put online."
-msgstr "制具 %s 的保养已过期，无法上线。"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling %s has no applicability mapping for the current work order."
-msgstr "制具 %s 没有针对当前工单的适用性映射。"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling %s is not applicable to the current work center."
-msgstr "制具 %s 不适用于当前工作中心。"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_applicability
-msgid "Tooling Applicability"
-msgstr "制具适用性"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__name
-msgid "Tooling Code"
-msgstr "制具编码"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_count
-msgid "Tooling Count"
-msgstr "制具数量"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintenance_log
-msgid "Tooling Maintenance Log"
-msgstr "制具保养日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintenance_log_line
-msgid "Tooling Maintenance Log Line"
-msgstr "制具保养日志明细"
-
-#. module: sn_wsd_tooling
-#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_maintenance_log
-msgid "Tooling Maintenance Logs"
-msgstr "制具保养日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintenance_wizard
-msgid "Tooling Maintenance Wizard"
-msgstr "制具保养向导"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintenance_wizard_line
-msgid "Tooling Maintenance Wizard Line"
-msgstr "制具保养向导明细"
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_type
+#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_type
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_type
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__type_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__type_id
+msgid "Tooling Type"
+msgstr "制具类型"
 
 #. module: sn_wsd_tooling
 #: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_root
@@ -1176,89 +294,645 @@ msgid "Tooling Management"
 msgstr "制具管理"
 
 #. module: sn_wsd_tooling
-#: model:res.groups,name:sn_wsd_tooling.group_tooling_manager
-msgid "Tooling Manager"
-msgstr "制具管理员"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_operation_log
-msgid "Tooling Operation Log"
-msgstr "制具操作日志"
-
-#. module: sn_wsd_tooling
-#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_operation_log
-msgid "Tooling Operation Logs"
-msgstr "制具操作日志"
-
-#. module: sn_wsd_tooling
-#. odoo-python
-#: code:addons/sn_wsd_tooling/models/mrp_workorder.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_pda_wizard_form
-msgid "Tooling PDA Operation"
-msgstr "制具 PDA 操作"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_pda_wizard
-msgid "Tooling PDA Wizard"
-msgstr "制具 PDA 向导"
-
-#. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__x_tooling_required
-msgid "Tooling Required"
-msgstr "需要制具"
-
-#. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_template
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__template_id
-msgid "Tooling Template"
-msgstr "制具模板"
-
-#. module: sn_wsd_tooling
 #: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_template_maintenance_item
 msgid "Tooling Template Maintenance Item"
-msgstr "制具模板保养项目"
+msgstr "制具保养项目"
 
 #. module: sn_wsd_tooling
-#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_template
-#: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling_template
-msgid "Tooling Templates"
-msgstr "制具模板"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_record_line
+msgid "Tooling Record Line"
+msgstr "制具检查项行"
 
 #. module: sn_wsd_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__x_tooling_usage_count
-msgid "Tooling Usage Count"
-msgstr "制具使用计数"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintain_wizard
+msgid "Tooling Maintain Wizard"
+msgstr "制具保养完成向导"
 
 #. module: sn_wsd_tooling
-#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_usage_log
-msgid "Tooling Usage Log"
-msgstr "制具使用日志"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_maintain_wizard_line
+msgid "Tooling Maintain Wizard Line"
+msgstr "制具保养完成向导行"
 
 #. module: sn_wsd_tooling
-#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_usage_log
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_mrp_workorder__x_tooling_usage_log_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_mrp_workorder_form_tooling
-msgid "Tooling Usage Logs"
-msgstr "制具使用日志"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_repair_start_wizard
+msgid "Tooling Repair Start Wizard"
+msgstr "制具维修登记向导"
 
 #. module: sn_wsd_tooling
-#: model:res.groups,name:sn_wsd_tooling.group_tooling_user
-msgid "Tooling User"
-msgstr "制具用户"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_repair_done_wizard
+msgid "Tooling Repair Done Wizard"
+msgstr "制具维修完成向导"
 
 #. module: sn_wsd_tooling
-#: model:ir.model.constraint,message:sn_wsd_tooling.constraint_sn_tooling_name_company_uniq
-msgid "Tooling code must be unique per company."
-msgstr "每个公司的制具编码必须是唯一的。"
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_disable_wizard
+msgid "Tooling Disable Wizard"
+msgstr "制具禁用向导"
+
+#. module: sn_wsd_tooling
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_scrap_wizard
+msgid "Tooling Scrap Wizard"
+msgstr "制具报废向导"
+
+#. module: sn_wsd_tooling
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_service
+msgid "Tooling PDA Service"
+msgstr "制具PDA服务"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__sn
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__tooling_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__tooling_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__tooling_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__tooling_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__tooling_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__tooling_id
+msgid "Tooling SN"
+msgstr "制具编号"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__code
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__template_id
+msgid "Tooling Code"
+msgstr "制具料号"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__name
+msgid "Tooling Name"
+msgstr "制具名称"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__spec
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__spec
+msgid "Specification"
+msgstr "规格"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__has_tension
+msgid "Enable Tension"
+msgstr "启用张力"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__has_thickness
+msgid "Enable Thickness"
+msgstr "启用厚度"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__has_flatness
+msgid "Enable Flatness"
+msgstr "启用平整度"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__has_tension
+msgid "Show the tension parameter on templates and tooling of this type."
+msgstr "在该类型制具的建档与制具信息上显示张力参数。"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__has_thickness
+msgid "Show the thickness parameter on templates and tooling of this type."
+msgstr "在该类型制具的建档与制具信息上显示厚度参数。"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__has_flatness
+msgid "Show the flatness parameter on templates and tooling of this type."
+msgstr "在该类型制具的建档与制具信息上显示平整度参数。"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__name
+msgid "Type Name"
+msgstr "类型名称"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__code
+msgid "Type Code"
+msgstr "类型编码"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_by_count
+msgid "Maintenance by Count"
+msgstr "按次数保养"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_count_limit
+msgid "Maintenance Count Limit"
+msgstr "保养次数上限"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_count_reminder
+msgid "Count Reminder Threshold"
+msgstr "次数提醒阈值"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_by_cycle
+msgid "Maintenance by Cycle"
+msgstr "按周期保养"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_cycle_days
+msgid "Maintenance Cycle (days)"
+msgstr "保养周期(天)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_cycle_reminder_days
+msgid "Cycle Reminder (days)"
+msgstr "周期提醒(天)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__maintenance_item_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "Maintenance Items"
+msgstr "保养项目"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__default_tension
+msgid "Default Tension"
+msgstr "默认张力"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__default_thickness
+msgid "Default Thickness (μm)"
+msgstr "默认厚度(μm)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__default_flatness
+msgid "Default Flatness (μm)"
+msgstr "默认平整度(μm)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__name
+msgid "Item Name"
+msgstr "项目名称"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__default_result
+msgid "Default Result"
+msgstr "默认结果"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__note
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__note
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__tension
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__tension
+msgid "Tension"
+msgstr "张力"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__thickness
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__thickness
+msgid "Thickness (μm)"
+msgstr "厚度(μm)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__flatness
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__flatness
+msgid "Flatness (μm)"
+msgstr "平整度(μm)"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__location_id
+msgid "Location"
+msgstr "库位"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__manufacture_date
+msgid "Manufacture Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__total_usage_count
+msgid "Total Usage Count"
+msgstr "累计使用次数"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__cycle_usage_count
+msgid "Cycle Usage Count"
+msgstr "周期内使用次数"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__last_maintenance_date
+msgid "Last Maintenance Date"
+msgstr "上次保养日期"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__maintenance_status
+msgid "Maintenance Status"
+msgstr "保养状态"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__issued_user_id
+msgid "Issued By"
+msgstr "领用人"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__issued_date
+msgid "Issued Date"
+msgstr "领用时间"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__disable_reason
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__reason
+msgid "Disable Reason"
+msgstr "禁用原因"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__scrap_reason
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__reason
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__reason
+msgid "Scrap Reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__state
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__outcome
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__record_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__record_count
+msgid "History"
+msgstr "履历"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__action
+msgid "Action"
+msgstr "动作"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__user_id
+msgid "User"
+msgstr "操作人"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__occurred_at
+msgid "Occurred At"
+msgstr "时间"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__qty
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__fault
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__fault
+msgid "Fault"
+msgstr "故障描述"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__reason
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__reason
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintain_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__line_ids
+msgid "Check Items"
+msgstr "检查项"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__result
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__result
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__company_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__company_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__company_id
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__idle
+msgid "Idle"
+msgstr "空闲"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__issued
+msgid "Issued"
+msgstr "领用中"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__online
+msgid "Online"
+msgstr "使用中"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling was issued while maintenance status was Due."
-msgstr "制具在保养状态为“到期”时被领用。"
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__maintaining
+msgid "Maintaining"
+msgstr "保养中"
 
 #. module: sn_wsd_tooling
 #. odoo-python
 #: code:addons/sn_wsd_tooling/models/tooling.py:0
-msgid "Tooling was put online while maintenance status was Due."
-msgstr "制具在保养状态为“到期”时被上线。"
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__repairing
+msgid "Repairing"
+msgstr "维修中"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__disabled
+msgid "Disabled"
+msgstr "已禁用"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__normal
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__due
+msgid "Due"
+msgstr "即将到期"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__maintenance_status__expired
+msgid "Expired"
+msgstr "已超期"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__issue
+msgid "Issue"
+msgstr "领用"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__return
+msgid "Return"
+msgstr "归还"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__online
+msgid "Put Online"
+msgstr "上线"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__offline
+msgid "Take Offline"
+msgstr "下线"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__usage
+msgid "Usage"
+msgstr "使用"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__maintain
+msgid "Maintain"
+msgstr "保养"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__repair
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__disable
+msgid "Disable"
+msgstr "禁用"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__enable
+msgid "Enable"
+msgstr "解禁"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record__action__scrap
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintain_wizard_line__result__done
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record_line__result__done
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__done
+msgid "Done"
+msgstr "正常"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintain_wizard_line__result__skipped
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record_line__result__skipped
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__skipped
+msgid "Skipped"
+msgstr "跳过"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_maintain_wizard_line__result__issue
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_record_line__result__issue
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_template_maintenance_item__default_result__issue
+msgid "Issue Found"
+msgstr "异常"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+#: code:addons/sn_wsd_tooling/wizard/tooling_wizards.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_repair_done_wizard__outcome__fixed
+msgid "Repaired"
+msgstr "已修复"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/wizard/tooling_wizards.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling_repair_done_wizard__outcome__scrap
+msgid "Cannot Repair - Scrap"
+msgstr "无法修复 - 报废"
+
+#. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_maintain_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Finish Maintenance"
+msgstr "保养完成"
+
+#. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_repair_start_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Start Repair"
+msgstr "开始维修"
+
+#. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_repair_done_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Finish Repair"
+msgstr "维修完成"
+
+#. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_disable_wizard
+msgid "Disable Tooling"
+msgstr "禁用制具"
+
+#. module: sn_wsd_tooling
+#: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_scrap_wizard
+msgid "Scrap Tooling"
+msgstr "报废制具"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_type_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "Parameter Defaults"
+msgstr "参数默认值"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "Maintenance Rules"
+msgstr "保养规则"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "By Count"
+msgstr "按次数"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "By Cycle"
+msgstr "按周期"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintain_wizard_form
+msgid "Measured Parameters"
+msgstr "实测参数"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Usage & Maintenance"
+msgstr "使用与保养"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Issue Info"
+msgstr "领用信息"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Issued By Me"
+msgstr "我领用的"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Maintenance Due"
+msgstr "保养即将到期"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Maintenance Expired"
+msgstr "保养已超期"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Start Maintenance"
+msgstr "开始保养"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintain_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_start_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_done_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_disable_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_scrap_wizard_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintain_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_start_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_done_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_disable_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_scrap_wizard_form
+msgid "Cancel"
+msgstr "取消"

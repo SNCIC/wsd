@@ -13,10 +13,28 @@ class TestConsumable(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        def _get_or_create_type(name, vals):
+            existing = cls.env['sn.consumable.type'].search([('name', '=', name)], limit=1)
+            return existing or cls.env['sn.consumable.type'].create({'name': name, **vals})
+
+        # The migration seeds the six legacy types, reuse them when present.
+        cls.consumable_type = _get_or_create_type('Solder Paste', {
+            'thaw_duration_min': 0,
+            'thaw_duration_max': 120,
+            'thaw_count_limit': 2,
+            'stir_control': True,
+            'stir_duration_min': 0,
+            'stir_duration_max': 5,
+        })
+        cls.red_glue_type = _get_or_create_type('Red Glue', {
+            'thaw_duration_min': 0,
+            'thaw_duration_max': 133,
+        })
         cls.template = cls.env['sn.consumable.template'].create({
             'code': 'AUX-TST-001',
             'name': 'Test Solder Paste',
-            'consumable_type': 'solder_paste',
+            'type_id': cls.consumable_type.id,
             'thaw_duration_min': 0,
             'thaw_duration_max': 120,
             'thaw_count_limit': 2,
@@ -57,6 +75,8 @@ class TestConsumable(TransactionCase):
             })
 
     def _thaw_ok(self, info):
+        if info.aux_state == 'normal':
+            info.action_issue()
         info.action_thaw_start()
         info.action_thaw_end()
 
@@ -74,16 +94,21 @@ class TestConsumable(TransactionCase):
                 self.env['sn.consumable.template'].create({
                     'code': 'AUX-TST-001',
                     'name': 'Dup',
-                    'consumable_type': 'flux',
+                    'type_id': self.red_glue_type.id,
                     'shelf_life_days': 30,
                     'expiry_remind_days': 3,
                 })
+
+    def test_type_name_unique(self):
+        with self.assertRaises(psycopg2.IntegrityError):
+            with self.env.cr.savepoint():
+                self.env['sn.consumable.type'].create({'name': 'Solder Paste'})
 
     def test_type_prefill_defaults(self):
         with Form(self.env['sn.consumable.template']) as template_form:
             template_form.code = 'AUX-TST-002'
             template_form.name = 'Prefill'
-            template_form.consumable_type = 'red_glue'
+            template_form.type_id = self.red_glue_type
             template_form.shelf_life_days = 90
             template_form.expiry_remind_days = 5
             self.assertEqual(template_form.thaw_duration_min, 0)
@@ -120,7 +145,29 @@ class TestConsumable(TransactionCase):
     # Lifecycle
     # ------------------------------------------------------------------
 
+    def test_issue_return(self):
+        self.info.action_issue()
+        self.assertEqual(self.info.aux_state, 'issued')
+        self.assertEqual(self.info.issued_user_id, self.env.user)
+        self.assertTrue(self.info.issued_date)
+        self.info.action_return()
+        self.assertEqual(self.info.aux_state, 'normal')
+        self.assertFalse(self.info.issued_user_id)
+        self.assertFalse(self.info.issued_date)
+        records = sorted(self.info.record_ids.mapped('action'))
+        self.assertEqual(records, ['issue', 'return'])
+
+    def test_issue_requires_normal(self):
+        self.info.action_issue()
+        with self.assertRaises(UserError):
+            self.info.action_issue()
+
+    def test_return_requires_issued(self):
+        with self.assertRaises(UserError):
+            self.info.action_return()
+
     def test_thaw_flow(self):
+        self.info.action_issue()
         self.info.action_thaw_start()
         self.assertEqual(self.info.aux_state, 'thawing')
         self.assertEqual(self.info.thaw_count, 1)
@@ -130,19 +177,24 @@ class TestConsumable(TransactionCase):
         self.assertEqual(len(records), 1)
         self.assertEqual(records.thaw_count, 1)
 
-    def test_thaw_requires_normal(self):
+    def test_thaw_requires_issued(self):
+        with self.assertRaises(UserError):
+            self.info.action_thaw_start()
+        self.info.action_issue()
         self.info.action_thaw_start()
         with self.assertRaises(UserError):
             self.info.action_thaw_start()
 
     def test_thaw_short_blocked(self):
         self.template.write({'thaw_duration_min': 60})
+        self.info.action_issue()
         self.info.action_thaw_start()
         with self.assertRaises(UserError):
             self.info.action_thaw_end()
         self.assertEqual(self.info.aux_state, 'thawing')
 
     def test_thaw_over_limit_blocked(self):
+        self.info.action_issue()
         self.info.action_thaw_start()
         self.info.write({'thaw_start': fields.Datetime.now() - timedelta(hours=3)})
         with self.assertRaises(UserError):
@@ -159,8 +211,13 @@ class TestConsumable(TransactionCase):
         with self.assertRaises(UserError):
             self.info.action_thaw_start()
 
-    def test_expired_blocks_thaw(self):
+    def test_expired_blocks_issue_and_thaw(self):
+        self.info.action_issue()
         self.info.production_date = fields.Date.add(fields.Date.today(), days=-400)
+        self.info.action_return()
+        with self.assertRaises(UserError):
+            self.info.action_issue()
+        self.info.write({'aux_state': 'issued'})
         with self.assertRaises(UserError):
             self.info.action_thaw_start()
 
@@ -190,7 +247,7 @@ class TestConsumable(TransactionCase):
         self._stir_ok(self.info)
         self.info.action_load(self.mes_order)
         self.info.action_unload()
-        self.assertEqual(self.info.aux_state, 'normal')
+        self.assertEqual(self.info.aux_state, 'issued')
         load = self.info.record_ids.filtered(lambda r: r.action == 'load')
         unload = self.info.record_ids.filtered(lambda r: r.action == 'unload')
         self.assertEqual(load.mes_order_id, self.mes_order)
@@ -233,6 +290,8 @@ class TestConsumable(TransactionCase):
         service = self.env['sn.consumable.service']
         resolved = service.resolve('AUX-SN-001')
         self.assertEqual(resolved['template_code'], 'AUX-TST-001')
+        service.issue('AUX-SN-001')
+        self.assertEqual(self.info.aux_state, 'issued')
         service.thaw_start('AUX-SN-001')
         service.thaw_end('AUX-SN-001')
         service.stir_start('AUX-SN-001')
@@ -241,6 +300,10 @@ class TestConsumable(TransactionCase):
         self.assertIn('AUX-SN-001', message)
         self.assertEqual(self.info.aux_state, 'in_use')
         service.unload('AUX-SN-001')
+        self.assertEqual(self.info.aux_state, 'issued')
+        service.return_('AUX-SN-001')
+        self.assertEqual(self.info.aux_state, 'normal')
+        service.issue('AUX-SN-001')
         service.exhaust('AUX-SN-001')
         self.assertEqual(self.info.aux_state, 'exhausted')
 
