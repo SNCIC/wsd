@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sn_wsd_internal_serial_generate_print_wizard_user,sn.wsd.internal.serial.generate.print.wizard user,model_sn_wsd_internal_serial_generate_print_wizard,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_incoming_material_label_wizard_user,sn.wsd.incoming.material.label.wizard user,model_sn_wsd_incoming_material_label_wizard,stock.group_stock_user,1,1,1,1
+access_sn_wsd_incoming_material_label_wizard_line_user,sn.wsd.incoming.material.label.wizard.line user,model_sn_wsd_incoming_material_label_wizard_line,stock.group_stock_user,1,1,1,1

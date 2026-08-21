@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * sn_wsd_print
 #
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-28 00:00+0000\n"
-"PO-Revision-Date: 2026-08-20 00:00+0000\n"
+"PO-Revision-Date: 2026-08-21 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -35,6 +35,7 @@ msgid "Generate Quantity"
 msgstr "生成数量"
 
 #. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__label_print_count
 #: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_internal_serial__label_print_count
 msgid "Label Print Count"
 msgstr "标签打印次数"
@@ -56,7 +57,7 @@ msgid ""
 msgstr "生成数量不能超过剩余可生成数量 %(remaining)s。"
 
 #. module: sn_wsd_print
-#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_internal_serial_generate_print_wizard__product_id
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__product_id
 msgid "Product"
 msgstr "产品"
 
@@ -79,3 +80,165 @@ msgstr "取消"
 #: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_mes_order__can_generate_internal_serials
 msgid "Can Generate Internal Serials"
 msgstr "可生成厂内序列号"
+
+#. module: sn_wsd_print
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_incoming_material_label_wizard_form
+#: code:addons/sn_wsd_print/models/stock_picking.py:0
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "Generate and Print Material Labels"
+msgstr "生成并打印物料标签"
+
+#. module: sn_wsd_print
+#: model_terms:ir.ui.view,arch_db:sn_wsd_print.view_stock_picking_form_material_label
+msgid "Print Material Labels"
+msgstr "打印物料标签"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard__picking_id
+msgid "Receipt"
+msgstr "入库单"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard__partner_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard__supplier_code
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__supplier_code
+msgid "Supplier Code"
+msgstr "供应商编码"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard__line_ids
+msgid "Material Lines"
+msgstr "物料明细"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__move_line_id
+msgid "Operation Line"
+msgstr "操作明细"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__move_id
+msgid "Stock Move"
+msgstr "库存移动"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__quantity_per_label
+msgid "Quantity per Label"
+msgstr "每张标签数量"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__official_batch_no
+msgid "Official Batch"
+msgstr "官方批次"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_sn_wsd_incoming_material_label_wizard_line__existing_lot_id
+msgid "Official Lot"
+msgstr "官方批次记录"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__material_sn_base
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_move_line__material_sn_base
+msgid "Material SN Base"
+msgstr "物料 SN 基础值"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__material_sn_suffix
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_move_line__material_sn_suffix
+msgid "Material SN Suffix"
+msgstr "物料 SN 后缀"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__supplier_name
+msgid "Supplier Name"
+msgstr "供应商名称"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__supplier_batch_no
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_move_line__supplier_batch_no
+msgid "Supplier Batch"
+msgstr "供应商批次"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__initial_quantity
+msgid "Initial Quantity"
+msgstr "初始数量"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__source_picking_id
+msgid "Source Receipt"
+msgstr "来源入库单"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_lot__source_move_line_id
+msgid "Source Operation Line"
+msgstr "来源操作明细"
+
+#. module: sn_wsd_print
+#: model:ir.model.fields,field_description:sn_wsd_print.field_stock_move_line__material_label_printed
+msgid "Material Label Printed"
+msgstr "物料标签已打印"
+
+#. module: sn_wsd_print
+#: model:ir.actions.report,name:sn_wsd_print.action_report_incoming_material_label_zpl
+msgid "Incoming Material Labels (ZPL)"
+msgstr "入库物料标签（ZPL）"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/report/incoming_material_label.py:0
+msgid "No material lots were selected for label printing."
+msgstr "未选择要打印标签的物料批次。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/models/stock_picking.py:0
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "Material labels can only be printed for active receipts."
+msgstr "只能为有效入库单打印物料标签。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "The supplier must have a reference code before printing labels."
+msgstr "打印标签前，供应商档案必须填写编码。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "The supplier batch cannot contain the $ character."
+msgstr "供应商批次不能包含 $ 字符。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "Product %(product)s must have an internal reference."
+msgstr "产品 %(product)s 必须填写内部参考号。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "Label quantities must be greater than zero."
+msgstr "标签数量必须大于零。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "Quantity per label cannot exceed the total quantity."
+msgstr "每张标签数量不能超过总数量。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "The material serial sequence is not configured."
+msgstr "尚未配置物料序列号序列。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "The material SN already exists: %s"
+msgstr "物料 SN 已存在：%s"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "There are no material lines to print."
+msgstr "没有可打印的物料明细。"
+
+#. module: sn_wsd_print
+#: code:addons/sn_wsd_print/wizard/incoming_material_label_wizard.py:0
+msgid "There are no material lots to print."
+msgstr "没有可打印的物料批次。"

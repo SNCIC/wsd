@@ -351,6 +351,83 @@
                         </group>
                     </group>
                     <notebook>
+                        <page name="items" string="Inspection Items">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_code"/>
+                                    <field name="name"/>
+                                    <field name="item_type"/>
+                                    <field name="required"/>
+                                    <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                    <field name="text_value" invisible="item_type == 'numeric'"/>
+                                    <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                    <field name="is_checked"/>
+                                    <field name="result"/>
+                                    <field name="unit"/>
+                                    <field name="note"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="sequence"/>
+                                                <field name="item_code"/>
+                                                <field name="name"/>
+                                                <field name="item_type"/>
+                                                <field name="required"/>
+                                            </group>
+                                            <group>
+                                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                                <field name="text_value" invisible="item_type == 'numeric'"/>
+                                                <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                                <field name="is_checked"/>
+                                                <field name="result"/>
+                                                <field name="unit"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="instruction" string="Instruction">
+                                                <field name="instruction" nolabel="1"/>
+                                            </page>
+                                            <page name="attachments" string="Attachments">
+                                                <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                                            </page>
+                                            <page name="notes" string="Notes">
+                                                <field name="note" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['iqc', 'oqc', 'fai', 'ipqc']">
+                            <group>
+                                <field name="sample_size"/>
+                                <field name="sample_checked_qty" readonly="1"/>
+                                <field name="inspected_qty" readonly="1"/>
+                                <field name="defect_qty" readonly="1"/>
+                                <field name="sample_defect_qty" readonly="1"/>
+                                <field name="accept_qty"/>
+                                <field name="reject_qty"/>
+                            </group>
+                            <field name="defect_line_ids">
+                                <list editable="bottom">
+                                    <field name="internal_serial_id"/>
+                                    <field name="defect_code_id"/>
+                                    <field name="defect_qty"/>
+                                    <field name="position"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="attachments" string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                        </page>
                         <page name="scope" string="Scope">
                             <group>
                                 <group>
@@ -433,83 +510,6 @@
                                     </sheet>
                                 </form>
                             </field>
-                        </page>
-                        <page name="items" string="Inspection Items">
-                            <field name="line_ids">
-                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="item_code"/>
-                                    <field name="name"/>
-                                    <field name="item_type"/>
-                                    <field name="required"/>
-                                    <field name="lower_limit" invisible="item_type != 'numeric'"/>
-                                    <field name="upper_limit" invisible="item_type != 'numeric'"/>
-                                    <field name="measured_value" invisible="item_type != 'numeric'"/>
-                                    <field name="text_value" invisible="item_type == 'numeric'"/>
-                                    <field name="manual_result" invisible="item_type == 'numeric'"/>
-                                    <field name="is_checked"/>
-                                    <field name="result"/>
-                                    <field name="unit"/>
-                                    <field name="note"/>
-                                </list>
-                                <form>
-                                    <sheet>
-                                        <group>
-                                            <group>
-                                                <field name="sequence"/>
-                                                <field name="item_code"/>
-                                                <field name="name"/>
-                                                <field name="item_type"/>
-                                                <field name="required"/>
-                                            </group>
-                                            <group>
-                                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
-                                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
-                                                <field name="measured_value" invisible="item_type != 'numeric'"/>
-                                                <field name="text_value" invisible="item_type == 'numeric'"/>
-                                                <field name="manual_result" invisible="item_type == 'numeric'"/>
-                                                <field name="is_checked"/>
-                                                <field name="result"/>
-                                                <field name="unit"/>
-                                            </group>
-                                        </group>
-                                        <notebook>
-                                            <page name="instruction" string="Instruction">
-                                                <field name="instruction" nolabel="1"/>
-                                            </page>
-                                            <page name="attachments" string="Attachments">
-                                                <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
-                                            </page>
-                                            <page name="notes" string="Notes">
-                                                <field name="note" nolabel="1"/>
-                                            </page>
-                                        </notebook>
-                                    </sheet>
-                                </form>
-                            </field>
-                        </page>
-                        <page name="defects" string="Defects" invisible="inspection_type not in ['iqc', 'oqc', 'fai', 'ipqc']">
-                            <group>
-                                <field name="sample_size"/>
-                                <field name="sample_checked_qty" readonly="1"/>
-                                <field name="inspected_qty" readonly="1"/>
-                                <field name="defect_qty" readonly="1"/>
-                                <field name="sample_defect_qty" readonly="1"/>
-                                <field name="accept_qty"/>
-                                <field name="reject_qty"/>
-                            </group>
-                            <field name="defect_line_ids">
-                                <list editable="bottom">
-                                    <field name="internal_serial_id"/>
-                                    <field name="defect_code_id"/>
-                                    <field name="defect_qty"/>
-                                    <field name="position"/>
-                                    <field name="description"/>
-                                </list>
-                            </field>
-                        </page>
-                        <page name="attachments" string="Attachments">
-                            <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                         </page>
                         <page name="notes" string="Notes">
                             <field name="note" nolabel="1"/>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_incoming_material_label_zpl">
+        <t t-foreach="labels" t-as="label">
+            <t t-translation="off">
+^XA
+^CI28
+^PW709
+^LL945
+^LH0,0
+^FO20,20^GB669,905,3^FS
+^FO20,160^GB669,3,3^FS
+^FO20,300^GB669,3,3^FS
+^FO20,590^GB669,3,3^FS
+^FO350,20^GB3,570,3^FS
+^FO515,20^GB3,280,3^FS
+^FO20,90^GB669,3,3^FS
+^FO20,230^GB669,3,3^FS
+^FO350,160^GB165,3,3^FS
+^FO515,160^GB174,3,3^FS
+^FO350,230^GB165,3,3^FS
+^FO515,230^GB174,3,3^FS
+^FO40,48^A0N,28,24^FDMaterial Code^FS
+^FO190,48^A0N,28,24^FD<t t-out="label['material_code']"/>^FS
+^FO370,48^A0N,28,24^FDSupplier Code^FS
+^FO530,48^A0N,28,24^FD<t t-out="label['supplier_code']"/>^FS
+^FO40,118^A0N,28,24^FDMaterial Name^FS
+^FO190,118^A0N,24,20^FD<t t-out="label['material_name']"/>^FS
+^FO370,118^A0N,28,24^FDSupplier^FS
+^FO530,118^A0N,22,18^FD<t t-out="label['supplier_name']"/>^FS
+^FO40,188^A0N,28,24^FDSpecification^FS
+^FO190,188^A0N,24,20^FD<t t-out="label['specification']"/>^FS
+^FO370,188^A0N,28,24^FDBatch^FS
+^FO530,188^A0N,24,20^FD<t t-out="label['batch_no']"/>^FS
+^FO370,340^BQN,2,6^FDLA,<t t-out="label['qr_data']"/>^FS
+^FO530,340^A0N,28,24^FDQty^FS
+^FO530,390^A0N,32,28^FD<t t-out="label['quantity']"/>^FS
+^FO40,640^A0N,32,28^FDMATERIAL SN^FS
+^FO40,700^A0N,34,30^FD<t t-out="label['material_sn']"/>^FS
+^XZ
+            </t>
+        </t>
+    </template>
+</odoo>

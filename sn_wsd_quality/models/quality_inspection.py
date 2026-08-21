@@ -615,7 +615,12 @@ class QualityInspection(models.Model):
                 serial = self.env['sn.wsd.internal.serial'].browse(vals.get('evidence_internal_serial_id')).exists() if vals.get('evidence_internal_serial_id') else travel.internal_serial_id
                 workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else travel.route_operation_id
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or (workorder.mes_order_id.production_id if workorder else False)
-                mes_order = serial.mes_order_id or travel.mes_order_id or (workorder.mes_order_id if workorder else False) or production.x_mes_order_id
+                mes_order = (
+                    serial.mes_order_id
+                    or travel.mes_order_id
+                    or (workorder.mes_order_id if workorder else False)
+                    or (production.x_mes_order_id if production else False)
+                )
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -1336,7 +1341,7 @@ class StockPicking(models.Model):
             and not move.move_line_ids
         )
 
-    def _auto_create_iqc_inspections(self):
+    def _create_iqc_inspections(self):
         inspection_model = self.env['sn.wsd.quality.inspection']
         inspections = inspection_model
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
@@ -1380,11 +1385,6 @@ class StockPicking(models.Model):
                 })
         return inspections
 
-    def _create_backorder(self, backorder_moves=None):
-        backorders = super()._create_backorder(backorder_moves=backorder_moves)
-        backorders._auto_create_iqc_inspections()
-        return backorders
-
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
@@ -1395,9 +1395,7 @@ class StockPicking(models.Model):
         return result
 
     def action_confirm(self):
-        result = super().action_confirm()
-        self._auto_create_iqc_inspections()
-        return result
+        return super().action_confirm()
 
     def action_assign(self):
         return super().action_assign()
@@ -1405,13 +1403,15 @@ class StockPicking(models.Model):
     def _check_iqc_before_validate(self):
         inspection_model = self.env['sn.wsd.quality.inspection']
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            picking._auto_create_iqc_inspections()
-            required_products = picking.move_ids.filtered(
+            incoming_products = picking.move_ids.filtered(
                 lambda move: move.state not in ('cancel', 'done')
                 and move.product_id
                 and move.product_id.is_storable
                 and move.quantity > 0
             ).mapped('product_id')
+            required_products = incoming_products.filtered(
+                lambda product: inspection_model._find_scheme('iqc', product=product)
+            )
             inspections = inspection_model.search([
                 ('inspection_type', '=', 'iqc'),
                 ('picking_id', '=', picking.id),
@@ -1441,7 +1441,6 @@ class StockPicking(models.Model):
         result = super()._pre_action_done_hook()
         if result is not True:
             return result
-        self._auto_create_iqc_inspections()
         self._check_iqc_before_validate()
         return True
 
@@ -1464,3 +1463,8 @@ class StockPicking(models.Model):
                 'default_inspection_type': 'iqc',
             },
         }
+
+    def action_create_iqc_inspections(self):
+        self.ensure_one()
+        self._create_iqc_inspections()
+        return self.action_open_iqc_inspections()
