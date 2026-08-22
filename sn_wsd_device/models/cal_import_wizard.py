@@ -15,7 +15,7 @@ class CalibrationLineImportWizard(models.TransientModel):
 
     task_id = fields.Many2one(
         'sn.wsd.device.cal.task', string='Calibration Task', required=True)
-    file = fields.Binary(string='File', required=True, filename='file_name')
+    file = fields.Binary(string='File', required=True)
     file_name = fields.Char(string='File Name')
     preview_line_ids = fields.One2many(
         'sn.wsd.device.cal.line.import.wizard.line', 'wizard_id',

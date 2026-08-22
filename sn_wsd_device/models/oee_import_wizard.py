@@ -46,7 +46,7 @@ class OeeImportWizard(models.TransientModel):
     _name = 'sn.wsd.device.oee.import.wizard'
     _description = 'OEE Import'
 
-    file = fields.Binary(string='File', required=True, filename='file_name')
+    file = fields.Binary(string='File', required=True)
     file_name = fields.Char(string='File Name')
     overwrite = fields.Boolean(
         string='Overwrite Existing Records', default=True,

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_dingding_approval_config_tree" model="ir.ui.view">
+            <field name="name">sn.wsd.ding.approval.config.tree</field>
+            <field name="model">sn.wsd.ding.approval.config</field>
+            <field name="arch" type="xml">
+                <list string="DingTalk Approval Configs">
+                    <field name="name"/>
+                    <field name="process_code"/>
+                    <field name="target_model_id" optional="hide"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_dingding_approval_config_form" model="ir.ui.view">
+            <field name="name">sn.wsd.ding.approval.config.form</field>
+            <field name="model">sn.wsd.ding.approval.config</field>
+            <field name="arch" type="xml">
+                <form string="DingTalk Approval Config">
+                    <header>
+                        <button name="action_sync_dingding_fields" type="object" string="Sync DingTalk Fields" class="btn-primary"
+                                help="Fetch form fields from DingTalk process definition and update mappings."/>
+                        <button name="action_fetch_process_code_by_name" type="object" string="Get Template Code" class="btn-secondary"
+                                help="Fetch DingTalk template processCode by this record's Name, then fill Process Code."/>
+                        <button name="action_generate_server_action" type="object" string="Generate Launch Action" class="btn-primary"
+                                invisible="not target_model_id"
+                                help="Generate a server action to launch DingTalk approvals from the target model."/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="active"/>
+                            <field name="name"/>
+                            <field name="process_code"/>
+                            <field name="target_model_id"/>
+                            <field name="server_action_id" readonly="1" invisible="not server_action_id"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <notebook>
+                            <page string="Field Mappings">
+                                <field name="field_ids" domain="[('parent_field_id', '=', False)]">
+                                    <list editable="bottom" default_order="owner_sort, sequence, id">
+                                        <field name="owner_sort" optional="hide"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="field_owner"/>
+                                        <field name="dingding_field_id" optional="hide"/>
+                                        <field name="dingding_field_name"/>
+                                        <field name="dingding_field_type"/>
+                                        <field name="record_o2m_field_id" invisible="dingding_field_type != 'table'"/>
+                                        <field name="record_field_model_name" column_invisible="1"/>
+                                        <field name="record_field_path" widget="field_selector"
+                                               options="{'model': 'record_field_model_name', 'follow_relations': true, 'only_searchable': false}"
+                                               invisible="dingding_field_type == 'table'"/>
+                                        <field name="required"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="DingTalk Schema" groups="base.group_system">
+                                <group>
+                                    <field name="dingding_schema_sync_at" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="dingding_schema_json" widget="text" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_dingding_approval_config" model="ir.actions.act_window">
+            <field name="name">Approval Config</field>
+            <field name="res_model">sn.wsd.ding.approval.config</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

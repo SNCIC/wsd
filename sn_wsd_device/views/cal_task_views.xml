@@ -108,8 +108,8 @@
                     <notebook>
                         <page string="Calibration Lines">
                             <div class="mb-2">
-                                <a class="btn btn-secondary"
-                                   href="/sn_wsd_device/calibration_line_template.xlsx">
+                                <a class="btn btn-secondary" role="button"
+                                    href="/sn_wsd_device/calibration_line_template.xlsx">
                                     <i class="fa fa-download"/> Download Template</a>
                                 <button name="%(action_cal_line_import_wizard)d"
                                         type="action" class="btn btn-secondary ms-2"
