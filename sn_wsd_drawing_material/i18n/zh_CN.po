@@ -1,0 +1,258 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_drawing_material
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.constraint,message:sn_wsd_drawing_material.constraint_sn_wsd_drawing_material_drawing_material_dim_uniq
+msgid ""
+"A drawing number already has a material list for this workshop, operation "
+"and side."
+msgstr "图号在该车间、工序、面别下已存在物料清单。"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__sequence
+msgid "Assembly Sequence"
+msgstr "组立顺序"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_board_side
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__bottom
+msgid "Bottom (B)"
+msgstr "底面 (B)"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__company_id
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_drawing_material
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_type__consumable
+#: code:addons/sn_wsd_drawing_material/models/drawing_material.py:18
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_ref__sn_consumable_template
+msgid "Consumable"
+msgstr "辅料"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__qty
+msgid "Control Quantity"
+msgstr "管控数量"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__note
+msgid "Control Note"
+msgstr "管控提示"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+msgid "Material Lines"
+msgstr "物料明细"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__material_name
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__material_spec
+msgid "Material Spec"
+msgstr "物料规格"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__material_type
+msgid "Material Type"
+msgstr "物料类型"
+
+#. module: sn_wsd_drawing_material
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_type__material
+#: code:addons/sn_wsd_drawing_material/models/drawing_material.py:19
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_ref__product_product
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__material_ref
+msgid "Material Code"
+msgstr "料号"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_drawing_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Drawing No."
+msgstr "图号"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.actions.act_window,name:sn_wsd_drawing_material.action_sn_wsd_drawing_material
+#: model:ir.model,name:sn_wsd_drawing_material.model_sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__drawing_material_id
+#: model:ir.ui.menu,name:sn_wsd_drawing_material.menu_sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+msgid "Drawing Material Relation"
+msgstr "关键物料管控"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model,name:sn_wsd_drawing_material.model_sn_wsd_drawing_material_line
+msgid "Drawing Material Relation Line"
+msgstr "关键物料管控明细"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+msgid "Dimension"
+msgstr "维度"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_side
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Production Side"
+msgstr "生产面"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_id
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_name
+msgid "Product Name"
+msgstr "产品名称"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_specification
+msgid "Product Specification"
+msgstr "产品规格"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_board_side
+msgid "Board Side Type"
+msgstr "板面类型"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+msgid "Product Info"
+msgstr "产品信息"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__single
+msgid "Single"
+msgstr "单面"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__top
+msgid "Top (T)"
+msgstr "顶面 (T)"
+
+#. module: sn_wsd_drawing_material
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_type__tooling
+#: code:addons/sn_wsd_drawing_material/models/drawing_material.py:17
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material_line__material_ref__sn_tooling_template
+msgid "Tooling"
+msgstr "制具"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__usage_times
+msgid "Usage Times"
+msgstr "使用次数"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__line_count
+msgid "Lines"
+msgstr "行数"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_drawing_no
+msgid "Product code of the drawing; product info is derived from it."
+msgstr "图号即产品编码，产品信息按图号带出。"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__usage_times
+msgid ""
+"How many times the material is consumed per product pass, e.g. a stencil "
+"printing once per board."
+msgstr "每个产品过站时该物料的使用次数，如钢网每板印一次。"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__note
+msgid "Shown to operators at loading-check time (future use)."
+msgstr "上料核对时向操作工展示（消费期启用）。"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.actions.act_window,help:sn_wsd_drawing_material.action_sn_wsd_drawing_material
+msgid "Create a drawing material relation"
+msgstr "创建图号物料关系"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.actions.act_window,help:sn_wsd_drawing_material.action_sn_wsd_drawing_material
+msgid ""
+"Maintain the tooling, consumable and material list used when a drawing "
+"number runs through one operation on one production side."
+msgstr "为图号在某车间、工序、面别下维护使用的制具/辅料/物料清单。"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Group By"
+msgstr "分组"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Material"
+msgstr "物料"
+#. module: sn_wsd_drawing_material
+#: model:ir.model.constraint,message:sn_wsd_drawing_material.constraint_sn_wsd_drawing_material_line_material_ref_uniq
+msgid "This material is already listed on the drawing relation."
+msgstr "该料号已在此关键物料管控清单中。"
+
+#. module: sn_wsd_drawing_material
+#. odoo-python
+#: code:addons/sn_wsd_drawing_material/models/drawing_material.py:257
+msgid "The control quantity must be positive."
+msgstr "管控数量必须大于零。"
+
+#. module: sn_wsd_drawing_material
+#. odoo-python
+#: code:addons/sn_wsd_drawing_material/models/drawing_material.py:264
+msgid "The usage times must be at least 1."
+msgstr "使用次数至少为 1。"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__product_board_side__single
+msgid "Single Side"
+msgstr "单面"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__product_board_side__double
+msgid "Double Side"
+msgstr "双面"
+

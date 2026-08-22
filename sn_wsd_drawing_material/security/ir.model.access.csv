@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_wsd_drawing_material_user,sn.wsd.drawing.material.user,model_sn_wsd_drawing_material,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_drawing_material_manager,sn.wsd.drawing.material.manager,model_sn_wsd_drawing_material,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_drawing_material_line_user,sn.wsd.drawing.material.line.user,model_sn_wsd_drawing_material_line,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_drawing_material_line_manager,sn.wsd.drawing.material.line.manager,model_sn_wsd_drawing_material_line,mrp.group_mrp_manager,1,1,1,1
