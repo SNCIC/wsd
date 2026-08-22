@@ -8,9 +8,9 @@
     <menuitem id="menu_sn_smt_feeder" name="Feeders" parent="menu_sn_smt_root" action="action_sn_smt_feeder" sequence="30"/>
     <menuitem id="menu_sn_smt_cart" name="Feeder Cart" parent="menu_sn_smt_root" action="action_sn_smt_cart" sequence="40"/>
     <menuitem id="menu_sn_smt_config" name="Config" parent="menu_sn_smt_root" action="action_sn_smt_config" sequence="50"/>
-    <menuitem id="menu_sn_smt_operation_record" name="Operation Records" parent="menu_sn_smt_root" action="action_sn_smt_operation_record" sequence="60"/>
-    <menuitem id="menu_sn_smt_operation_log" name="Operation Logs" parent="menu_sn_smt_root" action="action_sn_smt_operation_log" sequence="70"/>
-    <menuitem id="menu_sn_smt_traceability" name="Traceability" parent="menu_sn_smt_root" action="action_sn_smt_traceability" sequence="80"/>
-    <menuitem id="menu_sn_smt_material_consumption" name="SN Material Consumption" parent="menu_sn_smt_root" action="action_sn_smt_material_consumption" sequence="90"/>
+    <menuitem id="menu_sn_smt_operation_record" name="Operation Records" parent="menu_sn_smt_root" action="action_sn_smt_operation_record" sequence="60" groups="base.group_no_one"/>
+    <menuitem id="menu_sn_smt_operation_log" name="Operation Logs" parent="menu_sn_smt_root" action="action_sn_smt_operation_log" sequence="70" groups="base.group_no_one"/>
+    <menuitem id="menu_sn_smt_traceability" name="Traceability" parent="menu_sn_smt_root" action="action_sn_smt_traceability" sequence="80" groups="base.group_no_one"/>
+    <menuitem id="menu_sn_smt_material_consumption" name="SN Material Consumption" parent="menu_sn_smt_root" action="action_sn_smt_material_consumption" sequence="90" groups="base.group_no_one"/>
 
 </odoo>

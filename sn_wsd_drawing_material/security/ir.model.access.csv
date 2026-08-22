@@ -3,3 +3,9 @@ access_sn_wsd_drawing_material_user,sn.wsd.drawing.material.user,model_sn_wsd_dr
 access_sn_wsd_drawing_material_manager,sn.wsd.drawing.material.manager,model_sn_wsd_drawing_material,mrp.group_mrp_manager,1,1,1,1
 access_sn_wsd_drawing_material_line_user,sn.wsd.drawing.material.line.user,model_sn_wsd_drawing_material_line,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_drawing_material_line_manager,sn.wsd.drawing.material.line.manager,model_sn_wsd_drawing_material_line,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_esop_document_user,sn.wsd.esop.document.user,model_sn_wsd_esop_document,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_esop_document_floor,sn.wsd.esop.document.floor,model_sn_wsd_esop_document,sn_wsd_workorder.group_sn_wsd_shop_floor_user,1,0,0,0
+access_sn_wsd_esop_document_manager,sn.wsd.esop.document.manager,model_sn_wsd_esop_document,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_esop_acknowledge_user,sn.wsd.esop.acknowledge.user,model_sn_wsd_esop_acknowledge,mrp.group_mrp_user,1,0,1,0
+access_sn_wsd_esop_acknowledge_floor,sn.wsd.esop.acknowledge.floor,model_sn_wsd_esop_acknowledge,sn_wsd_workorder.group_sn_wsd_shop_floor_user,1,0,1,0
+access_sn_wsd_esop_acknowledge_manager,sn.wsd.esop.acknowledge.manager,model_sn_wsd_esop_acknowledge,mrp.group_mrp_manager,1,1,1,1

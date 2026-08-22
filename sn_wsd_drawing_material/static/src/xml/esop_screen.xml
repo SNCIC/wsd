@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_drawing_material.EsopScreen">
+        <div class="o_action o_sn_wsd_esop_screen h-100 d-flex flex-column">
+            <!-- reading a document: drop the search header entirely (the
+                 reader toolbar has back/ack/fullscreen); F11 browser
+                 fullscreen then gives the PDF the whole screen -->
+            <header t-if="!state.viewing"
+                    class="o_sn_wsd_esop_header border-bottom bg-view px-3 py-2 d-flex flex-wrap gap-2 align-items-center">
+                <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.close()">
+                    <i class="fa fa-arrow-left" role="img"/>
+                </button>
+                <strong><i class="fa fa-file-pdf-o me-1" role="img"/><t t-out="labels.title"/></strong>
+                <div class="input-group o_sn_wsd_esop_search ms-auto">
+                    <span class="input-group-text"><i class="fa fa-barcode" role="img"/></span>
+                    <input type="text" class="form-control"
+                           t-att-placeholder="labels.searchPlaceholder"
+                           t-model="state.search"
+                           t-on-keydown="onSearchKeydown"/>
+                    <button class="btn btn-primary" t-on-click="() => this.load()" t-out="labels.searchGo"/>
+                    <button class="btn btn-outline-secondary" t-if="hasSearch"
+                            t-on-click="() => this.clearSearch()" t-out="labels.clearSearch"/>
+                </div>
+                <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.load()"
+                        t-att-title="labels.refresh">
+                    <i class="fa fa-refresh" role="img"/>
+                </button>
+            </header>
+
+            <main class="o_sn_wsd_esop_body flex-grow-1 overflow-auto p-3">
+                <div t-if="state.loading" class="o_sn_wsd_esop_empty">
+                    <i class="fa fa-spinner fa-spin me-2" role="img"/><t t-out="labels.loading"/>
+                </div>
+
+                <!-- fullscreen PDF reader -->
+                <div t-elif="state.viewing" class="o_sn_wsd_esop_viewer d-flex flex-column gap-2 h-100">
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeDoc()">
+                            <i class="fa fa-arrow-left me-1" role="img"/><t t-out="labels.back"/>
+                        </button>
+                        <strong t-out="state.viewing.drawing"/>
+                        <span class="text-muted" t-out="state.viewing.operation"/>
+                        <span class="badge text-bg-secondary" t-out="sideLabel(state.viewing.side)"/>
+                        <span class="badge text-bg-info" t-out="typeLabel(state.viewing.doc_type)"/>
+                        <span class="badge text-bg-light border" t-out="state.viewing.version"/>
+                        <t t-if="state.viewing.unacked and state.canAck">
+                            <span class="badge text-bg-warning">
+                                <i class="fa fa-bell me-1" role="img"/><t t-out="labels.updatedTo"/>
+                                <t t-out="state.viewing.version"/>
+                            </span>
+                            <button class="btn btn-sm btn-primary" t-on-click="() => this.ackDoc(state.viewing)">
+                                <i class="fa fa-check me-1" role="img"/><t t-out="labels.ackButton"/>
+                            </button>
+                        </t>
+                        <button class="btn btn-secondary o_btn_icon ms-auto" t-on-click="() => this.toggleFullscreen()">
+                            <i class="fa fa-arrows-alt" role="img"/>
+                        </button>
+                    </div>
+                    <iframe class="o_sn_wsd_esop_pdf border rounded bg-white flex-grow-1"
+                            t-att-src="state.viewing.url"
+                            t-att-title="state.viewing.name"/>
+                </div>
+
+                <!-- search results grouped by operation and side -->
+                <div t-elif="hasSearch">
+                    <div t-if="!groupedDocs.length" class="o_sn_wsd_esop_empty" t-out="labels.noDocs"/>
+                    <div t-foreach="groupedDocs" t-as="group" t-key="group.key" class="mb-3">
+                        <div class="fw-semibold mb-2">
+                            <i class="fa fa-cogs me-1" role="img"/><t t-out="group.operation"/>
+                            · <t t-out="sideLabel(group.side)"/>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button t-foreach="group.docs" t-as="doc" t-key="doc.id"
+                                    class="btn btn-outline-primary o_sn_wsd_esop_doc position-relative"
+                                    t-on-click="() => this.openDoc(doc)">
+                                <t t-out="typeLabel(doc.doc_type)"/>
+                                <span class="badge text-bg-light border" t-out="doc.version"/>
+                                <span t-if="doc.unacked and state.canAck"
+                                      class="o_sn_wsd_esop_dot position-absolute top-0 start-100 translate-middle"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- landing: one card per in-production drawing -->
+                <div t-else="">
+                    <div t-if="!state.cards.length" class="o_sn_wsd_esop_empty" t-out="labels.noInProduction"/>
+                    <div class="o_sn_wsd_esop_cards">
+                        <button t-foreach="state.cards" t-as="card" t-key="card.drawing"
+                                class="btn o_sn_wsd_esop_card border text-start position-relative"
+                                t-on-click="() => this.openCard(card)">
+                            <div class="fw-bold text-truncate" t-out="card.drawing"/>
+                            <div class="small text-muted text-truncate" t-out="card.product_name"/>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span t-foreach="card.workshops" t-as="ws" t-key="ws"
+                                      class="badge text-bg-secondary" t-out="ws"/>
+                            </div>
+                            <span t-if="card.unacked and state.canAck"
+                                  class="o_sn_wsd_esop_dot position-absolute top-0 end-0"/>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </t>
+</templates>

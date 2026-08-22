@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_esop_document_list" model="ir.ui.view">
+        <field name="name">sn.wsd.esop.document.list</field>
+        <field name="model">sn.wsd.esop.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="x_drawing_no"/>
+                <field name="product_name" optional="show"/>
+                <field name="operation_id"/>
+                <field name="x_side"/>
+                <field name="doc_type"/>
+                <field name="name"/>
+                <field name="version"/>
+                <field name="state"/>
+                <field name="file_name" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_esop_document_search" model="ir.ui.view">
+        <field name="name">sn.wsd.esop.document.search</field>
+        <field name="model">sn.wsd.esop.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="x_drawing_no" string="Drawing No."/>
+                <field name="operation_id"/>
+                <field name="name" string="Document Title"/>
+                <filter name="filter_state_active" string="In Use"
+                        domain="[('state', '=', 'active')]"/>
+                <filter name="filter_state_archived" string="Archived"
+                        domain="[('state', '=', 'archived')]"/>
+                <filter name="filter_type_instruction" string="Work Instruction"
+                        domain="[('doc_type', '=', 'instruction')]"/>
+                <filter name="filter_type_drawing" string="Drawing"
+                        domain="[('doc_type', '=', 'drawing')]"/>
+                <filter name="filter_type_inspection" string="Inspection Standard"
+                        domain="[('doc_type', '=', 'inspection')]"/>
+                <group>
+                    <filter name="group_by_drawing" string="Drawing No."
+                            domain="[]" context="{'group_by': 'x_drawing_no'}"/>
+                    <filter name="group_by_operation" string="Operation"
+                            domain="[]" context="{'group_by': 'operation_id'}"/>
+                    <filter name="group_by_side" string="Production Side"
+                            domain="[]" context="{'group_by': 'x_side'}"/>
+                    <filter name="group_by_type" string="Document Type"
+                            domain="[]" context="{'group_by': 'doc_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_esop_document_form" model="ir.ui.view">
+        <field name="name">sn.wsd.esop.document.form</field>
+        <field name="model">sn.wsd.esop.document</field>
+        <field name="arch" type="xml">
+            <form string="ESOP Document">
+                <sheet>
+                    <group>
+                        <group name="dimension" string="Dimension">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="x_drawing_no" default_focus="1"/>
+                            <field name="operation_id"/>
+                            <field name="x_side"/>
+                            <field name="doc_type"/>
+                        </group>
+                        <group name="product_info" string="Product Info">
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_name" readonly="1"/>
+                            <field name="product_specification" readonly="1"/>
+                            <field name="product_board_side" readonly="1"/>
+                        </group>
+                        <group name="document" string="Document">
+                            <field name="name"/>
+                            <field name="file" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                        </group>
+                        <group name="version_info" string="Version">
+                            <field name="version" readonly="1"/>
+                            <field name="state"/>
+                            <field name="archived_date" readonly="1"/>
+                            <field name="archived_uid" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_esop_documents" model="ir.actions.act_window">
+        <field name="name">ESOP Documents</field>
+        <field name="res_model">sn.wsd.esop.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_state_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an ESOP document
+            </p>
+            <p>Upload the work instruction PDF for a drawing number, operation and side; re-uploading archives the previous version automatically.</p>
+        </field>
+    </record>
+</odoo>
