@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_exception_reason_list" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.reason.list</field>
+        <field name="model">sn.wsd.exception.reason</field>
+        <field name="arch" type="xml">
+            <list string="Exception Reasons">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_reason_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.reason.form</field>
+        <field name="model">sn.wsd.exception.reason</field>
+        <field name="arch" type="xml">
+            <form string="Exception Reason">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Feeder maintenance overdue"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_exception_reason" model="ir.actions.act_window">
+        <field name="name">Exception Reasons</field>
+        <field name="res_model">sn.wsd.exception.reason</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first exception reason
+            </p>
+            <p>
+                Reasons answer why the line failed (4M1E wording). They are independent
+                from the repair failure causes, which answer why a single board failed.
+            </p>
+        </field>
+    </record>
+</odoo>

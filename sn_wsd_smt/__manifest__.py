@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD SMT',
-    'version': '19.0.3.4.0',
+    'version': '19.0.3.5.0',
     'summary': 'SMT material table and online loading management',
     'depends': ['mrp', 'sn_wsd_mrp', 'web'],
     'data': [

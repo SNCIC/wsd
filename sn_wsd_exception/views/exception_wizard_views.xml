@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_exception_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.cancel.wizard.form</field>
+        <field name="model">sn.wsd.exception.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Exception">
+                <group>
+                    <field name="ticket_id" invisible="1"/>
+                    <field name="note" placeholder="Why is this ticket cancelled (e.g. false alarm)?"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Cancel Ticket" type="object" class="btn-primary"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_suspend_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.suspend.wizard.form</field>
+        <field name="model">sn.wsd.exception.suspend.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Suspend Exception">
+                <group>
+                    <field name="ticket_id" invisible="1"/>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Suspend" type="object" class="btn-primary"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_reject_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.reject.wizard.form</field>
+        <field name="model">sn.wsd.exception.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Closure">
+                <group>
+                    <field name="ticket_id" invisible="1"/>
+                    <field name="note" placeholder="Why is the closure rejected (e.g. root cause not convincing)?"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Reject Closure" type="object" class="btn-primary"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_pareto_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.pareto.wizard.form</field>
+        <field name="model">sn.wsd.exception.pareto.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Exception Pareto">
+                <group>
+                    <group>
+                        <field name="dimension"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print" string="Print" type="object" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_exception_pareto_wizard" model="ir.actions.act_window">
+        <field name="name">Pareto Report</field>
+        <field name="res_model">sn.wsd.exception.pareto.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
