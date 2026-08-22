@@ -7,6 +7,15 @@ class InternalSerial(models.Model):
     _description = 'Internal Serial'
     _order = 'production_date desc, id desc'
 
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # Scan-friendly: match by the physical SN as well as the record name.
+        if name:
+            domain = list(domain or []) + [
+                '|', ('serial_no', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
+
     name = fields.Char(
         string='Serial Record',
         required=True,

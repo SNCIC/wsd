@@ -2,21 +2,14 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
-class SnWsdRepairType(models.Model):
-    _name = 'sn.wsd.repair.type'
-    _description = 'SN WSD Repair Type'
+class SnWsdRepairCause(models.Model):
+    _name = 'sn.wsd.repair.cause'
+    _description = 'SN WSD Repair Failure Cause'
     _order = 'code, id'
     _check_company_auto = True
 
-    name = fields.Char(string='Repair Type', required=True)
-    code = fields.Char(string='Type Code', required=True, index=True)
-    mode = fields.Selection(
-        [('sn', 'SN Pass Repair'), ('qty', 'Quantity Repair')],
-        string='Repair Mode',
-        required=True,
-        default='sn',
-        index=True,
-    )
+    name = fields.Char(string='Failure Cause', required=True)
+    code = fields.Char(string='Cause Code', required=True, index=True)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
         'res.company',
@@ -29,8 +22,26 @@ class SnWsdRepairType(models.Model):
 
     _code_company_uniq = models.Constraint(
         'unique(company_id, code)',
-        'The repair type code must be unique per company.',
+        'The failure cause code must be unique per company.',
     )
+    _name_company_uniq = models.Constraint(
+        'unique(company_id, name)',
+        'The failure cause name must be unique per company.',
+    )
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = ' - '.join(
+                part for part in (record.code, record.name) if part)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
 
 
 class SnWsdRepairOrder(models.Model):
@@ -56,19 +67,15 @@ class SnWsdRepairOrder(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
-    repair_type_id = fields.Many2one(
-        'sn.wsd.repair.type',
-        string='Repair Type',
-        required=True,
-        check_company=True,
-        tracking=True,
-    )
     repair_mode = fields.Selection(
-        related='repair_type_id.mode',
+        [('sn', 'SN Pass Repair'), ('qty', 'Quantity Repair')],
         string='Repair Mode',
-        store=True,
-        readonly=True,
+        required=True,
+        default='sn',
         index=True,
+        tracking=True,
+        help='Derived from the MES order management mode: station tracking -> '
+             'SN pass repair, operation reporting -> quantity repair.',
     )
     serial_no = fields.Char(string='Scanned SN', index=True, tracking=True)
     serial_id = fields.Many2one(
@@ -88,9 +95,12 @@ class SnWsdRepairOrder(models.Model):
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',
+        readonly=True,
         check_company=True,
         index=True,
         tracking=True,
+        help='Traceability only: derived from the MES order. Business rules '
+             'run on the MES order since process routes moved there.',
     )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
@@ -106,20 +116,32 @@ class SnWsdRepairOrder(models.Model):
         index=True,
         tracking=True,
     )
-    current_process_step_id = fields.Many2one(
-        'sn.wsd.process.route.operation',
-        string='Source Process Step',
+    repair_entry_route_operation_id = fields.Many2one(
+        'sn.wsd.mes.order.route.operation',
+        string='Repair Entry Route Operation',
         check_company=True,
+        index=True,
+        tracking=True,
+        help='MES order operation the SN flows back to after repair. '
+             'Defaults to the operation where the defect was reported.',
+    )
+    current_process_step_id = fields.Many2one(
+        related='route_operation_id.operation_id',
+        string='Source Process Step',
+        store=True,
+        readonly=True,
         index=True,
     )
     defect_code_id = fields.Many2one(
         'sn.wsd.quality.defect.code',
         string='Defect Code',
-        required=True,
         check_company=True,
         index=True,
         tracking=True,
-    )
+        help='Main defect: derived from the defect line with the largest '
+             'quantity; the defect lines are the source of truth.')
+    defect_line_ids = fields.One2many(
+        'sn.wsd.repair.order.line', 'repair_order_id', string='Defect Lines')
     quality_issue_id = fields.Many2one(
         'sn.wsd.quality.issue',
         string='Quality Issue',
@@ -127,7 +149,22 @@ class SnWsdRepairOrder(models.Model):
         index=True,
     )
     repair_method = fields.Text(string='Repair Method', tracking=True)
+    defect_location = fields.Char(
+        string='Defect Location', index=True,
+        help='Location of the defective component on the board, e.g. U12, R45.')
+    failure_cause_id = fields.Many2one(
+        'sn.wsd.repair.cause',
+        string='Failure Cause',
+        check_company=True,
+        index=True,
+    )
     replacement_sn = fields.Char(string='Replacement Material SN', index=True)
+    replacement_product_id = fields.Many2one(
+        'product.product',
+        string='Replacement Product',
+        check_company=True,
+        index=True,
+    )
     board_sn = fields.Char(string='Board SN', index=True)
     defect_qty = fields.Float(string='Defect Quantity', digits='Product Unit', tracking=True)
     repair_qty = fields.Float(string='Repair Quantity', digits='Product Unit', default=1.0, tracking=True)
@@ -135,19 +172,6 @@ class SnWsdRepairOrder(models.Model):
     reported_user_id = fields.Many2one('res.users', string='Reported By', default=lambda self: self.env.user, required=True, tracking=True)
     repair_user_id = fields.Many2one('res.users', string='Repair User', default=lambda self: self.env.user, tracking=True)
     repair_time = fields.Datetime(string='Repair Time', tracking=True)
-    repair_process_route_id = fields.Many2one(
-        'sn.wsd.process.route',
-        string='Repair Process Route',
-        related='production_id.x_route_id',
-        readonly=True,
-    )
-    repair_entry_step_id = fields.Many2one(
-        'sn.wsd.process.route.operation',
-        string='Repair Entry Step',
-        check_company=True,
-        domain="[('route_id', '=', repair_process_route_id)]",
-        tracking=True,
-    )
     result = fields.Selection(
         [('ok', 'Repair OK'), ('scrap', 'Repair Invalid Scrap')],
         string='Repair Result',
@@ -190,7 +214,7 @@ class SnWsdRepairOrder(models.Model):
         self.ensure_one()
         if self.repair_mode != 'qty' or not self.route_operation_id:
             return self.env['sn.wsd.mes.operation.report']
-        if self.mes_order_id.x_manage_mode != 'report':
+        if self.mes_order_id.x_manage_mode != 'report' or not self.mes_order_id.x_online_date:
             return self.env['sn.wsd.mes.operation.report']
         self.mes_order_id.report_operation_qty(
             self.route_operation_id,
@@ -215,13 +239,14 @@ class SnWsdRepairOrder(models.Model):
     def _get_serial_manufacturing_context(self, serial):
         route_operation = serial.current_route_operation_id
         production = route_operation.mes_order_id.production_id or serial.current_production_id or serial.production_id
-        mes_order = serial.mes_order_id or route_operation.mes_order_id or production.x_mes_order_id
+        mes_order = serial.mes_order_id or route_operation.mes_order_id or production.x_mes_order_ids[:1]
         return {
             'serial_id': serial,
             'production_id': production,
             'mes_order_id': mes_order,
             'route_operation_id': route_operation,
-            'current_process_step_id': route_operation.operation_id,
+            'repair_entry_route_operation_id': route_operation,
+            'repair_mode': 'qty' if mes_order.x_manage_mode == 'report' else 'sn',
         }
 
     def _apply_serial_manufacturing_context(self, serial):
@@ -259,6 +284,17 @@ class SnWsdRepairOrder(models.Model):
                 record.defect_qty = 1.0
             if not record.repair_qty:
                 record.repair_qty = 1.0
+            # Surface the SN's station defect history as defect lines: the
+            # operator sees why the board was pulled before repairing.
+            if not record.defect_line_ids:
+                open_issues = serial.quality_issue_ids.filtered(
+                    lambda issue: issue.state not in ('closed', 'scrapped') and issue.defect_code_id)
+                if open_issues:
+                    record.defect_line_ids = [
+                        (0, 0, {'defect_code_id': issue.defect_code_id.id, 'qty': 1})
+                        for issue in open_issues[:5]
+                    ]
+                    record.defect_code_id = open_issues[0].defect_code_id
 
     @api.onchange('route_operation_id')
     def _onchange_route_operation_id(self):
@@ -267,21 +303,13 @@ class SnWsdRepairOrder(models.Model):
                 continue
             record.production_id = record.route_operation_id.mes_order_id.production_id
             record.mes_order_id = record.route_operation_id.mes_order_id
-            record.current_process_step_id = record.route_operation_id.operation_id
-            if record.repair_entry_step_id and record.repair_entry_step_id.route_id != record.production_id.x_route_id:
-                record.repair_entry_step_id = False
+            record.repair_mode = 'qty' if record.mes_order_id.x_manage_mode == 'report' else 'sn'
+            # Inline rework defaults to flowing back where the defect occurred.
+            if not record.repair_entry_route_operation_id or \
+                    record.repair_entry_route_operation_id.mes_order_id != record.mes_order_id:
+                record.repair_entry_route_operation_id = record.route_operation_id
             if record.repair_mode == 'qty' and not record.defect_qty:
                 record.defect_qty = record.route_operation_id.x_ng_qty
-
-    @api.onchange('production_id')
-    def _onchange_production_id_repair_entry_step(self):
-        for record in self:
-            if (
-                record.repair_entry_step_id
-                and record.production_id
-                and record.repair_entry_step_id.route_id != record.production_id.x_route_id
-            ):
-                record.repair_entry_step_id = False
 
     @api.constrains('repair_mode', 'serial_id', 'replacement_sn', 'board_sn')
     def _check_mode_serial_fields(self):
@@ -303,25 +331,55 @@ class SnWsdRepairOrder(models.Model):
             if record.repair_mode == 'sn' and record.repair_qty != 1.0:
                 raise ValidationError(_('SN pass repair quantity must be 1.'))
 
-    @api.constrains('route_operation_id', 'production_id')
-    def _check_route_operation_matches_production(self):
+    @api.onchange('defect_line_ids')
+    def _onchange_defect_line_ids(self):
+        lines = self.defect_line_ids.filtered(lambda line: line.defect_code_id)
+        if not lines:
+            return
+        # Main defect = line with the largest quantity (first line breaks ties).
+        main_line = max(lines, key=lambda line: line.qty)
+        self.defect_code_id = main_line.defect_code_id
+        if self.repair_mode == 'qty':
+            total = sum(lines.mapped('qty'))
+            if not self.defect_qty or self.defect_qty < total:
+                self.defect_qty = total
+
+    @api.constrains('defect_qty', 'defect_line_ids', 'repair_mode')
+    def _check_defect_lines(self):
+        for record in self:
+            lines = record.defect_line_ids
+            if not lines:
+                continue
+            if record.repair_mode == 'sn':
+                for line in lines:
+                    if line.qty != 1:
+                        raise ValidationError(_('SN pass repair defect lines must have quantity 1.'))
+            else:
+                total = sum(lines.mapped('qty'))
+                if total > record.defect_qty:
+                    raise ValidationError(_(
+                        'The defect line total (%s) exceeds the defect quantity (%s).',
+                        total, record.defect_qty))
+
+    @api.constrains('route_operation_id', 'mes_order_id')
+    def _check_route_operation_matches_mes_order(self):
         for record in self:
             if (
                 record.route_operation_id
-                and record.production_id
-                and record.route_operation_id.mes_order_id.production_id != record.production_id
+                and record.mes_order_id
+                and record.route_operation_id.mes_order_id != record.mes_order_id
             ):
-                raise ValidationError(_('The selected route operation must belong to the selected manufacturing order.'))
+                raise ValidationError(_('The defect operation must belong to the MES order.'))
 
-    @api.constrains('production_id', 'repair_entry_step_id')
-    def _check_repair_entry_step(self):
+    @api.constrains('repair_entry_route_operation_id', 'mes_order_id')
+    def _check_repair_entry_route_operation(self):
         for record in self:
             if (
-                record.repair_entry_step_id
-                and record.production_id
-                and record.repair_entry_step_id.route_id != record.production_id.x_route_id
+                record.repair_entry_route_operation_id
+                and record.mes_order_id
+                and record.repair_entry_route_operation_id.mes_order_id != record.mes_order_id
             ):
-                raise ValidationError(_('The repair entry step must belong to the manufacturing order route.'))
+                raise ValidationError(_('The repair entry operation must belong to the MES order.'))
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -335,12 +393,19 @@ class SnWsdRepairOrder(models.Model):
                 mes_order = serial.mes_order_id or route_operation.mes_order_id or production.x_mes_order_id
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
-            repair_type = self.env['sn.wsd.repair.type'].browse(vals.get('repair_type_id'))
-            if repair_type.mode == 'qty':
+            if vals.get('repair_mode') == 'qty':
                 vals['serial_id'] = False
                 vals['serial_no'] = False
                 vals['replacement_sn'] = False
                 vals['board_sn'] = False
+            if vals.get('route_operation_id') and not vals.get('repair_entry_route_operation_id'):
+                vals['repair_entry_route_operation_id'] = vals.get('route_operation_id')
+            if not vals.get('repair_mode'):
+                serial = self.env['sn.wsd.internal.serial'].browse(vals.get('serial_id')).exists()
+                route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(
+                    vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else serial.current_route_operation_id
+                mes_order = (serial.mes_order_id or route_operation.mes_order_id) if (serial or route_operation) else self.env['sn.wsd.mes.order']
+                vals['repair_mode'] = 'qty' if mes_order.x_manage_mode == 'report' else 'sn'
         return super().create(vals_list)
 
     def write(self, vals):
@@ -348,10 +413,8 @@ class SnWsdRepairOrder(models.Model):
             protected_fields = set(vals) - {'message_follower_ids', 'activity_ids'}
             if protected_fields and any(record.state in ('done', 'scrapped', 'cancel') for record in self):
                 raise UserError(_('Finished repair orders cannot be modified.'))
-        if vals.get('repair_type_id'):
-            repair_type = self.env['sn.wsd.repair.type'].browse(vals['repair_type_id'])
-            if repair_type.mode == 'qty':
-                vals = {**vals, 'serial_id': False, 'serial_no': False, 'replacement_sn': False, 'board_sn': False}
+        if vals.get('repair_mode') == 'qty':
+            vals = {**vals, 'serial_id': False, 'serial_no': False, 'replacement_sn': False, 'board_sn': False}
         return super().write(vals)
 
     @api.ondelete(at_uninstall=False)
@@ -385,18 +448,27 @@ class SnWsdRepairOrder(models.Model):
         serial = self.serial_id
         if not serial:
             return False
-        if serial.state == 'scrapped':
-            return False
-        if serial.state == 'rework' or serial.final_result in ('fail', 'hold'):
+        if serial.final_result in ('fail', 'hold'):
             return True
-        if serial.x_quality_hold_state in ('hold', 'blocked'):
+        if 'x_quality_hold_state' in serial._fields and serial.x_quality_hold_state in ('hold', 'blocked'):
             return True
-        return bool(serial.quality_issue_ids.filtered(lambda issue: issue.state not in ('closed', 'scrapped')))
+        return bool(serial.quality_issue_ids.filtered(
+            lambda issue: issue.state not in ('closed', 'scrapped')))
 
     def _ensure_reportable(self):
         for record in self:
             if record.state != 'draft':
                 raise UserError(_('Only draft repair orders can be reported.'))
+            if not record.defect_line_ids:
+                raise UserError(_('Add at least one defect line before reporting.'))
+            if not record.defect_code_id:
+                main_line = max(
+                    record.defect_line_ids.filtered(lambda line: line.defect_code_id),
+                    key=lambda line: line.qty,
+                    default=self.env['sn.wsd.repair.order.line'],
+                )
+                if main_line:
+                    record.defect_code_id = main_line.defect_code_id
             if record.repair_mode == 'sn':
                 if not record.serial_id and record.serial_no:
                     record.serial_id = record._find_serial_by_no(record.serial_no)
@@ -405,7 +477,13 @@ class SnWsdRepairOrder(models.Model):
                 if not record._serial_is_repairable():
                     raise UserError(_('The scanned SN must be in abnormal or defective status before repair reporting.'))
                 context_values = record._get_serial_manufacturing_context(record.serial_id)
-                record.write({field_name: value.id for field_name, value in context_values.items()})
+                entry = record.repair_entry_route_operation_id
+                if entry and entry.mes_order_id == context_values['mes_order_id']:
+                    context_values.pop('repair_entry_route_operation_id')
+                record.write({
+                    field_name: value.id if hasattr(value, 'id') and not isinstance(value, str) else value
+                    for field_name, value in context_values.items()
+                })
             else:
                 if not record.route_operation_id:
                     raise UserError(_('Quantity repair must be linked to the current route operation.'))
@@ -434,19 +512,13 @@ class SnWsdRepairOrder(models.Model):
 
     def _get_repair_entry_route_operation(self):
         self.ensure_one()
-        step = self.repair_entry_step_id
-        if not step or not self.production_id:
-            return self.env['sn.wsd.mes.order.route.operation']
-        route_operations = self.mes_order_id.x_route_operation_ids if self.mes_order_id else self.env['sn.wsd.mes.order.route.operation']
-        return route_operations.filtered(lambda route_operation: route_operation.operation_id == step)[:1]
+        return self.repair_entry_route_operation_id or self.route_operation_id
 
     def _get_repair_entry_route_operation_or_raise(self):
         self.ensure_one()
-        if not self.repair_entry_step_id:
-            raise UserError(_('Select a repair entry step before starting repair.'))
         route_operation = self._get_repair_entry_route_operation()
         if not route_operation:
-            raise UserError(_('No MES route operation was found for the selected repair entry step.'))
+            raise UserError(_('Select a repair entry operation before starting repair.'))
         return route_operation
 
     def action_report_repair(self):
@@ -469,13 +541,14 @@ class SnWsdRepairOrder(models.Model):
                 raise UserError(_('Only reported repair orders can start repair.'))
             route_operation = record._get_repair_entry_route_operation_or_raise()
             if record.repair_mode == 'sn':
-                record.serial_id.write({
-                    'state': 'rework',
+                serial_values = {
                     'final_result': 'fail',
-                    'x_quality_hold_state': 'hold',
                     'current_route_operation_id': route_operation.id,
-                })
-                record.serial_id._mark_rework_started(route_operation, source_route_operation=record.route_operation_id)
+                }
+                if 'x_quality_hold_state' in record.serial_id._fields:
+                    serial_values['x_quality_hold_state'] = 'hold'
+                record.serial_id.write(serial_values)
+                record.serial_id._mark_rework_started()
             record.with_context(allow_repair_order_write=True).write({'state': 'repairing'})
         return True
 
@@ -492,12 +565,13 @@ class SnWsdRepairOrder(models.Model):
             record.with_context(allow_repair_order_write=True).write(vals)
             if record.repair_mode == 'sn':
                 route_operation = record._get_repair_entry_route_operation_or_raise()
-                record.serial_id.write({
-                    'state': 'rework',
+                serial_values = {
                     'final_result': False,
-                    'x_quality_hold_state': 'released',
                     'current_route_operation_id': route_operation.id,
-                })
+                }
+                if 'x_quality_hold_state' in record.serial_id._fields:
+                    serial_values['x_quality_hold_state'] = 'released'
+                record.serial_id.write(serial_values)
                 if record.quality_issue_id:
                     record.quality_issue_id.write({
                         'state': 'closed',
@@ -519,8 +593,8 @@ class SnWsdRepairOrder(models.Model):
             scrap = self.env['sn.wsd.scrap.record'].create({
                 'serial_id': record.serial_id.id,
                 'production_id': record.production_id.id,
+                'mes_order_id': record.mes_order_id.id,
                 'route_operation_id': record.route_operation_id.id or record.serial_id.current_route_operation_id.id,
-                'process_step_id': record.current_process_step_id.id,
                 'scrap_reason_id': record.scrap_reason_id.id,
                 'quality_issue_id': record.quality_issue_id.id,
                 'scrap_qty': 1.0,
@@ -649,3 +723,26 @@ class MeterQualityIssue(models.Model):
                 'default_repair_qty': 1.0,
             },
         }
+
+
+class SnWsdRepairOrderLine(models.Model):
+    _name = 'sn.wsd.repair.order.line'
+    _description = 'SN WSD Repair Defect Line'
+    _order = 'repair_order_id, sequence, id'
+
+    repair_order_id = fields.Many2one(
+        'sn.wsd.repair.order', required=True, ondelete='cascade', index=True)
+    sequence = fields.Integer(default=10)
+    defect_code_id = fields.Many2one(
+        'sn.wsd.quality.defect.code',
+        string='Defect Code',
+        required=True,
+        check_company=True,
+        index=True,
+    )
+    qty = fields.Integer(string='Quantity', default=1, required=True)
+    defect_location = fields.Char(string='Defect Location')
+    repair_mode = fields.Selection(
+        related='repair_order_id.repair_mode')
+    company_id = fields.Many2one(
+        'res.company', related='repair_order_id.company_id', store=True, index=True)

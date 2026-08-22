@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Tooling',
-    'version': '19.0.4.0.0',
+    'version': '19.0.4.1.0',
     'summary': 'Tooling types, templates, tooling lifecycle, and PDA service',
     'depends': ['mrp', 'stock', 'mail'],
     'data': [

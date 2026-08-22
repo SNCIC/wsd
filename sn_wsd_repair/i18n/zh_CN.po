@@ -1,4 +1,4 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_repair
 #
@@ -243,8 +243,8 @@ msgid "Quality Issue"
 msgstr "质量问题"
 
 #. module: sn_wsd_repair
-#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_type__mode__qty
 #: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__repair_mode__qty
 msgid "Quantity Repair"
 msgstr "数量维修"
 
@@ -373,7 +373,7 @@ msgid "SMS Delivery error"
 msgstr "短信发送错误"
 
 #. module: sn_wsd_repair
-#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_type__mode__sn
+#: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__repair_mode__sn
 msgid "SN Pass Repair"
 msgstr "单台（SN）合格维修"
 
@@ -518,16 +518,6 @@ msgid "Website communication history"
 msgstr "网站沟通历史"
 
 #. module: sn_wsd_repair
-#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_type
-msgid "Repair Types"
-msgstr "维修类型"
-
-#. module: sn_wsd_repair
-#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_order
-msgid "Repair Orders"
-msgstr "维修工单"
-
-#. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_entry_step_id
 msgid "Repair Entry Step"
 msgstr "维修切入工序"
@@ -605,6 +595,7 @@ msgstr "创建时间"
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__defect_code_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order_line__defect_code_id
 msgid "Defect Code"
 msgstr "缺陷代码"
 
@@ -696,7 +687,7 @@ msgstr "返修无效报废"
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_method
 msgid "Repair Method"
-msgstr "返修方式"
+msgstr "维修方法"
 
 #. module: sn_wsd_repair
 #: model:ir.model.fields.selection,name:sn_wsd_repair.selection__sn_wsd_repair_order__result__ok
@@ -759,3 +750,168 @@ msgstr "已报废"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_search
 msgid "Work Order"
 msgstr "工单"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_cause__name
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__failure_cause_id
+#: model:ir.model,name:sn_wsd_repair.model_sn_wsd_repair_cause
+msgid "Failure Cause"
+msgstr "故障原因"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_cause__code
+msgid "Cause Code"
+msgstr "原因编码"
+
+#. module: sn_wsd_repair
+#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_cause
+#: model:ir.actions.act_window,name:sn_wsd_repair.action_sn_wsd_repair_cause
+msgid "Failure Causes"
+msgstr "故障原因"
+
+#. module: sn_wsd_repair
+msgid "The failure cause code must be unique per company."
+msgstr "故障原因编码在同一公司内必须唯一。"
+
+#. module: sn_wsd_repair
+msgid "The failure cause name must be unique per company."
+msgstr "故障原因名称在同一公司内必须唯一。"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__defect_location
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order_line__defect_location
+msgid "Defect Location"
+msgstr "维修位号"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__replacement_product_id
+msgid "Replacement Product"
+msgstr "换料料号"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__repair_entry_route_operation_id
+msgid "Repair Entry Route Operation"
+msgstr "回流工序"
+
+#. module: sn_wsd_repair
+msgid "The defect operation must belong to the MES order."
+msgstr "不良工序必须属于该制令单。"
+
+#. module: sn_wsd_repair
+msgid "The repair entry operation must belong to the MES order."
+msgstr "回流工序必须属于该制令单。"
+
+#. module: sn_wsd_repair
+msgid "Select a repair entry operation before starting repair."
+msgstr "开始维修前必须选择回流工序。"
+
+#. module: sn_wsd_repair
+#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_root
+msgid "Repair Management"
+msgstr "维修管理"
+
+#. module: sn_wsd_repair
+msgid "SN %s does not exist."
+msgstr "SN %s 不存在。"
+
+#. module: sn_wsd_repair
+msgid "No active SN-mode repair type is configured."
+msgstr "未配置可用的SN模式维修类型。"
+
+#. module: sn_wsd_repair
+msgid "SN %s already has an open repair order %s."
+msgstr "SN %s 已有未完成的维修单 %s。"
+
+#. module: sn_wsd_repair
+msgid "A defect code is required."
+msgstr "必须填写不良代码。"
+
+#. module: sn_wsd_repair
+msgid "SN %s has no current route operation."
+msgstr "SN %s 没有当前工序。"
+
+#. module: sn_wsd_repair
+msgid "Repair order %s reported for %s."
+msgstr "SN %s 已报修，维修单 %s。"
+
+#. module: sn_wsd_repair
+msgid "Repair order %s cannot start (state %s)."
+msgstr "维修单 %s 当前状态不能开始维修（%s）。"
+
+#. module: sn_wsd_repair
+msgid "Route operation %s does not exist."
+msgstr "工序 %s 不存在。"
+
+#. module: sn_wsd_repair
+msgid "The entry operation does not belong to the MES order of repair %s."
+msgstr "回流工序不属于维修单 %s 的制令单。"
+
+#. module: sn_wsd_repair
+msgid "Repair %s started, SN %s flows back to %s."
+msgstr "维修单 %s 已开始，SN %s 修好后回流 %s。"
+
+#. module: sn_wsd_repair
+msgid "SN %s has no open repair order."
+msgstr "SN %s 没有未完成的维修单。"
+
+#. module: sn_wsd_repair
+msgid "Repair order %s is not under repair."
+msgstr "维修单 %s 不在维修中。"
+
+#. module: sn_wsd_repair
+msgid "Repair %s done, SN %s returns to %s."
+msgstr "维修单 %s 已修好，SN %s 回流 %s。"
+
+#. module: sn_wsd_repair
+msgid "A scrap reason is required."
+msgstr "必须填写报废原因。"
+
+#. module: sn_wsd_repair
+msgid "Repair %s scrapped SN %s."
+msgstr "维修单 %s 已将 SN %s 报废。"
+
+#. module: sn_wsd_repair
+msgid "Defect code"
+msgstr "不良代码"
+
+#. module: sn_wsd_repair
+msgid "Scrap reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__mes_order_id
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__route_operation_id
+msgid "Repair Source Route Operation"
+msgstr "不良工序"
+
+#. module: sn_wsd_repair
+#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_order_line
+#: model:ir.actions.act_window,name:sn_wsd_repair.action_sn_wsd_repair_order_line
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__defect_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_form
+msgid "Defect Lines"
+msgstr "缺陷明细"
+
+#. module: sn_wsd_repair
+#: code:addons/sn_wsd_repair/models/sn_wsd_repair.py:1
+msgid "SN pass repair defect lines must have quantity 1."
+msgstr "SN维修的缺陷明细行数量必须为1。"
+
+#. module: sn_wsd_repair
+#: code:addons/sn_wsd_repair/models/sn_wsd_repair.py:1
+msgid "The defect line total (%s) exceeds the defect quantity (%s)."
+msgstr "缺陷明细行合计（%s）超过不良数量（%s）。"
+
+#. module: sn_wsd_repair
+#: code:addons/sn_wsd_repair/models/sn_wsd_repair.py:1
+msgid "Add at least one defect line before reporting."
+msgstr "提报前请至少登记一条缺陷明细。"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order_line__qty
+msgid "Quantity"
+msgstr "数量"

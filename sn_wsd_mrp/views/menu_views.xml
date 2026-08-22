@@ -5,6 +5,7 @@
     </record>
 
     <menuitem id="menu_sn_mrp_base_config" name="Meter MES" parent="mrp.menu_mrp_configuration" sequence="85"/>
+    <menuitem id="menu_sn_wsd_process_management" name="Process Management" parent="mrp.menu_mrp_root" sequence="25"/>
     <menuitem id="menu_sn_quality_root" name="Quality Management" parent="mrp.menu_mrp_root" sequence="70"/>
     <menuitem id="menu_sn_quality_config" name="Quality Configuration" parent="menu_sn_quality_root" sequence="1"/>
     <menuitem id="menu_sn_quality_operation" name="Quality Operations" parent="menu_sn_quality_root" sequence="2"/>
@@ -13,17 +14,20 @@
     <menuitem id="menu_sn_mrp_production_line" name="Production Lines" parent="menu_sn_mrp_base_config" action="action_sn_mrp_production_line" sequence="10"/>
     <menuitem id="menu_sn_mrp_team" name="Teams" parent="menu_sn_mrp_base_config" action="action_sn_mrp_team" sequence="15"/>
     <record id="mrp.menu_view_resource_search_mrp" model="ir.ui.menu">
-        <field name="parent_id" ref="menu_sn_mrp_base_config"/>
-        <field name="sequence">20</field>
+        <field name="parent_id" ref="menu_sn_wsd_process_management"/>
+        <field name="sequence">10</field>
     </record>
     <record id="mrp.menu_mrp_routing_action" model="ir.ui.menu">
         <field name="name">Operations</field>
-        <field name="parent_id" ref="menu_sn_mrp_base_config"/>
-        <field name="sequence">25</field>
+        <field name="parent_id" ref="menu_sn_wsd_process_management"/>
+        <field name="sequence">20</field>
         <field name="action" ref="action_sn_wsd_process_route_operation"/>
     </record>
-    <menuitem id="menu_sn_wsd_process_route" name="Process Routes" parent="menu_sn_mrp_base_config" action="action_sn_wsd_process_route" sequence="27"/>
-    <menuitem id="menu_sn_wsd_process_route_drawing" name="Drawing Number Binding" parent="menu_sn_mrp_base_config" action="action_sn_wsd_process_route_drawing" sequence="30"/>
+    <menuitem id="menu_sn_wsd_process_route" name="Process Routes" parent="menu_sn_wsd_process_management" action="action_sn_wsd_process_route" sequence="30"/>
+    <menuitem id="menu_sn_wsd_process_route_drawing" name="Drawing Number Binding" parent="menu_sn_wsd_process_management" action="action_sn_wsd_process_route_drawing" sequence="40"/>
+    <record id="mrp.menu_mrp_reporting" model="ir.ui.menu">
+        <field name="sequence">95</field>
+    </record>
     <menuitem id="menu_sn_wsd_traceability" name="Traceability" parent="mrp.menu_mrp_root" sequence="90"/>
     <menuitem id="menu_sn_wsd_internal_serial" name="Internal Serials" parent="menu_sn_wsd_traceability" action="action_sn_wsd_internal_serial" sequence="10"/>
     <menuitem id="menu_sn_wsd_meter_aging_batch" name="Aging Batches" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_aging_batch" sequence="20"/>

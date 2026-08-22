@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Quality Configuration Submenu -->
-    <menuitem id="menu_sn_wsd_repair_type" name="Repair Types" parent="sn_wsd_mrp.menu_sn_quality_config" action="action_sn_wsd_repair_type" sequence="55"/>
-
-    <!-- Quality Operations Submenu -->
-    <menuitem id="menu_sn_wsd_repair_order" name="Repair Orders" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_repair_order" sequence="70"/>
+    <menuitem id="menu_sn_wsd_repair_root" name="Repair Management"
+              parent="mrp.menu_mrp_root" sequence="30"
+              groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_sn_wsd_repair_order" name="Repair Orders"
+              parent="menu_sn_wsd_repair_root"
+              action="action_sn_wsd_repair_order" sequence="10"/>
+    <menuitem id="menu_sn_wsd_repair_cause" name="Failure Causes"
+              parent="menu_sn_wsd_repair_root"
+              action="action_sn_wsd_repair_cause" sequence="30"
+              groups="mrp.group_mrp_manager"/>
 </odoo>

@@ -10,6 +10,21 @@ class SnWsdScrapReason(models.Model):
 
     code = fields.Char(string='Reason Code', required=True, index=True)
     name = fields.Char(string='Reason Description', required=True)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # Scan-friendly: match by code as well as by name.
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = ' - '.join(
+                part for part in (record.code, record.name) if part)
     category = fields.Selection(
         [
             ('material', 'Material'),
