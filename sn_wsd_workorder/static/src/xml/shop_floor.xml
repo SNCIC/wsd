@@ -31,7 +31,10 @@
                         <span class="ms-2 small text-muted" t-if="state.station.workcenter">
                             <t t-out="labels.operationLabel"/>: <strong t-out="state.station.workcenter.operation"/>
                         </span>
-                        <button class="btn btn-secondary o_btn_icon ms-auto" t-on-click="() => this.loadStation()">
+                        <button class="btn btn-warning ms-auto" t-on-click="() => this.openExceptionDialog()">
+                            <i class="fa fa-bell me-1" role="img"/><t t-out="labels.reportException"/>
+                        </button>
+                        <button class="btn btn-secondary o_btn_icon" t-on-click="() => this.loadStation()">
                             <i class="fa fa-refresh" role="img"/>
                         </button>
                     </div>
@@ -266,6 +269,34 @@
                     <div class="d-flex justify-content-end gap-2">
                         <button class="btn btn-secondary" t-on-click="() => this.state.stationScrapDialog.open = false" t-out="labels.cancel"/>
                         <button class="btn btn-dark" t-on-click="() => this.submitStationScrap()" t-out="labels.confirm"/>
+                    </div>
+                </div>
+            </div>
+            <div class="o_sn_wsd_modal_backdrop" t-if="state.exceptionDialog.open">
+                <div class="o_sn_wsd_modal bg-view border shadow p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <div>
+                            <h4 class="h5 mb-1" t-out="labels.exceptionTitle"/>
+                            <div class="text-muted small" t-out="state.exception.lineName"/>
+                        </div>
+                        <button class="btn btn-secondary btn-sm o_btn_icon" t-on-click="() => this.closeExceptionDialog()">
+                            <i class="fa fa-times" role="img"/>
+                        </button>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button t-foreach="state.exception.categories" t-as="cat" t-key="cat.id"
+                                class="btn"
+                                t-att-class="state.exceptionDialog.categoryId === cat.id ? 'btn-warning' : 'btn-outline-warning'"
+                                t-on-click="() => this.state.exceptionDialog.categoryId = cat.id"
+                                t-out="cat.name"/>
+                    </div>
+                    <label class="form-label" t-out="labels.exceptionNoteLabel"/>
+                    <textarea class="form-control mb-3" rows="2"
+                              t-att-placeholder="labels.exceptionNotePlaceholder"
+                              t-model="state.exceptionDialog.note"/>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary" t-on-click="() => this.closeExceptionDialog()" t-out="labels.cancel"/>
+                        <button class="btn btn-warning" t-on-click="() => this.submitException()" t-out="labels.exceptionSubmit"/>
                     </div>
                 </div>
             </div>

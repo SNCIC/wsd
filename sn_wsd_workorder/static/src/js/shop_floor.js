@@ -33,6 +33,13 @@ const UI_LABELS = {
     destinationLineside: _t("Workshop line side (auto-validated)"),
     destinationStock: _t("Finished goods stock (waiting for validation)"),
     enterSn: _t("Feed SN"),
+    exceptionCategoryRequired: _t("Select a category first."),
+    exceptionNoLine: _t("This work center has no production line; exceptions are reported per line."),
+    exceptionNoteLabel: _t("Description"),
+    exceptionNotePlaceholder: _t("One line: what happened on the line?"),
+    exceptionSubmit: _t("Report"),
+    exceptionTitle: _t("Report Exception"),
+    reportException: _t("Report Exception"),
     finish: _t("Finish"),
     inProgressHere: _t("In progress at this station"),
     inputPoint: _t("Input Point"),
@@ -147,6 +154,16 @@ export class SnWsdShopFloor extends Component {
                 destination: "stock",
                 workshopId: null,
             },
+            exception: {
+                lineId: null,
+                lineName: "",
+                categories: [],
+            },
+            exceptionDialog: {
+                open: false,
+                categoryId: null,
+                note: "",
+            },
         });
         onWillStart(async () => {
             // the station page is the whole terminal: one payload brings
@@ -212,8 +229,65 @@ export class SnWsdShopFloor extends Component {
                 workcenterId ?? this.state.station.workcenterId ?? false,
             ]);
             this.applyStationData(data);
+            await this.loadExceptionContext();
         } finally {
             this.state.station.loading = false;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // exception reporting (delegated to sn_wsd_exception terminal service)
+    // ------------------------------------------------------------------
+
+    async loadExceptionContext() {
+        const workcenterId = this.state.station.workcenterId;
+        if (!workcenterId) {
+            return;
+        }
+        try {
+            const data = await this.orm.silent.call(
+                "sn.wsd.exception.service", "terminal_context", [workcenterId]);
+            this.state.exception.lineId = data.line_id || null;
+            this.state.exception.lineName = data.line_name || "";
+            this.state.exception.categories = data.categories || [];
+        } catch {
+            // exception module unavailable or no access: keep the terminal alive
+            this.state.exception.lineId = null;
+        }
+    }
+
+    openExceptionDialog() {
+        if (!this.state.exception.lineId) {
+            this.notification.add(this.labels.exceptionNoLine, { type: "warning" });
+            return;
+        }
+        const dialog = this.state.exceptionDialog;
+        dialog.open = true;
+        dialog.categoryId = null;
+        dialog.note = "";
+    }
+
+    closeExceptionDialog() {
+        this.state.exceptionDialog.open = false;
+    }
+
+    async submitException() {
+        const dialog = this.state.exceptionDialog;
+        if (!dialog.categoryId) {
+            this.notification.add(this.labels.exceptionCategoryRequired, { type: "warning" });
+            return;
+        }
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.exception.service", "report", [], {
+                    line_id: this.state.exception.lineId,
+                    category_id: dialog.categoryId,
+                    note: dialog.note || "",
+                });
+            this.notification.add(result.message, { type: "success" });
+            this.closeExceptionDialog();
+        } catch (error) {
+            this.notifyError(error);
         }
     }
 

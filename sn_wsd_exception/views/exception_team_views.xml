@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_exception_team_list" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.team.list</field>
+        <field name="model">sn.wsd.exception.team</field>
+        <field name="arch" type="xml">
+            <list string="Responsible Teams">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code" optional="show"/>
+                <field name="leader_id" widget="many2one_avatar_user"/>
+                <field name="member_ids" widget="many2many_tags" optional="show"/>
+                <field name="ticket_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_team_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.team.form</field>
+        <field name="model">sn.wsd.exception.team</field>
+        <field name="arch" type="xml">
+            <form string="Responsible Team">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Equipment Team"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="leader_id" widget="many2one_avatar_user"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Members">
+                        <field name="member_ids" widget="many2many_tags" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_team_search" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.team.search</field>
+        <field name="model">sn.wsd.exception.team</field>
+        <field name="arch" type="xml">
+            <search string="Responsible Teams">
+                <field name="name"/>
+                <field name="member_ids"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_exception_team" model="ir.actions.act_window">
+        <field name="name">Responsible Teams</field>
+        <field name="res_model">sn.wsd.exception.team</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first responsible team
+            </p>
+            <p>
+                Tickets are routed to the team configured on the category; whoever is on
+                shift claims the ticket. The line team leader is always notified as a fallback.
+            </p>
+        </field>
+    </record>
+</odoo>

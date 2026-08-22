@@ -469,7 +469,7 @@ msgstr "计划"
 #. odoo-javascript
 #: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
 msgid "Report"
-msgstr "报工"
+msgstr "上报"
 
 #. module: sn_wsd_workorder
 #. odoo-javascript
@@ -778,3 +778,74 @@ msgid ""
 "%(workcenter)s. Remove it there first."
 msgstr "设备 %(equipment)s 已分配给工作中心 %(workcenter)s，请先在那里移除。"
 
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Report Exception"
+msgstr "发起异常"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Select a category first."
+msgstr "请先选择大类。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "This work center has no production line; exceptions are reported per line."
+msgstr "该工位未挂产线,异常按产线上报。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Description"
+msgstr "异常描述"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "One line: what happened on the line?"
+msgstr "一句话:线上发生了什么?"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Processing"
+msgstr "处理中"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Suspended"
+msgstr "挂起中"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "To Confirm"
+msgstr "待确认"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Normal"
+msgstr "一般"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Urgent"
+msgstr "紧急"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Critical"
+msgstr "特急"

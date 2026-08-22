@@ -3,8 +3,8 @@
     <menuitem id="menu_sn_smt_root" name="SMT" parent="mrp.menu_mrp_root" sequence="85"/>
     <menuitem id="menu_sn_smt_material_table" name="Material Tables" parent="menu_sn_smt_root" action="action_sn_smt_material_table" sequence="10"/>
     <menuitem id="menu_sn_smt_online_material" name="Online Materials" parent="menu_sn_smt_root" action="action_sn_smt_online_material" sequence="20"/>
-    <menuitem id="menu_sn_smt_pcb_panel" name="PCB Panel Records" parent="menu_sn_smt_root" action="action_sn_smt_pcb_panel" sequence="25"/>
-    <menuitem id="menu_sn_smt_pcb_board" name="PCB Board Records" parent="menu_sn_smt_root" action="action_sn_smt_pcb_board" sequence="26"/>
+    <menuitem id="menu_sn_smt_pcb_panel" name="PCB Panel Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_panel" sequence="11"/>
+    <menuitem id="menu_sn_smt_pcb_board" name="PCB Board Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_board" sequence="12"/>
     <menuitem id="menu_sn_smt_feeder" name="Feeders" parent="menu_sn_smt_root" action="action_sn_smt_feeder" sequence="30"/>
     <menuitem id="menu_sn_smt_cart" name="Feeder Cart" parent="menu_sn_smt_root" action="action_sn_smt_cart" sequence="40"/>
     <menuitem id="menu_sn_smt_config" name="Config" parent="menu_sn_smt_root" action="action_sn_smt_config" sequence="50"/>

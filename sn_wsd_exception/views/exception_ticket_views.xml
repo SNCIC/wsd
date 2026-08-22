@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_exception_ticket_list" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.list</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <list string="Exception Tickets">
+                <field name="name" decoration-bf="1"/>
+                <field name="reported_at"/>
+                <field name="workshop_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="production_line_id"/>
+                <field name="category_id"/>
+                <field name="subcategory_id" optional="show"/>
+                <field name="level" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'pending'"
+                       decoration-info="state == 'processing'"
+                       decoration-warning="state == 'suspended'"
+                       decoration-success="state == 'done'"/>
+                <field name="team_id" optional="show" groups="sn_wsd_exception.group_sn_wsd_exception_user"/>
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="is_repeat" optional="show" widget="boolean_toggle"/>
+                <field name="downtime_minutes" sum="Total Downtime" optional="show"/>
+                <field name="response_minutes" optional="hide"/>
+                <field name="mttr_minutes" optional="hide"/>
+                <field name="respond_at" optional="hide"/>
+                <field name="closed_at" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_ticket_form" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.form</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Exception Ticket">
+                <header>
+                    <button name="action_claim" type="object" string="Claim" class="btn-primary"
+                            invisible="state != 'pending'"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_open_suspend_wizard" type="object" string="Suspend"
+                            invisible="state != 'processing'"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_resume" type="object" string="Resume"
+                            invisible="state != 'suspended'"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_submit_close" type="object" string="Submit for Closure" class="btn-primary"
+                            invisible="state not in ('processing', 'suspended')"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_confirm" type="object" string="Confirm Closure" class="btn-primary"
+                            invisible="state != 'pending_confirm'"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_open_reject_wizard" type="object" string="Reject Closure"
+                            invisible="state != 'pending_confirm'"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <button name="action_open_cancel_wizard" type="object" string="Cancel"
+                            invisible="state in ('done', 'cancelled')"
+                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,processing,pending_confirm,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_repeat_candidates" type="object" class="oe_stat_button" icon="fa-repeat"
+                                string="Repeat Candidates" invisible="state == 'pending'"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group name="routing" string="Classification">
+                            <field name="category_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="subcategory_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="level" readonly="state in ('done', 'cancelled')"/>
+                            <field name="team_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="responsible_user_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="repeat_of_id" readonly="state in ('done', 'cancelled')"/>
+                        </group>
+                        <group name="context" string="Context">
+                            <field name="workshop_id"/>
+                            <field name="production_line_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="mes_order_id" readonly="state in ('done', 'cancelled')"/>
+                            <field name="reported_by_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Report" name="report">
+                            <group>
+                                <field name="description" readonly="state in ('done', 'cancelled')"/>
+                                <field name="attachment_ids" widget="many2many_binary"
+                                       readonly="state in ('done', 'cancelled')"/>
+                            </group>
+                        </page>
+                        <page string="Handling" name="handling">
+                            <group>
+                                <group name="closure" string="Closure">
+                                    <field name="reason_id" readonly="state == 'cancelled'"/>
+                                    <field name="temp_action"/>
+                                    <field name="root_cause"/>
+                                    <field name="corrective_action"/>
+                                </group>
+                                <group name="losses" string="Losses and Timings">
+                                    <field name="downtime_minutes"/>
+                                    <field name="impact_qty"/>
+                                    <field name="scrap_qty"/>
+                                    <field name="rework_qty"/>
+                                    <separator colspan="2"/>
+                                    <field name="response_minutes"/>
+                                    <field name="suspended_minutes"/>
+                                    <field name="mttr_minutes"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Suspensions" name="suspensions">
+                            <field name="pause_line_ids" readonly="state == 'done'">
+                                <list>
+                                    <field name="started_at"/>
+                                    <field name="ended_at"/>
+                                    <field name="reason"/>
+                                    <field name="duration_minutes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Escalation Log" name="escalation"
+                              groups="sn_wsd_exception.group_sn_wsd_exception_manager">
+                            <field name="escalation_log_ids">
+                                <list>
+                                    <field name="escalated_at"/>
+                                    <field name="stage"/>
+                                    <field name="user_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_ticket_kanban" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.kanban</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <kanban string="Exception Board" default_group_by="state" class="o_kanban_small_columns">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="level"/>
+                <field name="state"/>
+                <field name="production_line_id"/>
+                <field name="responsible_user_id"/>
+                <field name="is_repeat"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="o_kanban_record d-flex flex-column mb-2 #{record.state.raw_value === 'pending' ? 'border-danger border-2' : ''}">
+                            <div class="o_kanban_record_top d-flex justify-content-between mb-1">
+                                <b><field name="name"/></b>
+                                <span t-if="record.is_repeat.raw_value" class="badge text-bg-warning ms-1">Repeat</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-1">
+                                <field name="category_id"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge"
+                                      t-attf-class="#{record.level.raw_value === 'critical' ? 'text-bg-danger' : (record.level.raw_value === 'urgent' ? 'text-bg-warning' : 'text-bg-secondary')}">
+                                    <field name="level"/>
+                                </span>
+                                <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                            </div>
+                            <div class="text-muted small mt-1">
+                                <field name="production_line_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_ticket_search" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.search</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Exception Tickets">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="category_id"/>
+                <field name="production_line_id"/>
+                <field name="responsible_user_id"/>
+                <filter string="Open" name="open"
+                        domain="[('state', 'in', ('pending', 'processing', 'suspended', 'pending_confirm'))]"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="To Confirm" name="to_confirm" domain="[('state', '=', 'pending_confirm')]"/>
+                <filter string="Repeat" name="repeat" domain="[('is_repeat', '=', True)]"/>
+                <filter string="My Tickets" name="my_tickets"
+                        domain="[('responsible_user_id', '=', uid)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Subcategory" name="group_subcategory" context="{'group_by': 'subcategory_id'}"/>
+                    <filter string="Level" name="group_level" context="{'group_by': 'level'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Production Line" name="group_line" context="{'group_by': 'production_line_id'}"/>
+                    <filter string="Workshop" name="group_workshop" context="{'group_by': 'workshop_id'}"/>
+                    <filter string="Reported Month" name="group_reported_month"
+                            context="{'group_by': 'reported_at:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_ticket_pivot" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.pivot</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <pivot string="Exception Analysis">
+                <field name="category_id" type="row"/>
+                <field name="reported_at" interval="month" type="col"/>
+                <field name="downtime_minutes" type="measure"/>
+                <field name="mttr_minutes" type="measure"/>
+                <field name="response_minutes" type="measure"/>
+                <field name="impact_qty" type="measure"/>
+                <field name="scrap_qty" type="measure"/>
+                <field name="rework_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_exception_ticket_graph" model="ir.ui.view">
+        <field name="name">sn.wsd.exception.ticket.graph</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="arch" type="xml">
+            <graph string="Exception Pareto (screen)">
+                <field name="category_id" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_exception_ticket" model="ir.actions.act_window">
+        <field name="name">Exception Tickets</field>
+        <field name="res_model">sn.wsd.exception.ticket</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
+        <field name="context">{'search_default_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first exception ticket
+            </p>
+            <p>
+                Report from the shop-floor terminal (category + photo + one line), routing
+                follows the category's responsible team, and the line team leader is always
+                notified as a fallback.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_exception_ticket_board" model="ir.actions.act_window">
+        <field name="name">Exception Board</field>
+        <field name="res_model">sn.wsd.exception.ticket</field>
+        <field name="view_mode">kanban,form,list</field>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

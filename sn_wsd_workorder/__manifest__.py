@@ -1,9 +1,9 @@
 {
     'name': 'SN WSD Shop Floor Terminal',
-    'version': '19.0.2.4.0',
+    'version': '19.0.2.5.0',
     'summary': 'Shop floor station terminal for WSD MES orders',
     'category': 'Manufacturing',
-    'depends': ['sn_wsd_mrp', 'barcodes', 'sn_wsd_device'],
+    'depends': ['sn_wsd_mrp', 'barcodes', 'sn_wsd_device', 'sn_wsd_exception'],
     'data': [
         'security/security_groups.xml',
         'security/ir.model.access.csv',
