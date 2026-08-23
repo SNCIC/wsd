@@ -12,8 +12,12 @@ This module extends sn.wsd.api.service to implement full scan-pass functionality
 """
 
 import json
+import logging
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+
+_logger = logging.getLogger(__name__)
 
 
 class EnhancedScanPassService(models.AbstractModel):
@@ -308,7 +312,6 @@ class EnhancedScanPassService(models.AbstractModel):
             'workcenter_id': workcenter_id,
             'internal_serial_id': serial.id,
             'operator_code': operator_code,
-            'payload': payload,
         }
 
         validation_results = self._validate_process_parameters(
@@ -373,6 +376,21 @@ class EnhancedScanPassService(models.AbstractModel):
                     self._create_test_result_details(test_result, metadata_payload.get('M_TEST_DETAIL'))
 
             if normalized_result == 'pass':
+                # SMT/DIP 工序过站扣点：按料站表点数扣减在线卷余量并落流水。
+                # 扣点事务只写扣点流水与在线料表行，不触碰任何库存对象。
+                if mes_order.x_smt_online_material_ids and mes_order._is_smt_route_order():
+                    try:
+                        self.env['sn.smt.material.consumption'].consume_for_serial(
+                            route_operation,
+                            serial,
+                            operator_code=operator_code,
+                            external_event_id=external_event_id,
+                            source_system=source_system,
+                        )
+                    except Exception as error:
+                        _logger.exception('SMT point consumption failed for %s.', serial_number)
+                        return self._aoi_error(str(error), error_code='smt_consumption_failed')
+
                 self._process_nameplate_binding(
                     payload,
                     production_id,

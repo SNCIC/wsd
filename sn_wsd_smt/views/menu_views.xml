@@ -3,14 +3,12 @@
     <menuitem id="menu_sn_smt_root" name="SMT" parent="mrp.menu_mrp_root" sequence="85"/>
     <menuitem id="menu_sn_smt_material_table" name="Material Tables" parent="menu_sn_smt_root" action="action_sn_smt_material_table" sequence="10"/>
     <menuitem id="menu_sn_smt_online_material" name="Online Materials" parent="menu_sn_smt_root" action="action_sn_smt_online_material" sequence="20"/>
-    <menuitem id="menu_sn_smt_pcb_panel" name="PCB Panel Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_panel" sequence="11"/>
-    <menuitem id="menu_sn_smt_pcb_board" name="PCB Board Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_board" sequence="12"/>
     <menuitem id="menu_sn_smt_feeder" name="Feeders" parent="menu_sn_smt_root" action="action_sn_smt_feeder" sequence="30"/>
     <menuitem id="menu_sn_smt_cart" name="Feeder Cart" parent="menu_sn_smt_root" action="action_sn_smt_cart" sequence="40"/>
-    <menuitem id="menu_sn_smt_config" name="Config" parent="menu_sn_smt_root" action="action_sn_smt_config" sequence="50"/>
-    <menuitem id="menu_sn_smt_operation_record" name="Operation Records" parent="menu_sn_smt_root" action="action_sn_smt_operation_record" sequence="60" groups="base.group_no_one"/>
-    <menuitem id="menu_sn_smt_operation_log" name="Operation Logs" parent="menu_sn_smt_root" action="action_sn_smt_operation_log" sequence="70" groups="base.group_no_one"/>
-    <menuitem id="menu_sn_smt_traceability" name="Traceability" parent="menu_sn_smt_root" action="action_sn_smt_traceability" sequence="80" groups="base.group_no_one"/>
-    <menuitem id="menu_sn_smt_material_consumption" name="SN Material Consumption" parent="menu_sn_smt_root" action="action_sn_smt_material_consumption" sequence="90" groups="base.group_no_one"/>
+    <menuitem id="menu_sn_smt_material_log" name="Material Logs" parent="menu_sn_smt_root" action="action_sn_smt_material_log" sequence="50"/>
+    <menuitem id="menu_sn_smt_product_material_usage" name="Product Material Usage" parent="menu_sn_smt_root" action="action_sn_smt_product_material_usage" sequence="60"/>
+    <menuitem id="menu_sn_smt_lot_product_usage" name="Lot Product Usage" parent="menu_sn_smt_root" action="action_sn_smt_lot_product_usage" sequence="70"/>
+    <menuitem id="menu_sn_smt_pcb_panel" name="PCB Panel Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_panel" sequence="11"/>
+    <menuitem id="menu_sn_smt_pcb_board" name="PCB Board Records" parent="sn_wsd_mrp.menu_sn_wsd_traceability" action="action_sn_smt_pcb_board" sequence="12"/>
 
 </odoo>

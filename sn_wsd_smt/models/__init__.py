@@ -5,6 +5,7 @@ from . import sn_smt_material_table
 from . import sn_smt_feeder
 from . import sn_smt_cart
 from . import sn_smt_consumption
+from . import sn_smt_loading_service
 from . import stock_lot
 from . import sn_smt_pcb_panel
 from . import sn_smt_pcb_panel_api

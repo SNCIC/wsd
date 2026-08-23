@@ -1,79 +1,112 @@
+import re
+
 from odoo import _, http
 from odoo.exceptions import UserError
 from odoo.http import request
 
 
 class SnSmtPdaController(http.Controller):
+    """SMT PDA jsonrpc 入口。路径与参数形状保持稳定，内部全部经由
+    sn.smt.loading.service（制令单锚点）执行。"""
 
-    @http.route('/sn_wsd_barcode/smt/get_production_context', type='jsonrpc', auth='user')
-    def get_production_context(self, workcenter_id, production_line_id=False):
+    # ------------------------------------------------------------------
+    # Context helpers
+    # ------------------------------------------------------------------
+
+    def _get_service(self):
+        return request.env['sn.smt.loading.service']
+
+    def _get_workcenter(self, workcenter_id):
         workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
         if not workcenter:
             raise UserError(_('Work center not found.'))
+        return workcenter
+
+    def _get_online_mes_order(self, workcenter):
         production = request.env['mrp.production']._get_current_online_production(
             workcenter=workcenter
         )
         if not production:
             raise UserError(_('No online manufacturing order was found for the selected work center.'))
+        mes_order = production.x_mes_order_id
+        if not mes_order:
+            raise UserError(_('No online MES order was found for the selected work center.'))
+        return production, mes_order
+
+    def _get_mes_order_by_production(self, production_id):
+        production = request.env['mrp.production'].browse(production_id).exists()
+        if not production:
+            raise UserError(_('Manufacturing order not found.'))
+        mes_order = production.x_mes_order_id
+        if not mes_order:
+            raise UserError(_('MES order not found.'))
+        return production, mes_order
+
+    # ------------------------------------------------------------------
+    # Query endpoints
+    # ------------------------------------------------------------------
+
+    @http.route('/sn_wsd_barcode/smt/get_production_context', type='jsonrpc', auth='user')
+    def get_production_context(self, workcenter_id, production_line_id=False):
+        workcenter = self._get_workcenter(workcenter_id)
+        production, mes_order = self._get_online_mes_order(workcenter)
         if production_line_id:
             line = request.env['sn.mrp.production.line'].browse(production_line_id).exists()
-            if line and production.x_smt_production_line_id != line:
+            if line and mes_order.production_line_id != line:
                 raise UserError(
-                    _('The selected production line does not match the current online manufacturing order.')
+                    _('The selected production line does not match the current online MES order.')
                 )
         return {
             'production_id': production.id,
             'production_name': production.display_name,
-            'product_default_code': production.product_id.default_code,
-            'product_side': production.x_smt_product_side,
-            'smt_material_table_id': production.x_smt_material_table_id.id,
-            'smt_material_table_name': production.x_smt_material_table_id.display_name,
-            'production_line_id': production.x_smt_production_line_id.id,
-            'production_line_name': production.x_smt_production_line_id.display_name,
+            'mes_order_id': mes_order.id,
+            'mes_order_name': mes_order.display_name,
+            'product_default_code': mes_order.product_id.default_code,
+            'product_side': mes_order.x_side,
+            'smt_material_table_id': mes_order.x_smt_material_table_id.id,
+            'smt_material_table_name': mes_order.x_smt_material_table_id.display_name,
+            'production_line_id': mes_order.production_line_id.id,
+            'production_line_name': mes_order.production_line_id.display_name,
         }
 
     @http.route('/sn_wsd_barcode/smt/get_material_table_status', type='jsonrpc', auth='user')
     def get_material_table_status(self, production_id):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        if not production:
-            raise UserError(_('Manufacturing order not found.'))
-        helper = request.env['sn.smt.tp.wizard']
-        active_lines = helper._get_active_online_materials(production)
-        snapshot = helper._get_completion_snapshot(production)
-        rows = []
-        for line in production.x_smt_online_material_ids.sorted(
-            lambda item: (item.device_seq, item.table_no, item.loadpoint, item.id)
-        ):
-            rows.append({
-                'device_seq': line.device_seq,
-                'table_no': line.table_no,
-                'loadpoint': line.loadpoint,
-                'channel': line.chanel_sn,
-                'item_code': line.item_code,
-                'required_qty': line.point_qty,
-                'loaded_material_lot_name': line.loaded_material_lot_id.name,
-                'loaded_material_available_qty': line.loaded_material_lot_id.x_smt_available_qty,
-                'loaded_product_name': line.loaded_product_id.display_name,
-                'loaded_feeder_name': line.loaded_feeder_id.name,
-                'load_status': line.is_load,
-                'replace_count': line.replace_count,
-                'is_skip': line.is_skip,
-            })
+        production, mes_order = self._get_mes_order_by_production(production_id)
+        status = self._get_service().get_material_status(mes_order)
+        # 保持旧响应键（required_qty 等），供车间屏幕无感切换。
+        rows = [{
+            'device_seq': row['device_seq'],
+            'table_no': row['table_no'],
+            'loadpoint': row['loadpoint'],
+            'channel': row['channel'],
+            'item_code': row['item_code'],
+            'required_qty': row['point_qty'],
+            'loaded_material_lot_name': row['loaded_material_lot_name'],
+            'loaded_material_available_qty': row['remaining_qty'],
+            'loaded_feeder_name': row['loaded_feeder_name'],
+            'load_status': row['load_status'],
+            'replace_count': row['replace_count'],
+            'is_skip': row['is_skip'],
+        } for row in status['rows']]
+        summary = status['summary']
         return {
             'production_id': production.id,
             'production_name': production.display_name,
-            'material_table_name': production.x_smt_material_table_id.display_name,
+            'mes_order_id': mes_order.id,
+            'material_table_name': status['material_table_name'],
             'summary': {
-                'required_qty': snapshot['required_qty'],
-                'loaded_qty': snapshot['loaded_qty'],
-                'unloaded_qty': snapshot['unloaded_qty'],
-                'table_complete_count': len(snapshot['table_complete_keys']),
-                'machine_complete_count': len(snapshot['machine_complete_keys']),
-                'line_complete': snapshot['line_complete'],
-                'active_rows': len(active_lines),
+                'required_qty': summary['required_qty'],
+                'loaded_qty': summary['loaded_qty'],
+                'unloaded_qty': summary['unloaded_qty'],
+                'line_complete': summary['line_complete'],
+                'active_rows': summary['required_qty'],
             },
             'rows': rows,
         }
+
+    # ------------------------------------------------------------------
+    # Action endpoints（委托服务层）
+    # ------------------------------------------------------------------
 
     @http.route('/sn_wsd_barcode/smt/do_online_load', type='jsonrpc', auth='user')
     def do_online_load(
@@ -85,30 +118,20 @@ class SnSmtPdaController(http.Controller):
         material_sn_input,
         feeder_sn_input=False,
     ):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.tp.wizard'].with_context(
-            default_production_id=production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'device_table_input': device_table_input or '',
-            'loadpoint_input': loadpoint_input or '',
-            'feeder_input': feeder_sn_input or '',
-            'material_sn_input': material_sn_input or '',
-        })
-        wizard.action_validate()
-        wizard.action_save()
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id)
+        result = self._get_service().load_material(
+            mes_order, workcenter, device_table_input, loadpoint_input,
+            material_sn_input, feeder_sn=feeder_sn_input,
+        )
         return {
             'ok': True,
-            'message': wizard.message or _('Online loading saved successfully.'),
-            'production_id': production.id,
-            'online_material_id': wizard.online_material_id.id,
-            'material_lot_id': wizard.material_lot_id.id,
-            'feeder_id': wizard.feeder_id.id,
+            'message': result.get('message') or _('Online loading saved successfully.'),
+            'production_id': production_id,
+            'mes_order_id': mes_order.id,
+            'online_material_id': result.get('online_material_id'),
+            'material_lot_id': result.get('material_lot_id'),
+            'feeder_id': result.get('feeder_id'),
         }
 
     @http.route('/sn_wsd_barcode/smt/do_offline_prepare', type='jsonrpc', auth='user')
@@ -122,73 +145,57 @@ class SnSmtPdaController(http.Controller):
         cart_sn_input=False,
         feeder_sn_input=False,
     ):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.bl.wizard'].with_context(
-            default_production_id=production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'device_table_input': device_table_input or '',
-            'loadpoint_input': loadpoint_input or '',
-            'cart_input': cart_sn_input or '',
-            'feeder_input': feeder_sn_input or '',
-            'material_sn_input': material_sn_input or '',
-        })
-        wizard.action_validate()
-        wizard.action_save()
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id)
+        cart = request.env['sn.smt.cart'].search([
+            ('cart_sn', '=', cart_sn_input or ''),
+            ('company_id', '=', mes_order.company_id.id),
+        ], limit=1) if cart_sn_input else request.env['sn.smt.cart']
+        if cart_sn_input and not cart:
+            raise UserError(_('The cart SN does not exist.'))
+        result = self._get_service().prepare_offline(
+            mes_order, cart, feeder_sn_input, material_sn_input,
+            slot_no=loadpoint_input or '',
+        )
         return {
             'ok': True,
-            'message': wizard.message or _('Offline preparation saved successfully.'),
-            'production_id': production.id,
+            'message': _('Offline preparation saved successfully.'),
+            'production_id': production_id,
+            'mes_order_id': mes_order.id,
+            'cart_line_id': result.get('cart_line_id'),
         }
 
     @http.route('/sn_wsd_barcode/smt/do_cart_load', type='jsonrpc', auth='user')
     def do_cart_load(self, production_id, workcenter_id, device_table_input, cart_sn_input):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.lcsl.wizard'].with_context(
-            default_production_id=production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'device_table_input': device_table_input or '',
-            'cart_input': cart_sn_input or '',
-        })
-        wizard.action_load()
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id)
+        cart = request.env['sn.smt.cart'].search([
+            ('cart_sn', '=', cart_sn_input or ''),
+            ('company_id', '=', mes_order.company_id.id),
+        ], limit=1)
+        if not cart:
+            raise UserError(_('The cart SN does not exist.'))
+        result = self._get_service().load_cart(
+            mes_order, workcenter, device_table_input, cart,
+        )
         return {
             'ok': True,
-            'message': wizard.message or _('Cart loading saved successfully.'),
-            'production_id': production.id,
+            'message': result.get('message') or _('Cart loading saved successfully.'),
+            'production_id': production_id,
+            'mes_order_id': mes_order.id,
         }
 
     @http.route('/sn_wsd_barcode/smt/do_changeover', type='jsonrpc', auth='user')
     def do_changeover(self, production_id, target_production_id, workcenter_id):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        target_production = request.env['mrp.production'].browse(target_production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not target_production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.zc.wizard'].with_context(
-            default_production_id=production.id,
-            default_target_production_id=target_production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'target_production_id': target_production.id,
-            'workcenter_id': workcenter.id,
-        })
-        wizard.action_changeover()
+        _, source_mes_order = self._get_mes_order_by_production(production_id)
+        _, target_mes_order = self._get_mes_order_by_production(target_production_id)
+        workcenter = self._get_workcenter(workcenter_id)
+        result = self._get_service().changeover(source_mes_order, target_mes_order, workcenter)
         return {
             'ok': True,
-            'message': wizard.message or _('Changeover completed.'),
-            'production_id': target_production.id,
+            'message': result.get('message') or _('Changeover completed.'),
+            'production_id': target_production_id,
+            'mes_order_id': target_mes_order.id,
         }
 
     @http.route('/sn_wsd_barcode/smt/do_continue', type='jsonrpc', auth='user')
@@ -203,31 +210,30 @@ class SnSmtPdaController(http.Controller):
         new_feeder_sn_input=False,
         change_type='continue',
     ):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.change.wizard'].with_context(
-            default_production_id=production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'change_type': change_type or 'continue',
-            'device_table_input': device_table_input or '',
-            'loadpoint_input': loadpoint_input or '',
-            'material_sn_input': old_material_sn_input or '',
-            'new_material_sn_input': new_material_sn_input or '',
-            'feeder_input': new_feeder_sn_input or '',
-        })
-        if old_material_sn_input and not device_table_input:
-            wizard.action_change_by_material_sn()
-        else:
-            wizard.action_change()
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id)
+        old_lot = request.env['stock.lot'].search([
+            ('name', '=', old_material_sn_input or ''),
+        ], limit=1)
+        if old_lot:
+            position = request.env['sn.smt.online.material'].search([
+                ('mes_order_id', '=', mes_order.id),
+                ('loaded_material_lot_id', '=', old_lot.id),
+                ('is_load', '=', 'Y'),
+            ], limit=1)
+            if position:
+                device_table_input = device_table_input or f'{position.device_seq}.{position.table_no}'
+                loadpoint_input = loadpoint_input or position.loadpoint
+        result = self._get_service().change_material(
+            mes_order, workcenter, device_table_input, loadpoint_input,
+            new_material_sn_input, new_feeder_sn=new_feeder_sn_input,
+            change_type=change_type or 'continue',
+        )
         return {
             'ok': True,
-            'message': wizard.message or _('Material change or continuation completed.'),
-            'production_id': production.id,
+            'message': result.get('message') or _('Material change or continuation completed.'),
+            'production_id': production_id,
+            'mes_order_id': mes_order.id,
         }
 
     @http.route('/sn_wsd_barcode/smt/do_unload', type='jsonrpc', auth='user')
@@ -241,40 +247,37 @@ class SnSmtPdaController(http.Controller):
         cart_input=False,
         material_sn_input=False,
     ):
-        production = request.env['mrp.production'].browse(production_id).exists()
-        workcenter = request.env['mrp.workcenter'].browse(workcenter_id).exists()
-        if not production or not workcenter:
-            raise UserError(_('Manufacturing order or work center not found.'))
-        wizard = request.env['sn.smt.xl.wizard'].with_context(
-            default_production_id=production.id,
-            default_workcenter_id=workcenter.id,
-        ).create({
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'unload_scope': unload_scope or 'station',
-            'device_table_input': device_table_input or '',
-            'loadpoint_input': loadpoint_input or '',
-            'cart_input': cart_input or '',
-            'material_sn_input': material_sn_input or '',
-        })
-        if unload_scope == 'material':
-            wizard.action_unload_by_material_sn()
-        else:
-            wizard.action_unload()
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        cart = request.env['sn.smt.cart']
+        if cart_input:
+            cart = request.env['sn.smt.cart'].search([
+                ('cart_sn', '=', cart_input),
+                ('company_id', '=', mes_order.company_id.id),
+            ], limit=1)
+            if not cart:
+                raise UserError(_('The cart SN does not exist.'))
+        result = self._get_service().unload(
+            mes_order, scope=unload_scope or 'station',
+            device_table=device_table_input or False,
+            loadpoint=loadpoint_input or False,
+            material_sn=material_sn_input or False,
+            cart=cart,
+        )
         return {
             'ok': True,
-            'message': wizard.message or _('Unload completed.'),
-            'production_id': production.id,
+            'message': _('Unload completed.'),
+            'production_id': production_id,
+            'mes_order_id': mes_order.id,
+            'unloaded_qty': result.get('unloaded_qty', 0),
         }
+
+    # ------------------------------------------------------------------
+    # Unified barcode entry
+    # ------------------------------------------------------------------
 
     @http.route('/sn_wsd_barcode/smt/process_smt_scan', type='jsonrpc', auth='user')
     def process_smt_scan(self, station_id, barcode, operation):
-        import re
-
-        workcenter = request.env['mrp.workcenter'].browse(station_id).exists()
-        if not workcenter:
-            return {'ok': False, 'message': _('Work center not found.')}
-
+        workcenter = self._get_workcenter(station_id)
         production = request.env['mrp.production']._get_current_online_production(
             workcenter=workcenter
         )
@@ -285,43 +288,41 @@ class SnSmtPdaController(http.Controller):
                     'No online manufacturing order was found for the selected workshop and production line.'
                 ),
             }
+        mes_order = production.x_mes_order_id
+        if not mes_order:
+            return {
+                'ok': False,
+                'message': _('No online MES order was found for the selected workshop and production line.'),
+            }
+        service = self._get_service()
 
         def extract(key):
             pattern = rf'(?:^|\|){re.escape(key)}=([^|]+)'
             match = re.search(pattern, barcode or '', re.IGNORECASE)
             return match.group(1).strip() if match else ''
 
-        if operation == 'feeder_unload':
-            device_table_input = extract('DEV')
-            loadpoint_input = extract('LP')
-            material_sn_input = extract('MAT')
-            feeder_sn_input = extract('FD')
-            if not device_table_input or not loadpoint_input:
-                return {
-                    'ok': False,
-                    'message': _('Load format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx'),
-                    'barcode': barcode,
-                }
-            if not material_sn_input:
-                return {
-                    'ok': False,
-                    'message': _('Load barcode is missing the MAT field.'),
-                    'barcode': barcode,
-                }
-            wizard = request.env['sn.smt.tp.wizard'].with_context(
-                default_production_id=production.id,
-                default_workcenter_id=workcenter.id,
-            ).create({
-                'production_id': production.id,
-                'workcenter_id': workcenter.id,
-                'device_table_input': device_table_input,
-                'loadpoint_input': loadpoint_input,
-                'feeder_input': feeder_sn_input,
-                'material_sn_input': material_sn_input,
-            })
-            try:
-                wizard.action_validate()
-                wizard.action_save()
+        try:
+            if operation in ('feeder_unload', 'online_load'):
+                device_table_input = extract('DEV')
+                loadpoint_input = extract('LP')
+                material_sn_input = extract('MAT')
+                feeder_sn_input = extract('FD')
+                if not device_table_input or not loadpoint_input:
+                    return {
+                        'ok': False,
+                        'message': _('Load format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx'),
+                        'barcode': barcode,
+                    }
+                if not material_sn_input:
+                    return {
+                        'ok': False,
+                        'message': _('Load barcode is missing the MAT field.'),
+                        'barcode': barcode,
+                    }
+                service.load_material(
+                    mes_order, workcenter, device_table_input, loadpoint_input,
+                    material_sn_input, feeder_sn=feeder_sn_input,
+                )
                 return {
                     'ok': True,
                     'message': _('SMT load completed: %(device)s %(loadpoint)s %(material)s') % {
@@ -331,38 +332,34 @@ class SnSmtPdaController(http.Controller):
                     },
                     'operation': 'online_load',
                     'production_id': production.id,
+                    'mes_order_id': mes_order.id,
                     'production_name': production.display_name,
                 }
-            except UserError as error:
-                return {'ok': False, 'message': str(error)}
 
-        if operation == 'offline_prepare':
-            device_table_input = extract('DEV')
-            loadpoint_input = extract('LP')
-            material_sn_input = extract('MAT')
-            feeder_sn_input = extract('FD')
-            cart_sn_input = extract('CART')
-            if not device_table_input or not loadpoint_input or not material_sn_input:
-                return {
-                    'ok': False,
-                    'message': _('Offline prepare format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx|CART=xxx'),
-                    'barcode': barcode,
-                }
-            wizard = request.env['sn.smt.bl.wizard'].with_context(
-                default_production_id=production.id,
-                default_workcenter_id=workcenter.id,
-            ).create({
-                'production_id': production.id,
-                'workcenter_id': workcenter.id,
-                'device_table_input': device_table_input,
-                'loadpoint_input': loadpoint_input,
-                'cart_input': cart_sn_input,
-                'feeder_input': feeder_sn_input,
-                'material_sn_input': material_sn_input,
-            })
-            try:
-                wizard.action_validate()
-                wizard.action_save()
+            if operation == 'offline_prepare':
+                device_table_input = extract('DEV')
+                loadpoint_input = extract('LP')
+                material_sn_input = extract('MAT')
+                feeder_sn_input = extract('FD')
+                cart_sn_input = extract('CART')
+                if not device_table_input or not loadpoint_input or not material_sn_input:
+                    return {
+                        'ok': False,
+                        'message': _('Offline prepare format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx|CART=xxx'),
+                        'barcode': barcode,
+                    }
+                cart = request.env['sn.smt.cart']
+                if cart_sn_input:
+                    cart = request.env['sn.smt.cart'].search([
+                        ('cart_sn', '=', cart_sn_input),
+                        ('company_id', '=', mes_order.company_id.id),
+                    ], limit=1)
+                    if not cart:
+                        raise UserError(_('The cart SN does not exist.'))
+                service.prepare_offline(
+                    mes_order, cart, feeder_sn_input, material_sn_input,
+                    slot_no=loadpoint_input,
+                )
                 return {
                     'ok': True,
                     'message': _('SMT offline preparation completed: %(device)s %(loadpoint)s %(material)s') % {
@@ -372,31 +369,26 @@ class SnSmtPdaController(http.Controller):
                     },
                     'operation': 'offline_prepare',
                     'production_id': production.id,
+                    'mes_order_id': mes_order.id,
                     'production_name': production.display_name,
                 }
-            except UserError as error:
-                return {'ok': False, 'message': str(error)}
 
-        if operation == 'cart_load':
-            device_table_input = extract('DEV')
-            cart_sn_input = extract('CART')
-            if not device_table_input or not cart_sn_input:
-                return {
-                    'ok': False,
-                    'message': _('Cart load format: DEV=N.T|CART=xxx'),
-                    'barcode': barcode,
-                }
-            wizard = request.env['sn.smt.lcsl.wizard'].with_context(
-                default_production_id=production.id,
-                default_workcenter_id=workcenter.id,
-            ).create({
-                'production_id': production.id,
-                'workcenter_id': workcenter.id,
-                'device_table_input': device_table_input,
-                'cart_input': cart_sn_input,
-            })
-            try:
-                wizard.action_load()
+            if operation == 'cart_load':
+                device_table_input = extract('DEV')
+                cart_sn_input = extract('CART')
+                if not device_table_input or not cart_sn_input:
+                    return {
+                        'ok': False,
+                        'message': _('Cart load format: DEV=N.T|CART=xxx'),
+                        'barcode': barcode,
+                    }
+                cart = request.env['sn.smt.cart'].search([
+                    ('cart_sn', '=', cart_sn_input),
+                    ('company_id', '=', mes_order.company_id.id),
+                ], limit=1)
+                if not cart:
+                    raise UserError(_('The cart SN does not exist.'))
+                service.load_cart(mes_order, workcenter, device_table_input, cart)
                 return {
                     'ok': True,
                     'message': _('SMT cart load completed: %(device)s %(cart)s') % {
@@ -405,30 +397,19 @@ class SnSmtPdaController(http.Controller):
                     },
                     'operation': 'cart_load',
                     'production_id': production.id,
+                    'mes_order_id': mes_order.id,
                     'production_name': production.display_name,
                 }
-            except UserError as error:
-                return {'ok': False, 'message': str(error)}
 
-        if operation == 'table_unload':
-            material_sn_input = extract('MAT')
-            if not material_sn_input:
-                return {
-                    'ok': False,
-                    'message': _('Unload format: MAT=xxx'),
-                    'barcode': barcode,
-                }
-            wizard = request.env['sn.smt.xl.wizard'].with_context(
-                default_production_id=production.id,
-                default_workcenter_id=workcenter.id,
-            ).create({
-                'production_id': production.id,
-                'workcenter_id': workcenter.id,
-                'unload_scope': 'material',
-                'material_sn_input': material_sn_input,
-            })
-            try:
-                wizard.action_unload_by_material_sn()
+            if operation == 'table_unload':
+                material_sn_input = extract('MAT')
+                if not material_sn_input:
+                    return {
+                        'ok': False,
+                        'message': _('Unload format: MAT=xxx'),
+                        'barcode': barcode,
+                    }
+                service.unload(mes_order, scope='material', material_sn=material_sn_input)
                 return {
                     'ok': True,
                     'message': _('SMT unload completed: %(material)s') % {
@@ -436,41 +417,45 @@ class SnSmtPdaController(http.Controller):
                     },
                     'operation': 'unload',
                     'production_id': production.id,
+                    'mes_order_id': mes_order.id,
                     'production_name': production.display_name,
                 }
-            except UserError as error:
-                return {'ok': False, 'message': str(error)}
 
-        if operation == 'material_refill':
-            old_material_sn = extract('OLD_MAT')
-            new_material_sn = extract('NEW_MAT')
-            if not old_material_sn or not new_material_sn:
-                return {
-                    'ok': False,
-                    'message': _('Refill format: OLD_MAT=old material SN|NEW_MAT=new material SN'),
-                    'barcode': barcode,
-                }
-            if old_material_sn == new_material_sn:
-                return {
-                    'ok': False,
-                    'message': _('Old and new material SN cannot be the same.'),
-                    'barcode': barcode,
-                }
-            wizard = request.env['sn.smt.change.wizard'].with_context(
-                default_production_id=production.id,
-                default_workcenter_id=workcenter.id,
-            ).create({
-                'production_id': production.id,
-                'workcenter_id': workcenter.id,
-                'change_type': 'change',
-                'material_sn_input': old_material_sn,
-                'new_material_sn_input': new_material_sn,
-                'feeder_input': '',
-                'device_table_input': '0.DUMMY',
-                'loadpoint_input': 'DUMMY',
-            })
-            try:
-                wizard.action_change_by_material_sn()
+            if operation == 'material_refill':
+                old_material_sn = extract('OLD_MAT')
+                new_material_sn = extract('NEW_MAT')
+                if not old_material_sn or not new_material_sn:
+                    return {
+                        'ok': False,
+                        'message': _('Refill format: OLD_MAT=old material SN|NEW_MAT=new material SN'),
+                        'barcode': barcode,
+                    }
+                if old_material_sn == new_material_sn:
+                    return {
+                        'ok': False,
+                        'message': _('Old and new material SN cannot be the same.'),
+                        'barcode': barcode,
+                    }
+                old_lot = request.env['stock.lot'].search([
+                    ('name', '=', old_material_sn),
+                ], limit=1)
+                position = request.env['sn.smt.online.material'].search([
+                    ('mes_order_id', '=', mes_order.id),
+                    ('loaded_material_lot_id', '=', old_lot.id),
+                    ('is_load', '=', 'Y'),
+                ], limit=1) if old_lot else request.env['sn.smt.online.material']
+                if not position:
+                    return {
+                        'ok': False,
+                        'message': _('The old material SN is not loaded online.'),
+                        'barcode': barcode,
+                    }
+                service.change_material(
+                    mes_order, workcenter,
+                    f'{position.device_seq}.{position.table_no}',
+                    position.loadpoint, new_material_sn,
+                    change_type='change',
+                )
                 return {
                     'ok': True,
                     'message': _('SMT refill completed: %(old)s -> %(new)s') % {
@@ -479,10 +464,11 @@ class SnSmtPdaController(http.Controller):
                     },
                     'operation': 'change',
                     'production_id': production.id,
+                    'mes_order_id': mes_order.id,
                     'production_name': production.display_name,
                 }
-            except UserError as error:
-                return {'ok': False, 'message': str(error)}
+        except UserError as error:
+            return {'ok': False, 'message': str(error)}
 
         return {
             'ok': False,

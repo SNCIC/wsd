@@ -1357,25 +1357,35 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def _resolve_smt_loading_context(self, payload):
-        production_id = self._get_first_payload_value(
-            payload, 'production_id', 'productionId', 'manufacturing_order_id', 'manufacturingOrderId',
-        )
-        production = self.env['mrp.production']
-        if production_id:
+        mes_order_id = self._get_first_payload_value(payload, 'mes_order_id', 'mesOrderId')
+        mes_order = self.env['sn.wsd.mes.order']
+        if mes_order_id:
             try:
-                production = self.env['mrp.production'].browse(int(production_id)).exists()
+                mes_order = self.env['sn.wsd.mes.order'].browse(int(mes_order_id)).exists()
             except (TypeError, ValueError):
-                raise ValidationError('Manufacturing order ID is invalid.')
-        if not production:
-            mo_number = self._get_first_payload_value(payload, 'mo_number', 'moNumber', 'manufacturing_order')
-            production = self.env['mrp.production'].search([('name', '=', mo_number)], limit=1) if mo_number else production
+                raise ValidationError('MES order ID is invalid.')
+        if not mes_order:
+            production_id = self._get_first_payload_value(
+                payload, 'production_id', 'productionId',
+                'manufacturing_order_id', 'manufacturingOrderId',
+            )
+            production = self.env['mrp.production']
+            if production_id:
+                try:
+                    production = self.env['mrp.production'].browse(int(production_id)).exists()
+                except (TypeError, ValueError):
+                    production = self.env['mrp.production']
+            if not production:
+                mo_number = self._get_first_payload_value(payload, 'mo_number', 'moNumber', 'manufacturing_order')
+                production = self.env['mrp.production'].search([('name', '=', mo_number)], limit=1) if mo_number else production
+            mes_order = production.x_mes_order_id
         workcenter_id = self._get_first_payload_value(payload, 'workcenter_id', 'workcenterId')
         try:
             workcenter = self.env['mrp.workcenter'].browse(int(workcenter_id)).exists() if workcenter_id else self.env['mrp.workcenter']
         except (TypeError, ValueError):
             raise ValidationError('Work center ID is invalid.')
-        if not production:
-            raise ValidationError('Manufacturing order was not found.')
+        if not mes_order:
+            raise ValidationError('MES order was not found.')
         if not workcenter:
             raise ValidationError('Work center was not found.')
         required = {
@@ -1387,16 +1397,16 @@ class SnWsdApiService(models.AbstractModel):
         missing = [key for key, value in required.items() if value in (None, '')]
         if missing:
             raise ValidationError('Missing SMT loading fields: %s' % ', '.join(missing))
-        return production, workcenter, required
+        return mes_order, workcenter, required
 
     @api.model
     def smt_loading_validate(self, payload):
-        production, workcenter, values = self._resolve_smt_loading_context(payload or {})
-        result = self.env['sn.smt.loading.service'].validate_loading(production, workcenter, **values)
+        mes_order, workcenter, values = self._resolve_smt_loading_context(payload or {})
+        result = self.env['sn.smt.loading.service'].validate_loading(mes_order, workcenter, **values)
         return self._service_ok(result)
 
     @api.model
     def smt_loading_save(self, payload):
-        production, workcenter, values = self._resolve_smt_loading_context(payload or {})
-        result = self.env['sn.smt.loading.service'].save_loading(production, workcenter, **values)
+        mes_order, workcenter, values = self._resolve_smt_loading_context(payload or {})
+        result = self.env['sn.smt.loading.service'].save_loading(mes_order, workcenter, **values)
         return self._service_ok(result)

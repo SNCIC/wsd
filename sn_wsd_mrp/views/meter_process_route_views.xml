@@ -64,6 +64,7 @@
                         <group>
                             <field name="code" readonly="version > 0"/>
                             <field name="name"/>
+                            <field name="x_process_type" readonly="version > 0"/>
                             <field name="version" readonly="1"/>
                             <!-- state/route_flow_json invisible: the canvas edits are
                                  pushed into route_flow_json and saved/versioned by the

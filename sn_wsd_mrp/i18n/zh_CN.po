@@ -7112,3 +7112,14 @@ msgstr "计划日期止"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_process_management
 msgid "Process Management"
 msgstr "工艺管理"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_process_type
+msgid "Process Type"
+msgstr "工艺类型"
+
+#. module: sn_wsd_mrp
+#: selection:sn.wsd.process.route,x_process_type:0
+msgid "Complete Machine"
+msgstr "整机"
+

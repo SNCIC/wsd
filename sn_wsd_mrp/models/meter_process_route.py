@@ -95,6 +95,18 @@ class MeterProcessRoute(models.Model):
 
     name = fields.Char(string='Route Name', required=True)
     code = fields.Char(string='Route Code', required=True, index=True)
+    # 工艺类型：标识整条路线属于哪种工艺（SMT 上料/扣点域以此判定拆行与扣点触发）。
+    x_process_type = fields.Selection(
+        [
+            ('smt', 'SMT'),
+            ('dip', 'DIP'),
+            ('machine', 'Complete Machine'),
+        ],
+        string='Process Type',
+        tracking=True,
+        help='Craft family of this route: SMT lines split the material table '
+             'and deduct points on pass; DIP and complete-machine lines do not.',
+    )
     version = fields.Integer(
         string='Version',
         default=0,

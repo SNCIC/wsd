@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_mrp_production_form_inherit_sn_smt" model="ir.ui.view">
-        <field name="name">mrp.production.form.sn.smt</field>
-        <field name="model">mrp.production</field>
-        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <record id="view_sn_wsd_mes_order_form_inherit_sn_smt" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.form.sn.smt</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-                <field name="x_has_smt_operations" invisible="1"/>
-                <field name="x_smt_consumption_count" invisible="1"/>
-                <field name="x_smt_consumed_points" invisible="1"/>
-            </xpath>
-            <xpath expr="//sheet" position="inside">
-                <div class="oe_button_box" name="button_box">
-                    <button name="action_open_smt_consumption" type="object" class="oe_stat_button" icon="fa-list-alt" invisible="not x_has_smt_operations">
-                        <field name="x_smt_consumption_count" widget="statinfo" string="SMT Usage"/>
-                    </button>
-                    <button name="action_check_smt_consumption_reconciliation" type="object" class="oe_stat_button" icon="fa-balance-scale" invisible="not x_has_smt_operations">
-                        <span class="o_stat_text">Reconcile</span>
-                    </button>
-                </div>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_smt_online_materials" type="object" class="oe_stat_button" icon="fa-cubes">
+                    <field name="x_smt_online_material_count" widget="statinfo" string="SMT Materials"/>
+                </button>
+                <button name="action_smt_batch_unload" type="object" class="oe_stat_button" icon="fa-download"
+                        invisible="x_smt_loaded_material_count == 0"
+                        confirm="Batch unload ALL online materials of this MES order? Remaining points stay on the reels.">
+                    <field name="x_smt_loaded_material_count" widget="statinfo" string="Batch Unload"/>
+                </button>
             </xpath>
         </field>
     </record>

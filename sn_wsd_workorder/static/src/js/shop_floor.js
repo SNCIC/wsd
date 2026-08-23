@@ -85,7 +85,7 @@ const UI_LABELS = {
     registerMaterialConsumption: _t("Register Material Consumption"),
     remainingQuantity: _t("Remaining Quantity:"),
     reportAndFinish: _t("Report and Finish"),
-    reportModeBadge: _t("Report"),
+    reportModeBadge: _t("Work Report"),
     reportedLabel: _t("Reported"),
     reportedQuantity: _t("Reported Quantity"),
     reportQuantity: _t("Report Quantity"),
