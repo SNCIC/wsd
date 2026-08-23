@@ -42,7 +42,7 @@ class MesTestResultBase(models.Model):
         required=True, default='final_test', index=True,
     )
     test_time = fields.Datetime(required=True, default=fields.Datetime.now, index=True)
-    result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], required=True, default='pass', index=True)
+    result = fields.Selection([('ok', 'OK'), ('ng', 'NG'), ('hold', 'Hold')], required=True, default='ok', index=True)
     cycle_time_sec = fields.Float()
     operator_code = fields.Char(index=True)
     tester_channel = fields.Char()
@@ -70,7 +70,7 @@ class MesTestResultBase(models.Model):
         self,
         serial_number,
         test_type='final_test',
-        result='pass',
+        result='ok',
         workcenter_code=None,
         production_id=None,
         operator_code=None,

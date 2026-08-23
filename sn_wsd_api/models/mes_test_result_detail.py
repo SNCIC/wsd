@@ -73,8 +73,8 @@ class MesTestResultDetail(models.Model):
     upper_limit = fields.Char(string='Upper Limit')
     actual_value = fields.Char(string='Actual Value')
     result = fields.Selection([
-        ('pass', 'Pass'),
-        ('fail', 'Fail'),
+        ('ok', 'OK'),
+        ('ng', 'NG'),
         ('ng', 'NG'),
     ], string='Result', required=True)
     raw_line = fields.Char(string='Raw Line', help='Original raw data before parsing')
@@ -83,10 +83,10 @@ class MesTestResultDetail(models.Model):
     def _normalize_detail_result(self, raw_result):
         result_value = str(raw_result or '').strip().upper()
         if result_value in ('NG', 'FAIL', 'F'):
-            return 'fail'
+            return 'ng'
         if result_value in ('OK', 'PASS', 'P'):
-            return 'pass'
-        return 'pass'
+            return 'ok'
+        return 'ok'
 
     @api.model
     def _detail_text(self, value):

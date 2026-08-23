@@ -327,7 +327,7 @@ class SnWsdApiService(models.AbstractModel):
         # test result for the scanned board only
         test_result = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
             serial_number=identity.name,
-            result='pass' if result == RESULT_PASS else 'fail',
+            result=result,
             workcenter_code=workcenter.code,
             operator_code=payload.get('M_EMP'),
             payload=payload,

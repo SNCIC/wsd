@@ -426,7 +426,7 @@ class MesTestResult(models.Model):
     def _create_quality_issue_from_failure(self):
         issue_model = self.env['sn.wsd.quality.issue']
         for record in self:
-            if record.result != 'fail' or not record.serial_identity_id:
+            if record.result != 'ng' or not record.serial_identity_id:
                 continue
             identity = record.serial_identity_id
             existing = issue_model.search([
