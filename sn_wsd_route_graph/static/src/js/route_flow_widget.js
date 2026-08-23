@@ -645,7 +645,7 @@ export class RouteFlowEditor extends Component {
             uid: "new_" + Date.now(), id: null, operation_id: op.id, name: op.name,
             step_code: op.code, sequence: (existing.length + 1) * 10, x_station_type: op.x_station_type,
             time_cycle_manual: 60, x_allow_entry: existing.length === 0, x_allow_exit: false,
-            x_allow_serial_creation: false, x_allow_reentry: false, x_allow_repair_return: false, x_ng_retry_limit: 0,
+            x_allow_serial_creation: false,
         }, 30, y);
         this.state.usedOpIds = [...this.state.usedOpIds, opId];
         this.state.paletteVersion++;
@@ -673,9 +673,7 @@ export class RouteFlowEditor extends Component {
                 sequence: d.sequence || 100, x_allow_entry: d.x_allow_entry || false,
                 x_allow_exit: d.x_allow_exit || false,
                 x_allow_serial_creation: d.x_allow_serial_creation || false,
-                x_allow_reentry: d.x_allow_reentry || false,
-                x_allow_repair_return: d.x_allow_repair_return || false,
-                x_ng_retry_limit: d.x_ng_retry_limit || 0, predecessors: d.predecessors || [],
+                predecessors: d.predecessors || [],
             };
         } else {
             this.state.selected = null;
@@ -713,8 +711,6 @@ export class RouteFlowEditor extends Component {
             step_code: s.step_code, name: s.name, x_station_type: s.x_station_type,
             time_cycle_manual: s.time_cycle_manual, sequence: s.sequence,
             x_allow_entry: s.x_allow_entry, x_allow_exit: s.x_allow_exit, x_allow_serial_creation: s.x_allow_serial_creation,
-            x_allow_reentry: s.x_allow_reentry, x_allow_repair_return: s.x_allow_repair_return,
-            x_ng_retry_limit: s.x_ng_retry_limit,
         });
     }
 

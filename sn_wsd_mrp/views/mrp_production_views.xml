@@ -129,8 +129,6 @@
             <xpath expr="//form" position="inside">
                 <field name="x_has_meter_operations" invisible="1"/>
             </xpath>
-            <!-- internal-serial smart button moved to the MES orders (制令单):
-                 boards are produced and tracked under their MES order -->
             <xpath expr="//notebook" position="attributes">
                 <attribute name="class">o_sn_wsd_mrp_production_notebook</attribute>
             </xpath>
@@ -192,7 +190,6 @@
                             <!-- hidden column: the o2m dialog parses the full MES-order
                                  form against the fields collected from this inline list,
                                  so every field of that form must appear here (column_invisible) -->
-                            <field name="internal_serial_count" column_invisible="1"/>
                             <field name="name"/>
                             <field name="production_line_id"/>
                             <field name="date_plan"/>

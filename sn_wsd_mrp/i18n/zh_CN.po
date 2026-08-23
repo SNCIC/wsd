@@ -314,43 +314,10 @@ msgid "Allow Entry"
 msgstr "允许作为起始工序"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_reentry
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_reentry
-msgid "Allow Reentry"
-msgstr "允许相同工位重复进入"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_repair_return
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_repair_return
-msgid "Allow Repair Return"
-msgstr "允许返修返回"
-
-#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_skip_with_override
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_skip_with_override
 msgid "Allow Skip With Override"
 msgstr "允许强制跳过"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_reentry
-msgid "Allow a serial to be processed again on the same BoM operation."
-msgstr "允许同一序列号在同一个物料清单工序上再次处理。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_reentry
-msgid "Allow a serial to be processed again on the same operation."
-msgstr "允许同一序列号在同一个工序上再次处理。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_repair_return
-msgid ""
-"Allow serials returning from a repair station to enter this BoM operation."
-msgstr "允许从维修工位返回的序列号进入此物料清单工序。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_repair_return
-msgid "Allow serials returning from a repair station to enter this operation."
-msgstr "允许从维修工位返回的序列号进入此工序。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_entry
@@ -5553,6 +5520,7 @@ msgid "Work Center Code"
 msgstr "工作中心代码"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
 msgid ""
 "Generated %(count)s internal serials for the manufacturing batch. Serial "
@@ -5560,18 +5528,12 @@ msgid ""
 msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围：%(first)s 至 %(last)s。"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_ng_retry_limit
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_ng_retry_limit
-msgid "NG Retry Limit"
-msgstr "NG重试上限"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_ng_retry_limit
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_ng_retry_limit
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
-"Maximum NG scan-pass attempts allowed before the serial must enter repair. "
-"Set 0 for no automatic repair threshold."
-msgstr "序列号必须进入维修前允许的最大NG过站次数。设置为0表示不启用自动维修阈值。"
+"SN %(sn)s reached the retry limit (%(limit)s) of operation %(op)s; send it "
+"to repair."
+msgstr "SN %(sn)s 已达工序 %(op)s 的过站上限（%(limit)s 次），请送维修。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__date_deadline
@@ -5810,12 +5772,6 @@ msgid "An SN can be in progress at only one operation at a time."
 msgstr "一个 SN 同一时刻只能在一个工序在制。"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_serial_operation_history_history_uniq
-msgid ""
-"An SN passes an operation of a MES order only once (re-entry rules are "
-"handled at the operation level, not by duplicating history)."
-msgstr "一个 SN 在制令单的同一工序只过站一次（重复进站由工序规则处理，不通过重复历史实现）。"
-
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_mes_route_operation_route_op_uniq
 msgid "Each operation appears at most once in a MES order route."
@@ -7119,7 +7075,44 @@ msgid "Process Type"
 msgstr "工艺类型"
 
 #. module: sn_wsd_mrp
-#: selection:sn.wsd.process.route,x_process_type:0
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__machine
 msgid "Complete Machine"
 msgstr "整机"
+
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_serial_binding
+msgid "Serial Identity Binding"
+msgstr "SN 绑定关系"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
+msgid "SN"
+msgstr "SN"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__bound_serial_identity_id
+msgid "Bound Machine SN"
+msgstr "绑定的整机 SN"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__binding_type
+msgid "Binding Type"
+msgstr "绑定类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_binding__binding_type__machine
+msgid "Machine Binding"
+msgstr "整机绑定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_binding__binding_type__nameplate
+msgid "Nameplate Mapping"
+msgstr "铭牌映射"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_serial_identity
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_serial_identity
+msgid "Serial Identities"
+msgstr "SN 注册表"
 

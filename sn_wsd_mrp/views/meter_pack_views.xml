@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="serial_id"/>
+                <field name="serial_identity_id"/>
                 <field name="production_id"/>
                 <field name="pack_route_operation_id"/>
                 <field name="seal_no"/>
@@ -26,13 +26,10 @@
         <field name="model">sn.wsd.meter.pack.record</field>
         <field name="arch" type="xml">
             <form>
-                <header>
-                    <button name="action_apply_to_serial" type="object" string="Apply to Serial" class="btn-primary"/>
-                </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="serial_id"/>
+                            <field name="serial_identity_id"/>
                             <field name="production_id"/>
                             <field name="pack_route_operation_id"/>
                             <field name="operator_code"/>

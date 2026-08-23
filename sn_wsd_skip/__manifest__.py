@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Skip Station',
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.2.0',
     'summary': 'Skip station requests for WSD meter manufacturing routes',
     'depends': ['mail', 'sn_wsd_wip'],
     'data': [

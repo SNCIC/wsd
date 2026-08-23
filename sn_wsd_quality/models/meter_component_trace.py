@@ -36,28 +36,28 @@ class MeterComponentBinding(models.Model):
         required=True,
         index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Meter Serial',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         required=True,
         index=True,
         ondelete='cascade',
         check_company=True,
     )
-    production_id = fields.Many2one(
-        'mrp.production',
-        string='Manufacturing Order',
-        related='internal_serial_id.production_id',
-        store=True,
-        readonly=True,
-    )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='internal_serial_id.mes_order_id',
+        related='route_operation_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,
+    )
+    production_id = fields.Many2one(
+        'mrp.production',
+        string='Manufacturing Order',
+        related='mes_order_id.production_id',
+        store=True,
+        readonly=True,
     )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
@@ -130,14 +130,14 @@ class MeterComponentBinding(models.Model):
     note = fields.Char(string='Note')
     payload = fields.Json(string='Payload')
 
-    @api.depends('internal_serial_id.serial_no', 'component_type', 'component_sn', 'component_batch_no')
+    @api.depends('serial_identity_id.name', 'component_type', 'component_sn', 'component_batch_no')
     def _compute_display_name(self):
         for record in self:
             component_identity = record.component_sn or record.component_batch_no or '-'
             record.display_name = ' / '.join(
                 item
                 for item in [
-                    record.internal_serial_id.serial_no or '-',
+                    record.serial_identity_id.name or '-',
                     dict(COMPONENT_TYPE_SELECTION).get(record.component_type, record.component_type or '-'),
                     component_identity,
                 ]
@@ -155,15 +155,7 @@ class MeterComponentBinding(models.Model):
                 raise ValidationError(_('The component lot/serial must belong to the selected component product.'))
 
     @api.model
-    def _component_field_map(self):
-        return {
-            'main_pcb': 'main_pcb_sn',
-            'comm_module': 'comm_module_sn',
-            'display_module': 'display_module_sn',
-        }
-
-    @api.model
-    def _prepare_component_binding_vals(self, internal_serial, component_data, workorder=False, test_result=False):
+    def _prepare_component_binding_vals(self, identity, component_data, workorder=False, test_result=False):
         component_product = self.env['product.product']
         component_lot = self.env['stock.lot']
         product_id = component_data.get('component_product_id')
@@ -180,7 +172,7 @@ class MeterComponentBinding(models.Model):
                 ('product_id', '=', component_product.id),
                 '|',
                 ('company_id', '=', False),
-                ('company_id', '=', internal_serial.company_id.id),
+                ('company_id', '=', identity.company_id.id),
             ], limit=1)
 
         station = self.env['mrp.workcenter']
@@ -190,8 +182,8 @@ class MeterComponentBinding(models.Model):
             station = test_result.workcenter_id
 
         return {
-            'company_id': internal_serial.company_id.id,
-            'internal_serial_id': internal_serial.id,
+            'company_id': identity.company_id.id,
+            'serial_identity_id': identity.id,
             'route_operation_id': workorder.id if workorder else False,
             'workcenter_id': station.id if station else False,
             'component_type': component_data['component_type'],
@@ -214,17 +206,15 @@ class MeterComponentBinding(models.Model):
         }
 
     @api.model
-    def register_component_bindings(self, internal_serial, component_bindings, workorder=False, test_result=False):
-        if not internal_serial or not component_bindings:
+    def register_component_bindings(self, identity, component_bindings, workorder=False, test_result=False):
+        if not identity or not component_bindings:
             return self.env['sn.wsd.meter.component.binding']
 
         active_bindings = self.search([
-            ('internal_serial_id', '=', internal_serial.id),
+            ('serial_identity_id', '=', identity.id),
             ('state', '=', 'active'),
         ])
         created_bindings = self.env['sn.wsd.meter.component.binding']
-        field_map = self._component_field_map()
-        legacy_updates = {}
 
         for component_data in component_bindings:
             component_type = component_data.get('component_type')
@@ -234,7 +224,7 @@ class MeterComponentBinding(models.Model):
             if active_same_type and component_data.get('event_type', 'bind') in ('bind', 'replace'):
                 active_same_type.write({'state': 'replaced'})
             vals = self._prepare_component_binding_vals(
-                internal_serial,
+                identity,
                 component_data,
                 workorder=workorder,
                 test_result=test_result,
@@ -242,20 +232,15 @@ class MeterComponentBinding(models.Model):
             created_binding = self.create(vals)
             created_bindings |= created_binding
             active_bindings |= created_binding
-            if component_type in field_map and created_binding.component_sn:
-                legacy_updates[field_map[component_type]] = created_binding.component_sn
-
-        if legacy_updates:
-            internal_serial.write(legacy_updates)
         return created_bindings
 
 
-class InternalSerial(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentity(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
     component_binding_ids = fields.One2many(
         'sn.wsd.meter.component.binding',
-        'internal_serial_id',
+        'serial_identity_id',
         string='Component Binding History',
     )
     active_component_binding_ids = fields.Many2many(
@@ -286,9 +271,9 @@ class InternalSerial(models.Model):
             'name': _('Component Bindings'),
             'res_model': 'sn.wsd.meter.component.binding',
             'view_mode': 'list,form',
-            'domain': [('internal_serial_id', '=', self.id)],
+            'domain': [('serial_identity_id', '=', self.id)],
             'context': {
-                'default_internal_serial_id': self.id,
+                'default_serial_identity_id': self.id,
                 'default_company_id': self.company_id.id,
             },
         }
@@ -311,8 +296,8 @@ class MesTestResult(models.Model):
         binding_model = self.env['sn.wsd.meter.component.binding']
         for record in self:
             bindings = binding_model
-            if record.internal_serial_id and record.route_operation_id:
-                bindings = record.internal_serial_id.component_binding_ids.filtered(
+            if record.serial_identity_id and record.route_operation_id:
+                bindings = record.serial_identity_id.component_binding_ids.filtered(
                     lambda item: item.route_operation_id == record.route_operation_id
                 )
             record.component_binding_ids = bindings
@@ -325,10 +310,10 @@ class MesTestResult(models.Model):
         for record, vals in zip(records, vals_list):
             payload = vals.get('payload') or record.payload or {}
             component_bindings = payload.get('component_bindings') or []
-            if not component_bindings or not record.internal_serial_id:
+            if not component_bindings or not record.serial_identity_id:
                 continue
             binding_model.register_component_bindings(
-                record.internal_serial_id,
+                record.serial_identity_id,
                 component_bindings,
                 workorder=record.route_operation_id,
                 test_result=record,

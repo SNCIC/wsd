@@ -1,7 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sn_wsd_internal_serial_user,sn.wsd.internal.serial user,model_sn_wsd_internal_serial,base.group_user,1,1,1,1
-access_sn_wsd_meter_aging_batch_user,sn.wsd.meter.aging.batch user,model_sn_wsd_meter_aging_batch,base.group_user,1,1,1,1
-access_sn_wsd_meter_aging_batch_line_user,sn.wsd.meter.aging.batch.line user,model_sn_wsd_meter_aging_batch_line,base.group_user,1,1,1,1
 access_sn_wsd_meter_pack_record_user,sn.wsd.meter.pack.record user,model_sn_wsd_meter_pack_record,base.group_user,1,1,1,1
 access_sn_wsd_serial_identity_user,sn.wsd.serial.identity user,model_sn_wsd_serial_identity,base.group_user,1,1,1,0
 access_sn_wsd_carton_pallet_binding_log_user,sn.wsd.carton.pallet.binding.log user,model_sn_wsd_carton_pallet_binding_log,base.group_user,1,0,1,0
@@ -42,3 +39,5 @@ access_sn_wsd_serial_wip_user,sn.wsd.serial.wip user,model_sn_wsd_serial_wip,bas
 access_sn_wsd_mes_operation_report_user,sn.wsd.mes.operation.report user,model_sn_wsd_mes_operation_report,base.group_user,1,1,1,0
 access_sn_wsd_mes_done_wizard_user,sn.wsd.mes.done.wizard user,model_sn_wsd_mes_done_wizard,mrp.group_mrp_user,1,0,1,0
 access_sn_wsd_scrap_reason_user,sn.wsd.scrap.reason user,model_sn_wsd_scrap_reason,base.group_user,1,0,0,0
+access_sn_wsd_serial_binding_user,sn.wsd.serial.binding user,model_sn_wsd_serial_binding,base.group_user,1,1,1,0
+access_sn_wsd_serial_binding_manager,sn.wsd.serial.binding manager,model_sn_wsd_serial_binding,mrp.group_mrp_manager,1,1,1,1

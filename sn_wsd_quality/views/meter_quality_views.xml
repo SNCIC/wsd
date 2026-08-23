@@ -61,7 +61,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="internal_serial_id"/>
+                <field name="serial_identity_id"/>
                 <field name="mes_order_id"/>
                 <field name="defect_code_id"/>
                 <field name="category"/>
@@ -94,8 +94,8 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="internal_serial_id"/>
-                            <field name="internal_serial_id"/>
+                            <field name="serial_identity_id"/>
+                            <field name="serial_identity_id"/>
                             <field name="production_id"/>
                             <field name="mes_order_id"/>
                             <field name="route_operation_id"/>

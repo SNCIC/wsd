@@ -13,11 +13,11 @@ class SnWsdRepairService(models.AbstractModel):
 
     @api.model
     def _resolve_sn(self, sn):
-        serial = self.env['sn.wsd.internal.serial'].search(
-            [('serial_no', '=', sn), ('company_id', '=', self.env.company.id)], limit=1)
-        if not serial:
+        identity = self.env['sn.wsd.serial.identity'].search(
+            [('name', '=', sn), ('company_id', '=', self.env.company.id)], limit=1)
+        if not identity:
             raise UserError(_('SN %s does not exist.', sn))
-        return serial
+        return identity
 
     @api.model
     def _resolve_dict(self, model, value, field_names, label):
@@ -39,23 +39,25 @@ class SnWsdRepairService(models.AbstractModel):
 
     @api.model
     def _get_open_order(self, sn):
-        serial = self._resolve_sn(sn)
+        identity = self._resolve_sn(sn)
         order = self.env['sn.wsd.repair.order'].search(
-            [('serial_id', '=', serial.id),
+            [('serial_identity_id', '=', identity.id),
              ('state', 'in', ('draft', 'reported', 'repairing'))],
             order='id desc', limit=1)
-        return serial, order
+        return identity, order
 
     @api.model
     def resolve(self, sn):
-        serial, order = self._get_open_order(sn)
+        identity, order = self._get_open_order(sn)
+        route_operation = identity._current_route_operation()
+        production = route_operation.mes_order_id.production_id if route_operation else False
         return {
-            'sn': serial.serial_no,
-            'product': serial.product_id.display_name or '',
-            'current_route_operation': serial.current_route_operation_id.display_name or '',
+            'sn': identity.name,
+            'product': production.product_id.display_name if production else '',
+            'current_route_operation': route_operation.display_name if route_operation else '',
             'open_repair_order': order.name or '',
             'open_repair_state': order.state or '',
-            'repair_count': len(serial.repair_order_ids),
+            'repair_count': len(identity.repair_order_ids),
         }
 
     @api.model
@@ -64,7 +66,7 @@ class SnWsdRepairService(models.AbstractModel):
 
         lines: optional list of {'defect_code': code/id, 'qty': int, 'location': str}
         describing multiple defects; defect_code stays the main defect."""
-        serial, order = self._get_open_order(sn)
+        identity, order = self._get_open_order(sn)
         if order:
             raise UserError(_(
                 'SN %s already has an open repair order %s.', sn, order.name))
@@ -74,7 +76,7 @@ class SnWsdRepairService(models.AbstractModel):
             raise UserError(_('A defect code is required.'))
         cause_rec = self._resolve_dict(
             'sn.wsd.repair.cause', cause, ['code', 'name'], _('Failure cause'))
-        route_operation = serial.current_route_operation_id
+        route_operation = identity._current_route_operation()
         if not route_operation:
             raise UserError(_('SN %s has no current route operation.', sn))
         line_commands = []
@@ -92,8 +94,8 @@ class SnWsdRepairService(models.AbstractModel):
                 'defect_location': line.get('location'),
             }))
         order = self.env['sn.wsd.repair.order'].create({
-            'serial_id': serial.id,
-            'serial_no': serial.serial_no,
+            'serial_identity_id': identity.id,
+            'serial_no': identity.name,
             'defect_code_id': defect.id,
             'failure_cause_id': cause_rec.id,
             'defect_location': location,

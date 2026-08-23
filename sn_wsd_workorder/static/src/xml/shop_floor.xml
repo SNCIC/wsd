@@ -45,11 +45,21 @@
                         state.station.mode === 'scrap' ? 'o_scan_mode_scrap' : 'o_scan_mode_ok')">
                         <div class="input-group input-group-lg">
                             <span class="input-group-text"><i class="fa fa-barcode" role="img"/></span>
-                            <input class="form-control o_sn_wsd_scan_input" t-att-placeholder="labels.scanPlaceholder"
+                            <input class="form-control o_sn_wsd_scan_input"
+                                   t-att-placeholder="state.station.ngPending ? labels.modeNgScan : labels.scanPlaceholder"
                                    t-model="state.station.scan" t-on-keydown="onScanKeydown"/>
                             <button class="btn btn-primary" t-on-click="() => this.onScanSubmit()">
                                 <t t-out="labels.scanGo"/>
                             </button>
+                        </div>
+                        <!-- two-step NG: the SN is held until its defect code is scanned -->
+                        <div t-if="state.station.ngPending"
+                             class="alert alert-warning d-flex flex-wrap align-items-center gap-2 mt-2 mb-0 py-2">
+                            <i class="fa fa-exclamation-triangle" role="img"/>
+                            <span class="badge text-bg-dark" t-out="state.station.ngPending.sn"/>
+                            <span t-out="labels.ngWaitHint"/>
+                            <button class="btn btn-sm btn-outline-secondary ms-auto"
+                                    t-on-click="() => this.cancelNgPending()" t-out="labels.cancel"/>
                         </div>
                         <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
                             <span class="small text-muted me-1" t-out="labels.scanHint"/>

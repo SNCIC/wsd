@@ -76,14 +76,6 @@ class MesOrder(models.Model):
         'stock.picking', 'x_mes_order_id', string='Material Pickings',
     )
     picking_count = fields.Integer(compute='_compute_picking_count')
-    internal_serial_count = fields.Integer(
-        string='Internal Serials', compute='_compute_internal_serial_count',
-        help='Boards tracked under the parent manufacturing order. Becomes '
-             'order-scoped once serials carry their MES order link.',
-    )
-    internal_serial_ids = fields.One2many(
-        'sn.wsd.internal.serial', 'mes_order_id', string='Internal Serial Records',
-    )
     company_id = fields.Many2one(
         'res.company', string='Company', required=True,
         default=lambda self: self.env.company, index=True,
@@ -621,10 +613,27 @@ class MesOrder(models.Model):
                     'must leave that order through its end operation before '
                     'being fed into another one.',
                     sn=serial_identity.name, order=bound_order.name))
-        if walked.filtered(lambda h: h.route_operation_id == route_operation):
+        passed_ok = walked.filtered(
+            lambda h: h.route_operation_id == route_operation
+            and h.result == 'ok')
+        if passed_ok:
             raise ValidationError(_(
                 'SN %(sn)s already passed operation %(op)s.',
                 sn=serial_identity.name, op=route_operation.display_label))
+        # NG passes are free re-entries until the operation's retry limit;
+        # sn_wsd_repair marks the context to reset the count after a closed
+        # repair order.
+        retry_limit = route_operation.operation_id.x_max_test_count or 0
+        if retry_limit > 0 and not self.env.context.get('sn_wsd_repair_return'):
+            ng_count = len(walked.filtered(
+                lambda h: h.route_operation_id == route_operation
+                and h.result == 'ng'))
+            if ng_count >= retry_limit:
+                raise ValidationError(_(
+                    'SN %(sn)s reached the retry limit (%(limit)s) of '
+                    'operation %(op)s; send it to repair.',
+                    sn=serial_identity.name, limit=retry_limit,
+                    op=route_operation.display_label))
         if not walked and not route_operation.x_allow_entry:
             raise ValidationError(_(
                 'SN %(sn)s has not entered MES order %(order)s yet; it must '
@@ -645,15 +654,18 @@ class MesOrder(models.Model):
             'workcenter_id': workcenter.id if workcenter else False,
         })
 
-    def leave_station(self, serial_identity, result, scrap_reason=False):
+    def leave_station(self, serial_identity, result, scrap_reason=False,
+                      ng_defect=False):
         """Station mode: an SN leaves its current station.
 
         result: 'ok' counts as completed and unlocks the successors; 'ng'
-        does not (repair handling is a later flow); 'scrap' is terminal:
-        the board is gone, its components are scrapped from the line side
-        through a native scrap order and the SN is sealed for this order.
-        Returns True when the SN left through an end operation with OK --
-        its flow on this order is finished."""
+        does not, but the SN may re-enter the operation until its retry
+        limit (a defect code rides along via ng_defect and is stamped on
+        the history row by sn_wsd_quality, which owns the comodel);
+        'scrap' is terminal: the board is gone, its components are scrapped
+        from the line side through a native scrap order and the SN is
+        sealed for this order. Returns True when the SN left through an
+        end operation with OK -- its flow on this order is finished."""
         self.ensure_one()
         if result not in ('ok', 'ng', 'scrap'):
             raise ValidationError(_(
@@ -672,7 +684,19 @@ class MesOrder(models.Model):
             if not scrap_reason:
                 raise ValidationError(_('Select a scrap reason.'))
             self._mes_scrap_components(route_operation, 1.0, scrap_reason)
-        self.env['sn.wsd.serial.operation.history'].sudo().create({
+        self.env['sn.wsd.serial.operation.history'].sudo().create(
+            self._prepare_leave_history_vals(
+                serial_identity, route_operation, wip, result,
+                scrap_reason=scrap_reason, ng_defect=ng_defect))
+        wip.sudo().unlink()
+        return bool(result == 'ok' and route_operation.x_allow_exit)
+
+    def _prepare_leave_history_vals(self, serial_identity, route_operation,
+                                    wip, result, scrap_reason=False,
+                                    ng_defect=False):
+        """Vals of the append-only history row written on leave. Extended by
+        sn_wsd_quality to stamp the NG defect code (the comodel lives there)."""
+        return {
             'serial_identity_id': serial_identity.id,
             'mes_order_id': self.id,
             'route_operation_id': route_operation.id,
@@ -680,9 +704,7 @@ class MesOrder(models.Model):
             'result': result,
             'in_date': wip.in_date,
             'out_date': fields.Datetime.now(),
-        })
-        wip.sudo().unlink()
-        return bool(result == 'ok' and route_operation.x_allow_exit)
+        }
 
     def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
                               qty_scrap=0.0, scrap_reason=False):
@@ -1155,66 +1177,6 @@ class MesOrder(models.Model):
     def _compute_picking_count(self):
         for order in self:
             order.picking_count = len(order.picking_ids)
-
-    def _compute_internal_serial_count(self):
-        for order in self:
-            order.internal_serial_count = len(order.internal_serial_ids)
-
-    def action_open_internal_serials(self):
-        self.ensure_one()
-        production = self.production_id
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Internal Serials'),
-            'res_model': 'sn.wsd.internal.serial',
-            'view_mode': 'list,form',
-            'domain': [('mes_order_id', '=', self.id)],
-            'context': {
-                'default_production_id': production.id,
-                'default_product_id': production.product_id.id,
-                'default_mes_order_id': self.id,
-            },
-        }
-
-    def action_generate_missing_internal_serials(self, quantity=None):
-        self.ensure_one()
-        if self.state in ('cancelled', 'done'):
-            raise ValidationError(_('Internal serials cannot be generated for a closed MES order.'))
-        target_count = int(round(self.planned_qty))
-        if target_count <= 0:
-            raise ValidationError(_('The MES order planned quantity must be a positive whole number.'))
-        active_serials = self.internal_serial_ids.filtered(
-            lambda serial: serial.active and not serial.is_confirmed_scrapped()
-        )
-        missing_count = target_count - len(active_serials)
-        if missing_count <= 0:
-            return active_serials
-        generate_count = min(int(quantity), missing_count) if quantity is not None else missing_count
-        if generate_count <= 0:
-            raise ValidationError(_('The internal serial generation quantity must be positive.'))
-        self.production_id._lock_serial_capacity()
-        values_list = []
-        for _index in range(generate_count):
-            serial_no = (
-                self.env['ir.sequence'].next_by_code('sn.wsd.internal.serial.no')
-                or self.env['ir.sequence'].next_by_code('sn.wsd.internal.serial')
-            )
-            if not serial_no:
-                raise ValidationError(_('No internal serial number sequence is configured.'))
-            values_list.append({
-                'serial_no': serial_no,
-                'barcode': serial_no,
-                'product_id': self.product_id.id,
-                'production_id': self.production_id.id,
-                'current_production_id': self.production_id.id,
-                'mes_order_id': self.id,
-                'company_id': self.company_id.id,
-                'serial_type': 'finished' if self.production_id.x_has_meter_operations else 'semifinished',
-                'firmware_version': self.production_id.x_firmware_version,
-                'customer_batch_no': self.production_id.x_delivery_batch_no,
-            })
-        return self.env['sn.wsd.internal.serial'].create(values_list)
-
 
 class StockPickingMesOrder(models.Model):
     """Link a material picking back to its MES order (F5).

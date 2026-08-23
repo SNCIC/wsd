@@ -122,3 +122,30 @@ class TestStationServices(TransactionCase):
         data = order.sn_station_report(self.wc_out.id, 2)
         card = next(o for o in data['orders'] if o['id'] == order.id)
         self.assertEqual(card['output_qty'], 2.0)
+
+    def test_04_two_step_ng_defect_flow(self):
+        """Two-step NG: sn_resolve_ng_defect resolves scanned codes and the
+        leave wrapper stamps the defect on the history row."""
+        defect = self.env['sn.wsd.quality.defect.code'].search(
+            [('company_id', 'in', [self.company.id, False])], limit=1)
+        if not defect:
+            defect = self.env['sn.wsd.quality.defect.code'].create({
+                'name': 'Station Defect', 'code': 'STDF',
+                'category': 'other', 'severity': 'minor',
+            })
+        resolved = self.env['sn.wsd.mes.order'].sn_resolve_ng_defect(defect.code)
+        self.assertEqual(resolved['id'], defect.id)
+        self.assertFalse(
+            self.env['sn.wsd.mes.order'].sn_resolve_ng_defect('NOPE-404'))
+        data = self.order.sn_station_enter('SN-T4', self.wc_in.id)
+        wip_id = data['wip'][0]['id']
+        MesOrder = self.env['sn.wsd.mes.order']
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_leave(wip_id, 'ng')  # defect is mandatory
+        payload = MesOrder.sn_station_leave(
+            wip_id, 'ng', False, resolved['id'])
+        self.assertFalse(payload['finished'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-T4')])
+        self.assertEqual(history.result, 'ng')
+        self.assertEqual(history.defect_code_id, defect)

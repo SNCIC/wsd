@@ -8,7 +8,7 @@
             <search string="Repair Orders">
                 <field name="name"/>
                 <field name="serial_no"/>
-                <field name="serial_id"/>
+                <field name="serial_identity_id"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
                 <field name="route_operation_id"/>
@@ -42,7 +42,7 @@
             <list>
                 <field name="name"/>
                 <field name="repair_mode"/>
-                <field name="serial_id"/>
+                <field name="serial_identity_id"/>
                 <field name="defect_code_id"/>
                 <field name="production_id"/>
                 <field name="mes_order_id"/>
@@ -77,7 +77,7 @@
                         <group>
                             <field name="name"/>
                                                         <field name="repair_mode" readonly="1"/>
-                            <field name="serial_id" default_focus="1" readonly="state != 'draft' or repair_mode == 'qty'" invisible="repair_mode == 'qty'"/>
+                            <field name="serial_identity_id" default_focus="1" readonly="state != 'draft' or repair_mode == 'qty'" invisible="repair_mode == 'qty'"/>
                             <field name="product_id" readonly="1"/>
                         </group>
                         <group>

@@ -135,7 +135,7 @@
                 <field name="required_item_code"/>
                 <field name="loadpoint"/>
                 <group>
-                    <filter name="group_by_serial" string="Product SN" context="{'group_by': 'internal_serial_id'}"/>
+                    <filter name="group_by_serial" string="Product SN" context="{'group_by': 'serial_identity_id'}"/>
                     <filter name="group_by_lot" string="Material SN" context="{'group_by': 'material_lot_id'}"/>
                     <filter name="group_by_mes_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
                     <filter name="group_by_day" string="Consumed Day" context="{'group_by': 'consumed_at:day'}"/>

@@ -70,7 +70,7 @@ class SnSmtOnlineMaterialExtension(models.Model):
         copy=False,
     )
     last_consumed_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial', string='Last Product SN', copy=False, check_company=True,
+        'sn.wsd.serial.identity', string='Last Product SN', copy=False, check_company=True,
     )
     last_consumed_at = fields.Datetime(string='Last Consumption Time', copy=False)
     loaded_at = fields.Datetime(string='Loaded At', copy=False)
@@ -118,11 +118,11 @@ class SnSmtMaterialConsumption(models.Model):
     company_id = fields.Many2one(
         'res.company', required=True, default=lambda self: self.env.company, index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial', string='Product SN', required=True,
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='SN', required=True,
         ondelete='restrict', index=True, check_company=True,
     )
-    serial_no = fields.Char(related='internal_serial_id.serial_no', store=True, readonly=True, index=True)
+    serial_no = fields.Char(related='serial_identity_id.name', store=True, readonly=True, index=True)
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order', string='MES Order', required=True, index=True, check_company=True,
     )
@@ -166,7 +166,7 @@ class SnSmtMaterialConsumption(models.Model):
     note = fields.Char(string='Note')
 
     _smt_consumption_event_unique = models.Constraint(
-        'unique(internal_serial_id, route_operation_id, online_material_id, external_event_id)',
+        'unique(serial_identity_id, route_operation_id, online_material_id, external_event_id)',
         'A product serial can only consume one material position per event.',
     )
 
@@ -177,7 +177,7 @@ class SnSmtMaterialConsumption(models.Model):
         )
 
     @api.model
-    def validate_for_serial(self, route_operation, internal_serial):
+    def validate_for_serial(self, route_operation, identity=False):
         # 触发条件：制令单路线工艺类型为 SMT，且已拆出在线料表行。
         mes_order = route_operation.mes_order_id
         if not mes_order.x_smt_online_material_ids:
@@ -205,16 +205,16 @@ class SnSmtMaterialConsumption(models.Model):
         return lines
 
     @api.model
-    def consume_for_serial(self, route_operation, internal_serial, operator_code=None,
+    def consume_for_serial(self, route_operation, identity=False, operator_code=None,
                            external_event_id=None, source_system=None, note=None):
-        lines = self.validate_for_serial(route_operation, internal_serial)
+        lines = self.validate_for_serial(route_operation, identity)
         if not lines:
             return self.env['sn.smt.material.consumption']
         mes_order = route_operation.mes_order_id
         # 一块板一张料站表只扣一次：同 SN 在本制令单已有正向扣点流水则跳过
         # （SMT 车间路线含多道工序，板会在多站过站，按单幂等防止重复扣点）。
         existing_domain = [
-            ('internal_serial_id', '=', internal_serial.id),
+            ('serial_identity_id', '=', identity.id),
             ('mes_order_id', '=', mes_order.id),
             ('product_qty', '>', 0),
         ]
@@ -223,7 +223,7 @@ class SnSmtMaterialConsumption(models.Model):
             return existing
         if external_event_id:
             existing = self.search([
-                ('internal_serial_id', '=', internal_serial.id),
+                ('serial_identity_id', '=', identity.id),
                 ('route_operation_id', '=', route_operation.id),
                 ('external_event_id', '=', external_event_id),
             ])
@@ -236,7 +236,7 @@ class SnSmtMaterialConsumption(models.Model):
             after = before - point_qty
             record = self.create({
                 'company_id': route_operation.company_id.id,
-                'internal_serial_id': internal_serial.id,
+                'serial_identity_id': identity.id,
                 'mes_order_id': mes_order.id,
                 'route_operation_id': route_operation.id,
                 'online_material_id': line.id,
@@ -254,7 +254,7 @@ class SnSmtMaterialConsumption(models.Model):
             })
             created |= record
             line.write({
-                'last_consumed_serial_id': internal_serial.id,
+                'last_consumed_serial_id': identity.id,
                 'last_consumed_at': record.consumed_at,
             })
         return created
@@ -265,7 +265,7 @@ class SnSmtMaterialConsumption(models.Model):
             raise ValidationError(_('This SMT consumption has already been reversed.'))
         reversal = self.create({
             'company_id': self.company_id.id,
-            'internal_serial_id': self.internal_serial_id.id,
+            'serial_identity_id': self.serial_identity_id.id,
             'mes_order_id': self.mes_order_id.id,
             'route_operation_id': self.route_operation_id.id,
             'online_material_id': self.online_material_id.id,
@@ -284,11 +284,11 @@ class SnSmtMaterialConsumption(models.Model):
         return reversal
 
 
-class InternalSerialSmtExtension(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentitySmtExtension(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
     smt_consumption_ids = fields.One2many(
-        'sn.smt.material.consumption', 'internal_serial_id', string='SMT Material Consumption',
+        'sn.smt.material.consumption', 'serial_identity_id', string='SMT Material Consumption',
     )
     smt_consumption_count = fields.Integer(
         string='SMT Consumption Count', compute='_compute_smt_consumption_count',
@@ -306,6 +306,6 @@ class InternalSerialSmtExtension(models.Model):
             'name': 'Product Material Usage',
             'res_model': 'sn.smt.material.consumption',
             'view_mode': 'list,form',
-            'domain': [('internal_serial_id', '=', self.id)],
-            'context': {'default_internal_serial_id': self.id},
+            'domain': [('serial_identity_id', '=', self.id)],
+            'context': {'default_serial_identity_id': self.id},
         }

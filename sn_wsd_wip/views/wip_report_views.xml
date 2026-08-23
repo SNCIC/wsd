@@ -147,37 +147,6 @@
         </field>
     </record>
 
-    <record id="view_sn_wsd_wip_mes_order_report_search" model="ir.ui.view">
-        <field name="name">sn.wsd.wip.mes.order.report.search</field>
-        <field name="model">sn.wsd.wip.mes.order.report</field>
-        <field name="arch" type="xml">
-            <search string="MES Order WIP Report">
-                <field name="mes_order_id"/>
-                <field name="route_id"/>
-                <field name="route_step_id"/>
-                <group>
-                    <filter string="MES Order" name="group_by_mes_order" context="{'group_by': 'mes_order_id'}"/>
-                    <filter string="Process Step" name="group_by_step" context="{'group_by': 'route_step_id'}"/>
-                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <record id="action_sn_wsd_wip_mes_order_report" model="ir.actions.act_window">
-        <field name="name">MES Order WIP Report</field>
-        <field name="res_model">sn.wsd.wip.mes.order.report</field>
-        <field name="view_mode">graph,list,pivot</field>
-        <field name="search_view_id" ref="view_sn_wsd_wip_mes_order_report_search"/>
-    </record>
-
-    <menuitem id="menu_sn_wsd_wip_mes_order_report"
-              name="MES Order WIP Report"
-              parent="mrp.menu_mrp_reporting"
-              action="action_sn_wsd_wip_mes_order_report"
-              groups="mrp.group_mrp_user"
-              sequence="36"/>
-
     <record id="view_sn_wsd_wip_production_overview_list" model="ir.ui.view">
         <field name="name">sn.wsd.wip.production.overview.list</field>
         <field name="model">sn.wsd.wip.production.overview</field>

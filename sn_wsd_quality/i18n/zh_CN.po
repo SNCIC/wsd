@@ -3061,3 +3061,27 @@ msgstr "同一个检验项组内的检验项必须是唯一的。"
 #: code:addons/sn_wsd_quality/models/quality_inspection.py:0
 msgid "The inspection item type must match the item group inspection type."
 msgstr "检验项类型必须与检验项组的检验类型一致。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_operation_history__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_operation_report__defect_code_id
+msgid "NG Defect Code"
+msgstr "不良代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_serial_operation_history__defect_code_id
+msgid "Defect code scanned when the SN was rejected at this operation."
+msgstr "该 SN 在此工序被判 NG 时扫描的不良代码。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_mes_operation_report__defect_code_id
+msgid ""
+"Defect code recorded with the NG quantity (reserved for later use; the "
+"terminal does not fill it yet)."
+msgstr "随不良数量记录的不良代码（预留字段，终端暂不填写）。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_ng_defect.py:0
+msgid "Select a defect code."
+msgstr "请扫描不良代码。"

@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD SMT',
-    'version': '19.0.3.5.0',
+    'version': '19.0.4.0.0',
     'summary': 'SMT material table and online loading management',
     'depends': ['mrp', 'sn_wsd_mrp', 'web'],
     'data': [
@@ -12,7 +12,6 @@
         'views/product_views.xml',
         'views/sn_smt_views.xml',
         'views/sn_smt_pcb_panel_views.xml',
-        'views/internal_serial_views.xml',
         'views/stock_lot_views.xml',
         'views/menu_views.xml',
         'views/sn_smt_feeder_care_views.xml',

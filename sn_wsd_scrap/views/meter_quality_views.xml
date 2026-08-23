@@ -38,7 +38,7 @@
                         <field name="scrap_record_ids" nolabel="1" readonly="1">
                             <list create="0" edit="0" delete="0">
                                 <field name="name"/>
-                                <field name="serial_id"/>
+                                <field name="serial_identity_id"/>
                                 <field name="scrap_reason_id"/>
                                 <field name="route_operation_id"/>
                                 <field name="process_step_id"/>
@@ -54,7 +54,7 @@
                         <field name="restored_scrap_record_ids" nolabel="1" readonly="1">
                             <list create="0" edit="0" delete="0">
                                 <field name="name"/>
-                                <field name="serial_id"/>
+                                <field name="serial_identity_id"/>
                                 <field name="resume_route_operation_id"/>
                                 <field name="restore_time"/>
                                 <field name="restore_user_id"/>

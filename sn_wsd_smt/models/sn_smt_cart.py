@@ -385,7 +385,7 @@ class SnSmtCartLine(models.Model):
                 _('The station %s is not required by MES order %s.',
                   self.slot_no, self.mes_order_id.display_name))
         if self.material_lot_id and not any(
-                self.cart_id._cart_material_matches(req.item_code, self.material_lot_id.product_id)
+                self.cart_id._cart_material_matches(self.mes_order_id, req.item_code, self.material_lot_id.product_id)
                 for req in requirements):
             raise UserError(
                 _('The material %s does not match station %s. Required item code: %s.',

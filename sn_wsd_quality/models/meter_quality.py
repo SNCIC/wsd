@@ -108,28 +108,28 @@ class MeterQualityIssue(models.Model):
         required=True,
         index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Meter Serial',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         required=True,
         index=True,
         check_company=True,
         tracking=True,
     )
-    production_id = fields.Many2one(
-        'mrp.production',
-        string='Manufacturing Order',
-        related='internal_serial_id.production_id',
-        store=True,
-        readonly=True,
-    )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='internal_serial_id.mes_order_id',
+        related='route_operation_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,
+    )
+    production_id = fields.Many2one(
+        'mrp.production',
+        string='Manufacturing Order',
+        related='mes_order_id.production_id',
+        store=True,
+        readonly=True,
     )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
@@ -257,19 +257,15 @@ class MeterQualityIssue(models.Model):
 
     def _sync_meter_quality_state(self):
         for issue in self:
-            meter = issue.internal_serial_id
-            if not meter:
+            identity = issue.serial_identity_id
+            if not identity:
                 continue
-            open_issues = meter.quality_issue_ids.filtered(lambda item: item.state not in ('closed', 'scrapped'))
+            open_issues = identity.quality_issue_ids.filtered(
+                lambda item: item.state not in ('closed', 'scrapped'))
             if open_issues:
-                meter.x_quality_hold_state = 'hold'
-                if meter.final_result == 'pass':
-                    meter.final_result = 'hold'
-            else:
-                if meter.x_quality_hold_state == 'hold':
-                    meter.x_quality_hold_state = 'released'
-                if meter.final_result == 'hold':
-                    meter.final_result = 'pass'
+                identity.x_quality_hold_state = 'hold'
+            elif identity.x_quality_hold_state == 'hold':
+                identity.x_quality_hold_state = 'released'
 
     def action_start_analysis(self):
         self.write({'state': 'analysis'})
@@ -299,20 +295,16 @@ class MeterQualityIssue(models.Model):
             'disposition': 'scrap',
             'closed_time': fields.Datetime.now(),
         })
-        self.internal_serial_id.write({
-            'state': 'scrapped',
-            'final_result': 'scrap',
-            'x_quality_hold_state': 'scrapped',
-        })
+        self.serial_identity_id.x_quality_hold_state = 'scrapped'
         return True
 
 
-class InternalSerial(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentity(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
     quality_issue_ids = fields.One2many(
         'sn.wsd.quality.issue',
-        'internal_serial_id',
+        'serial_identity_id',
         string='Quality Issues',
     )
     quality_issue_count = fields.Integer(
@@ -370,9 +362,9 @@ class InternalSerial(models.Model):
             'name': _('Quality Issues'),
             'res_model': 'sn.wsd.quality.issue',
             'view_mode': 'list,form',
-            'domain': [('internal_serial_id', '=', self.id)],
+            'domain': [('serial_identity_id', '=', self.id)],
             'context': {
-                'default_internal_serial_id': self.id,
+                'default_serial_identity_id': self.id,
                 'default_company_id': self.company_id.id,
             },
         }
@@ -434,9 +426,9 @@ class MesTestResult(models.Model):
     def _create_quality_issue_from_failure(self):
         issue_model = self.env['sn.wsd.quality.issue']
         for record in self:
-            if record.result != 'fail' or not record.internal_serial_id:
+            if record.result != 'fail' or not record.serial_identity_id:
                 continue
-            internal_serial = record.internal_serial_id
+            identity = record.serial_identity_id
             existing = issue_model.search([
                 ('test_result_id', '=', record.id),
             ], limit=1)
@@ -446,7 +438,7 @@ class MesTestResult(models.Model):
             if not defect_code:
                 continue
             issue_model.create({
-                'internal_serial_id': internal_serial.id,
+                'serial_identity_id': identity.id,
                 'route_operation_id': record.route_operation_id.id,
                 'test_result_id': record.id,
                 'workcenter_id': record.workcenter_id.id,

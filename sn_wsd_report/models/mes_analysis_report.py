@@ -10,14 +10,16 @@ class SnWsdMesDashboardService(models.AbstractModel):
         today = fields.Date.context_today(self)
         now = fields.Datetime.context_timestamp(self, fields.Datetime.now())
         mes_orders = self.env['sn.wsd.mes.order'].search([], order='id desc', limit=8)
-        travels = self.env['sn.wsd.mes.sn.travel'].search([], order='event_time desc, id desc', limit=24)
+        histories = self.env['sn.wsd.serial.operation.history'].search(
+            [], order='out_date desc, id desc', limit=48)
         tests = self.env['sn.wsd.mes.test.result'].search([], order='test_time desc, id desc', limit=24)
 
-        today_travels = travels.filtered(lambda rec: rec.event_time and rec.event_time.date() == today)
+        today_histories = histories.filtered(
+            lambda rec: rec.out_date and rec.out_date.date() == today)
         today_tests = tests.filtered(lambda rec: rec.test_time and rec.test_time.date() == today)
         station_rows = {}
-        for travel in today_travels:
-            station_code = travel.workcenter_code or travel.workcenter_id.code or '-'
+        for history in today_histories:
+            station_code = history.workcenter_id.code or '-'
             row = station_rows.setdefault(station_code, {
                 'station_code': station_code,
                 'qty_in': 0.0,
@@ -26,11 +28,10 @@ class SnWsdMesDashboardService(models.AbstractModel):
                 'qty_scrap': 0.0,
             })
             row['qty_in'] += 1.0
-            if travel.result:
-                row['qty_out'] += 1.0
-            if travel.result == 'fail':
+            row['qty_out'] += 1.0
+            if history.result == 'ng':
                 row['qty_ng'] += 1.0
-            elif travel.result == 'hold':
+            elif history.result == 'scrap':
                 row['qty_scrap'] += 1.0
 
         congestion_rows = []
@@ -64,7 +65,7 @@ class SnWsdMesDashboardService(models.AbstractModel):
             'summary': {
                 'production_count': self.env['sn.wsd.mes.order'].search_count([]),
                 'open_progress_count': len(mes_orders.filtered(lambda order: order.state not in ('done', 'cancelled'))),
-                'today_output_total': len(today_travels.filtered(lambda travel: travel.result == 'pass')),
+                'today_output_total': len(today_histories.filtered(lambda h: h.result == 'ok')),
                 'today_pass_total': len(today_tests.filtered(lambda test: test.result == 'pass')),
                 'today_test_count': len(today_tests),
                 'today_date': fields.Date.to_string(today),
@@ -93,7 +94,7 @@ class SnWsdMesDashboardService(models.AbstractModel):
             'test_history': [
                 {
                     'test_time': rec.test_time,
-                    'serial_no': rec.internal_serial_id.serial_no,
+                    'serial_no': rec.serial_identity_id.name,
                     'test_type': rec.test_type,
                     'result': rec.result,
                     'station_code': rec.workcenter_code,
@@ -105,17 +106,17 @@ class SnWsdMesDashboardService(models.AbstractModel):
             ],
             'serial_trace': [
                 {
-                    'event_time': rec.event_time,
-                    'serial_no': rec.internal_serial_id.serial_no,
-                    'event_source': 'travel',
-                    'event_type': rec.event_type,
-                    'station_code': rec.workcenter_code,
+                    'event_time': rec.out_date,
+                    'serial_no': rec.serial_identity_id.name,
+                    'event_source': 'station',
+                    'event_type': rec.result,
+                    'station_code': rec.workcenter_id.code or '-',
                     'result': rec.result,
                     'quantity': 1.0,
-                    'reference_name': rec.name,
-                    'status': 'danger' if rec.result == 'fail' else 'warning' if rec.result == 'hold' else 'normal',
+                    'reference_name': rec.route_operation_id.display_name or '-',
+                    'status': 'danger' if rec.result in ('ng', 'scrap') else 'normal',
                 }
-                for rec in travels[:12]
+                for rec in histories[:12]
             ],
             'top_abnormal_stations': abnormal_rows[:6],
             'station_congestion': congestion_rows[:6],

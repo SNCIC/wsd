@@ -251,10 +251,12 @@ class SnWsdSkipRequestLine(models.Model):
         self.ensure_one()
         if not self.route_operation_id:
             return False
-        return bool(self.env['sn.wsd.mes.sn.travel'].search_count([
-            ('route_operation_id', '=', self.route_operation_id.id),
-            ('event_type', 'in', ['start', 'complete', 'pass', 'fail', 'hold', 'repair']),
-        ]))
+        History = self.env['sn.wsd.serial.operation.history']
+        Report = self.env['sn.wsd.mes.operation.report']
+        return bool(
+            History.search_count([('route_operation_id', '=', self.route_operation_id.id)])
+            or Report.search_count([('route_operation_id', '=', self.route_operation_id.id)])
+        )
 
     def _check_not_processed(self):
         self.ensure_one()
