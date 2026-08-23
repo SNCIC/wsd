@@ -3,6 +3,7 @@ from . import res_partner
 from . import mrp_team
 from . import serial_identity
 from . import serial_binding
+from . import production_process_doc
 from . import meter_pack
 from . import mrp_production
 from . import mrp_production_mes

@@ -44,6 +44,8 @@ class MeterPackRecord(models.Model):
     operator_code = fields.Char(index=True)
     scan_check_result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], default='pass')
     note = fields.Char()
+    barcode_line_ids = fields.One2many(
+        'sn.wsd.meter.pack.barcode', 'pack_id', string='Barcode Lines')
 
     def _get_serial_lot(self):
         self.ensure_one()
@@ -91,3 +93,19 @@ class MeterPackRecord(models.Model):
             quants.filtered(lambda quant: not quant.package_id).write({
                 'package_id': record.carton_package_id.id,
             })
+
+
+class MeterPackBarcodeLine(models.Model):
+    """One uploaded packing barcode (seals, RF codes, MAC, module, side
+    codes) attached to the pack record."""
+    _name = 'sn.wsd.meter.pack.barcode'
+    _description = 'Meter Pack Barcode Line'
+    _order = 'id'
+
+    pack_id = fields.Many2one(
+        'sn.wsd.meter.pack.record', required=True, ondelete='cascade',
+        index=True)
+    code = fields.Char(required=True, index=True,
+                       help='Source field of the uploaded barcode, e.g. M_PACK_MAC.')
+    value = fields.Char(required=True)
+    company_id = fields.Many2one(related='pack_id.company_id', store=True)

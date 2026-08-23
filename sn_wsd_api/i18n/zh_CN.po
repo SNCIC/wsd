@@ -2807,3 +2807,88 @@ msgstr "工单"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_laser_print_record_count
 msgid "X Laser Print Record Count"
 msgstr "激光打印记录数量"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_request_log
+msgid "Device API Request Log"
+msgstr "设备接口日志"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_request_log
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_request_log
+msgid "Device API Logs"
+msgstr "设备接口日志"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Employee %s does not exist in MES."
+msgstr "员工 %s 在 MES 中不存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Work center %s does not exist."
+msgstr "工作中心 %s 不存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "The test result must be OK or NG."
+msgstr "测试总结果必须是OK或者NG。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Employee code is required."
+msgstr "员工号为空。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN is required."
+msgstr "SN不能为空。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN %s is inactive."
+msgstr "SN %s 已停用。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "No online MES order runs through work center %s."
+msgstr "工作中心 %s 所在线别不存在在线制令单。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Defect code %s does not exist."
+msgstr "不良代码 %s 不存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN %s already has a pack record."
+msgstr "产品SN %s 在产品包装报表中已存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Container %s already exists in stock."
+msgstr "箱号/托盘 %s 已经在库存中存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "The test result is NG."
+msgstr "测试总结果NG。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid ""
+"%(field)s %(value)s is not maintained on operation %(op)s of manufacturing "
+"order %(order)s."
+msgstr "%(field)s %(value)s 未维护在制造订单 %(order)s 的工序 %(op)s 中。"

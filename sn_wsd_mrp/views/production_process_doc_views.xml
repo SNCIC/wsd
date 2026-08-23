@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- craft document types: lightweight list, extensible -->
+    <record id="view_production_process_doc_type_list" model="ir.ui.view">
+        <field name="name">production.process.doc.type.list</field>
+        <field name="model">production.process.doc.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_production_process_doc_type" model="ir.actions.act_window">
+        <field name="name">Process Document Types</field>
+        <field name="res_model">production.process.doc.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_production_process_doc_type" name="Process Document Types"
+              parent="mrp.menu_mrp_config" action="action_production_process_doc_type"
+              sequence="99" groups="mrp.group_mrp_manager"/>
+
+    <!-- default four types (parameter plan / program / test plan / software) -->
+    <record id="doc_type_parameter_plan" model="production.process.doc.type">
+        <field name="code">parameter_plan</field>
+        <field name="name">Parameter Plan</field>
+    </record>
+    <record id="doc_type_program_version" model="production.process.doc.type">
+        <field name="code">program_version</field>
+        <field name="name">Program Version</field>
+    </record>
+    <record id="doc_type_test_plan" model="production.process.doc.type">
+        <field name="code">test_plan</field>
+        <field name="name">Test Plan</field>
+    </record>
+    <record id="doc_type_production_software" model="production.process.doc.type">
+        <field name="code">production_software</field>
+        <field name="name">Production Software</field>
+    </record>
+
+    <!-- MO form: per-operation document maintenance page -->
+    <record id="view_mrp_production_form_process_docs" model="ir.ui.view">
+        <field name="name">mrp.production.form.process.documents</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="process_documents" string="Process Documents">
+                    <field name="x_process_document_ids">
+                        <list editable="bottom">
+                            <field name="route_operation_code"/>
+                            <field name="type_id"/>
+                            <field name="codes_display"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

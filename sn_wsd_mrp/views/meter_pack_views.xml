@@ -50,7 +50,17 @@
                         <field name="note"/>
                     </group>
                 </sheet>
-            </form>
+                                <notebook>
+                        <page name="barcodes" string="Barcodes">
+                            <field name="barcode_line_ids">
+                                <list editable="bottom" create="false">
+                                    <field name="code"/>
+                                    <field name="value"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
         </field>
     </record>
 

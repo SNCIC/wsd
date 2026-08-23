@@ -41,6 +41,10 @@
         <field name="arch" type="xml">
             <form create="false" delete="false">
                 <header>
+                    <button name="%(action_sn_wsd_generate_sn_wizard)d" type="action"
+                            string="Generate SNs" class="btn-secondary"
+                            context="{'default_mes_order_id': id}"
+                            invisible="state in ('cancelled', 'done')"/>
                     <button name="action_open_pick_wizard" type="object" string="Pick Material"
                             class="btn-primary" invisible="state != 'released'"/>
                     <button name="action_online" type="object" string="Go Online"

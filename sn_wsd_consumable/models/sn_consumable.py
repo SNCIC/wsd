@@ -25,6 +25,7 @@ RECORD_ACTION_SELECTION = [
     ('scrap', 'Scrap'),
     ('disable', 'Disable'),
     ('enable', 'Enable'),
+    ('usage', 'Usage'),
 ]
 
 EXPIRY_STATE_SELECTION = [
@@ -217,6 +218,9 @@ class SnConsumableInfo(models.Model):
     stir_end = fields.Datetime(string='Last Stir End', copy=False, readonly=True)
     stir_minutes = fields.Float(string='Stir Minutes (last)', copy=False, readonly=True)
     record_ids = fields.One2many('sn.consumable.record', 'info_id', string='History')
+    total_usage_count = fields.Integer(
+        string='Total Usage Count', copy=False,
+        help='Accumulated station-pass usage (key-material controlled).')
     record_count = fields.Integer(compute='_compute_record_count')
     company_id = fields.Many2one(
         'res.company',
@@ -289,6 +293,19 @@ class SnConsumableInfo(models.Model):
                 raise UserError(_(
                     'The consumable %s must be stirred after the current thaw before loading.',
                     info.sn))
+
+    def register_usage(self, qty, mes_order=False):
+        """Station-pass usage counting (key-material controlled only):
+        mirrors sn.tooling.register_usage."""
+        for info in self:
+            if info.state != 'loaded':
+                raise UserError(_(
+                    'Only a loaded consumable can register usage (%s).', info.sn))
+            if not isinstance(qty, int) or qty <= 0:
+                raise UserError(_('The usage quantity must be a positive integer.'))
+            info.total_usage_count = info.total_usage_count + qty
+            info._record('usage', mes_order=mes_order)
+        return True
 
     def _record(self, action, mes_order=False, duration=False, reason=False):
         return self.env['sn.consumable.record'].create({
