@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_contract_information" model="ir.ui.view">
+        <field name="name">purchase.order.form.contract.information</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="contract_information" string="Contract Information">
+                    <group>
+                        <group string="Contract Details">
+                            <field name="contract_number"/>
+                            <field name="signing_date"/>
+                            <field name="signing_location"/>
+                        </group>
+                        <group string="Bank Accounts">
+                            <field name="buyer_bank_id"
+                                   domain="[('partner_id', '=', company_id.partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
+                            <field name="supplier_bank_id"
+                                   domain="[('partner_id', '=', partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Delivery">
+                            <field name="delivery_date_text"/>
+                            <field name="delivery_location"/>
+                        </group>
+                        <group string="Signatures">
+                            <field name="buyer_agent"/>
+                            <field name="supplier_agent"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Contract Terms">
+                            <field name="technical_requirements"/>
+                            <field name="acceptance_terms"/>
+                        </group>
+                        <group>
+                            <field name="payment_terms_text"/>
+                            <field name="liability_terms"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
