@@ -152,6 +152,10 @@ class TestScanPass(TransactionCase):
     def test_08_panel_fanout(self):
         # SMT panel inside the order: 4 boards
         self.route.x_process_type = 'smt'
+        # real flow: SNs are printed first (identity exists), then panel-associated
+        Identity = self.env['sn.wsd.serial.identity']
+        for sn in ('SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4'):
+            Identity.get_or_create(sn, self.company, origin_type='laser')
         panel = self.env['sn.smt.pcb.panel'].create({
             'production_id': self.production.id,
             'product_no': 'DWG-API', 'quantity': 4,
@@ -174,6 +178,8 @@ class TestScanPass(TransactionCase):
                 ('serial_identity_id.name', '=', sn)])
             self.assertEqual(history.result, 'ok', sn)
         # NG only marks the scanned board
+        for sn in ('SN-PB2-1', 'SN-PB2-2'):
+            Identity.get_or_create(sn, self.company, origin_type='laser')
         panel2 = self.env['sn.smt.pcb.panel'].create({
             'production_id': self.production.id,
             'product_no': 'DWG-API', 'quantity': 2,

@@ -91,12 +91,12 @@ class SnWsdApiService(models.AbstractModel):
         ], limit=1)
         if not board:
             return identity
-        members = self.env['sn.wsd.serial.identity']
-        Identity = self.env['sn.wsd.serial.identity']
-        for other in board.panel_id.board_ids:
-            member = Identity.get_or_create(
-                other.pro_sn, identity.company_id, origin_type='external')
-            members |= member
+        # SNs are printed (laser) and panel-associated with the MES order
+        # BEFORE station passing: all member identities already exist
+        members = self.env['sn.wsd.serial.identity'].search([
+            ('name', 'in', board.panel_id.board_ids.mapped('pro_sn')),
+            ('company_id', '=', identity.company_id.id),
+        ])
         return members or identity
 
     def _find_live_order(self, workcenter):
