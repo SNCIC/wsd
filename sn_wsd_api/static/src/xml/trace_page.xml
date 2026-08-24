@@ -2,51 +2,253 @@
 <templates xml:space="preserve">
 
     <t t-name="sn_wsd_api.TracePage">
-        <div class="o_sn_wsd_trace_page d-flex flex-column h-100 overflow-hidden">
-            <div t-if="!state.committedSn" class="d-flex flex-column align-items-center justify-content-center h-100 gap-3">
-                <h3 class="mb-0"><t t-out="labels.hint"/></h3>
-                <div class="input-group input-group-lg w-50">
-                    <input type="text" class="form-control" autofocus="1"
+        <div class="o_sn_wsd_trace_page">
+            <!-- ============ top-left: query + product structure ============ -->
+            <section class="o_trace_panel">
+                <div class="d-flex align-items-center gap-2 p-2 border-bottom">
+                    <input type="text" class="form-control form-control-sm" autofocus="1"
+                           style="max-width:220px"
+                           t-att-placeholder="labels.snPlaceholder"
                            t-model="state.snInput"
-                           t-on-keydown="onKeydownInput"
-                           placeholder="SN"/>
-                    <button class="btn btn-primary" type="button" t-on-click="onTrace">
-                        <t t-out="labels.trace"/>
-                    </button>
+                           t-on-keydown="onKeydownInput"/>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            t-on-click="onTrace" t-esc="labels.query"/>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                            t-on-click="exportCsv" t-esc="labels.export"/>
                 </div>
-            </div>
-            <t t-else="">
-                <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom bg-view">
-                    <div class="input-group w-auto">
-                        <input type="text" class="form-control"
-                               t-model="state.snInput"
-                               t-on-keydown="onKeydownInput"
-                               placeholder="SN"/>
-                        <button class="btn btn-primary" type="button" t-on-click="onTrace">
-                            <t t-out="labels.trace"/>
-                        </button>
+                <div class="o_trace_panel_hd" t-esc="labels.productStructure"/>
+                <div class="o_trace_panel_bd">
+                    <t t-if="state.notFound">
+                        <div class="d-flex h-100 align-items-center justify-content-center text-danger"
+                             t-esc="labels.notFound"/>
+                    </t>
+                    <t t-elif="state.treeChildren.length">
+                        <ul class="o_trace_tree">
+                            <li t-attf-class="{{state.treeOpen ? 'o_tree_open' : ''}}">
+                                <span class="o_tree_switch" t-on-click="toggleTree"/>
+                                <a class="o_tree_selected" t-esc="state.committedSn"/>
+                                <ul t-if="state.treeOpen">
+                                    <li t-foreach="state.treeChildren" t-as="child" t-key="child.id">
+                                        <span class="o_tree_leafdot">•</span>
+                                        <span t-att-title="child.type" t-esc="child.sn"/>
+                                        <span class="text-muted ms-1" t-esc="'[' + child.type + ']'"/>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </t>
+                    <t t-else="">
+                        <div class="d-flex h-100 align-items-center justify-content-center text-muted"
+                             t-esc="labels.noData"/>
+                    </t>
+                </div>
+            </section>
+
+            <!-- ============ top-right: product information ============ -->
+            <section class="o_trace_panel">
+                <div class="o_trace_panel_hd" t-esc="labels.productInfo"/>
+                <div class="o_trace_panel_bd overflow-auto">
+                    <div class="o_trace_form" t-if="state.productInfo">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="o_form_label">SN</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.sn"/>
+                                    <td class="o_form_label">Production</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.productionName"/>
+                                    <td class="o_form_label">MES Order</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.orderName"/>
+                                    <td class="o_form_label">Product</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.productCode"/>
+                                </tr>
+                                <tr>
+                                    <td class="o_form_label">Line</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.line"/>
+                                    <td class="o_form_label">Side</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.side"/>
+                                    <td class="o_form_label">Route</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.route"/>
+                                    <td class="o_form_label">Finished</td>
+                                    <td class="o_form_value">
+                                        <span t-attf_class="badge {{state.productInfo.finished ? 'text-bg-success' : 'text-bg-secondary'}}"
+                                              t-esc="state.productInfo.finished ? labels.finished : labels.unfinished"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <t t-if="state.summary">
-                        <span class="fw-bold" t-esc="state.committedSn"/>
-                        <span class="badge text-bg-secondary" t-esc="state.summary.count + ' ' + labels.events"/>
-                        <span t-if="state.summary.ng" class="badge text-bg-danger" t-esc="labels.ng + ' ' + state.summary.ng"/>
-                        <span class="text-muted" t-esc="state.summary.first + ' → ' + state.summary.last"/>
-                    </t>
+                    <div t-else="" class="d-flex h-100 align-items-center justify-content-center text-muted"
+                         t-esc="labels.noData"/>
                 </div>
-                <div class="flex-grow-1 overflow-hidden">
-                    <t t-if="state.summary &amp;&amp; state.summary.count">
-                        <View type="'list'"
-                              resModel="'sn.wsd.trace.event'"
-                              viewId="state.listViewId"
-                              domain="traceDomain"/>
-                    </t>
-                    <t t-elif="state.summary &amp;&amp; !state.summary.count">
-                        <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                            <t t-out="labels.notFound"/>
+            </section>
+
+            <!-- ============ bottom-right: tabs ============ -->
+            <section class="o_trace_panel">
+                <ul class="nav nav-tabs o_trace_tabs">
+                    <li class="nav-item" t-foreach="tabDefs" t-as="tab" t-key="tab.key">
+                        <a href="#"
+                           t-attf-class="nav-link {{state.activeTab === tab.key ? 'active' : ''}}"
+                           t-on-click.prevent="() => this.setActiveTab(tab.key)"
+                           t-esc="tab.label"/>
+                    </li>
+                </ul>
+                <div class="o_trace_tab_body">
+                    <!-- process -->
+                    <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'process' ? 'active' : ''}}">
+                        <div class="o_trace_table_wrap">
+                            <table class="o_trace_grid">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px">#</th>
+                                        <th>Operation</th>
+                                        <th>Operation Name</th>
+                                        <th>Work Center</th>
+                                        <th>Line</th>
+                                        <th>Flag</th>
+                                        <th>MES Order</th>
+                                        <th>Production</th>
+                                        <th>Product</th>
+                                        <th>Operator</th>
+                                        <th>Device SN</th>
+                                        <th>Tooling</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.processRows" t-as="r" t-key="r.seq"
+                                        t-attf-class="{{r.isNg ? 'o_trace_row_ng' : ''}}">
+                                        <td t-esc="r.seq"/>
+                                        <td t-esc="r.opCode"/>
+                                        <td t-esc="r.opName"/>
+                                        <td t-esc="r.workcenter"/>
+                                        <td t-esc="r.line"/>
+                                        <td>
+                                            <span t-attf-class="badge {{r.flag === 'NG' ? 'text-bg-danger' : r.flag === 'OK' ? 'text-bg-success' : 'text-bg-secondary'}}"
+                                                  t-esc="r.flag"/>
+                                        </td>
+                                        <td t-esc="r.orderName"/>
+                                        <td t-esc="r.productionName"/>
+                                        <td t-esc="r.productCode"/>
+                                        <td t-esc="r.operator"/>
+                                        <td t-esc="r.equipment"/>
+                                        <td t-esc="r.tooling"/>
+                                        <td t-esc="r.time"/>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </t>
+                    </div>
+                    <!-- material -->
+                    <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'material' ? 'active' : ''}}">
+                        <div class="o_trace_table_wrap">
+                            <table class="o_trace_grid">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px">#</th>
+                                        <th>Material SN</th>
+                                        <th>Item Code</th>
+                                        <th>Name</th>
+                                        <th>Spec</th>
+                                        <th>Lot</th>
+                                        <th>Loadpoint</th>
+                                        <th>Qty</th>
+                                        <th>Station</th>
+                                        <th>Operator</th>
+                                        <th>Time</th>
+                                        <th>MES Order</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.materialRows" t-as="r" t-key="r.materialSn + '_' + r_index">
+                                        <td t-esc="r_index + 1"/>
+                                        <td t-esc="r.materialSn"/>
+                                        <td t-esc="r.itemCode"/>
+                                        <td t-esc="r.name"/>
+                                        <td t-esc="r.spec"/>
+                                        <td t-esc="r.lotDate"/>
+                                        <td t-esc="r.loadpoint"/>
+                                        <td t-esc="r.qty"/>
+                                        <td t-esc="r.station"/>
+                                        <td t-esc="r.operator"/>
+                                        <td t-esc="r.time"/>
+                                        <td t-esc="r.orderName"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- quality -->
+                    <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'quality' ? 'active' : ''}}">
+                        <div class="o_trace_table_wrap">
+                            <table class="o_trace_grid">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px">#</th>
+                                        <th>Inspection</th>
+                                        <th>Type</th>
+                                        <th>Result</th>
+                                        <th>State</th>
+                                        <th>MES Order</th>
+                                        <th>Submit Time</th>
+                                        <th>Submitter</th>
+                                        <th>Inspector</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.qualityRows" t-as="r" t-key="r.id">
+                                        <td t-esc="r_index + 1"/>
+                                        <td t-esc="r.name"/>
+                                        <td t-esc="r.type"/>
+                                        <td>
+                                            <span t-if="r.result"
+                                                  t-attf-class="badge {{r.result === 'pass' || r.result === 'ok' ? 'text-bg-success' : 'text-bg-warning'}}"
+                                                  t-esc="r.result"/>
+                                        </td>
+                                        <td t-esc="r.state"/>
+                                        <td t-esc="r.orderName"/>
+                                        <td t-esc="r.submitTime"/>
+                                        <td t-esc="r.submitter"/>
+                                        <td t-esc="r.inspector"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- repair -->
+                    <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'repair' ? 'active' : ''}}">
+                        <div class="o_trace_table_wrap">
+                            <table class="o_trace_grid">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px">#</th>
+                                        <th>Repair Order</th>
+                                        <th>State</th>
+                                        <th>Operation</th>
+                                        <th>Defects</th>
+                                        <th>Method</th>
+                                        <th>Repairer</th>
+                                        <th>Report Time</th>
+                                        <th>Done Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.repairRows" t-as="r" t-key="r.id">
+                                        <td t-esc="r_index + 1"/>
+                                        <td t-esc="r.name"/>
+                                        <td t-esc="r.state"/>
+                                        <td t-esc="r.operation"/>
+                                        <td t-esc="r.defects"/>
+                                        <td t-esc="r.method"/>
+                                        <td t-esc="r.repairer"/>
+                                        <td t-esc="r.reportTime"/>
+                                        <td t-esc="r.doneTime"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </t>
+            </section>
         </div>
     </t>
 
