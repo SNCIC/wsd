@@ -22,10 +22,9 @@ const SMT_OPERATION_BUTTONS = [
 // jigs are shared by both workshops: SMT and DIP each get the button
 const JIG_BUTTON = { key: "equipment_tooling", label: _t("Jig") };
 
-const DIP_OPERATION_BUTTONS = [
-    { key: "dip_material_load", label: _t("Load") },
-    JIG_BUTTON,
-];
+// product station passing is NOT done on PDA for now -- the DIP screen
+// only carries the shared jig sub-mode
+const DIP_OPERATION_BUTTONS = [JIG_BUTTON];
 
 // equipment sub-modes of the SMT workshop screen: pick a pill, scan the SN
 const EQUIPMENT_MODES = {
@@ -104,8 +103,7 @@ export class WorkshopOperationAction extends Component {
             smtLoading: false,
             cameraScannerEnabled: false,
             readyToToggleCamera: true,
-                    ngMode: false,
-            equipmentDomain: false,
+                    equipmentDomain: false,
             equipmentAction: false,
             equipmentExtra: "",
         });
@@ -832,13 +830,6 @@ export class WorkshopOperationAction extends Component {
         this.state.equipmentAction = false;
         this.state.equipmentExtra = "";
 
-        if (this.isDipMode && operation.key === "dip_material_load") {
-            this.resetSmtScan();
-            this.setResult(_t("Load: scan material SN."), "info");
-            this.focusCommandInput();
-            return;
-        }
-
         if (SMT_OPS.has(operation.key)) {
             this.resetSmtScan();
             this.state.smtStep = 1;
@@ -875,30 +866,12 @@ export class WorkshopOperationAction extends Component {
             station_id: this.state.selectedStationId,
             barcode,
             operation,
-            mode: this.state.ngMode ? "ng" : "ok",
         });
         this.setResult(result.message || (result.ok ? _t("Scan accepted") : _t("Scan rejected")), result.ok ? "success" : "danger");
         if (result.ok) {
             this.state.command = "";
-            if (!result.pending_ng) {
-                this.state.total += 1;
-            }
+            this.state.total += 1;
         }
-    }
-
-    toggleNgMode() {
-        this.state.ngMode = !this.state.ngMode;
-        this.setResult(
-            this.state.ngMode
-                ? _t("NG mode: scan the SN, then scan the defect code.")
-                : _t("OK mode: one scan completes the pass."),
-            "info"
-        );
-        this.focusCommandInput();
-    }
-
-    get ngModeLabel() {
-        return this.state.ngMode ? _t("NG") : _t("OK");
     }
 
     cancelSmtOperation() {
