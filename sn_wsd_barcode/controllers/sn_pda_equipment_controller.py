@@ -8,20 +8,20 @@ groups and normalize the answer into the PDA {ok, message} envelope.
 from odoo import _, http
 from odoo.http import request
 
+# PDA whitelist: floor operations only. Admin-ish actions (disable /
+# enable / info-lookup) stay on the back office, never on the scanner.
 TOOLING_ACTIONS = {
-    'resolve', 'issue', 'return_', 'online', 'offline',
+    'issue', 'return_', 'online', 'offline',
     'maintain_start', 'maintain_done', 'repair_start', 'repair_done',
-    'disable', 'enable',
 }
 CONSUMABLE_ACTIONS = {
-    'resolve', 'issue', 'return_', 'thaw_start', 'thaw_end',
+    'issue', 'return_', 'thaw_start', 'thaw_end',
     'stir_start', 'stir_end', 'load', 'unload', 'exhaust',
 }
 
 # actions that carry one extra free-text parameter besides the SN
 EXTRA_PARAMS = {
     'repair_start': 'fault',
-    'disable': 'reason',
 }
 
 
