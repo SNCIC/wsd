@@ -9,7 +9,9 @@
         <field name="arch" type="xml">
             <list create="0" edit="0" delete="0"
                   decoration-danger="result in ('ng', 'fail')">
-                <field name="event_time"/>
+                <field name="time_of_day" string="Time"/>
+                <field name="event_time" optional="hide"/>
+                <field name="is_ng" column_invisible="1" sum="NG"/>
                 <field name="event_type" widget="badge"
                        decoration-info="event_type == 'station'"
                        decoration-success="event_type == 'test'"
@@ -71,7 +73,13 @@
         <field name="context">{'search_default_filter_30d': True}</field>
     </record>
 
+    <!-- dedicated trace entry: big SN input first, timeline below -->
+    <record id="action_sn_wsd_trace_page" model="ir.actions.client">
+        <field name="name">SN Trace</field>
+        <field name="tag">sn_wsd_trace_page</field>
+    </record>
+
     <menuitem id="menu_sn_wsd_trace_event" name="SN Trace"
               parent="sn_wsd_mrp.menu_sn_wsd_traceability"
-              action="action_sn_wsd_trace_event" sequence="5"/>
+              action="action_sn_wsd_trace_page" sequence="5"/>
 </odoo>

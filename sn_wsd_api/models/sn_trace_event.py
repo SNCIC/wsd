@@ -48,6 +48,8 @@ _BRANCHES = [
                '' AS object_ref,
                '' AS summary,
                h.result AS result,
+               to_char(COALESCE(h.out_date, h.in_date, h.create_date), 'HH24:MI:SS') AS time_of_day,
+               CASE WHEN h.result = 'ng' THEN 1 ELSE 0 END AS is_ng,
                'sn.wsd.serial.operation.history' AS source_model,
                h.id AS source_id,
                h.company_id AS company_id
@@ -70,7 +72,8 @@ _BRANCHES = [
                     END
                 FROM sn_wsd_mes_test_result_detail d
                 WHERE d.test_result_id = t.id),
-               t.result, 'sn.wsd.mes.test.result', t.id, t.company_id
+               t.result, to_char(t.test_time, 'HH24:MI:SS'), CASE WHEN t.result = 'ng' THEN 1 ELSE 0 END,
+               'sn.wsd.mes.test.result', t.id, t.company_id
         FROM sn_wsd_mes_test_result t
         LEFT JOIN sn_wsd_mes_order mo ON mo.id = t.mes_order_id
         LEFT JOIN sn_wsd_mes_order_route_operation ro ON ro.id = t.route_operation_id
@@ -86,7 +89,8 @@ _BRANCHES = [
                COALESCE(NULLIF(om.required_item_code, ''), '') || ' / ' ||
                    COALESCE(c.material_sn, ''),
                c.point_qty || ' pt',
-               '', 'sn.smt.material.consumption', c.id, c.company_id
+               '', to_char(c.consumed_at, 'HH24:MI:SS'), 0,
+               'sn.smt.material.consumption', c.id, c.company_id
         FROM sn_smt_material_consumption c
         LEFT JOIN sn_smt_online_material om ON om.id = c.online_material_id
         LEFT JOIN sn_wsd_mes_order mo ON mo.id = c.mes_order_id
@@ -99,7 +103,7 @@ _BRANCHES = [
                'component', mo.name, op.name, wc.name,
                b.operator_code,
                b.component_sn || ' (' || b.component_type || ')',
-               '', b.event_type,
+               '', b.event_type, to_char(b.event_time, 'HH24:MI:SS'), 0,
                'sn.wsd.meter.component.binding', b.id, b.company_id
         FROM sn_wsd_meter_component_binding b
         LEFT JOIN mrp_workcenter wc ON wc.id = b.workcenter_id
@@ -114,7 +118,8 @@ _BRANCHES = [
                'nameplate', '', '', '', '',
                i1.name || ' -> ' || i2.name,
                CASE WHEN sb.is_current THEN 'current' ELSE 'history' END,
-               '', 'sn.wsd.serial.binding', sb.id, sb.company_id
+               '', to_char(sb.binding_date, 'HH24:MI:SS'), 0,
+               'sn.wsd.serial.binding', sb.id, sb.company_id
         FROM sn_wsd_serial_binding sb
         JOIN sn_wsd_serial_identity i1 ON i1.id = sb.serial_identity_id
         JOIN sn_wsd_serial_identity i2 ON i2.id = sb.bound_serial_identity_id
@@ -127,7 +132,7 @@ _BRANCHES = [
                trim(both ' /' from
                     COALESCE('Box ' || NULLIF(p.carton_no, '') || ' / ', '') ||
                     COALESCE('Pallet ' || NULLIF(p.pallet_no, ''), '')),
-               '', p.scan_check_result,
+               '', p.scan_check_result, to_char(p.pack_time, 'HH24:MI:SS'), CASE WHEN p.scan_check_result = 'fail' THEN 1 ELSE 0 END,
                'sn.wsd.meter.pack.record', p.id, p.company_id
         FROM sn_wsd_meter_pack_record p
         LEFT JOIN sn_wsd_mes_order_route_operation ro ON ro.id = p.pack_route_operation_id
@@ -137,21 +142,21 @@ _BRANCHES = [
     """),
     (7, ['sn_wsd_quality_issue'], f"""
         SELECT {7 * _ID_BASE} + q.id, q.serial_identity_id, i.name, q.create_date,
-               'quality', q.name, '', '', '', '', '', q.state,
+               'quality', q.name, '', '', '', '', '', q.state, to_char(q.create_date, 'HH24:MI:SS'), 0,
                'sn.wsd.quality.issue', q.id, q.company_id
         FROM sn_wsd_quality_issue q
         JOIN sn_wsd_serial_identity i ON i.id = q.serial_identity_id
     """),
     (8, ['sn_wsd_repair_order'], f"""
         SELECT {8 * _ID_BASE} + r.id, r.serial_identity_id, i.name, r.create_date,
-               'repair', r.name, '', '', '', '', '', r.state,
+               'repair', r.name, '', '', '', '', '', r.state, to_char(r.create_date, 'HH24:MI:SS'), 0,
                'sn.wsd.repair.order', r.id, r.company_id
         FROM sn_wsd_repair_order r
         JOIN sn_wsd_serial_identity i ON i.id = r.serial_identity_id
     """),
     (9, ['sn_wsd_scrap_record'], f"""
         SELECT {9 * _ID_BASE} + s.id, s.serial_identity_id, i.name, s.scrap_time,
-               'scrap', s.name, '', '', '', '', '', s.state,
+               'scrap', s.name, '', '', '', '', '', s.state, to_char(s.scrap_time, 'HH24:MI:SS'), 0,
                'sn.wsd.scrap.record', s.id, s.company_id
         FROM sn_wsd_scrap_record s
         JOIN sn_wsd_serial_identity i ON i.id = s.serial_identity_id
@@ -187,6 +192,13 @@ class SnTraceEvent(models.Model):
              'involved in the event.')
     summary = fields.Char(string='Summary', readonly=True)
     result = fields.Char(string='Result', readonly=True)
+    time_of_day = fields.Char(
+        string='Time', readonly=True,
+        help='HH:MM:SS part of the event time; group by day for the date.')
+    is_ng = fields.Integer(
+        string='NG', readonly=True,
+        help='1 when the event result is NG/fail; sums as the NG count in '
+             'group headers.')
     source_model = fields.Char(string='Source Model', readonly=True)
     source_id = fields.Integer(string='Source ID', readonly=True)
     company_id = fields.Many2one('res.company', readonly=True)

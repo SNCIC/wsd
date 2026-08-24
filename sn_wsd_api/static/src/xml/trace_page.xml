@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_api.TracePage">
+        <div class="o_sn_wsd_trace_page d-flex flex-column h-100 overflow-hidden">
+            <div t-if="!state.committedSn" class="d-flex flex-column align-items-center justify-content-center h-100 gap-3">
+                <h3 class="mb-0"><t t-out="labels.hint"/></h3>
+                <div class="input-group input-group-lg w-50">
+                    <input type="text" class="form-control" autofocus="1"
+                           t-model="state.snInput"
+                           t-on-keydown="onKeydownInput"
+                           placeholder="SN"/>
+                    <button class="btn btn-primary" type="button" t-on-click="onTrace">
+                        <t t-out="labels.trace"/>
+                    </button>
+                </div>
+            </div>
+            <t t-else="">
+                <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom bg-view">
+                    <div class="input-group w-auto">
+                        <input type="text" class="form-control"
+                               t-model="state.snInput"
+                               t-on-keydown="onKeydownInput"
+                               placeholder="SN"/>
+                        <button class="btn btn-primary" type="button" t-on-click="onTrace">
+                            <t t-out="labels.trace"/>
+                        </button>
+                    </div>
+                    <t t-if="state.summary">
+                        <span class="fw-bold" t-esc="state.committedSn"/>
+                        <span class="badge text-bg-secondary" t-esc="state.summary.count + ' ' + labels.events"/>
+                        <span t-if="state.summary.ng" class="badge text-bg-danger" t-esc="labels.ng + ' ' + state.summary.ng"/>
+                        <span class="text-muted" t-esc="state.summary.first + ' → ' + state.summary.last"/>
+                    </t>
+                </div>
+                <div class="flex-grow-1 overflow-hidden">
+                    <t t-if="state.summary &amp;&amp; state.summary.count">
+                        <View type="'list'"
+                              resModel="'sn.wsd.trace.event'"
+                              viewId="state.listViewId"
+                              domain="traceDomain"/>
+                    </t>
+                    <t t-elif="state.summary &amp;&amp; !state.summary.count">
+                        <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                            <t t-out="labels.notFound"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

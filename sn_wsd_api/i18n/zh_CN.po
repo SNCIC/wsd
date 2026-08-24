@@ -859,6 +859,7 @@ msgstr "维修"
 #. module: sn_wsd_api
 #: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_trace_event
 #: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_trace_event
+#: model:ir.actions.client,name:sn_wsd_api.action_sn_wsd_trace_page
 msgid "SN Trace"
 msgstr "SN 追溯"
 
@@ -890,3 +891,27 @@ msgid ""
 "Work center for passes, device SN for tests, machine.table for material "
 "deductions."
 msgstr "过站显示工位，测试显示设备SN，物料扣点显示机台.料站。"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Trace"
+msgstr "追溯"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Scan or type an SN, press Enter to trace"
+msgstr "扫入或输入 SN，回车开始追溯"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "events"
+msgstr "个事件"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "No trace events found for this SN"
+msgstr "该 SN 没有找到追溯事件"

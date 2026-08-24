@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD API',
-    'version': '19.0.5.5.0',
+    'version': '19.0.5.6.0',
     'summary': 'MES device test-result ingestion (legacy flows removed; API rewrite planned)',
     'depends': ['sn_wsd_mrp', 'sn_wsd_device', 'sn_wsd_smt', 'sn_wsd_tooling', 'sn_wsd_consumable'],
     'data': [
@@ -13,6 +13,8 @@
         'web.assets_backend': [
             'sn_wsd_api/static/src/js/test_result_split.js',
             'sn_wsd_api/static/src/xml/test_result_split.xml',
+            'sn_wsd_api/static/src/js/trace_page.js',
+            'sn_wsd_api/static/src/xml/trace_page.xml',
         ],
     },
     'installable': True,
