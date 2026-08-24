@@ -6,6 +6,15 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header/button[@name='button_validate'][1]" position="before">
+                <field name="can_print_material_labels" invisible="1"/>
+                <button name="action_open_material_label_wizard"
+                        string="Print Material Labels"
+                        type="object"
+                        class="btn-secondary"
+                        groups="stock.group_stock_user"
+                        invisible="not can_print_material_labels"/>
+            </xpath>
+            <xpath expr="//header/button[@name='button_validate'][1]" position="before">
                 <button name="action_open_reel_split_wizard"
                         string="Generate Reel Lots"
                         type="object"

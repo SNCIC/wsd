@@ -9,7 +9,7 @@
                         <a t-if="!pwaService.isScopedApp" href="/odoo" class="o_sn_wsd_barcode_home_menu oi oi-apps me-3 text-dark"/>
                         <span class="fs-2 me-auto" t-out="barcodeScannerLabel"/>
                         <button t-if="pwaService.isScopedApp" class="btn btn-secondary" t-on-click="logout" t-out="logoutLabel"/>
-                        <a t-elif="pwaService.isSupportedOnBrowser" class="btn btn-secondary d-flex align-items-center justify-content-center" href="/scoped_app?app_id=sn_wsd_barcode&amp;path=scoped_app/barcode" target="_blank" t-out="installLabel"/>
+                        <a t-elif="pwaService.isSupportedOnBrowser" class="btn btn-secondary d-flex align-items-center justify-content-center" href="/scoped_app?app_id=sn_wsd_barcode&amp;path=scoped_app/wsd-barcode" target="_blank" t-out="installLabel"/>
                     </div>
                 </header>
                 <main class="o_sn_wsd_barcode_main_actions flex-grow-1 d-flex flex-column justify-content-center">

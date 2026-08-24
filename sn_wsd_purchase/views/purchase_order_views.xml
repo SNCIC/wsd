@@ -33,32 +33,6 @@
                             <field name="signing_date"/>
                             <field name="signing_location"/>
                         </group>
-                        <group string="Bank Accounts">
-                            <field name="buyer_bank_id"
-                                   domain="[('partner_id', '=', company_id.partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
-                            <field name="supplier_bank_id"
-                                   domain="[('partner_id', '=', partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Delivery">
-                            <field name="delivery_date_text"/>
-                            <field name="delivery_location"/>
-                        </group>
-                        <group string="Signatures">
-                            <field name="buyer_agent"/>
-                            <field name="supplier_agent"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Contract Terms">
-                            <field name="technical_requirements"/>
-                            <field name="acceptance_terms"/>
-                        </group>
-                        <group>
-                            <field name="payment_terms_text"/>
-                            <field name="liability_terms"/>
-                        </group>
                     </group>
                 </page>
             </xpath>

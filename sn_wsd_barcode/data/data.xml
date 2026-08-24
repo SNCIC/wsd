@@ -1,4 +1,18 @@
 <odoo>
+    <!-- Reload the web client before opening the barcode action so its assets are available. -->
+    <record id="sn_wsd_barcode_install_url" model="ir.actions.act_url">
+        <field name="name">Open WSD Barcode</field>
+        <field name="url">/odoo/wsd-barcode</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- The todo is consumed once by Odoo after module installation. -->
+    <record id="sn_wsd_barcode_install_todo" model="ir.actions.todo">
+        <field name="name">Open WSD Barcode</field>
+        <field name="action_id" ref="sn_wsd_barcode.sn_wsd_barcode_install_url"/>
+        <field name="sequence">1</field>
+    </record>
+
     <record id="sn_wsd_barcode_picking_client_action" model="ir.actions.client">
         <field name="name">Barcode Picking Client Action</field>
         <field name="tag">sn_wsd_barcode_client_action</field>

@@ -64,7 +64,7 @@ class SnWsdDeviceApi(http.Controller):
             request.env.cr.commit()
             return {'code': 500, 'message': message, 'data': False}
 
-    @http.route('/api/v1/scan-pass', type='json', auth='public', methods=['POST'], csrf=False)
+    @http.route('/api/v1/scan-pass', type='jsonrpc', auth='public', methods=['POST'], csrf=False)
     def scan_pass(self, **kwargs):
         if not _check_token():
             return {'code': 401, 'message': 'Unauthorized', 'data': False}
@@ -74,7 +74,7 @@ class SnWsdDeviceApi(http.Controller):
         return self._logged_call(
             '/api/v1/scan-pass', service.scan_pass, payload)
 
-    @http.route('/api/v1/next-sn', type='json', auth='public', methods=['POST'], csrf=False)
+    @http.route('/api/v1/next-sn', type='jsonrpc', auth='public', methods=['POST'], csrf=False)
     def next_sn(self, **kwargs):
         if not _check_token():
             return {'code': 401, 'message': 'Unauthorized', 'data': False}
