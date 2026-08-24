@@ -54,6 +54,45 @@ class MesTestResultBase(models.Model):
     aging_temp_c = fields.Float()
     payload = fields.Json()
     note = fields.Char()
+    # -- scan-pass context (aligned with the legacy test-record wide table) --
+    tooling_sns = fields.Char(
+        string='Tooling SNs', index=True,
+        help='Tooling SNs uploaded with this pass (pipe-separated).')
+    equipment_sn = fields.Char(
+        string='Equipment SN', index=True,
+        help='Device SN (M_DEVICE_SN) used for this test.')
+    internal_code = fields.Char(
+        string='Internal Code', index=True,
+        help='Factory code / nameplate code (M_STR1) scanned with this pass.')
+    pcba_codes = fields.Char(
+        string='PCBA Codes', index=True,
+        help='PCBA board codes assembled (M_MAIN_ID, pipe-separated).')
+    module_codes = fields.Char(
+        string='Module Codes', index=True,
+        help='Module codes assembled (M_MODULE_ID, pipe-separated).')
+    leadseal_codes = fields.Char(
+        string='Lead Seal Codes', index=True,
+        help='Lead seal codes assembled (M_LEADSEAL_ID, pipe-separated).')
+    box_sn = fields.Char(
+        string='Box SN', index=True,
+        help='Packing box number (M_BOX_SN) if packed at this pass.')
+    pallet_sn = fields.Char(
+        string='Pallet SN', index=True,
+        help='Pallet number (M_SECOND_SN) if packed at this pass.')
+    collaborator_code = fields.Char(
+        string='Collaborator', index=True,
+        help='Collaborating operator code (M_COLLABORATION_EMP).')
+    defect_code = fields.Char(
+        string='Uploaded Defect', index=True,
+        help='Raw defect code (M_STR2) uploaded with an NG pass. The '
+             'dictionary link is defect_code_id (quality module).')
+    parameter_plan = fields.Char(string='Parameter Plan')
+    program_num = fields.Char(string='Program Number')
+    test_plan = fields.Char(string='Test Plan')
+    software_num = fields.Char(string='Software Number')
+    software_name = fields.Char(string='Software Name')
+    table_position = fields.Char(string='Table Position', help='M_ADDRESS')
+
     detail_ids = fields.One2many(
         'sn.wsd.mes.test.result.detail', 'test_result_id', string='Test Items')
     retry_sequence = fields.Integer(string='Retry Sequence', default=0, index=True)
@@ -134,7 +173,7 @@ class MesTestResultBase(models.Model):
         test_dt = fields.Datetime.to_datetime(test_time) if test_time else fields.Datetime.now()
         production_line = workcenter.x_production_line_id
         workshop = workcenter.x_workshop_id
-        record = self.create({
+        vals = {
             'serial_identity_id': identity.id,
             'product_id': production.product_id.id if production else False,
             'production_id': production.id if production else False,
@@ -160,11 +199,40 @@ class MesTestResultBase(models.Model):
             'aging_temp_c': aging_temp_c,
             'payload': payload,
             'note': note,
+            'tooling_sns': payload.get('M_TOOLING', ''),
+            'equipment_sn': payload.get('M_DEVICE_SN', ''),
+            'internal_code': payload.get('M_STR1', ''),
+            'pcba_codes': payload.get('M_MAIN_ID', ''),
+            'module_codes': payload.get('M_MODULE_ID', ''),
+            'leadseal_codes': payload.get('M_LEADSEAL_ID', ''),
+            'box_sn': payload.get('M_BOX_SN', ''),
+            'pallet_sn': payload.get('M_SECOND_SN', ''),
+            'collaborator_code': payload.get('M_COLLABORATION_EMP', ''),
+            'defect_code': payload.get('M_STR2', ''),
+            'parameter_plan': payload.get('M_PARAMETER_PLAN', ''),
+            'program_num': payload.get('M_PROGRAM_NUM', ''),
+            'test_plan': payload.get('M_TEST_PLAN', ''),
+            'software_num': payload.get('M_SOFTWARE_NUM', ''),
+            'software_name': payload.get('M_SOFTWARE_NAME', ''),
+            'table_position': payload.get('M_ADDRESS', ''),
             'retry_sequence': retry_sequence,
             'retry_limit': retry_limit,
             'requires_repair': requires_repair,
             'is_rework_pass': is_rework_pass,
-        })
+        }
+        raw_defect = (payload.get('M_STR2') or '').strip()
+        if raw_defect and result == 'ng' and 'defect_code_id' in self._fields:
+            # link the quality dictionary when installed (terminal NG flow
+            # uses the same field)
+            defect = self.env['sn.wsd.quality.defect.code'].search([
+                '|', ('code', '=ilike', raw_defect),
+                ('name', '=ilike', raw_defect),
+                ('company_id', 'in', [company.id, False]),
+            ], limit=1)
+            vals['defect_code_id'] = defect.id
+        record = self.create(vals)
+        self.env['sn.wsd.mes.test.result.detail'].create_from_test_result(
+            record, payload.get('M_TEST_DETAIL'))
         return {
             'ok': True,
             'duplicated': False,

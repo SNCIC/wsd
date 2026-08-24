@@ -177,8 +177,8 @@ class MeterComponentBinding(models.Model):
             ], limit=1)
 
         station = self.env['mrp.workcenter']
-        if workorder and workorder.x_mes_workcenter_id:
-            station = workorder.x_mes_workcenter_id
+        if workorder and workorder.workcenter_id:
+            station = workorder.workcenter_id
         elif test_result and test_result.workcenter_id:
             station = test_result.workcenter_id
 

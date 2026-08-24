@@ -75,7 +75,6 @@ class MesTestResultDetail(models.Model):
     result = fields.Selection([
         ('ok', 'OK'),
         ('ng', 'NG'),
-        ('ng', 'NG'),
     ], string='Result', required=True)
     raw_line = fields.Char(string='Raw Line', help='Original raw data before parsing')
 

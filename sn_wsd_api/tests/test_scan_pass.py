@@ -221,3 +221,67 @@ class TestScanPass(TransactionCase):
             self.service._handle_packing(
                 identity, self.order, route_op, self.wc_in,
                 {'M_BOX_SN': 'BOX-2'}, 'ok')
+
+    def test_10_wide_table_capture(self):
+        """One scan-pass lands every device field on the test-result wide
+        table: order context, component bindings, parsed test items and the
+        mirrored craft/tooling columns."""
+        route_op = self.order.x_mes_route_id.operation_ids[:1]
+        self.env['production.process.document'].create({
+            'production_id': self.production.id,
+            'route_operation_code': route_op.operation_id.code,
+            'type_id': self.env.ref('sn_wsd_mrp.doc_type_parameter_plan').id,
+            'code_ids': [(0, 0, {'code': 'PLAN-WIDE'})],
+        })
+        detail = [
+            {'item_name': 'ACV', 'low_limit': '220', 'up_limit': '230',
+             'item_value': '225.1', 'item_result': 'OK'},
+            {'item_name': 'I_MAX', 'low_limit': '0', 'up_limit': '10',
+             'item_value': '12', 'item_result': 'NG'},
+        ]
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-API-WIDE',
+            M_DEVICE_SN='DEV-01',
+            M_TOOLING='T-1|T-2',
+            M_MAIN_ID='PCB-WIDE-1',
+            M_MODULE_ID='MOD-WIDE-1',
+            M_LEADSEAL_ID='LS-WIDE-1',
+            M_PARAMETER_PLAN='PLAN-WIDE',
+            M_ADDRESS='TABLE-3',
+            M_TEST_DETAIL=detail,
+        ))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        # order context survives the pass (WIP row is already cleared)
+        self.assertEqual(test_result.mes_order_id, self.order)
+        self.assertTrue(test_result.route_operation_id)
+        self.assertEqual(test_result.workcenter_id, self.wc_in)
+        # mirrored device columns
+        self.assertEqual(test_result.equipment_sn, 'DEV-01')
+        self.assertEqual(test_result.tooling_sns, 'T-1|T-2')
+        self.assertEqual(test_result.pcba_codes, 'PCB-WIDE-1')
+        self.assertEqual(test_result.module_codes, 'MOD-WIDE-1')
+        self.assertEqual(test_result.leadseal_codes, 'LS-WIDE-1')
+        self.assertEqual(test_result.parameter_plan, 'PLAN-WIDE')
+        self.assertEqual(test_result.table_position, 'TABLE-3')
+        # parsed test items
+        items = test_result.detail_ids.sorted('sequence')
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0].project_name, 'ACV')
+        self.assertEqual(items[0].actual_value, '225.1')
+        self.assertEqual(items[1].result, 'ng')
+        # component bindings registered against the pass
+        bindings = self.env['sn.wsd.meter.component.binding'].search([
+            ('serial_identity_id.name', '=', 'SN-API-WIDE')])
+        self.assertEqual(
+            sorted(bindings.mapped('component_sn')),
+            ['LS-WIDE-1', 'MOD-WIDE-1', 'PCB-WIDE-1'])
+
+    def test_11_ng_links_defect_dictionary(self):
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-API-DFT', M_TEST_RESULT='NG', M_STR2='APID'))
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.defect_code_id, self.defect)
+        self.assertEqual(test_result.defect_code, 'APID')

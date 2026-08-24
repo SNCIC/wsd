@@ -222,21 +222,24 @@ class SnWsdApiService(models.AbstractModel):
         other uploaded tooling SN is recorded in the request log only."""
         raw = (payload.get('M_TOOLING') or '').strip()
         tooling_sns = [part.strip() for part in raw.split('|') if part.strip()]
-        if not tooling_sns:
+        tooling_templates = self.env['sn.tooling.template']
+        consumable_templates = self.env['sn.consumable.template']
+        for line in self._key_material_lines(
+                mes_order, route_operation, workcenter).line_ids:
+            ref = line.material_ref
+            if ref and ref._name == 'sn.tooling.template':
+                tooling_templates |= ref
+            elif ref and ref._name == 'sn.consumable.template':
+                consumable_templates |= ref
+        if not tooling_sns and not consumable_templates:
             return
-        key_templates = self._key_material_lines(
-            mes_order, route_operation, workcenter).mapped('material_ref')
         Tooling = self.env['sn.tooling']
         for sn in tooling_sns:
             tooling = Tooling.search([('sn', '=', sn)], limit=1)
-            if not tooling or tooling.template_id not in key_templates:
+            if not tooling or tooling.template_id not in tooling_templates:
                 continue  # log-only
             if tooling.state == 'online':
                 tooling.register_usage(board_qty)
-        # consumables from the key list: every online individual of the
-        # referenced templates counts once per pass
-        consumable_templates = key_templates.filtered(
-            lambda ref: ref._name == 'sn.consumable.template')
         for template in consumable_templates:
             infos = self.env['sn.consumable.info'].search([
                 ('template_id', '=', template.id), ('state', '=', 'loaded')])
@@ -324,14 +327,19 @@ class SnWsdApiService(models.AbstractModel):
             finished, mes_order = self._pass_station(
                 member, workcenter, member_result, member_defect, employee)
         route_operation = self._route_operation(mes_order, workcenter)
-        # test result for the scanned board only
-        test_result = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
+        # test result for the scanned board only (station pass already
+        # cleared the WIP row, so the order context is passed explicitly)
+        result_info = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
             serial_number=identity.name,
             result=result,
             workcenter_code=workcenter.code,
             operator_code=payload.get('M_EMP'),
             payload=payload,
+            mes_order_id=mes_order.id,
+            route_operation_id=route_operation.id,
         )
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result_info['test_result_id']).exists()
         production = mes_order.production_id
         self._check_process_documents(production, route_operation, payload)
         self._register_components(identity, route_operation, payload, test_result)
@@ -356,7 +364,7 @@ class SnWsdApiService(models.AbstractModel):
             'sn': identity.name,
             'panel_qty': len(members),
             'finished': finished,
-            'test_result_id': test_result.get('test_result_id') if isinstance(test_result, dict) else test_result.id,
+            'test_result_id': result_info.get('test_result_id'),
         }
 
     @api.model

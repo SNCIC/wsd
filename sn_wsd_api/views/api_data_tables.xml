@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ================================================================ -->
-    <!-- Test Results: every device test upload, browsable standalone     -->
+    <!-- Test Results: the legacy wide test-record table, one row per     -->
+    <!-- scan-pass upload, every device field browsable/searchable        -->
     <!-- ================================================================ -->
     <record id="view_sn_wsd_test_result_list" model="ir.ui.view">
         <field name="name">sn.wsd.mes.test.result.list.api</field>
         <field name="model">sn.wsd.mes.test.result</field>
         <field name="arch" type="xml">
             <list>
-                <field name="name"/>
+                <field name="name" optional="hide"/>
                 <field name="serial_identity_id"/>
-                <field name="test_type"/>
+                <field name="test_type" optional="hide"/>
                 <field name="result" widget="badge"
                        decoration-success="result == 'ok'"
                        decoration-danger="result == 'ng'"
                        decoration-warning="result == 'hold'"/>
+                <field name="defect_code" optional="show"/>
                 <field name="test_time"/>
                 <field name="workcenter_id"/>
                 <field name="mes_order_id"/>
                 <field name="operator_code"/>
+                <field name="equipment_sn" optional="show"/>
+                <field name="tooling_sns" optional="hide"/>
+                <field name="pcba_codes" optional="hide"/>
+                <field name="module_codes" optional="hide"/>
+                <field name="leadseal_codes" optional="hide"/>
+                <field name="internal_code" optional="hide"/>
+                <field name="box_sn" optional="hide"/>
+                <field name="pallet_sn" optional="hide"/>
+                <field name="collaborator_code" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
@@ -31,18 +42,88 @@
             <form>
                 <sheet>
                     <group>
-                        <group>
+                        <group string="Basic Info">
                             <field name="name"/>
                             <field name="serial_identity_id"/>
-                            <field name="result"/>
+                            <field name="result" widget="badge"
+                                   decoration-success="result == 'ok'"
+                                   decoration-danger="result == 'ng'"
+                                   decoration-warning="result == 'hold'"/>
+                            <field name="defect_code"/>
                             <field name="test_type"/>
+                            <field name="test_time"/>
+                            <field name="operator_code"/>
+                            <field name="collaborator_code"/>
                         </group>
-                        <group>
+                        <group string="Order / Station">
                             <field name="mes_order_id"/>
+                            <field name="route_operation_id"/>
+                            <field name="production_id"/>
                             <field name="workcenter_id"/>
+                            <field name="workshop_id"/>
+                            <field name="production_line_id"/>
+                            <field name="table_position"/>
+                        </group>
+                        <group string="Component Codes">
+                            <field name="pcba_codes"/>
+                            <field name="module_codes"/>
+                            <field name="leadseal_codes"/>
+                            <field name="internal_code"/>
+                        </group>
+                        <group string="Tooling &amp; Device">
+                            <field name="equipment_id"/>
+                            <field name="equipment_sn"/>
+                            <field name="tooling_sns"/>
+                            <field name="tester_channel"/>
+                        </group>
+                        <group string="Craft Documents">
+                            <field name="parameter_plan"/>
+                            <field name="program_num"/>
+                            <field name="test_plan"/>
+                            <field name="software_num"/>
+                            <field name="software_name"/>
+                        </group>
+                        <group string="Packing">
+                            <field name="box_sn"/>
+                            <field name="pallet_sn"/>
+                        </group>
+                        <group string="Measurements">
+                            <field name="basic_error"/>
+                            <field name="phase_error"/>
+                            <field name="aging_temp_c"/>
+                            <field name="cycle_time_sec"/>
                         </group>
                     </group>
-                    <field name="detail_ids"/>
+                    <notebook>
+                        <page string="Test Items">
+                            <field name="detail_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="project_name"/>
+                                    <field name="lower_limit"/>
+                                    <field name="upper_limit"/>
+                                    <field name="actual_value"/>
+                                    <field name="result" widget="badge"
+                                           decoration-success="result == 'ok'"
+                                           decoration-danger="result == 'ng'"/>
+                                    <field name="raw_line" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Raw Payload">
+                            <group>
+                                <field name="payload" readonly="1"/>
+                                <field name="note"/>
+                                <field name="external_event_id"/>
+                                <field name="request_id"/>
+                                <field name="source_system"/>
+                                <field name="retry_sequence"/>
+                                <field name="retry_limit"/>
+                                <field name="requires_repair"/>
+                                <field name="is_rework_pass"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -55,17 +136,31 @@
             <search>
                 <field name="serial_identity_id"/>
                 <field name="mes_order_id"/>
+                <field name="production_id"/>
                 <field name="workcenter_id"/>
                 <field name="operator_code"/>
+                <field name="defect_code"/>
+                <field name="box_sn"/>
+                <field name="pallet_sn"/>
+                <field name="equipment_sn"/>
+                <field name="pcba_codes"/>
+                <field name="module_codes"/>
+                <field name="leadseal_codes"/>
+                <field name="tooling_sns"/>
+                <field name="internal_code"/>
                 <filter string="OK" name="filter_ok" domain="[('result', '=', 'ok')]"/>
                 <filter string="NG" name="filter_ng" domain="[('result', '=', 'ng')]"/>
                 <filter string="Hold" name="filter_hold" domain="[('result', '=', 'hold')]"/>
+                <filter string="NG with Defect" name="filter_ng_defect"
+                        domain="[('result', '=', 'ng'), ('defect_code', '!=', False)]"/>
                 <separator string="Group By"/>
                 <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
                 <filter string="MES Order" name="group_by_order" context="{'group_by': 'mes_order_id'}"/>
                 <filter string="Test Type" name="group_by_type" context="{'group_by': 'test_type'}"/>
                 <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
                 <filter string="Work Center" name="group_by_wc" context="{'group_by': 'workcenter_id'}"/>
+                <filter string="Box SN" name="group_by_box" context="{'group_by': 'box_sn'}"/>
+                <filter string="Defect Code" name="group_by_defect" context="{'group_by': 'defect_code'}"/>
             </search>
         </field>
     </record>
@@ -79,7 +174,7 @@
 
     <menuitem id="menu_sn_wsd_test_result" name="Test Results"
               parent="sn_wsd_mrp.menu_sn_wsd_traceability"
-              action="action_sn_wsd_test_result" sequence="12"/>
+              action="action_sn_wsd_test_result" sequence="13"/>
 
     <!-- ================================================================ -->
     <!-- SN Bindings: nameplate & machine binding history (API written)   -->
@@ -109,6 +204,6 @@
 
     <menuitem id="menu_sn_wsd_serial_binding_api" name="SN Bindings"
               parent="sn_wsd_mrp.menu_sn_wsd_traceability"
-              action="action_sn_wsd_serial_binding_api" sequence="13"/>
+              action="action_sn_wsd_serial_binding_api" sequence="14"/>
 
 </odoo>
