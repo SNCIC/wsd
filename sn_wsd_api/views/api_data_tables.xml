@@ -320,14 +320,14 @@
     </record>
 
     <record id="action_sn_wsd_serial_binding_api" model="ir.actions.act_window">
-        <field name="name">SN Bindings</field>
+        <field name="name">Nameplate SN Bindings</field>
         <field name="res_model">sn.wsd.serial.binding</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_sn_wsd_serial_binding_search_api"/>
         <field name="context">{'search_default_filter_current': True, 'search_default_filter_nameplate': True}</field>
     </record>
 
-    <menuitem id="menu_sn_wsd_serial_binding_api" name="SN Bindings"
+    <menuitem id="menu_sn_wsd_serial_binding_api" name="Nameplate SN Bindings"
               parent="sn_wsd_mrp.menu_sn_wsd_traceability"
               action="action_sn_wsd_serial_binding_api" sequence="14"/>
 
