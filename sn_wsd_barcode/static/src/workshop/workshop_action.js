@@ -19,8 +19,12 @@ const SMT_OPERATION_BUTTONS = [
     { key: "smt_material_refill", label: _t("CHANGE") },
 ];
 
+// jigs are shared by both workshops: SMT and DIP each get the button
+const JIG_BUTTON = { key: "equipment_tooling", label: _t("Jig") };
+
 const DIP_OPERATION_BUTTONS = [
     { key: "dip_material_load", label: _t("Load") },
+    JIG_BUTTON,
 ];
 
 // equipment sub-modes of the SMT workshop screen: pick a pill, scan the SN
@@ -37,9 +41,6 @@ const EQUIPMENT_MODES = {
             { key: "maintain_done", label: _t("Maintain done") },
             { key: "repair_start", label: _t("Repair start"), extra: "fault" },
             { key: "repair_done", label: _t("Repair done") },
-            { key: "disable", label: _t("Disable"), extra: "reason" },
-            { key: "enable", label: _t("Enable") },
-            { key: "resolve", label: _t("Info") },
         ],
     },
     consumable: {
@@ -55,7 +56,6 @@ const EQUIPMENT_MODES = {
             { key: "stir_start", label: _t("Stir start") },
             { key: "stir_end", label: _t("Stir done") },
             { key: "exhaust", label: _t("Exhaust") },
-            { key: "resolve", label: _t("Info") },
         ],
     },
 };
@@ -206,7 +206,7 @@ export class WorkshopOperationAction extends Component {
             return DIP_OPERATION_BUTTONS;
         }
         return [...SMT_OPERATION_BUTTONS,
-                EQUIPMENT_MODES.tooling, EQUIPMENT_MODES.consumable];
+                JIG_BUTTON, EQUIPMENT_MODES.consumable];
     }
 
     get equipmentModeDef() {

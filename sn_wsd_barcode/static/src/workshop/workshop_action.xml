@@ -105,7 +105,7 @@
                     </div>
                 </section>
 
-                <section class="o_sn_wsd_workshop_smt_buttons list-group-item">
+                <section class="o_sn_wsd_workshop_smt_buttons o_sn_wsd_grid4 list-group-item">
                     <t t-foreach="smtOperationButtons" t-as="opBtn" t-key="opBtn.key">
                         <button type="button"
                                 class="btn"
@@ -118,7 +118,7 @@
 
                 <!-- SMT equipment sub-mode: tooling / consumable action pills -->
                 <section t-if="equipmentModeDef" class="o_sn_wsd_workshop_equipment list-group-item">
-                    <div class="d-flex flex-wrap gap-1 mb-1">
+                    <div class="o_sn_wsd_grid4 gap-1 mb-1">
                         <button t-foreach="equipmentModeDef.actions" t-as="act" t-key="act.key"
                                 type="button"
                                 t-attf-class="btn btn-sm {{state.equipmentAction === act.key ? 'btn-primary' : 'btn-outline-primary'}}"

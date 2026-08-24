@@ -2902,7 +2902,7 @@ msgstr "回温开始"
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 #: code:addons/sn_wsd_barcode/static/src/pda_equipment/pda_equipment_action.js:0
 msgid "Tooling"
-msgstr "工装"
+msgstr "制具"
 
 #. module: sn_wsd_barcode
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_tooling_action
@@ -2914,3 +2914,9 @@ msgstr "工装扫码"
 #: code:addons/sn_wsd_barcode/controllers/sn_pda_equipment_controller.py:0
 msgid "Unknown action %s."
 msgstr "未知动作 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Jig"
+msgstr "制具"
