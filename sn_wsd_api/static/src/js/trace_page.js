@@ -40,12 +40,6 @@ export class SnTracePage extends Component {
             materialRows: [],
             qualityRows: [],
             repairRows: [],
-            pagers: {
-                process: { page: 1, size: 20 },
-                material: { page: 1, size: 20 },
-                quality: { page: 1, size: 20 },
-                repair: { page: 1, size: 20 },
-            },
         });
         this.labels = {
             query: _t("Query"),
@@ -88,9 +82,6 @@ export class SnTracePage extends Component {
         this.state.qualityRows = [];
         this.state.repairRows = [];
         this.state.committedSn = "";
-        for (const key of Object.keys(this.state.pagers)) {
-            this.state.pagers[key].page = 1;
-        }
         try {
             const identityIds = await this.orm.silent.search(
                 "sn.wsd.serial.identity", [["name", "=", sn]], { limit: 1 });
@@ -345,34 +336,10 @@ export class SnTracePage extends Component {
 
 
 
-    rowsFor(tab) {
-        return {
-            process: this.state.processRows,
-            material: this.state.materialRows,
-            quality: this.state.qualityRows,
-            repair: this.state.repairRows,
-        }[tab] || [];
-    }
 
-    activePager() {
-        return this.state.pagers[this.state.activeTab];
-    }
 
-    getPagedRows(tab) {
-        const p = this.state.pagers[tab];
-        const start = (p.page - 1) * p.size;
-        return this.rowsFor(tab).slice(start, start + p.size);
-    }
 
-    pageCount(tab) {
-        const p = this.state.pagers[tab];
-        return Math.max(1, Math.ceil(this.rowsFor(tab).length / p.size));
-    }
 
-    pagerMove(tab, delta) {
-        const p = this.state.pagers[tab];
-        p.page = Math.min(this.pageCount(tab), Math.max(1, p.page + delta));
-    }
 
     // ------------------------------------------------------------------
     // CSV export: every tab in one file, headers share the page labels

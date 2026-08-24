@@ -84,27 +84,14 @@
 
             <!-- ============ bottom-right: tabs ============ -->
             <section class="o_trace_panel">
-                <div class="d-flex align-items-center o_trace_tabs">
-                    <ul class="nav nav-tabs flex-grow-1">
-                        <li class="nav-item" t-foreach="tabDefs" t-as="tab" t-key="tab.key">
-                            <a href="#"
-                               t-attf-class="nav-link {{state.activeTab === tab.key ? 'active' : ''}}"
-                               t-on-click.prevent="() => this.setActiveTab(tab.key)"
-                               t-esc="tab.label"/>
-                        </li>
-                    </ul>
-                    <div class="d-flex align-items-center gap-2 pb-1 px-2" style="font-size:12px"
-                         t-if="rowsFor(state.activeTab).length">
-                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                t-att-disabled="activePager().page &lt;= 1"
-                                t-on-click="() => this.pagerMove(state.activeTab, -1)">‹</button>
-                        <span t-esc="activePager().page"/> / <span t-esc="pageCount(state.activeTab)"/>
-                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                t-att-disabled="activePager().page &gt;= pageCount(state.activeTab)"
-                                t-on-click="() => this.pagerMove(state.activeTab, 1)">›</button>
-                        <span class="text-muted">共计 <b t-esc="rowsFor(state.activeTab).length"/> 条</span>
-                    </div>
-                </div>
+                <ul class="nav nav-tabs o_trace_tabs">
+                    <li class="nav-item" t-foreach="tabDefs" t-as="tab" t-key="tab.key">
+                        <a href="#"
+                           t-attf-class="nav-link {{state.activeTab === tab.key ? 'active' : ''}}"
+                           t-on-click.prevent="() => this.setActiveTab(tab.key)"
+                           t-esc="tab.label"/>
+                    </li>
+                </ul>
                 <div class="o_trace_tab_body">
                     <!-- process -->
                     <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'process' ? 'active' : ''}}">
@@ -128,7 +115,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="getPagedRows('process')" t-as="r" t-key="r.seq"
+                                    <tr t-foreach="state.processRows" t-as="r" t-key="r.seq"
                                         t-attf-class="{{r.isNg ? 'o_trace_row_ng' : ''}}">
                                         <td t-esc="r.seq"/>
                                         <td t-esc="r.opCode"/>
@@ -172,7 +159,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="getPagedRows('material')" t-as="r" t-key="r.materialSn + '_' + r_index">
+                                    <tr t-foreach="state.materialRows" t-as="r" t-key="r.materialSn + '_' + r_index">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.materialSn"/>
                                         <td t-esc="r.itemCode"/>
@@ -208,7 +195,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="getPagedRows('quality')" t-as="r" t-key="r.id">
+                                    <tr t-foreach="state.qualityRows" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.name"/>
                                         <td t-esc="r.type"/>
@@ -245,7 +232,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="getPagedRows('repair')" t-as="r" t-key="r.id">
+                                    <tr t-foreach="state.repairRows" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.name"/>
                                         <td t-esc="r.state"/>
