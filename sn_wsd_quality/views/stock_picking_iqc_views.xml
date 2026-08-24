@@ -5,24 +5,10 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="action_open_iqc_inspections"
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-check-square-o"
-                        invisible="x_iqc_inspection_count == 0">
-                    <field name="x_iqc_inspection_count"
-                           string="IQC"
-                           widget="statinfo"/>
-                </button>
-            </xpath>
             <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom_qty']" position="after">
                 <field name="x_quality_inspection_count"
                        string="IQC"
                        optional="hide"/>
-            </xpath>
-            <xpath expr="//sheet" position="inside">
-                <field name="x_iqc_inspection_count" invisible="1"/>
             </xpath>
         </field>
     </record>
