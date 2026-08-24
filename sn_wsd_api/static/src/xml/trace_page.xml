@@ -81,45 +81,6 @@
                 </div>
             </section>
 
-            <!-- ============ bottom-left: same batch products ============ -->
-            <section class="o_trace_panel">
-                <div class="o_trace_panel_hd" t-esc="labels.sameBatch"/>
-                <div class="o_trace_panel_bd">
-                    <div class="o_trace_table_wrap">
-                        <table class="o_trace_grid">
-                            <thead>
-                                <tr>
-                                    <th style="width:30px">#</th>
-                                    <th>SN</th>
-                                    <th>MES Order</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="batchPageRows" t-as="row" t-key="row.identityId"
-                                    t-attf-class="{{row.current ? 'o_trace_current' : ''}}">
-                                    <td t-esc="row_index + 1 + (state.batch.page - 1) * state.batch.pageSize"/>
-                                    <td style="cursor:pointer" t-on-click="() => this.switchSn(row)"
-                                        t-esc="row.sn"/>
-                                    <td t-esc="state.productInfo ? state.productInfo.orderName : ''"/>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="o_trace_pager" t-if="state.batch.rows.length">
-                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                t-att-disabled="state.batch.page &lt;= 1"
-                                t-on-click="() => this.batchPageMove(-1)">‹</button>
-                        <span t-esc="state.batch.page"/> / <span t-esc="batchPageCount"/>
-                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                t-att-disabled="state.batch.page &gt;= batchPageCount"
-                                t-on-click="() => this.batchPageMove(1)">›</button>
-                        <span class="ms-auto">
-                            <t t-esc="labels.total"/> <b t-esc="state.batch.rows.length"/> <t t-esc="labels.rows"/>
-                        </span>
-                    </div>
-                </div>
-            </section>
-
             <!-- ============ bottom-right: tabs ============ -->
             <section class="o_trace_panel">
                 <ul class="nav nav-tabs o_trace_tabs">

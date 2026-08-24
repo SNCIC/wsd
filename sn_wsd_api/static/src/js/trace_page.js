@@ -36,7 +36,6 @@ export class SnTracePage extends Component {
             treeOpen: true,
             productInfo: null,
             treeChildren: [],
-            batch: { rows: [], page: 1, pageSize: 20 },
             processRows: [],
             materialRows: [],
             qualityRows: [],
@@ -57,8 +56,6 @@ export class SnTracePage extends Component {
             noData: _t("No data"),
             finished: _t("Yes"),
             unfinished: _t("No"),
-            total: _t("Total"),
-            rows: _t("rows"),
         };
         this.tabDefs = [
             { key: "process", label: this.labels.process },
@@ -84,7 +81,6 @@ export class SnTracePage extends Component {
         this.state.materialRows = [];
         this.state.qualityRows = [];
         this.state.repairRows = [];
-        this.state.batch = { rows: [], page: 1, pageSize: 20 };
         this.state.committedSn = "";
         try {
             const identityIds = await this.orm.silent.search(
@@ -107,7 +103,7 @@ export class SnTracePage extends Component {
             }
             this.state.committedSn = sn;
             const lastOrder = history[history.length - 1].mes_order_id;
-            const [productInfo, tests, components, batch, materials] = await Promise.all([
+            const [productInfo, tests, components, materials] = await Promise.all([
                 this._loadProductInfo(sn, history, lastOrder),
                 this.orm.silent.searchRead(
                     "sn.wsd.mes.test.result",
@@ -118,7 +114,6 @@ export class SnTracePage extends Component {
                     "sn.wsd.meter.component.binding",
                     [["serial_identity_id", "=", identityId], ["state", "=", "active"]],
                     ["component_sn", "component_type"]),
-                this._loadBatch(lastOrder[0], identityId),
                 this._loadMaterials(identityId),
             ]);
             this.state.productInfo = productInfo;
@@ -127,7 +122,6 @@ export class SnTracePage extends Component {
                 type: COMPONENT_TYPE_LABELS[c.component_type] || c.component_type,
                 id: c.id,
             }));
-            this.state.batch = { ...this.state.batch, rows: batch, page: 1 };
             this.state.processRows = this._buildProcessRows(history, tests, productInfo);
             this.state.materialRows = materials;
             const [quality, repair] = await Promise.all([
@@ -184,18 +178,6 @@ export class SnTracePage extends Component {
         };
     }
 
-    async _loadBatch(orderId, currentIdentityId) {
-        const result = await this.orm.silent.webReadGroup(
-            "sn.wsd.serial.operation.history",
-            [["mes_order_id", "=", orderId]],
-            ["serial_identity_id"], ["__count"]);
-        const groups = (result && result.groups) || [];
-        return groups.map((g) => ({
-            identityId: g.serial_identity_id[0],
-            sn: g.serial_identity_id[1],
-            current: g.serial_identity_id[0] === currentIdentityId,
-        }));
-    }
 
     async _loadMaterials(identityId) {
         const rows = await this.orm.silent.searchRead(
@@ -348,26 +330,9 @@ export class SnTracePage extends Component {
         this.state.treeOpen = !this.state.treeOpen;
     }
 
-    get batchPageRows() {
-        const b = this.state.batch;
-        const start = (b.page - 1) * b.pageSize;
-        return b.rows.slice(start, start + b.pageSize);
-    }
 
-    get batchPageCount() {
-        return Math.max(1, Math.ceil(this.state.batch.rows.length / this.state.batch.pageSize));
-    }
 
-    batchPageMove(delta) {
-        const b = this.state.batch;
-        const page = Math.min(this.batchPageCount, Math.max(1, b.page + delta));
-        this.state.batch = { ...b, page };
-    }
 
-    switchSn(row) {
-        this.state.snInput = row.sn;
-        this.onTrace();
-    }
 
 
 
