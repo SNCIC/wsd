@@ -405,6 +405,7 @@ msgstr "响应体摘要。"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__result
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__result
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__result
 msgid "Result"
 msgstr "结果"
 
@@ -436,9 +437,11 @@ msgstr "返工过站"
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_identity_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__serial_identity_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__sn
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
 msgid "SN"
 msgstr "SN"
 
@@ -630,6 +633,7 @@ msgstr "最近 7 天"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operation
 msgid "Operation"
 msgstr "工序"
 
@@ -651,6 +655,7 @@ msgstr "存储标记，用于列表快速分组与NG计数聚合。"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__test
 msgid "Test"
 msgstr "测试"
 
@@ -710,6 +715,7 @@ msgstr "模块码"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__nameplate
 msgid "Nameplate"
 msgstr "铭牌"
 
@@ -767,3 +773,120 @@ msgstr "测试方案"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
 msgid "Type"
 msgstr "类型"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__component
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Component"
+msgstr "组件"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_time
+msgid "Event Time"
+msgstr "事件时间"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Event Type"
+msgstr "事件类型"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Last 30 Days"
+msgstr "最近 30 天"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__order_no
+msgid ""
+"MES order for production events; the document number of the "
+"quality/repair/scrap ticket for those."
+msgstr "生产事件显示制令单；质量/维修/报废事件显示其单据号。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__object_ref
+msgid ""
+"Material reel, component SN, nameplate mapping or box/pallet involved in the"
+" event."
+msgstr "事件涉及的物料卷号、组件SN、铭牌映射或箱/托盘。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__object_ref
+msgid "Object"
+msgstr "对象"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_list
+msgid "Open source document"
+msgstr "打开源单据"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operator
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Operator"
+msgstr "操作员"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__order_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Order / Document"
+msgstr "制令单/单据"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__pack
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Pack"
+msgstr "包装"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Quality"
+msgstr "质量"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_trace_event
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_trace_event
+msgid "SN Trace"
+msgstr "SN 追溯"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__station
+msgid "Station / Device"
+msgstr "工位/设备"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__station
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Station Pass"
+msgstr "过站"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__summary
+msgid "Summary"
+msgstr "摘要"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__station
+msgid ""
+"Work center for passes, device SN for tests, machine.table for material "
+"deductions."
+msgstr "过站显示工位，测试显示设备SN，物料扣点显示机台.料站。"

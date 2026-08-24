@@ -29,7 +29,7 @@ class SerialBinding(models.Model):
         help='Machine binding: a product SN was assembled into this machine '
              'SN. Nameplate mapping: scanning the nameplate SN resolves to '
              'this machine SN.')
-    binding_date = fields.Datetime(default=fields.Datetime.now, required=True)
+    binding_date = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
     source = fields.Selection(
         [('manual', 'Manual'), ('api', 'API')],
         default='manual', required=True,

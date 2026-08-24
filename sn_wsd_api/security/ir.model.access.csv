@@ -2,3 +2,5 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sn_wsd_mes_test_result_user,sn.wsd.mes.test.result user,model_sn_wsd_mes_test_result,base.group_user,1,1,1,1
 access_sn_wsd_mes_test_result_detail_user,sn.wsd.mes.test.result.detail user,model_sn_wsd_mes_test_result_detail,base.group_user,1,1,1,1
 access_sn_wsd_api_request_log_user,sn.wsd.api.request.log user,model_sn_wsd_api_request_log,base.group_user,1,0,0,0
+access_sn_wsd_trace_event_user,sn.wsd.trace.event user,model_sn_wsd_trace_event,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_trace_event_manager,sn.wsd.trace.event manager,model_sn_wsd_trace_event,mrp.group_mrp_manager,1,0,0,0

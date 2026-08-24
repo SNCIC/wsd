@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================ -->
+    <!-- SN trace: one search box, one SN, every event on one screen.     -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_trace_event_list" model="ir.ui.view">
+        <field name="name">sn.wsd.trace.event.list</field>
+        <field name="model">sn.wsd.trace.event</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  decoration-danger="result in ('ng', 'fail')">
+                <field name="event_time"/>
+                <field name="event_type" widget="badge"
+                       decoration-info="event_type == 'station'"
+                       decoration-success="event_type == 'test'"
+                       decoration-warning="event_type in ('material', 'component')"/>
+                <field name="order_no"/>
+                <field name="operation"/>
+                <field name="station"/>
+                <field name="operator"/>
+                <field name="object_ref"/>
+                <field name="summary" optional="show"/>
+                <field name="result"/>
+                <button name="action_open_source" type="object"
+                        icon="fa-external-link" title="Open source document"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_trace_event_search" model="ir.ui.view">
+        <field name="name">sn.wsd.trace.event.search</field>
+        <field name="model">sn.wsd.trace.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sn" string="SN" filter_domain="[('sn', 'ilike', self)]"/>
+                <field name="order_no"/>
+                <field name="operator"/>
+                <field name="object_ref"/>
+                <field name="operation"/>
+                <filter string="Station Pass" name="f_station" domain="[('event_type', '=', 'station')]"/>
+                <filter string="Test" name="f_test" domain="[('event_type', '=', 'test')]"/>
+                <filter string="Material" name="f_material" domain="[('event_type', '=', 'material')]"/>
+                <filter string="Component" name="f_component" domain="[('event_type', '=', 'component')]"/>
+                <filter string="Nameplate" name="f_nameplate" domain="[('event_type', '=', 'nameplate')]"/>
+                <filter string="Pack" name="f_pack" domain="[('event_type', '=', 'pack')]"/>
+                <filter string="Quality" name="f_quality" domain="[('event_type', '=', 'quality')]"/>
+                <filter string="Repair" name="f_repair" domain="[('event_type', '=', 'repair')]"/>
+                <filter string="Scrap" name="f_scrap" domain="[('event_type', '=', 'scrap')]"/>
+                <separator string="Result"/>
+                <filter string="NG" name="f_ng" domain="[('result', 'in', ('ng', 'fail'))]"/>
+                <separator string="Date"/>
+                <filter string="Last 30 Days" name="filter_30d"
+                        domain="[('event_time', '&gt;=', datetime.datetime.combine(context_today() - relativedelta(days=30), datetime.time(0, 0, 0)))]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="g_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="Event Type" name="g_type" context="{'group_by': 'event_type'}"/>
+                <filter string="Order / Document" name="g_order" context="{'group_by': 'order_no'}"/>
+                <filter string="Operator" name="g_operator" context="{'group_by': 'operator'}"/>
+                <filter string="Result" name="g_result" context="{'group_by': 'result'}"/>
+                <filter string="Event Time (Day)" name="g_day" context="{'group_by': 'event_time:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_trace_event" model="ir.actions.act_window">
+        <field name="name">SN Trace</field>
+        <field name="res_model">sn.wsd.trace.event</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_trace_event_search"/>
+        <field name="context">{'search_default_filter_30d': True}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_trace_event" name="SN Trace"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_trace_event" sequence="5"/>
+</odoo>
