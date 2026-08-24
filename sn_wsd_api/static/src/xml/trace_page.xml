@@ -7,6 +7,7 @@
             <section class="o_trace_panel">
                 <div class="d-flex align-items-center gap-2 p-2 border-bottom">
                     <input type="text" class="form-control form-control-sm" autofocus="1"
+                           style="max-width:220px"
                            t-att-placeholder="labels.snPlaceholder"
                            t-model="state.snInput"
                            t-on-keydown="onKeydownInput"/>
@@ -114,7 +115,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="state.processRows" t-as="r" t-key="r.seq"
+                                    <tr t-foreach="getPagedRows('process')" t-as="r" t-key="r.seq"
                                         t-attf-class="{{r.isNg ? 'o_trace_row_ng' : ''}}">
                                         <td t-esc="r.seq"/>
                                         <td t-esc="r.opCode"/>
@@ -135,6 +136,16 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="o_trace_pager" t-if="rowsFor('process').length">
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.process.page &lt;= 1"
+                                    t-on-click="() => this.pagerMove('process', -1)">‹</button>
+                            <span t-esc="state.pagers.process.page"/> / <span t-esc="pageCount('process')"/>
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.process.page &gt;= pageCount('process')"
+                                    t-on-click="() => this.pagerMove('process', 1)">›</button>
+                            <span class="ms-auto">共计 <b t-esc="rowsFor('process').length"/> 条</span>
                         </div>
                     </div>
                     <!-- material -->
@@ -158,7 +169,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="state.materialRows" t-as="r" t-key="r.materialSn + '_' + r_index">
+                                    <tr t-foreach="getPagedRows('material')" t-as="r" t-key="r.materialSn + '_' + r_index">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.materialSn"/>
                                         <td t-esc="r.itemCode"/>
@@ -174,6 +185,16 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="o_trace_pager" t-if="rowsFor('material').length">
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.material.page &lt;= 1"
+                                    t-on-click="() => this.pagerMove('material', -1)">‹</button>
+                            <span t-esc="state.pagers.material.page"/> / <span t-esc="pageCount('material')"/>
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.material.page &gt;= pageCount('material')"
+                                    t-on-click="() => this.pagerMove('material', 1)">›</button>
+                            <span class="ms-auto">共计 <b t-esc="rowsFor('material').length"/> 条</span>
                         </div>
                     </div>
                     <!-- quality -->
@@ -194,7 +215,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="state.qualityRows" t-as="r" t-key="r.id">
+                                    <tr t-foreach="getPagedRows('quality')" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.name"/>
                                         <td t-esc="r.type"/>
@@ -211,6 +232,16 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="o_trace_pager" t-if="rowsFor('quality').length">
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.quality.page &lt;= 1"
+                                    t-on-click="() => this.pagerMove('quality', -1)">‹</button>
+                            <span t-esc="state.pagers.quality.page"/> / <span t-esc="pageCount('quality')"/>
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.quality.page &gt;= pageCount('quality')"
+                                    t-on-click="() => this.pagerMove('quality', 1)">›</button>
+                            <span class="ms-auto">共计 <b t-esc="rowsFor('quality').length"/> 条</span>
                         </div>
                     </div>
                     <!-- repair -->
@@ -231,7 +262,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="state.repairRows" t-as="r" t-key="r.id">
+                                    <tr t-foreach="getPagedRows('repair')" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
                                         <td t-esc="r.name"/>
                                         <td t-esc="r.state"/>
@@ -244,6 +275,16 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="o_trace_pager" t-if="rowsFor('repair').length">
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.repair.page &lt;= 1"
+                                    t-on-click="() => this.pagerMove('repair', -1)">‹</button>
+                            <span t-esc="state.pagers.repair.page"/> / <span t-esc="pageCount('repair')"/>
+                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                    t-att-disabled="state.pagers.repair.page &gt;= pageCount('repair')"
+                                    t-on-click="() => this.pagerMove('repair', 1)">›</button>
+                            <span class="ms-auto">共计 <b t-esc="rowsFor('repair').length"/> 条</span>
                         </div>
                     </div>
                 </div>

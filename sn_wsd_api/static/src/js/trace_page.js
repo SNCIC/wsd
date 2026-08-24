@@ -40,6 +40,12 @@ export class SnTracePage extends Component {
             materialRows: [],
             qualityRows: [],
             repairRows: [],
+            pagers: {
+                process: { page: 1, size: 20 },
+                material: { page: 1, size: 20 },
+                quality: { page: 1, size: 20 },
+                repair: { page: 1, size: 20 },
+            },
         });
         this.labels = {
             query: _t("Query"),
@@ -82,6 +88,9 @@ export class SnTracePage extends Component {
         this.state.qualityRows = [];
         this.state.repairRows = [];
         this.state.committedSn = "";
+        for (const key of Object.keys(this.state.pagers)) {
+            this.state.pagers[key].page = 1;
+        }
         try {
             const identityIds = await this.orm.silent.search(
                 "sn.wsd.serial.identity", [["name", "=", sn]], { limit: 1 });
@@ -336,59 +345,103 @@ export class SnTracePage extends Component {
 
 
 
+    rowsFor(tab) {
+        return {
+            process: this.state.processRows,
+            material: this.state.materialRows,
+            quality: this.state.qualityRows,
+            repair: this.state.repairRows,
+        }[tab] || [];
+    }
+
+    getPagedRows(tab) {
+        const p = this.state.pagers[tab];
+        const start = (p.page - 1) * p.size;
+        return this.rowsFor(tab).slice(start, start + p.size);
+    }
+
+    pageCount(tab) {
+        const p = this.state.pagers[tab];
+        return Math.max(1, Math.ceil(this.rowsFor(tab).length / p.size));
+    }
+
+    pagerMove(tab, delta) {
+        const p = this.state.pagers[tab];
+        p.page = Math.min(this.pageCount(tab), Math.max(1, p.page + delta));
+    }
+
     // ------------------------------------------------------------------
-    // CSV export of the active tab
+    // CSV export: every tab in one file, headers share the page labels
     // ------------------------------------------------------------------
     exportCsv() {
         const tabs = {
             process: {
-                headers: ["#", "Operation", "Operation Name", "Work Center",
-                    "Line", "Flag", "MES Order", "Production", "Product",
-                    "Operator", "Device SN", "Tooling", "Time"],
+                title: _t("Process"),
+                headers: ["#", _t("Operation"), _t("Operation Name"),
+                    _t("Work Center"), _t("Line"), _t("Flag"), _t("MES Order"),
+                    _t("Production"), _t("Product"), _t("Operator"),
+                    _t("Device SN"), _t("Tooling"), _t("Time")],
                 rows: this.state.processRows.map((r) => [r.seq, r.opCode,
                     r.opName, r.workcenter, r.line, r.flag, r.orderName,
                     r.productionName, r.productCode, r.operator, r.equipment,
                     r.tooling, r.time]),
             },
             material: {
-                headers: ["#", "Material SN", "Item Code", "Name", "Spec",
-                    "Lot", "Loadpoint", "Qty", "Station", "Operator", "Time",
-                    "MES Order"],
+                title: _t("Material"),
+                headers: ["#", _t("Material SN"), _t("Item Code"), _t("Name"),
+                    _t("Spec"), _t("Lot"), _t("Loadpoint"), _t("Qty"),
+                    _t("Station"), _t("Operator"), _t("Time"), _t("MES Order")],
                 rows: this.state.materialRows.map((r, i) => [i + 1, r.materialSn,
                     r.itemCode, r.name, r.spec, r.lotDate, r.loadpoint, r.qty,
                     r.station, r.operator, r.time, r.orderName]),
             },
             quality: {
-                headers: ["#", "Inspection", "Type", "Result", "State",
-                    "MES Order", "Submit Time", "Submitter", "Inspector"],
+                title: _t("Quality"),
+                headers: ["#", _t("Inspection"), _t("Type"), _t("Result"),
+                    _t("State"), _t("MES Order"), _t("Submit Time"),
+                    _t("Submitter"), _t("Inspector")],
                 rows: this.state.qualityRows.map((r, i) => [i + 1, r.name,
                     r.type, r.result, r.state, r.orderName, r.submitTime,
                     r.submitter, r.inspector]),
             },
             repair: {
-                headers: ["#", "Repair Order", "State", "Operation",
-                    "Defects", "Method", "Repairer", "Report Time", "Done Time"],
+                title: _t("Repair"),
+                headers: ["#", _t("Repair Order"), _t("State"), _t("Operation"),
+                    _t("Defects"), _t("Method"), _t("Repairer"),
+                    _t("Report Time"), _t("Done Time")],
                 rows: this.state.repairRows.map((r, i) => [i + 1, r.name,
                     r.state, r.operation, r.defects, r.method, r.repairer,
                     r.reportTime, r.doneTime]),
             },
         };
-        const def = tabs[this.state.activeTab];
-        if (!def || !def.rows.length) {
-            return;
-        }
         const esc = (v) => {
             const s = String(v ?? "");
-            return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+            return /[",
+]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
         };
-        const lines = [def.headers.map(esc).join(",")]
-            .concat(def.rows.map((r) => r.map(esc).join(",")));
-        const blob = new Blob(["\ufeff" + lines.join("\r\n")],
+        const lines = [];
+        for (const key of ["process", "material", "quality", "repair"]) {
+            const def = tabs[key];
+            if (!def.rows.length) {
+                continue;
+            }
+            lines.push(def.title);
+            lines.push(def.headers.map(esc).join(","));
+            for (const row of def.rows) {
+                lines.push(row.map(esc).join(","));
+            }
+            lines.push("");
+        }
+        if (!lines.length) {
+            return;
+        }
+        const blob = new Blob(["﻿" + lines.join("
+")],
             { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `trace_${this.state.committedSn}_${this.state.activeTab}.csv`;
+        a.download = `trace_${this.state.committedSn}.csv`;
         a.click();
         URL.revokeObjectURL(url);
     }
