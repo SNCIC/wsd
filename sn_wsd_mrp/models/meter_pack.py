@@ -43,6 +43,27 @@ class MeterPackRecord(models.Model):
     pack_time = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
     operator_code = fields.Char(index=True)
     scan_check_result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], default='pass')
+    product_id = fields.Many2one(
+        'product.product', string='Product',
+        related='production_id.product_id', readonly=True)
+    nameplate_sn = fields.Char(
+        string='Nameplate SN', compute='_compute_nameplate_sn',
+        help='Current nameplate bound to this SN (latest current binding).')
+
+    def _compute_nameplate_sn(self):
+        # one batched search for the whole list page, not one per row; pack
+        # SNs are machines, so match them against the bound machine SN side
+        bindings = self.env['sn.wsd.serial.binding'].search([
+            ('bound_serial_identity_id', 'in', self.serial_identity_id.ids),
+            ('binding_type', '=', 'nameplate'),
+            ('is_current', '=', True),
+        ])
+        nameplate_by_machine = {
+            b.bound_serial_identity_id.id: b.serial_identity_id.name
+            for b in bindings
+        }
+        for pack in self:
+            pack.nameplate_sn = nameplate_by_machine.get(pack.serial_identity_id.id, '')
     note = fields.Char()
     barcode_line_ids = fields.One2many(
         'sn.wsd.meter.pack.barcode', 'pack_id', string='Barcode Lines')

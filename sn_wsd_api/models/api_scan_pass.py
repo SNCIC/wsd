@@ -199,6 +199,10 @@ class SnWsdApiService(models.AbstractModel):
             ('binding_type', '=', 'nameplate'),
         ], limit=1)
         if existing:
+            # re-binding an earlier pair (physical swap back): promote its
+            # historical row as current again instead of skipping silently
+            if not existing.is_current:
+                existing._promote_as_current()
             return
         # overwrite mode: a new row supersedes any previous binding of this
         # nameplate; the old rows stay as history

@@ -25,6 +25,42 @@
                 <field name="operator_code"/>
                 <field name="equipment_sn" optional="show"/>
                 <field name="tooling_sns" optional="hide"/>
+                <field name="box_sn" optional="show"/>
+                <field name="pallet_sn" optional="show"/>
+                <field name="internal_code" optional="hide"/>
+                <field name="pcba_codes" optional="hide"/>
+                <field name="module_codes" optional="hide"/>
+                <field name="leadseal_codes" optional="hide"/>
+                <field name="parameter_plan" optional="hide"/>
+                <field name="program_num" optional="hide"/>
+                <field name="test_plan_num" optional="hide"/>
+                <field name="software_num" optional="hide"/>
+                <field name="software_name" optional="hide"/>
+                <field name="table_position" optional="hide"/>
+                <field name="collaborator_code" optional="hide"/>
+                <field name="code_id" optional="hide"/>
+                <field name="m_str2" optional="hide"/>
+                <field name="m_str3" optional="hide"/>
+                <field name="m_str4" optional="hide"/>
+                <field name="m_str5" optional="hide"/>
+                <field name="m_str6" optional="hide"/>
+                <field name="m_str7" optional="hide"/>
+                <field name="m_str8" optional="hide"/>
+                <field name="m_str9" optional="hide"/>
+                <field name="m_str10" optional="hide"/>
+                <field name="pack_left_seal" optional="hide"/>
+                <field name="pack_left_seal_rf" optional="hide"/>
+                <field name="pack_right_seal" optional="hide"/>
+                <field name="pack_right_seal_rf" optional="hide"/>
+                <field name="pack_door_seal" optional="hide"/>
+                <field name="pack_door_seal_rf" optional="hide"/>
+                <field name="pack_nameplate_rf" optional="hide"/>
+                <field name="pack_module" optional="hide"/>
+                <field name="pack_mac" optional="hide"/>
+                <field name="pack_top" optional="hide"/>
+                <field name="pack_left" optional="hide"/>
+                <field name="pack_right" optional="hide"/>
+                <field name="pack_back" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
@@ -115,6 +151,12 @@
                 <field name="operator_code"/>
                 <field name="equipment_sn"/>
                 <field name="tooling_sns"/>
+                <field name="box_sn"/>
+                <field name="pallet_sn"/>
+                <field name="internal_code"/>
+                <field name="pcba_codes"/>
+                <field name="module_codes"/>
+                <field name="leadseal_codes"/>
                 <filter string="OK" name="filter_ok" domain="[('result', '=', 'ok')]"/>
                 <filter string="NG" name="filter_ng" domain="[('result', '=', 'ng')]"/>
                 <filter string="Hold" name="filter_hold" domain="[('result', '=', 'hold')]"/>
@@ -259,10 +301,30 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_serial_binding_search_api" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.binding.search.api</field>
+        <field name="model">sn.wsd.serial.binding</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id" string="SN / Nameplate"/>
+                <field name="bound_serial_identity_id" string="Machine SN"/>
+                <filter string="Current" name="filter_current" domain="[('is_current', '=', True)]"/>
+                <filter string="Nameplate" name="filter_nameplate" domain="[('binding_type', '=', 'nameplate')]"/>
+                <separator string="Group By"/>
+                <filter string="SN / Nameplate" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="Machine SN" name="group_by_machine" context="{'group_by': 'bound_serial_identity_id'}"/>
+                <filter string="Type" name="group_by_type" context="{'group_by': 'binding_type'}"/>
+                <filter string="Source" name="group_by_source" context="{'group_by': 'source'}"/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_serial_binding_api" model="ir.actions.act_window">
         <field name="name">SN Bindings</field>
         <field name="res_model">sn.wsd.serial.binding</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_serial_binding_search_api"/>
+        <field name="context">{'search_default_filter_current': True, 'search_default_filter_nameplate': True}</field>
     </record>
 
     <menuitem id="menu_sn_wsd_serial_binding_api" name="SN Bindings"

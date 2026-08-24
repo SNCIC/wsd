@@ -261,6 +261,10 @@ class TestScanPass(TransactionCase):
         # other category data stays in its own small tables
         self.assertEqual(test_result.equipment_sn, 'DEV-01')
         self.assertEqual(test_result.tooling_sns, 'T-1|T-2')
+        # interface mirror columns carry the verbatim upload
+        self.assertEqual(test_result.parameter_plan, 'PLAN-WIDE')
+        self.assertEqual(test_result.table_position, 'TABLE-3')
+        self.assertEqual(test_result.pcba_codes, 'PCB-WIDE-1')
         # parsed test items
         items = test_result.detail_ids.sorted('sequence')
         self.assertEqual(len(items), 2)
@@ -281,3 +285,41 @@ class TestScanPass(TransactionCase):
             result['test_result_id'])
         self.assertEqual(test_result.defect_code_id, self.defect)
         self.assertTrue(test_result.is_ng)
+
+    def test_12_binding_is_current_lifecycle(self):
+        """Rebinding demotes the old row; rebinding an earlier pair back
+        promotes its historical row; current mappings resolve in one search."""
+        Identity = self.env['sn.wsd.serial.identity']
+        Binding = self.env['sn.wsd.serial.binding']
+        m1 = Identity.get_or_create('SN-CUR-M1', self.company)
+        m2 = Identity.get_or_create('SN-CUR-M2', self.company)
+
+        def bind(machine, source='api'):
+            self.service._bind_nameplate(machine, 'NP-CUR')
+
+        bind(m1)
+        row1 = Binding.search([('serial_identity_id.name', '=', 'NP-CUR'),
+                               ('bound_serial_identity_id', '=', m1.id)])
+        self.assertTrue(row1.is_current)
+
+        bind(m2)
+        row1.invalidate_recordset()
+        row2 = Binding.search([('serial_identity_id.name', '=', 'NP-CUR'),
+                               ('bound_serial_identity_id', '=', m2.id)])
+        self.assertFalse(row1.is_current)
+        self.assertTrue(row2.is_current)
+
+        # one-shot current resolution
+        current = Binding.search([
+            ('binding_type', '=', 'nameplate'), ('is_current', '=', True),
+            ('serial_identity_id.name', '=', 'NP-CUR')])
+        self.assertEqual(current.bound_serial_identity_id, m2)
+
+        # swap back to M1: historical row is promoted again, no new row
+        bind(m1)
+        self.assertEqual(len(Binding.search(
+            [('serial_identity_id.name', '=', 'NP-CUR')])), 2)
+        row1.invalidate_recordset()
+        row2.invalidate_recordset()
+        self.assertTrue(row1.is_current)
+        self.assertFalse(row2.is_current)

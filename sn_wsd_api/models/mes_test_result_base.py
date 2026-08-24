@@ -185,6 +185,10 @@ class MesTestResultBase(models.Model):
             'requires_repair': requires_repair,
             'is_rework_pass': is_rework_pass,
         }
+        from odoo.addons.sn_wsd_api.models.mes_test_result_fields import PAYLOAD_TO_FIELD
+        for m_key, fname in PAYLOAD_TO_FIELD.items():
+            if m_key in payload:
+                vals[fname] = payload.get(m_key) or ''
         raw_defect = (payload.get('M_STR2') or '').strip()
         if raw_defect and result == 'ng' and 'defect_code_id' in self._fields:
             # link the quality dictionary when installed (terminal NG flow

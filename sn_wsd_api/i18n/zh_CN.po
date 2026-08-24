@@ -677,3 +677,93 @@ msgstr "打开完整表单"
 #: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
 msgid "Click a test result above to view its item details"
 msgstr "点击上方任意一次测试，查看逐项明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__box_sn
+msgid "Box SN"
+msgstr "箱号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__code_id
+msgid "Code ID"
+msgstr "代码ID"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__collaborator_code
+msgid "Collaborator"
+msgstr "协作人"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Current"
+msgstr "现行"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__leadseal_codes
+msgid "Lead Seal Codes"
+msgstr "铅封码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__module_codes
+msgid "Module Codes"
+msgstr "模块码"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Nameplate"
+msgstr "铭牌"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__internal_code
+msgid "Nameplate Code"
+msgstr "铭牌码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pcba_codes
+msgid "PCBA Codes"
+msgstr "PCBA码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pallet_sn
+msgid "Pallet SN"
+msgstr "托盘号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__parameter_plan
+msgid "Parameter Plan"
+msgstr "参数方案"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__program_num
+msgid "Program Number"
+msgstr "程序编号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_name
+msgid "Software Name"
+msgstr "软件名"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_num
+msgid "Software Number"
+msgstr "软件编号"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__table_position
+msgid "Table Position"
+msgstr "表位"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_plan_num
+msgid "Test Plan"
+msgstr "测试方案"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Type"
+msgstr "类型"

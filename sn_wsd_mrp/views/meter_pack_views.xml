@@ -69,4 +69,53 @@
         <field name="res_model">sn.wsd.meter.pack.record</field>
         <field name="view_mode">list,form</field>
     </record>
+    <!-- flat packing details: group by pallet or box to see what is inside -->
+    <record id="view_sn_wsd_meter_pack_detail_list" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.detail.list</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="arch" type="xml">
+            <list default_order="pack_time desc">
+                <field name="pallet_no"/>
+                <field name="carton_no"/>
+                <field name="carton_seq" optional="hide"/>
+                <field name="serial_identity_id" string="SN"/>
+                <field name="nameplate_sn"/>
+                <field name="product_id" optional="show"/>
+                <field name="pack_route_operation_id" optional="hide"/>
+                <field name="pack_time"/>
+                <field name="operator_code" optional="hide"/>
+                <field name="seal_no" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_meter_pack_detail_search" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.detail.search</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id" string="SN"/>
+                <field name="carton_no"/>
+                <field name="pallet_no"/>
+                <field name="nameplate_sn"/>
+                <separator string="Group By"/>
+                <filter string="Pallet" name="group_by_pallet" context="{'group_by': 'pallet_no'}"/>
+                <filter string="Box" name="group_by_box" context="{'group_by': 'carton_no'}"/>
+                <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                <filter string="Pack Operation" name="group_by_op" context="{'group_by': 'pack_route_operation_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_meter_pack_detail" model="ir.actions.act_window">
+        <field name="name">Packing Details</field>
+        <field name="res_model">sn.wsd.meter.pack.record</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_meter_pack_detail_search"/>
+    </record>
+
+    <menuitem id="menu_sn_wsd_meter_pack_detail" name="Packing Details"
+              parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_pack_detail"
+              sequence="31"/>
 </odoo>

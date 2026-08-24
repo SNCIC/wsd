@@ -3103,6 +3103,7 @@ msgstr "工艺路线"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_manufacturing_batch_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__product_id
 msgid "Product"
 msgstr "产品"
 
@@ -7125,6 +7126,8 @@ msgstr "SN 绑定关系"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__serial_identity_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
 msgid "SN"
 msgstr "SN"
 
@@ -8015,3 +8018,34 @@ msgstr "首次本地编辑时置位：工单停止自动跟随公共路线，直
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__value
 msgid "Value"
 msgstr "值"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+msgid "Box"
+msgstr "箱"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__is_current
+msgid "Current"
+msgstr "现行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__nameplate_sn
+msgid "Nameplate SN"
+msgstr "铭牌码"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+msgid "Pack Operation"
+msgstr "包装工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_pack_detail
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_meter_pack_detail
+msgid "Packing Details"
+msgstr "装箱明细"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+msgid "Pallet"
+msgstr "托盘"

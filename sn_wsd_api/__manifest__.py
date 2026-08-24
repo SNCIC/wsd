@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD API',
-    'version': '19.0.5.3.0',
+    'version': '19.0.5.4.0',
     'summary': 'MES device test-result ingestion (legacy flows removed; API rewrite planned)',
     'depends': ['sn_wsd_mrp', 'sn_wsd_device', 'sn_wsd_smt', 'sn_wsd_tooling', 'sn_wsd_consumable'],
     'data': [

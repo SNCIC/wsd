@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class SerialBinding(models.Model):
@@ -36,6 +36,11 @@ class SerialBinding(models.Model):
         help='Manual entries come from the UI; API entries are uploaded by '
              'the future device API.')
     note = fields.Text()
+    is_current = fields.Boolean(
+        string='Current', default=False, index=True, copy=False,
+        help='True on the latest binding of each (SN, type); demoted '
+             'automatically when a newer binding of the same SN and type '
+             'is created, so current mappings resolve in one search.')
     company_id = fields.Many2one(
         'res.company', required=True, default=lambda self: self.env.company,
         index=True,
@@ -46,3 +51,25 @@ class SerialBinding(models.Model):
         'binding_type)',
         'The same SN pair can only be bound once per binding type.',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._promote_as_current()
+        return records
+
+    def _promote_as_current(self):
+        """Mark these bindings current and demote every older binding of
+        the same (SN, type), including a pair bound earlier and re-bound
+        now (its historical row is promoted back in place)."""
+        for binding in self:
+            siblings = self.search([
+                ('serial_identity_id', '=', binding.serial_identity_id.id),
+                ('binding_type', '=', binding.binding_type),
+                ('company_id', '=', binding.company_id.id),
+                ('is_current', '=', True),
+                ('id', '!=', binding.id),
+            ])
+            siblings.write({'is_current': False})
+            if not binding.is_current:
+                binding.is_current = True
