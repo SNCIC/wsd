@@ -369,22 +369,7 @@ export class SnTracePage extends Component {
         this.onTrace();
     }
 
-    openDoc(resModel, resId) {
-        if (!resModel || !resId) {
-            return;
-        }
-        this.action.doAction({
-            type: "ir.actions.act_window",
-            res_model: resModel,
-            res_id: resId,
-            views: [[false, "form"]],
-            target: "current",
-        });
-    }
 
-    openComponent(component) {
-        this.openDoc("sn.wsd.meter.component.binding", component.id);
-    }
 
     // ------------------------------------------------------------------
     // CSV export of the active tab

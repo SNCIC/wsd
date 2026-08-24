@@ -29,9 +29,7 @@
                                 <ul t-if="state.treeOpen">
                                     <li t-foreach="state.treeChildren" t-as="child" t-key="child.id">
                                         <span class="o_tree_leafdot">•</span>
-                                        <a t-on-click="() => this.openComponent(child)"
-                                           t-att-title="child.type"
-                                           t-esc="child.sn"/>
+                                        <span t-att-title="child.type" t-esc="child.sn"/>
                                         <span class="text-muted ms-1" t-esc="'[' + child.type + ']'"/>
                                     </li>
                                 </ul>
@@ -100,7 +98,7 @@
                                 <tr t-foreach="batchPageRows" t-as="row" t-key="row.identityId"
                                     t-attf-class="{{row.current ? 'o_trace_current' : ''}}">
                                     <td t-esc="row_index + 1 + (state.batch.page - 1) * state.batch.pageSize"/>
-                                    <td class="o_trace_link" t-on-click="() => this.switchSn(row)"
+                                    <td style="cursor:pointer" t-on-click="() => this.switchSn(row)"
                                         t-esc="row.sn"/>
                                     <td t-esc="state.productInfo ? state.productInfo.orderName : ''"/>
                                 </tr>
@@ -159,18 +157,14 @@
                                         t-attf-class="{{r.isNg ? 'o_trace_row_ng' : ''}}">
                                         <td t-esc="r.seq"/>
                                         <td t-esc="r.opCode"/>
-                                        <td class="o_trace_link"
-                                            t-on-click="() => this.openDoc('sn.wsd.mes.order.route.operation', r.opId)"
-                                            t-esc="r.opName"/>
+                                        <td t-esc="r.opName"/>
                                         <td t-esc="r.workcenter"/>
                                         <td t-esc="r.line"/>
                                         <td>
                                             <span t-attf-class="badge {{r.flag === 'NG' ? 'text-bg-danger' : r.flag === 'OK' ? 'text-bg-success' : 'text-bg-secondary'}}"
                                                   t-esc="r.flag"/>
                                         </td>
-                                        <td class="o_trace_link"
-                                            t-on-click="() => this.openDoc('sn.wsd.mes.order', r.orderId)"
-                                            t-esc="r.orderName"/>
+                                        <td t-esc="r.orderName"/>
                                         <td t-esc="r.productionName"/>
                                         <td t-esc="r.productCode"/>
                                         <td t-esc="r.operator"/>
@@ -215,9 +209,7 @@
                                         <td t-esc="r.station"/>
                                         <td t-esc="r.operator"/>
                                         <td t-esc="r.time"/>
-                                        <td class="o_trace_link"
-                                            t-on-click="() => this.openDoc('sn.wsd.mes.order', r.orderId)"
-                                            t-esc="r.orderName"/>
+                                        <td t-esc="r.orderName"/>
                                     </tr>
                                 </tbody>
                             </table>
@@ -243,9 +235,7 @@
                                 <tbody>
                                     <tr t-foreach="state.qualityRows" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
-                                        <td class="o_trace_link"
-                                            t-on-click="() => this.openDoc('sn.wsd.quality.inspection', r.id)"
-                                            t-esc="r.name"/>
+                                        <td t-esc="r.name"/>
                                         <td t-esc="r.type"/>
                                         <td>
                                             <span t-if="r.result"
@@ -282,9 +272,7 @@
                                 <tbody>
                                     <tr t-foreach="state.repairRows" t-as="r" t-key="r.id">
                                         <td t-esc="r_index + 1"/>
-                                        <td class="o_trace_link"
-                                            t-on-click="() => this.openDoc('sn.wsd.repair.order', r.id)"
-                                            t-esc="r.name"/>
+                                        <td t-esc="r.name"/>
                                         <td t-esc="r.state"/>
                                         <td t-esc="r.operation"/>
                                         <td t-esc="r.defects"/>
