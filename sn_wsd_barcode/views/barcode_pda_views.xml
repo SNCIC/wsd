@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SMT loading screen (SMT operator group) -->
+    <record id="sn_wsd_barcode_smt_load_action" model="ir.actions.client">
+        <field name="name">SMT Loading</field>
+        <field name="tag">sn_wsd_barcode_smt_load_action</field>
+    </record>
+
+    <!-- tooling scan screen (shop + smt) -->
+    <record id="sn_wsd_barcode_tooling_action" model="ir.actions.client">
+        <field name="name">Tooling Scan</field>
+        <field name="tag">sn_wsd_barcode_pda_equipment_action</field>
+        <field name="context">{'equipment_domain': 'tooling'}</field>
+    </record>
+
+    <!-- consumable scan screen (smt) -->
+    <record id="sn_wsd_barcode_consumable_action" model="ir.actions.client">
+        <field name="name">Consumable Scan</field>
+        <field name="tag">sn_wsd_barcode_pda_equipment_action</field>
+        <field name="context">{'equipment_domain': 'consumable'}</field>
+    </record>
+</odoo>

@@ -13,15 +13,29 @@
                     </div>
                 </header>
                 <main class="o_sn_wsd_barcode_main_actions flex-grow-1 d-flex flex-column justify-content-center">
-                    <button class="o_button_operations btn btn-block btn-primary mb-3 p-3 w-100"
+                    <button t-if="mesWarehouse" class="o_button_operations btn btn-block btn-primary mb-3 p-3 w-100"
                             t-on-click="() => this.actionService.doAction('sn_wsd_barcode.stock_picking_type_action_kanban')">
                         <t t-out="warehouseOperationsLabel"/>
                     </button>
-                    <button class="o_button_workshop btn btn-block btn-primary mb-3 p-3 w-100"
+                    <button t-if="productionEnabled" class="o_button_workshop btn btn-block btn-primary mb-3 p-3 w-100"
                             t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_production_menu_action')">
                         <t t-out="productionOperationsLabel"/>
                     </button>
-                    <button t-attf-class="o_button_inventory btn btn-block btn-{{this.quantCount ? 'info' : 'secondary'}} mb-3 p-3 w-100"
+                    <button t-if="mesSmt" class="o_button_smt_load btn btn-block btn-warning mb-3 p-3 w-100"
+                            t-on-click="openSmtLoading">
+                        <t t-out="smtLoadingLabel"/>
+                    </button>
+                    <div t-if="equipmentEnabled" class="d-flex gap-2 mb-3">
+                        <button class="o_button_tooling btn btn-outline-primary p-3 w-100"
+                                t-on-click="() => this.openEquipment('tooling')">
+                            <t t-out="toolingLabel"/>
+                        </button>
+                        <button t-if="mesSmt" class="o_button_consumable btn btn-outline-primary p-3 w-100"
+                                t-on-click="() => this.openEquipment('consumable')">
+                            <t t-out="consumableLabel"/>
+                        </button>
+                    </div>
+                    <button t-if="mesWarehouse" t-attf-class="o_button_inventory btn btn-block btn-{{this.quantCount ? 'info' : 'secondary'}} mb-3 p-3 w-100"
                             t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_inventory_client_action')">
                         <t t-out="countInventoryLabel"/>
                         <span t-if="this.quantCount" class="ms-2 p-1 px-2 bg-light rounded-circle text-primary" t-out="this.quantCount"/>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.SmtLoadAction">
+        <div class="o_sn_wsd_smt_load d-flex flex-column h-100 p-3 gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-secondary" t-on-click="goBack" t-out="labels.back"/>
+                <select class="form-select w-auto" t-on-change="onStationChange">
+                    <option t-foreach="state.stations" t-as="st" t-key="st.id"
+                            t-att-value="st.id"
+                            t-att-selected="st.id === state.selectedStationId ? 'selected' : undefined"
+                            t-out="st.display_name || st.name"/>
+                </select>
+                <div class="ms-auto fw-bold" t-out="state.productionName"/>
+            </div>
+
+            <div t-if="state.summary" class="d-flex gap-3 text-muted small">
+                <span>工单: <b t-out="state.mesOrderName"/></span>
+                <span>应上: <b t-out="state.summary.required_qty"/></span>
+                <span>已上: <b t-out="state.summary.loaded_qty"/></span>
+            </div>
+
+            <div class="o_trace-like table-responsive border rounded flex-grow-1" style="overflow:auto; min-height:0;">
+                <table class="table table-sm table-hover mb-0 align-middle">
+                    <thead class="table-light" style="position:sticky; top:0;">
+                        <tr>
+                            <th>#</th>
+                            <th>机台.料站</th>
+                            <th>料位</th>
+                            <th>料号</th>
+                            <th>卷号</th>
+                            <th>飞达</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.rows" t-as="row" t-key="row_index"
+                            t-attf-class="{{row.id === state.activeRow?.id ? 'table-active' : ''}} {{row.is_load === 'Y' ? '' : ''}}">
+                            <td t-out="row_index + 1"/>
+                            <td t-out="row.device_seq + '.' + row.table_no"/>
+                            <td t-out="row.loadpoint"/>
+                            <td t-out="row.required_item_code"/>
+                            <td t-out="row.loaded_material_lot_name || ''"/>
+                            <td t-out="row.loaded_feeder_name || ''"/>
+                            <td>
+                                <span t-if="row.is_load === 'Y'" class="badge text-bg-success" t-out="labels.loaded"/>
+                                <span t-else="" class="badge text-bg-secondary" t-out="labels.notLoaded"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex gap-2">
+                <input type="text" class="form-control"
+                       t-att-placeholder="state.step === 0 ? labels.hintStep0 : labels.hintStep1"
+                       t-on-keydown="onScan"/>
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary btn-sm" t-att-disabled="state.busy"
+                            t-on-click="() => this.simpleAction('cart_load')" t-out="labels.cartLoad"/>
+                    <button class="btn btn-outline-primary btn-sm" t-att-disabled="state.busy"
+                            t-on-click="() => this.simpleAction('changeover')" t-out="labels.changeover"/>
+                    <button class="btn btn-outline-primary btn-sm" t-att-disabled="state.busy"
+                            t-on-click="() => this.simpleAction('offline_prepare')" t-out="labels.offlinePrepare"/>
+                    <button class="btn btn-outline-danger btn-sm" t-att-disabled="state.busy"
+                            t-on-click="() => this.simpleAction('unload')" t-out="labels.unload"/>
+                </div>
+            </div>
+
+            <div t-if="state.result"
+                 t-attf-class="alert alert-{{state.resultType === 'danger' ? 'danger' : state.resultType === 'success' ? 'success' : 'info'}} py-2 mb-0"
+                 t-out="state.result"/>
+        </div>
+    </t>
+
+</templates>

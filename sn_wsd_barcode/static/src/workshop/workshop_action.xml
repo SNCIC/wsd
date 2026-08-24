@@ -52,6 +52,10 @@
                         <span t-out="selectedStation?.display_name || selectedStation?.name || workCenterLabel"/>
                         <i class="fa fa-caret-down"/>
                     </button>
+                    <button type="button"
+                            t-attf-class="btn {{this.state.ngMode ? 'btn-danger' : 'btn-success'}}"
+                            t-on-click="toggleNgMode"
+                            t-out="ngModeLabel"/>
                 </div>
 
                 <div t-if="state.productionName" class="o_sn_wsd_workshop_context list-group-item">

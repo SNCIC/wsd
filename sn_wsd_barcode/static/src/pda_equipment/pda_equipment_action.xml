@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.PdaEquipmentAction">
+        <div class="o_sn_wsd_pda_equipment d-flex flex-column h-100 p-3 gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-secondary" t-on-click="goBack" t-out="labels.back"/>
+                <h5 class="mb-0" t-out="labels.title"/>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button t-foreach="actions" t-as="act" t-key="act.key"
+                        t-attf-class="btn btn-sm {{state.selectedAction === act.key ? 'btn-primary' : 'btn-outline-primary'}}"
+                        t-on-click="() => this.pickAction(act.key)"
+                        t-out="act.label"/>
+            </div>
+
+            <div t-if="selectedDef &amp;&amp; selectedDef.extra" class="d-flex gap-2">
+                <input type="text" class="form-control"
+                       t-att-placeholder="labels.extra"
+                       t-model="state.extraValue"/>
+            </div>
+
+            <input type="text" class="form-control form-control-lg" autofocus="1"
+                   placeholder="SN" t-on-keydown="onScan"/>
+
+            <div t-if="state.detail" class="border rounded p-2 small">
+                <div t-foreach="Object.entries(state.detail)" t-as="entry" t-key="entry[0]"
+                     class="d-flex justify-content-between">
+                    <span class="text-muted" t-out="entry[0]"/>
+                    <b t-out="entry[1]"/>
+                </div>
+            </div>
+
+            <div t-if="state.result"
+                 t-attf-class="alert alert-{{state.resultType === 'danger' ? 'danger' : state.resultType === 'success' ? 'success' : 'info'}} py-2 mb-0"
+                 t-out="state.result"/>
+        </div>
+    </t>
+
+</templates>
