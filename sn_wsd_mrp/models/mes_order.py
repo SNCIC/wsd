@@ -1178,6 +1178,53 @@ class MesOrder(models.Model):
         for order in self:
             order.picking_count = len(order.picking_ids)
 
+    def _sn_sequence(self):
+        """SN numbering sequence of this order's product: drawing-number
+        prefix + serial. The prefix stays empty until drawing numbers are
+        configured (test phase)."""
+        self.ensure_one()
+        production = self.production_id
+        prefix = production.product_id.default_code or ''
+        code = 'sn.wsd.serial.identity.product.%s' % production.product_id.id
+        sequence = self.env['ir.sequence'].sudo().search([('code', '=', code)], limit=1)
+        if not sequence:
+            sequence = self.env['ir.sequence'].sudo().create({
+                'name': 'SN %s' % production.display_name,
+                'code': code,
+                'prefix': prefix,
+                'padding': 5,
+                'company_id': production.company_id.id,
+            })
+        return sequence
+
+    def generate_sn(self):
+        """Reserve the next SN identity for this order (device calls the
+        next-sn endpoint; the order form button generates in batch)."""
+        self.ensure_one()
+        serial_no = self._sn_sequence().sudo().next_by_code(
+            self._sn_sequence().code)
+        if not serial_no:
+            raise ValidationError(_('No SN sequence is configured.'))
+        return self.env['sn.wsd.serial.identity'].create({
+            'name': serial_no,
+            'company_id': self.company_id.id,
+            'origin_type': 'manual',
+            'origin_production_id': self.production_id.id,
+        })
+
+    def action_generate_sns(self, quantity=1):
+        self.ensure_one()
+        identities = self.env['sn.wsd.serial.identity']
+        for _index in range(int(quantity)):
+            identities |= self.generate_sn()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Generated SNs'),
+            'res_model': 'sn.wsd.serial.identity',
+            'view_mode': 'list',
+            'domain': [('id', 'in', identities.ids)],
+        }
+
 class StockPickingMesOrder(models.Model):
     """Link a material picking back to its MES order (F5).
 

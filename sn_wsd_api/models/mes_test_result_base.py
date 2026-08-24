@@ -42,7 +42,7 @@ class MesTestResultBase(models.Model):
         required=True, default='final_test', index=True,
     )
     test_time = fields.Datetime(required=True, default=fields.Datetime.now, index=True)
-    result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], required=True, default='pass', index=True)
+    result = fields.Selection([('ok', 'OK'), ('ng', 'NG'), ('hold', 'Hold')], required=True, default='ok', index=True)
     cycle_time_sec = fields.Float()
     operator_code = fields.Char(index=True)
     tester_channel = fields.Char()
@@ -54,10 +54,30 @@ class MesTestResultBase(models.Model):
     aging_temp_c = fields.Float()
     payload = fields.Json()
     note = fields.Char()
+    # tooling trace field (design #6): non-key tooling SNs are recorded on
+    # the pass result only; key-material tooling also counts via
+    # register_usage
+    tooling_sns = fields.Char(
+        string='Tooling SNs', index=True,
+        help='Tooling SNs (M_TOOLING) recorded with this pass.')
+    equipment_sn = fields.Char(
+        string='Equipment SN', index=True,
+        help='Device SN (M_DEVICE_SN) that performed this test.')
+
+    detail_ids = fields.One2many(
+        'sn.wsd.mes.test.result.detail', 'test_result_id', string='Test Items')
     retry_sequence = fields.Integer(string='Retry Sequence', default=0, index=True)
     retry_limit = fields.Integer(string='Retry Limit', default=0)
     requires_repair = fields.Boolean(string='Requires Repair', default=False, index=True)
     is_rework_pass = fields.Boolean(string='Rework Pass', default=False, index=True)
+    is_ng = fields.Boolean(
+        string='NG', compute='_compute_is_ng', store=True, index=True,
+        help='Stored flag for fast list grouping and NG count aggregates.')
+
+    @api.depends('result')
+    def _compute_is_ng(self):
+        for record in self:
+            record.is_ng = record.result == 'ng'
 
     @api.depends('serial_identity_id', 'test_type', 'test_time')
     def _compute_name(self):
@@ -70,7 +90,7 @@ class MesTestResultBase(models.Model):
         self,
         serial_number,
         test_type='final_test',
-        result='pass',
+        result='ok',
         workcenter_code=None,
         production_id=None,
         operator_code=None,
@@ -132,7 +152,7 @@ class MesTestResultBase(models.Model):
         test_dt = fields.Datetime.to_datetime(test_time) if test_time else fields.Datetime.now()
         production_line = workcenter.x_production_line_id
         workshop = workcenter.x_workshop_id
-        record = self.create({
+        vals = {
             'serial_identity_id': identity.id,
             'product_id': production.product_id.id if production else False,
             'production_id': production.id if production else False,
@@ -158,11 +178,30 @@ class MesTestResultBase(models.Model):
             'aging_temp_c': aging_temp_c,
             'payload': payload,
             'note': note,
+            'tooling_sns': payload.get('M_TOOLING', ''),
+            'equipment_sn': payload.get('M_DEVICE_SN', ''),
             'retry_sequence': retry_sequence,
             'retry_limit': retry_limit,
             'requires_repair': requires_repair,
             'is_rework_pass': is_rework_pass,
-        })
+        }
+        from odoo.addons.sn_wsd_api.models.mes_test_result_fields import PAYLOAD_TO_FIELD
+        for m_key, fname in PAYLOAD_TO_FIELD.items():
+            if m_key in payload:
+                vals[fname] = payload.get(m_key) or ''
+        raw_defect = (payload.get('M_STR2') or '').strip()
+        if raw_defect and result == 'ng' and 'defect_code_id' in self._fields:
+            # link the quality dictionary when installed (terminal NG flow
+            # uses the same field)
+            defect = self.env['sn.wsd.quality.defect.code'].search([
+                '|', ('code', '=ilike', raw_defect),
+                ('name', '=ilike', raw_defect),
+                ('company_id', 'in', [company.id, False]),
+            ], limit=1)
+            vals['defect_code_id'] = defect.id
+        record = self.create(vals)
+        self.env['sn.wsd.mes.test.result.detail'].create_from_test_result(
+            record, payload.get('M_TEST_DETAIL'))
         return {
             'ok': True,
             'duplicated': False,

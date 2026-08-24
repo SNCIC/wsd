@@ -1,1559 +1,32 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * sn_wsd_api
+# 	* sn_wsd_api
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-19 00:00+0000\n"
-"PO-Revision-Date: 2026-07-21 06:45+0000\n"
+"POT-Creation-Date: 2026-08-24 01:15+0000\n"
+"PO-Revision-Date: 2026-08-24 01:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
 #. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_service
-msgid "WSD Public JSON-2 API Service"
-msgstr "WSD公共JSON-2接口服务"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sncic_mes_api_mixin
-msgid "MES API Helper Mixin"
-msgstr "MES接口辅助混入类"
-
-#. module: sn_wsd_api
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_api_records
-msgid "MES API Records"
-msgstr "MES接口记录"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_nameplate_binding
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_nameplate_binding
-msgid "Nameplate Bindings"
-msgstr "铭牌绑定"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_packaging_record
-msgid "Packaging Records"
-msgstr "包装记录"
-
-#. module: sn_wsd_api
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_packaging_record
-msgid "MES Packaging Records"
-msgstr "MES包装记录"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_test_result_detail
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_test_result_detail
-msgid "Test Result Details"
-msgstr "测试明细"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_tooling_usage_log
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_tooling_usage_log
-msgid "MES Tooling Usage Logs"
-msgstr "MES工装使用日志"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_process_parameter
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_process_parameter
-msgid "Process Parameters"
-msgstr "工艺参数"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_process_parameter_validation
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_process_parameter_validation
-msgid "Parameter Validations"
-msgstr "参数校验记录"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_eip_category_mapping
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_eip_category_mapping
-msgid "EIP Category Mappings"
-msgstr "EIP类别映射"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_eip_operation_mapping
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_eip_operation_mapping
-msgid "EIP Operation Mappings"
-msgstr "EIP工序映射"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_eip_sync_record
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_eip_sync_record
-msgid "EIP Sync Records"
-msgstr "EIP同步记录"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_pcb_exposure_record
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_pcb_exposure_record
-msgid "PCB Exposure Records"
-msgstr "PCB暴露记录"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_product_warning
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_mes_product_warning
-msgid "Product Warnings"
-msgstr "产品预警"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_stock_lot__x_nameplate_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__nameplate_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__nameplate_code
-msgid "Nameplate Code"
-msgstr "铭牌码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__active
-msgid "Active"
-msgstr "启用"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_nameplate_binding
-msgid "MES Nameplate Binding Record"
-msgstr "MES铭牌绑定记录"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_packaging_record
-msgid "MES Packaging Record"
-msgstr "MES包装记录"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__workorder_id
-msgid "Work Order"
-msgstr "工单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__box_sn
-msgid "Box SN"
-msgstr "箱号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__pallet_sn
-msgid "Pallet SN"
-msgstr "托盘号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__crc_value
-msgid "CRC Value"
-msgstr "CRC值"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_mes_packaging_record_form
-msgid "Raw Payload"
-msgstr "原始报文"
-
-#. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "Station not found."
-msgstr "工位未找到。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "The work order is not mapped to a MES station."
-msgstr "工单未映射到MES工位。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "The work order is not ready to start."
-msgstr "工单未准备好开始。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "The work order state does not allow this operation."
-msgstr "工单状态不允许此操作。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "Serial number not found."
-msgstr "序列号未找到。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid ""
-"This serial cannot enter the current station according to the configured "
-"route."
-msgstr "根据配置的路线，该序列号无法进入当前工位。"
+"%(field)s %(value)s is not maintained on operation %(op)s of manufacturing "
+"order %(order)s."
+msgstr "%(field)s %(value)s 未维护在制造订单 %(order)s 的工序 %(op)s 中。"
 
 #. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_api_mixin.py:0
-msgid "This serial has already been processed on the current station."
-msgstr "该序列号已在当前工位处理过。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mrp_production_api.py:0
-msgid "Finished serial upload is only allowed for SMT manufacturing orders."
-msgstr "成品序列号上传仅允许用于SMT制造订单。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mrp_production_api.py:0
-msgid ""
-"Finished serials cannot be uploaded to a done or cancelled manufacturing "
-"order."
-msgstr "成品序列号无法上传到已完成或已取消的制造订单。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mrp_production_api.py:0
-msgid "No serial numbers were provided."
-msgstr "未提供序列号。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mrp_production_api.py:0
-msgid "Serial number is required."
-msgstr "序列号是必填项。"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_laser_print_record
-msgid "Laser Print Records"
-msgstr "激光打印记录"
-
-#. module: sn_wsd_api
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_laser_print_record
-msgid "Laser Print Records"
-msgstr "激光打印记录"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Laser Print Records"
-msgstr "激光打印记录"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_laser_print_record_laser_request_company_unique
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "The laser print request ID must be unique per company."
-msgstr "激光打印请求ID必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "The print quantity must be positive."
-msgstr "打印数量必须为正数。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Meter product laser lines must be linked to a meter serial archive."
-msgstr "电表产品激光打印明细行必须链接到电表序列号档案。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Unsupported laser SN scope: %s"
-msgstr "不支持的激光序列号范围: %s"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Laser print is not supported for this manufacturing order type."
-msgstr "此制造订单类型不支持激光打印。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Unable to generate a unique product serial number."
-msgstr "无法生成唯一的产品序列号。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Manufacturing order is closed and cannot print serial numbers."
-msgstr "制造订单已关闭，无法打印序列号。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "PCBA module laser print is not implemented yet."
-msgstr "PCBA模块激光打印尚未实现。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid ""
-"Meter product serial numbers can only be printed for final assembly "
-"manufacturing orders."
-msgstr "电表产品序列号只能为成品装配制造订单打印。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid ""
-"SMT PCB serial numbers can only be printed for SMT manufacturing orders."
-msgstr "SMT PCB序列号只能为SMT制造订单打印。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Print quantity cannot exceed the planned quantity."
-msgstr "打印数量不能超过计划数量。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid ""
-"SMT laser SN quantity exceeds manufacturing order planned quantity. Planned:"
-" %(planned_qty)s, existing generated: %(existing_qty)s, requested: "
-"%(requested_qty)s, available: %(available_qty)s."
-msgstr ""
-"SMT激光序列号数量超过制造订单计划数量。计划: %(planned_qty)s, 已生成: %(existing_qty)s, 请求: "
-"%(requested_qty)s, 可用: %(available_qty)s。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_laser_print_record_line_laser_serial_company_unique
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "The laser printed serial number must be unique per company."
-msgstr "激光打印的序列号必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__print_time
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__print_time
-msgid "Print Time"
-msgstr "打印时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__name
-msgid "Name"
-msgstr "名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__production_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__production_id
-msgid "Production"
-msgstr "生产单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__work_order_no
-msgid "Reference"
-msgstr "制造订单号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__product_id
-msgid "Product"
-msgstr "产品"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__sn_scope
-msgid "SN Scope"
-msgstr "序列号范围"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__drawing_no
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__drawing_no
-msgid "Drawing No"
-msgstr "图纸号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__quantity
-msgid "Quantity"
-msgstr "数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__operator_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__operator_code
-msgid "Operator Code"
-msgstr "操作员代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__source_system
-msgid "Source System"
-msgstr "来源系统"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__request_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_form
-msgid "Request"
-msgstr "请求"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__line_ids
-msgid "Printed Serials"
-msgstr "已打印序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__serial_no
-msgid "Serial No"
-msgstr "序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__meter_serial_id
-msgid "Meter Serial"
-msgstr "电表序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_laser_print_record__sn_scope__meter_product
-msgid "Meter Product"
-msgstr "电表产品"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_laser_print_record__sn_scope__smt_pcb_board
-msgid "SMT PCB Board"
-msgstr "SMT PCB板"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_laser_print_record__sn_scope__pcba_module
-msgid "PCBA Module"
-msgstr "PCBA模块"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__lot_id
-msgid "Lot/Serial"
-msgstr "批次/序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__pcb_board_id
-msgid "SMT PCB Board"
-msgstr "SMT PCB板"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_laser_print_record
-msgid "Laser Print Record"
-msgstr "激光打印记录"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_laser_print_record_line
-msgid "Laser Print Record Line"
-msgstr "激光打印记录明细"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_form
-msgid "Printed Serials"
-msgstr "已打印序列号"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_search
-msgid "Today"
-msgstr "今日"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_search
-msgid "Manufacturing Order"
-msgstr "制造订单"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_search
-msgid "SN Scope"
-msgstr "序列号范围"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_search
-msgid "Drawing No"
-msgstr "图纸号"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_laser_print_record_search
-msgid "Operator"
-msgstr "操作员"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_mrp_production_form_sn_wsd_laser_print
-msgid "Laser Prints"
-msgstr "激光打印"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Product SN %s not found."
-msgstr "产品序列号 %s 未找到。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid ""
-"Nameplate code %s is already bound to product SN %s. Please unbind the "
-"existing binding first."
-msgstr "铭牌码 %s 已绑定到产品序列号 %s。请先解除现有绑定。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid ""
-"Product SN %s is already bound to nameplate code %s. Please unbind the "
-"existing binding first."
-msgstr "产品序列号 %s 已绑定到铭牌码 %s。请先解除现有绑定。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Product SN %s already has an active nameplate binding."
-msgstr "产品序列号 %s 已有有效的铭牌绑定。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Nameplate code %s already has an active product binding."
-msgstr "铭牌码 %s 已有有效的产品绑定。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__binding_mode
-msgid "Binding Mode"
-msgstr "绑定模式"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_nameplate_binding__binding_mode__strict
-msgid "Strict (One-to-One)"
-msgstr "严格（一对一）"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_nameplate_binding__binding_mode__override
-msgid "Override"
-msgstr "覆盖"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__previous_nameplate_id
-msgid "Previous Binding"
-msgstr "先前绑定"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__binding_time
-msgid "Binding Time"
-msgstr "绑定时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__operator_code
-msgid "Operator Code"
-msgstr "操作员代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__serial_lot_id
-msgid "Product SN"
-msgstr "产品序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__workcenter_code
-msgid "Work Center Code"
-msgstr "工作中心代码"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_tooling_usage_log
-msgid "MES Tooling Usage Log"
-msgstr "MES工装使用日志"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__tooling_id
-msgid "Tooling"
-msgstr "工装"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__tooling_code
-msgid "Tooling Code"
-msgstr "工装代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__usage_count
-msgid "Usage Count"
-msgstr "使用次数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__usage_time
-msgid "Usage Time"
-msgstr "使用时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__event_type
-msgid "Event Type"
-msgstr "事件类型"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_workorder_scan_pass
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_tooling_usage_log__event_type__scan_pass
-msgid "Scan Pass"
-msgstr "扫码过站"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_tooling_usage_log__event_type__feeder_use
-msgid "Feeder Use"
-msgstr "飞达使用"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_tooling_usage_log__event_type__consumable_use
-msgid "Consumable Use"
-msgstr "耗材使用"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__serial_number
-msgid "Serial Number"
-msgstr "序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__serial_lot_id
-msgid "Product SN"
-msgstr "产品序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_process_parameter
-msgid "MES Process Parameter Configuration"
-msgstr "MES工艺参数配置"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_process_parameter_validation
-msgid "MES Process Parameter Validation Record"
-msgstr "MES工艺参数校验记录"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__parameter_type
-msgid "Parameter Type"
-msgstr "参数类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter__parameter_type__parameter_plan
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__parameter_type__parameter_plan
-msgid "Parameter Plan"
-msgstr "参数计划"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter__parameter_type__program_version
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__parameter_type__program_version
-msgid "Program Version"
-msgstr "程序版本"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter__parameter_type__test_plan
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__parameter_type__test_plan
-msgid "Test Plan"
-msgstr "测试计划"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter__parameter_type__software_number
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__parameter_type__software_number
-msgid "Software Number"
-msgstr "软件编号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__code
-msgid "Code"
-msgstr "代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__name
-msgid "Name"
-msgstr "名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__operation_id
-msgid "Operation"
-msgstr "工序"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__note
-msgid "Notes"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_process_parameter_code_type_company_uniq
-msgid "Parameter type and code must be unique per company."
-msgstr "参数类型和代码必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__passed_code
-msgid "Passed Code"
-msgstr "传入代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__expected_code
-msgid "Expected Code"
-msgstr "期望代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__result
-msgid "Result"
-msgstr "结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__result__pass
-msgid "Pass"
-msgstr "通过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__result__fail
-msgid "Fail"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_process_parameter_validation__result__skipped
-msgid "Skipped"
-msgstr "跳过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__validation_time
-msgid "Validation Time"
-msgstr "校验时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__payload
-msgid "Payload"
-msgstr "载荷"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_process_parameter_validation_validation_uniq
-msgid ""
-"Validation record must be unique per production, serial, and parameter type."
-msgstr "校验记录在每个产品、序列号和参数类型组合中必须唯一。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_process_parameter.py:0
-msgid "%s mismatch. Expected: %s, Passed: %s"
-msgstr "%s 不匹配。期望: %s, 传入: %s"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_eip_category_mapping
-msgid "MES EIP Product Category Mapping"
-msgstr "MES EIP产品类别映射"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_eip_operation_mapping
-msgid "MES EIP Operation Mapping"
-msgstr "MES EIP工序映射"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_eip_sync_config
-msgid "MES EIP Sync Configuration"
-msgstr "MES EIP同步配置"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_eip_sync_record
-msgid "MES EIP Synchronization Record"
-msgstr "MES EIP同步记录"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__product_category_id
-msgid "Product Category"
-msgstr "产品类别"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__category_code
-msgid "Category Code"
-msgstr "类别代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__eip_category
-msgid "EIP Category"
-msgstr "EIP类别"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__note
-msgid "Notes"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_eip_category_mapping_category_uniq
-msgid "Category mapping must be unique per company."
-msgstr "类别映射必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_eip_category_mapping_eip_category_uniq
-msgid "EIP category must be unique per company."
-msgstr "EIP类别必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__operation_name
-msgid "Operation Name"
-msgstr "工序名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__eip_operation_code
-msgid "EIP Operation Code"
-msgstr "EIP工序代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__operation_type
-msgid "Operation Type"
-msgstr "工序类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_operation_mapping__operation_type__single_board_debug
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__operation_type__single_board_debug
-msgid "Single Board Debug"
-msgstr "单板调试"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_operation_mapping__operation_type__pressure_test
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__operation_type__pressure_test
-msgid "Pressure Test"
-msgstr "耐压测试"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_operation_mapping__operation_type__auto_function
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__operation_type__auto_function
-msgid "Auto Function Test"
-msgstr "自动功能测试"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_eip_operation_mapping_operation_uniq
-msgid "Operation mapping must be unique per company, name, and type."
-msgstr "工序映射必须在每个公司、工序名称和类型组合中唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__key
-msgid "Config Key"
-msgstr "配置键"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__value
-msgid "Config Value"
-msgstr "配置值"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__description
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__description
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__description
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__description
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-msgid "Description"
-msgstr "说明"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_mes_eip_sync_config_config_uniq
-msgid "Config key must be unique per company."
-msgstr "配置键必须在每个公司内唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__eip_category
-msgid "EIP Category"
-msgstr "EIP类别"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__eip_operation_type
-msgid "EIP Operation Type"
-msgstr "EIP工序类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__test_result
-msgid "Test Result"
-msgstr "测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__test_data
-msgid "Test Data"
-msgstr "测试数据"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__sync_status
-msgid "Sync Status"
-msgstr "同步状态"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__sync_status__pending
-msgid "Pending"
-msgstr "待处理"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__sync_status__synced
-msgid "Synced"
-msgstr "已同步"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__sync_status__failed
-msgid "Failed"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_eip_sync_record__sync_status__skipped
-msgid "Skipped"
-msgstr "跳过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__sync_time
-msgid "Sync Time"
-msgstr "同步时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__external_id
-msgid "External EIP ID"
-msgstr "外部EIP ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__error_message
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__error_message
-msgid "Error Message"
-msgstr "错误消息"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__retry_count
-msgid "Retry Count"
-msgstr "重试次数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__payload
-msgid "Original Payload"
-msgstr "原始载荷"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_pcb_exposure_record
-msgid "PCB Exposure Time Record"
-msgstr "PCB暴露时间记录"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_product_warning
-msgid "Product Warning Record"
-msgstr "产品预警记录"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__serial_lot_id
-msgid "PCB Serial"
-msgstr "PCB序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__record_type
-msgid "Record Type"
-msgstr "记录类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__record_type__unpack
-msgid "Unpack"
-msgstr "拆封"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__record_type__print
-msgid "Print"
-msgstr "印刷"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__record_type__reflow
-msgid "Reflow"
-msgstr "回流"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__exposure_minutes
-msgid "Exposure Minutes"
-msgstr "暴露分钟数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__standard_minutes
-msgid "Standard Minutes"
-msgstr "标准分钟数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__warning_minutes
-msgid "Warning Minutes"
-msgstr "警告分钟数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__record_time
-msgid "Record Time"
-msgstr "记录时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__operator_code
-msgid "Operator Code"
-msgstr "操作员代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__state
-msgid "State"
-msgstr "状态"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__state__normal
-msgid "Normal"
-msgstr "正常"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__state__warning
-msgid "Warning"
-msgstr "警告"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_pcb_exposure_record__state__expired
-msgid "Expired"
-msgstr "已过期"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__serial_lot_id
-msgid "Serial/Lot"
-msgstr "序列号/批次"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__warning_type
-msgid "Warning Type"
-msgstr "预警类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_type__msd_exposure
-msgid "MSD Exposure"
-msgstr "湿度敏感器件暴露"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_type__defect_count
-msgid "Defect Count"
-msgstr "缺陷数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_type__quality
-msgid "Quality Issue"
-msgstr "质量问题"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__warning_level
-msgid "Warning Level"
-msgstr "预警级别"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_level__info
-msgid "Info"
-msgstr "信息"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_level__warning
-msgid "Warning"
-msgstr "警告"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_product_warning__warning_level__critical
-msgid "Critical"
-msgstr "严重"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__message
-msgid "Warning Message"
-msgstr "预警消息"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__warning_time
-msgid "Warning Time"
-msgstr "预警时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__acknowledged
-msgid "Acknowledged"
-msgstr "已确认"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__acknowledged_by
-msgid "Acknowledged By"
-msgstr "确认人"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__acknowledged_time
-msgid "Acknowledged Time"
-msgstr "确认时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_msd_exposure.py:0
-msgid "PCB serial not found."
-msgstr "PCB序列号未找到。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_msd_exposure.py:0
-msgid "PCB has no unpack record. Please unpack first."
-msgstr "PCB没有拆封记录。请先拆封。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_msd_exposure.py:0
-msgid "PCB has no print record. Please print first."
-msgstr "PCB没有印刷记录。请先印刷。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_msd_exposure.py:0
-msgid ""
-"Print to reflow interval (%d minutes) exceeded maximum allowed (%d minutes)."
-msgstr "印刷到回流间隔（%d分钟）超过允许的最大值（%d分钟）。"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_sn_travel
-msgid "MES SN Travel"
-msgstr "MES序列号流转"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__serial_lot_id
-msgid "Serial Number"
-msgstr "序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__workcenter_id
-msgid "MES Work Center"
-msgstr "MES工作中心"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__workshop_id
-msgid "Workshop"
-msgstr "车间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__production_line_id
-msgid "Production Line"
-msgstr "生产线"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__equipment_id
-msgid "Equipment"
-msgstr "设备"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__line_code
-msgid "Line Code"
-msgstr "产线代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__workcenter_code
-msgid "Work Center Code"
-msgstr "工作中心代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__event_type
-msgid "Event Type"
-msgstr "事件类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__start
-msgid "Start"
-msgstr "开始"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__pass
-msgid "Pass"
-msgstr "通过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__fail
-msgid "Fail"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__hold
-msgid "Hold"
-msgstr "暂存"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__repair
-msgid "Repair"
-msgstr "维修"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__event_type__complete
-msgid "Complete"
-msgstr "完成"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__event_time
-msgid "Event Time"
-msgstr "事件时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__operator_code
-msgid "Operator Code"
-msgstr "操作员代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__result
-msgid "Result"
-msgstr "结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__result__pass
-msgid "Pass"
-msgstr "通过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__result__fail
-msgid "Fail"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_sn_travel__result__hold
-msgid "Hold"
-msgstr "暂存"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__external_event_id
-msgid "External Event ID"
-msgstr "外部事件ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__request_id
-msgid "Request ID"
-msgstr "请求ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__source_system
-msgid "Source System"
-msgstr "来源系统"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__payload
-msgid "Payload"
-msgstr "载荷"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_test_result
-msgid "MES Test Result"
-msgstr "MES测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_lot_id
-msgid "Serial Number"
-msgstr "序列号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_id
-msgid "MES Work Center"
-msgstr "MES工作中心"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workshop_id
-msgid "Workshop"
-msgstr "车间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__production_line_id
-msgid "Production Line"
-msgstr "生产线"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__equipment_id
-msgid "Equipment"
-msgstr "设备"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__line_code
-msgid "Line Code"
-msgstr "产线代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_code
-msgid "Work Center Code"
-msgstr "工作中心代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_type
-msgid "Test Type"
-msgstr "测试类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__programming
-msgid "Programming"
-msgstr "编程"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__inspection
-msgid "Inspection"
-msgstr "检验"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aging
-msgid "Aging"
-msgstr "老化"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__calibration
-msgid "Calibration"
-msgstr "校准"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__final_test
-msgid "Final Test"
-msgstr "最终测试"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__packaging
-msgid "Packaging"
-msgstr "包装"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__aoi
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__aoi
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aoi
-msgid "AOI"
-msgstr "AOI"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_time
-msgid "Test Time"
-msgstr "测试时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__result
-msgid "Result"
-msgstr "结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__pass
-msgid "Pass"
-msgstr "通过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__fail
-msgid "Fail"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__hold
-msgid "Hold"
-msgstr "暂存"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__cycle_time_sec
-msgid "Cycle Time (sec)"
-msgstr "周期时间（秒）"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__operator_code
-msgid "Operator Code"
-msgstr "操作员代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__tester_channel
-msgid "Tester Channel"
-msgstr "测试通道"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__external_event_id
-msgid "External Event ID"
-msgstr "外部事件ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__request_id
-msgid "Request ID"
-msgstr "请求ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__source_system
-msgid "Source System"
-msgstr "来源系统"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__basic_error
-msgid "Basic Error"
-msgstr "基本误差"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__phase_error
-msgid "Phase Error"
-msgstr "相位误差"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aging_temp_c
-msgid "Aging Temp (C)"
-msgstr "老化温度（摄氏度）"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__payload
-msgid "Payload"
-msgstr "载荷"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__note
-msgid "Note"
-msgstr "备注"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__travel_id
-msgid "Travel"
-msgstr "流转"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_log_code
-msgid "AOI Log Code"
-msgstr "AOI日志代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_machine_name
-msgid "AOI Machine Name"
-msgstr "AOI设备名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_inspection_type
-msgid "AOI Inspection Type"
-msgstr "AOI检测类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_retest_result
-msgid "AOI Retest Result"
-msgstr "AOI复测结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_station_result
-msgid "AOI Station Result"
-msgstr "AOI工位结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_station_info
-msgid "AOI Station Info"
-msgstr "AOI工位信息"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_retest_time
-msgid "AOI Retest Time"
-msgstr "AOI复测时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_create_time
-msgid "AOI Create Time"
-msgstr "AOI创建时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_file_name
-msgid "AOI File Name"
-msgstr "AOI文件名"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_program_name
-msgid "AOI Program Name"
-msgstr "AOI程序名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_small_board_no
-msgid "AOI Small Board No"
-msgstr "AOI小板编号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_total_parts
-msgid "AOI Total Parts"
-msgstr "AOI总点数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_error_parts
-msgid "AOI Error Parts"
-msgstr "AOI错误点数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_confirmed_defect_parts
-msgid "AOI Confirmed Defect Parts"
-msgstr "AOI确认缺陷点数"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_face
-msgid "AOI Face"
-msgstr "AOI面"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_operator
-msgid "AOI Operator"
-msgstr "AOI操作员"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_details
-msgid "AOI Defect Details"
-msgstr "AOI缺陷明细"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_count
-msgid "AOI Defect Count"
-msgstr "AOI缺陷数量"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_aoi_defect_detail
-msgid "AOI Defect Detail"
-msgstr "AOI缺陷明细"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_result_id
-msgid "Test Result"
-msgstr "测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__part_id
-msgid "Part ID"
-msgstr "部件ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__position
-msgid "Position"
-msgstr "位置"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_code
-msgid "Defect Code"
-msgstr "缺陷代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_name
-msgid "Defect Name"
-msgstr "缺陷名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__confirmed_result
-msgid "Confirmed Result"
-msgstr "确认结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__image_path
-msgid "Image Path"
-msgstr "图片路径"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__payload
-msgid "Payload"
-msgstr "载荷"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_test_result_detail
-msgid "MES Test Result Detail Item"
-msgstr "MES测试结果明细项"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__sequence
-msgid "Sequence"
-msgstr "序号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__project_name
-msgid "Project Name"
-msgstr "项目名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__lower_limit
-msgid "Lower Limit"
-msgstr "下限"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__upper_limit
-msgid "Upper Limit"
-msgstr "上限"
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__endpoint
+msgid "API path, e.g. /api/v1/scan-pass"
+msgstr "API 路径，如 /api/v1/scan-pass"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__actual_value
@@ -1561,744 +34,9 @@ msgid "Actual Value"
 msgstr "实际值"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__result
-msgid "Result"
-msgstr "结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__pass
-msgid "Pass"
-msgstr "通过"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__fail
-msgid "Fail"
-msgstr "失败"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ng
-msgid "NG"
-msgstr "NG"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
-msgid "Raw Line"
-msgstr "原始行"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_mes_test_result_detail_form
-msgid "Measurement Values"
-msgstr "测量值"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_stock_lot_form_sn_wsd_api
-msgid "MES History"
-msgstr "MES历史"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_stock_lot__x_mes_travel_ids
-msgid "MES Travel History"
-msgstr "MES流转历史"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_stock_lot__x_mes_test_result_ids
-msgid "MES Test Results"
-msgstr "MES测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workorder__x_meter_test_result_ids
-msgid "MES Test Results"
-msgstr "MES测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_meter_serial__mes_travel_ids
-msgid "MES Travel History"
-msgstr "MES流转历史"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_meter_serial__mes_test_result_ids
-msgid "MES Test Results"
-msgstr "MES测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_meter_serial__travel_count
-msgid "Travel Count"
-msgstr "流转数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_meter_serial__test_result_count
-msgid "Test Result Count"
-msgstr "测试结果数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_travel_ids
-msgid "Recent Travel Events"
-msgstr "最近流转事件"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_test_result_ids
-msgid "Recent Test Results"
-msgstr "最近测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_exception_travel_ids
-msgid "Recent Exception Events"
-msgstr "最近异常事件"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_travel_count
-msgid "Recent Travel Count"
-msgstr "最近流转数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_test_result_count
-msgid "Recent Test Result Count"
-msgstr "最近测试结果数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workcenter__x_recent_exception_count
-msgid "Recent Exception Count"
-msgstr "最近异常数量"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_recent_travels
-msgid "Recent Travel Events"
-msgstr "最近流转事件"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_recent_test_results
-msgid "Recent Test Results"
-msgstr "最近测试结果"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_recent_exceptions
-msgid "Recent Exception Events"
-msgstr "最近异常事件"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_mrp_workorder_form_sn_wsd_api
-msgid "Latest MES Test Results"
-msgstr "最新MES测试结果"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_meter_serial_form_api
-msgid "Travel Timeline"
-msgstr "流转时间线"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_meter_serial_form_api
-msgid "Test Results"
-msgstr "测试结果"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_mes_pcb_exposure_record_form
-msgid "Exposure Times"
-msgstr "暴露时间"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_mes_nameplate_binding_form
-msgid "Audit"
-msgstr "审计"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_laser_drawing_no
-msgid "Laser Drawing No"
-msgstr "激光图纸号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_laser_print_record_ids
-msgid "Laser Print Records"
-msgstr "激光打印记录"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_laser_print_record_count
-msgid "Laser Print Record Count"
-msgstr "激光打印记录数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_skip_request_ids
-msgid "Skip Requests"
-msgstr "跳站申请"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_skip_request_count
-msgid "Skip Request Count"
-msgstr "跳站申请数量"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Product SN %s has a recent NG test result and cannot be packaged."
-msgstr "产品序列号 %s 有最近的NG测试结果，无法包装。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Product SN %s already has an active packaging record."
-msgstr "产品序列号 %s 已有有效的包装记录。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__product_id
-msgid "Product"
-msgstr "产品"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__production_id
-msgid "Manufacturing Order"
-msgstr "制造订单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__workcenter_id
-msgid "Work Center"
-msgstr "工作中心"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__workcenter_code
-msgid "Work Center Code"
-msgstr "工作中心代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__quantity
-msgid "Quantity"
-msgstr "数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__project_code
-msgid "Project Code"
-msgstr "项目代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__packaging_time
-msgid "Packaging Time"
-msgstr "包装时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__operator_id
-msgid "Operator"
-msgstr "操作员"
-
-#. module: sn_wsd_api
-msgid ""
-"Pallet binding is only allowed through the manual barcode pallet-binding "
-"operation."
-msgstr "托盘绑定只允许通过人工条码托盘绑定作业执行。"
-
-#. module: sn_wsd_api
-msgid "This operation does not allow serial stage creation."
-msgstr "当前工序不允许创建序列号生产阶段。"
-
-#. module: sn_wsd_api
-msgid ""
-"Serial stage was not found. Manufacturing batch number is required at an "
-"entry operation."
-msgstr "未找到序列号生产阶段，入口工序必须提供制造批次号。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workorder__x_mes_travel_count
-msgid "MES Travel Event Count"
-msgstr "MES过站流水数量"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_sn_travel
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workorder__x_mes_travel_ids
-msgid "MES Travel Events"
-msgstr "MES过站流水"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_mrp_workorder_form_sn_wsd_api
-msgid "Travel Events"
-msgstr "过站流水"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_mes_sn_travel_form
-msgid "Source"
-msgstr "来源"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/mrp_workorder_api.py:0
-msgid "MES Travel Events - %s"
-msgstr "MES过站流水 - %s"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__retry_sequence
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__retry_sequence
-msgid "Retry Sequence"
-msgstr "重试序号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__retry_limit
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__retry_limit
-msgid "Retry Limit"
-msgstr "重试上限"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__requires_repair
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__requires_repair
-msgid "Requires Repair"
-msgstr "需要维修"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__is_rework_pass
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_rework_pass
-msgid "Rework Pass"
-msgstr "返工过站"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__rework_source_workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__rework_source_workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__x_rework_source_workorder_id
-msgid "Rework Source Work Order"
-msgstr "返工来源工单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__x_mes_repair_state
-msgid "MES Repair State"
-msgstr "MES维修状态"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__x_rework_entry_workorder_id
-msgid "Rework Entry Work Order"
-msgstr "返工入口工单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__x_rework_exit_workorder_id
-msgid "Rework Exit Work Order"
-msgstr "返工结束工单"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_internal_serial__x_mes_repair_state__none
-msgid "None"
-msgstr "无"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_internal_serial__x_mes_repair_state__repair_required
-msgid "Repair Required"
-msgstr "需要维修"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_internal_serial__x_mes_repair_state__repairing
-msgid "Repairing"
-msgstr "维修中"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_internal_serial__x_mes_repair_state__rework
-msgid "Rework"
-msgstr "返工"
-
-#. module: sn_wsd_api
-#: model:ir.module.category,name:sn_wsd_api.module_category_sn_wsd_api
-msgid "WSD API"
-msgstr "WSD API"
-
-#. module: sn_wsd_api
-#: model:res.groups,name:sn_wsd_api.group_sn_wsd_api_tester
-msgid "API Tester"
-msgstr "接口测试员"
-
-#. module: sn_wsd_api
-#: model:res.groups,name:sn_wsd_api.group_sn_wsd_api_manager
-msgid "API Manager"
-msgstr "接口管理员"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_endpoint
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_tester
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_kanban
-msgid "API Tester"
-msgstr "接口测试台"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_test_case
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_test_case
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-msgid "API Test Cases"
-msgstr "接口测试用例"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_test_run
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_test_run
-msgid "API Test Runs"
-msgstr "接口测试记录"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_endpoint
-msgid "WSD API Endpoint"
-msgstr "WSD API 接口"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_test_case
-msgid "WSD API Test Case"
-msgstr "WSD API 测试用例"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_test_run
-msgid "WSD API Test Run"
-msgstr "WSD API 测试记录"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_kanban
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-msgid "Open Tester"
-msgstr "打开测试台"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "Send"
-msgstr "发送"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "Format JSON"
-msgstr "格式化 JSON"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "Reset Defaults"
-msgstr "重置默认值"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "Duplicate"
-msgstr "复制"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_form
-msgid "Response"
-msgstr "响应"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "History"
-msgstr "历史"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-msgid "Default Request"
-msgstr "默认请求"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_kanban
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__is_mutating
-msgid "May Change Data"
-msgstr "可能变更数据"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_status_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_status_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_status_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_status_code
-msgid "Last Status Code"
-msgstr "最近状态码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_elapsed_ms
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_elapsed_ms
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_elapsed_ms
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_elapsed_ms
-msgid "Last Elapsed MS"
-msgstr "最近耗时毫秒"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_response_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_response_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_response_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_response_body
-msgid "Last Response Body"
-msgstr "最近响应内容"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_error_message
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_error_message
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_error_message
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_error_message
-msgid "Last Error Message"
-msgstr "最近错误消息"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_run_at
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_run_at
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_run_at
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_run_at
-msgid "Last Run At"
-msgstr "最近运行时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__last_run_by_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_run_by_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__last_run_by_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_run_by_id
-msgid "Last Run By"
-msgstr "最近运行人"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__user_id
-msgid "Owner"
-msgstr "所有者"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__test_case_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__test_case_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__test_case_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__test_case_count
-msgid "Test Cases"
-msgstr "测试用例"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__run_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__run_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__run_count
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__run_count
-msgid "Runs"
-msgstr "运行次数"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_form
-msgid "Other"
-msgstr "其他"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__response_body
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_form
-msgid "Response Body"
-msgstr "响应内容"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__category
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__category
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__category
-msgid "Category"
-msgstr "类别"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__method
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__method
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__method
-msgid "Method"
-msgstr "方法"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__path
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__path
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__path
-msgid "Path"
-msgstr "路径"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__default_headers
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__default_headers
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__default_headers
-msgid "Default Headers JSON"
-msgstr "默认请求头 JSON"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__default_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__default_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__default_body
-msgid "Default Request Body"
-msgstr "默认请求体"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__endpoint_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__endpoint_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__endpoint_id
-msgid "Endpoint"
-msgstr "接口"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__base_url
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__base_url
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__base_url
-msgid "Base URL"
-msgstr "基础 URL"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__headers_json
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__headers_json
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__headers_json
-msgid "Headers JSON"
-msgstr "请求头 JSON"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__request_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__request_body
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__request_body
-msgid "Request Body"
-msgstr "请求体"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__is_default_case
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__is_default_case
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__is_default_case
-msgid "Is Default Case"
-msgstr "是否默认用例"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__case_id
-msgid "Test Case"
-msgstr "测试用例"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__url
-msgid "URL"
-msgstr "URL"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__status_code
-msgid "Status Code"
-msgstr "状态码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__elapsed_ms
-msgid "Elapsed MS"
-msgstr "耗时毫秒"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__run_at
-msgid "Run At"
-msgstr "运行时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__run_by_id
-msgid "Run By"
-msgstr "运行人"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__auth
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__auth
-msgid "Auth"
-msgstr "认证"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__panel
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__panel
-msgid "Panel"
-msgstr "拼版"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__manufacturing
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__manufacturing
-msgid "Manufacturing"
-msgstr "制造"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__execution
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__execution
-msgid "Production Execution"
-msgstr "生产执行"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__traceability
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__traceability
-msgid "Traceability"
-msgstr "追溯"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_endpoint__category__laser
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_test_case__category__laser
-msgid "Laser"
-msgstr "镭雕"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_auth_check
-msgid "Login Check"
-msgstr "登录检查"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_panels_add
-msgid "Add Panel"
-msgstr "新增拼版"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_panels_query
-msgid "Query Panels"
-msgstr "查询拼版"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_panels_delete
-msgid "Delete Panel"
-msgstr "删除拼版"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_manufacturing_orders_by_work_order
-msgid "Get Manufacturing Orders by Work Order"
-msgstr "按工单查询制造订单"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_work_centers_search
-msgid "Search Work Centers"
-msgstr "查询工作中心"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_defect_codes_search
-msgid "Search Defect Codes"
-msgstr "查询缺陷代码"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_laser_print_requests
-msgid "Submit Laser Print Request"
-msgstr "提交镭雕打印请求"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_aoi_results
-msgid "Submit AOI Result"
-msgstr "提交 AOI 结果"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_online_context
-msgid "Get Online Context"
-msgstr "获取在线上下文"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_workorder_events
-msgid "Submit Workorder Event"
-msgstr "提交工单事件"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_test_results
-msgid "Submit Test Result"
-msgstr "提交测试结果"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_finished_serials
-msgid "Upload Finished Serials"
-msgstr "上传完工序列号"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_serial_trace
-msgid "Serial Trace"
-msgstr "序列号追溯"
-
-#. module: sn_wsd_api
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Default"
-msgstr "默认"
-
-#. module: sn_wsd_api
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "%s Copy"
-msgstr "%s 副本"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_nameplate_binding__binding_mode__strict
-msgid "Strict"
-msgstr "严格"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "%s is not valid JSON: %s"
-msgstr "%s 不是有效的 JSON：%s"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_endpoint_kanban
-msgid "<span class=\"badge text-bg-warning\">May Change Data</span>"
-msgstr "<span class=\"badge text-bg-warning\">可能修改数据</span>"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aging
+msgid "Aging"
+msgstr "老化"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aging_temp_c
@@ -2306,118 +44,46 @@ msgid "Aging Temp C"
 msgstr "老化温度 (°C)"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_count
-msgid "Aoi Defect Count"
-msgstr "AOI 缺陷数量"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__basic_error
+msgid "Basic Error"
+msgstr "基本误差"
 
 #. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Base URL host is not allowed for API testing."
-msgstr "该 Base URL 主机不允许用于 API 测试。"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Basic Info"
+msgstr "基础信息"
 
 #. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Base URL must be a valid HTTP or HTTPS URL."
-msgstr "Base URL 必须是有效的 HTTP 或 HTTPS 地址。"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__calibration
+msgid "Calibration"
+msgstr "校准"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_search
-msgid "Case"
-msgstr "用例"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__eip_category
-msgid "Category code used in EIP system (first 7 characters of product code)"
-msgstr "EIP 系统使用的类别编码（产品编码前 7 位）"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_auth_check
-msgid "Check external user credentials and optional organization membership."
-msgstr "校验外部用户凭据及可选的组织成员关系。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__company_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__company_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__company_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__company_id
 msgid "Company"
 msgstr "公司"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_panels_add
-msgid "Create a panel and bind PCB board serials."
-msgstr "创建拼板并绑定 PCB 单板序列号。"
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Container %s already exists in stock."
+msgstr "箱号/托盘 %s 已经在库存中存在。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__create_uid
 msgid "Created by"
 msgstr "创建人"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__create_date
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_date
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_date
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__create_date
 msgid "Created on"
 msgstr "创建时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__exposure_minutes
-msgid "Cumulative exposure time in minutes"
-msgstr "累计暴露时长（分钟）"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__cycle_time_sec
@@ -2425,198 +91,232 @@ msgid "Cycle Time Sec"
 msgstr "节拍时间（秒）"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_search
-msgid "Default Cases"
-msgstr "默认用例"
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Defect code %s does not exist."
+msgstr "不良代码 %s 不存在。"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_panels_delete
-msgid "Delete or deactivate a panel binding."
-msgstr "删除或停用拼板绑定。"
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_request_log
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_request_log
+msgid "Device API Logs"
+msgstr "设备接口日志"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workorder__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__display_name
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_request_log
+msgid "Device API Request Log"
+msgstr "设备接口日志"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__equipment_sn
+msgid "Device SN (M_DEVICE_SN) that performed this test."
+msgstr "执行本次测试的设备SN（M_DEVICE_SN）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__display_name
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__display_name
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__display_name
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sncic_mes_api_mixin__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_form
-msgid "Error"
-msgstr "错误"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__display_ref
+msgid "Display Ref"
+msgstr "显示编号"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_search
-msgid "Errors"
-msgstr "错误"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__duration_ms
+msgid "Duration Ms"
+msgstr "耗时(毫秒)"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__external_event_id
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Employee %s does not exist in MES."
+msgstr "员工 %s 在 MES 中不存在。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__employee_code
+msgid "Employee Code"
+msgstr "员工工号"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Employee code is required."
+msgstr "员工号为空。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__endpoint
+msgid "Endpoint"
+msgstr "端点"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__equipment_id
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__equipment_sn
+msgid "Equipment SN"
+msgstr "设备SN"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__external_event_id
 msgid "External Event"
 msgstr "外部事件"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_online_context
-msgid ""
-"Get current online manufacturing context by work center, line, or workshop."
-msgstr "按工作中心、产线或车间获取当前上线的制造上下文。"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__final_test
+msgid "Final Test"
+msgstr "最终测试"
 
 #. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Headers JSON must be a JSON object."
-msgstr "Headers JSON 必须是 JSON 对象。"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Group By"
+msgstr "分组"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_workorder__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__id
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__result_code
+msgid "HTTP-ish result code of the response."
+msgstr "响应结果码。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__hold
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Hold"
+msgstr "暂存"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_internal_serial__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sncic_mes_api_mixin__id
 msgid "ID"
 msgstr "ID"
 
 #. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_internal_serial
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__internal_serial_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__internal_serial_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__internal_serial_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__internal_serial_id
-msgid "Internal Serial"
-msgstr "内部序列号"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__inspection
+msgid "Inspection"
+msgstr "检验"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__lot_id
-msgid "Inventory Lot"
-msgstr "库存批次"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__last_elapsed_ms
-msgid "Last Elapsed Ms"
-msgstr "最近耗时（毫秒）"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_run__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_category_mapping__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_config__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_eip_sync_record__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_nameplate_binding__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_packaging_record__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_product_warning__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__write_date
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_date
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_date
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__standard_minutes
-msgid "MSD level standard exposure time in minutes"
-msgstr "MSD 等级标准暴露时长（分钟）"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__line_code
+msgid "Line Code"
+msgstr "产线代码"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter_validation__manufacturing_batch_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__manufacturing_batch_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__manufacturing_batch_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_tooling_usage_log__manufacturing_batch_id
-msgid "Manufacturing Batch"
-msgstr "制造批次"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__lower_limit
+msgid "Lower Limit"
+msgstr "下限"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__route_operation_id
+msgid "MES Route Operation"
+msgstr "制令单工序"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_test_result
+msgid "MES Test Result"
+msgstr "MES测试结果"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_mes_test_result_detail
+msgid "MES Test Result Detail Item"
+msgstr "MES测试结果明细项"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_id
+msgid "MES Work Center"
+msgstr "MES工作中心"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_list_api
+msgid "Machine SN"
+msgstr "整机SN"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__sn
+msgid "Main SN of the call (panel: the scanned board)."
+msgstr "调用主SN（拼板时为扫中的板）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Measurements"
+msgstr "测量值"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ng
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ng
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ng
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "NG"
+msgstr "NG"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__name
+msgid "Name"
+msgstr "名称"
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "Meter laser printing requires a manufacturing batch."
-msgstr "电表激光打印需要制造批次。"
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "No online MES order runs through work center %s."
+msgstr "工作中心 %s 所在线别不存在在线制令单。"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_search
-msgid "My Cases"
-msgstr "我的用例"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__note
+msgid "Note"
+msgstr "备注"
 
 #. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Only /api/v1/ endpoints can be tested."
-msgstr "只能测试 /api/v1/ 端点。"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ok
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ok
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ok
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "OK"
+msgstr "OK"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__operator_code
+msgid "Operator Code"
+msgstr "操作员代码"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Order / Station"
+msgstr "工单/工位"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
@@ -2624,186 +324,446 @@ msgid "Original raw data before parsing"
 msgstr "解析前的原始数据"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__part_id
-msgid "Part"
-msgstr "元件位号"
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__packaging
+msgid "Packaging"
+msgstr "包装"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_process_parameter__product_tmpl_id
-msgid "Product Template"
-msgstr "产品模板"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__payload
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__payload
+msgid "Payload"
+msgstr "载荷"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_panels_query
-msgid "Query board serials in the same panel by product serial."
-msgstr "按产品序列号查询同拼板内的单板序列号。"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__phase_error
+msgid "Phase Error"
+msgstr "相位误差"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_serial_trace
-msgid "Query serial traceability records and optional test results."
-msgstr "查询序列号追溯记录及可选的测试结果。"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__product_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__product_id
+msgid "Product"
+msgstr "产品"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_laser_print_record_line__record_id
-msgid "Record"
-msgstr "记录"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__production_id
+msgid "Production"
+msgstr "制造订单"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__production_line_id
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__programming
+msgid "Programming"
+msgstr "编程"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__project_name
+msgid "Project Name"
+msgstr "项目名称"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
+msgid "Raw Line"
+msgstr "原始行"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Raw Payload"
+msgstr "原始报文"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__request_id
+msgid "Request"
+msgstr "请求ID"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__request_time
+msgid "Request Time"
+msgstr "请求时间"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__requires_repair
+msgid "Requires Repair"
+msgstr "需要维修"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__response
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_form
+msgid "Response"
+msgstr "响应"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__response
+msgid "Response body summary."
+msgstr "响应体摘要。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__result
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__result_code
+msgid "Result Code"
+msgstr "结果码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__result_message
+msgid "Result Message"
+msgstr "结果消息"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__retry_limit
+msgid "Retry Limit"
+msgstr "重试上限"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__retry_sequence
+msgid "Retry Sequence"
+msgstr "重试序号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_rework_pass
+msgid "Rework Pass"
+msgstr "返工过站"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_identity_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__serial_identity_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "SN"
+msgstr "SN"
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "Request Body must be a JSON object."
-msgstr "请求体必须是 JSON 对象。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__run_ids
-msgid "Run"
-msgstr "运行"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_test_case__run_count
-msgid "Run Count"
-msgstr "运行次数"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_run_search
-msgid "Runner"
-msgstr "执行人"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/laser_print.py:0
-msgid "SMT laser printing requires a manufacturing batch."
-msgstr "SMT 激光打印需要制造批次。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,name:sn_wsd_api.endpoint_manufacturing_orders_by_work_order
-msgid "Search Manufacturing Batches"
-msgstr "搜索制造批次"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_manufacturing_orders_by_work_order
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid ""
-"Search manufacturing batch numbers by keyword. The request field names are "
-"kept for device compatibility."
-msgstr "按关键字搜索制造批次号。请求字段名保留以兼容设备。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_defect_codes_search
-msgid "Search quality defect codes by code or name."
-msgstr "按编码或名称搜索质量缺陷代码。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_work_centers_search
-msgid "Search work centers by code or name."
-msgstr "按编码或名称搜索工作中心。"
+"SN %(sn)s is in progress at operation %(op)s of order %(order)s; use the "
+"matching station."
+msgstr ""
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/mes_nameplate_binding.py:0
-msgid "Serial number %(serial)s is already stored in package %(package)s."
-msgstr "序列号 %(serial)s 已存入包裹 %(package)s。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_aoi_results
-msgid "Submit AOI inspection result and defect details."
-msgstr "提交 AOI 检验结果及缺陷明细。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_workorder_scan_pass
-msgid ""
-"Submit a MES scan-pass request. Only documented M_* request parameter names "
-"are accepted for this endpoint."
-msgstr "提交 MES 扫描过站请求。该端点只接受文档中列明的 M_* 请求参数名。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_laser_print_requests
-msgid "Submit a laser print request and generate printable serial data."
-msgstr "提交激光打印请求并生成可打印的序列号数据。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_workorder_events
-msgid "Submit a workorder event for MES traceability."
-msgstr "提交工单事件用于 MES 追溯。"
-
-#. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_test_results
-msgid "Submit functional, aging, or station test result data."
-msgstr "提交功能、老化或工位测试结果数据。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_endpoint__test_case_count
-msgid "Test Case Count"
-msgstr "测试用例数量"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_api_endpoint_code_company_unique
-msgid "The endpoint code must be unique per company."
-msgstr "端点编码在公司内必须唯一。"
-
-#. module: sn_wsd_api
-#: model:ir.model.constraint,message:sn_wsd_api.constraint_sn_wsd_api_endpoint_path_method_company_unique
-msgid "The endpoint path and method must be unique per company."
-msgstr "端点路径和请求方式在公司内必须唯一。"
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN %s already has a pack record."
+msgstr "产品SN %s 在产品包装报表中已存在。"
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "The endpoint path must start with /api/v1/."
-msgstr "端点路径必须以 /api/v1/ 开头。"
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN %s is inactive."
+msgstr "SN %s 已停用。"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_list_api
+msgid "SN / Nameplate"
+msgstr "SN/铭牌"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_serial_binding_api
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_serial_binding_api
+msgid "Nameplate SN Bindings"
+msgstr "铭牌SN绑定"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_service
+msgid "SN WSD Device API Service"
+msgstr "WSD公共JSON-2接口服务"
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "The request path must start with /api/v1/."
-msgstr "请求路径必须以 /api/v1/ 开头。"
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "SN is required."
+msgstr "SN不能为空。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__sn
+msgid "Sn"
+msgstr "SN"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__source_system
+msgid "Source System"
+msgstr "来源系统"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__detail_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Test Items"
+msgstr "测试项"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__test_result
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_result_id
+msgid "Test Result"
+msgstr "测试结果"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_list
+msgid "Test Results"
+msgstr "测试结果"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_time
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_time
+msgid "Test Time"
+msgstr "测试时间"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Test Type"
+msgstr "测试类型"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__tester_channel
+msgid "Tester Channel"
+msgstr "测试通道"
 
 #. module: sn_wsd_api
 #. odoo-python
-#: code:addons/sn_wsd_api/models/api_tester.py:0
-msgid "This helper is only available for the Scan Pass endpoint."
-msgstr "该辅助功能仅适用于扫描过站端点。"
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "The test result is NG."
+msgstr "测试总结果NG。"
 
 #. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_mes_tooling_usage_log
-msgid "Tooling Usage Logs"
-msgstr "工装使用记录"
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "The test result must be OK or NG."
+msgstr "测试总结果必须是OK或者NG。"
 
 #. module: sn_wsd_api
-#: model:sn.wsd.api.endpoint,description:sn_wsd_api.endpoint_finished_serials
-msgid ""
-"Upload finished serial numbers for a manufacturing batch. The public "
-"production_id field contains the manufacturing batch ID."
-msgstr "上传制造批次的完工序列号。对外字段 production_id 即制造批次 ID。"
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__payload
+msgid "The uploaded form, verbatim."
+msgstr "上报表单原文。"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_test_case_form
-msgid "Use Alias Rejection Body"
-msgstr "使用别名的拒绝响应体"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Tooling & Device"
+msgstr "工装与设备"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_pcb_exposure_record__warning_minutes
-msgid "Warning threshold before standard"
-msgstr "标准前的预警阈值"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__tooling_sns
+msgid "Tooling SNs"
+msgstr "工装SN"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_eip_operation_mapping__operation_name
-msgid "Work center name or operation name"
-msgstr "工作中心名称或工序名称"
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__tooling_sns
+msgid "Tooling SNs (M_TOOLING) recorded with this pass."
+msgstr "本次过站记录的工装SN（M_TOOLING）。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__workcenter_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_form
+msgid "Uploaded Payload"
+msgstr "上报报文"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__upper_limit
+msgid "Upper Limit"
+msgstr "上限"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Work center %s does not exist."
+msgstr "工作中心 %s 不存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Work center %s does not match any operation of MES order %s."
+msgstr "工作中心 %s 与制令单 %s 的任何工序都不匹配。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__workcenter_code
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_code
 msgid "Workcenter Code"
 msgstr "工作中心编码"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_sn_travel__workorder_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workorder_id
-msgid "Workorder"
-msgstr "工单"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workshop_id
+msgid "Workshop"
+msgstr "车间"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_mrp_production__x_laser_print_record_count
-msgid "X Laser Print Record Count"
-msgstr "激光打印记录数量"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item NG"
+msgstr "单项NG"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item Result"
+msgstr "单项结果"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Last 7 Days"
+msgstr "最近 7 天"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall NG"
+msgstr "总结果NG"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__parent_result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall Result"
+msgstr "总结果"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
+msgid "Stored flag for fast list grouping and NG count aggregates."
+msgstr "存储标记，用于列表快速分组与NG计数聚合。"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Test"
+msgstr "测试"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result_detail
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result_detail
+msgid "Test Item Details"
+msgstr "测试项明细"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Open Full Form"
+msgstr "打开完整表单"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Click a test result above to view its item details"
+msgstr "点击上方任意一次测试，查看逐项明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__box_sn
+msgid "Box SN"
+msgstr "箱号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__code_id
+msgid "Code ID"
+msgstr "代码ID"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__collaborator_code
+msgid "Collaborator"
+msgstr "协作人"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Current"
+msgstr "现行"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__leadseal_codes
+msgid "Lead Seal Codes"
+msgstr "铅封码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__module_codes
+msgid "Module Codes"
+msgstr "模块码"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Nameplate"
+msgstr "铭牌"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__internal_code
+msgid "Nameplate Code"
+msgstr "铭牌码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pcba_codes
+msgid "PCBA Codes"
+msgstr "PCBA码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pallet_sn
+msgid "Pallet SN"
+msgstr "托盘号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__parameter_plan
+msgid "Parameter Plan"
+msgstr "参数方案"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__program_num
+msgid "Program Number"
+msgstr "程序编号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_name
+msgid "Software Name"
+msgstr "软件名"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_num
+msgid "Software Number"
+msgstr "软件编号"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__table_position
+msgid "Table Position"
+msgstr "表位"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_plan_num
+msgid "Test Plan"
+msgstr "测试方案"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Type"
+msgstr "类型"

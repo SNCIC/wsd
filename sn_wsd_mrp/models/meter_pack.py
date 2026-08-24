@@ -43,7 +43,30 @@ class MeterPackRecord(models.Model):
     pack_time = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
     operator_code = fields.Char(index=True)
     scan_check_result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], default='pass')
+    product_id = fields.Many2one(
+        'product.product', string='Product',
+        related='production_id.product_id', readonly=True)
+    nameplate_sn = fields.Char(
+        string='Nameplate SN', compute='_compute_nameplate_sn',
+        help='Current nameplate bound to this SN (latest current binding).')
+
+    def _compute_nameplate_sn(self):
+        # one batched search for the whole list page, not one per row; pack
+        # SNs are machines, so match them against the bound machine SN side
+        bindings = self.env['sn.wsd.serial.binding'].search([
+            ('bound_serial_identity_id', 'in', self.serial_identity_id.ids),
+            ('binding_type', '=', 'nameplate'),
+            ('is_current', '=', True),
+        ])
+        nameplate_by_machine = {
+            b.bound_serial_identity_id.id: b.serial_identity_id.name
+            for b in bindings
+        }
+        for pack in self:
+            pack.nameplate_sn = nameplate_by_machine.get(pack.serial_identity_id.id, '')
     note = fields.Char()
+    barcode_line_ids = fields.One2many(
+        'sn.wsd.meter.pack.barcode', 'pack_id', string='Barcode Lines')
 
     def _get_serial_lot(self):
         self.ensure_one()
@@ -91,3 +114,19 @@ class MeterPackRecord(models.Model):
             quants.filtered(lambda quant: not quant.package_id).write({
                 'package_id': record.carton_package_id.id,
             })
+
+
+class MeterPackBarcodeLine(models.Model):
+    """One uploaded packing barcode (seals, RF codes, MAC, module, side
+    codes) attached to the pack record."""
+    _name = 'sn.wsd.meter.pack.barcode'
+    _description = 'Meter Pack Barcode Line'
+    _order = 'id'
+
+    pack_id = fields.Many2one(
+        'sn.wsd.meter.pack.record', required=True, ondelete='cascade',
+        index=True)
+    code = fields.Char(required=True, index=True,
+                       help='Source field of the uploaded barcode, e.g. M_PACK_MAC.')
+    value = fields.Char(required=True)
+    company_id = fields.Many2one(related='pack_id.company_id', store=True)

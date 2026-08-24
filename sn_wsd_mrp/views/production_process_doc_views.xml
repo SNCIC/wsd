@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- craft document types: lightweight list, extensible -->
+    <record id="view_production_process_doc_type_list" model="ir.ui.view">
+        <field name="name">production.process.doc.type.list</field>
+        <field name="model">production.process.doc.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_production_process_doc_type" model="ir.actions.act_window">
+        <field name="name">Process Document Types</field>
+        <field name="res_model">production.process.doc.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_production_process_doc_type" name="Process Document Types"
+              parent="mrp.menu_mrp_config" action="action_production_process_doc_type"
+              sequence="99" groups="mrp.group_mrp_manager"/>
+
+    <!-- default four types (parameter plan / program / test plan / software) -->
+    <record id="doc_type_parameter_plan" model="production.process.doc.type">
+        <field name="code">parameter_plan</field>
+        <field name="name">Parameter Plan</field>
+    </record>
+    <record id="doc_type_program_version" model="production.process.doc.type">
+        <field name="code">program_version</field>
+        <field name="name">Program Version</field>
+    </record>
+    <record id="doc_type_test_plan" model="production.process.doc.type">
+        <field name="code">test_plan</field>
+        <field name="name">Test Plan</field>
+    </record>
+    <record id="doc_type_production_software" model="production.process.doc.type">
+        <field name="code">production_software</field>
+        <field name="name">Production Software</field>
+    </record>
+
+    <!-- standalone browse table: every maintained document list -->
+    <record id="view_production_process_document_list" model="ir.ui.view">
+        <field name="name">production.process.document.list</field>
+        <field name="model">production.process.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="production_id"/>
+                <field name="route_operation_code"/>
+                <field name="type_id"/>
+                <field name="codes_display"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_production_process_document_form" model="ir.ui.view">
+        <field name="name">production.process.document.form</field>
+        <field name="model">production.process.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="production_id"/>
+                            <field name="route_operation_code"/>
+                            <field name="type_id"/>
+                        </group>
+                        <group>
+                            <field name="codes_display" invisible="1"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <field name="code_ids">
+                        <list editable="bottom">
+                            <field name="code"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_production_process_document_search" model="ir.ui.view">
+        <field name="name">production.process.document.search</field>
+        <field name="model">production.process.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="production_id"/>
+                <field name="route_operation_code"/>
+                <field name="type_id"/>
+                <field name="code_ids"/>
+                <separator string="Group By"/>
+                <filter string="Manufacturing Order" name="group_by_production" context="{'group_by': 'production_id'}"/>
+                <filter string="Operation" name="group_by_operation" context="{'group_by': 'route_operation_code'}"/>
+                <filter string="Type" name="group_by_type" context="{'group_by': 'type_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_production_process_document" model="ir.actions.act_window">
+        <field name="name">Process Documents</field>
+        <field name="res_model">production.process.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_production_process_document_search"/>
+    </record>
+
+    <menuitem id="menu_production_process_document" name="Process Documents"
+              parent="menu_sn_wsd_traceability" action="action_production_process_document"
+              sequence="15" groups="mrp.group_mrp_user"/>
+
+    <!-- MO form: per-operation document maintenance page -->
+    <record id="view_mrp_production_form_process_docs" model="ir.ui.view">
+        <field name="name">mrp.production.form.process.documents</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="process_documents" string="Process Documents">
+                    <field name="x_process_document_ids">
+                        <list editable="bottom">
+                            <field name="route_operation_code"/>
+                            <field name="type_id"/>
+                            <field name="codes_display"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

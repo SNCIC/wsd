@@ -32,6 +32,7 @@ class MesTestResultDetail(models.Model):
         related='test_result_id.serial_identity_id',
         store=True,
         readonly=True,
+        index=True,
     )
     production_id = fields.Many2one(
         'mrp.production',
@@ -67,14 +68,34 @@ class MesTestResultDetail(models.Model):
         store=True,
         readonly=True,
     )
+    parent_result = fields.Selection(
+        [('ok', 'OK'), ('ng', 'NG'), ('hold', 'Hold')],
+        string='Overall Result',
+        related='test_result_id.result',
+        store=True,
+        readonly=True,
+        index=True,
+    )
+    product_id = fields.Many2one(
+        'product.product',
+        string='Product',
+        related='test_result_id.product_id',
+        store=True,
+        readonly=True,
+    )
+    operator_code = fields.Char(
+        string='Operator Code',
+        related='test_result_id.operator_code',
+        store=True,
+        readonly=True,
+    )
     sequence = fields.Integer(string='Sequence', default=1, required=True)
     project_name = fields.Char(string='Project Name', required=True)
     lower_limit = fields.Char(string='Lower Limit')
     upper_limit = fields.Char(string='Upper Limit')
     actual_value = fields.Char(string='Actual Value')
     result = fields.Selection([
-        ('pass', 'Pass'),
-        ('fail', 'Fail'),
+        ('ok', 'OK'),
         ('ng', 'NG'),
     ], string='Result', required=True)
     raw_line = fields.Char(string='Raw Line', help='Original raw data before parsing')
@@ -83,10 +104,10 @@ class MesTestResultDetail(models.Model):
     def _normalize_detail_result(self, raw_result):
         result_value = str(raw_result or '').strip().upper()
         if result_value in ('NG', 'FAIL', 'F'):
-            return 'fail'
+            return 'ng'
         if result_value in ('OK', 'PASS', 'P'):
-            return 'pass'
-        return 'pass'
+            return 'ok'
+        return 'ok'
 
     @api.model
     def _detail_text(self, value):

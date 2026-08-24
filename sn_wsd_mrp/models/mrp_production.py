@@ -156,6 +156,8 @@ class MrpProduction(models.Model):
         tracking=True,
     )
     x_meter_pack_record_ids = fields.One2many('sn.wsd.meter.pack.record', 'production_id', string='Pack Records')
+    x_process_document_ids = fields.One2many(
+        'production.process.document', 'production_id', string='Process Documents')
     x_meter_pack_record_count = fields.Integer(compute='_compute_meter_pack_stats')
 
     @api.depends('x_mes_order_ids.state', 'x_mes_order_ids.date_plan')

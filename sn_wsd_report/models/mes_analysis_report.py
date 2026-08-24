@@ -66,7 +66,7 @@ class SnWsdMesDashboardService(models.AbstractModel):
                 'production_count': self.env['sn.wsd.mes.order'].search_count([]),
                 'open_progress_count': len(mes_orders.filtered(lambda order: order.state not in ('done', 'cancelled'))),
                 'today_output_total': len(today_histories.filtered(lambda h: h.result == 'ok')),
-                'today_pass_total': len(today_tests.filtered(lambda test: test.result == 'pass')),
+                'today_pass_total': len(today_tests.filtered(lambda test: test.result == 'ok')),
                 'today_test_count': len(today_tests),
                 'today_date': fields.Date.to_string(today),
                 'refresh_time': now.strftime('%Y-%m-%d %H:%M:%S'),
@@ -100,7 +100,7 @@ class SnWsdMesDashboardService(models.AbstractModel):
                     'station_code': rec.workcenter_code,
                     'operator_code': rec.operator_code,
                     'cycle_time_sec': rec.cycle_time_sec,
-                    'status': 'danger' if rec.result == 'fail' else 'warning' if rec.result == 'hold' else 'normal',
+                    'status': 'danger' if rec.result == 'ng' else 'warning' if rec.result == 'hold' else 'normal',
                 }
                 for rec in tests[:12]
             ],

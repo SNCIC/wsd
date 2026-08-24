@@ -41,3 +41,8 @@ access_sn_wsd_mes_done_wizard_user,sn.wsd.mes.done.wizard user,model_sn_wsd_mes_
 access_sn_wsd_scrap_reason_user,sn.wsd.scrap.reason user,model_sn_wsd_scrap_reason,base.group_user,1,0,0,0
 access_sn_wsd_serial_binding_user,sn.wsd.serial.binding user,model_sn_wsd_serial_binding,base.group_user,1,1,1,0
 access_sn_wsd_serial_binding_manager,sn.wsd.serial.binding manager,model_sn_wsd_serial_binding,mrp.group_mrp_manager,1,1,1,1
+access_production_process_doc_type_user,production.process.doc.type user,model_production_process_doc_type,mrp.group_mrp_user,1,0,0,0
+access_production_process_doc_type_manager,production.process.doc.type manager,model_production_process_doc_type,mrp.group_mrp_manager,1,1,1,1
+access_production_process_doc_user,production.process.document user,model_production_process_document,mrp.group_mrp_user,1,1,1,0
+access_production_process_doc_code_user,production.process.document.code user,model_production_process_document_code,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_meter_pack_barcode_user,sn.wsd.meter.pack.barcode user,model_sn_wsd_meter_pack_barcode,mrp.group_mrp_user,1,1,1,0

@@ -14,6 +14,7 @@ COMPONENT_TYPE_SELECTION = [
     ('esam', 'ESAM'),
     ('sim', 'SIM'),
     ('security_chip', 'Security Chip'),
+    ('leadseal', 'Lead Seal'),
     ('other', 'Other'),
 ]
 
@@ -176,8 +177,8 @@ class MeterComponentBinding(models.Model):
             ], limit=1)
 
         station = self.env['mrp.workcenter']
-        if workorder and workorder.x_mes_workcenter_id:
-            station = workorder.x_mes_workcenter_id
+        if workorder and workorder.workcenter_id:
+            station = workorder.workcenter_id
         elif test_result and test_result.workcenter_id:
             station = test_result.workcenter_id
 
@@ -220,6 +221,21 @@ class MeterComponentBinding(models.Model):
             component_type = component_data.get('component_type')
             if not component_type:
                 continue
+            component_sn = component_data.get('component_sn')
+            if component_sn:
+                # a component already actively bound to ANOTHER product cannot
+                # be assembled twice (replace events rebind to the same parent)
+                other_parent = self.search([
+                    ('component_sn', '=', component_sn),
+                    ('state', '=', 'active'),
+                    ('serial_identity_id', '!=', identity.id),
+                ], limit=1)
+                if other_parent:
+                    from odoo.exceptions import ValidationError as VE
+                    from odoo import _
+                    raise VE(_(
+                        'Component %s is already assembled into %s.',
+                        component_sn, other_parent.serial_identity_id.name))
             active_same_type = active_bindings.filtered(lambda item: item.component_type == component_type)
             if active_same_type and component_data.get('event_type', 'bind') in ('bind', 'replace'):
                 active_same_type.write({'state': 'replaced'})

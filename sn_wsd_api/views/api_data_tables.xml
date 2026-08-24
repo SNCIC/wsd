@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================ -->
+    <!-- Test Results: the test-data landing table of the scan-pass API.  -->
+    <!-- Category data (components / craft docs / packing / tooling)      -->
+    <!-- lives in its own small tables, not as columns here.              -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_test_result_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.list.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="result == 'ng'">
+                <field name="name" optional="hide"/>
+                <field name="serial_identity_id"/>
+                <field name="route_operation_id"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'ok'"
+                       decoration-danger="result == 'ng'"
+                       decoration-warning="result == 'hold'"/>
+                <field name="is_ng" column_invisible="1" sum="NG"/>
+                <field name="test_type" optional="hide"/>
+                <field name="test_time"/>
+                <field name="workcenter_id"/>
+                <field name="mes_order_id"/>
+                <field name="operator_code"/>
+                <field name="equipment_sn" optional="show"/>
+                <field name="tooling_sns" optional="hide"/>
+                <field name="box_sn" optional="show"/>
+                <field name="pallet_sn" optional="show"/>
+                <field name="internal_code" optional="hide"/>
+                <field name="pcba_codes" optional="hide"/>
+                <field name="module_codes" optional="hide"/>
+                <field name="leadseal_codes" optional="hide"/>
+                <field name="parameter_plan" optional="hide"/>
+                <field name="program_num" optional="hide"/>
+                <field name="test_plan_num" optional="hide"/>
+                <field name="software_num" optional="hide"/>
+                <field name="software_name" optional="hide"/>
+                <field name="table_position" optional="hide"/>
+                <field name="collaborator_code" optional="hide"/>
+                <field name="code_id" optional="hide"/>
+                <field name="m_str2" optional="hide"/>
+                <field name="m_str3" optional="hide"/>
+                <field name="m_str4" optional="hide"/>
+                <field name="m_str5" optional="hide"/>
+                <field name="m_str6" optional="hide"/>
+                <field name="m_str7" optional="hide"/>
+                <field name="m_str8" optional="hide"/>
+                <field name="m_str9" optional="hide"/>
+                <field name="m_str10" optional="hide"/>
+                <field name="pack_left_seal" optional="hide"/>
+                <field name="pack_left_seal_rf" optional="hide"/>
+                <field name="pack_right_seal" optional="hide"/>
+                <field name="pack_right_seal_rf" optional="hide"/>
+                <field name="pack_door_seal" optional="hide"/>
+                <field name="pack_door_seal_rf" optional="hide"/>
+                <field name="pack_nameplate_rf" optional="hide"/>
+                <field name="pack_module" optional="hide"/>
+                <field name="pack_mac" optional="hide"/>
+                <field name="pack_top" optional="hide"/>
+                <field name="pack_left" optional="hide"/>
+                <field name="pack_right" optional="hide"/>
+                <field name="pack_back" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_test_result_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.form.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Basic Info">
+                            <field name="name"/>
+                            <field name="serial_identity_id"/>
+                            <field name="result" widget="badge"
+                                   decoration-success="result == 'ok'"
+                                   decoration-danger="result == 'ng'"
+                                   decoration-warning="result == 'hold'"/>
+                            <field name="test_type"/>
+                            <field name="test_time"/>
+                            <field name="operator_code"/>
+                        </group>
+                        <group string="Order / Station">
+                            <field name="mes_order_id"/>
+                            <field name="route_operation_id"/>
+                            <field name="production_id"/>
+                            <field name="workcenter_id"/>
+                            <field name="workshop_id"/>
+                            <field name="production_line_id"/>
+                        </group>
+                        <group string="Tooling &amp; Device">
+                            <field name="equipment_id"/>
+                            <field name="equipment_sn"/>
+                            <field name="tooling_sns"/>
+                        </group>
+                        <group string="Measurements">
+                            <field name="basic_error"/>
+                            <field name="phase_error"/>
+                            <field name="aging_temp_c"/>
+                            <field name="cycle_time_sec"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Test Items">
+                            <field name="detail_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="project_name"/>
+                                    <field name="lower_limit"/>
+                                    <field name="upper_limit"/>
+                                    <field name="actual_value"/>
+                                    <field name="result" widget="badge"
+                                           decoration-success="result == 'ok'"
+                                           decoration-danger="result == 'ng'"/>
+                                    <field name="raw_line" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Raw Payload">
+                            <group>
+                                <field name="payload" readonly="1"/>
+                                <field name="note"/>
+                                <field name="external_event_id"/>
+                                <field name="request_id"/>
+                                <field name="source_system"/>
+                                <field name="retry_sequence"/>
+                                <field name="retry_limit"/>
+                                <field name="requires_repair"/>
+                                <field name="is_rework_pass"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_test_result_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.search.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id"/>
+                <field name="mes_order_id"/>
+                <field name="production_id"/>
+                <field name="workcenter_id"/>
+                <field name="operator_code"/>
+                <field name="equipment_sn"/>
+                <field name="tooling_sns"/>
+                <field name="box_sn"/>
+                <field name="pallet_sn"/>
+                <field name="internal_code"/>
+                <field name="pcba_codes"/>
+                <field name="module_codes"/>
+                <field name="leadseal_codes"/>
+                <filter string="OK" name="filter_ok" domain="[('result', '=', 'ok')]"/>
+                <filter string="NG" name="filter_ng" domain="[('result', '=', 'ng')]"/>
+                <filter string="Hold" name="filter_hold" domain="[('result', '=', 'hold')]"/>
+                <separator string="Date"/>
+                <filter string="Today" name="filter_today"
+                        domain="[('test_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+                <filter string="Last 7 Days" name="filter_week"
+                        domain="[('test_time', '&gt;=', datetime.datetime.combine(context_today() - relativedelta(days=7), datetime.time(0, 0, 0)))]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="MES Order" name="group_by_order" context="{'group_by': 'mes_order_id'}"/>
+                <filter string="Test Type" name="group_by_type" context="{'group_by': 'test_type'}"/>
+                <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
+                <filter string="Work Center" name="group_by_wc" context="{'group_by': 'workcenter_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_test_result" model="ir.actions.act_window">
+        <field name="name">Test Results</field>
+        <field name="res_model">sn.wsd.mes.test.result</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_sn_wsd_test_result_search"/>
+    </record>
+
+    <!-- split screen entry: top = main list, click row = details below -->
+    <record id="action_sn_wsd_test_result_split" model="ir.actions.client">
+        <field name="name">Test Results</field>
+        <field name="tag">sn_wsd_test_result_split</field>
+        <field name="context">{'search_default_filter_today': True, 'group_by': ['serial_identity_id']}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_test_result" name="Test Results"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_test_result_split" sequence="13"/>
+
+    <!-- ================================================================ -->
+    <!-- Test item details: standalone wide table (export-ready)          -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_test_result_detail_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.detail.list.api</field>
+        <field name="model">sn.wsd.mes.test.result.detail</field>
+        <field name="arch" type="xml">
+            <list default_order="test_time desc, id desc" decoration-danger="result == 'ng'">
+                <field name="serial_identity_id" string="SN"/>
+                <field name="product_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="workcenter_id"/>
+                <field name="test_time"/>
+                <field name="operator_code"/>
+                <field name="project_name"/>
+                <field name="lower_limit"/>
+                <field name="upper_limit"/>
+                <field name="actual_value"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'ok'"
+                       decoration-danger="result == 'ng'"/>
+                <field name="parent_result" widget="badge"
+                       decoration-success="parent_result == 'ok'"
+                       decoration-danger="parent_result == 'ng'"
+                       decoration-warning="parent_result == 'hold'"/>
+                <field name="raw_line" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_test_result_detail_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.detail.search.api</field>
+        <field name="model">sn.wsd.mes.test.result.detail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id" string="SN"/>
+                <field name="project_name"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <filter string="Item NG" name="filter_item_ng" domain="[('result', '=', 'ng')]"/>
+                <filter string="Overall NG" name="filter_overall_ng" domain="[('parent_result', '=', 'ng')]"/>
+                <separator string="Date"/>
+                <filter string="Today" name="filter_today"
+                        domain="[('test_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+                <filter string="Last 7 Days" name="filter_week"
+                        domain="[('test_time', '&gt;=', datetime.datetime.combine(context_today() - relativedelta(days=7), datetime.time(0, 0, 0)))]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="Test" name="group_by_test" context="{'group_by': 'test_result_id'}"/>
+                <filter string="Operation" name="group_by_op" context="{'group_by': 'route_operation_id'}"/>
+                <filter string="Item Result" name="group_by_item_result" context="{'group_by': 'result'}"/>
+                <filter string="Overall Result" name="group_by_parent_result" context="{'group_by': 'parent_result'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_test_result_detail" model="ir.actions.act_window">
+        <field name="name">Test Item Details</field>
+        <field name="res_model">sn.wsd.mes.test.result.detail</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_test_result_detail_search"/>
+        <field name="context">{'search_default_filter_today': True}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_test_result_detail" name="Test Item Details"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_test_result_detail" sequence="13"/>
+
+    <!-- compact detail list embedded in the bottom panel of the split view -->
+    <record id="view_sn_wsd_test_result_detail_split_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.detail.list.split</field>
+        <field name="model">sn.wsd.mes.test.result.detail</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" default_order="sequence asc, id asc">
+                <field name="sequence" column_invisible="1"/>
+                <field name="project_name"/>
+                <field name="lower_limit"/>
+                <field name="upper_limit"/>
+                <field name="actual_value"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'ok'"
+                       decoration-danger="result == 'ng'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================ -->
+    <!-- SN Bindings: nameplate & machine binding history (API written)   -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_serial_binding_list_api" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.binding.list.api</field>
+        <field name="model">sn.wsd.serial.binding</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="binding_type" widget="badge"
+                       decoration-info="binding_type == 'machine'"
+                       decoration-warning="binding_type == 'nameplate'"/>
+                <field name="serial_identity_id" string="SN / Nameplate"/>
+                <field name="bound_serial_identity_id" string="Machine SN"/>
+                <field name="binding_date"/>
+                <field name="source"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_serial_binding_search_api" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.binding.search.api</field>
+        <field name="model">sn.wsd.serial.binding</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id" string="SN / Nameplate"/>
+                <field name="bound_serial_identity_id" string="Machine SN"/>
+                <filter string="Current" name="filter_current" domain="[('is_current', '=', True)]"/>
+                <filter string="Nameplate" name="filter_nameplate" domain="[('binding_type', '=', 'nameplate')]"/>
+                <separator string="Group By"/>
+                <filter string="SN / Nameplate" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="Machine SN" name="group_by_machine" context="{'group_by': 'bound_serial_identity_id'}"/>
+                <filter string="Type" name="group_by_type" context="{'group_by': 'binding_type'}"/>
+                <filter string="Source" name="group_by_source" context="{'group_by': 'source'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_serial_binding_api" model="ir.actions.act_window">
+        <field name="name">Nameplate SN Bindings</field>
+        <field name="res_model">sn.wsd.serial.binding</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_serial_binding_search_api"/>
+        <field name="context">{'search_default_filter_current': True, 'search_default_filter_nameplate': True}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_serial_binding_api" name="Nameplate SN Bindings"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_serial_binding_api" sequence="14"/>
+
+</odoo>
