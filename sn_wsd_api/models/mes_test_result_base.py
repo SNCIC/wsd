@@ -54,6 +54,8 @@ class MesTestResultBase(models.Model):
     aging_temp_c = fields.Float()
     payload = fields.Json()
     note = fields.Char()
+    detail_ids = fields.One2many(
+        'sn.wsd.mes.test.result.detail', 'test_result_id', string='Test Items')
     retry_sequence = fields.Integer(string='Retry Sequence', default=0, index=True)
     retry_limit = fields.Integer(string='Retry Limit', default=0)
     requires_repair = fields.Boolean(string='Requires Repair', default=False, index=True)

@@ -6,6 +6,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/api_request_log_views.xml',
+        'views/api_data_tables.xml',
     ],
     'installable': True,
     'application': False,

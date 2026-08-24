@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================ -->
+    <!-- Test Results: every device test upload, browsable standalone     -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_test_result_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.list.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_identity_id"/>
+                <field name="test_type"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'ok'"
+                       decoration-danger="result == 'ng'"
+                       decoration-warning="result == 'hold'"/>
+                <field name="test_time"/>
+                <field name="workcenter_id"/>
+                <field name="mes_order_id"/>
+                <field name="operator_code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_test_result_form" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.form.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="serial_identity_id"/>
+                            <field name="result"/>
+                            <field name="test_type"/>
+                        </group>
+                        <group>
+                            <field name="mes_order_id"/>
+                            <field name="workcenter_id"/>
+                        </group>
+                    </group>
+                    <field name="detail_ids"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_test_result_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.search.api</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id"/>
+                <field name="mes_order_id"/>
+                <field name="workcenter_id"/>
+                <field name="operator_code"/>
+                <filter string="OK" name="filter_ok" domain="[('result', '=', 'ok')]"/>
+                <filter string="NG" name="filter_ng" domain="[('result', '=', 'ng')]"/>
+                <filter string="Hold" name="filter_hold" domain="[('result', '=', 'hold')]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="MES Order" name="group_by_order" context="{'group_by': 'mes_order_id'}"/>
+                <filter string="Test Type" name="group_by_type" context="{'group_by': 'test_type'}"/>
+                <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
+                <filter string="Work Center" name="group_by_wc" context="{'group_by': 'workcenter_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_test_result" model="ir.actions.act_window">
+        <field name="name">Test Results</field>
+        <field name="res_model">sn.wsd.mes.test.result</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_sn_wsd_test_result_search"/>
+    </record>
+
+    <menuitem id="menu_sn_wsd_test_result" name="Test Results"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_test_result" sequence="12"/>
+
+    <!-- ================================================================ -->
+    <!-- SN Bindings: nameplate & machine binding history (API written)   -->
+    <!-- ================================================================ -->
+    <record id="view_sn_wsd_serial_binding_list_api" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.binding.list.api</field>
+        <field name="model">sn.wsd.serial.binding</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="binding_type" widget="badge"
+                       decoration-info="binding_type == 'machine'"
+                       decoration-warning="binding_type == 'nameplate'"/>
+                <field name="serial_identity_id" string="SN / Nameplate"/>
+                <field name="bound_serial_identity_id" string="Machine SN"/>
+                <field name="binding_date"/>
+                <field name="source"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_serial_binding_api" model="ir.actions.act_window">
+        <field name="name">SN Bindings</field>
+        <field name="res_model">sn.wsd.serial.binding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_serial_binding_api" name="SN Bindings"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_serial_binding_api" sequence="13"/>
+
+</odoo>
