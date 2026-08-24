@@ -12,11 +12,17 @@ import { standardActionServiceProps } from "@web/webclient/actions/action_servic
 
 const SMT_OPS = new Set(["smt_offline_prepare", "smt_online_load", "smt_cart_load", "smt_unload", "smt_material_refill"]);
 
+// SMT material operations collapsed into one sub-mode button: picking a
+// pill routes to the same step flows the old top-level buttons used
+const SMT_MATERIAL_ACTIONS = [
+    { key: "smt_online_load", label: _t("Load") },
+    { key: "smt_unload", label: _t("Unload") },
+    { key: "smt_material_refill", label: _t("Refill") },
+];
+
 const SMT_OPERATION_BUTTONS = [
-    { key: "smt_online_load", label: _t("TP") },
+    { key: "smt_material", label: _t("SMT Material") },
     { key: "smt_cart_load", label: _t("LCSL") },
-    { key: "smt_unload", label: _t("XL") },
-    { key: "smt_material_refill", label: _t("CHANGE") },
 ];
 
 // jigs are shared by both workshops: SMT and DIP each get the button
@@ -208,6 +214,10 @@ export class WorkshopOperationAction extends Component {
     }
 
     get equipmentModeDef() {
+        if (this.state.equipmentDomain === "smt_material") {
+            return { key: "smt_material", label: _t("SMT Material"),
+                     actions: SMT_MATERIAL_ACTIONS };
+        }
         return this.state.equipmentDomain
             ? EQUIPMENT_MODES[this.state.equipmentDomain] : false;
     }
@@ -535,7 +545,9 @@ export class WorkshopOperationAction extends Component {
             return;
         }
         await this.scanMutex.exec(async () => {
-            if (this.state.equipmentDomain) {
+            if (this.state.equipmentDomain === "smt_material") {
+                await this._handleSmtMaterialScan(cleanBarcode);
+            } else if (this.state.equipmentDomain) {
                 await this._handleEquipmentScan(cleanBarcode);
             } else if (this.isSmtOperation) {
                 await this._handleSmtScan(cleanBarcode);
@@ -551,12 +563,42 @@ export class WorkshopOperationAction extends Component {
         });
     }
 
+    async _handleSmtMaterialScan(barcode) {
+        if (!this.state.equipmentAction) {
+            this.setResult(_t("Pick a material action before scanning."), "warning");
+            return;
+        }
+        await this._handleSmtScan(barcode);
+    }
+
     pickEquipmentAction(key) {
         this.state.equipmentAction = key;
         this.state.equipmentExtra = "";
         this.state.command = "";
+        if (this.state.equipmentDomain === "smt_material") {
+            // route to the standard SMT step flow for that operation
+            this.state.selectedOperation = key;
+            this.resetSmtScan();
+            this.state.smtStep = 1;
+            this.setResult(this._smtStepHint(key), "info");
+            this.focusCommandInput();
+            return;
+        }
         this.setResult(_t("Scan the equipment SN."), "info");
         this.focusCommandInput();
+    }
+
+    _smtStepHint(key) {
+        if (key === "smt_online_load") {
+            return _t("TP: scan device table, for example 1.A.");
+        }
+        if (key === "smt_unload") {
+            return _t("Unload: scan material SN.");
+        }
+        if (key === "smt_material_refill") {
+            return _t("Refill: scan old material SN.");
+        }
+        return _t("Scan.");
     }
 
     async _handleEquipmentScan(sn) {
@@ -814,6 +856,16 @@ export class WorkshopOperationAction extends Component {
     async runOperation(operation) {
         this.state.selectedOperation = operation.key;
         this.setResult("", "info");
+        if (operation.key === "smt_material") {
+            this.state.equipmentDomain = "smt_material";
+            this.state.equipmentAction = false;
+            this.state.equipmentExtra = "";
+            this.resetSmtScan();
+            this.state.command = "";
+            this.setResult(_t("Pick a material action, then scan."), "info");
+            this.focusCommandInput();
+            return;
+        }
         if (EQUIPMENT_MODES.tooling.key === operation.key
                 || EQUIPMENT_MODES.consumable.key === operation.key) {
             this.state.equipmentDomain =
