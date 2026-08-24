@@ -18,7 +18,7 @@ msgstr "%s 不能盘点。只有可存储的产品可以盘点。"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/components/count_screen_rfid.xml:0
 msgid "/s"
-msgstr "/s"
+msgstr "/秒"
 
 #. module: sn_wsd_barcode
 #: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.scrap_product_selector
@@ -2204,39 +2204,46 @@ msgid "Unload: scan material SN."
 msgstr "下料：请扫描物料 SN。"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Load format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx"
-msgstr "上料格式：DEV=N.T|LP=xxx|MAT=xxx|FD=xxx"
+msgstr "上料格式：DEV=机台.台|LP=料位|MAT=卷号|FD=飞达"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Load barcode is missing the MAT field."
-msgstr "上料条码缺少 MAT 字段。"
+msgstr "上料条码缺少 MAT（卷号）字段。"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "SMT load completed: %(device)s %(loadpoint)s %(material)s"
-msgstr "SMT 上料成功：%(device)s %(loadpoint)s %(material)s"
+msgstr "上料完成：%(device)s %(loadpoint)s %(material)s"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Unload format: MAT=xxx"
-msgstr "下料格式：MAT=xxx"
+msgstr "下料格式：MAT=卷号"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "SMT unload completed: %(material)s"
-msgstr "SMT 下料成功：%(material)s"
+msgstr "下料完成：%(material)s"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Refill format: OLD_MAT=old material SN|NEW_MAT=new material SN"
-msgstr "续料格式：OLD_MAT=旧物料SN|NEW_MAT=新物料SN"
+msgstr "换料格式：OLD_MAT=旧卷号|NEW_MAT=新卷号"
 
 #. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "SMT refill completed: %(old)s -> %(new)s"
-msgstr "SMT 续料成功：%(old)s -> %(new)s"
+msgstr "换料完成：%(old)s → %(new)s"
 
 #. module: sn_wsd_barcode
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_production_menu_action
@@ -2561,68 +2568,102 @@ msgid "MSD Start Drying"
 msgstr "开始干燥"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
+#: code:addons/sn_wsd_barcode/static/src/production_menu/production_menu.js:0
+#: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_pallet_binding_action
 msgid "Pallet Binding"
 msgstr "托盘绑定"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/production_menu/production_menu.js:0
 msgid "Bind meter cartons to a pallet"
-msgstr "将电表箱绑定到托盘"
+msgstr "将仪表箱绑定到托盘"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Scan a pallet number."
-msgstr "请扫描托盘号。"
+msgstr "扫托盘号。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Pallet recorded. Scan a meter carton."
-msgstr "托盘已记录，请扫描电表箱号。"
+msgstr "托盘已记录，扫仪表箱。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "This carton is already bound to the current pallet."
-msgstr "该箱已绑定到当前托盘。"
+msgstr "该箱已绑定当前托盘。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Carton bound. Scan the next meter carton."
-msgstr "箱号绑定成功，请扫描下一箱。"
+msgstr "箱已绑定，扫下一箱。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Carton binding failed."
-msgstr "箱号绑定失败。"
+msgstr "箱绑定失败。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Pallet closing failed."
-msgstr "托盘关闭失败。"
+msgstr "托盘封盘失败。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Pallet closed successfully."
-msgstr "托盘关闭成功。"
+msgstr "托盘封盘成功。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Current Pallet"
 msgstr "当前托盘"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Last Carton"
-msgstr "最近箱号"
+msgstr "尾箱"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Cartons"
 msgstr "箱数"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Meters"
-msgstr "电表数"
+msgstr "台数"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Scan pallet or carton"
-msgstr "扫描托盘号或箱号"
+msgstr "扫托盘或箱号"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Close Pallet"
-msgstr "关闭托盘"
+msgstr "封盘"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 msgid "Change Pallet"
-msgstr "更换托盘"
+msgstr "换托盘"
 
 #. module: sn_wsd_barcode
 #. odoo-python
@@ -2920,3 +2961,273 @@ msgstr "未知动作 %s。"
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Jig"
 msgstr "制具"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "BL: scan device table, for example 1.A."
+msgstr "下料准备：扫机台料站，如 1.A。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "CHANGE"
+msgstr "换料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Cart SN: "
+msgstr "料车SN："
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Cart load format: DEV=N.T|CART=xxx"
+msgstr "料车格式：DEV=机台.台|CART=料车SN"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Cart loading saved successfully."
+msgstr "料车上台完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Device table recorded. Scan cart SN."
+msgstr "机台已记录，扫料车SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "LCSL"
+msgstr "料车"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "LCSL: scan device table, for example 1.A."
+msgstr "料车：扫机台料站，如 1.A。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "MES order not found."
+msgstr "未找到制令单。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Manufacturing order not found."
+msgstr "未找到制造订单。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Material change or continuation completed."
+msgstr "换料/续用完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Material recorded. Scan cart SN or submit directly."
+msgstr "物料已记录，扫料车SN或直接提交。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "NG"
+msgstr "NG"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid ""
+"No active route operation was found for the current online manufacturing "
+"order."
+msgstr "当前在线制造订单没有生效工序。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"No online MES order was found for the selected workshop and production line."
+msgstr "所选车间产线没有在线制令单。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "OK"
+msgstr "OK"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Offline preparation saved successfully."
+msgstr "下料准备完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Offline prepare format: DEV=N.T|LP=xxx|MAT=xxx|FD=xxx|CART=xxx"
+msgstr "下料准备格式：DEV=机台.台|LP=料位|MAT=卷号|FD=飞达|CART=料车"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Online loading saved successfully."
+msgstr "上料完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Operation completed."
+msgstr "操作完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Operation failed."
+msgstr "操作失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Pick an equipment action before scanning."
+msgstr "请先选设备动作再扫码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Pick an equipment action, then scan the SN."
+msgstr "选择设备动作后扫个体SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "SMT cart load completed: %(device)s %(cart)s"
+msgstr "料车上台完成：%(device)s %(cart)s"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"SMT offline preparation completed: %(device)s %(loadpoint)s %(material)s"
+msgstr "下料准备完成：%(device)s %(loadpoint)s %(material)s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan accepted"
+msgstr "扫码成功"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "Scan linked to MES order %(order)s and route operation %(operation)s."
+msgstr "已关联制令单 %(order)s 与工序 %(operation)s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan or enter a barcode first."
+msgstr "请先扫码或输入条码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan rejected"
+msgstr "扫码失败"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan the equipment SN."
+msgstr "扫设备个体SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Select a work center first."
+msgstr "请先选择工位。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "TP"
+msgstr "贴片"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "TP: scan device table, for example 1.A."
+msgstr "贴片：扫机台料站，如 1.A。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "The cart SN does not exist."
+msgstr "料车SN不存在。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "The old material SN is not loaded online."
+msgstr "旧料卷不在机。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"The selected production line does not match the current online MES order."
+msgstr "所选产线与当前在线制令单不符。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Unknown SMT operation: %(operation)s"
+msgstr "未知SMT操作：%(operation)s"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Unload completed."
+msgstr "下料完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Work Center"
+msgstr "工位"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "Work center not found."
+msgstr "未找到工位。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "XL"
+msgstr "下料"
