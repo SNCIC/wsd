@@ -144,14 +144,12 @@
                             <td><span t-out="line.product_id.material_specification or ''"/></td>
                             <td/>
                             <td class="center"><span t-out="line.product_uom_id.name or ''"/></td>
-                            <td class="amount"><span t-field="line.product_qty"/></td>
+                            <td class="amount"><span t-out="o._format_contract_quantity(line.product_qty)"/></td>
                             <td class="amount">
-                                <span t-out="line.price_total / line.product_qty if line.product_qty else 0"
-                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                <span t-out="o._format_contract_unit_price(line.price_unit_tax_included)"/>
                             </td>
                             <td class="amount">
-                                <span t-field="line.price_total"
-                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                <span t-out="o._format_contract_amount(line.price_total)"/>
                             </td>
                         </tr>
                     </t>
@@ -161,16 +159,14 @@
                         <td colspan="2"><b>合计金额（含13%的增值税）</b></td>
                         <td colspan="6"><span t-out="o.amount_total_chinese"/></td>
                         <td class="amount">
-                            <span t-field="o.amount_total"
-                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            <span t-out="o._format_contract_total(o.amount_total)"/>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2"><b>不含税金额</b></td>
                         <td colspan="6"><span t-out="o.amount_untaxed_chinese"/></td>
                         <td class="amount">
-                            <span t-field="o.amount_untaxed"
-                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            <span t-out="o._format_contract_total(o.amount_untaxed)"/>
                         </td>
                     </tr>
                 </tfoot>
