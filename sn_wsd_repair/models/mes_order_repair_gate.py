@@ -31,7 +31,7 @@ class MesOrderRepairGate(models.Model):
         ).enter_station(serial_identity, route_operation, workcenter=workcenter)
 
     def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False):
+                      ng_defect=False, operator_code=False):
         """Frozen SNs may not continue downstream: an OK leave is refused
         until the repair order / quality issue is closed. NG and scrap
         leaves stay open -- they are the offline paths to repair/scrap."""
@@ -47,7 +47,7 @@ class MesOrderRepairGate(models.Model):
                     state=freeze_source['state']))
         return super().leave_station(
             serial_identity, result, scrap_reason=scrap_reason,
-            ng_defect=ng_defect)
+            ng_defect=ng_defect, operator_code=operator_code)
 
     def _sn_quality_freeze_source(self, serial_identity):
         """First freeze source of the SN: an active repair order or an open

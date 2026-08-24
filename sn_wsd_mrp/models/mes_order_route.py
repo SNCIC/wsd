@@ -588,7 +588,12 @@ class SerialOperationHistory(models.Model):
         required=True, index=True,
     )
     in_date = fields.Datetime()
-    out_date = fields.Datetime(default=fields.Datetime.now)
+    out_date = fields.Datetime(default=fields.Datetime.now, index=True)
+    operator_code = fields.Char(
+        index=True,
+        help='Employee who scanned the pass (API: M_EMP; terminal: current '
+             'user employee). Old rows written before the column have no '
+             'source to backfill.')
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )

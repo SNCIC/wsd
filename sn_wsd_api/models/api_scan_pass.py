@@ -134,6 +134,9 @@ class SnWsdApiService(models.AbstractModel):
         terminal: WIP at this operation -> leave; parked elsewhere ->
         error; not in flow -> enter (feed) then leave."""
         Wip = self.env['sn.wsd.serial.wip']
+        operator_code = (
+            employee.barcode
+            or (employee.user_id.login if employee.user_id else False))
         wip = Wip.search([('serial_identity_id', '=', identity.id)], limit=1)
         if wip:
             if wip.route_operation_id.operation_id != workcenter.x_operation_id:
@@ -145,11 +148,13 @@ class SnWsdApiService(models.AbstractModel):
                     order=wip.mes_order_id.name))
             mes_order = wip.mes_order_id
             return mes_order.leave_station(
-                identity, result, ng_defect=defect), mes_order
+                identity, result, ng_defect=defect,
+                operator_code=operator_code), mes_order
         mes_order = self._find_live_order(workcenter)
         mes_order.scan_enter(identity.name, workcenter)
         return mes_order.leave_station(
-            identity, result, ng_defect=defect), mes_order
+            identity, result, ng_defect=defect,
+            operator_code=operator_code), mes_order
 
     # ------------------------------------------------------------------
     # craft documents / components / nameplate / tooling / packing

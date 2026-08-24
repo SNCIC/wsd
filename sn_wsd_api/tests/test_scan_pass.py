@@ -323,3 +323,25 @@ class TestScanPass(TransactionCase):
         row2.invalidate_recordset()
         self.assertTrue(row1.is_current)
         self.assertFalse(row2.is_current)
+
+    def test_13_trace_timeline(self):
+        """The trace view unions every source; a station pass shows up with
+        order, operation, operator and jumps back to its source document."""
+        self.service.scan_pass(self._payload(M_SN='SN-TRACE-T13'))
+        events = self.env['sn.wsd.trace.event'].search([
+            ('sn', '=', 'SN-TRACE-T13')])
+        types = events.mapped('event_type')
+        self.assertIn('station', types)
+        self.assertIn('test', types)
+        station = events.filtered(lambda e: e.event_type == 'station')
+        self.assertEqual(station.operator, 'APIOP')
+        self.assertEqual(station.order_no, self.order.name)
+        self.assertTrue(station.operation)
+        self.assertEqual(station.source_model,
+                         'sn.wsd.serial.operation.history')
+        test_event = events.filtered(lambda e: e.event_type == 'test')
+        self.assertEqual(test_event.source_model, 'sn.wsd.mes.test.result')
+        # the jump action resolves to the source record
+        action = station.action_open_source()
+        self.assertEqual(action['res_model'], station.source_model)
+        self.assertEqual(action['res_id'], station.source_id)

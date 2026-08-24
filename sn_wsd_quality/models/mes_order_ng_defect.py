@@ -33,21 +33,22 @@ class MesOrder(models.Model):
     _inherit = 'sn.wsd.mes.order'
 
     def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False):
+                      ng_defect=False, operator_code=False):
         """NG passes must carry a defect code; it is stamped on the history
         row so the repair side knows what to fix."""
         if result == 'ng' and not ng_defect:
             raise ValidationError(_('Select a defect code.'))
         return super().leave_station(
             serial_identity, result, scrap_reason=scrap_reason,
-            ng_defect=ng_defect)
+            ng_defect=ng_defect, operator_code=operator_code)
 
     def _prepare_leave_history_vals(self, serial_identity, route_operation,
                                     wip, result, scrap_reason=False,
-                                    ng_defect=False):
+                                    ng_defect=False, operator_code=False):
         vals = super()._prepare_leave_history_vals(
             serial_identity, route_operation, wip, result,
-            scrap_reason=scrap_reason, ng_defect=ng_defect)
+            scrap_reason=scrap_reason, ng_defect=ng_defect,
+            operator_code=operator_code)
         if result == 'ng' and ng_defect:
             vals['defect_code_id'] = ng_defect.id
         return vals
