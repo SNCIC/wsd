@@ -26,10 +26,10 @@ class MesTestResultDetail(models.Model):
         store=True,
         readonly=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Serial Number',
-        related='test_result_id.internal_serial_id',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
+        related='test_result_id.serial_identity_id',
         store=True,
         readonly=True,
     )

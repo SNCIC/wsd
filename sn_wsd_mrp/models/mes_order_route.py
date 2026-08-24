@@ -189,18 +189,9 @@ class MesOrderRoute(models.Model):
             allow_serial_creation = node.get('x_allow_serial_creation')
             if allow_serial_creation is None and common_op:
                 allow_serial_creation = common_op.x_allow_serial_creation
-            allow_reentry = node.get('x_allow_reentry')
-            if allow_reentry is None and common_op:
-                allow_reentry = common_op.x_allow_reentry
-            allow_repair_return = node.get('x_allow_repair_return')
-            if allow_repair_return is None and common_op:
-                allow_repair_return = common_op.x_allow_repair_return
             allow_skip_with_override = node.get('x_allow_skip_with_override')
             if allow_skip_with_override is None and common_op:
                 allow_skip_with_override = common_op.x_allow_skip_with_override
-            ng_retry_limit = node.get('x_ng_retry_limit')
-            if ng_retry_limit in (None, '') and common_op:
-                ng_retry_limit = common_op.x_ng_retry_limit
             vals = {
                 'operation_id': op_id,
                 'workcenter_id': (
@@ -215,10 +206,7 @@ class MesOrderRoute(models.Model):
                 'x_allow_entry': bool(node.get('x_allow_entry')),
                 'x_allow_exit': bool(node.get('x_allow_exit')),
                 'x_allow_serial_creation': bool(allow_serial_creation),
-                'x_allow_reentry': bool(allow_reentry),
-                'x_allow_repair_return': bool(allow_repair_return),
                 'x_allow_skip_with_override': bool(allow_skip_with_override),
-                'x_ng_retry_limit': int(ng_retry_limit or 0),
                 'is_input': bool(node.get('x_allow_entry')),
                 'x_canvas_x': node.get('x'),
                 'x_canvas_y': node.get('y'),
@@ -421,22 +409,9 @@ class MesOrderRouteOperation(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this MES order operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same MES order operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this MES order operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this MES order operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     is_input = fields.Boolean(
         string='Input Operation',
@@ -584,8 +559,11 @@ class MesOrderRouteOperation(models.Model):
 class SerialOperationHistory(models.Model):
     """Append-only record: SN passed this operation of this MES order.
 
-    Only result='ok' counts as completed for reachability; 'ng' blocks the
-    successors until handled (repair/scrap flows are out of scope for now).
+    Only result='ok' counts as completed for reachability; 'ng' rows are
+    free re-entries until the operation retry limit sends the SN to repair.
+    A repaired SN may come back and pass, so at most one 'ok' row per
+    (SN, operation) is allowed while 'ng' rows may pile up (partial unique
+    index created in migration 19.0.7.1.0).
     """
     _name = 'sn.wsd.serial.operation.history'
     _description = 'SN Operation History'
@@ -613,12 +591,6 @@ class SerialOperationHistory(models.Model):
     out_date = fields.Datetime(default=fields.Datetime.now)
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
-    )
-
-    _history_uniq = models.Constraint(
-        'unique(serial_identity_id, route_operation_id)',
-        'An SN passes an operation of a MES order only once (re-entry rules '
-        'are handled at the operation level, not by duplicating history).',
     )
 
 

@@ -351,6 +351,88 @@
                         </group>
                     </group>
                     <notebook>
+                        <page name="scope" string="Scope">
+                            <group>
+                                <group>
+                                    <field name="production_id"/>
+                                    <field name="mes_order_id"/>
+                                    <field name="route_operation_id"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="operation_id"/>
+                                </group>
+                                <group>
+                                    <field name="production_line_id"/>
+                                    <field name="area_sn"/>
+                                    <field name="model_code"/>
+                                    <field name="product_id"/>
+                                </group>
+                                <group>
+                                    <field name="picking_id"/>
+                                    <field name="move_line_id"/>
+                                    <field name="lot_id"/>
+                                </group>
+                                <group>
+                                    <field name="sample_window_start"/>
+                                    <field name="sample_window_end"/>
+                                    <field name="evidence_serial_identity_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="sampling" string="Sampling">
+                            <group>
+                                <group>
+                                    <field name="sampling_method" readonly="1"/>
+                                    <field name="sampling_standard_id" readonly="1"/>
+                                    <field name="lot_qty_source" readonly="1"/>
+                                    <field name="lot_qty" readonly="1"/>
+                                    <field name="sample_selection_method" readonly="state != 'open'"/>
+                                </group>
+                                <group>
+                                    <field name="inspection_level" readonly="1"/>
+                                    <field name="switching_mode" readonly="1"/>
+                                    <field name="aql_value" readonly="1"/>
+                                    <field name="sample_size_code" readonly="1"/>
+                                    <field name="sample_size" readonly="1"/>
+                                    <field name="sample_checked_qty" readonly="1"/>
+                                    <field name="sample_defect_qty" readonly="1"/>
+                                    <field name="accept_qty" readonly="1"/>
+                                    <field name="reject_qty" readonly="1"/>
+                                </group>
+                            </group>
+                            <field name="sample_ids">
+                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="serial_identity_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="result"/>
+                                    <field name="defect_code_id" invisible="result != 'fail'"/>
+                                    <field name="note"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="sequence"/>
+                                                <field name="name" readonly="1"/>
+                                                <field name="serial_identity_id"/>
+                                                <field name="lot_id"/>
+                                            </group>
+                                            <group>
+                                                <field name="result"/>
+                                                <field name="defect_code_id" invisible="result != 'fail'"/>
+                                                <field name="company_id" groups="base.group_multi_company"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="notes" string="Notes">
+                                                <field name="note" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
                         <page name="items" string="Inspection Items">
                             <field name="line_ids">
                                 <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
@@ -405,7 +487,7 @@
                                 </form>
                             </field>
                         </page>
-                        <page name="defects" string="Defects" invisible="inspection_type not in ['iqc', 'oqc', 'fai', 'ipqc']">
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
                             <group>
                                 <field name="sample_size"/>
                                 <field name="sample_checked_qty" readonly="1"/>
@@ -417,7 +499,7 @@
                             </group>
                             <field name="defect_line_ids">
                                 <list editable="bottom">
-                                    <field name="internal_serial_id"/>
+                                    <field name="serial_identity_id"/>
                                     <field name="defect_code_id"/>
                                     <field name="defect_qty"/>
                                     <field name="position"/>
@@ -427,89 +509,6 @@
                         </page>
                         <page name="attachments" string="Attachments">
                             <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
-                        </page>
-                        <page name="scope" string="Scope">
-                            <group>
-                                <group>
-                                    <field name="production_id"/>
-                                    <field name="mes_order_id"/>
-                                    <field name="route_operation_id"/>
-                                    <field name="workcenter_id"/>
-                                    <field name="operation_id"/>
-                                </group>
-                                <group>
-                                    <field name="production_line_id"/>
-                                    <field name="area_sn"/>
-                                    <field name="model_code"/>
-                                    <field name="product_id"/>
-                                </group>
-                                <group>
-                                    <field name="picking_id"/>
-                                    <field name="move_line_id"/>
-                                    <field name="lot_id"/>
-                                </group>
-                                <group>
-                                    <field name="sample_window_start"/>
-                                    <field name="sample_window_end"/>
-                                    <field name="evidence_travel_id"/>
-                                    <field name="evidence_internal_serial_id"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page name="sampling" string="Sampling">
-                            <group>
-                                <group>
-                                    <field name="sampling_method" readonly="1"/>
-                                    <field name="sampling_standard_id" readonly="1"/>
-                                    <field name="lot_qty_source" readonly="1"/>
-                                    <field name="lot_qty" readonly="1"/>
-                                    <field name="sample_selection_method" readonly="state != 'open'"/>
-                                </group>
-                                <group>
-                                    <field name="inspection_level" readonly="1"/>
-                                    <field name="switching_mode" readonly="1"/>
-                                    <field name="aql_value" readonly="1"/>
-                                    <field name="sample_size_code" readonly="1"/>
-                                    <field name="sample_size" readonly="1"/>
-                                    <field name="sample_checked_qty" readonly="1"/>
-                                    <field name="sample_defect_qty" readonly="1"/>
-                                    <field name="accept_qty" readonly="1"/>
-                                    <field name="reject_qty" readonly="1"/>
-                                </group>
-                            </group>
-                            <field name="sample_ids">
-                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="internal_serial_id"/>
-                                    <field name="lot_id"/>
-                                    <field name="result"/>
-                                    <field name="defect_code_id" invisible="result != 'fail'"/>
-                                    <field name="note"/>
-                                </list>
-                                <form>
-                                    <sheet>
-                                        <group>
-                                            <group>
-                                                <field name="sequence"/>
-                                                <field name="name" readonly="1"/>
-                                                <field name="internal_serial_id"/>
-                                                <field name="lot_id"/>
-                                            </group>
-                                            <group>
-                                                <field name="result"/>
-                                                <field name="defect_code_id" invisible="result != 'fail'"/>
-                                                <field name="company_id" groups="base.group_multi_company"/>
-                                            </group>
-                                        </group>
-                                        <notebook>
-                                            <page name="notes" string="Notes">
-                                                <field name="note" nolabel="1"/>
-                                            </page>
-                                        </notebook>
-                                    </sheet>
-                                </form>
-                            </field>
                         </page>
                         <page name="notes" string="Notes">
                             <field name="note" nolabel="1"/>

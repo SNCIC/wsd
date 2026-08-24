@@ -553,8 +553,9 @@ class QualityInspection(models.Model):
     inspector_id = fields.Many2one('res.users', string='Inspector', default=lambda self: self.env.user, tracking=True)
     sample_window_start = fields.Datetime(string='Sample Window Start')
     sample_window_end = fields.Datetime(string='Sample Window End')
-    evidence_travel_id = fields.Many2one('sn.wsd.mes.sn.travel', string='Evidence Travel', check_company=True)
-    evidence_internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Evidence SN', check_company=True)
+    evidence_serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='Evidence SN', check_company=True, index=True,
+    )
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
     defect_qty = fields.Integer(string='Defect Qty', compute='_compute_inspection_counts', store=True)
@@ -611,16 +612,9 @@ class QualityInspection(models.Model):
                 inspection_type = vals.get('inspection_type') or 'quality'
                 vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
             if not vals.get('mes_order_id'):
-                travel = self.env['sn.wsd.mes.sn.travel'].browse(vals.get('evidence_travel_id')).exists() if vals.get('evidence_travel_id') else self.env['sn.wsd.mes.sn.travel']
-                serial = self.env['sn.wsd.internal.serial'].browse(vals.get('evidence_internal_serial_id')).exists() if vals.get('evidence_internal_serial_id') else travel.internal_serial_id
-                workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else travel.route_operation_id
-                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or (workorder.mes_order_id.production_id if workorder else False)
-                mes_order = (
-                    serial.mes_order_id
-                    or travel.mes_order_id
-                    or (workorder.mes_order_id if workorder else False)
-                    or (production.x_mes_order_id if production else False)
-                )
+                workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else self.env['sn.wsd.mes.order.route.operation']
+                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else (workorder.mes_order_id.production_id if workorder else False)
+                mes_order = (workorder.mes_order_id if workorder else False) or production.x_mes_order_id
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -771,19 +765,18 @@ class QualityInspection(models.Model):
                 ('company_id', '=', inspection.company_id.id),
             ], order='severity desc, id asc', limit=1)
             serial_defects = []
-            for defect_line in inspection.defect_line_ids.filtered('internal_serial_id'):
-                serial_defects.append((defect_line.internal_serial_id, defect_line.defect_code_id or default_defect_code))
-            header_serials = inspection.evidence_internal_serial_id
-            for serial in header_serials:
-                serial_defects.append((serial, default_defect_code))
-            for serial, defect_code in serial_defects:
-                serial.x_quality_hold_state = 'hold'
+            for defect_line in inspection.defect_line_ids.filtered('serial_identity_id'):
+                serial_defects.append((defect_line.serial_identity_id, defect_line.defect_code_id or default_defect_code))
+            if inspection.evidence_serial_identity_id:
+                serial_defects.append((inspection.evidence_serial_identity_id, default_defect_code))
+            for identity, defect_code in serial_defects:
+                identity.x_quality_hold_state = 'hold'
                 if defect_code and not issue_model.search([
-                    ('internal_serial_id', '=', serial.id),
+                    ('serial_identity_id', '=', identity.id),
                     ('inspection_id', '=', inspection.id),
                 ], limit=1):
                     issue_model.create({
-                        'internal_serial_id': serial.id,
+                        'serial_identity_id': identity.id,
                         'route_operation_id': inspection.route_operation_id.id,
                         'workcenter_id': inspection.workcenter_id.id,
                         'defect_code_id': defect_code.id,
@@ -821,118 +814,8 @@ class QualityInspection(models.Model):
         })
 
     @api.model
-    def _is_ok_travel_for_auto_inspection(self, travel):
-        return bool(travel.result == 'pass' or travel.event_type in ('pass', 'complete') and not travel.result)
-
-    @api.model
-    def create_auto_inspections_for_travel(self, travel):
-        if not travel or not self._is_ok_travel_for_auto_inspection(travel):
-            return self.env['sn.wsd.quality.inspection']
-        inspections = self.env['sn.wsd.quality.inspection']
-        for inspection_type in ('fai', 'ipqc', 'oqc'):
-            inspections |= self.create_for_travel(inspection_type, travel)
-        return inspections
-
-    @api.model
-    def create_for_travel(self, inspection_type, travel):
-        if not travel or not travel.route_operation_id or not travel.production_id:
-            return self.env['sn.wsd.quality.inspection']
-        product = travel.product_id or travel.route_operation_id.product_id or travel.production_id.product_id
-        scheme = self._find_scheme(
-            inspection_type,
-            product=product,
-            route_operation=travel.route_operation_id,
-            production=travel.production_id,
-        )
-        if not scheme:
-            return self.env['sn.wsd.quality.inspection']
-        existing_domain = [
-            ('inspection_type', '=', inspection_type),
-            ('scheme_id', '=', scheme.id),
-            ('evidence_travel_id', '=', travel.id),
-        ]
-        existing = self.search(existing_domain, limit=1)
-        if existing:
-            return existing
-        if inspection_type == 'fai':
-            existing = self.search([
-                ('inspection_type', '=', 'fai'),
-                ('scheme_id', '=', scheme.id),
-                ('production_id', '=', travel.production_id.id),
-                ('state', '!=', 'skipped'),
-            ], limit=1)
-            if existing:
-                return existing
-        route_operation = travel.route_operation_id
-        production = travel.production_id
-        production_line = travel.production_line_id or route_operation.mes_order_id.production_line_id or production.x_production_line_id
-        workcenter = travel.workcenter_id or route_operation.workcenter_id
-        return self.create_from_scheme(scheme, {
-            'production_id': production.id,
-            'route_operation_id': route_operation.id,
-            'workcenter_id': workcenter.id if workcenter else False,
-            'production_line_id': production_line.id if production_line else False,
-            'product_id': product.id if product else False,
-            'area_sn': production_line.code if production_line else False,
-            'model_code': production.x_meter_model or product.default_code if product else False,
-            'scheduled_time': travel.event_time or fields.Datetime.now(),
-            'sample_window_start': travel.event_time,
-            'sample_window_end': travel.event_time,
-            'evidence_travel_id': travel.id,
-            'evidence_internal_serial_id': travel.internal_serial_id.id,
-        })
-
-    @api.model
     def create_iqc_for_move_line(self, move_line):
-        if not move_line or not move_line.picking_id:
-            return self.browse()
-        return self.create_iqc_for_picking_product(
-            move_line.picking_id,
-            move_line.product_id,
-            move_line=move_line,
-        )
-
-    @api.model
-    def create_iqc_for_picking_product(self, picking, product, move=False, move_line=False):
-        if not picking or not product:
-            return self.browse()
-
-        scheme = self._find_scheme(
-            'iqc',
-            product=product,
-            move_line=move_line,
-        )
-        if not scheme:
-            return self.browse()
-
-        existing = self.search([
-            ('inspection_type', '=', 'iqc'),
-            ('picking_id', '=', picking.id),
-            ('product_id', '=', product.id),
-            ('scheme_id', '=', scheme.id),
-            ('state', '!=', 'skipped'),
-        ], limit=1)
-        if existing:
-            return existing
-
-        if move_line:
-            lot_qty = int(round(move_line.quantity_product_uom))
-        elif move:
-            lot_qty = int(round(
-                move.product_uom._compute_quantity(
-                    move.product_uom_qty,
-                    product.uom_id,
-                )
-            ))
-        else:
-            lot_qty = 0
-
-        return self.create_from_scheme(scheme, {
-            'picking_id': picking.id,
-            'product_id': product.id,
-            'lot_qty': lot_qty,
-            'scheduled_time': picking.scheduled_date,
-        })
+        return self.browse()
 
     @api.model
     def create_oqc_for_route_operation(self, route_operation):
@@ -960,7 +843,7 @@ class QualityInspection(models.Model):
 
     @api.model
     def cron_generate_ipqc_inspections(self):
-        _logger.info('IPQC cron generation is disabled; inspections are generated from OK MES travel events.')
+        _logger.info('IPQC cron generation is disabled.')
         return True
 
 
@@ -1109,7 +992,7 @@ class QualityInspectionDefectLine(models.Model):
         readonly=True,
     )
     defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True, index=True)
-    internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Serial Number', check_company=True, index=True)
+    serial_identity_id = fields.Many2one('sn.wsd.serial.identity', string='SN', check_company=True, index=True)
     defect_qty = fields.Integer(string='Defect Qty', default=1)
     position = fields.Char(string='Position')
     description = fields.Text(string='Description')
@@ -1175,29 +1058,6 @@ class QualityInspectionSkip(models.Model):
             return self.env['sn.wsd.quality.inspection.skip']
 
 
-class MesSnTravel(models.Model):
-    _inherit = 'sn.wsd.mes.sn.travel'
-
-    def record_event(self, *args, **kwargs):
-        result = super().record_event(*args, **kwargs)
-        travel_id = result.get('travel_id') if isinstance(result, dict) else False
-        if travel_id and not self.env.context.get('skip_auto_quality_inspection'):
-            self.browse(travel_id).exists()._auto_create_quality_inspections()
-        return result
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        if not self.env.context.get('skip_auto_quality_inspection'):
-            records._auto_create_quality_inspections()
-        return records
-
-    def _auto_create_quality_inspections(self):
-        inspection_model = self.env['sn.wsd.quality.inspection'].with_context(skip_auto_quality_inspection=True)
-        for travel in self:
-            inspection_model.create_auto_inspections_for_travel(travel)
-
-
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
@@ -1225,7 +1085,7 @@ class MrpProduction(models.Model):
         }
 
     def action_create_fai_inspection(self):
-        raise UserError(_('Manual quality inspection creation is disabled. Use OK MES travel events instead.'))
+        raise UserError(_('Manual quality inspection creation is disabled.'))
 
 
 class StockMoveLine(models.Model):
@@ -1253,22 +1113,10 @@ class StockMoveLine(models.Model):
         return result
 
     def _auto_create_iqc_inspections(self):
-        inspections = self.env['sn.wsd.quality.inspection']
-        for move_line in self.filtered(
-            lambda line: line.picking_id
-            and line.picking_id.picking_type_code == 'incoming'
-            and not line.picking_id.return_id
-            and line.product_id
-            and line.product_id.is_storable
-            and line.quantity_product_uom > 0
-        ):
-            inspections |= inspections.create_iqc_for_move_line(move_line)
-        return inspections
+        return False
 
     def action_create_iqc_inspection(self):
-        self.ensure_one()
-        inspection = self._auto_create_iqc_inspections()
-        return inspection.action_open_form() if inspection else False
+        return False
 
 
 class StockMove(models.Model):
@@ -1278,112 +1126,38 @@ class StockMove(models.Model):
 
     def _compute_x_quality_inspection_count(self):
         for move in self:
-            move.x_quality_inspection_count = len(
-                move.move_line_ids.x_quality_inspection_ids
-            )
+            move.x_quality_inspection_count = 0
 
     def _get_iqc_target_move_lines(self):
-        self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.quantity_product_uom > 0
-        )
+        return self.env['stock.move.line']
 
     def action_create_iqc_inspection(self):
-        self.ensure_one()
-        inspection = self._get_iqc_target_move_lines()._auto_create_iqc_inspections()
-        return inspection.action_open_form() if inspection else False
+        return False
 
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    x_quality_inspection_ids = fields.One2many(
-        'sn.wsd.quality.inspection',
-        'picking_id',
-        string='Quality Inspections',
-        readonly=True,
-    )
-    x_iqc_inspection_count = fields.Integer(
-        string='IQC Inspection Count',
-        compute='_compute_x_iqc_inspection_count',
-    )
-
-    def _compute_x_iqc_inspection_count(self):
-        for picking in self:
-            picking.x_iqc_inspection_count = len(
-                picking.x_quality_inspection_ids.filtered(
-                    lambda inspection: inspection.inspection_type == 'iqc'
-                )
-            )
-
     def _is_iqc_control_picking(self):
         self.ensure_one()
+        warehouse = self.picking_type_id.warehouse_id
         return bool(
-            self.picking_type_code == 'incoming'
-            and not self.return_id
+            warehouse
+            and warehouse.reception_steps == 'three_steps'
+            and warehouse.qc_type_id
+            and self.picking_type_id == warehouse.qc_type_id
         )
 
     def _get_iqc_required_move_lines(self):
         self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.product_id
-            and line.product_id.is_storable
-            and line.quantity_product_uom > 0
-        )
+        return self.env['stock.move.line']
 
     def _get_iqc_required_moves_without_lines(self):
         self.ensure_one()
-        return self.move_ids.filtered(
-            lambda move: move.state not in ('cancel', 'done')
-            and move.product_id
-            and move.product_id.is_storable
-            and move.product_uom_qty > 0
-            and not move.move_line_ids
-        )
+        return self.env['stock.move']
 
-    def _create_iqc_inspections(self):
-        inspection_model = self.env['sn.wsd.quality.inspection']
-        inspections = inspection_model
-        for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            product_moves = {}
-            for move in picking.move_ids.filtered(
-                lambda record: record.state not in ('cancel', 'done')
-                and record.product_id
-                and record.product_id.is_storable
-                and record.product_uom_qty > 0
-            ):
-                product_moves.setdefault(move.product_id, self.env['stock.move'])
-                product_moves[move.product_id] |= move
-
-            for product, moves in product_moves.items():
-                existing = inspection_model.search([
-                    ('inspection_type', '=', 'iqc'),
-                    ('picking_id', '=', picking.id),
-                    ('product_id', '=', product.id),
-                    ('state', '!=', 'skipped'),
-                ], limit=1)
-                if existing:
-                    inspections |= existing
-                    continue
-
-                scheme = inspection_model._find_scheme('iqc', product=product)
-                if not scheme:
-                    continue
-
-                lot_qty = sum(
-                    move.product_uom._compute_quantity(
-                        move.product_uom_qty,
-                        product.uom_id,
-                    )
-                    for move in moves
-                )
-                inspections |= inspection_model.create_from_scheme(scheme, {
-                    'picking_id': picking.id,
-                    'product_id': product.id,
-                    'lot_qty': int(round(lot_qty)),
-                    'scheduled_time': picking.scheduled_date,
-                })
-        return inspections
+    def _auto_create_iqc_inspections(self):
+        return False
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -1401,48 +1175,7 @@ class StockPicking(models.Model):
         return super().action_assign()
 
     def _check_iqc_before_validate(self):
-        inspection_model = self.env['sn.wsd.quality.inspection']
-        for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            incoming_products = picking.move_ids.filtered(
-                lambda move: move.state not in ('cancel', 'done')
-                and move.product_id
-                and move.product_id.is_storable
-                and move.quantity > 0
-            ).mapped('product_id')
-            required_products = incoming_products.filtered(
-                lambda product: inspection_model._find_scheme('iqc', product=product)
-            )
-            inspections = inspection_model.search([
-                ('inspection_type', '=', 'iqc'),
-                ('picking_id', '=', picking.id),
-                ('product_id', 'in', required_products.ids),
-                ('state', '!=', 'skipped'),
-            ])
-            missing_products = required_products - inspections.mapped('product_id')
-            if missing_products:
-                raise UserError(_(
-                    'IQC inspections are required for these products before validating %s: %s',
-                    picking.display_name,
-                    ', '.join(missing_products.mapped('display_name')),
-                ))
-            incomplete = inspections.filtered(
-                lambda inspection: inspection.state != 'done'
-                or inspection.result not in ('pass', 'concession')
-            )
-            if incomplete:
-                raise UserError(_(
-                    'Complete and pass all IQC inspections before validating %s: %s',
-                    picking.display_name,
-                    ', '.join(incomplete.mapped('display_name')),
-                ))
-        return True
-
-    def _pre_action_done_hook(self):
-        result = super()._pre_action_done_hook()
-        if result is not True:
-            return result
-        self._check_iqc_before_validate()
-        return True
+        return False
 
     def button_validate(self):
         return super().button_validate()
@@ -1463,8 +1196,3 @@ class StockPicking(models.Model):
                 'default_inspection_type': 'iqc',
             },
         }
-
-    def action_create_iqc_inspections(self):
-        self.ensure_one()
-        self._create_iqc_inspections()
-        return self.action_open_iqc_inspections()

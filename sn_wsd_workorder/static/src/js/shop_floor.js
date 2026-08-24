@@ -65,6 +65,11 @@ const UI_LABELS = {
     modeNg: _t("NG mode"),
     modeOk: _t("OK pass-through"),
     modeScrap: _t("Scrap mode"),
+    modeNgScan: _t("Scan defect code…"),
+    ngInvalidDefect: _t(
+        "Unknown defect code. Scan a defect code, another in-progress SN, or cancel."),
+    ngPendingSwitched: _t("Waiting SN switched."),
+    ngWaitHint: _t("rejected — scan its defect code"),
     moreWipHidden: _t("More WIP hidden — scanning still works"),
     otherOrders: _t("Other live orders"),
     snLeftNg: _t("SN left with NG."),
@@ -85,7 +90,7 @@ const UI_LABELS = {
     registerMaterialConsumption: _t("Register Material Consumption"),
     remainingQuantity: _t("Remaining Quantity:"),
     reportAndFinish: _t("Report and Finish"),
-    reportModeBadge: _t("Report"),
+    reportModeBadge: _t("Work Report"),
     reportedLabel: _t("Reported"),
     reportedQuantity: _t("Reported Quantity"),
     reportQuantity: _t("Report Quantity"),
@@ -133,6 +138,7 @@ export class SnWsdShopFloor extends Component {
                 scan: "",
                 expandedWipId: null,
                 mode: "ok",
+                ngPending: false,
             },
             stationScrapDialog: {
                 open: false,
@@ -338,7 +344,11 @@ export class SnWsdShopFloor extends Component {
     }
 
     setStationMode(mode) {
-        this.state.station.mode = mode;
+        const station = this.state.station;
+        station.mode = mode;
+        if (mode !== "ng") {
+            station.ngPending = false;
+        }
     }
 
     toggleWipRow(row) {
@@ -363,6 +373,11 @@ export class SnWsdShopFloor extends Component {
         if (!code) {
             return;
         }
+        if (station.ngPending) {
+            station.scan = "";
+            await this.onNgPendingScan(code);
+            return;
+        }
         try {
             const result = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_scan", [
                 station.workcenterId, code, station.selectedOrderId || false,
@@ -380,8 +395,12 @@ export class SnWsdShopFloor extends Component {
                 station.scan = "";
                 this.focusScanInput();
                 const mode = station.mode;
-                if (mode === "ok" || mode === "ng") {
-                    await this.leaveStationWip({ id: result.wip_id }, mode);
+                if (mode === "ok") {
+                    await this.leaveStationWip({ id: result.wip_id }, "ok");
+                } else if (mode === "ng") {
+                    // two-step NG: hold the WIP row and wait for the defect
+                    // code scan before actually leaving the station
+                    this.setNgPending(result.wip_id);
                 } else {
                     // scrap keeps its mandatory reason dialog
                     const row = station.wip.find((w) => w.id === result.wip_id);
@@ -406,12 +425,84 @@ export class SnWsdShopFloor extends Component {
         }, 0);
     }
 
+    setNgPending(wipId) {
+        const station = this.state.station;
+        const row = station.wip.find((w) => w.id === wipId);
+        station.ngPending = {
+            wipId: wipId,
+            sn: row?.sn || "",
+            orderName: row?.order_name || "",
+        };
+        this.focusScanInput();
+    }
+
+    cancelNgPending() {
+        this.state.station.ngPending = false;
+        this.focusScanInput();
+    }
+
+    async onNgPendingScan(code) {
+        // while waiting for a defect code, the scan box resolves codes (or
+        // switches to another in-progress SN); sn_station_scan is NOT used
+        // here so an unknown input can never feed a new SN as a side effect
+        const station = this.state.station;
+        try {
+            const defect = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_resolve_ng_defect", [code]);
+            if (defect) {
+                const pending = station.ngPending;
+                station.ngPending = false;
+                await this.leaveNgWithDefect(pending.wipId, defect.id);
+                return;
+            }
+        } catch (error) {
+            this.notifyError(error);
+            this.focusScanInput();
+            return;
+        }
+        const row = station.wip.find((w) => w.sn === code);
+        if (row) {
+            station.ngPending = {
+                wipId: row.id,
+                sn: row.sn,
+                orderName: row.order_name || "",
+            };
+            this.notification.add(this.labels.ngPendingSwitched, { type: "info" });
+        } else {
+            this.notification.add(this.labels.ngInvalidDefect, { type: "warning" });
+        }
+        this.focusScanInput();
+    }
+
+    async leaveNgWithDefect(wipId, defectId) {
+        try {
+            const payload = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_leave", [
+                    wipId, "ng", false, defectId,
+                ]);
+            this.applyStationData(payload.data);
+            this.notification.add(this.labels.snLeftNg, { type: "warning" });
+            if (payload.finished) {
+                this.notification.add(this.labels.snFlowFinished, { type: "success" });
+            }
+        } catch (error) {
+            this.notifyError(error);
+        }
+        this.focusScanInput();
+    }
+
     async leaveStationWip(row, result) {
         if (result === "scrap") {
             const dialog = this.state.stationScrapDialog;
             dialog.open = true;
             dialog.row = row;
             dialog.reasonId = null;
+            return;
+        }
+        if (result === "ng") {
+            // same two-step flow as the scan box: WIP-row NG button only
+            // holds the row, the leave happens on the defect code scan
+            this.setNgPending(row.id);
             return;
         }
         try {

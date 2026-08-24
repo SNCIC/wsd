@@ -53,7 +53,6 @@ class TestSnSmtCart(TransactionCase):
         })
         cls.mes_order = cls._create_mes_order(cls.production, 10)
         cls.online_a = cls.env['sn.smt.online.material'].create({
-            'production_id': cls.production.id,
             'mes_order_id': cls.mes_order.id,
             'model_code': 'CARTTST',
             'device_seq': 1,
@@ -63,7 +62,6 @@ class TestSnSmtCart(TransactionCase):
             'process_face': 'single',
         })
         cls.online_b = cls.env['sn.smt.online.material'].create({
-            'production_id': cls.production.id,
             'mes_order_id': cls.mes_order.id,
             'model_code': 'CARTTST',
             'device_seq': 1,

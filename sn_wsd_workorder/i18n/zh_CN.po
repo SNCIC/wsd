@@ -849,3 +849,33 @@ msgstr "紧急"
 #: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
 msgid "Critical"
 msgstr "特急"
+
+#. module: sn_wsd_workorder
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Work Report"
+msgstr "报工"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Scan defect code…"
+msgstr "扫不良代码…"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid ""
+"Unknown defect code. Scan a defect code, another in-progress SN, or cancel."
+msgstr "未识别的不良代码：请扫不良代码、扫另一块在制 SN 切换目标，或取消。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Waiting SN switched."
+msgstr "已切换待出站 SN。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "rejected — scan its defect code"
+msgstr "判 NG 待出站，请扫不良代码"

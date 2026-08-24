@@ -1,0 +1,49 @@
+.o_sn_wsd_esop_screen {
+    background: #f6f7f9;
+
+    .o_sn_wsd_esop_search {
+        width: 380px;
+    }
+
+    .o_sn_wsd_esop_empty {
+        color: #6c757d;
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+
+    .o_sn_wsd_esop_cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .o_sn_wsd_esop_card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .o_sn_wsd_esop_doc {
+        position: relative;
+
+        .badge {
+            margin-inline-start: 0.35rem;
+        }
+    }
+
+    .o_sn_wsd_esop_dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #f0ad4e;
+        border: 2px solid #fff;
+    }
+
+    .o_sn_wsd_esop_pdf {
+        width: 100%;
+        // flex-grow-1 stretches it over the reader; keep a floor so the
+        // frame never collapses on very short screens
+        min-height: 320px;
+    }
+}

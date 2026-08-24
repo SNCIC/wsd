@@ -2,6 +2,9 @@
     <menuitem id="menu_sn_wsd_repair_root" name="Repair Management"
               parent="mrp.menu_mrp_root" sequence="30"
               groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_sn_wsd_repair_pending" name="Pending Repair"
+              parent="menu_sn_wsd_repair_root"
+              action="action_sn_wsd_repair_pending" sequence="5"/>
     <menuitem id="menu_sn_wsd_repair_order" name="Repair Orders"
               parent="menu_sn_wsd_repair_root"
               action="action_sn_wsd_repair_order" sequence="10"/>

@@ -95,6 +95,18 @@ class MeterProcessRoute(models.Model):
 
     name = fields.Char(string='Route Name', required=True)
     code = fields.Char(string='Route Code', required=True, index=True)
+    # 工艺类型：标识整条路线属于哪种工艺（SMT 上料/扣点域以此判定拆行与扣点触发）。
+    x_process_type = fields.Selection(
+        [
+            ('smt', 'SMT'),
+            ('dip', 'DIP'),
+            ('machine', 'Complete Machine'),
+        ],
+        string='Process Type',
+        tracking=True,
+        help='Craft family of this route: SMT lines split the material table '
+             'and deduct points on pass; DIP and complete-machine lines do not.',
+    )
     version = fields.Integer(
         string='Version',
         default=0,
@@ -593,9 +605,6 @@ class MeterProcessRoute(models.Model):
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
                 'x_allow_serial_creation': op.x_allow_serial_creation,
-                'x_allow_reentry': op.x_allow_reentry,
-                'x_allow_repair_return': op.x_allow_repair_return,
-                'x_ng_retry_limit': op.x_ng_retry_limit,
                 'predecessors': op.blocked_by_route_operation_ids.mapped('x_step_code'),
             })
         for op in self.route_operation_ids:
@@ -976,22 +985,9 @@ class MeterProcessRouteOperation(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this entry operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     needed_by_route_operation_ids = fields.Many2many(
         'sn.wsd.process.route.operation',
@@ -1082,22 +1078,9 @@ class MrpRoutingWorkcenter(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this BoM operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same BoM operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this BoM operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this BoM operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     # Legacy columns kept only so existing work orders (which relate to
     # x_route_operation_id through their BoM operation row) keep working until

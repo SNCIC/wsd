@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- extend the shop floor console header with an ESOP entry; the
+         console itself is untouched (template inheritance from here) -->
+    <t t-name="sn_wsd_drawing_material.ShopFloorEsopLink"
+       t-inherit="sn_wsd_workorder.ShopFloor"
+       t-inherit-mode="extension">
+        <xpath expr="//header" position="inside">
+            <button class="btn btn-secondary ms-auto o_sn_wsd_esop_link"
+                    t-on-click="() => this.openEsop()">
+                <i class="fa fa-file-pdf-o me-1" role="img"/>
+                <t t-out="esopLabel"/>
+            </button>
+        </xpath>
+    </t>
+</templates>

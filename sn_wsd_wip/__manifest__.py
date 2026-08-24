@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD WIP',
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.1.1',
     'summary': 'WIP reporting and visualization for manufacturing orders',
     'depends': ['mrp', 'sn_wsd_api', 'sn_wsd_quality'],
     'data': [

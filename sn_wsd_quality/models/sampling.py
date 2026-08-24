@@ -472,10 +472,9 @@ class QualityInspectionScheme(models.Model):
         if source == 'mes_order':
             mes_order = self.env['sn.wsd.mes.order'].browse(values.get('mes_order_id')).exists()
             if mes_order:
-                serial_count = len(mes_order.internal_serial_ids.filtered(
-                    lambda serial: serial.active and not serial.is_confirmed_scrapped()
-                ))
-                return serial_count or int(round(mes_order.planned_qty or 0.0))
+                identity_count = self.env['sn.wsd.serial.operation.history'].search_count(
+                    [('mes_order_id', '=', mes_order.id)])
+                return identity_count or int(round(mes_order.planned_qty or 0.0))
             return 0
         if source == 'production':
             production = self.env['mrp.production'].browse(values.get('production_id')).exists()
@@ -665,24 +664,32 @@ class QualityInspection(models.Model):
 
     def _get_candidate_sample_serials(self):
         self.ensure_one()
-        serial_model = self.env['sn.wsd.internal.serial'].with_context(active_test=False)
-        domain = [('active', '=', True)]
+        identity_model = self.env['sn.wsd.serial.identity']
         if self.mes_order_id:
-            domain.append(('mes_order_id', '=', self.mes_order_id.id))
+            domain = [('mes_order_id', '=', self.mes_order_id.id)]
         elif self.production_id:
-            domain.append(('production_id', '=', self.production_id.id))
+            domain = [('production_id', '=', self.production_id.id)]
         else:
-            return serial_model
+            return identity_model
+        # SNs that actually flowed through the order: WIP or history rows
+        wip_ids = self.env['sn.wsd.serial.wip'].search(domain).mapped('serial_identity_id')
+        history_ids = self.env['sn.wsd.serial.operation.history'].search(domain).mapped('serial_identity_id')
+        identities = (wip_ids | history_ids).filtered(lambda identity: identity.active)
         if self.product_id:
-            domain.append(('product_id', '=', self.product_id.id))
-        return serial_model.search(domain, order='serial_no, id')
+            lot_domain = [
+                ('name', 'in', identities.mapped('name')),
+                ('product_id', '=', self.product_id.id)]
+            lots = self.env['stock.lot'].with_context(active_test=False).search(lot_domain)
+            lot_names = set(lots.mapped('name'))
+            identities = identities.filtered(lambda identity: identity.name in lot_names)
+        return identities.sorted(lambda identity: (identity.name, identity.id))
 
     def _select_systematic_serials(self, candidates, sample_size):
         if not candidates or sample_size <= 0:
             return candidates.browse()
         if len(candidates) <= sample_size:
             return candidates
-        selected = self.env['sn.wsd.internal.serial']
+        selected = self.env['sn.wsd.serial.identity']
         step = len(candidates) / float(sample_size)
         used_indexes = set()
         for index in range(sample_size):
@@ -696,12 +703,14 @@ class QualityInspection(models.Model):
     def _sample_commands_from_serials(self, serials):
         self.ensure_one()
         commands = []
-        for sequence, serial in enumerate(serials, 1):
+        for sequence, identity in enumerate(serials, 1):
+            lot = self.env['stock.lot'].with_context(active_test=False).search(
+                [('name', '=', identity.name)], limit=1)
             commands.append(Command.create({
                 'sequence': sequence,
                 'company_id': self.company_id.id,
-                'internal_serial_id': serial.id,
-                'lot_id': serial.lot_id.id if 'lot_id' in serial._fields else False,
+                'serial_identity_id': identity.id,
+                'lot_id': lot.id,
             }))
         return commands
 
@@ -782,9 +791,9 @@ class QualityInspectionSample(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Serial Number',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         check_company=True,
         index=True,
     )
@@ -805,7 +814,7 @@ class QualityInspectionSample(models.Model):
     note = fields.Char(string='Notes')
 
     _sample_serial_uniq = models.Constraint(
-        'unique(inspection_id, internal_serial_id)',
+        'unique(inspection_id, serial_identity_id)',
         'The same serial number can only be sampled once in one inspection.',
     )
 
@@ -827,12 +836,12 @@ class QualityInspectionSample(models.Model):
         self.write({'result': 'fail'})
         return True
 
-    @api.constrains('inspection_id', 'company_id', 'internal_serial_id', 'lot_id', 'defect_code_id')
+    @api.constrains('inspection_id', 'company_id', 'serial_identity_id', 'lot_id', 'defect_code_id')
     def _check_sample_company(self):
         for sample in self:
             if sample.inspection_id.company_id != sample.company_id:
                 raise ValidationError(_('The sample must belong to the same company as the inspection.'))
-            related_records = [sample.internal_serial_id, sample.lot_id, sample.defect_code_id]
+            related_records = [sample.serial_identity_id, sample.lot_id, sample.defect_code_id]
             for record in related_records:
                 if record and record.company_id and record.company_id != sample.company_id:
                     raise ValidationError(_('Sample related records must belong to the same company.'))

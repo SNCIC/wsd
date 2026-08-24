@@ -30,8 +30,12 @@ class SerialIdentity(models.Model):
     origin_lot_id = fields.Many2one(
         'stock.lot', string='Origin Lot/Serial', check_company=True, index=True,
     )
-    stage_serial_ids = fields.One2many(
-        'sn.wsd.internal.serial', 'serial_identity_id', string='Production Stages', readonly=True,
+    binding_ids = fields.One2many(
+        'sn.wsd.serial.binding', 'serial_identity_id', string='Bindings',
+    )
+    bound_machine_binding_ids = fields.One2many(
+        'sn.wsd.serial.binding', 'bound_serial_identity_id',
+        string='Bound SNs',
     )
     note = fields.Text()
 

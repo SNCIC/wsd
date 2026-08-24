@@ -155,15 +155,8 @@ class MrpProduction(models.Model):
         default='draft',
         tracking=True,
     )
-    x_internal_serial_ids = fields.One2many('sn.wsd.internal.serial', 'production_id', string='Origin Internal Serials')
-    x_internal_serial_count = fields.Integer(compute='_compute_internal_serial_stats')
-    x_internal_serial_passed = fields.Integer(compute='_compute_internal_serial_stats')
-    x_internal_serial_failed = fields.Integer(compute='_compute_internal_serial_stats')
-    x_internal_serial_scrapped = fields.Integer(compute='_compute_internal_serial_stats')
-    x_meter_aging_batch_ids = fields.One2many('sn.wsd.meter.aging.batch', 'production_id', string='Aging Batches')
-    x_meter_aging_batch_count = fields.Integer(compute='_compute_internal_serial_stats')
     x_meter_pack_record_ids = fields.One2many('sn.wsd.meter.pack.record', 'production_id', string='Pack Records')
-    x_meter_pack_record_count = fields.Integer(compute='_compute_internal_serial_stats')
+    x_meter_pack_record_count = fields.Integer(compute='_compute_meter_pack_stats')
 
     @api.depends('x_mes_order_ids.state', 'x_mes_order_ids.date_plan')
     def _compute_x_mes_order_id(self):
@@ -173,145 +166,16 @@ class MrpProduction(models.Model):
             ).sorted(lambda order: (order.date_plan, order.id))
             production.x_mes_order_id = orders[:1]
 
-    def _get_active_stage_serials(self):
+    def _get_meter_packed_serials(self):
+        """Identities packed for this MO: pack records are the single
+        source of truth since the stage-archive model was removed."""
         self.ensure_one()
-        serials = self.env['sn.wsd.internal.serial'].with_context(active_test=False).search([
-            ('production_id', '=', self.id),
-            ('active', '=', True),
-        ])
-        return serials.filtered(lambda serial: not serial.is_confirmed_scrapped())
+        return self.x_meter_pack_record_ids.mapped('serial_identity_id')
 
-    def _get_serial_capacity(self):
-        self.ensure_one()
-        planned_qty = int(self.product_uom_id.round(self.product_qty))
-        all_serials = self.env['sn.wsd.internal.serial'].with_context(active_test=False).search([
-            ('production_id', '=', self.id),
-        ])
-        active_serials = all_serials.filtered(lambda serial: serial.active and not serial.is_confirmed_scrapped())
-        scrapped_serials = all_serials.filtered(lambda serial: serial.is_confirmed_scrapped())
-        return {
-            'planned_qty': planned_qty,
-            'active_serial_qty': len(active_serials),
-            'scrapped_serial_qty': len(scrapped_serials),
-            'historical_serial_qty': len(all_serials),
-            'available_qty': max(planned_qty - len(active_serials), 0),
-        }
-
-    def _lock_serial_capacity(self):
-        self.ensure_one()
-        self.env.cr.execute('SELECT id FROM mrp_production WHERE id = %s FOR UPDATE', [self.id])
-
-    def _get_or_create_stage_lot(self, serial_no, identity=False):
-        self.ensure_one()
-        lot = self.env['stock.lot'].with_context(active_test=False).search([
-            ('name', '=', serial_no),
-            ('product_id', '=', self.product_id.id),
-            '|',
-            ('company_id', '=', False),
-            ('company_id', '=', self.company_id.id),
-        ], limit=1)
-        if not lot:
-            lot = self.env['stock.lot'].create({
-                'name': serial_no,
-                'product_id': self.product_id.id,
-                'company_id': self.company_id.id,
-                'x_serial_identity_id': identity.id if identity else False,
-            })
-        elif identity and not lot.x_serial_identity_id:
-            lot.x_serial_identity_id = identity
-        return lot
-
-    def _find_serial_source(self, serial_no):
-        self.ensure_one()
-        source_serial = self.env['sn.wsd.internal.serial'].with_context(active_test=False).search([
-            ('serial_no', '=', serial_no),
-            ('company_id', '=', self.company_id.id),
-            ('production_id', '!=', self.id),
-            ('active', '=', True),
-        ], order='production_date desc, id desc', limit=1)
-        source_lot = source_serial.lot_id or self.env['stock.lot'].with_context(active_test=False).search([
-            ('name', '=', serial_no),
-            ('product_id', '!=', self.product_id.id),
-            '|',
-            ('company_id', '=', False),
-            ('company_id', '=', self.company_id.id),
-        ], order='id desc', limit=1)
-        return source_serial, source_lot
-
-    def get_or_create_stage_serial(self, serial_no, workorder=False, allow_create=False, origin_type='external'):
-        self.ensure_one()
-        serial_no = (serial_no or '').strip()
-        if not serial_no:
-            raise ValidationError(_('Serial number is required.'))
-        serial_model = self.env['sn.wsd.internal.serial'].with_context(active_test=False)
-        serial = serial_model.search([
-            ('serial_no', '=', serial_no),
-            ('company_id', '=', self.company_id.id),
-            ('production_id', '=', self.id),
-        ], limit=1)
-        if serial:
-            if not serial.active:
-                raise ValidationError(_('Serial number %s is inactive.') % serial_no)
-            return serial, False
-        if not allow_create:
-            return serial, False
-
-        self._lock_serial_capacity()
-        serial = serial_model.search([
-            ('serial_no', '=', serial_no),
-            ('company_id', '=', self.company_id.id),
-            ('production_id', '=', self.id),
-        ], limit=1)
-        if serial:
-            return serial, False
-        capacity = self._get_serial_capacity()
-        if capacity['available_qty'] <= 0:
-            raise ValidationError(_(
-                'Serial capacity exceeded for manufacturing order %(production)s. '
-                'Planned: %(planned)s, active: %(active)s, scrapped: %(scrapped)s.'
-            ) % {
-                'production': self.display_name,
-                'planned': capacity['planned_qty'],
-                'active': capacity['active_serial_qty'],
-                'scrapped': capacity['scrapped_serial_qty'],
-            })
-
-        source_serial, source_lot = self._find_serial_source(serial_no)
-        identity = source_serial.serial_identity_id or source_lot.x_serial_identity_id
-        if not identity:
-            identity = self.env['sn.wsd.serial.identity'].get_or_create(
-                serial_no,
-                self.company_id,
-                origin_type=origin_type,
-                origin_production_id=source_serial.production_id or self,
-                origin_lot_id=source_lot,
-            )
-        lot = self._get_or_create_stage_lot(serial_no, identity=identity)
-        scrapped_candidate = serial_model.search([
-            ('production_id', '=', self.id),
-            ('final_result', '=', 'scrap'),
-            ('replacement_serial_ids', '=', False),
-        ], order='production_date, id', limit=1)
-        serial = serial_model.create({
-            'serial_no': serial_no,
-            'barcode': serial_no,
-            'serial_identity_id': identity.id,
-            'product_id': self.product_id.id,
-            'production_id': self.id,
-            'current_production_id': self.id,
-            'company_id': self.company_id.id,
-            'serial_type': 'finished' if self.x_has_meter_operations else 'semifinished',
-            'parent_id': source_serial.id,
-            'source_lot_id': source_lot.id,
-            'lot_id': lot.id,
-            'entry_route_operation_id': workorder.operation_id.x_route_operation_id.id if workorder and workorder.operation_id.x_route_operation_id else False,
-            'entry_time': fields.Datetime.now(),
-            'replaces_serial_id': scrapped_candidate.id,
-            'identity_origin_type': origin_type,
-        })
-        if lot not in self.lot_producing_ids:
-            self.lot_producing_ids = [fields.Command.link(lot.id)]
-        return serial, True
+    @api.depends('x_meter_pack_record_ids')
+    def _compute_meter_pack_stats(self):
+        for production in self:
+            production.x_meter_pack_record_count = len(production.x_meter_pack_record_ids)
     @api.depends(
         'state',
         'reservation_state',
@@ -568,19 +432,6 @@ class MrpProduction(models.Model):
         draft_productions._check_workshop_manufacturing_locations()
         return super().action_confirm()
 
-    def _compute_internal_serial_stats(self):
-        for production in self:
-            serials = self.env['sn.wsd.internal.serial'].search([
-                '|', ('production_id', '=', production.id),
-                ('current_production_id', '=', production.id),
-            ])
-            production.x_internal_serial_count = len(serials)
-            production.x_internal_serial_passed = len(serials.filtered(lambda s: s.final_result == 'pass'))
-            production.x_internal_serial_failed = len(serials.filtered(lambda s: s.final_result == 'fail'))
-            production.x_internal_serial_scrapped = len(serials.filtered(lambda s: s.final_result == 'scrap'))
-            production.x_meter_aging_batch_count = len(production.x_meter_aging_batch_ids)
-            production.x_meter_pack_record_count = len(production.x_meter_pack_record_ids)
-
     def _update_meter_flow_state(self):
         state_priority = {
             'draft': 0,
@@ -619,16 +470,9 @@ class MrpProduction(models.Model):
             if production.state == 'done':
                 target_state = 'done'
             else:
-                serials = production._get_active_stage_serials()
                 observed_states = []
-                if serials.filtered('pack_date'):
+                if production.x_meter_pack_record_ids:
                     observed_states.append('packed')
-                if serials.filtered('seal_no'):
-                    observed_states.append('sealed')
-                if serials.filtered(lambda serial: serial.final_verification_result == 'pass'):
-                    observed_states.append('verified')
-                if serials.filtered(lambda serial: serial.aging_result == 'pass'):
-                    observed_states.append('aging_done')
                 completed_operations = production.x_mes_order_ids.x_route_operation_ids.filtered(
                     lambda operation: operation.x_ok_qty > 0 or operation.x_reported_ok_qty > 0
                 )
@@ -648,13 +492,9 @@ class MrpProduction(models.Model):
 
     def _check_sn_uniqueness(self):
         self.ensure_one()
-        if self.x_has_meter_operations and self.x_internal_serial_ids.filtered('pack_date'):
+        if self.x_has_meter_operations and self._get_meter_packed_serials():
             return True
         return super()._check_sn_uniqueness()
-
-    def _get_meter_packed_serials(self):
-        self.ensure_one()
-        return self.x_internal_serial_ids.filtered('pack_date')
 
     def _should_use_meter_mes_done_flow(self):
         self.ensure_one()
@@ -904,38 +744,6 @@ class MrpProduction(models.Model):
             })
             production.move_finished_ids.filtered(lambda move: move.state == 'done')._trigger_assign()
         return result if result is not None else True
-
-    def action_generate_internal_serial_archives(self):
-        orders = self.mapped('x_mes_order_ids').filtered(
-            lambda order: order.state != 'cancelled'
-        )
-        if not orders:
-            raise ValidationError(_('An MES order is required to generate internal serials.'))
-        for order in orders:
-            order.action_generate_missing_internal_serials()
-        return True
-
-    def action_open_internal_serials(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Internal Serials',
-            'res_model': 'sn.wsd.internal.serial',
-            'view_mode': 'list,form',
-            'domain': [('production_id', '=', self.id)],
-            'context': {'default_production_id': self.id, 'default_product_id': self.product_id.id},
-        }
-
-    def action_open_aging_batches(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Aging Batches',
-            'res_model': 'sn.wsd.meter.aging.batch',
-            'view_mode': 'list,form',
-            'domain': [('production_id', '=', self.id)],
-            'context': {'default_production_id': self.id},
-        }
 
     def action_open_pack_records(self):
         self.ensure_one()

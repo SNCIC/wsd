@@ -170,6 +170,7 @@ msgstr "新建"
 #. module: sn_wsd_repair
 #. odoo-python
 #: code:addons/sn_wsd_repair/models/sn_wsd_repair.py:0
+#: code:addons/sn_wsd_repair/models/repair_pending.py:0
 msgid "New Repair Order"
 msgstr "新维修单"
 
@@ -880,6 +881,7 @@ msgstr "报废原因"
 
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
 
@@ -915,3 +917,103 @@ msgstr "提报前请至少登记一条缺陷明细。"
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order_line__qty
 msgid "Quantity"
 msgstr "数量"
+
+#. module: sn_wsd_repair
+#: model:ir.model,name:sn_wsd_repair.model_sn_wsd_repair_pending
+msgid "SNs Waiting for Repair"
+msgstr "待维修 SN"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__serial_name
+msgid "SN"
+msgstr "SN"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__serial_identity_id
+msgid "Physical SN"
+msgstr "物理 SN"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__route_operation_id
+msgid "Failed Operation"
+msgstr "不良工序"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__operation_name
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__ng_count
+msgid "NG Count"
+msgstr "NG 次数"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__retry_limit
+msgid "Retry Limit"
+msgstr "过站上限"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__last_ng_time
+msgid "Last NG Time"
+msgstr "最近 NG 时间"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/mes_order_repair_gate.py:0
+msgid ""
+"SN %(sn)s has repair order %(order)s in state %(state)s; close it before "
+"feeding the SN back into the flow."
+msgstr "SN %(sn)s 存在未完成的维修单 %(order)s（状态：%(state)s），请先完成维修单再重新入站。"
+
+#. module: sn_wsd_repair
+#: model:ir.actions.act_window,name:sn_wsd_repair.action_sn_wsd_repair_pending
+#: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_pending
+msgid "Pending Repair"
+msgstr "待维修"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_list
+msgid "Create Repair Order"
+msgstr "创建维修单"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.actions.act_window,help:sn_wsd_repair.action_sn_wsd_repair_pending
+msgid "No SN is waiting for repair"
+msgstr "没有待维修的 SN"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.actions.act_window,help:sn_wsd_repair.action_sn_wsd_repair_pending
+msgid ""
+"SNs appear here once their NG passes exhaust the operation retry limit. "
+"Create a repair order, fix the board, then feed it back at the failed "
+"operation."
+msgstr "当 SN 的 NG 过站次数达到工序上限时会出现在这里。创建维修单、修复后，把 SN 重新投入不良工序。"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/mes_order_repair_gate.py:0
+msgid ""
+"SN %(sn)s is frozen by %(kind)s %(ref)s in state %(state)s; close it before "
+"feeding the SN back into the flow."
+msgstr "SN %(sn)s 被%(kind)s %(ref)s（状态：%(state)s）冻结，请先处理完单据再投入。"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/mes_order_repair_gate.py:0
+msgid ""
+"SN %(sn)s is frozen by %(kind)s %(ref)s in state %(state)s; it cannot leave "
+"with OK before the issue is resolved."
+msgstr "SN %(sn)s 被%(kind)s %(ref)s（状态：%(state)s）冻结，处置完成前不能以 OK 出站。"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/mes_order_repair_gate.py:0
+msgid "repair order"
+msgstr "维修单"
+
+#. module: sn_wsd_repair
+#. odoo-python
+#: code:addons/sn_wsd_repair/models/mes_order_repair_gate.py:0
+msgid "quality issue"
+msgstr "质量问题单"

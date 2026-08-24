@@ -6,12 +6,21 @@
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet" position="inside">
-                <group string="SMT Product Usage">
+                <group string="SMT Reel" name="smt_reel">
+                    <field name="x_smt_is_reel" readonly="1"/>
+                    <field name="x_smt_reel_state" readonly="1"/>
+                    <field name="x_smt_initial_qty" readonly="1"/>
+                    <field name="x_smt_consumed_points" readonly="1"/>
+                    <field name="x_smt_point_balance" readonly="1"/>
+                    <field name="x_smt_supplier_lot_no" readonly="1"/>
+                    <field name="x_smt_date_code" readonly="1"/>
+                </group>
+                <group string="Lot Product Usage">
                     <field name="smt_consumption_count" readonly="1"/>
                     <field name="smt_consumption_ids" readonly="1">
                         <list create="0" delete="0">
                             <field name="serial_no"/>
-                            <field name="production_id"/>
+                            <field name="mes_order_id"/>
                             <field name="required_item_code"/>
                             <field name="consumed_qty"/>
                             <field name="consumed_at"/>

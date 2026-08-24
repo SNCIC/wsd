@@ -46,11 +46,6 @@ class SnSmtCart(models.Model):
     line_ids = fields.One2many('sn.smt.cart.line', 'cart_id', string='Feeder Lines')
     feeder_ids = fields.Many2many('sn.smt.feeder', compute='_compute_feeder_ids', string='Feeders')
     feeder_count = fields.Integer(compute='_compute_feeder_ids')
-    offline_material_ids = fields.One2many(
-        'sn.smt.offline.material',
-        'cart_id',
-        string='Offline Materials',
-    )
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -181,8 +176,8 @@ class SnSmtCart(models.Model):
                 extra.append(line.slot_no)
                 continue
             if line.material_lot_id and not any(
-                    self._cart_material_matches(req.item_code, line.material_lot_id.product_id)
-                    for req in requirements):
+                self._cart_material_matches(line.mes_order_id, req.item_code, line.material_lot_id.product_id)
+                for req in requirements):
                 mismatch.append((line.slot_no, line.material_lot_id.product_id.default_code,
                                  ', '.join(sorted(set(requirements.mapped('item_code'))))))
         if mismatch:
@@ -202,14 +197,15 @@ class SnSmtCart(models.Model):
         return missing, extra
 
     @api.model
-    def _cart_material_matches(self, item_code, product):
+    def _cart_material_matches(self, mes_order, item_code, product):
         if not product:
             return False
         required = self.env['product.product'].search([
             ('default_code', '=', item_code),
         ], limit=1)
         if required:
-            return self.env['sn.smt.operation.mixin']._is_allowed_material_product(required, product)
+            return self.env['sn.smt.operation.mixin']._is_allowed_material_product(
+                mes_order, required, product)
         return product.default_code == item_code
 
     def action_unmount(self):
@@ -389,7 +385,7 @@ class SnSmtCartLine(models.Model):
                 _('The station %s is not required by MES order %s.',
                   self.slot_no, self.mes_order_id.display_name))
         if self.material_lot_id and not any(
-                self.cart_id._cart_material_matches(req.item_code, self.material_lot_id.product_id)
+                self.cart_id._cart_material_matches(self.mes_order_id, req.item_code, self.material_lot_id.product_id)
                 for req in requirements):
             raise UserError(
                 _('The material %s does not match station %s. Required item code: %s.',

@@ -36,11 +36,14 @@ class TestRepair(TransactionCase):
         })
         cls.mes_order = cls._create_mes_order(cls.production, 10)
         cls.route_operation = cls.mes_order.x_route_operation_ids[0] if cls.mes_order.x_route_operation_ids else False
-        cls.serial = cls.env['sn.wsd.internal.serial'].create({
-            'serial_no': 'RP-SN-001',
-            'product_id': cls.production.product_id.id,
-            'production_id': cls.production.id,
+        cls.serial = cls.env['sn.wsd.serial.identity'].create({
+            'name': 'RP-SN-001',
+            'company_id': cls.env.company.id,
+        })
+        cls.env['sn.wsd.serial.wip'].create({
+            'serial_identity_id': cls.serial.id,
             'mes_order_id': cls.mes_order.id,
+            'route_operation_id': cls.route_operation.id,
         })
 
     @classmethod
@@ -70,12 +73,17 @@ class TestRepair(TransactionCase):
             })
 
     def _make_serial_defective(self, serial):
-        serial.write({'final_result': 'fail', 'x_quality_hold_state': 'hold'})
+        self.env['sn.wsd.quality.issue'].create({
+            'serial_identity_id': serial.id,
+            'route_operation_id': self.route_operation.id,
+            'defect_code_id': self.defect_code.id,
+            'issue_source': 'manual',
+        })
 
     def _create_order(self, **kw):
         vals = {
-            'serial_id': self.serial.id,
-            'serial_no': self.serial.serial_no,
+            'serial_identity_id': self.serial.id,
+            'serial_no': self.serial.name,
             'defect_code_id': self.defect_code.id,
             'defect_line_ids': [(0, 0, {
                 'defect_code_id': self.defect_code.id, 'qty': 1})],
@@ -105,7 +113,7 @@ class TestRepair(TransactionCase):
 
     def test_entry_defaults_to_defect_operation(self):
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         order = self._create_order()
         order.action_report_repair()
         self.assertEqual(order.repair_entry_route_operation_id, self.route_operation)
@@ -138,7 +146,7 @@ class TestRepair(TransactionCase):
 
     def test_full_flow_repair_ok(self):
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         order = self._create_order(
             defect_location='U12',
             failure_cause_id=self.failure_cause.id,
@@ -149,7 +157,7 @@ class TestRepair(TransactionCase):
         order.action_start_repair()
         self.assertEqual(order.state, 'repairing')
         self.assertEqual(
-            self.serial.current_route_operation_id, order.repair_entry_route_operation_id)
+            self.route_operation, order.repair_entry_route_operation_id)
         order.action_repair_ok()
         self.assertEqual(order.state, 'done')
         self.assertEqual(order.result, 'ok')
@@ -158,7 +166,7 @@ class TestRepair(TransactionCase):
 
     def test_full_flow_repair_scrap(self):
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         order = self._create_order()
         order.action_report_repair()
         with self.assertRaises(UserError):
@@ -171,14 +179,14 @@ class TestRepair(TransactionCase):
 
     def test_report_requires_defect_lines(self):
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         order = self._create_order(defect_line_ids=[(5, 0, 0)])
         with self.assertRaises(UserError):
             order.action_report_repair()
 
     def test_report_derives_main_defect(self):
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         order = self._create_order(defect_code_id=False)
         order.action_report_repair()
         self.assertEqual(order.defect_code_id, self.defect_code)
@@ -187,13 +195,13 @@ class TestRepair(TransactionCase):
         from odoo.tests import Form
         self._make_serial_defective(self.serial)
         self.env['sn.wsd.quality.issue'].create({
-            'internal_serial_id': self.serial.id,
+            'serial_identity_id': self.serial.id,
             'defect_code_id': self.defect_code.id,
             'issue_source': 'repair',
             'state': 'open',
         })
         with Form(self.env['sn.wsd.repair.order']) as f:
-            f.serial_id = self.serial
+            f.serial_identity_id = self.serial
             self.assertEqual(len(f.defect_line_ids), 1)
         order = f.save()
         self.assertEqual(order.defect_line_ids.defect_code_id, self.defect_code)
@@ -223,7 +231,7 @@ class TestRepair(TransactionCase):
     def test_service_full_flow(self):
         service = self.env['sn.wsd.repair.service']
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         info = service.resolve('RP-SN-001')
         self.assertEqual(info['sn'], 'RP-SN-001')
         message = service.report(
@@ -245,13 +253,13 @@ class TestRepair(TransactionCase):
     def test_service_scrap_flow(self):
         service = self.env['sn.wsd.repair.service']
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         service.report('RP-SN-001', 'D01')
         service.start('RP-SN-001')
         message = service.scrap('RP-SN-001', 'SCR01')
         self.assertIn('RP-SN-001', message)
         order = self.env['sn.wsd.repair.order'].search(
-            [('serial_id', '=', self.serial.id)], order='id desc', limit=1)
+            [('serial_identity_id', '=', self.serial.id)], order='id desc', limit=1)
         self.assertEqual(order.state, 'scrapped')
         self.assertTrue(order.scrap_record_id)
 
@@ -293,8 +301,8 @@ class TestRepairDefectLines(TestRepair):
         self._make_serial_defective(self.serial)
         with self.assertRaises(ValidationError):
             self.env['sn.wsd.repair.order'].create({
-                'serial_id': self.serial.id,
-                'serial_no': self.serial.serial_no,
+                'serial_identity_id': self.serial.id,
+                'serial_no': self.serial.name,
                 'defect_line_ids': [(0, 0, {
                     'defect_code_id': self.defect_code.id, 'qty': 2})],
             })
@@ -303,13 +311,13 @@ class TestRepairDefectLines(TestRepair):
         # service.report is the SN flow: run it on a station-mode order
         self.mes_order.x_manage_mode = 'station'
         self._make_serial_defective(self.serial)
-        self.serial.current_route_operation_id = self.route_operation
+        
         service = self.env['sn.wsd.repair.service']
         message = service.report('RP-SN-001', 'D01', lines=[
             {'defect_code': 'D01', 'qty': 1, 'location': 'U12'},
         ])
         self.assertIn('RP-SN-001', message)
         order = self.env['sn.wsd.repair.order'].search(
-            [('serial_id', '=', self.serial.id)], order='id desc', limit=1)
+            [('serial_identity_id', '=', self.serial.id)], order='id desc', limit=1)
         self.assertEqual(len(order.defect_line_ids), 1)
         self.assertEqual(order.defect_line_ids[0].defect_location, 'U12')

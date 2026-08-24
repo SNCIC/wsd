@@ -23,6 +23,7 @@
                 <field name="code"/>
                 <field name="active"/>
                 <field name="name"/>
+                <field name="x_process_type" optional="show"/>
                 <field name="x_production_side"/>
                 <field name="x_workshop_id"/>
                 <field name="x_is_default"/>
@@ -64,6 +65,7 @@
                         <group>
                             <field name="code" readonly="version > 0"/>
                             <field name="name"/>
+                            <field name="x_process_type"/>
                             <field name="version" readonly="1"/>
                             <!-- state/route_flow_json invisible: the canvas edits are
                                  pushed into route_flow_json and saved/versioned by the
@@ -179,10 +181,7 @@
                 <field name="time_cycle_manual"/>
                 <field name="x_allow_entry"/>
                 <field name="x_allow_serial_creation"/>
-                <field name="x_allow_reentry"/>
-                <field name="x_allow_repair_return"/>
                 <field name="x_allow_skip_with_override"/>
-                <field name="x_ng_retry_limit"/>
             </list>
         </field>
     </record>
@@ -217,10 +216,7 @@
                     <group string="Route Control">
                         <field name="x_allow_entry"/>
                         <field name="x_allow_serial_creation"/>
-                        <field name="x_allow_reentry"/>
-                        <field name="x_allow_repair_return"/>
                         <field name="x_allow_skip_with_override"/>
-                        <field name="x_ng_retry_limit"/>
                     </group>
                 </sheet>
             </form>

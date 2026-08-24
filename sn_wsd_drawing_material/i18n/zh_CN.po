@@ -27,14 +27,19 @@ msgid "Assembly Sequence"
 msgstr "组立顺序"
 
 #. module: sn_wsd_drawing_material
+#. odoo-javascript
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_board_side
 #: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__bottom
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__x_side__bottom
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
 msgid "Bottom (B)"
 msgstr "底面 (B)"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__company_id
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__company_id
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_acknowledge__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -92,7 +97,9 @@ msgstr "料号"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_drawing_no
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__x_drawing_no
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
 msgid "Drawing No."
 msgstr "图号"
 
@@ -112,6 +119,7 @@ msgstr "关键物料管控明细"
 
 #. module: sn_wsd_drawing_material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_form
 msgid "Dimension"
 msgstr "维度"
 
@@ -122,48 +130,64 @@ msgstr "启用"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__operation_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
 msgid "Operation"
 msgstr "工序"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_side
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__x_side
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
 msgid "Production Side"
 msgstr "生产面"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_id
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__product_id
 msgid "Product"
 msgstr "产品"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_name
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__product_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_list
 msgid "Product Name"
 msgstr "产品名称"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_specification
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__product_specification
 msgid "Product Specification"
 msgstr "产品规格"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__product_board_side
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__product_board_side
 msgid "Board Side Type"
 msgstr "板面类型"
 
 #. module: sn_wsd_drawing_material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_form
 msgid "Product Info"
 msgstr "产品信息"
 
 #. module: sn_wsd_drawing_material
+#. odoo-javascript
 #: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__single
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__x_side__single
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
 msgid "Single"
 msgstr "单面"
 
 #. module: sn_wsd_drawing_material
+#. odoo-javascript
 #: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__x_side__top
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__x_side__top
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
 msgid "Top (T)"
 msgstr "顶面 (T)"
 
@@ -193,6 +217,7 @@ msgstr "行数"
 
 #. module: sn_wsd_drawing_material
 #: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material__x_drawing_no
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_esop_document__x_drawing_no
 msgid "Product code of the drawing; product info is derived from it."
 msgstr "图号即产品编码，产品信息按图号带出。"
 
@@ -222,6 +247,7 @@ msgstr "为图号在某车间、工序、面别下维护使用的制具/辅料/�
 
 #. module: sn_wsd_drawing_material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
 msgid "Group By"
 msgstr "分组"
 
@@ -255,4 +281,214 @@ msgstr "单面"
 #: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_drawing_material__product_board_side__double
 msgid "Double Side"
 msgstr "双面"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model,name:sn_wsd_drawing_material.model_sn_wsd_esop_document
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_acknowledge__document_id
+msgid "ESOP Document"
+msgstr "ESOP 文件"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model,name:sn_wsd_drawing_material.model_sn_wsd_esop_acknowledge
+msgid "ESOP Document Acknowledgement"
+msgstr "ESOP 文件签收"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: model:ir.actions.act_window,name:sn_wsd_drawing_material.action_sn_wsd_esop_documents
+#: model:ir.ui.menu,name:sn_wsd_drawing_material.menu_sn_wsd_esop_documents
+#: code:addons/sn_wsd_drawing_material/static/src/js/shop_floor_esop_link.js:0
+msgid "ESOP Documents"
+msgstr "ESOP 文件"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+#: model:ir.actions.client,name:sn_wsd_drawing_material.action_sn_wsd_esop_screen
+#: model:ir.ui.menu,name:sn_wsd_drawing_material.menu_sn_wsd_esop_screen
+msgid "ESOP"
+msgstr "ESOP 文件"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__doc_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Document Type"
+msgstr "文档类型"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Document Title"
+msgstr "文件标题"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__file
+msgid "File"
+msgstr "文件"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__file_name
+msgid "File Name"
+msgstr "文件名"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__version
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_acknowledge__version
+msgid "Version"
+msgstr "版本"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__state
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__state__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "In Use"
+msgstr "在用"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__state__archived
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__archived_date
+msgid "Archived On"
+msgstr "归档时间"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__archived_uid
+msgid "Archived By"
+msgstr "归档人"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_document__ack_ids
+msgid "Acknowledgements"
+msgstr "签收记录"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_acknowledge__employee_id
+msgid "Employee"
+msgstr "员工"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_esop_acknowledge__ack_datetime
+msgid "Acknowledged On"
+msgstr "签收时间"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__doc_type__instruction
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Work Instruction"
+msgstr "作业指导书"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__doc_type__drawing
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Drawing"
+msgstr "图纸"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__doc_type__inspection
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_search
+msgid "Inspection Standard"
+msgstr "检验标准"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: model:ir.model.fields.selection,name:sn_wsd_drawing_material.selection__sn_wsd_esop_document__doc_type__other
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.constraint,message:sn_wsd_drawing_material.constraint_sn_wsd_esop_document_esop_active_uniq
+msgid ""
+"This drawing already has an active document of this type for this "
+"operation and side."
+msgstr "该图号在此工序、面别下已有同类型的在用文件。"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.constraint,message:sn_wsd_drawing_material.constraint_sn_wsd_esop_acknowledge_employee_version_uniq
+msgid "This employee already acknowledged this document version."
+msgstr "该员工已签收过此文件版本。"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.actions.act_window,help:sn_wsd_drawing_material.action_sn_wsd_esop_documents
+msgid "Create an ESOP document"
+msgstr "新建 ESOP 文件"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.actions.act_window,help:sn_wsd_drawing_material.action_sn_wsd_esop_documents
+msgid "Upload the work instruction PDF for a drawing number, operation and side; re-uploading archives the previous version automatically."
+msgstr "维护图号在某工序、面别下的作业指导书 PDF；重新上传会自动归档旧版本。"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Acknowledge"
+msgstr "确认已读"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Back"
+msgstr "返回"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Clear"
+msgstr "清空"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Loading…"
+msgstr "加载中…"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "No documents for this drawing number."
+msgstr "该图号暂无在用文件。"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "No MES order in progress. Scan or type a drawing number to search."
+msgstr "当前没有进行中的制令单，可扫/输图号搜索。"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Refresh"
+msgstr "刷新"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Scan or type a drawing number…"
+msgstr "扫/输图号…"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Search"
+msgstr "搜索"
+
+#. module: sn_wsd_drawing_material
+#. odoo-javascript
+#: code:addons/sn_wsd_drawing_material/static/src/js/esop_screen.js:0
+msgid "Updated to"
+msgstr "已更新至"
 

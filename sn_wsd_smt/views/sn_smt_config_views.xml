@@ -1,125 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_sn_smt_config_list" model="ir.ui.view">
-        <field name="name">sn.smt.config.list</field>
-        <field name="model">sn.smt.config</field>
-        <field name="arch" type="xml">
-            <list editable="bottom">
-                <field name="key"/>
-                <field name="value"/>
-                <field name="description"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="view_sn_smt_operation_record_list" model="ir.ui.view">
-        <field name="name">sn.smt.operation.record.list</field>
-        <field name="model">sn.smt.operation.record</field>
+    <!-- 物料日志（事件账）：每次 上料/备料/料车上料/换续料/下料/转机继承 一行 -->
+    <record id="view_sn_smt_material_log_list" model="ir.ui.view">
+        <field name="name">sn.smt.material.log.list</field>
+        <field name="model">sn.smt.material.log</field>
         <field name="arch" type="xml">
             <list create="0" delete="0">
-                <field name="production_id"/>
-                <field name="mes_order_id" optional="show"/>
+                <field name="operated_at"/>
+                <field name="mes_order_id"/>
+                <field name="workcenter_id" optional="show"/>
                 <field name="operation_type"/>
-                <field name="material_lot_id"/>
-                <field name="old_material_lot_id"/>
-                <field name="feeder_id"/>
-                <field name="cart_id"/>
                 <field name="device_seq"/>
                 <field name="table_no"/>
                 <field name="loadpoint"/>
-                <field name="is_online"/>
+                <field name="chanel_sn" optional="hide"/>
                 <field name="required_item_code" optional="show"/>
                 <field name="actual_item_code" optional="show"/>
-                <field name="qty_before" optional="show"/>
-                <field name="operation_qty" optional="show"/>
-                <field name="qty_after" optional="show"/>
-                <field name="operator_id" optional="show"/>
-                <field name="create_date"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="view_sn_smt_operation_log_list" model="ir.ui.view">
-        <field name="name">sn.smt.operation.log.list</field>
-        <field name="model">sn.smt.operation.log</field>
-        <field name="arch" type="xml">
-            <list create="0" delete="0">
-                <field name="production_id"/>
-                <field name="mes_order_id" optional="show"/>
-                <field name="event_type"/>
-                <field name="message"/>
-                <field name="create_date"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="view_sn_smt_traceability_list" model="ir.ui.view">
-        <field name="name">sn.smt.traceability.list</field>
-        <field name="model">sn.smt.traceability</field>
-        <field name="arch" type="xml">
-            <list create="0" delete="0">
-                <field name="production_id"/>
-                <field name="mes_order_id" optional="show"/>
-                <field name="action_type"/>
                 <field name="material_lot_id"/>
-                <field name="old_material_lot_id"/>
-                <field name="feeder_id"/>
-                <field name="cart_id"/>
-                <field name="device_seq"/>
-                <field name="table_no"/>
-                <field name="loadpoint"/>
-                <field name="required_item_code" optional="show"/>
-                <field name="actual_item_code" optional="show"/>
-                <field name="create_date"/>
+                <field name="old_material_lot_id" optional="show"/>
+                <field name="old_lot_qty" optional="hide"/>
+                <field name="feeder_id" optional="show"/>
+                <field name="cart_id" optional="show"/>
+                <field name="qty_before" optional="hide"/>
+                <field name="qty_after" optional="hide"/>
+                <field name="operator_id"/>
+                <field name="note" optional="hide"/>
             </list>
         </field>
     </record>
 
-    <record id="action_sn_smt_config" model="ir.actions.act_window">
-        <field name="name">SMT Config</field>
-        <field name="res_model">sn.smt.config</field>
-        <field name="view_mode">list</field>
-        <field name="context">{'default_key': 'QM011'}</field>
+    <record id="view_sn_smt_material_log_search" model="ir.ui.view">
+        <field name="name">sn.smt.material.log.search</field>
+        <field name="model">sn.smt.material.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mes_order_id"/>
+                <field name="material_lot_id"/>
+                <field name="loadpoint"/>
+                <field name="required_item_code"/>
+                <field name="operator_id"/>
+                <filter name="filter_online_load" string="Online Load" domain="[('operation_type', '=', 'online_load')]"/>
+                <filter name="filter_cart_load" string="Cart Load" domain="[('operation_type', '=', 'cart_load')]"/>
+                <filter name="filter_change" string="Change / Continue" domain="[('operation_type', 'in', ('change', 'continue'))]"/>
+                <filter name="filter_unload" string="Unload" domain="[('operation_type', '=', 'unload')]"/>
+                <filter name="filter_changeover" string="Changeover Inherit" domain="[('operation_type', '=', 'changeover_inherit')]"/>
+                <group>
+                    <filter name="group_by_operation" string="Operation Type" context="{'group_by': 'operation_type'}"/>
+                    <filter name="group_by_mes_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
+                    <filter name="group_by_material" string="Material SN" context="{'group_by': 'material_lot_id'}"/>
+                    <filter name="group_by_day" string="Operated Day" context="{'group_by': 'operated_at:day'}"/>
+                </group>
+            </search>
+        </field>
     </record>
 
-    <record id="action_sn_smt_operation_record" model="ir.actions.act_window">
-        <field name="name">SMT Operation Records</field>
-        <field name="res_model">sn.smt.operation.record</field>
+    <record id="action_sn_smt_material_log" model="ir.actions.act_window">
+        <field name="name">Material Logs</field>
+        <field name="res_model">sn.smt.material.log</field>
         <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_smt_material_log_search"/>
     </record>
 
-    <record id="action_sn_smt_operation_log" model="ir.actions.act_window">
-        <field name="name">SMT Operation Logs</field>
-        <field name="res_model">sn.smt.operation.log</field>
-        <field name="view_mode">list</field>
-    </record>
-
-    <record id="action_sn_smt_traceability" model="ir.actions.act_window">
-        <field name="name">SMT Traceability</field>
-        <field name="res_model">sn.smt.traceability</field>
-        <field name="view_mode">list</field>
-    </record>
-
+    <!-- 扣点流水（内部）：产品用料（正向）/ 物料去向（反向）两个入口 -->
     <record id="view_sn_smt_material_consumption_list" model="ir.ui.view">
         <field name="name">sn.smt.material.consumption.list</field>
         <field name="model">sn.smt.material.consumption</field>
         <field name="arch" type="xml">
             <list create="0" delete="0">
+                <field name="consumed_at"/>
                 <field name="serial_no"/>
-                <field name="production_id"/>
-                <field name="route_operation_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id" optional="show"/>
                 <field name="required_item_code"/>
-                <field name="actual_item_code"/>
+                <field name="actual_item_code" optional="show"/>
                 <field name="material_sn"/>
-                <field name="device_seq"/>
-                <field name="table_no"/>
+                <field name="device_seq" optional="show"/>
+                <field name="table_no" optional="show"/>
                 <field name="loadpoint"/>
                 <field name="point_qty"/>
                 <field name="consumed_qty"/>
-                <field name="qty_before"/>
-                <field name="qty_after"/>
-                <field name="consumed_at"/>
-                <field name="operator_code"/>
+                <field name="qty_before" optional="hide"/>
+                <field name="qty_after" optional="hide"/>
+                <field name="operator_code" optional="hide"/>
             </list>
         </field>
     </record>
@@ -136,7 +98,7 @@
                     <group>
                         <group>
                             <field name="serial_no" readonly="1"/>
-                            <field name="production_id" readonly="1"/>
+                            <field name="mes_order_id" readonly="1"/>
                             <field name="route_operation_id" readonly="1"/>
                             <field name="material_sn" readonly="1"/>
                         </group>
@@ -162,9 +124,38 @@
         </field>
     </record>
 
-    <record id="action_sn_smt_material_consumption" model="ir.actions.act_window">
-        <field name="name">SMT Material Consumption</field>
+    <record id="view_sn_smt_material_consumption_search" model="ir.ui.view">
+        <field name="name">sn.smt.material.consumption.search</field>
+        <field name="model">sn.smt.material.consumption</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_no"/>
+                <field name="material_sn"/>
+                <field name="mes_order_id"/>
+                <field name="required_item_code"/>
+                <field name="loadpoint"/>
+                <group>
+                    <filter name="group_by_serial" string="Product SN" context="{'group_by': 'serial_identity_id'}"/>
+                    <filter name="group_by_lot" string="Material SN" context="{'group_by': 'material_lot_id'}"/>
+                    <filter name="group_by_mes_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
+                    <filter name="group_by_day" string="Consumed Day" context="{'group_by': 'consumed_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_product_material_usage" model="ir.actions.act_window">
+        <field name="name">Product Material Usage</field>
         <field name="res_model">sn.smt.material.consumption</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_smt_material_consumption_search"/>
+    </record>
+
+    <record id="action_sn_smt_lot_product_usage" model="ir.actions.act_window">
+        <field name="name">Lot Product Usage</field>
+        <field name="res_model">sn.smt.material.consumption</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_smt_material_consumption_search"/>
+        <field name="context">{'search_default_group_by_lot': 1}</field>
     </record>
 </odoo>

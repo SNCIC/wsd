@@ -22,9 +22,9 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
         required=True,
         default=lambda self: self.env.company,
     )
-    serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Meter Serial',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         check_company=True,
     )
     production_id = fields.Many2one(
@@ -55,15 +55,14 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
                 'mode': 'release',
                 'freeze_record_ids': [fields.Command.set(records.ids)],
             })
-        elif active_model == 'sn.wsd.internal.serial' and active_ids:
-            serial = self.env['sn.wsd.internal.serial'].browse(active_ids[:1])
+        elif active_model == 'sn.wsd.serial.identity' and active_ids:
+            identity = self.env['sn.wsd.serial.identity'].browse(active_ids[:1])
             values.update({
                 'mode': values.get('mode') or 'single',
-                'serial_id': serial.id,
-                'serial_no': serial.serial_no,
-                'company_id': serial.company_id.id,
-                'route_operation_id': serial.current_route_operation_id.id,
-                'production_id': serial.production_id.id,
+                'serial_identity_id': identity.id,
+                'serial_no': identity.name,
+                'company_id': identity.company_id.id,
+                'route_operation_id': identity._current_route_operation().id,
             })
         return values
 
@@ -71,23 +70,21 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
     def _onchange_serial_no(self):
         if not self.serial_no:
             return
-        serial = self.env['sn.wsd.internal.serial'].search([
-            ('serial_no', '=', self.serial_no.strip()),
+        identity = self.env['sn.wsd.serial.identity'].search([
+            ('name', '=', self.serial_no.strip()),
         ], limit=1)
-        self.serial_id = serial
-        if serial:
-            self.company_id = serial.company_id
-            self.production_id = serial.production_id
-            self.route_operation_id = serial.current_route_operation_id
+        self.serial_identity_id = identity
+        if identity:
+            self.company_id = identity.company_id
+            self.route_operation_id = identity._current_route_operation()
 
-    @api.onchange('serial_id')
-    def _onchange_serial_id(self):
-        if not self.serial_id:
+    @api.onchange('serial_identity_id')
+    def _onchange_serial_identity_id(self):
+        if not self.serial_identity_id:
             return
-        self.serial_no = self.serial_id.serial_no
-        self.company_id = self.serial_id.company_id
-        self.production_id = self.serial_id.production_id
-        self.route_operation_id = self.serial_id.current_route_operation_id
+        self.serial_no = self.serial_identity_id.name
+        self.company_id = self.serial_identity_id.company_id
+        self.route_operation_id = self.serial_identity_id._current_route_operation()
 
     @api.onchange('route_operation_id')
     def _onchange_route_operation_id(self):
@@ -97,27 +94,26 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
 
     def _resolve_single_serial(self):
         self.ensure_one()
-        serial = self.serial_id
-        if not serial and self.serial_no:
-            serial = self.env['sn.wsd.internal.serial'].search([
-                ('serial_no', '=', self.serial_no.strip()),
+        identity = self.serial_identity_id
+        if not identity and self.serial_no:
+            identity = self.env['sn.wsd.serial.identity'].search([
+                ('name', '=', self.serial_no.strip()),
             ], limit=1)
-        if not serial:
+        if not identity:
             raise UserError(_('Please select or enter a valid SN.'))
-        return serial
+        return identity
 
-    def _prepare_freeze_values(self, serial):
+    def _prepare_freeze_values(self, identity):
         self.ensure_one()
         if not self.freeze_reason:
             raise UserError(_('Freeze reason is required.'))
         return {
-            'serial_id': serial.id,
-            'company_id': serial.company_id.id,
-            'mes_order_id': serial.mes_order_id.id,
+            'serial_identity_id': identity.id,
+            'company_id': identity.company_id.id,
             'route_operation_id': (
                 self.route_operation_id.id
                 if self.route_operation_id
-                else serial.current_route_operation_id.id
+                else identity._current_route_operation().id
             ),
             'freeze_reason': self.freeze_reason,
         }
@@ -133,20 +129,32 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
             return {'type': 'ir.actions.act_window_close'}
 
         if self.mode == 'single':
-            serial = self._resolve_single_serial()
-            freeze_model.create(self._prepare_freeze_values(serial))
+            identity = self._resolve_single_serial()
+            freeze_model.create(self._prepare_freeze_values(identity))
             return {'type': 'ir.actions.act_window_close'}
 
         if not self.route_operation_id:
             raise UserError(_('Please select a route operation.'))
-        serials = self.env['sn.wsd.internal.serial'].search([
-            ('mes_order_id', '=', self.route_operation_id.mes_order_id.id),
-            ('current_route_operation_id', '=', self.route_operation_id.id),
-            ('final_result', '!=', 'scrap'),
-            ('pack_date', '=', False),
-            ('x_freeze_state', '!=', 'frozen'),
+        # batch frame: SNs currently parked at the operation (WIP), skipping
+        # scrapped, packed and already-frozen ones
+        ScrapRecord = self.env['sn.wsd.scrap.record']
+        PackRecord = self.env['sn.wsd.meter.pack.record']
+        wips = self.env['sn.wsd.serial.wip'].search([
+            ('route_operation_id', '=', self.route_operation_id.id),
         ])
-        if not serials:
+        identities = self.env['sn.wsd.serial.identity']
+        for wip in wips:
+            identity = wip.serial_identity_id
+            if identity.x_freeze_state == 'frozen':
+                continue
+            if ScrapRecord.search_count([
+                    ('serial_identity_id', '=', identity.id),
+                    ('state', '=', 'scrapped')]):
+                continue
+            if PackRecord.search_count([('serial_identity_id', '=', identity.id)]):
+                continue
+            identities |= identity
+        if not identities:
             raise UserError(_('No freezable SNs were found on the selected route operation.'))
-        freeze_model.create([self._prepare_freeze_values(serial) for serial in serials])
+        freeze_model.create([self._prepare_freeze_values(identity) for identity in identities])
         return {'type': 'ir.actions.act_window_close'}

@@ -78,15 +78,16 @@ class SnWsdScrapRecord(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
-    serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Scrap Product SN',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='Scrap SN',
         required=True,
         index=True,
         check_company=True,
         tracking=True,
+        ondelete='restrict',
     )
-    serial_no = fields.Char(string='SN', related='serial_id.serial_no', store=True, readonly=True)
+    serial_no = fields.Char(string='SN', related='serial_identity_id.name', store=True, readonly=True)
     lot_id = fields.Many2one(
         'stock.lot',
         string='Lot/Serial',
@@ -96,7 +97,7 @@ class SnWsdScrapRecord(models.Model):
     product_id = fields.Many2one(
         'product.product',
         string='Product',
-        related='serial_id.product_id',
+        related='production_id.product_id',
         store=True,
         readonly=True,
     )
@@ -174,14 +175,17 @@ class SnWsdScrapRecord(models.Model):
         copy=False,
     )
     previous_final_result = fields.Selection(
-        selection=lambda self: self.env['sn.wsd.internal.serial']._fields['final_result'].selection,
+        selection=[('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold'), ('scrap', 'Scrap')],
         string='Previous Final Result',
         readonly=True,
         copy=False,
     )
     previous_route_operation_id = fields.Many2one('sn.wsd.mes.order.route.operation', string='Previous Route Operation', readonly=True, copy=False, check_company=True)
     previous_quality_hold_state = fields.Selection(
-        selection=lambda self: self.env['sn.wsd.internal.serial']._fields['x_quality_hold_state'].selection,
+        selection=[
+            ('released', 'Released'), ('hold', 'Quality Hold'),
+            ('blocked', 'Blocked'), ('scrapped', 'Scrapped'),
+        ],
         string='Previous Quality Hold State',
         readonly=True,
         copy=False,
@@ -213,16 +217,18 @@ class SnWsdScrapRecord(models.Model):
             record.balance_qty = input_qty - output_qty - active_scrap_qty
             record.scrap_rate = (active_scrap_qty / input_qty * 100.0) if input_qty else 0.0
 
-    @api.onchange('serial_id')
-    def _onchange_serial_id(self):
+    @api.onchange('serial_identity_id')
+    def _onchange_serial_identity_id(self):
         for record in self:
-            serial = record.serial_id
-            if not serial:
+            identity = record.serial_identity_id
+            if not identity:
                 continue
             record.lot_id = False
-            record.production_id = serial.production_id
-            record.route_operation_id = serial.current_route_operation_id
-            if serial.product_id and serial.product_id.tracking == 'serial':
+            route_operation = identity._current_route_operation()
+            if route_operation:
+                record.route_operation_id = route_operation
+                record.production_id = route_operation.mes_order_id.production_id
+            if record.production_id and record.production_id.product_id.tracking == 'serial':
                 record.scrap_qty = 1.0
 
     @api.onchange('route_operation_id')
@@ -231,12 +237,12 @@ class SnWsdScrapRecord(models.Model):
             if record.route_operation_id:
                 record.production_id = record.route_operation_id.mes_order_id.production_id
 
-    @api.constrains('scrap_qty', 'serial_id')
+    @api.constrains('scrap_qty', 'serial_identity_id')
     def _check_scrap_qty(self):
         for record in self:
             if record.scrap_qty <= 0:
                 raise ValidationError(_('The scrap quantity must be positive.'))
-            if record.serial_id and record.product_id.tracking == 'serial' and record.scrap_qty != 1.0:
+            if record.serial_identity_id and record.product_id.tracking == 'serial' and record.scrap_qty != 1.0:
                 raise ValidationError(_('Serial-tracked scrap records must use quantity 1.'))
 
     @api.constrains('route_operation_id', 'production_id')
@@ -249,12 +255,12 @@ class SnWsdScrapRecord(models.Model):
             ):
                 raise ValidationError(_('The selected route operation must belong to the selected manufacturing order.'))
 
-    @api.constrains('serial_id', 'state')
+    @api.constrains('serial_identity_id', 'state')
     def _check_single_active_scrap_per_serial(self):
-        for record in self.filtered(lambda item: item.serial_id and item.state == 'scrapped'):
+        for record in self.filtered(lambda item: item.serial_identity_id and item.state == 'scrapped'):
             duplicate = self.search_count([
                 ('id', '!=', record.id),
-                ('serial_id', '=', record.serial_id.id),
+                ('serial_identity_id', '=', record.serial_identity_id.id),
                 ('state', '=', 'scrapped'),
             ])
             if duplicate:
@@ -266,10 +272,13 @@ class SnWsdScrapRecord(models.Model):
             if vals.get('name', _('New')) == _('New'):
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.scrap.record') or _('New')
             if not vals.get('mes_order_id'):
-                serial = self.env['sn.wsd.internal.serial'].browse(vals.get('serial_id')).exists() if vals.get('serial_id') else self.env['sn.wsd.internal.serial']
-                route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else serial.current_route_operation_id
-                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else serial.production_id or route_operation.mes_order_id.production_id
-                mes_order = serial.mes_order_id or route_operation.mes_order_id or production.x_mes_order_id
+                route_operation = self.env['sn.wsd.mes.order.route.operation'].browse(
+                    vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else False
+                if not route_operation and vals.get('serial_identity_id'):
+                    identity = self.env['sn.wsd.serial.identity'].browse(vals.get('serial_identity_id')).exists()
+                    route_operation = identity._current_route_operation() if identity else False
+                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else False
+                mes_order = (route_operation.mes_order_id if route_operation else False) or (production.x_mes_order_id if production else False)
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -329,7 +338,7 @@ class SnWsdScrapRecord(models.Model):
             if record.state != 'draft':
                 raise UserError(_('Only draft scrap records can be confirmed.'))
             existing = self.search([
-                ('serial_id', '=', record.serial_id.id),
+                ('serial_identity_id', '=', record.serial_identity_id.id),
                 ('state', '=', 'scrapped'),
                 ('id', '!=', record.id),
             ], limit=1)
@@ -345,9 +354,9 @@ class SnWsdScrapRecord(models.Model):
                 'scrap_time': record.scrap_time or fields.Datetime.now(),
                 'scrap_user_id': record.scrap_user_id.id or self.env.user.id,
                 'previous_meter_state': False,
-                'previous_final_result': record.serial_id.final_result,
-                'previous_route_operation_id': record.serial_id.current_route_operation_id.id,
-                'previous_quality_hold_state': record.serial_id.x_quality_hold_state,
+                'previous_final_result': False,
+                'previous_route_operation_id': record.serial_identity_id._current_route_operation().id,
+                'previous_quality_hold_state': record.serial_identity_id.x_quality_hold_state,
                 'previous_issue_state': previous_issue_state,
                 'previous_issue_disposition': previous_issue_disposition,
             })
@@ -372,11 +381,7 @@ class SnWsdScrapRecord(models.Model):
                 record.with_context(allow_scrap_record_write=True).write({
                     'route_operation_report_id': report.id,
                 })
-            record.serial_id.write({
-                'final_result': 'scrap',
-                'x_quality_hold_state': 'scrapped',
-                'current_route_operation_id': record.route_operation_id.id,
-            })
+            record.serial_identity_id.x_quality_hold_state = 'scrapped'
             if record.quality_issue_id:
                 record.quality_issue_id.write({
                     'scrap_record_id': record.id,
@@ -390,26 +395,11 @@ class SnWsdScrapRecord(models.Model):
         for record in self:
             if record.state != 'scrapped':
                 raise UserError(_('Only scrapped records can be restored.'))
-            production = record.production_id or record.serial_id.production_id
-            if production:
-                production._lock_serial_capacity()
-                capacity = production._get_serial_capacity()
-                if capacity['active_serial_qty'] >= capacity['planned_qty']:
-                    raise UserError(_(
-                        'The scrapped SN cannot be restored because replacement serials already fill '
-                        'the manufacturing order capacity. Planned: %(planned)s, active: %(active)s.'
-                    ) % {
-                        'planned': capacity['planned_qty'],
-                        'active': capacity['active_serial_qty'],
-                    })
             resume_route_operation = record.route_operation_id or record.previous_route_operation_id
             move = self.env['stock.move'].create(record._prepare_restore_move_vals())
             move._action_done()
-            record.serial_id.write({
-                'final_result': record.previous_final_result or False,
-                'x_quality_hold_state': record.previous_quality_hold_state or 'released',
-                'current_route_operation_id': resume_route_operation.id,
-            })
+            record.serial_identity_id.x_quality_hold_state = (
+                record.previous_quality_hold_state or 'released')
             if record.quality_issue_id:
                 record.quality_issue_id.write({
                     'state': record.previous_issue_state or 'analysis',
@@ -458,10 +448,10 @@ class SnWsdScrapRecord(models.Model):
         }
 
 
-class InternalSerial(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentity(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
-    scrap_record_ids = fields.One2many('sn.wsd.scrap.record', 'serial_id', string='Scrap Records', readonly=True)
+    scrap_record_ids = fields.One2many('sn.wsd.scrap.record', 'serial_identity_id', string='Scrap Records', readonly=True)
     scrap_record_count = fields.Integer(string='Scrap Record Count', compute='_compute_scrap_record_count')
 
     def _compute_scrap_record_count(self):
@@ -475,11 +465,10 @@ class InternalSerial(models.Model):
             'name': _('Scrap Records'),
             'res_model': 'sn.wsd.scrap.record',
             'view_mode': 'list,form,graph,pivot',
-            'domain': [('serial_id', '=', self.id)],
+            'domain': [('serial_identity_id', '=', self.id)],
             'context': {
-                'default_serial_id': self.id,
-                'default_route_operation_id': self.current_route_operation_id.id,
-                'default_production_id': self.production_id.id,
+                'default_serial_identity_id': self.id,
+                'default_route_operation_id': self._current_route_operation().id,
             },
         }
 
@@ -492,9 +481,8 @@ class InternalSerial(models.Model):
             'view_mode': 'form',
             'target': 'current',
             'context': {
-                'default_serial_id': self.id,
-                'default_route_operation_id': self.current_route_operation_id.id,
-                'default_production_id': self.production_id.id,
+                'default_serial_identity_id': self.id,
+                'default_route_operation_id': self._current_route_operation().id,
                 'default_scrap_user_id': self.env.user.id,
                 'default_scrap_qty': 1.0,
             },
@@ -569,9 +557,9 @@ class MeterQualityIssue(models.Model):
             'domain': [('quality_issue_id', '=', self.id)],
             'context': {
                 'default_quality_issue_id': self.id,
-                'default_serial_id': self.internal_serial_id.id,
-                'default_route_operation_id': self.route_operation_id.id or self.internal_serial_id.current_route_operation_id.id,
-                'default_production_id': self.production_id.id or self.internal_serial_id.production_id.id,
+                'default_serial_identity_id': self.serial_identity_id.id,
+                'default_route_operation_id': self.route_operation_id.id,
+                'default_production_id': self.production_id.id,
             },
         }
 
@@ -584,9 +572,9 @@ class MeterQualityIssue(models.Model):
             'view_mode': 'form',
             'target': 'current',
             'context': {
-                'default_serial_id': self.internal_serial_id.id,
-                'default_route_operation_id': self.route_operation_id.id or self.internal_serial_id.current_route_operation_id.id,
-                'default_production_id': self.production_id.id or self.internal_serial_id.production_id.id,
+                'default_serial_identity_id': self.serial_identity_id.id,
+                'default_route_operation_id': self.route_operation_id.id,
+                'default_production_id': self.production_id.id,
                 'default_quality_issue_id': self.id,
                 'default_scrap_user_id': self.env.user.id,
                 'default_scrap_qty': 1.0,

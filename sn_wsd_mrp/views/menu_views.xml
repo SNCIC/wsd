@@ -28,8 +28,7 @@
     <record id="mrp.menu_mrp_reporting" model="ir.ui.menu">
         <field name="sequence">95</field>
     </record>
+    <menuitem id="menu_sn_wsd_serial_identity" name="Serial Identities" parent="menu_sn_wsd_traceability" action="action_sn_wsd_serial_identity" sequence="10"/>
     <menuitem id="menu_sn_wsd_traceability" name="Traceability" parent="mrp.menu_mrp_root" sequence="90"/>
-    <menuitem id="menu_sn_wsd_internal_serial" name="Internal Serials" parent="menu_sn_wsd_traceability" action="action_sn_wsd_internal_serial" sequence="10"/>
-    <menuitem id="menu_sn_wsd_meter_aging_batch" name="Aging Batches" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_aging_batch" sequence="20"/>
     <menuitem id="menu_sn_wsd_meter_pack_record" name="Pack Records" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_pack_record" sequence="30"/>
 </odoo>

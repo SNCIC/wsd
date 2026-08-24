@@ -195,19 +195,41 @@ class MesOrderStationServices(models.Model):
         return self.sn_station_floor_data(workcenter_id)
 
     @api.model
-    def sn_station_leave(self, wip_id, result, scrap_reason_id=False):
+    def sn_station_leave(self, wip_id, result, scrap_reason_id=False,
+                         ng_defect_code_id=False):
         """Terminal exit: act on one WIP row, keyed by its own work center."""
         wip = self.env['sn.wsd.serial.wip'].browse(wip_id)
         # capture before leave_station unlinks the WIP row
         workcenter_id = wip.workcenter_id.id or False
         reason = self.env['sn.wsd.scrap.reason'].browse(
             int(scrap_reason_id) if scrap_reason_id else False)
+        defect = self.env['sn.wsd.quality.defect.code'].browse(
+            int(ng_defect_code_id) if ng_defect_code_id else False)
         finished = wip.mes_order_id.leave_station(
-            wip.serial_identity_id, result, scrap_reason=reason)
+            wip.serial_identity_id, result, scrap_reason=reason,
+            ng_defect=defect)
         return {
             'finished': finished,
             'data': self.sn_station_floor_data(workcenter_id),
         }
+
+    @api.model
+    def sn_resolve_ng_defect(self, code):
+        """Resolve a scanned defect code for the two-step NG flow.
+
+        Exact code match first, then exact name, within the terminal
+        company. Returns {'id', 'name'} or False when nothing matches."""
+        code = (code or '').strip()
+        if not code:
+            return False
+        DefectCode = self.env['sn.wsd.quality.defect.code']
+        base = [('company_id', '=', self.env.company.id)]
+        defect = (
+            DefectCode.search(base + [('code', '=ilike', code)], limit=1)
+            or DefectCode.search(base + [('name', '=ilike', code)], limit=1))
+        if not defect:
+            return False
+        return {'id': defect.id, 'name': defect.display_name}
 
     def sn_station_report(self, workcenter_id, qty_ok, qty_ng=0.0, qty_scrap=0.0,
                           scrap_reason_id=False):

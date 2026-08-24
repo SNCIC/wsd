@@ -2,8 +2,7 @@ from . import mrp_base_config
 from . import res_partner
 from . import mrp_team
 from . import serial_identity
-from . import internal_serial
-from . import meter_aging
+from . import serial_binding
 from . import meter_pack
 from . import mrp_production
 from . import mrp_production_mes
