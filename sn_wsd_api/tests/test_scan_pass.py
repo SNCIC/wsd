@@ -257,14 +257,10 @@ class TestScanPass(TransactionCase):
         self.assertEqual(test_result.mes_order_id, self.order)
         self.assertTrue(test_result.route_operation_id)
         self.assertEqual(test_result.workcenter_id, self.wc_in)
-        # mirrored device columns
+        # tooling trace + device SN live on the pass result (design #6);
+        # other category data stays in its own small tables
         self.assertEqual(test_result.equipment_sn, 'DEV-01')
         self.assertEqual(test_result.tooling_sns, 'T-1|T-2')
-        self.assertEqual(test_result.pcba_codes, 'PCB-WIDE-1')
-        self.assertEqual(test_result.module_codes, 'MOD-WIDE-1')
-        self.assertEqual(test_result.leadseal_codes, 'LS-WIDE-1')
-        self.assertEqual(test_result.parameter_plan, 'PLAN-WIDE')
-        self.assertEqual(test_result.table_position, 'TABLE-3')
         # parsed test items
         items = test_result.detail_ids.sorted('sequence')
         self.assertEqual(len(items), 2)
@@ -284,4 +280,3 @@ class TestScanPass(TransactionCase):
         test_result = self.env['sn.wsd.mes.test.result'].browse(
             result['test_result_id'])
         self.assertEqual(test_result.defect_code_id, self.defect)
-        self.assertEqual(test_result.defect_code, 'APID')

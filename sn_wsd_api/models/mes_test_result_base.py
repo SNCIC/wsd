@@ -54,44 +54,15 @@ class MesTestResultBase(models.Model):
     aging_temp_c = fields.Float()
     payload = fields.Json()
     note = fields.Char()
-    # -- scan-pass context (aligned with the legacy test-record wide table) --
+    # tooling trace field (design #6): non-key tooling SNs are recorded on
+    # the pass result only; key-material tooling also counts via
+    # register_usage
     tooling_sns = fields.Char(
         string='Tooling SNs', index=True,
-        help='Tooling SNs uploaded with this pass (pipe-separated).')
+        help='Tooling SNs (M_TOOLING) recorded with this pass.')
     equipment_sn = fields.Char(
         string='Equipment SN', index=True,
-        help='Device SN (M_DEVICE_SN) used for this test.')
-    internal_code = fields.Char(
-        string='Internal Code', index=True,
-        help='Factory code / nameplate code (M_STR1) scanned with this pass.')
-    pcba_codes = fields.Char(
-        string='PCBA Codes', index=True,
-        help='PCBA board codes assembled (M_MAIN_ID, pipe-separated).')
-    module_codes = fields.Char(
-        string='Module Codes', index=True,
-        help='Module codes assembled (M_MODULE_ID, pipe-separated).')
-    leadseal_codes = fields.Char(
-        string='Lead Seal Codes', index=True,
-        help='Lead seal codes assembled (M_LEADSEAL_ID, pipe-separated).')
-    box_sn = fields.Char(
-        string='Box SN', index=True,
-        help='Packing box number (M_BOX_SN) if packed at this pass.')
-    pallet_sn = fields.Char(
-        string='Pallet SN', index=True,
-        help='Pallet number (M_SECOND_SN) if packed at this pass.')
-    collaborator_code = fields.Char(
-        string='Collaborator', index=True,
-        help='Collaborating operator code (M_COLLABORATION_EMP).')
-    defect_code = fields.Char(
-        string='Uploaded Defect', index=True,
-        help='Raw defect code (M_STR2) uploaded with an NG pass. The '
-             'dictionary link is defect_code_id (quality module).')
-    parameter_plan = fields.Char(string='Parameter Plan')
-    program_num = fields.Char(string='Program Number')
-    test_plan = fields.Char(string='Test Plan')
-    software_num = fields.Char(string='Software Number')
-    software_name = fields.Char(string='Software Name')
-    table_position = fields.Char(string='Table Position', help='M_ADDRESS')
+        help='Device SN (M_DEVICE_SN) that performed this test.')
 
     detail_ids = fields.One2many(
         'sn.wsd.mes.test.result.detail', 'test_result_id', string='Test Items')
@@ -201,20 +172,6 @@ class MesTestResultBase(models.Model):
             'note': note,
             'tooling_sns': payload.get('M_TOOLING', ''),
             'equipment_sn': payload.get('M_DEVICE_SN', ''),
-            'internal_code': payload.get('M_STR1', ''),
-            'pcba_codes': payload.get('M_MAIN_ID', ''),
-            'module_codes': payload.get('M_MODULE_ID', ''),
-            'leadseal_codes': payload.get('M_LEADSEAL_ID', ''),
-            'box_sn': payload.get('M_BOX_SN', ''),
-            'pallet_sn': payload.get('M_SECOND_SN', ''),
-            'collaborator_code': payload.get('M_COLLABORATION_EMP', ''),
-            'defect_code': payload.get('M_STR2', ''),
-            'parameter_plan': payload.get('M_PARAMETER_PLAN', ''),
-            'program_num': payload.get('M_PROGRAM_NUM', ''),
-            'test_plan': payload.get('M_TEST_PLAN', ''),
-            'software_num': payload.get('M_SOFTWARE_NUM', ''),
-            'software_name': payload.get('M_SOFTWARE_NAME', ''),
-            'table_position': payload.get('M_ADDRESS', ''),
             'retry_sequence': retry_sequence,
             'retry_limit': retry_limit,
             'requires_repair': requires_repair,

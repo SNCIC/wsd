@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ================================================================ -->
-    <!-- Test Results: the legacy wide test-record table, one row per     -->
-    <!-- scan-pass upload, every device field browsable/searchable        -->
+    <!-- Test Results: the test-data landing table of the scan-pass API.  -->
+    <!-- Category data (components / craft docs / packing / tooling)      -->
+    <!-- lives in its own small tables, not as columns here.              -->
     <!-- ================================================================ -->
     <record id="view_sn_wsd_test_result_list" model="ir.ui.view">
         <field name="name">sn.wsd.mes.test.result.list.api</field>
@@ -16,20 +17,12 @@
                        decoration-success="result == 'ok'"
                        decoration-danger="result == 'ng'"
                        decoration-warning="result == 'hold'"/>
-                <field name="defect_code" optional="show"/>
                 <field name="test_time"/>
                 <field name="workcenter_id"/>
                 <field name="mes_order_id"/>
                 <field name="operator_code"/>
                 <field name="equipment_sn" optional="show"/>
                 <field name="tooling_sns" optional="hide"/>
-                <field name="pcba_codes" optional="hide"/>
-                <field name="module_codes" optional="hide"/>
-                <field name="leadseal_codes" optional="hide"/>
-                <field name="internal_code" optional="hide"/>
-                <field name="box_sn" optional="hide"/>
-                <field name="pallet_sn" optional="hide"/>
-                <field name="collaborator_code" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
         </field>
@@ -49,11 +42,9 @@
                                    decoration-success="result == 'ok'"
                                    decoration-danger="result == 'ng'"
                                    decoration-warning="result == 'hold'"/>
-                            <field name="defect_code"/>
                             <field name="test_type"/>
                             <field name="test_time"/>
                             <field name="operator_code"/>
-                            <field name="collaborator_code"/>
                         </group>
                         <group string="Order / Station">
                             <field name="mes_order_id"/>
@@ -62,30 +53,11 @@
                             <field name="workcenter_id"/>
                             <field name="workshop_id"/>
                             <field name="production_line_id"/>
-                            <field name="table_position"/>
-                        </group>
-                        <group string="Component Codes">
-                            <field name="pcba_codes"/>
-                            <field name="module_codes"/>
-                            <field name="leadseal_codes"/>
-                            <field name="internal_code"/>
                         </group>
                         <group string="Tooling &amp; Device">
                             <field name="equipment_id"/>
                             <field name="equipment_sn"/>
                             <field name="tooling_sns"/>
-                            <field name="tester_channel"/>
-                        </group>
-                        <group string="Craft Documents">
-                            <field name="parameter_plan"/>
-                            <field name="program_num"/>
-                            <field name="test_plan"/>
-                            <field name="software_num"/>
-                            <field name="software_name"/>
-                        </group>
-                        <group string="Packing">
-                            <field name="box_sn"/>
-                            <field name="pallet_sn"/>
                         </group>
                         <group string="Measurements">
                             <field name="basic_error"/>
@@ -139,28 +111,17 @@
                 <field name="production_id"/>
                 <field name="workcenter_id"/>
                 <field name="operator_code"/>
-                <field name="defect_code"/>
-                <field name="box_sn"/>
-                <field name="pallet_sn"/>
                 <field name="equipment_sn"/>
-                <field name="pcba_codes"/>
-                <field name="module_codes"/>
-                <field name="leadseal_codes"/>
                 <field name="tooling_sns"/>
-                <field name="internal_code"/>
                 <filter string="OK" name="filter_ok" domain="[('result', '=', 'ok')]"/>
                 <filter string="NG" name="filter_ng" domain="[('result', '=', 'ng')]"/>
                 <filter string="Hold" name="filter_hold" domain="[('result', '=', 'hold')]"/>
-                <filter string="NG with Defect" name="filter_ng_defect"
-                        domain="[('result', '=', 'ng'), ('defect_code', '!=', False)]"/>
                 <separator string="Group By"/>
                 <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
                 <filter string="MES Order" name="group_by_order" context="{'group_by': 'mes_order_id'}"/>
                 <filter string="Test Type" name="group_by_type" context="{'group_by': 'test_type'}"/>
                 <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
                 <filter string="Work Center" name="group_by_wc" context="{'group_by': 'workcenter_id'}"/>
-                <filter string="Box SN" name="group_by_box" context="{'group_by': 'box_sn'}"/>
-                <filter string="Defect Code" name="group_by_defect" context="{'group_by': 'defect_code'}"/>
             </search>
         </field>
     </record>

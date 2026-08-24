@@ -3471,11 +3471,16 @@ msgid "Route Name"
 msgstr "路线名称"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_route_operation_id
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__route_operation_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_data_definition_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_operation_report__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__route_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_feeder_line_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
 msgid "Route Operation"
-msgstr "路线工序"
+msgstr "工序"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_step_code
@@ -7079,7 +7084,6 @@ msgstr "工艺类型"
 msgid "Complete Machine"
 msgstr "整机"
 
-
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_serial_binding
 msgid "Serial Identity Binding"
@@ -7116,7 +7120,6 @@ msgstr "铭牌映射"
 msgid "Serial Identities"
 msgstr "SN 注册表"
 
-
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_type
 msgid "Production Process Document Type"
@@ -7137,3 +7140,67 @@ msgstr "工艺文件维护"
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_meter_pack_barcode
 msgid "Meter Pack Barcode Line"
 msgstr "包装条码明细"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_production_process_document
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_process_document_ids
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_production_process_document
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_process_docs
+msgid "Process Documents"
+msgstr "工艺文件"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_document_code
+msgid "Production Process Document Number"
+msgstr "工艺文件编号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__codes_display
+msgid "Codes Display"
+msgstr "编号列表"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__code_ids
+msgid "Codes"
+msgstr "编号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__document_id
+msgid "Document"
+msgstr "单据"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_production_process_document_op_type_uniq
+msgid "One document list per operation and type on a manufacturing order."
+msgstr "同一制造订单的同一工序同一类型只允许一份文件清单。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_production_process_document_code_code_uniq
+msgid "The document number must be unique in its list."
+msgstr "文件编号在其清单内必须唯一。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_production_process_doc_type_code_uniq
+msgid "The process document type code must be unique per company."
+msgstr "工艺文件类型编码按公司唯一。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_production_process_doc_type__code
+msgid "Stable key the device API checks against."
+msgstr "设备 API 校验用的稳定键。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_production_process_document__route_operation_code
+msgid "Operation code of the MES-order route operation this list applies to."
+msgstr "该清单适用的制令单路线工序编码。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
+msgid "Source field of the uploaded barcode, e.g. M_PACK_MAC."
+msgstr "上报条码的来源字段，如 M_PACK_MAC。"
