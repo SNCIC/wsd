@@ -115,6 +115,23 @@
                         </button>
                     </t>
                 </section>
+
+                <!-- SMT equipment sub-mode: tooling / consumable action pills -->
+                <section t-if="equipmentModeDef" class="o_sn_wsd_workshop_equipment list-group-item">
+                    <div class="d-flex flex-wrap gap-1 mb-1">
+                        <button t-foreach="equipmentModeDef.actions" t-as="act" t-key="act.key"
+                                type="button"
+                                t-attf-class="btn btn-sm {{state.equipmentAction === act.key ? 'btn-primary' : 'btn-outline-primary'}}"
+                                t-on-click="() => this.pickEquipmentAction(act.key)">
+                            <t t-out="act.label"/>
+                        </button>
+                    </div>
+                    <div t-if="equipmentActionDef &amp;&amp; equipmentActionDef.extra" class="d-flex gap-1">
+                        <input type="text" class="form-control form-control-sm"
+                               t-att-placeholder="equipmentActionDef.extra"
+                               t-model="state.equipmentExtra"/>
+                    </div>
+                </section>
             </main>
 
             <footer class="o_barcode_control o_action_buttons d-flex justify-content-between p-2 gap-2 border-top">

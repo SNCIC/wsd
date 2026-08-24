@@ -23,6 +23,43 @@ const DIP_OPERATION_BUTTONS = [
     { key: "dip_material_load", label: _t("Load") },
 ];
 
+// equipment sub-modes of the SMT workshop screen: pick a pill, scan the SN
+const EQUIPMENT_MODES = {
+    tooling: {
+        key: "equipment_tooling",
+        label: _t("Tooling"),
+        actions: [
+            { key: "online", label: _t("Put online") },
+            { key: "offline", label: _t("Take offline") },
+            { key: "issue", label: _t("Issue") },
+            { key: "return_", label: _t("Return") },
+            { key: "maintain_start", label: _t("Maintain start") },
+            { key: "maintain_done", label: _t("Maintain done") },
+            { key: "repair_start", label: _t("Repair start"), extra: "fault" },
+            { key: "repair_done", label: _t("Repair done") },
+            { key: "disable", label: _t("Disable"), extra: "reason" },
+            { key: "enable", label: _t("Enable") },
+            { key: "resolve", label: _t("Info") },
+        ],
+    },
+    consumable: {
+        key: "equipment_consumable",
+        label: _t("Consumables"),
+        actions: [
+            { key: "load", label: _t("Put online") },
+            { key: "unload", label: _t("Take offline") },
+            { key: "issue", label: _t("Issue") },
+            { key: "return_", label: _t("Return") },
+            { key: "thaw_start", label: _t("Thaw start") },
+            { key: "thaw_end", label: _t("Thaw done") },
+            { key: "stir_start", label: _t("Stir start") },
+            { key: "stir_end", label: _t("Stir done") },
+            { key: "exhaust", label: _t("Exhaust") },
+            { key: "resolve", label: _t("Info") },
+        ],
+    },
+};
+
 export class WorkshopOperationAction extends Component {
     static template = "sn_wsd_barcode.WorkshopOperationAction";
     static props = { ...standardActionServiceProps };
@@ -68,6 +105,9 @@ export class WorkshopOperationAction extends Component {
             cameraScannerEnabled: false,
             readyToToggleCamera: true,
                     ngMode: false,
+            equipmentDomain: false,
+            equipmentAction: false,
+            equipmentExtra: "",
         });
 
         this.cameraScannerSupported = isBarcodeScannerSupported();
@@ -162,7 +202,23 @@ export class WorkshopOperationAction extends Component {
     }
 
     get smtOperationButtons() {
-        return this.isDipMode ? DIP_OPERATION_BUTTONS : SMT_OPERATION_BUTTONS;
+        if (this.isDipMode) {
+            return DIP_OPERATION_BUTTONS;
+        }
+        return [...SMT_OPERATION_BUTTONS,
+                EQUIPMENT_MODES.tooling, EQUIPMENT_MODES.consumable];
+    }
+
+    get equipmentModeDef() {
+        return this.state.equipmentDomain
+            ? EQUIPMENT_MODES[this.state.equipmentDomain] : false;
+    }
+
+    get equipmentActionDef() {
+        const def = this.equipmentModeDef;
+        return def
+            ? def.actions.find((a) => a.key === this.state.equipmentAction) || false
+            : false;
     }
 
     get isSmtMode() {
@@ -481,7 +537,9 @@ export class WorkshopOperationAction extends Component {
             return;
         }
         await this.scanMutex.exec(async () => {
-            if (this.isSmtOperation) {
+            if (this.state.equipmentDomain) {
+                await this._handleEquipmentScan(cleanBarcode);
+            } else if (this.isSmtOperation) {
                 await this._handleSmtScan(cleanBarcode);
             } else if (this.state.selectedOperation) {
                 await this.processScan(cleanBarcode, this.state.selectedOperation);
@@ -493,6 +551,39 @@ export class WorkshopOperationAction extends Component {
                 window.navigator.vibrate(100);
             }
         });
+    }
+
+    pickEquipmentAction(key) {
+        this.state.equipmentAction = key;
+        this.state.equipmentExtra = "";
+        this.state.command = "";
+        this.setResult(_t("Scan the equipment SN."), "info");
+        this.focusCommandInput();
+    }
+
+    async _handleEquipmentScan(sn) {
+        if (!this.state.equipmentAction) {
+            this.setResult(_t("Pick an equipment action before scanning."), "warning");
+            return;
+        }
+        const payload = { action: this.state.equipmentAction, sn };
+        if (this.equipmentActionDef?.extra && this.state.equipmentExtra) {
+            payload[this.equipmentActionDef.extra] = this.state.equipmentExtra;
+        }
+        try {
+            const result = await rpc(`/sn_wsd_barcode/pda/${this.state.equipmentDomain}/call`, payload);
+            this.state.command = "";
+            if (result.data) {
+                this.setResult(
+                    `${result.data.sn} · ${result.data.state || ""}`, "success");
+            } else {
+                this.setResult(result.message || "", result.ok ? "success" : "danger");
+            }
+        } catch (error) {
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.focusCommandInput();
+        }
     }
 
     async _handleSmtScan(rawBarcode) {
@@ -725,6 +816,21 @@ export class WorkshopOperationAction extends Component {
     async runOperation(operation) {
         this.state.selectedOperation = operation.key;
         this.setResult("", "info");
+        if (EQUIPMENT_MODES.tooling.key === operation.key
+                || EQUIPMENT_MODES.consumable.key === operation.key) {
+            this.state.equipmentDomain =
+                operation.key === EQUIPMENT_MODES.tooling.key ? "tooling" : "consumable";
+            this.state.equipmentAction = false;
+            this.state.equipmentExtra = "";
+            this.resetSmtScan();
+            this.state.command = "";
+            this.setResult(_t("Pick an equipment action, then scan the SN."), "info");
+            this.focusCommandInput();
+            return;
+        }
+        this.state.equipmentDomain = false;
+        this.state.equipmentAction = false;
+        this.state.equipmentExtra = "";
 
         if (this.isDipMode && operation.key === "dip_material_load") {
             this.resetSmtScan();

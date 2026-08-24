@@ -78,36 +78,8 @@ export class MainMenu extends Component {
         return _t("Count Inventory");
     }
 
-    get smtLoadingLabel() {
-        return _t("SMT Loading");
-    }
-
-    get toolingLabel() {
-        return _t("Tooling");
-    }
-
-    get consumableLabel() {
-        return _t("Consumables");
-    }
-
     get productionEnabled() {
         return this.mesShop || this.mesSmt;
-    }
-
-    get equipmentEnabled() {
-        return this.mesShop || this.mesSmt;
-    }
-
-    openSmtLoading() {
-        this.actionService.doAction("sn_wsd_barcode.sn_wsd_barcode_smt_load_action");
-    }
-
-    openEquipment(domain) {
-        this.actionService.doAction(
-            domain === "tooling"
-                ? "sn_wsd_barcode.sn_wsd_barcode_tooling_action"
-                : "sn_wsd_barcode.sn_wsd_barcode_consumable_action"
-        );
     }
 
     openManualBarcodeDialog() {
