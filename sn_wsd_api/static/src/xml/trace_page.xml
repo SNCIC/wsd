@@ -84,14 +84,27 @@
 
             <!-- ============ bottom-right: tabs ============ -->
             <section class="o_trace_panel">
-                <ul class="nav nav-tabs o_trace_tabs">
-                    <li class="nav-item" t-foreach="tabDefs" t-as="tab" t-key="tab.key">
-                        <a href="#"
-                           t-attf-class="nav-link {{state.activeTab === tab.key ? 'active' : ''}}"
-                           t-on-click.prevent="() => this.setActiveTab(tab.key)"
-                           t-esc="tab.label"/>
-                    </li>
-                </ul>
+                <div class="d-flex align-items-center o_trace_tabs">
+                    <ul class="nav nav-tabs flex-grow-1">
+                        <li class="nav-item" t-foreach="tabDefs" t-as="tab" t-key="tab.key">
+                            <a href="#"
+                               t-attf-class="nav-link {{state.activeTab === tab.key ? 'active' : ''}}"
+                               t-on-click.prevent="() => this.setActiveTab(tab.key)"
+                               t-esc="tab.label"/>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 pb-1 px-2" style="font-size:12px"
+                         t-if="rowsFor(state.activeTab).length">
+                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                t-att-disabled="activePager().page &lt;= 1"
+                                t-on-click="() => this.pagerMove(state.activeTab, -1)">‹</button>
+                        <span t-esc="activePager().page"/> / <span t-esc="pageCount(state.activeTab)"/>
+                        <button class="btn btn-sm btn-outline-secondary py-0" type="button"
+                                t-att-disabled="activePager().page &gt;= pageCount(state.activeTab)"
+                                t-on-click="() => this.pagerMove(state.activeTab, 1)">›</button>
+                        <span class="text-muted">共计 <b t-esc="rowsFor(state.activeTab).length"/> 条</span>
+                    </div>
+                </div>
                 <div class="o_trace_tab_body">
                     <!-- process -->
                     <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'process' ? 'active' : ''}}">
@@ -137,16 +150,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="o_trace_pager" t-if="rowsFor('process').length">
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.process.page &lt;= 1"
-                                    t-on-click="() => this.pagerMove('process', -1)">‹</button>
-                            <span t-esc="state.pagers.process.page"/> / <span t-esc="pageCount('process')"/>
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.process.page &gt;= pageCount('process')"
-                                    t-on-click="() => this.pagerMove('process', 1)">›</button>
-                            <span class="ms-auto">共计 <b t-esc="rowsFor('process').length"/> 条</span>
-                        </div>
                     </div>
                     <!-- material -->
                     <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'material' ? 'active' : ''}}">
@@ -186,16 +189,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="o_trace_pager" t-if="rowsFor('material').length">
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.material.page &lt;= 1"
-                                    t-on-click="() => this.pagerMove('material', -1)">‹</button>
-                            <span t-esc="state.pagers.material.page"/> / <span t-esc="pageCount('material')"/>
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.material.page &gt;= pageCount('material')"
-                                    t-on-click="() => this.pagerMove('material', 1)">›</button>
-                            <span class="ms-auto">共计 <b t-esc="rowsFor('material').length"/> 条</span>
-                        </div>
                     </div>
                     <!-- quality -->
                     <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'quality' ? 'active' : ''}}">
@@ -233,16 +226,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="o_trace_pager" t-if="rowsFor('quality').length">
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.quality.page &lt;= 1"
-                                    t-on-click="() => this.pagerMove('quality', -1)">‹</button>
-                            <span t-esc="state.pagers.quality.page"/> / <span t-esc="pageCount('quality')"/>
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.quality.page &gt;= pageCount('quality')"
-                                    t-on-click="() => this.pagerMove('quality', 1)">›</button>
-                            <span class="ms-auto">共计 <b t-esc="rowsFor('quality').length"/> 条</span>
-                        </div>
                     </div>
                     <!-- repair -->
                     <div t-attf-class="o_trace_tab_pane {{state.activeTab === 'repair' ? 'active' : ''}}">
@@ -275,16 +258,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="o_trace_pager" t-if="rowsFor('repair').length">
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.repair.page &lt;= 1"
-                                    t-on-click="() => this.pagerMove('repair', -1)">‹</button>
-                            <span t-esc="state.pagers.repair.page"/> / <span t-esc="pageCount('repair')"/>
-                            <button class="btn btn-sm btn-outline-secondary py-0" type="button"
-                                    t-att-disabled="state.pagers.repair.page &gt;= pageCount('repair')"
-                                    t-on-click="() => this.pagerMove('repair', 1)">›</button>
-                            <span class="ms-auto">共计 <b t-esc="rowsFor('repair').length"/> 条</span>
                         </div>
                     </div>
                 </div>

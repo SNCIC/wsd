@@ -354,6 +354,10 @@ export class SnTracePage extends Component {
         }[tab] || [];
     }
 
+    activePager() {
+        return this.state.pagers[this.state.activeTab];
+    }
+
     getPagedRows(tab) {
         const p = this.state.pagers[tab];
         const start = (p.page - 1) * p.size;
@@ -436,6 +440,7 @@ export class SnTracePage extends Component {
             return;
         }
         const blob = new Blob(["﻿" + lines.join("
+
 ")],
             { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
