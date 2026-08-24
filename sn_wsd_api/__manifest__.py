@@ -14,6 +14,7 @@
             'sn_wsd_api/static/src/js/test_result_split.js',
             'sn_wsd_api/static/src/xml/test_result_split.xml',
             'sn_wsd_api/static/src/js/trace_page.js',
+            'sn_wsd_api/static/src/scss/trace_page.scss',
             'sn_wsd_api/static/src/xml/trace_page.xml',
         ],
     },

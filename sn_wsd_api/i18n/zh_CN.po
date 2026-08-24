@@ -197,9 +197,10 @@ msgid "ID"
 msgstr "ID"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__inspection
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Inspection"
-msgstr "检验"
+msgstr "检验单号"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_uid
@@ -226,9 +227,8 @@ msgid "Lower Limit"
 msgstr "下限"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__mes_order_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__mes_order_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "MES Order"
 msgstr "制令单"
 
@@ -284,7 +284,8 @@ msgid "NG"
 msgstr "NG"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__name
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Name"
 msgstr "名称"
 
@@ -340,15 +341,16 @@ msgid "Phase Error"
 msgstr "相位误差"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__product_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__product_id
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Product"
-msgstr "产品"
+msgstr "产品料号"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__production_id
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Production"
-msgstr "制造订单"
+msgstr "工单号"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__production_line_id
@@ -402,10 +404,8 @@ msgid "Response body summary."
 msgstr "响应体摘要。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__result
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__result
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__result
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Result"
 msgstr "结果"
 
@@ -581,8 +581,8 @@ msgid "Upper Limit"
 msgstr "上限"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__workcenter_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Work Center"
 msgstr "工作中心"
 
@@ -632,8 +632,8 @@ msgid "Last 7 Days"
 msgstr "最近 7 天"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operation
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Operation"
 msgstr "工序"
 
@@ -770,7 +770,8 @@ msgid "Test Plan"
 msgstr "测试方案"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Type"
 msgstr "类型"
 
@@ -804,8 +805,8 @@ msgid ""
 msgstr "生产事件显示制令单；质量/维修/报废事件显示其单据号。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__material
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "Material"
 msgstr "物料"
 
@@ -845,14 +846,14 @@ msgid "Pack"
 msgstr "包装"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__quality
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "Quality"
 msgstr "质量"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__repair
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "Repair"
 msgstr "维修"
 
@@ -864,8 +865,8 @@ msgid "SN Trace"
 msgstr "SN 追溯"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "Scrap"
 msgstr "报废"
 
@@ -915,3 +916,237 @@ msgstr "个事件"
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "No trace events found for this SN"
 msgstr "该 SN 没有找到追溯事件"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Operation Name"
+msgstr "工序名称"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Line"
+msgstr "线别"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Side"
+msgstr "面别"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Finished"
+msgstr "流程结束"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Device SN"
+msgstr "设备SN"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Tooling"
+msgstr "工装"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Material SN"
+msgstr "物料SN"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Item Code"
+msgstr "料号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Spec"
+msgstr "规格"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Lot"
+msgstr "批次"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Loadpoint"
+msgstr "料位"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Qty"
+msgstr "点数"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Station"
+msgstr "料站"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "State"
+msgstr "状态"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Submit Time"
+msgstr "送检时间"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Submitter"
+msgstr "送检人"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Inspector"
+msgstr "检验人"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Repair Order"
+msgstr "维修单号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Defects"
+msgstr "缺陷"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Method"
+msgstr "维修方法"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Repairer"
+msgstr "维修员"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Report Time"
+msgstr "提报时间"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Done Time"
+msgstr "完成时间"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Flag"
+msgstr "标志"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "PCBA"
+msgstr "PCBA"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Module"
+msgstr "模块"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Lead seal"
+msgstr "铅封"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Skipped"
+msgstr "跳站"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Query"
+msgstr "查询"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Product Structure"
+msgstr "产品结构"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Product Information"
+msgstr "产品信息"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Same Batch Products"
+msgstr "同批次产品"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Process"
+msgstr "制程"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Yes"
+msgstr "是"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "No"
+msgstr "否"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Total"
+msgstr "共计"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "rows"
+msgstr "条"
