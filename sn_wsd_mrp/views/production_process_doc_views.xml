@@ -110,8 +110,8 @@
     </record>
 
     <menuitem id="menu_production_process_document" name="Process Documents"
-              parent="menu_sn_wsd_traceability" action="action_production_process_document"
-              sequence="15" groups="mrp.group_mrp_user"/>
+              parent="menu_sn_wsd_process_management" action="action_production_process_document"
+              sequence="50" groups="mrp.group_mrp_user"/>
 
     <!-- MO form: per-operation document maintenance page -->
     <record id="view_mrp_production_form_process_docs" model="ir.ui.view">
