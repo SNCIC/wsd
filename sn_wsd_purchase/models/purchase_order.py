@@ -2,6 +2,8 @@ from decimal import Decimal
 from datetime import datetime
 
 from odoo import api, fields, models
+from odoo.tools import formatLang
+from odoo.tools.misc import NON_BREAKING_SPACE, format_amount, get_lang
 
 
 def cncurrency(value, capital=True, prefix=False, classical=None):
@@ -79,6 +81,45 @@ def cncurrency(value, capital=True, prefix=False, classical=None):
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
+
+    @staticmethod
+    def _strip_trailing_zeroes(value, decimal_point):
+        """Remove insignificant decimal zeroes without changing integer zeroes."""
+        decimal_position = value.rfind(decimal_point)
+        if decimal_position == -1:
+            return value
+        return value[:decimal_position] + value[decimal_position:].rstrip('0').rstrip(decimal_point)
+
+    def _format_contract_quantity(self, value):
+        """Format a quantity using the Product Unit precision without trailing zeroes."""
+        precision = self.env['decimal.precision'].precision_get('Product Unit')
+        formatted = formatLang(self.env, value, digits=precision)
+        decimal_point = get_lang(self.env).decimal_point
+        return self._strip_trailing_zeroes(formatted, decimal_point)
+
+    def _format_contract_amount(self, value):
+        """Format a detail amount using the currency precision without trailing zeroes."""
+        currency = self.currency_id or self.company_id.currency_id
+        return format_amount(self.env, value, currency, trailing_zeroes=False)
+
+    def _format_contract_unit_price(self, value):
+        """Format a unit price using Product Price precision without trailing zeroes."""
+        currency = self.currency_id or self.company_id.currency_id
+        formatted = formatLang(self.env, value, dp='Product Price')
+        formatted = self._strip_trailing_zeroes(formatted, get_lang(self.env).decimal_point)
+        symbol = currency.symbol or ''
+        if currency.position == 'before':
+            return f'{symbol}{NON_BREAKING_SPACE}{formatted}'
+        return f'{formatted}{NON_BREAKING_SPACE}{symbol}'
+
+    def _format_contract_total(self, value):
+        """Format a contract summary amount with exactly two decimal places."""
+        currency = self.currency_id or self.company_id.currency_id
+        formatted = formatLang(self.env, value, digits=2)
+        symbol = currency.symbol or ''
+        if currency.position == 'before':
+            return f'{symbol}{NON_BREAKING_SPACE}{formatted}'
+        return f'{formatted}{NON_BREAKING_SPACE}{symbol}'
 
     def _get_contract_address(self, partner):
         """Return a contract address from the largest region to the smallest."""
@@ -177,3 +218,150 @@ class PurchaseOrder(models.Model):
         for order in self:
             order.amount_total_chinese = cncurrency(order.amount_total, prefix=True)
             order.amount_untaxed_chinese = cncurrency(order.amount_untaxed, prefix=True)
+
+
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+
+    price_unit_tax_included = fields.Float(
+        string='Unit Price Tax Included',
+        min_display_digits='Product Price',
+    )
+    price_unit_tax_excluded = fields.Float(
+        string='Untaxed Unit Price',
+        min_display_digits='Product Price',
+    )
+
+    def _get_tax_details(self, price_unit, special_mode=False):
+        self.ensure_one()
+        if not self.tax_ids:
+            return {
+                'total_excluded': price_unit,
+                'total_included': price_unit,
+            }
+        return self.tax_ids._get_tax_details(
+            price_unit,
+            1.0,
+            precision_rounding=self.currency_id.rounding,
+            rounding_method='round_globally',
+            product=self.product_id,
+            product_uom=self.product_uom_id,
+            special_mode=special_mode,
+        )
+
+    def _get_unit_price_values(self, price_unit):
+        self.ensure_one()
+        tax_details = self._get_tax_details(price_unit)
+        return tax_details['total_included'], tax_details['total_excluded']
+
+    def _get_display_values_from_price_unit(self, price_unit):
+        self.ensure_one()
+        return self._get_unit_price_values(price_unit)
+
+    def _get_price_unit_from_tax_included(self, price_unit_tax_included):
+        self.ensure_one()
+        if self.order_id.company_price_include == 'tax_included':
+            return price_unit_tax_included
+        return self._get_tax_details(
+            price_unit_tax_included,
+            special_mode='total_included',
+        )['total_excluded']
+
+    def _get_price_unit_from_tax_excluded(self, price_unit_tax_excluded):
+        self.ensure_one()
+        if self.order_id.company_price_include == 'tax_excluded':
+            return price_unit_tax_excluded
+        return self._get_tax_details(
+            price_unit_tax_excluded,
+            special_mode='total_excluded',
+        )['total_included']
+
+    @api.onchange('price_unit', 'tax_ids', 'product_id', 'product_uom_id', 'currency_id')
+    def _onchange_price_unit_tax_values(self):
+        for line in self:
+            line.price_unit_tax_included, line.price_unit_tax_excluded = line._get_display_values_from_price_unit(
+                line.price_unit
+            )
+
+    @api.onchange('price_unit_tax_included')
+    def _onchange_price_unit_tax_included(self):
+        for line in self:
+            line.price_unit = line._get_price_unit_from_tax_included(line.price_unit_tax_included)
+            line.price_unit_tax_included, line.price_unit_tax_excluded = line._get_display_values_from_price_unit(
+                line.price_unit
+            )
+
+    @api.onchange('price_unit_tax_excluded')
+    def _onchange_price_unit_tax_excluded(self):
+        for line in self:
+            line.price_unit = line._get_price_unit_from_tax_excluded(line.price_unit_tax_excluded)
+            line.price_unit_tax_included, line.price_unit_tax_excluded = line._get_display_values_from_price_unit(
+                line.price_unit
+            )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            line = self.new(vals)
+            if 'price_unit_tax_included' in vals or 'price_unit_tax_excluded' in vals:
+                if 'price_unit_tax_included' in vals and 'price_unit_tax_excluded' not in vals:
+                    vals['price_unit'] = line._get_price_unit_from_tax_included(
+                        vals['price_unit_tax_included']
+                    )
+                elif 'price_unit_tax_excluded' in vals and 'price_unit_tax_included' not in vals:
+                    vals['price_unit'] = line._get_price_unit_from_tax_excluded(
+                        vals['price_unit_tax_excluded']
+                    )
+                elif line.order_id.company_price_include == 'tax_included':
+                    vals['price_unit'] = line._get_price_unit_from_tax_included(
+                        vals['price_unit_tax_included']
+                    )
+                else:
+                    vals['price_unit'] = line._get_price_unit_from_tax_excluded(
+                        vals['price_unit_tax_excluded']
+                    )
+                included, excluded = line._get_display_values_from_price_unit(vals['price_unit'])
+                vals.update(
+                    price_unit_tax_included=included,
+                    price_unit_tax_excluded=excluded,
+                )
+        lines = super().create(vals_list)
+        lines._sync_display_price_values()
+        return lines
+
+    def write(self, vals):
+        display_fields = {'price_unit_tax_included', 'price_unit_tax_excluded'}
+        if self.env.context.get('skip_wsd_price_sync'):
+            return super().write(vals)
+        if not (display_fields & vals.keys()):
+            result = super().write(vals)
+            if result and ('price_unit' in vals or {'tax_ids', 'product_id', 'product_uom_id', 'currency_id'} & vals.keys()):
+                self._sync_display_price_values()
+            return result
+        for line in self:
+            line_vals = dict(vals)
+            included = vals.get('price_unit_tax_included')
+            excluded = vals.get('price_unit_tax_excluded')
+            if included is not None and excluded is None:
+                line_vals['price_unit'] = line._get_price_unit_from_tax_included(included)
+            elif excluded is not None and included is None:
+                line_vals['price_unit'] = line._get_price_unit_from_tax_excluded(excluded)
+            elif line.order_id.company_price_include == 'tax_included':
+                line_vals['price_unit'] = line._get_price_unit_from_tax_included(included)
+            else:
+                line_vals['price_unit'] = line._get_price_unit_from_tax_excluded(excluded)
+            included, excluded = line._get_display_values_from_price_unit(line_vals['price_unit'])
+            line_vals.update(
+                price_unit_tax_included=included,
+                price_unit_tax_excluded=excluded,
+            )
+            super(PurchaseOrderLine, line.with_context(skip_wsd_price_sync=True)).write(line_vals)
+        return True
+
+    def _sync_display_price_values(self):
+        for line in self:
+            included, excluded = line._get_display_values_from_price_unit(line.price_unit)
+            super(PurchaseOrderLine, line.with_context(skip_wsd_price_sync=True)).write({
+                'price_unit_tax_included': included,
+                'price_unit_tax_excluded': excluded,
+            })

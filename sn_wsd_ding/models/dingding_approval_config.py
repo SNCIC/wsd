@@ -91,7 +91,7 @@ class SnWsdDingApprovalConfig(models.Model):
                             if not isinstance(item, dict):
                                 return None
                             props = item.get("props") or {}
-                            field_id = props.get("id") or props.get("name") or item.get("id") or item.get("name") or item.get("componentName")
+                            field_id = props.get("id") or item.get("id")
                             label = props.get("label") or props.get("title") or props.get("name") or item.get("componentName")
                             ftype = item.get("componentName") or props.get("componentType") or props.get("type")
                             if not field_id or not ftype:
@@ -110,7 +110,7 @@ class SnWsdDingApprovalConfig(models.Model):
                                 child_entries = []
                                 for c in children:
                                     cprops = c.get("props") or {}
-                                    child_id = cprops.get("id") or cprops.get("name") or c.get("id") or c.get("name") or c.get("componentName")
+                                    child_id = cprops.get("id") or c.get("id")
                                     child_label = cprops.get("label") or cprops.get("title") or cprops.get("name") or c.get("componentName")
                                     ctype = c.get("componentName") or cprops.get("componentType") or cprops.get("type")
                                     if not child_id or not ctype:
@@ -161,7 +161,7 @@ class SnWsdDingApprovalConfig(models.Model):
 
         candidates = []
         for d in walk(payload):
-            field_id = d.get("id") or d.get("field_id") or d.get("fieldId") or d.get("name")
+            field_id = d.get("id") or d.get("field_id") or d.get("fieldId")
             label = d.get("label") or d.get("title") or d.get("display_name") or d.get("displayName")
             ctype = d.get("component_type") or d.get("type") or d.get("componentName")
             if not field_id or not ctype:
@@ -183,7 +183,7 @@ class SnWsdDingApprovalConfig(models.Model):
                 for c in children:
                     if not isinstance(c, dict):
                         continue
-                    child_id = c.get("id") or c.get("field_id") or c.get("fieldId") or c.get("name")
+                    child_id = c.get("id") or c.get("field_id") or c.get("fieldId")
                     child_label = c.get("label") or c.get("title") or c.get("display_name") or c.get("displayName")
                     ctype = c.get("component_type") or c.get("type") or c.get("componentName")
                     if not child_id or not ctype:
@@ -276,7 +276,7 @@ class SnWsdDingApprovalConfig(models.Model):
                 vals = {
                     "sequence": seq,
                     "dingding_field_name": f["name"],
-                    "dingding_field_id": f.get("id") or f["name"],
+                    "dingding_field_id": f["id"],
                     "dingding_field_type": self._sanitize_field_type(f.get("type")),
                     "required": bool(f.get("required")),
                 }
@@ -289,7 +289,7 @@ class SnWsdDingApprovalConfig(models.Model):
                                 {
                                     "sequence": child_seq,
                                     "dingding_field_name": c["name"],
-                                    "dingding_field_id": c.get("id") or c["name"],
+                                    "dingding_field_id": c["id"],
                                     "dingding_field_type": self._sanitize_field_type(c.get("type")),
                                     "required": bool(c.get("required")),
                                 }
@@ -319,7 +319,7 @@ class SnWsdDingApprovalConfig(models.Model):
                     "config_id": self.id,
                     "sequence": seq,
                     "dingding_field_name": f["name"],
-                    "dingding_field_id": f.get("id") or f["name"],
+                    "dingding_field_id": f["id"],
                     "dingding_field_type": self._sanitize_field_type(f.get("type")),
                     "required": bool(f.get("required")),
                     "parent_field_id": False,
@@ -334,7 +334,7 @@ class SnWsdDingApprovalConfig(models.Model):
                             "config_id": self.id,
                             "sequence": child_seq,
                             "dingding_field_name": c["name"],
-                            "dingding_field_id": c.get("id") or c["name"],
+                            "dingding_field_id": c["id"],
                             "dingding_field_type": self._sanitize_field_type(c.get("type")),
                             "required": bool(c.get("required")),
                             "parent_field_id": parent.id,
@@ -828,12 +828,16 @@ class SnWsdDingApprovalConfig(models.Model):
         self.ensure_one()
         form_items = []
         for line in self.field_ids.filtered(lambda l: not l.parent_field_id).sorted("sequence"):
+            if not line.dingding_field_id:
+                raise UserError(
+                    _("DingTalk component ID is missing for field: %s") % (line.dingding_field_name,)
+                )
             value = line.compute_value(record=record)
             if line.required and (value in (None, "") or (isinstance(value, list) and not value)):
                 raise UserError(_("Required DingTalk field missing: %s") % (line.dingding_field_name,))
             form_items.append(
                 {
-                    "name": line.dingding_field_name,
+                    "name": line.dingding_field_id,
                     "value": value if value not in (None, False) else "",
                 }
             )
@@ -1021,10 +1025,15 @@ class SnWsdDingApprovalField(models.Model):
             for line in lines:
                 row_items = []
                 for child in self.child_ids.sorted("sequence"):
+                    if not child.dingding_field_id:
+                        raise UserError(
+                            _("DingTalk component ID is missing for field: %s")
+                            % (child.dingding_field_name,)
+                        )
                     value = child.compute_value(record=line)
                     row_items.append(
                         {
-                            "name": child.dingding_field_name,
+                            "name": child.dingding_field_id,
                             "value": value if value not in (None, False) else "",
                         }
                     )

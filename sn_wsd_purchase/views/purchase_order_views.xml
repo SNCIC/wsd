@@ -5,6 +5,26 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="before">
+                <field name="price_unit_tax_included" string="Tax Included Unit Price" readonly="qty_invoiced != 0"/>
+                <field name="price_unit_tax_excluded" string="Untaxed Unit Price" readonly="qty_invoiced != 0"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="attributes">
+                <attribute name="string">Untaxed Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="after">
+                <field name="price_total" string="Tax Included Amount"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="before">
+                <field name="price_unit_tax_included" string="Tax Included Unit Price" readonly="qty_invoiced != 0"/>
+                <field name="price_unit_tax_excluded" string="Untaxed Unit Price" readonly="qty_invoiced != 0"/>
+            </xpath>
             <xpath expr="//notebook" position="inside">
                 <page name="contract_information" string="Contract Information">
                     <group>
