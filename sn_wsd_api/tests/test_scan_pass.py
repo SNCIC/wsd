@@ -280,3 +280,4 @@ class TestScanPass(TransactionCase):
         test_result = self.env['sn.wsd.mes.test.result'].browse(
             result['test_result_id'])
         self.assertEqual(test_result.defect_code_id, self.defect)
+        self.assertTrue(test_result.is_ng)

@@ -91,4 +91,16 @@
             </xpath>
         </field>
     </record>
+    <!-- defect dictionary column on the API test-result list (quality owns
+         the field; api must not depend on quality) -->
+    <record id="view_sn_wsd_test_result_list_quality_defect" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.test.result.list.quality.defect</field>
+        <field name="model">sn.wsd.mes.test.result</field>
+        <field name="inherit_id" ref="sn_wsd_api.view_sn_wsd_test_result_list"/>
+        <field name="arch" type="xml">
+            <field name="result" position="after">
+                <field name="defect_code_id" optional="show"/>
+            </field>
+        </field>
+    </record>
 </odoo>

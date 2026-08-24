@@ -274,9 +274,11 @@ msgid "Measurements"
 msgstr "测量值"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ng
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ng
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ng
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "NG"
 msgstr "NG"
@@ -307,6 +309,7 @@ msgstr "OK"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__operator_code
 msgid "Operator Code"
 msgstr "操作员代码"
 
@@ -338,6 +341,7 @@ msgstr "相位误差"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__product_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__product_id
 msgid "Product"
 msgstr "产品"
 
@@ -432,6 +436,8 @@ msgstr "返工过站"
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_identity_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__serial_identity_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "SN"
 msgstr "SN"
@@ -599,3 +605,75 @@ msgstr "工作中心编码"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workshop_id
 msgid "Workshop"
 msgstr "车间"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item NG"
+msgstr "单项NG"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item Result"
+msgstr "单项结果"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Last 7 Days"
+msgstr "最近 7 天"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall NG"
+msgstr "总结果NG"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__parent_result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall Result"
+msgstr "总结果"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
+msgid "Stored flag for fast list grouping and NG count aggregates."
+msgstr "存储标记，用于列表快速分组与NG计数聚合。"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Test"
+msgstr "测试"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result_detail
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result_detail
+msgid "Test Item Details"
+msgstr "测试项明细"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Open Full Form"
+msgstr "打开完整表单"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Click a test result above to view its item details"
+msgstr "点击上方任意一次测试，查看逐项明细"

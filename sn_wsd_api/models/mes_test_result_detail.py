@@ -32,6 +32,7 @@ class MesTestResultDetail(models.Model):
         related='test_result_id.serial_identity_id',
         store=True,
         readonly=True,
+        index=True,
     )
     production_id = fields.Many2one(
         'mrp.production',
@@ -64,6 +65,27 @@ class MesTestResultDetail(models.Model):
     test_time = fields.Datetime(
         string='Test Time',
         related='test_result_id.test_time',
+        store=True,
+        readonly=True,
+    )
+    parent_result = fields.Selection(
+        [('ok', 'OK'), ('ng', 'NG'), ('hold', 'Hold')],
+        string='Overall Result',
+        related='test_result_id.result',
+        store=True,
+        readonly=True,
+        index=True,
+    )
+    product_id = fields.Many2one(
+        'product.product',
+        string='Product',
+        related='test_result_id.product_id',
+        store=True,
+        readonly=True,
+    )
+    operator_code = fields.Char(
+        string='Operator Code',
+        related='test_result_id.operator_code',
         store=True,
         readonly=True,
     )

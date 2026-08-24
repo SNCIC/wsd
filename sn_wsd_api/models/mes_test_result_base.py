@@ -70,6 +70,14 @@ class MesTestResultBase(models.Model):
     retry_limit = fields.Integer(string='Retry Limit', default=0)
     requires_repair = fields.Boolean(string='Requires Repair', default=False, index=True)
     is_rework_pass = fields.Boolean(string='Rework Pass', default=False, index=True)
+    is_ng = fields.Boolean(
+        string='NG', compute='_compute_is_ng', store=True, index=True,
+        help='Stored flag for fast list grouping and NG count aggregates.')
+
+    @api.depends('result')
+    def _compute_is_ng(self):
+        for record in self:
+            record.is_ng = record.result == 'ng'
 
     @api.depends('serial_identity_id', 'test_type', 'test_time')
     def _compute_name(self):
