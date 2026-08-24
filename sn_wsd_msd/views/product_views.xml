@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_information']//group[@name='group_general']" position="inside">
                 <field name="is_msd_material"/>
+                <field name="msd_info"/>
+                <field name="x_board_side" required="default_code"/>
                 <field name="msl_level_id" invisible="not is_msd_material" required="is_msd_material"/>
                 <field name="component_thickness" invisible="not is_msd_material" required="is_msd_material"/>
                 <field name="msd_control_rule_id" invisible="not is_msd_material" readonly="1"/>

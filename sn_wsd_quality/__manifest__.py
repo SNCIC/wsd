@@ -12,6 +12,7 @@
         'views/serial_freeze_views.xml',
         'wizard/serial_freeze_wizard_views.xml',
         'views/quality_inspection_views.xml',
+        'views/stock_picking_iqc_views.xml',
         'views/internal_serial_quality_views.xml',
         'views/menu_views.xml',
     ],

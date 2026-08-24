@@ -251,6 +251,7 @@ msgstr "校准任务"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_config_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_sync_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_config_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_accept_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_create_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_record_wizard_form
@@ -378,6 +379,7 @@ msgstr "投产时间"
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__company_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__company_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__company_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__company_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__company_id
 msgid "Company"
 msgstr "公司"
@@ -666,7 +668,7 @@ msgstr "设备位置"
 #. module: sn_wsd_device
 #: model:ir.ui.menu,name:sn_wsd_device.menu_device_root
 msgid "Device Management"
-msgstr "设备管理"
+msgstr "设备"
 
 #. module: sn_wsd_device
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__device_sn
@@ -789,6 +791,7 @@ msgstr "是否停机"
 #. module: sn_wsd_device
 #. odoo-python
 #: code:addons/sn_wsd_device/models/maint_template.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_record__state__draft
 msgid "Draft"
 msgstr "草稿"
 
@@ -841,6 +844,8 @@ msgstr "电气故障"
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__equipment_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__equipment_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__equipment_id
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__equipment_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_id
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_id
 #: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_equipment__equipment_kind__device
@@ -848,6 +853,8 @@ msgstr "电气故障"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_knowledge_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
 msgid "Equipment"
@@ -895,6 +902,7 @@ msgstr "设备类别"
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__code
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__equipment_code
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_code
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__equipment_code
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_code
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__equipment_code
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_code
@@ -978,6 +986,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__equipment_model
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__equipment_model
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__model
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__equipment_model
 msgid "Equipment Model"
 msgstr "设备型号"
 
@@ -987,6 +996,7 @@ msgstr "设备型号"
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__equipment_name
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__name
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__equipment_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__equipment_name
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__equipment_name
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__equipment_name
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__equipment_name
@@ -2683,6 +2693,7 @@ msgid "State Grid Serial Number"
 msgstr "国网出厂编号"
 
 #. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__state
 #: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__state
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_repair_order_search
 msgid "Status"
@@ -3104,3 +3115,799 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
 msgid "e.g. Temperature check"
 msgstr ""
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "%(equipment)s on %(date)s (%(shift)s): OEE %(oee).1f%% (A %(availability).1f%% / P %(performance).1f%% / Q %(quality).1f%%)"
+msgstr "%(equipment)s %(date)s（%(shift)s）：OEE %(oee).1f%%（时间开动率 %(availability).1f%% / 性能开动率 %(performance).1f%% / 合格品率 %(quality).1f%%）"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_oee_record__downtime_hours
+msgid "Automatically the sum of the downtime detail lines whenever at least one line exists. Enter a value manually only when there is no detail line."
+msgstr "存在停机明细行时自动取各行时长合计；无明细行时可手工填写。"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "30 Days"
+msgstr "30天"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "7 Days"
+msgstr "7天"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__actual_output
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__actual_output
+msgid "Actual Output (pcs)"
+msgstr "实际产量(件)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_batch_wizard__shift__all
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_record__shift__all
+msgid "All Day"
+msgstr "全天"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "All Equipments"
+msgstr "全部设备"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "Availability"
+msgstr "时间开动率"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__availability_rate
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__availability_rate
+msgid "Availability (%)"
+msgstr "时间开动率(%)"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Average"
+msgstr "一般"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Average OEE"
+msgstr "平均OEE"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Best Equipment"
+msgstr "最佳设备"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Downtime cannot exceed the planned working time."
+msgstr "停机时间不能超过计划工作时间。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__downtime_hours
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__downtime_hours
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Downtime (h)"
+msgstr "停机时间(小时)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__downtime_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Downtime Details"
+msgstr "停机明细"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Downtime must be between 0 and the planned working time."
+msgstr "停机时间必须在 0 到计划工作时间之间。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__reason
+msgid "Downtime Reason"
+msgstr "停机原因"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__hours
+msgid "Duration (h)"
+msgstr "时长(小时)"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Excellent"
+msgstr "优秀"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Please enter a positive design capacity."
+msgstr "请填写大于0的设计产能。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Please enter a positive planned working time."
+msgstr "请填写大于0的计划工作时间。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Please enter the actual output."
+msgstr "请填写实际产量。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__breakdown
+msgid "Equipment Breakdown"
+msgstr "设备故障"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Equipment OEE Comparison"
+msgstr "设备OEE对比"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_oee_downtime
+msgid "Equipment OEE Downtime Line"
+msgstr "设备OEE停机明细"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_oee_record
+#: model:ir.sequence,name:sn_wsd_device.seq_oee_record
+msgid "Equipment OEE Record"
+msgstr "设备OEE记录"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Equipment Ranking"
+msgstr "设备排名"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Equipment With Data"
+msgstr "有数据设备"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Entry"
+msgstr "录入信息"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Good"
+msgstr "良好"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Inputs"
+msgstr "录入参数"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Last 30 Days"
+msgstr "最近30天"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Last 7 Days"
+msgstr "最近7天"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Last 90 Days"
+msgstr "最近90天"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "Low OEE (< 70%)"
+msgstr "低OEE（< 70%）"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__material
+msgid "Material Shortage"
+msgstr "待料"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__month
+msgid "Month"
+msgstr "月份"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Needs Attention"
+msgstr "待关注设备"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "No computed OEE record for this equipment in the last 30 days."
+msgstr "该设备最近 30 天暂无已计算的OEE记录。"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "No computed OEE record in the selected period."
+msgstr "所选期间内暂无已计算的OEE记录。"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "No data"
+msgstr "暂无数据"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_device
+#: model:ir.ui.menu,name:sn_wsd_device.menu_oee
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "OEE"
+msgstr "OEE"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__oee_value
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__oee_value
+msgid "OEE (%)"
+msgstr "OEE(%)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "OEE Computed"
+msgstr "OEE计算完成"
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_oee_record
+#: model:ir.ui.menu,name:sn_wsd_device.menu_oee_entry
+msgid "OEE Entry"
+msgstr "OEE录入"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "OEE Level Distribution"
+msgstr "OEE水平分布"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__record_id
+msgid "OEE Record"
+msgstr "OEE记录"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__name
+msgid "OEE Reference"
+msgstr "OEE单号"
+
+#. module: sn_wsd_device
+#: model:ir.actions.client,name:sn_wsd_device.action_oee_report
+#: model:ir.ui.menu,name:sn_wsd_device.menu_oee_report
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "OEE Report"
+msgstr "OEE报表"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "OEE Results"
+msgstr "OEE结果"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "OEE Trend"
+msgstr "OEE趋势"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__trend_data
+msgid "OEE Trend Data"
+msgstr "OEE趋势数据"
+
+#. module: sn_wsd_device
+#: model:ir.model.constraint,message:sn_wsd_device.constraint_sn_wsd_device_oee_record_equipment_date_shift_unique
+msgid "One OEE record per equipment, date and shift."
+msgstr "同一设备、日期、班次只能有一条OEE记录。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Optional remark..."
+msgstr "备注(可选)..."
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Output"
+msgstr "产量"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Output (pcs)"
+msgstr "产量(件)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Output quantities cannot be negative."
+msgstr "产量数量不能为负数。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Overall Equipment Effectiveness"
+msgstr "设备综合效率"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "Performance"
+msgstr "性能开动率"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__performance_rate
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__performance_rate
+msgid "Performance (%)"
+msgstr "性能开动率(%)"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Pick an equipment..."
+msgstr "选择设备..."
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_oee_record
+msgid "Pick an equipment, a date and a shift, enter the working time, output and capacity, then click \"Compute OEE\"."
+msgstr "选择设备、日期和班次，录入工作时间、产量和产能，然后点击“计算OEE”。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__maintenance
+msgid "Planned Maintenance"
+msgstr "计划保养"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__planned_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__planned_time
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__planned_time
+msgid "Planned Working Time (h)"
+msgstr "计划工作时间(小时)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Planned working time must be positive."
+msgstr "计划工作时间必须大于0。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__power
+msgid "Power Outage"
+msgstr "停电"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Poor"
+msgstr "待改进"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__qualified_qty
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__qualified_qty
+msgid "Qualified Qty (pcs)"
+msgstr "合格品数量(件)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Qualified qty cannot exceed the actual output."
+msgstr "合格品数量不能超过实际产量。"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "Quality"
+msgstr "合格品率"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__quality_rate
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__quality_rate
+msgid "Quality Rate (%)"
+msgstr "合格品率(%)"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Rank"
+msgstr "排名"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Rates"
+msgstr "比率"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Records"
+msgstr "记录数"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Refresh"
+msgstr "刷新"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__remark
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__run_hours
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__run_hours
+msgid "Run Time (h)"
+msgstr "运行时间(小时)"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__shift
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__shift
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "Shift"
+msgstr "班次"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_batch_wizard__shift__day
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_record__shift__day
+msgid "Day Shift"
+msgstr "白班"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_batch_wizard__shift__night
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_record__shift__night
+msgid "Night Shift"
+msgstr "夜班"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_downtime__reason__changeover
+msgid "Changeover / Setup"
+msgstr "换型/调试"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__design_capacity
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__design_capacity
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__design_capacity
+msgid "Design Capacity (pcs/h)"
+msgstr "设计产能(件/小时)"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_record.py:0
+msgid "Design capacity must be positive."
+msgstr "设计产能必须大于0。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__theoretical_output
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__theoretical_output
+msgid "Theoretical Output (pcs)"
+msgstr "理论产量(件)"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Top Equipment Radar"
+msgstr "设备OEE雷达图"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Trend"
+msgstr "趋势"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__unqualified_qty
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__unqualified_qty
+msgid "Unqualified Qty (pcs)"
+msgstr "不合格品数量(件)"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "World Class"
+msgstr "世界级"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "World Class (OEE >= 85%)"
+msgstr "世界级（OEE ≥ 85%）"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields.selection,name:sn_wsd_device.selection__sn_wsd_device_oee_record__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "Computed"
+msgstr "已计算"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_oee_record
+msgid "Create your first OEE entry"
+msgstr "创建第一条OEE录入"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Compute OEE"
+msgstr "计算OEE"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "%(created)s record(s) created for %(equipment)s (%(month)s / %(shift)s), %(replaced)s existing record(s) replaced, %(skipped)s day(s) skipped."
+msgstr "已为 %(equipment)s（%(month)s / %(shift)s）创建 %(created)s 条记录，替换已有记录 %(replaced)s 条，跳过 %(skipped)s 天。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__wizard_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_list
+msgid "Batch Entry"
+msgstr "批量录入"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Batch Entry Data"
+msgstr "批量录入数据"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
+msgid "Create Records"
+msgstr "批量创建"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
+msgid "Daily Lines"
+msgstr "每日数据"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__planned_time
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__design_capacity
+msgid "Default value used when the daily lines are generated."
+msgstr "生成每日明细行时使用的默认值。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Fill in the actual output of at least one day to create OEE records."
+msgstr "请至少为一天填写实际产量，才能创建OEE记录。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Line of %(date)s: design capacity must be positive."
+msgstr "%(date)s 行：设计产能必须大于0。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Line of %(date)s: downtime must be between 0 and the planned working time."
+msgstr "%(date)s 行：停机时间必须在 0 到计划工作时间之间。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Line of %(date)s: planned working time must be positive."
+msgstr "%(date)s 行：计划工作时间必须大于0。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Line of %(date)s: qualified qty cannot exceed the actual output."
+msgstr "%(date)s 行：合格品数量不能超过实际产量。"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_oee_batch_line
+msgid "OEE Batch Entry Line"
+msgstr "OEE批量录入行"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_oee_batch_wizard
+#: model:ir.ui.menu,name:sn_wsd_device.menu_oee_batch_entry
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
+msgid "OEE Batch Entry"
+msgstr "OEE批量录入"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "OEE Records Created"
+msgstr "OEE记录已创建"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
+msgid "One line per day of the month is pre-filled (up to today). Leave \"Actual Output\" empty on a day to skip it. Existing records of the same equipment, shift and date are replaced. All created records stay editable afterwards."
+msgstr "所选月份按天预填一行（截至今日）。某天不想录入就把“实际产量”留空跳过。同设备、同班次、同日期的已有记录将被替换。创建的记录之后仍可编辑。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__random_data
+msgid "Random Data"
+msgstr "随机数据"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__random_data
+msgid "Fill every day with plausible random values. Only the design capacity (and optionally the planned working time) is needed."
+msgstr "勾选后用合理的随机值填充每一天，只需填写设计产能（可选计划工作时间）。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_batch_wizard.py:0
+msgid "Enter a positive design capacity to generate random data."
+msgstr "请填写正的设计产能以生成随机数据。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_batch_wizard_form
+msgid "Random data is on: every day of the month is filled with plausible values derived from the design capacity. Only the design capacity (and optionally the planned working time) is needed."
+msgstr "随机模式已开启：整月每天都会按设计产能自动填充合理数值，只需填写设计产能（可选计划工作时间）。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_oee_import_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_import_wizard_form
+#: model:ir.actions.act_window,name:sn_wsd_device.action_oee_import_wizard
+#: model:ir.ui.menu,name:sn_wsd_device.menu_oee_import
+msgid "OEE Import"
+msgstr "OEE导入"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__overwrite
+msgid "Overwrite Existing Records"
+msgstr "覆盖已有记录"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__overwrite
+msgid "Rows matching an existing record (same equipment, date and shift) replace it instead of being rejected."
+msgstr "设备、日期、班次与已有记录相同的行将替换原记录；不勾选则报错拒绝。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_import_wizard_form
+msgid "Upload the template file filled with one row per equipment and day. Rows matching an existing record (same equipment, date and shift) replace it when \"Overwrite Existing Records\" is checked."
+msgstr "上传按“每设备每天一行”填好的模板文件。勾选“覆盖已有记录”时，设备、日期、班次相同的行会替换已有记录。"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_import_wizard_form
+msgid "Download Template"
+msgstr "下载模板"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_import_wizard_form
+msgid "Import Records"
+msgstr "导入记录"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "OEE Records Imported"
+msgstr "OEE记录已导入"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_trend_chart/oee_trend_chart.js:0
+msgid "OEE Trend Chart"
+msgstr "OEE趋势图"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "%(created)s record(s) created, %(updated)s record(s) updated."
+msgstr "已创建 %(created)s 条记录，更新 %(updated)s 条记录。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: a record already exists for this equipment, date and shift."
+msgstr "第 %(row)s 行：该设备、日期、班次已存在记录。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: equipment \"%(value)s\" not found."
+msgstr "第 %(row)s 行：未找到设备“%(value)s”。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: equipment \"%(value)s\" matches several records, use its code."
+msgstr "第 %(row)s 行：设备“%(value)s”匹配到多条记录，请使用设备编码。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: planned working time must be positive."
+msgstr "第 %(row)s 行：计划工作时间必须为正数。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: downtime must be between 0 and the planned working time."
+msgstr "第 %(row)s 行：停机时间必须在0和计划工作时间之间。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: design capacity must be positive."
+msgstr "第 %(row)s 行：设计产能必须为正数。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: actual output cannot be negative."
+msgstr "第 %(row)s 行：实际产量不能为负数。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: qualified qty must be between 0 and the actual output."
+msgstr "第 %(row)s 行：合格品数量必须在0和实际产量之间。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Unsupported file format. Upload an xlsx or csv file."
+msgstr "不支持的文件格式，请上传 xlsx 或 csv 文件。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "The file is missing its header row. Use the download template."
+msgstr "文件缺少表头行，请使用下载的模板。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: invalid date \"%(value)s\" (expected YYYY-MM-DD)."
+msgstr "第 %(row)s 行：日期“%(value)s”无效（应为 YYYY-MM-DD）。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: invalid shift \"%(value)s\"."
+msgstr "第 %(row)s 行：班次“%(value)s”无效。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/oee_import_wizard.py:0
+msgid "Row %(row)s: invalid number \"%(value)s\"."
+msgstr "第 %(row)s 行：数值“%(value)s”无效。"
+

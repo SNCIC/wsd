@@ -22,11 +22,7 @@
     <!-- Quality Operations Submenu -->
     <menuitem id="menu_sn_wsd_quality_inspection_fai" name="FAI Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_fai" sequence="50"/>
     <menuitem id="menu_sn_wsd_quality_inspection_ipqc" name="IPQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_ipqc" sequence="60"/>
+    <menuitem id="menu_sn_wsd_quality_inspection_iqc" name="IQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_iqc" sequence="62"/>
     <menuitem id="menu_sn_wsd_quality_inspection_oqc" name="OQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_oqc" sequence="65"/>
     <menuitem id="menu_sn_wsd_quality_inspection_skip" name="IPQC Skip Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_skip" sequence="70"/>
-
-    <record id="menu_sn_wsd_quality_inspection_iqc" model="ir.ui.menu">
-        <field name="name">IQC Inspections</field>
-        <field name="active" eval="False"/>
-    </record>
 </odoo>

@@ -41,8 +41,13 @@ def migrate(cr, version):
 
     # Seed the six legacy types for every company that already has templates
     # (plus the default company when the module has never been used).
-    cr.execute("SELECT DISTINCT company_id FROM sn_consumable_template")
-    company_ids = [row[0] for row in cr.fetchall()]
+    cr.execute("SELECT to_regclass('sn_consumable_template')")
+    has_legacy_template_table = cr.fetchone()[0] is not None
+    if has_legacy_template_table:
+        cr.execute("SELECT DISTINCT company_id FROM sn_consumable_template")
+        company_ids = [row[0] for row in cr.fetchall()]
+    else:
+        company_ids = []
     if not company_ids:
         cr.execute("SELECT id FROM res_company ORDER BY id LIMIT 1")
         row = cr.fetchone()
@@ -55,20 +60,23 @@ def migrate(cr, version):
                 " VALUES (%s, %s, %s, %s, TRUE, %s)",
                 (name, thaw_min, thaw_max, stir, company_id))
 
-    # Convert the template selection column to the new type_id m2o column.
-    cr.execute("ALTER TABLE sn_consumable_template ADD COLUMN IF NOT EXISTS type_id INTEGER")
-    for key, (name, _tmin, _tmax, _stir) in zip(LEGACY_KEYS, LEGACY_TYPES):
-        cr.execute(
-            "UPDATE sn_consumable_template t SET type_id = c.id"
-            " FROM sn_consumable_type c"
-            " WHERE c.company_id = t.company_id AND c.name = %s"
-            " AND t.consumable_type = %s",
-            (name, key))
-    cr.execute("ALTER TABLE sn_consumable_template DROP COLUMN IF EXISTS consumable_type")
+    if has_legacy_template_table:
+        # Convert the template selection column to the new type_id m2o column.
+        cr.execute("ALTER TABLE sn_consumable_template ADD COLUMN IF NOT EXISTS type_id INTEGER")
+        for key, (name, _tmin, _tmax, _stir) in zip(LEGACY_KEYS, LEGACY_TYPES):
+            cr.execute(
+                "UPDATE sn_consumable_template t SET type_id = c.id"
+                " FROM sn_consumable_type c"
+                " WHERE c.company_id = t.company_id AND c.name = %s"
+                " AND t.consumable_type = %s",
+                (name, key))
+        cr.execute("ALTER TABLE sn_consumable_template DROP COLUMN IF EXISTS consumable_type")
 
     # The info table's stored selection mirror is replaced by a related type_id
     # column the ORM adds and backfills during the same upgrade.
-    cr.execute("ALTER TABLE sn_consumable_info DROP COLUMN IF EXISTS consumable_type")
+    cr.execute("SELECT to_regclass('sn_consumable_info')")
+    if cr.fetchone()[0] is not None:
+        cr.execute("ALTER TABLE sn_consumable_info DROP COLUMN IF EXISTS consumable_type")
 
     # Drop stale field metadata for the removed selection fields.
     cr.execute(

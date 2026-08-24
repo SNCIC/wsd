@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_sn_wsd_ding_root"
+                  name="DingTalk"
+                  sequence="200"
+                  web_icon="sn_wsd_ding,static/description/dingdinglogo.png"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_ding_instance"
+                  name="Approval Instances"
+                  parent="menu_sn_wsd_ding_root"
+                  action="action_dingding_approval_instance"
+                  sequence="10"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_ding_config"
+                  name="Approval Config"
+                  parent="menu_sn_wsd_ding_root"
+                  action="action_dingding_approval_config"
+                  sequence="20"
+                  groups="base.group_system"/>
+    </data>
+</odoo>

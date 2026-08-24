@@ -1,0 +1,294 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-22 00:00+0000\n"
+"PO-Revision-Date: 2026-08-22 00:00+0000\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__contract_number
+msgid "Contract Number"
+msgstr "合同号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__signing_date
+msgid "Signing Date"
+msgstr "签订日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__signing_location
+msgid "Signing Location"
+msgstr "签订地点"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__buyer_bank_id
+msgid "Buyer Bank Account"
+msgstr "买方银行账户"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__delivery_date_text
+msgid "Delivery Date Description"
+msgstr "交货日期说明"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__delivery_location
+msgid "Delivery Location"
+msgstr "交货地点"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__technical_requirements
+msgid "Technical Requirements"
+msgstr "技术要求"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__acceptance_terms
+msgid "Acceptance Terms"
+msgstr "验收方式"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__payment_terms_text
+msgid "Payment Terms Description"
+msgstr "付款方式说明"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__liability_terms
+msgid "Liability Terms"
+msgstr "违约责任"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__buyer_agent
+msgid "Buyer Agent"
+msgstr "买方委托代理人"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__supplier_agent
+msgid "Supplier Agent"
+msgstr "供方委托代理人"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Contract Information"
+msgstr "合同信息"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Delivery"
+msgstr "交货"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Signatures"
+msgstr "签章"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Contract Terms"
+msgstr "合同条款"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.report,name:sn_wsd_purchase.action_report_purchase_contract
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Purchase Contract"
+msgstr "采购合同"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Buyer:"
+msgstr "买方："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Supplier:"
+msgstr "供方："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Address:"
+msgstr "地址："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Phone:"
+msgstr "电话："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Bank:"
+msgstr "开户行："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Account:"
+msgstr "账号："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Signing Date:"
+msgstr "签订日期："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Signing Location:"
+msgstr "签订地点："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Contract No.:"
+msgstr "合同号："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "1. Product Details"
+msgstr "一、采购产品的明细表"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Product Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Product Name"
+msgstr "产品名称"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Specification"
+msgstr "产品规格"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Brand"
+msgstr "品牌"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Qty"
+msgstr "数量"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Tax-Included Unit Price"
+msgstr "含税单价"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Tax-Included Amount"
+msgstr "含税金额"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Total"
+msgstr "含税合计"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Untaxed Amount"
+msgstr "不含税金额"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "2. Technical Requirements"
+msgstr "二、技术要求"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "3. Delivery"
+msgstr "三、交货日期"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Delivery date:"
+msgstr "交货日期："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Delivery location:"
+msgstr "交货地点："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "4. Acceptance"
+msgstr "四、验收方式"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "5. Payment"
+msgstr "五、付款方式"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "6. Liability"
+msgstr "六、违约责任"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Authorized Agent:"
+msgstr "委托代理人："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "Page"
+msgstr "第"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+msgid "of"
+msgstr "页，共"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Tax Included Unit Price"
+msgstr "含税单价"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__price_unit_tax_included
+msgid "Unit Price Tax Included"
+msgstr "含税单价"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__price_unit_tax_excluded
+msgid "Untaxed Unit Price"
+msgstr "不含税单价"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Unit Price"
+msgstr "含税单价"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Untaxed Unit Price"
+msgstr "不含税单价"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Untaxed Amount"
+msgstr "不含税金额"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Tax Included Amount"
+msgstr "含税金额"

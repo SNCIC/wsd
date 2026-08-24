@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_purchase_contract" model="ir.actions.report">
+        <field name="name">Purchase Contract</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sn_wsd_purchase.report_purchase_contract</field>
+        <field name="report_file">sn_wsd_purchase.report_purchase_contract</field>
+        <field name="paperformat_id" ref="sn_wsd_purchase.paperformat_purchase_contract"/>
+        <field name="print_report_name">'Purchase Contract - %s' % (object.contract_number or object.name)</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

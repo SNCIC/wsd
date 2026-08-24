@@ -18,7 +18,6 @@ class SnSmtOnlineMaterialExtension(models.Model):
     required_item_code = fields.Char(
         string='Main Item Code',
         index=True,
-        tracking=False,
     )
 
     @api.onchange('required_item_code')
@@ -44,7 +43,6 @@ class SnSmtOnlineMaterialExtension(models.Model):
     required_product_name = fields.Char(
         string='Main Material Name',
         related='required_product_id.name',
-        store=True,
         readonly=True,
     )
     required_product_spec = fields.Char(
