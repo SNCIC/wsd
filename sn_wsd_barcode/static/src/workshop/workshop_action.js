@@ -836,7 +836,7 @@ export class WorkshopOperationAction extends Component {
                 this.state.command = "";
                 this.setResult(_t("Device table recorded. Scan cart SN."), "success");
             } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
+                this.setResult(_t("Invalid device table format. Expected N.T, for example 3.T1."), "danger");
             }
             return;
         }
@@ -1072,11 +1072,11 @@ export class WorkshopOperationAction extends Component {
             this.resetSmtScan();
             this.state.smtStep = 1;
             if (operation.key === "smt_offline_prepare") {
-                this.setResult(_t("BL: scan device table, for example 1.A."), "info");
+                this.setResult(_t("BL: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_online_load") {
                 this.setResult(_t("TP: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_cart_load") {
-                this.setResult(_t("LCSL: scan device table, for example 1.A."), "info");
+                this.setResult(_t("LCSL: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_material_refill") {
                 this.setResult(_t("Refill: scan old material SN."), "info");
             } else if (operation.key === "smt_unload") {

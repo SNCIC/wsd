@@ -2165,8 +2165,8 @@ msgstr "设备表已记录，请扫描飞达站位 SN。"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
-msgid "Invalid device table format. Expected N.T, for example 1.A."
-msgstr "设备表格式错误，应为 N.T，例如 1.A。"
+msgid "Invalid device table format. Expected N.T, for example 3.T1."
+msgstr "TABLE 码格式错误，应为 N.T，例如 3.T1。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -2977,8 +2977,8 @@ msgstr "应用"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
-msgid "BL: scan device table, for example 1.A."
-msgstr "下料准备：扫机台料站，如 1.A。"
+msgid "BL: scan the TABLE code, for example 3.T1."
+msgstr "下料准备：扫 TABLE 码，如 3.T1。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3019,8 +3019,8 @@ msgstr "料车"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
-msgid "LCSL: scan device table, for example 1.A."
-msgstr "料车：扫机台料站，如 1.A。"
+msgid "LCSL: scan the TABLE code, for example 3.T1."
+msgstr "料车：扫 TABLE 码，如 3.T1。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
