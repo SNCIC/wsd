@@ -15,6 +15,10 @@
                             t-att-aria-label="resetLabel" t-on-click="resetSerial">
                         <i class="oi oi-refresh"/>
                     </button>
+                    <span t-if="state.userName" class="o_sn_wsd_pda_user">
+                        <i class="fa fa-user-circle-o me-1"/>
+                        <t t-out="state.userName"/>
+                    </span>
                 </div>
             </header>
 

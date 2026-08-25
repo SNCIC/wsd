@@ -31,6 +31,7 @@ export class PalletBindingAction extends Component {
             lastAction: "",
             receiveList: [],
             loading: false,
+        userName: "",
         });
         useBus(this.barcodeService.bus, "barcode_scanned", (event) => {
             this.processBarcode(event.detail.barcode);
@@ -42,6 +43,7 @@ export class PalletBindingAction extends Component {
         });
         onMounted(() => {
             this.mobileService.enableReader();
+            this._loadUserInfo();
             this.focusInput();
             this.state.message = _t("Scan a pallet number.");
         });
@@ -109,6 +111,13 @@ export class PalletBindingAction extends Component {
         return this.state.palletNo
             ? _t("Scan a meter carton. Scan again to unbind/move.")
             : _t("Scan a pallet number.");
+    }
+
+    async _loadUserInfo() {
+        try {
+            const data = await rpc("/sn_wsd_barcode/get_workshop_operation_data");
+            this.state.userName = data.user_name || "";
+        } catch (error) { /* non-critical */ }
     }
 
     focusInput() {
