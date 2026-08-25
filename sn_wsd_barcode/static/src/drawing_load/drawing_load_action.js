@@ -8,9 +8,10 @@ import { rpc } from "@web/core/network/rpc";
 import { Component, onMounted, onWillUnmount, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
-// 投料（插件/装配，无料站表）：扫制令单定位 → 清单行视图（未上标红）
-// → 循环扫 物料盘号/制具SN/辅料SN 上线 → 全部 is_load=Y 后过站放行。
-// 换单收尾：[Unload All]（= 制令单批量下料，制具/辅料联动下线）。
+// 投料（插件/装配，无料站表）：选产线 → 选工作中心，工位带出本产线在线
+// 制令单与关键物料清单（不扫制令单条码），再循环扫 物料盘号/制具SN/辅料SN
+// 上线。换单 = 切工位/产线选择器。换单收尾：[Unload All]（= 制令单批量下料，
+// 制具/辅料联动下线）。
 export class DrawingLoadAction extends Component {
     static props = { ...standardActionServiceProps };
     static template = "sn_wsd_barcode.DrawingLoadAction";
@@ -20,8 +21,15 @@ export class DrawingLoadAction extends Component {
         this.mobileService = useService("sn_wsd_barcode_mobile");
         this.state = useState({
             command: "",
+            lines: [],
+            stations: [],
+            selectedLineId: false,
+            selectedStationId: false,
+            selector: false,
+            selectorQuery: "",
             productionId: false,
             orderName: "",
+            noControl: false,
             summary: {
                 required_qty: 0,
                 loaded_qty: 0,
@@ -38,13 +46,41 @@ export class DrawingLoadAction extends Component {
                 this.onScan(barcode);
             }
         });
-        onMounted(() => {
+        onMounted(async () => {
             this.mobileService.enableReader();
+            await this._loadSelectors();
+            await this.loadContext();
             this.focusInput();
         });
         onWillUnmount(() => {
             this.mobileService.stopReader();
         });
+    }
+
+    async _loadSelectors() {
+        const data = await rpc("/sn_wsd_barcode/get_workshop_operation_data");
+        this.state.lines = data.lines || [];
+        this.state.stations = data.stations || [];
+        this.state.selectedLineId = this.state.lines[0]?.id || false;
+        this.state.selectedStationId = this.stationsOfLine[0]?.id || false;
+    }
+
+    get stationsOfLine() {
+        return this.state.stations.filter(
+            (station) => !this.state.selectedLineId
+                || station.line_id === this.state.selectedLineId);
+    }
+
+    get selectedLineName() {
+        const line = this.state.lines.find(
+            (l) => l.id === this.state.selectedLineId);
+        return line ? line.display_name : _t("Line");
+    }
+
+    get selectedStationName() {
+        const station = this.state.stations.find(
+            (s) => s.id === this.state.selectedStationId);
+        return station ? station.display_name : _t("Work Center");
     }
 
     focusInput() {
@@ -64,10 +100,19 @@ export class DrawingLoadAction extends Component {
         return _t("Back");
     }
 
+    get lineLabel() {
+        return _t("Line");
+    }
+
+    get workCenterLabel() {
+        return _t("Work Center");
+    }
+
     get scanHint() {
-        return this.state.productionId
-            ? _t("Scan a material reel, tooling SN or consumable SN.")
-            : _t("Scan the production order barcode.");
+        if (!this.state.selectedStationId) {
+            return _t("Select a work center first.");
+        }
+        return _t("Scan a material reel, tooling SN or consumable SN.");
     }
 
     get unloadAllLabel() {
@@ -94,6 +139,10 @@ export class DrawingLoadAction extends Component {
         return _t("All rows loaded. Pass stations are now allowed.");
     }
 
+    get noControlLabel() {
+        return _t("No critical material control for the current order.");
+    }
+
     typeLabel(type) {
         if (type === "tooling") {
             return _t("Tooling");
@@ -109,22 +158,51 @@ export class DrawingLoadAction extends Component {
     }
 
     goBack() {
-        this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_action_main_menu");
+        this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action");
     }
 
-    resetOrder() {
-        this.state.productionId = false;
-        this.state.orderName = "";
-        this.state.rows = [];
-        this.state.summary = {
-            required_qty: 0,
-            loaded_qty: 0,
-            unloaded_qty: 0,
-            line_complete: false,
-        };
-        this.state.result = "";
-        this.state.resultType = "info";
+    openSelector(kind) {
+        this.state.selector = kind;
+        this.state.selectorQuery = "";
+    }
+
+    closeSelector() {
+        this.state.selector = false;
+        this.state.selectorQuery = "";
         this.focusInput();
+    }
+
+    get selectorTitle() {
+        return this.state.selector === "line"
+            ? _t("Select a production line.")
+            : _t("Select a work center.");
+    }
+
+    selectLine(line) {
+        this.state.selectedLineId = line.id;
+        this.state.selectedStationId = this.stationsOfLine[0]?.id || false;
+        this.closeSelector();
+        this.loadContext();
+    }
+
+    selectStation(station) {
+        this.state.selectedStationId = station.id;
+        this.state.selectedLineId = station.line_id || this.state.selectedLineId;
+        this.closeSelector();
+        this.loadContext();
+    }
+
+    get selectorRecords() {
+        const query = this.state.selectorQuery.trim().toLowerCase();
+        const records = this.state.selector === "line"
+            ? this.state.lines
+            : this.stationsOfLine;
+        if (!query) {
+            return records;
+        }
+        return records.filter(
+            (record) => (record.display_name || record.name || "")
+                .toLowerCase().includes(query));
     }
 
     _applyStatus(status) {
@@ -136,36 +214,65 @@ export class DrawingLoadAction extends Component {
         }
     }
 
-    async onScan(barcode) {
-        const code = String(barcode || "").trim();
-        if (!code || this.state.loading) {
+    // 工位 → 本产线在线制令单 → 该单关键物料清单状态
+    async loadContext() {
+        if (!this.state.selectedStationId) {
+            this.state.productionId = false;
+            this.state.rows = [];
+            this.state.result = _t("Select a work center first.");
+            this.state.resultType = "warning";
             return;
         }
         this.state.loading = true;
         try {
-            if (!this.state.productionId) {
-                const status = await rpc("/sn_wsd_barcode/smt/do_drawing_open", {
-                    barcode: code,
-                });
-                if (status.ok) {
-                    this._applyStatus(status);
+            const status = await rpc("/sn_wsd_barcode/smt/do_drawing_context", {
+                workcenter_id: this.state.selectedStationId,
+            });
+            if (status.ok) {
+                this._applyStatus(status);
+                this.state.noControl = !this.state.rows.length;
+                if (this.state.rows.length) {
                     this.state.result = _t(
                         "Order %s. Scan the materials to load.",
                         this.state.orderName);
                     this.state.resultType = "success";
                 } else {
-                    this.state.result = status.message || _t("Operation failed.");
-                    this.state.resultType = "danger";
+                    this.state.result = this.noControlLabel;
+                    this.state.resultType = "warning";
                 }
             } else {
-                const status = await rpc("/sn_wsd_barcode/smt/do_drawing_scan", {
-                    production_id: this.state.productionId,
-                    barcode: code,
-                });
-                this._applyStatus(status);
-                this.state.result = status.message || "";
-                this.state.resultType = status.ok ? "success" : "danger";
+                this.state.productionId = false;
+                this.state.rows = [];
+                this.state.result = status.message || _t("Operation failed.");
+                this.state.resultType = "danger";
             }
+        } catch (error) {
+            this.state.result = error.message || _t("Operation failed.");
+            this.state.resultType = "danger";
+        } finally {
+            this.state.loading = false;
+        }
+    }
+
+    async onScan(barcode) {
+        const code = String(barcode || "").trim();
+        if (!code || this.state.loading || this.state.selector) {
+            return;
+        }
+        if (!this.state.productionId) {
+            this.state.result = _t("Select a work center first.");
+            this.state.resultType = "warning";
+            return;
+        }
+        this.state.loading = true;
+        try {
+            const status = await rpc("/sn_wsd_barcode/smt/do_drawing_scan", {
+                production_id: this.state.productionId,
+                barcode: code,
+            });
+            this._applyStatus(status);
+            this.state.result = status.message || "";
+            this.state.resultType = status.ok ? "success" : "danger";
             this.state.command = "";
         } catch (error) {
             this.state.result = error.message || _t("Operation failed.");

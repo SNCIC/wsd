@@ -646,3 +646,20 @@ class SnSmtPdaController(http.Controller):
         status['ok'] = True
         status['message'] = result['message']
         return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_context', type='jsonrpc', auth='user')
+    def do_drawing_context(self, workcenter_id):
+        """投料定位：工位 → 本产线在线制令单 → 关键物料清单状态
+        （不扫制令单条码，与 SMT 车间屏定位方式一致）。"""
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        workcenter = self._get_workcenter(workcenter_id)
+        try:
+            production, mes_order = self._get_online_mes_order(workcenter)
+        except UserError as error:
+            return {'ok': False, 'message': str(error)}
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['production_id'] = production.id
+        return status

@@ -3359,16 +3359,6 @@ msgid "Exception Report"
 msgstr "异常上报"
 
 #. module: sn_wsd_barcode
-#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_drawing_load
-msgid "Critical Material Loading"
-msgstr "投料"
-
-#. module: sn_wsd_barcode
-#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_exception
-msgid "Exception Report"
-msgstr "异常上报"
-
-#. module: sn_wsd_barcode
 #. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "The MES order %s is closed."
@@ -3467,12 +3457,6 @@ msgstr "功能加载失败。"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
-msgid "Critical Material Loading"
-msgstr "投料"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
 msgid "Scan a material reel, tooling SN or consumable SN."
 msgstr "扫物料盘号、制具SN或辅料SN。"
 
@@ -3517,12 +3501,6 @@ msgstr "辅料"
 #: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
 msgid "Order %s. Scan the materials to load."
 msgstr "制令单 %s。请扫码投料。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
-msgid "Exception Report"
-msgstr "异常上报"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3718,13 +3696,6 @@ msgstr "已备料。料车 %s —— 扫下一料站。"
 
 
 #. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid "Prepared on cart %s (slot %s)."
-msgstr "已备到料车 %s（料站 %s）。"
-
-
-#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Channel SN: "
@@ -3742,4 +3713,28 @@ msgstr "料站: "
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Cart Mount"
 msgstr "料车"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "No critical material control for the current order."
+msgstr "当前制令单无关键物料管控。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Line"
+msgstr "产线"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Select a production line."
+msgstr "请选择产线。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Select a work center."
+msgstr "请选择工作中心。"
 
