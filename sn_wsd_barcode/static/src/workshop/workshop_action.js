@@ -19,12 +19,12 @@ const SMT_MATERIAL_ACTIONS = [
     { key: "smt_offline_prepare", label: _t("Prepare") },
     { key: "smt_unload", label: _t("Unload") },
     { key: "smt_material_refill", label: _t("Refill") },
+    { key: "smt_cart_load", label: _t("Cart Mount") },
     { key: "smt_changeover", label: _t("Changeover") },
 ];
 
 const SMT_OPERATION_BUTTONS = [
     { key: "smt_material", label: _t("SMT Material") },
-    { key: "smt_cart_load", label: _t("LCSL") },
 ];
 
 // jigs are shared by both workshops: SMT and DIP each get the button
