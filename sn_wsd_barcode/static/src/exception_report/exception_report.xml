@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.ExceptionReportAction">
+        <div class="o_sn_wsd_exception_report o_sn_wsd_workshop d-flex flex-column h-100">
+
+            <!-- ❶ 上下文带 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <button type="button" class="btn" t-if="state.serialId"
+                            t-att-aria-label="resetLabel" t-on-click="resetSerial">
+                        <i class="oi oi-refresh"/>
+                    </button>
+                </div>
+            </header>
+
+
+            <!-- ❸ 动作坞 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="onSubmit">
+                    <input class="o_sn_wsd_exception_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
+            <!-- ❷ 反馈区 -->
+            <main class="flex-grow-1 overflow-auto">
+                <div t-if="state.serialId" class="o_sn_wsd_pda_progress">
+                    <div class="o_sn_wsd_pda_order">
+                        <t t-out="snLabel"/>: <strong t-out="state.serialSn"/>
+                    </div>
+                </div>
+
+                <div t-if="state.result"
+                     class="o_sn_wsd_pda_feedback"
+                     t-attf-class="o_sn_wsd_pda_feedback is-{{state.resultType || 'info'}}">
+                    <t t-out="state.result"/>
+                </div>
+                <div t-if="!state.result" class="o_sn_wsd_pda_feedback is-empty">
+                    <t t-out="scanHint"/>
+                </div>
+
+                <div t-if="state.serialId" class="px-3 pt-2">
+                    <label class="form-label small text-muted" t-out="noteLabel"/>
+                    <textarea class="form-control" rows="2" t-model="state.note"/>
+                </div>
+            </main>
+        </div>
+    </t>
+
+</templates>

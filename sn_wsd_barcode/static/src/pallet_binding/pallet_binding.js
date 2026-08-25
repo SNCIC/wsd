@@ -41,7 +41,7 @@ export class PalletBindingAction extends Component {
         if (this.env.config.breadcrumbs.length > 1) {
             this.env.config.historyBack();
         } else {
-            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_production_menu_action");
+            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action");
         }
     }
 

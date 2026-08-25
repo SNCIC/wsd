@@ -6,6 +6,15 @@ from odoo.http import request
 
 
 class SnSmtPdaController(http.Controller):
+    GROUP_SMT = 'sn_wsd_mrp.group_mes_smt_operator'
+
+    def _pda_group_check(self):
+        if request.env.user.has_group('base.group_system'):
+            return None
+        if request.env.user.has_group(self.GROUP_SMT):
+            return None
+        return {'ok': False, 'message': _('No permission for this barcode operation.')}
+
     """SMT PDA jsonrpc 入口。路径与参数形状保持稳定，内部全部经由
     sn.smt.loading.service（制令单锚点）执行。"""
 
@@ -23,15 +32,21 @@ class SnSmtPdaController(http.Controller):
         return workcenter
 
     def _get_online_mes_order(self, workcenter):
-        production = request.env['mrp.production']._get_current_online_production(
-            workcenter=workcenter
-        )
-        if not production:
-            raise UserError(_('No online manufacturing order was found for the selected work center.'))
-        mes_order = production.x_mes_order_id
-        if not mes_order:
-            raise UserError(_('No online MES order was found for the selected work center.'))
-        return production, mes_order
+        # current pattern (kept in sync with sn.wsd.api.service._find_live_order):
+        # online + station-mode orders filtered by line, matched by operation
+        orders = request.env['sn.wsd.mes.order'].search([
+            ('state', 'not in', ('cancelled', 'done')),
+            ('x_online_date', '!=', False),
+            ('x_manage_mode', '=', 'station'),
+        ]).filtered(lambda o: (
+            not workcenter.x_production_line_id
+            or o.production_line_id == workcenter.x_production_line_id))
+        operation = workcenter.x_operation_id
+        for order in orders:
+            if order.x_mes_route_id.operation_ids.filtered(
+                    lambda r: r.operation_id == operation):
+                return order.production_id, order
+        raise UserError(_('No online manufacturing order was found for the selected work center.'))
 
     def _get_mes_order_by_production(self, production_id):
         production = request.env['mrp.production'].browse(production_id).exists()
@@ -48,6 +63,9 @@ class SnSmtPdaController(http.Controller):
 
     @http.route('/sn_wsd_barcode/smt/get_production_context', type='jsonrpc', auth='user')
     def get_production_context(self, workcenter_id, production_line_id=False):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         workcenter = self._get_workcenter(workcenter_id)
         production, mes_order = self._get_online_mes_order(workcenter)
         if production_line_id:
@@ -71,6 +89,9 @@ class SnSmtPdaController(http.Controller):
 
     @http.route('/sn_wsd_barcode/smt/get_material_table_status', type='jsonrpc', auth='user')
     def get_material_table_status(self, production_id):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         production, mes_order = self._get_mes_order_by_production(production_id)
         status = self._get_service().get_material_status(mes_order)
         # 保持旧响应键（required_qty 等），供车间屏幕无感切换。
@@ -118,6 +139,9 @@ class SnSmtPdaController(http.Controller):
         material_sn_input,
         feeder_sn_input=False,
     ):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, mes_order = self._get_mes_order_by_production(production_id)
         workcenter = self._get_workcenter(workcenter_id)
         result = self._get_service().load_material(
@@ -145,6 +169,9 @@ class SnSmtPdaController(http.Controller):
         cart_sn_input=False,
         feeder_sn_input=False,
     ):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, mes_order = self._get_mes_order_by_production(production_id)
         workcenter = self._get_workcenter(workcenter_id)
         cart = request.env['sn.smt.cart'].search([
@@ -165,8 +192,46 @@ class SnSmtPdaController(http.Controller):
             'cart_line_id': result.get('cart_line_id'),
         }
 
+    @http.route('/sn_wsd_barcode/smt/do_offline_prepare_stage', type='jsonrpc', auth='user')
+    def do_offline_prepare_stage(
+        self,
+        cart_sn_input,
+        feeder_sn_input,
+        material_sn_input,
+        slot_no,
+        production_id=False,
+    ):
+        """Offline cart preparation: order may not be online yet, the cart
+        carries the line until mount time."""
+        deny = self._pda_group_check()
+        if deny:
+            return deny
+        cart = request.env['sn.smt.cart'].search([
+            ('cart_sn', '=', cart_sn_input or ''),
+            ('status', '!=', 'disabled'),
+        ], limit=1)
+        if not cart:
+            return {'ok': False, 'message': _('The cart SN does not exist.')}
+        mes_order = False
+        if production_id:
+            _production, mes_order = self._get_mes_order_by_production(production_id)
+        try:
+            result = self._get_service().prepare_offline_stage(
+                cart, feeder_sn_input, material_sn_input, slot_no,
+                mes_order=mes_order)
+        except UserError as error:
+            return {'ok': False, 'message': str(error)}
+        return {
+            'ok': True,
+            'message': _('Prepared on cart %s (slot %s).', cart.cart_sn, slot_no),
+            'cart_line_id': result.get('cart_line_id'),
+        }
+
     @http.route('/sn_wsd_barcode/smt/do_cart_load', type='jsonrpc', auth='user')
     def do_cart_load(self, production_id, workcenter_id, device_table_input, cart_sn_input):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, mes_order = self._get_mes_order_by_production(production_id)
         workcenter = self._get_workcenter(workcenter_id)
         cart = request.env['sn.smt.cart'].search([
@@ -178,15 +243,33 @@ class SnSmtPdaController(http.Controller):
         result = self._get_service().load_cart(
             mes_order, workcenter, device_table_input, cart,
         )
+        loaded = result.get('loaded_slots') or []
+        skipped = result.get('skipped_slots') or []
+        if skipped:
+            message = _(
+                'Cart loading: %(loaded)d station(s) loaded, %(skipped)d '
+                'skipped (slots: %(slots)s -- no matching online position '
+                'or already loaded).',
+                loaded=len(loaded), skipped=len(skipped),
+                slots=', '.join(skipped))
+        else:
+            message = _(
+                'Cart loading: %(loaded)d station(s) loaded, all matched.',
+                loaded=len(loaded))
         return {
             'ok': True,
-            'message': result.get('message') or _('Cart loading saved successfully.'),
+            'message': message,
+            'loaded_slots': loaded,
+            'skipped_slots': skipped,
             'production_id': production_id,
             'mes_order_id': mes_order.id,
         }
 
     @http.route('/sn_wsd_barcode/smt/do_changeover', type='jsonrpc', auth='user')
     def do_changeover(self, production_id, target_production_id, workcenter_id):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, source_mes_order = self._get_mes_order_by_production(production_id)
         _, target_mes_order = self._get_mes_order_by_production(target_production_id)
         workcenter = self._get_workcenter(workcenter_id)
@@ -210,6 +293,9 @@ class SnSmtPdaController(http.Controller):
         new_feeder_sn_input=False,
         change_type='continue',
     ):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, mes_order = self._get_mes_order_by_production(production_id)
         workcenter = self._get_workcenter(workcenter_id)
         old_lot = request.env['stock.lot'].search([
@@ -247,6 +333,9 @@ class SnSmtPdaController(http.Controller):
         cart_input=False,
         material_sn_input=False,
     ):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         _, mes_order = self._get_mes_order_by_production(production_id)
         cart = request.env['sn.smt.cart']
         if cart_input:
@@ -277,18 +366,19 @@ class SnSmtPdaController(http.Controller):
 
     @http.route('/sn_wsd_barcode/smt/process_smt_scan', type='jsonrpc', auth='user')
     def process_smt_scan(self, station_id, barcode, operation):
+        deny = self._pda_group_check()
+        if deny:
+            return deny
         workcenter = self._get_workcenter(station_id)
-        production = request.env['mrp.production']._get_current_online_production(
-            workcenter=workcenter
-        )
-        if not production:
+        try:
+            production, mes_order = self._get_online_mes_order(workcenter)
+        except UserError:
             return {
                 'ok': False,
                 'message': _(
                     'No online manufacturing order was found for the selected workshop and production line.'
                 ),
             }
-        mes_order = production.x_mes_order_id
         if not mes_order:
             return {
                 'ok': False,
@@ -474,3 +564,102 @@ class SnSmtPdaController(http.Controller):
             'ok': False,
             'message': _('Unknown SMT operation: %(operation)s', operation=operation),
         }
+
+    # ------------------------------------------------------------------
+    # 投料（插件/装配关键物料，无料站表）——整机工组
+    # ------------------------------------------------------------------
+
+    def _shop_group_check(self):
+        if request.env.user.has_group('base.group_system'):
+            return None
+        if request.env.user.has_group('sn_wsd_mrp.group_mes_shop'):
+            return None
+        return {'ok': False, 'message': _('No permission for this barcode operation.')}
+
+    def _find_mes_order_by_barcode(self, barcode):
+        """扫制令单条码：优先按制令单名（WH/MO/xxxx-N）查，回退按
+        mrp.production 名（WH/MO/xxxx）取其制令单。注意不要用 `_` 做
+        解包占位——本文件里 `_` 是翻译函数。"""
+        name = (barcode or '').strip()
+        mes_order = request.env['sn.wsd.mes.order'].search([
+            ('name', '=', name),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not mes_order:
+            production = request.env['mrp.production'].search([
+                ('name', '=', name),
+                ('company_id', 'in', request.env.companies.ids),
+            ], limit=1)
+            mes_order = production.x_mes_order_id
+        if not mes_order:
+            raise UserError(_('No MES order was found for %s.', name))
+        if mes_order.state in ('cancelled', 'done'):
+            raise UserError(_('The MES order %s is closed.', mes_order.display_name))
+        return mes_order.production_id, mes_order
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_open', type='jsonrpc', auth='user')
+    def do_drawing_open(self, barcode):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        production, mes_order = self._find_mes_order_by_barcode(barcode)
+        status = self._get_service().drawing_status(mes_order)
+        if not status['rows']:
+            return {
+                'ok': False,
+                'message': _(
+                    'Order %s has no critical material list rows. Loading '
+                    'control is not configured for it.', mes_order.display_name),
+            }
+        status['ok'] = True
+        status['production_id'] = production.id
+        return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_scan', type='jsonrpc', auth='user')
+    def do_drawing_scan(self, production_id, barcode, workcenter_id=False):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        _production, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id) if workcenter_id else False
+        try:
+            result = self._get_service().load_drawing_barcode(
+                mes_order, barcode, workcenter=workcenter)
+        except UserError as error:
+            status = self._get_service().drawing_status(mes_order)
+            status['ok'] = False
+            status['message'] = str(error)
+            return status
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['message'] = result['message']
+        return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_unload_all', type='jsonrpc', auth='user')
+    def do_drawing_unload_all(self, production_id):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        _production, mes_order = self._get_mes_order_by_production(production_id)
+        result = self._get_service().unload_drawing_all(mes_order)
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['message'] = result['message']
+        return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_context', type='jsonrpc', auth='user')
+    def do_drawing_context(self, workcenter_id):
+        """投料定位：工位 → 本产线在线制令单 → 关键物料清单状态
+        （不扫制令单条码，与 SMT 车间屏定位方式一致）。"""
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        workcenter = self._get_workcenter(workcenter_id)
+        try:
+            production, mes_order = self._get_online_mes_order(workcenter)
+        except UserError as error:
+            return {'ok': False, 'message': str(error)}
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['production_id'] = production.id
+        return status

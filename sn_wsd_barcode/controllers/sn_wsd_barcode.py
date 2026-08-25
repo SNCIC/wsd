@@ -15,6 +15,40 @@ from odoo.addons.sn_wsd_barcode.models.epc_encoder import EpcScheme
 
 class StockBarcodeController(http.Controller):
 
+    GROUP_SHOP = 'sn_wsd_mrp.group_mes_shop'
+    GROUP_SMT = 'sn_wsd_mrp.group_mes_smt_operator'
+    GROUP_WAREHOUSE = 'sn_wsd_mrp.group_mes_warehouse'
+
+    def _pda_group_check(self, group_xmlids):
+        """Frontend hiding is not security: every PDA route re-checks the
+        group and answers with a PDA-style message."""
+        user = request.env.user
+        if user.has_group('base.group_system'):
+            return None
+        if any(user.has_group(g) for g in group_xmlids):
+            return None
+        return {
+            'ok': False,
+            'message': _('No permission for this barcode operation.'),
+        }
+
+    def _pda_live_order(self, workcenter):
+        """Online station-mode order running through this work center
+        (same resolution as the device API, so PDA and API stay in sync)."""
+        orders = request.env['sn.wsd.mes.order'].search([
+            ('state', 'not in', ('cancelled', 'done')),
+            ('x_online_date', '!=', False),
+            ('x_manage_mode', '=', 'station'),
+        ]).filtered(lambda o: (
+            not workcenter.x_production_line_id
+            or o.production_line_id == workcenter.x_production_line_id))
+        operation = workcenter.x_operation_id
+        for order in orders:
+            if order.x_mes_route_id.operation_ids.filtered(
+                    lambda r: r.operation_id == operation):
+                return order
+        return request.env['sn.wsd.mes.order']
+
     @http.route('/sn_wsd_barcode/scan_from_main_menu', type='jsonrpc', auth='user')
     def main_menu(self, barcode):
         """ Receive a barcode scanned from the main menu and return the appropriate
@@ -124,6 +158,11 @@ class StockBarcodeController(http.Controller):
             'locations': user.has_group('stock.group_stock_multi_locations'),
             'package': user.has_group('stock.group_tracking_lot'),
             'tracking': user.has_group('stock.group_production_lot'),
+            'mes_shop': user.has_group(self.GROUP_SHOP) or user.has_group('base.group_system'),
+            'mes_smt': user.has_group(self.GROUP_SMT) or user.has_group('base.group_system'),
+            'mes_warehouse': user.has_group(self.GROUP_WAREHOUSE)
+                or user.has_group('stock.group_stock_user')
+                or user.has_group('base.group_system'),
         }
         quant_count = request.env['stock.quant'].search_count([
             '|', ('user_id', '=', user.id), ('user_id', '=', False),
@@ -142,6 +181,9 @@ class StockBarcodeController(http.Controller):
 
     @http.route('/sn_wsd_barcode/get_workshop_operation_data', type='jsonrpc', auth='user')
     def get_workshop_operation_data(self):
+        deny = self._pda_group_check([self.GROUP_SHOP, self.GROUP_SMT])
+        if deny:
+            return deny
         allowed_company_ids = self._get_allowed_company_ids()
         line_model = request.env['sn.mrp.production.line'].with_context(
             allowed_company_ids=allowed_company_ids,
@@ -167,6 +209,7 @@ class StockBarcodeController(http.Controller):
                     'name': line.name,
                     'code': line.code,
                     'display_name': line.display_name,
+                    'is_feeder_control': bool(line.x_smt_is_feeder_control),
                 }
                 for line in lines
             ],
@@ -184,42 +227,89 @@ class StockBarcodeController(http.Controller):
         }
 
     @http.route('/sn_wsd_barcode/process_workshop_scan', type='jsonrpc', auth='user')
-    def process_workshop_scan(self, station_id, barcode, operation=False):
+    def process_workshop_scan(self, station_id, barcode, operation=False, mode='ok'):
+        deny = self._pda_group_check([self.GROUP_SHOP, self.GROUP_SMT])
+        if deny:
+            return deny
         workcenter = request.env['mrp.workcenter'].browse(station_id).exists()
         if not workcenter:
             return {
                 'ok': False,
                 'message': _('Work center not found.'),
             }
-        production = request.env['mrp.production']._get_current_online_production(workcenter=workcenter)
-        if not production:
+        mes_order = self._pda_live_order(workcenter)
+        if not mes_order:
             return {
                 'ok': False,
                 'message': _('No online manufacturing order was found for the selected workshop and production line.'),
             }
-        route_operation = production._get_current_online_route_operation(workcenter=workcenter)
+        try:
+            route_operation = mes_order._resolve_route_operation(workcenter)
+        except Exception:
+            route_operation = False
         if not route_operation:
             return {
                 'ok': False,
                 'message': _('No active route operation was found for the current online manufacturing order.'),
-                'production_name': production.display_name,
+                'production_name': mes_order.production_id.display_name,
             }
-        mes_order = route_operation.mes_order_id
+        if mode == 'ng':
+            return self._process_ng_scan(mes_order, route_operation, station_id, barcode)
         serial = mes_order.scan_enter(barcode, workcenter)
         mes_order.leave_station(serial, 'ok')
         return {
             'ok': True,
             'message': _('Scan linked to MES order %(order)s and route operation %(operation)s.', order=mes_order.display_name, operation=route_operation.display_label),
-            'production_id': production.id,
-            'production_name': production.display_name,
+            'production_id': mes_order.production_id.id,
+            'production_name': mes_order.production_id.display_name,
             'mes_order_id': mes_order.id,
             'route_operation_id': route_operation.id,
             'route_operation_name': route_operation.display_label,
             'serial_number': barcode,
         }
 
+    def _process_ng_scan(self, mes_order, route_operation, station_id, barcode):
+        """Two-scan NG: first scan enters the SN, second scan must be a
+        defect code and leaves the station with NG."""
+        session_key = 'pda_pending_ng'
+        pending = request.session.get(session_key)
+        DefectCode = request.env['sn.wsd.quality.defect.code']
+        if pending and pending.get('station_id') == station_id:
+            defect = DefectCode.search([
+                '|', ('code', '=ilike', barcode), ('name', '=ilike', barcode),
+                ('company_id', 'in', [mes_order.company_id.id, False]),
+            ], limit=1)
+            if defect:
+                identity = request.env['sn.wsd.serial.identity'].search([
+                    ('name', '=', pending['sn']),
+                    ('company_id', '=', mes_order.company_id.id),
+                ], limit=1)
+                request.session[session_key] = False
+                if not identity:
+                    return {'ok': False, 'message': _('SN %s not found.', pending['sn'])}
+                mes_order.leave_station(identity, 'ng', ng_defect=defect)
+                return {
+                    'ok': True,
+                    'message': _('SN %(sn)s left %(op)s with NG (%(defect)s).',
+                                 sn=pending['sn'], op=route_operation.display_label,
+                                 defect=defect.display_name),
+                }
+        # first scan (or a fresh SN): enter and wait for the defect code
+        workcenter = request.env['mrp.workcenter'].browse(station_id).exists()
+        serial = mes_order.scan_enter(barcode, workcenter)
+        request.session[session_key] = {'station_id': station_id, 'sn': barcode}
+        return {
+            'ok': True,
+            'pending_ng': True,
+            'message': _('SN %(sn)s entered %(op)s — scan the defect code.',
+                         sn=serial.name, op=route_operation.display_label),
+        }
+
     @http.route('/sn_wsd_barcode/pallet/bind_carton', type='jsonrpc', auth='user')
     def bind_carton_to_pallet(self, pallet_no, carton_no, device_code=False):
+        deny = self._pda_group_check([self.GROUP_WAREHOUSE])
+        if deny:
+            return deny
         try:
             return request.env['sn.wsd.carton.pallet.binding.log'].bind_carton_to_pallet(
                 pallet_no=pallet_no,
@@ -232,6 +322,9 @@ class StockBarcodeController(http.Controller):
 
     @http.route('/sn_wsd_barcode/pallet/close', type='jsonrpc', auth='user')
     def close_meter_pallet(self, pallet_no, device_code=False):
+        deny = self._pda_group_check([self.GROUP_WAREHOUSE])
+        if deny:
+            return deny
         try:
             return request.env['sn.wsd.carton.pallet.binding.log'].close_pallet(
                 pallet_no=pallet_no,
@@ -593,3 +686,81 @@ class StockBarcodeController(http.Controller):
             results[tracking_number] = scheme.encode_partial(field_name, tracking_number)
         return results
 
+
+    # ------------------------------------------------------------------
+    # 车间作业功能宫格（ir.ui.menu 子树驱动）
+    # ------------------------------------------------------------------
+
+    @http.route('/sn_wsd_barcode/get_workshop_functions', type='jsonrpc', auth='user')
+    def get_workshop_functions(self):
+        container = request.env.ref(
+            'sn_wsd_barcode.menu_workshop_functions', raise_if_not_found=False)
+        if not container:
+            return {'functions': []}
+        menus = request.env['ir.ui.menu'].search([
+            ('parent_id', '=', container.id),
+            ('action', '!=', False),
+        ], order='sequence, id')
+        user = request.env.user
+        if not user.has_group('base.group_system'):
+            menus = menus.filtered(
+                lambda menu: not menu.group_ids
+                or bool(menu.group_ids & user.groups_id))
+        return {
+            'functions': [{
+                'menu_id': menu.id,
+                'name': menu.name,
+                'description': '',
+                'action_id': menu.action.id,
+                'web_icon': '',
+            } for menu in menus],
+        }
+
+    # ------------------------------------------------------------------
+    # 异常上报（全员）：SN + 缺陷代码 → 质量问题单
+    # ------------------------------------------------------------------
+
+    @http.route('/sn_wsd_barcode/quality/resolve_exception_sn', type='jsonrpc', auth='user')
+    def resolve_exception_sn(self, sn):
+        sn = (sn or '').strip()
+        identity = request.env['sn.wsd.serial.identity'].search([
+            ('name', '=', sn),
+            '|', ('company_id', '=', False),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not identity:
+            raise UserError(_('No serial number was found for %s.', sn))
+        return {'serial_id': identity.id, 'serial_sn': identity.name}
+
+    @http.route('/sn_wsd_barcode/quality/report_exception', type='jsonrpc', auth='user')
+    def report_exception(self, serial_id, defect_input, note=False):
+        identity = request.env['sn.wsd.serial.identity'].browse(serial_id).exists()
+        if not identity:
+            raise UserError(_('The serial number no longer exists.'))
+        code = (defect_input or '').strip()
+        defect = request.env['sn.wsd.quality.defect.code'].search([
+            ('code', 'ilike', code),
+            '|', ('company_id', '=', False),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not defect:
+            defect = request.env['sn.wsd.quality.defect.code'].search([
+                ('name', 'ilike', code),
+                '|', ('company_id', '=', False),
+                ('company_id', 'in', request.env.companies.ids),
+            ], limit=1)
+        if not defect:
+            raise UserError(_('No defect code matches %s.', code))
+        issue = request.env['sn.wsd.quality.issue'].create({
+            'serial_identity_id': identity.id,
+            'defect_code_id': defect.id,
+            'issue_source': 'manual',
+            'root_cause': note or False,
+            'company_id': identity.company_id.id or request.env.company.id,
+        })
+        return {
+            'issue_id': issue.id,
+            'issue_name': issue.name,
+            'message': _('Exception %s reported for %s (%s).',
+                         issue.name, identity.name, defect.display_name),
+        }

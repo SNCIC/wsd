@@ -1989,11 +1989,6 @@ msgid "Reverse"
 msgstr "冲销"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__route_operation_id
-msgid "Route Operation"
-msgstr ""
-
-#. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/wizard/sn_smt_table_import_wizard.py:0
 msgid ""
@@ -3133,3 +3128,25 @@ msgstr "在线料表"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_wsd_mes_order_form_inherit_sn_smt
 msgid "Batch unload ALL online materials of this MES order? Remaining points stay on the reels."
 msgstr "整单批量下料该制令单的全部在线物料？各卷余量将保留在卷上。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__source__drawing_list
+msgid "Drawing Material List"
+msgstr "关键物料清单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__source
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
+msgid "Feeder control is enabled on the production line: scan the feeder channel SN first."
+msgstr "产线已开启飞达管控：请先扫飞达通道SN。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
+msgid "%s online material row(s) unloaded."
+msgstr "已下料 %s 行在线料。"
