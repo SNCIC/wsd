@@ -1,0 +1,23 @@
+{
+    'name': 'SN WSD Material',
+    'version': '19.0.1.0.0',
+    'summary': 'Material specification fields on business document lines',
+    'category': 'Inventory/Inventory',
+    'depends': [
+        'sale',
+        'purchase',
+        'stock',
+        'mrp',
+        'sn_wsd_mrp',
+    ],
+    'data': [
+        'views/sale_order_line_views.xml',
+        'views/purchase_order_line_views.xml',
+        'views/stock_move_views.xml',
+        'views/mrp_bom_line_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}
