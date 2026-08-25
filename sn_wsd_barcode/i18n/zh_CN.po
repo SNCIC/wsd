@@ -3329,7 +3329,7 @@ msgid "The feeder channel SN does not exist."
 msgstr "飞达通道SN不存在。"
 
 #. module: sn_wsd_barcode
-#. odoo-javascript
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Prepared on cart %s (slot %s)."
 msgstr "已备到料车 %s（料位 %s）。"
@@ -3350,11 +3350,15 @@ msgstr "料车上台：已上台 %(loaded)d 站，全部匹配。"
 
 #. module: sn_wsd_barcode
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_drawing_load_action
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
 msgid "Critical Material Loading"
 msgstr "投料"
 
 #. module: sn_wsd_barcode
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_exception_report_action
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
 msgid "Exception Report"
 msgstr "异常上报"
 
