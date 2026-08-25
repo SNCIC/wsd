@@ -278,7 +278,7 @@ class CartonPalletBindingLog(models.Model):
         if not pallet:
             raise ValidationError(_('Meter pallet %s was not found.') % (pallet_no or ''))
         if pallet.x_wsd_pack_state == 'shipped':
-            raise ValidationError(_('Meter pallet %s has already been shipped.',)) % (pallet.name,)
+            raise ValidationError(_('Meter pallet %s has already been shipped.', pallet.name))
         if pallet.x_wsd_pack_state in ('closed', 'received'):
             raise ValidationError(_('Meter pallet %s is %s; binding is not allowed.',
                                     pallet.name, pallet.x_wsd_pack_state))
@@ -330,15 +330,15 @@ class CartonPalletBindingLog(models.Model):
                 ('x_wsd_package_role', '=', 'pallet'),
             ], limit=1)
             if not pallet:
-                raise ValidationError(_('Meter pallet %s was not found.',)) % (pallet_no,)
+                raise ValidationError(_('Meter pallet %s was not found.', pallet_no))
             if pallet.x_wsd_pack_state == 'received':
-                raise ValidationError(_('Meter pallet %s was already received.',)) % (pallet.name,)
+                raise ValidationError(_('Meter pallet %s was already received.', pallet.name))
             if pallet.x_wsd_pack_state == 'shipped':
-                raise ValidationError(_('Meter pallet %s has already been shipped.',)) % (pallet.name,)
+                raise ValidationError(_('Meter pallet %s has already been shipped.', pallet.name))
             if pallet.x_wsd_pack_state != 'closed':
-                raise ValidationError(_('Meter pallet %s is not closed yet.',)) % (pallet.name,)
+                raise ValidationError(_('Meter pallet %s is not closed yet.', pallet.name))
             if not pallet.child_package_ids:
-                raise ValidationError(_('Meter pallet %s is empty.',)) % (pallet.name,)
+                raise ValidationError(_('Meter pallet %s is empty.', pallet.name))
             pallets |= pallet
 
         if dry_run:

@@ -1028,13 +1028,13 @@ class MesOrder(models.Model):
             'x_mes_order_id': self.id,
             'x_mes_order_qty': qty,
         })
+        # 不设 quantity/picked —— 设了会触发 _set_quantity inverse 自动创建
+        # move line 并传播 description_picking_manual（line 上无此字段），改为
+        # 下方手动创建带箱结构的 move line 并回写数量
         move = self.env['stock.move'].create({
-            'description_picking_manual': _('MES completion %(order)s', order=self.name),
             'product_id': mo.product_id.id,
             'product_uom': mo.product_uom_id.id,
             'product_uom_qty': qty,
-            'quantity': qty,
-            'picked': True,
             'picking_id': picking.id,
             'location_id': src.id,
             'location_dest_id': dest.id,
@@ -1057,6 +1057,8 @@ class MesOrder(models.Model):
                 'location_dest_id': dest.id,
                 'company_id': self.company_id.id,
             })
+        # quantity 是 computed-stored（Σ move lines），不手写——写它会触发
+        # _set_quantity inverse 再创建 move line 并传播 description_picking_manual
         picking.action_confirm()
         return picking
 
