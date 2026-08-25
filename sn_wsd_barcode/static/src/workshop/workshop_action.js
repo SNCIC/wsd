@@ -304,9 +304,9 @@ export class WorkshopOperationAction extends Component {
         }
         if (op === "smt_online_load") {
             const messages = [
-                _t("Scan device table, for example 1.A."),
-                _t("Scan feeder position SN."),
-                _t("Scan material SN."),
+                _t("Scan the TABLE code, for example 3.T1."),
+                _t("Scan the feeder channel SN."),
+                _t("Scan the loadpoint, then the material SN."),
             ];
             return messages[Math.max(step - 1, 0)] || messages[0];
         }

@@ -2082,7 +2082,7 @@ msgstr "请扫描条码或手工输入。"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Scan device table, for example 1.A."
-msgstr "请扫描设备表，例如 1.A。"
+msgstr "请扫 TABLE 码，如 3.T1。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3414,13 +3414,13 @@ msgstr "已提报异常 %s（SN %s，%s）。"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Table %s. Scan the feeder channel SN."
-msgstr "表 %s。请扫飞达通道SN。"
+msgstr "TABLE %s。请扫飞达通道SN。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Table %s. Scan the loadpoint."
-msgstr "表 %s。请扫料站。"
+msgstr "TABLE %s。请扫料站。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3679,4 +3679,22 @@ msgstr "辅料 %s 已上线 (%s)。"
 #: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
 msgid "%s online material row(s) unloaded."
 msgstr "已下料 %s 行在线料。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan the TABLE code, for example 3.T1."
+msgstr "请扫 TABLE 码，如 3.T1。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan the feeder channel SN."
+msgstr "请扫飞达通道SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan the loadpoint, then the material SN."
+msgstr "请扫料站，再扫物料SN。"
 
