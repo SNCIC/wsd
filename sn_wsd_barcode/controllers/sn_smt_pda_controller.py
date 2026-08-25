@@ -192,6 +192,38 @@ class SnSmtPdaController(http.Controller):
             'cart_line_id': result.get('cart_line_id'),
         }
 
+    @http.route('/sn_wsd_barcode/smt/do_offline_prepare_stage', type='jsonrpc', auth='user')
+    def do_offline_prepare_stage(
+        self,
+        cart_sn_input,
+        feeder_sn_input,
+        material_sn_input,
+        slot_no,
+        production_id=False,
+    ):
+        """Offline cart preparation: order may not be online yet, the cart
+        carries the line until mount time."""
+        deny = self._pda_group_check()
+        if deny:
+            return deny
+        cart = request.env['sn.smt.cart'].search([
+            ('cart_sn', '=', cart_sn_input or ''),
+            ('status', '!=', 'disabled'),
+        ], limit=1)
+        if not cart:
+            return {'ok': False, 'message': _('The cart SN does not exist.')}
+        mes_order = False
+        if production_id:
+            _, mes_order = self._get_mes_order_by_production(production_id)
+        result = self._get_service().prepare_offline_stage(
+            cart, feeder_sn_input, material_sn_input, slot_no,
+            mes_order=mes_order)
+        return {
+            'ok': True,
+            'message': _('Prepared on cart %s (slot %s).', cart.cart_sn, slot_no),
+            'cart_line_id': result.get('cart_line_id'),
+        }
+
     @http.route('/sn_wsd_barcode/smt/do_cart_load', type='jsonrpc', auth='user')
     def do_cart_load(self, production_id, workcenter_id, device_table_input, cart_sn_input):
         deny = self._pda_group_check()

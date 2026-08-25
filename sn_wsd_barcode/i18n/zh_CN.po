@@ -3255,3 +3255,75 @@ msgstr "请先选物料动作再扫码。"
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Scan."
 msgstr "请扫码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Prepare"
+msgstr "备料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Prepare: scan the cart SN first."
+msgstr "备料：先扫料车SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Cart %s locked. Scan the feeder channel SN."
+msgstr "料车 %s 已锁定，扫飞达通道SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Channel recorded. Scan the material reel SN."
+msgstr "通道已记录，扫物料卷号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Reel recorded. Scan the slot number."
+msgstr "卷号已记录，扫料位号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Cart locked. Scan the feeder channel SN."
+msgstr "料车已锁定，扫飞达通道SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Prepared. Cart %s -- scan the next feeder channel SN."
+msgstr "已备上。料车 %s —— 继续扫下一颗通道SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Changeover: scan the target production order barcode."
+msgstr "转机：扫目标制令单条码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Target order recorded. Scan the device table (e.g. 3.Table1)."
+msgstr "目标单已记录，扫机台料站（如 3.Table1）。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "The feeder channel SN is required."
+msgstr "飞达通道SN必填。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "The feeder channel SN does not exist."
+msgstr "飞达通道SN不存在。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Prepared on cart %s (slot %s)."
+msgstr "已备到料车 %s（料位 %s）。"

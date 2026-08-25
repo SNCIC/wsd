@@ -265,9 +265,12 @@ class SnSmtCartLine(models.Model):
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        required=True,
         index=True,
         check_company=True,
+        help='The order the line is prepared for. May be empty during '
+             'offline preparation before the order goes online; it is '
+             'matched to the online material table when the cart is '
+             'mounted (load_cart).',
     )
     installed_at = fields.Datetime(string='Installed At', default=fields.Datetime.now, required=True)
     removed_at = fields.Datetime(string='Removed At', readonly=True, copy=False)

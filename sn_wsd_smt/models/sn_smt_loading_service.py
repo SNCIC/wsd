@@ -262,14 +262,10 @@ class SnSmtLoadingService(models.AbstractModel):
 
     @api.model
     def prepare_offline(self, mes_order, cart, feeder_sn, material_sn, slot_no):
-        """方向A第一步：备料——扫物料SN 登记到料车（sn.smt.cart.line 承载，
-        校验由 cart.line 自身完成）。"""
-        feeder = self.env['sn.smt.feeder'].search([
-            ('feeder_sn', '=', (feeder_sn or '').strip()),
-            ('company_id', '=', mes_order.company_id.id),
-        ], limit=1)
-        if not feeder:
-            raise UserError(_('The feeder SN does not exist.'))
+        """Online preparation (legacy path): the order is already online,
+        the line lands on the cart AND writes a loading log now."""
+        feeder = self._resolve_feeder_by_sn(
+            (feeder_sn or '').strip(), mes_order.company_id)
         material_lot = self._resolve_material_lot(mes_order, material_sn)
         line = self.env['sn.smt.cart.line'].create({
             'cart_id': cart.id,
@@ -287,6 +283,56 @@ class SnSmtLoadingService(models.AbstractModel):
             qty_before=0.0, qty_after=material_lot.x_smt_point_balance, note='BL',
         )
         return {'cart_line_id': line.id, 'online_material_id': position.id if position else False}
+
+    @api.model
+    def prepare_offline_stage(self, cart, feeder_sn, material_sn, slot_no, mes_order=False):
+        """Offline preparation (PDA): the order may not be online yet --
+        only the entity checks run here (feeder resolvable, lot exists,
+        cart active). The position matching and material-vs-table checks
+        are deferred to load_cart when the cart is mounted."""
+        feeder = self._resolve_feeder_by_sn(
+            (feeder_sn or '').strip(), cart.company_id)
+        material_lot = self.env['stock.lot'].search([
+            ('name', '=', (material_sn or '').strip()),
+            '|', ('company_id', '=', False),
+            ('company_id', '=', cart.company_id.id),
+        ], limit=1)
+        if not material_lot:
+            raise UserError(_('No material lot was found for the material SN.'))
+        line = self.env['sn.smt.cart.line'].create({
+            'cart_id': cart.id,
+            'feeder_id': feeder.id,
+            'slot_no': slot_no,
+            'material_lot_id': material_lot.id,
+            'mes_order_id': mes_order.id if mes_order else False,
+        })
+        return {'cart_line_id': line.id}
+
+    @api.model
+    def _resolve_feeder_by_sn(self, sn, company):
+        """PDA scans the CHANNEL SN (not the feeder body SN): channel ->
+        feeder; entity checks only (status/maintenance), no
+        position-channel or spec matching here."""
+        sn = (sn or '').strip()
+        if not sn:
+            raise UserError(_('The feeder channel SN is required.'))
+        channel = self.env['sn.smt.feeder.channel'].search([
+            ('channel_sn', '=', sn),
+            '|', ('company_id', '=', False), ('company_id', '=', company.id),
+        ], limit=1)
+        feeder = channel.feeder_id if channel else self.env['sn.smt.feeder']
+        if not feeder:
+            feeder = self.env['sn.smt.feeder'].search([
+                ('feeder_sn', '=', sn),
+                '|', ('company_id', '=', False), ('company_id', '=', company.id),
+            ], limit=1)
+        if not feeder:
+            raise UserError(_('The feeder channel SN does not exist.'))
+        if feeder.status not in ('normal', 'in_use'):
+            raise UserError(_('The feeder status is invalid.'))
+        if not feeder.maintenance_ok:
+            raise UserError(_('The feeder is not available for use because maintenance is not valid.'))
+        return feeder
 
     @api.model
     def load_cart(self, mes_order, workcenter, device_table, cart):
