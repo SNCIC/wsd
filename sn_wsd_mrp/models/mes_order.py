@@ -1005,6 +1005,61 @@ class MesOrder(models.Model):
             picking.button_validate()
         return picking
 
+    def _mes_create_pallet_receipt(self, qty, cartons, origin_pallets=False):
+        """Pallet receipt with per-carton move lines: production ->
+        finished stock, each carton ends up as its own package at the
+        destination location."""
+        self.ensure_one()
+        mo = self.production_id
+        warehouse = mo.picking_type_id.warehouse_id
+        if not warehouse:
+            raise ValidationError(_(
+                'The manufacturing order of %(order)s has no warehouse; '
+                'cannot create the completion receipt.', order=self.name))
+        src = self._mes_production_location()
+        dest = mo.location_dest_id
+        picking_type = self._mes_receipt_picking_type(warehouse)
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': picking_type.id,
+            'origin': self.name if not origin_pallets else '%s (%s)' % (self.name, origin_pallets),
+            'location_id': src.id,
+            'location_dest_id': dest.id,
+            'company_id': self.company_id.id,
+            'x_mes_order_id': self.id,
+            'x_mes_order_qty': qty,
+        })
+        move = self.env['stock.move'].create({
+            'description_picking_manual': _('MES completion %(order)s', order=self.name),
+            'product_id': mo.product_id.id,
+            'product_uom': mo.product_uom_id.id,
+            'product_uom_qty': qty,
+            'quantity': qty,
+            'picked': True,
+            'picking_id': picking.id,
+            'location_id': src.id,
+            'location_dest_id': dest.id,
+            'company_id': self.company_id.id,
+        })
+        # 每箱一条 move line（本系统包装体系为自建 stock.package，
+        # 与库存原生 package 无关联，箱号记入 picking 的 origin 注记）
+        for carton in cartons:
+            meters = len(carton.x_meter_pack_record_ids)
+            if not meters:
+                continue
+            self.env['stock.move.line'].create({
+                'move_id': move.id,
+                'picking_id': picking.id,
+                'product_id': mo.product_id.id,
+                'product_uom_id': mo.product_uom_id.id,
+                'quantity': meters,
+                'quantity_product_uom': meters,
+                'location_id': src.id,
+                'location_dest_id': dest.id,
+                'company_id': self.company_id.id,
+            })
+        picking.action_confirm()
+        return picking
+
     def action_complete(self, qty, destination='stock', workshop=False):
         """Complete (完工入库) -- the single execution entry used by both
         the form wizard and the shop-floor terminal.

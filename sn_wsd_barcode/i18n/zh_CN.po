@@ -3760,3 +3760,291 @@ msgstr "确认全部下料？"
 msgid "Reset"
 msgstr "重置"
 
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet Binding"
+msgstr "托盘绑定"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Bind"
+msgstr "绑定"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Receive"
+msgstr "入库"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Cartons"
+msgstr "箱数"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Meters"
+msgstr "台数"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallets"
+msgstr "托盘数"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Current Pallet"
+msgstr "当前托盘"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Switch Pallet"
+msgstr "换托盘"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Close Pallet"
+msgstr "关闭托盘"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Clear"
+msgstr "清空"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Create Receipt"
+msgstr "开单入库"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "No pallet in the receipt list yet."
+msgstr "入库清单为空。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Scan a closed pallet."
+msgstr "扫已关闭的托盘。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Scan a meter carton. Scan again to unbind/move."
+msgstr "扫箱号。再扫一次=解绑/换托。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Scan a pallet number."
+msgstr "扫托盘号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Scan a meter carton."
+msgstr "扫箱号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Scan a closed pallet to add it to the receipt."
+msgstr "扫已关闭托盘加入入库清单。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet recorded. Scan a meter carton."
+msgstr "托盘已锁定，扫箱号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Carton bound. Scan the next meter carton."
+msgstr "箱已绑定，继续扫下一箱。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Carton %s unbound from pallet %s."
+msgstr "箱 %s 已从托盘 %s 解绑。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Carton %s moved from pallet %s to %s."
+msgstr "箱 %s 已从托盘 %s 移到 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet %s closed. Ready for receipt."
+msgstr "托盘 %s 已关闭，可入库。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet %s is already in the receipt list."
+msgstr "托盘 %s 已在入库清单中。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet %s added. Scan the next pallet or press [Receive]."
+msgstr "托盘 %s 已加入，继续扫或点【开单入库】。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Receipts created: %s"
+msgstr "入库单已开: %s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Carton binding failed."
+msgstr "箱绑定失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet closing failed."
+msgstr "托盘关闭失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Receipt creation failed."
+msgstr "入库单创建失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Pallet validation failed."
+msgstr "托盘校验失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
+msgid "Operation failed."
+msgstr "操作失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s is bound to the current pallet. Scan it again to unbind."
+msgstr "箱 %s 已绑本托盘，再扫一次确认解绑。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %(carton)s is bound to pallet %(pallet)s. Scan it again to move it to the current pallet."
+msgstr "箱 %(carton)s 绑在托盘 %(pallet)s，再扫一次移到当前托盘。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s is not bound to pallet %s."
+msgstr "箱 %s 不在托盘 %s 上。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s is not bound to any pallet."
+msgstr "箱 %s 未绑任何托盘。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "A shipped pallet or carton cannot be unbound."
+msgstr "已发货的托盘/箱不能解绑。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s is %s; unbind is not allowed."
+msgstr "托盘 %s 状态为 %s，不允许解绑。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s is %s; binding is not allowed."
+msgstr "托盘 %s 状态为 %s，不允许绑定。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "The source pallet has already been shipped."
+msgstr "来源托盘已发货。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "The source pallet is %s; move is not allowed."
+msgstr "来源托盘状态为 %s，不允许移托。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s was already received."
+msgstr "托盘 %s 已入库。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s is not closed yet."
+msgstr "托盘 %s 尚未关闭。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s is empty."
+msgstr "托盘 %s 是空的。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Pack record %s has no MES order; cannot receive."
+msgstr "包装记录 %s 无制令单，不能入库。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "MES order %s must be online and in progress to receive products."
+msgstr "制令单 %s 必须在线且在产才能入库。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "MES order %(order)s: receiving %(new)d would exceed the output target (%(done)d / %(target)d)."
+msgstr "制令单 %(order)s：入库 %(new)d 台将超出产出目标（%(done)d / %(target)d）。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "receipt: %s"
+msgstr "入库单: %s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Carton %s"
+msgstr "箱 %s"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "receipt: %s"
+msgstr "入库单: %s"

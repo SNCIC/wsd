@@ -3150,3 +3150,45 @@ msgstr "产线已开启飞达管控：请先扫飞达通道SN。"
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "%s online material row(s) unloaded."
 msgstr "已下料 %s 行在线料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s was not found."
+msgstr "未找到托盘 %s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s was not found."
+msgstr "未找到箱 %s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s does not contain any meter pack record."
+msgstr "箱 %s 没有任何包装记录。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s has already been shipped."
+msgstr "托盘 %s 已发货。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter pallet %s is closed."
+msgstr "托盘 %s 已关闭。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "An empty meter pallet cannot be closed."
+msgstr "空托盘不能关闭。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Meter carton %s has already been shipped."
+msgstr "箱 %s 已发货。"
