@@ -3327,3 +3327,17 @@ msgstr "飞达通道SN不存在。"
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Prepared on cart %s (slot %s)."
 msgstr "已备到料车 %s（料位 %s）。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"Cart loading: %(loaded)d station(s) loaded, %(skipped)d skipped (slots: "
+"%(slots)s -- no matching online position or already loaded)."
+msgstr "料车上台：已上台 %(loaded)d 站，跳过 %(skipped)d 站（料位: %(slots)s —— 无匹配在线料位或已上料）。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Cart loading: %(loaded)d station(s) loaded, all matched."
+msgstr "料车上台：已上台 %(loaded)d 站，全部匹配。"

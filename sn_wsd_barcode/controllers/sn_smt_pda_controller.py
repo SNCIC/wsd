@@ -240,9 +240,24 @@ class SnSmtPdaController(http.Controller):
         result = self._get_service().load_cart(
             mes_order, workcenter, device_table_input, cart,
         )
+        loaded = result.get('loaded_slots') or []
+        skipped = result.get('skipped_slots') or []
+        if skipped:
+            message = _(
+                'Cart loading: %(loaded)d station(s) loaded, %(skipped)d '
+                'skipped (slots: %(slots)s -- no matching online position '
+                'or already loaded).',
+                loaded=len(loaded), skipped=len(skipped),
+                slots=', '.join(skipped))
+        else:
+            message = _(
+                'Cart loading: %(loaded)d station(s) loaded, all matched.',
+                loaded=len(loaded))
         return {
             'ok': True,
-            'message': result.get('message') or _('Cart loading saved successfully.'),
+            'message': message,
+            'loaded_slots': loaded,
+            'skipped_slots': skipped,
             'production_id': production_id,
             'mes_order_id': mes_order.id,
         }
