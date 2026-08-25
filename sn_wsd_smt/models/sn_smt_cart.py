@@ -251,7 +251,6 @@ class SnSmtCartLine(models.Model):
     feeder_id = fields.Many2one(
         'sn.smt.feeder',
         string='FEEDER_SN',
-        required=True,
         ondelete='restrict',
         index=True,
         check_company=True,

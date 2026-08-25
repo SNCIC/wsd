@@ -3698,3 +3698,41 @@ msgstr "请扫飞达通道SN。"
 msgid "Scan the loadpoint, then the material SN."
 msgstr "请扫料站，再扫物料SN。"
 
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Cart %s locked. Scan the loadpoint."
+msgstr "料车 %s 已锁定，扫料站。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Loadpoint %s recorded. Scan the material reel SN."
+msgstr "料站 %s 已记录，请扫物料盘号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Prepared. Cart %s -- scan the next loadpoint."
+msgstr "已备料。料车 %s —— 扫下一料站。"
+
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Prepared on cart %s (slot %s)."
+msgstr "已备到料车 %s（料站 %s）。"
+
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Channel SN: "
+msgstr "通道SN: "
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Loadpoint: "
+msgstr "料站: "
+

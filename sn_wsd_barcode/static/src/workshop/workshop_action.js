@@ -288,17 +288,17 @@ export class WorkshopOperationAction extends Component {
         const step = this.state.smtStep;
         if (op === "smt_offline_prepare") {
             const parts = [];
-            if (this.state.smtDeviceTable) {
-                parts.push(_t("Device Table: ") + this.state.smtDeviceTable);
+            if (this.state.prepareCartSn) {
+                parts.push(_t("Cart SN: ") + this.state.prepareCartSn);
+            }
+            if (this.state.smtFeederSn) {
+                parts.push(_t("Channel SN: ") + this.state.smtFeederSn);
             }
             if (this.state.smtLoadpoint) {
-                parts.push(_t("Feeder Position: ") + this.state.smtLoadpoint);
+                parts.push(_t("Loadpoint: ") + this.state.smtLoadpoint);
             }
             if (this.state.smtMaterialSn) {
                 parts.push(_t("Material SN: ") + this.state.smtMaterialSn);
-            }
-            if (this.state.smtFeederSn) {
-                parts.push(_t("Cart SN: ") + this.state.smtFeederSn);
             }
             return parts.join(" | " );
         }
@@ -396,17 +396,17 @@ export class WorkshopOperationAction extends Component {
         const op = this.state.selectedOperation;
         if (op === "smt_offline_prepare") {
             const parts = [];
-            if (this.state.smtDeviceTable) {
-                parts.push(_t("Device Table: ") + this.state.smtDeviceTable);
+            if (this.state.prepareCartSn) {
+                parts.push(_t("Cart SN: ") + this.state.prepareCartSn);
+            }
+            if (this.state.smtFeederSn) {
+                parts.push(_t("Channel SN: ") + this.state.smtFeederSn);
             }
             if (this.state.smtLoadpoint) {
-                parts.push(_t("Feeder Position: ") + this.state.smtLoadpoint);
+                parts.push(_t("Loadpoint: ") + this.state.smtLoadpoint);
             }
             if (this.state.smtMaterialSn) {
                 parts.push(_t("Material SN: ") + this.state.smtMaterialSn);
-            }
-            if (this.state.smtFeederSn) {
-                parts.push(_t("Cart SN: ") + this.state.smtFeederSn);
             }
             return parts.join(" | " );
         }
@@ -596,9 +596,9 @@ export class WorkshopOperationAction extends Component {
         }
     }
 
-    // offline prepare: scan cart once, then loop (channel SN -> reel -> slot)
-    // the controller validates on each submit; a rejected cart is shown
-    // immediately without the PROBE trick
+    // offline prepare: scan cart once, then loop ([channel SN ->] loadpoint
+    // -> reel) mirroring the online-loading order; feeder channel scan only
+    // when the production line enables feeder control
     async _handleOfflinePrepareFlow(barcode) {
         if (!this.state.prepareCartSn) {
             this.state.prepareCartSn = barcode;
@@ -606,7 +606,9 @@ export class WorkshopOperationAction extends Component {
             this.resetSmtScan();
             this.state.smtStep = 2; // skip the device-table step: offline
             this.setResult(
-                _t("Cart %s locked. Scan the feeder channel SN.", barcode),
+                this.smtFeederControl
+                    ? _t("Cart %s locked. Scan the feeder channel SN.", barcode)
+                    : _t("Cart %s locked. Scan the loadpoint.", barcode),
                 "success"
             );
             this.focusCommandInput();
@@ -761,46 +763,33 @@ export class WorkshopOperationAction extends Component {
         }
     }
 
+    // prepare loop per scan, order mirrors online loading:
+    // [channel SN ->] loadpoint -> reel (one RPC per reel)
     async _handleOfflinePrepareStep(barcode) {
-        const step = this.state.smtStep;
-        if (step === 0 || step === 1) {
-            if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
-                this.state.smtDeviceTable = barcode;
-                this.state.rawValue = barcode;
-                this.state.smtStep = 2;
-                this.state.command = "";
-                this.setResult(_t("Cart locked. Scan the feeder channel SN."), "success");
-            } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
-            }
-            return;
-        }
-        if (step === 2) {
-            this.state.smtLoadpoint = barcode;
+        if (this.smtFeederControl && !this.state.smtFeederSn) {
+            this.state.smtFeederSn = barcode;
             this.state.rawValue = barcode;
             this.state.smtStep = 3;
             this.state.command = "";
-            this.setResult(_t("Channel recorded. Scan the material reel SN."), "success");
+            this.setResult(_t("Channel recorded. Scan the loadpoint."), "success");
             return;
         }
-        if (step === 3) {
-            this.state.smtMaterialSn = barcode;
+        if (!this.state.smtLoadpoint) {
+            this.state.smtLoadpoint = barcode;
             this.state.rawValue = barcode;
             this.state.smtStep = 4;
             this.state.command = "";
-            this.setResult(_t("Reel recorded. Scan the slot number."), "success");
+            this.setResult(_t("Loadpoint %s recorded. Scan the material reel SN.", barcode), "success");
             return;
         }
-        if (step === 4) {
-            this.state.smtFeederSn = barcode;
-            this.state.rawValue = barcode;
-            if (this.state.equipmentDomain === "smt_material"
-                    && this.state.equipmentAction === "smt_offline_prepare") {
-                await this._submitOfflinePrepareStage();
-                return;
-            }
-            await this._submitSmtOperation("smt_offline_prepare");
+        this.state.smtMaterialSn = barcode;
+        this.state.rawValue = barcode;
+        if (this.state.equipmentDomain === "smt_material"
+                && this.state.equipmentAction === "smt_offline_prepare") {
+            await this._submitOfflinePrepareStage();
+            return;
         }
+        await this._submitSmtOperation("smt_offline_prepare");
     }
 
     async _submitOfflinePrepareStage() {
@@ -813,16 +802,21 @@ export class WorkshopOperationAction extends Component {
                 slot_no: this.state.smtLoadpoint,
                 production_id: this.state.productionId || false,
             });
-            this.setResult(res.message || "", res.ok ? "success" : "danger");
             if (res.ok) {
                 this.state.total += 1;
                 this.resetSmtScan();
                 this.state.command = "";
-                // stay in the loop: cart locked, scan next channel SN
+                // stay in the loop: cart stays locked, scan the next
+                // channel SN (or loadpoint when feeder control is off)
                 this.setResult(
-                    _t("Prepared. Cart %s -- scan the next feeder channel SN.",
-                       this.state.prepareCartSn),
+                    this.smtFeederControl
+                        ? _t("Prepared. Cart %s -- scan the next feeder channel SN.",
+                             this.state.prepareCartSn)
+                        : _t("Prepared. Cart %s -- scan the next loadpoint.",
+                             this.state.prepareCartSn),
                     "success");
+            } else {
+                this.setResult(res.message || _t("Operation failed."), "danger");
             }
         } catch (error) {
             this.setResult(error.message || _t("Operation failed."), "danger");

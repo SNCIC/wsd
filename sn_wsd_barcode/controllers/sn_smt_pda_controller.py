@@ -214,10 +214,13 @@ class SnSmtPdaController(http.Controller):
             return {'ok': False, 'message': _('The cart SN does not exist.')}
         mes_order = False
         if production_id:
-            _, mes_order = self._get_mes_order_by_production(production_id)
-        result = self._get_service().prepare_offline_stage(
-            cart, feeder_sn_input, material_sn_input, slot_no,
-            mes_order=mes_order)
+            _production, mes_order = self._get_mes_order_by_production(production_id)
+        try:
+            result = self._get_service().prepare_offline_stage(
+                cart, feeder_sn_input, material_sn_input, slot_no,
+                mes_order=mes_order)
+        except UserError as error:
+            return {'ok': False, 'message': str(error)}
         return {
             'ok': True,
             'message': _('Prepared on cart %s (slot %s).', cart.cart_sn, slot_no),

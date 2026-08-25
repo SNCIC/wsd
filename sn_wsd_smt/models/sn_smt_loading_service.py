@@ -279,8 +279,10 @@ class SnSmtLoadingService(models.AbstractModel):
         only the entity checks run here (feeder resolvable, lot exists,
         cart active). The position matching and material-vs-table checks
         are deferred to load_cart when the cart is mounted."""
-        feeder = self._resolve_feeder_by_sn(
-            (feeder_sn or '').strip(), cart.company_id)
+        # 未开飞达管控的线不扫通道SN：feeder 留空，实体校验只查盘号与料车
+        feeder_sn = (feeder_sn or '').strip()
+        feeder = (self._resolve_feeder_by_sn(feeder_sn, cart.company_id)
+                  if feeder_sn else self.env['sn.smt.feeder'])
         material_lot = self.env['stock.lot'].search([
             ('name', '=', (material_sn or '').strip()),
             '|', ('company_id', '=', False),
