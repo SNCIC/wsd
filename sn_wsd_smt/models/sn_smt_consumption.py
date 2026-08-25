@@ -177,6 +177,7 @@ class SnSmtMaterialConsumption(models.Model):
     @api.model
     def validate_for_serial(self, route_operation, identity=False):
         # 触发条件：制令单路线工艺类型为 SMT，且已拆出在线料表行。
+        # 关键物料清单行（drawing_list）的门禁由 sn_wsd_barcode 扩展处理。
         mes_order = route_operation.mes_order_id
         if not mes_order.x_smt_online_material_ids:
             return self.env['sn.smt.online.material']
@@ -211,6 +212,7 @@ class SnSmtMaterialConsumption(models.Model):
         mes_order = route_operation.mes_order_id
         # 一块板一张料站表只扣一次：同 SN 在本制令单已有正向扣点流水则跳过
         # （SMT 车间路线含多道工序，板会在多站过站，按单幂等防止重复扣点）。
+        # drawing_list 行的扣减（按工序幂等 + usage_times）由 sn_wsd_barcode 扩展。
         existing_domain = [
             ('serial_identity_id', '=', identity.id),
             ('mes_order_id', '=', mes_order.id),

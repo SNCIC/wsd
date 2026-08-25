@@ -233,6 +233,19 @@ class SnSmtOnlineMaterial(models.Model):
     _check_company_auto = True
 
     mt_id = fields.Many2one('sn.smt.material.table', string='MT_ID', check_company=True)
+    # Row origin: SMT rows are split from the material table at order-online
+    # time; drawing_list rows are split from the critical-material list by
+    # sn_wsd_barcode for workshops without a material table (DIP / assembly).
+    source = fields.Selection(
+        [
+            ('smt_table', 'SMT Material Table'),
+            ('drawing_list', 'Drawing Material List'),
+        ],
+        string='Source',
+        default='smt_table',
+        required=True,
+        index=True,
+    )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
@@ -251,12 +264,12 @@ class SnSmtOnlineMaterial(models.Model):
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True)
     area_sn = fields.Char(string='AREA_SN', index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True)
-    process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE', required=True)
+    process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE')
     item_code = fields.Char(string='ITEM_CODE', index=True)
     program_name = fields.Char(string='PROGRAM_NAME')
-    device_seq = fields.Integer(string='DEVICE_SEQ', required=True)
-    table_no = fields.Char(string='TABLE_NO', required=True)
-    loadpoint = fields.Char(string='LOADPOINT', required=True)
+    device_seq = fields.Integer(string='DEVICE_SEQ')
+    table_no = fields.Char(string='TABLE_NO')
+    loadpoint = fields.Char(string='LOADPOINT')
     chanel_sn = fields.Char(string='CHANEL_SN')
     point_qty = fields.Integer(string='POINT_QTY')
     point_location = fields.Text(string='POINT_LOCATION')

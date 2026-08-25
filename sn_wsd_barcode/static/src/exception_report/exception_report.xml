@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.ExceptionReportAction">
+        <div class="o_sn_wsd_exception_report o_sn_wsd_workshop d-flex flex-column h-100">
+            <header>
+                <nav class="o_barcode_header d-flex align-items-center justify-content-between p-2 border-bottom gap-2">
+                    <button type="button" class="btn btn-secondary" t-on-click="goBack">
+                        <i class="oi oi-chevron-left"/> <t t-out="backLabel"/>
+                    </button>
+                    <span class="fs-4 mx-auto" t-out="title"/>
+                    <button type="button" class="btn btn-outline-secondary"
+                            t-if="state.serialId" t-on-click="resetSerial">
+                        <i class="oi oi-refresh"/>
+                    </button>
+                </nav>
+            </header>
+
+            <main class="flex-grow-1 overflow-auto p-2 d-flex flex-column gap-2">
+                <div t-if="state.serialId" class="text-center">
+                    <span class="text-muted" t-out="snLabel"/>:
+                    <strong t-out="state.serialSn"/>
+                </div>
+
+                <form t-on-submit="onSubmit" class="o_sn_wsd_workshop_command_row list-group-item d-flex gap-1">
+                    <input class="o_sn_wsd_exception_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+
+                <div t-if="state.serialId" class="list-group-item">
+                    <label class="form-label small text-muted" t-out="noteLabel"/>
+                    <textarea class="form-control" rows="2" t-model="state.note"/>
+                </div>
+
+                <section t-if="state.result" class="o_sn_wsd_workshop_result list-group-item">
+                    <div class="text-break fw-bold"
+                         t-att-class="state.resultType === 'success' ? 'text-success' : (state.resultType === 'danger' ? 'text-danger' : 'text-info')"
+                         t-out="state.result"/>
+                </section>
+            </main>
+        </div>
+    </t>
+
+</templates>

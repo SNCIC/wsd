@@ -18,7 +18,7 @@
                         <t t-out="warehouseOperationsLabel"/>
                     </button>
                     <button t-if="productionEnabled" class="o_button_workshop btn btn-block btn-primary mb-3 p-3 w-100"
-                            t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_production_menu_action')">
+                            t-on-click="() => this.actionService.doAction('sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action')">
                         <t t-out="productionOperationsLabel"/>
                     </button>
                     <button t-if="mesWarehouse" t-attf-class="o_button_inventory btn btn-block btn-{{this.quantCount ? 'info' : 'secondary'}} mb-3 p-3 w-100"

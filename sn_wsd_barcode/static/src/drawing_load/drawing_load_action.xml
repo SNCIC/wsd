@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.DrawingLoadAction">
+        <div class="o_sn_wsd_drawing_load o_sn_wsd_workshop d-flex flex-column h-100">
+            <header>
+                <nav class="o_barcode_header d-flex align-items-center justify-content-between p-2 border-bottom gap-2">
+                    <button type="button" class="btn btn-secondary" t-on-click="goBack">
+                        <i class="oi oi-chevron-left"/> <t t-out="backLabel"/>
+                    </button>
+                    <span class="fs-4 mx-auto" t-out="title"/>
+                    <button type="button" class="btn btn-outline-secondary"
+                            t-if="state.productionId" t-on-click="resetOrder">
+                        <i class="oi oi-refresh"/>
+                    </button>
+                </nav>
+            </header>
+
+            <main class="flex-grow-1 overflow-auto p-2 d-flex flex-column gap-2">
+                <div t-if="state.productionId" class="o_sn_wsd_workshop_smt_counts d-flex justify-content-around border rounded p-2">
+                    <div class="o_sn_wsd_workshop_smt_count">
+                        <span class="text-muted" t-out="requiredLabel"/>
+                        <strong t-out="state.summary.required_qty"/>
+                    </div>
+                    <div class="o_sn_wsd_workshop_smt_count">
+                        <span class="text-muted" t-out="loadedLabel"/>
+                        <strong class="text-success" t-out="state.summary.loaded_qty"/>
+                    </div>
+                    <div class="o_sn_wsd_workshop_smt_count">
+                        <span class="text-muted" t-out="unloadedLabel"/>
+                        <strong class="text-warning" t-out="state.summary.unloaded_qty"/>
+                    </div>
+                </div>
+
+                <div t-if="state.productionId" class="text-center small">
+                    <span class="fw-bold" t-out="orderLabel"/>:
+                    <span t-out="state.orderName"/>
+                </div>
+
+                <div t-if="state.productionId &amp;&amp; state.summary.line_complete"
+                     class="alert alert-success py-2 px-3 mb-0" t-out="completeLabel"/>
+
+                <div t-if="state.productionId" class="list-group">
+                    <div t-foreach="state.rows" t-as="row" t-key="row.online_material_id"
+                         t-att-class="rowClass(row)">
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <span class="badge bg-secondary" t-out="typeLabel(row.material_type)"/>
+                            <span class="flex-grow-1 text-break" t-out="row.item_code"/>
+                            <small class="text-muted" t-out="row.operation"/>
+                            <span class="text-break" t-out="row.loaded_name or '—'"/>
+                        </div>
+                    </div>
+                </div>
+
+                <form t-on-submit="onSubmit" class="o_sn_wsd_workshop_command_row list-group-item d-flex gap-1">
+                    <input class="o_sn_wsd_drawing_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                    <button t-if="state.productionId" type="button"
+                            class="btn btn-outline-danger text-nowrap"
+                            t-on-click="unloadAll" t-out="unloadAllLabel"/>
+                </form>
+
+                <section t-if="state.result" class="o_sn_wsd_workshop_result list-group-item">
+                    <div class="text-break fw-bold"
+                         t-att-class="state.resultType === 'success' ? 'text-success' : (state.resultType === 'danger' ? 'text-danger' : 'text-info')"
+                         t-out="state.result"/>
+                </section>
+            </main>
+        </div>
+    </t>
+
+</templates>

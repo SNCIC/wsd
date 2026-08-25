@@ -378,6 +378,11 @@ class SnSmtCartLine(models.Model):
             raise UserError(
                 _('The cart %s is prepared for MES order %s. All feeder lines must target the same MES order.',
                   self.cart_id.cart_sn, other_order_lines.mes_order_id.display_name))
+        # offline preparation (order not online yet): the online material
+        # table does not exist, so station/material matching is deferred
+        # to load_cart when the cart is mounted
+        if not self.mes_order_id                 or not self.mes_order_id.x_smt_online_material_ids:
+            return
         requirements = self.env['sn.smt.online.material'].search([
             ('mes_order_id', '=', self.mes_order_id.id),
             ('loadpoint', '=', self.slot_no),

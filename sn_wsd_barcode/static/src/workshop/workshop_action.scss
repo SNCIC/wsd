@@ -243,12 +243,20 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
-
     button {
         width: 100%;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+}
+
+/* PDA workshop functions grid: two large tiles per row */
+.o_sn_wsd_grid2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    button {
+        min-height: 96px;
     }
 }

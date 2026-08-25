@@ -71,7 +71,7 @@ export class MainMenu extends Component {
     }
 
     get productionOperationsLabel() {
-        return _t("Production Operations");
+        return _t("Workshop Operations");
     }
 
     get countInventoryLabel() {

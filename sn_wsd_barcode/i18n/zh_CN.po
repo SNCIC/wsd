@@ -2037,6 +2037,8 @@ msgstr "字词长度必须是正整数"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.xml:0
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_workshop_client_action
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_functions
+#: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action
 msgid "Workshop Operations"
 msgstr "车间作业"
 
@@ -2572,6 +2574,7 @@ msgstr "开始干燥"
 #: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.xml:0
 #: code:addons/sn_wsd_barcode/static/src/production_menu/production_menu.js:0
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_pallet_binding_action
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_pallet
 msgid "Pallet Binding"
 msgstr "托盘绑定"
 
@@ -2716,6 +2719,7 @@ msgstr "辅料扫码"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 #: code:addons/sn_wsd_barcode/static/src/pda_equipment/pda_equipment_action.js:0
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_consumable
 msgid "Consumables"
 msgstr "辅料"
 
@@ -2851,6 +2855,7 @@ msgstr "归还"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 #: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_smt_load_action
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_smt_loading
 msgid "SMT Loading"
 msgstr "SMT 上料"
 
@@ -2942,6 +2947,7 @@ msgstr "回温开始"
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 #: code:addons/sn_wsd_barcode/static/src/pda_equipment/pda_equipment_action.js:0
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_tooling
 msgid "Tooling"
 msgstr "制具"
 
@@ -3341,3 +3347,336 @@ msgstr "料车上台：已上台 %(loaded)d 站，跳过 %(skipped)d 站（料�
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Cart loading: %(loaded)d station(s) loaded, all matched."
 msgstr "料车上台：已上台 %(loaded)d 站，全部匹配。"
+
+#. module: sn_wsd_barcode
+#: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_drawing_load_action
+msgid "Critical Material Loading"
+msgstr "投料"
+
+#. module: sn_wsd_barcode
+#: model:ir.actions.client,name:sn_wsd_barcode.sn_wsd_barcode_exception_report_action
+msgid "Exception Report"
+msgstr "异常上报"
+
+#. module: sn_wsd_barcode
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_drawing_load
+msgid "Critical Material Loading"
+msgstr "投料"
+
+#. module: sn_wsd_barcode
+#: model:ir.ui.menu,name:sn_wsd_barcode.menu_workshop_fn_exception
+msgid "Exception Report"
+msgstr "异常上报"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "The MES order %s is closed."
+msgstr "制令单 %s 已关闭。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "No manufacturing order was found for %s."
+msgstr "未找到制造订单 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid "Order %s has no critical material list rows. Loading control is not configured for it."
+msgstr "制令单 %s 没有关键物料清单行，未配置投料管控。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "No serial number was found for %s."
+msgstr "未找到序列号 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "The serial number no longer exists."
+msgstr "该序列号已不存在。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "No defect code matches %s."
+msgstr "没有匹配 %s 的缺陷代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid "Exception %s reported for %s (%s)."
+msgstr "已提报异常 %s（SN %s，%s）。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Table %s. Scan the feeder channel SN."
+msgstr "表 %s。请扫飞达通道SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Table %s. Scan the loadpoint."
+msgstr "表 %s。请扫料站。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Scan a TABLE code first, for example 3.T1."
+msgstr "请先扫 TABLE 码，如 3.T1。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Channel recorded. Scan the loadpoint."
+msgstr "通道已记录。请扫料站。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Loadpoint %s. Scan the material reel SN."
+msgstr "料站 %s。请扫物料盘号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Loaded %s / %s (%s). Scan the next loadpoint or a new TABLE."
+msgstr "已上料 %s / %s (%s)。扫下一料站或新 TABLE。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "TP: scan the TABLE code, for example 3.T1."
+msgstr "上料：扫 TABLE 码，如 3.T1。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop_functions/workshop_functions.js:0
+msgid "No workshop function is assigned to you."
+msgstr "没有分配给你的车间作业功能。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop_functions/workshop_functions.js:0
+msgid "Failed to load functions."
+msgstr "功能加载失败。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Critical Material Loading"
+msgstr "投料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Scan a material reel, tooling SN or consumable SN."
+msgstr "扫物料盘号、制具SN或辅料SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Scan the production order barcode."
+msgstr "扫制令单条码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Unload All"
+msgstr "全部下料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "To Load"
+msgstr "应上"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "All rows loaded. Pass stations are now allowed."
+msgstr "全部上线完成，允许过站。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Consumable"
+msgstr "辅料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/drawing_load/drawing_load_action.js:0
+msgid "Order %s. Scan the materials to load."
+msgstr "制令单 %s。请扫码投料。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "Exception Report"
+msgstr "异常上报"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "Scan the defect code."
+msgstr "请扫缺陷代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "Scan the product SN."
+msgstr "请扫产品SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "Note (optional)"
+msgstr "备注（可选）"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "SN %s. Scan the defect code."
+msgstr "SN %s。请扫缺陷代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
+msgid "Exception reported."
+msgstr "异常已提报。"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields.selection,name:sn_wsd_barcode.selection__sn_smt_material_log__operation_type__drawing_load
+msgid "Drawing Material Load"
+msgstr "清单投料"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_online_material__drawing_material_line_id
+msgid "Drawing Material Line"
+msgstr "关键物料清单行"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_online_material__route_operation_id
+msgid "Route Operation"
+msgstr "工序实例"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_online_material__tooling_id
+msgid "Loaded Tooling"
+msgstr "上线制具"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_online_material__consumable_info_id
+msgid "Loaded Consumable"
+msgstr "上线辅料"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.constraint,message:sn_wsd_barcode.constraint_sn_smt_online_material_drawing_online_material_unique
+msgid "Each drawing material line is split once per MES order."
+msgstr "同一制令单每条清单行只拆一次。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "SMT material table rows require device, table and loadpoint."
+msgstr "料站表来源的行必须有机台、表号和料站。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Drawing material rows require a list line and a route operation."
+msgstr "清单来源的行必须挂清单行和工序实例。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Critical materials are not loaded online: %s. Load them before the product can pass this station."
+msgstr "关键物料未上线: %s，上线后产品才能过站。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Critical material %(material)s has insufficient quantity."
+msgstr "关键物料 %(material)s 余量不足。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "The scanned barcode is empty."
+msgstr "扫码内容为空。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "All critical material rows are already loaded online."
+msgstr "关键物料行已全部上线。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "No material lot, tooling or consumable matches the barcode %s."
+msgstr "条码 %s 未匹配到物料盘、制具或辅料。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "The material %s is not in the critical material list of this order."
+msgstr "物料 %s 不在本制令单的关键物料清单内。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "The tooling %s is not in the critical material list of this order."
+msgstr "制具 %s 不在本制令单的关键物料清单内。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "The consumable %s is not in the critical material list of this order."
+msgstr "辅料 %s 不在本制令单的关键物料清单内。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Tooling %s is already online on another order. Unload it first."
+msgstr "制具 %s 已在线于其他制令单，请先下料。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Consumable %s is already online on another order. Unload it first."
+msgstr "辅料 %s 已在线于其他制令单，请先下料。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Critical material %s loaded (%s)."
+msgstr "关键物料 %s 已上线 (%s)。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Tooling %s loaded (%s)."
+msgstr "制具 %s 已上线 (%s)。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "Consumable %s loaded (%s)."
+msgstr "辅料 %s 已上线 (%s)。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "%s online material row(s) unloaded."
+msgstr "已下料 %s 行在线料。"
+

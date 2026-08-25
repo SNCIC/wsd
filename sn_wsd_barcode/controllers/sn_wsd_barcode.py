@@ -209,6 +209,7 @@ class StockBarcodeController(http.Controller):
                     'name': line.name,
                     'code': line.code,
                     'display_name': line.display_name,
+                    'is_feeder_control': bool(line.x_smt_is_feeder_control),
                 }
                 for line in lines
             ],
@@ -685,3 +686,81 @@ class StockBarcodeController(http.Controller):
             results[tracking_number] = scheme.encode_partial(field_name, tracking_number)
         return results
 
+
+    # ------------------------------------------------------------------
+    # 车间作业功能宫格（ir.ui.menu 子树驱动）
+    # ------------------------------------------------------------------
+
+    @http.route('/sn_wsd_barcode/get_workshop_functions', type='jsonrpc', auth='user')
+    def get_workshop_functions(self):
+        container = request.env.ref(
+            'sn_wsd_barcode.menu_workshop_functions', raise_if_not_found=False)
+        if not container:
+            return {'functions': []}
+        menus = request.env['ir.ui.menu'].search([
+            ('parent_id', '=', container.id),
+            ('action', '!=', False),
+        ], order='sequence, id')
+        user = request.env.user
+        if not user.has_group('base.group_system'):
+            menus = menus.filtered(
+                lambda menu: not menu.group_ids
+                or bool(menu.group_ids & user.groups_id))
+        return {
+            'functions': [{
+                'menu_id': menu.id,
+                'name': menu.name,
+                'description': '',
+                'action_id': menu.action.id,
+                'web_icon': '',
+            } for menu in menus],
+        }
+
+    # ------------------------------------------------------------------
+    # 异常上报（全员）：SN + 缺陷代码 → 质量问题单
+    # ------------------------------------------------------------------
+
+    @http.route('/sn_wsd_barcode/quality/resolve_exception_sn', type='jsonrpc', auth='user')
+    def resolve_exception_sn(self, sn):
+        sn = (sn or '').strip()
+        identity = request.env['sn.wsd.serial.identity'].search([
+            ('name', '=', sn),
+            '|', ('company_id', '=', False),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not identity:
+            raise UserError(_('No serial number was found for %s.', sn))
+        return {'serial_id': identity.id, 'serial_sn': identity.name}
+
+    @http.route('/sn_wsd_barcode/quality/report_exception', type='jsonrpc', auth='user')
+    def report_exception(self, serial_id, defect_input, note=False):
+        identity = request.env['sn.wsd.serial.identity'].browse(serial_id).exists()
+        if not identity:
+            raise UserError(_('The serial number no longer exists.'))
+        code = (defect_input or '').strip()
+        defect = request.env['sn.wsd.quality.defect.code'].search([
+            ('code', 'ilike', code),
+            '|', ('company_id', '=', False),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not defect:
+            defect = request.env['sn.wsd.quality.defect.code'].search([
+                ('name', 'ilike', code),
+                '|', ('company_id', '=', False),
+                ('company_id', 'in', request.env.companies.ids),
+            ], limit=1)
+        if not defect:
+            raise UserError(_('No defect code matches %s.', code))
+        issue = request.env['sn.wsd.quality.issue'].create({
+            'serial_identity_id': identity.id,
+            'defect_code_id': defect.id,
+            'issue_source': 'manual',
+            'root_cause': note or False,
+            'company_id': identity.company_id.id or request.env.company.id,
+        })
+        return {
+            'issue_id': issue.id,
+            'issue_name': issue.name,
+            'message': _('Exception %s reported for %s (%s).',
+                         issue.name, identity.name, defect.display_name),
+        }

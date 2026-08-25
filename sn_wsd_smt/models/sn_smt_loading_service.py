@@ -60,30 +60,18 @@ class SnSmtLoadingService(models.AbstractModel):
 
     @api.model
     def _resolve_feeder(self, mes_order, online_material, feeder_sn):
+        """飞达解析统一规则（PDA 只认通道SN）：托盘位不上飞达；
+        未扫码时按产线管控开关决定必扫或跳过；扫码一律按 channel_sn
+        解析，仅实体校验（状态/保养），不比对通道与料站、不比对规格、
+        不解析飞达本体SN。"""
         if online_material.is_tray == 'Y':
             return self.env['sn.smt.feeder']
         feeder_sn = (feeder_sn or '').strip()
         if not feeder_sn:
             if self._is_feeder_control_enabled(mes_order):
-                raise UserError(_('Feeder control is enabled on the production line: scan the feeder SN first.'))
+                raise UserError(_('Feeder control is enabled on the production line: scan the feeder channel SN first.'))
             return self.env['sn.smt.feeder']
-        feeder = self.env['sn.smt.feeder'].search([
-            ('feeder_sn', '=', feeder_sn),
-            ('company_id', '=', mes_order.company_id.id),
-        ], limit=1)
-        if not feeder:
-            raise UserError(_('The feeder SN does not exist.'))
-        if feeder.status not in ('normal', 'in_use'):
-            raise UserError(_('The feeder status is invalid.'))
-        if not feeder.maintenance_ok:
-            raise UserError(_('The feeder is not available for use because maintenance is not valid.'))
-        if online_material.chanel_sn and feeder.channel_ids \
-                and online_material.chanel_sn not in feeder.channel_ids.mapped('channel_sn'):
-            raise UserError(_('The feeder channel does not match the SMT position channel.'))
-        if online_material.feeder_spec and feeder.feeder_spec \
-                and feeder.feeder_spec != online_material.feeder_spec:
-            raise UserError(_('The feeder specification does not match the SMT position requirement.'))
-        return feeder
+        return self._resolve_feeder_by_sn(feeder_sn, mes_order.company_id)
 
     @api.model
     def _log(self, mes_order, online_material, operation_type, material_lot=False,
@@ -194,7 +182,8 @@ class SnSmtLoadingService(models.AbstractModel):
     @api.model
     def _release_position(self, mes_order, online_material, operation_type='unload', note=False,
                           keep_feeder=False):
-        """下线一个料站：余量保留在卷上（跨制令单累计），不产生损耗记账。"""
+        """下线一个料站：余量保留在卷上（跨制令单累计），不产生损耗记账。
+        drawing_list 行的制具/辅料联动下线由 sn_wsd_barcode 扩展处理。"""
         old_lot = online_material.loaded_material_lot_id
         old_feeder = online_material.loaded_feeder_id
         remaining = online_material.remaining_qty
@@ -310,8 +299,8 @@ class SnSmtLoadingService(models.AbstractModel):
 
     @api.model
     def _resolve_feeder_by_sn(self, sn, company):
-        """PDA scans the CHANNEL SN (not the feeder body SN): channel ->
-        feeder; entity checks only (status/maintenance), no
+        """PDA scans the CHANNEL SN only (never the feeder body SN):
+        channel -> feeder; entity checks only (status/maintenance), no
         position-channel or spec matching here."""
         sn = (sn or '').strip()
         if not sn:
@@ -321,11 +310,6 @@ class SnSmtLoadingService(models.AbstractModel):
             '|', ('company_id', '=', False), ('company_id', '=', company.id),
         ], limit=1)
         feeder = channel.feeder_id if channel else self.env['sn.smt.feeder']
-        if not feeder:
-            feeder = self.env['sn.smt.feeder'].search([
-                ('feeder_sn', '=', sn),
-                '|', ('company_id', '=', False), ('company_id', '=', company.id),
-            ], limit=1)
         if not feeder:
             raise UserError(_('The feeder channel SN does not exist.'))
         if feeder.status not in ('normal', 'in_use'):

@@ -561,3 +561,78 @@ class SnSmtPdaController(http.Controller):
             'ok': False,
             'message': _('Unknown SMT operation: %(operation)s', operation=operation),
         }
+
+    # ------------------------------------------------------------------
+    # 投料（插件/装配关键物料，无料站表）——整机工组
+    # ------------------------------------------------------------------
+
+    def _shop_group_check(self):
+        if request.env.user.has_group('base.group_system'):
+            return None
+        if request.env.user.has_group('sn_wsd_mrp.group_mes_shop'):
+            return None
+        return {'ok': False, 'message': _('No permission for this barcode operation.')}
+
+    def _find_mes_order_by_barcode(self, barcode):
+        """扫制令单条码：mrp.production 名称（WH/MO/xxxx）→ 制令单。"""
+        name = (barcode or '').strip()
+        production = request.env['mrp.production'].search([
+            ('name', '=', name),
+            ('company_id', 'in', request.env.companies.ids),
+        ], limit=1)
+        if not production:
+            raise UserError(_('No manufacturing order was found for %s.', name))
+        _, mes_order = self._get_mes_order_by_production(production.id)
+        if mes_order.state in ('cancelled', 'done'):
+            raise UserError(_('The MES order %s is closed.', mes_order.display_name))
+        return production, mes_order
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_open', type='jsonrpc', auth='user')
+    def do_drawing_open(self, barcode):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        production, mes_order = self._find_mes_order_by_barcode(barcode)
+        status = self._get_service().drawing_status(mes_order)
+        if not status['rows']:
+            return {
+                'ok': False,
+                'message': _(
+                    'Order %s has no critical material list rows. Loading '
+                    'control is not configured for it.', mes_order.display_name),
+            }
+        status['ok'] = True
+        status['production_id'] = production.id
+        return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_scan', type='jsonrpc', auth='user')
+    def do_drawing_scan(self, production_id, barcode, workcenter_id=False):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        workcenter = self._get_workcenter(workcenter_id) if workcenter_id else False
+        try:
+            result = self._get_service().load_drawing_barcode(
+                mes_order, barcode, workcenter=workcenter)
+        except UserError as error:
+            status = self._get_service().drawing_status(mes_order)
+            status['ok'] = False
+            status['message'] = str(error)
+            return status
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['message'] = result['message']
+        return status
+
+    @http.route('/sn_wsd_barcode/smt/do_drawing_unload_all', type='jsonrpc', auth='user')
+    def do_drawing_unload_all(self, production_id):
+        deny = self._shop_group_check()
+        if deny:
+            return deny
+        _, mes_order = self._get_mes_order_by_production(production_id)
+        result = self._get_service().unload_drawing_all(mes_order)
+        status = self._get_service().drawing_status(mes_order)
+        status['ok'] = True
+        status['message'] = result['message']
+        return status

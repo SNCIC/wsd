@@ -80,6 +80,9 @@ export class WorkshopOperationAction extends Component {
         this.mobileService = useService("sn_wsd_barcode_mobile");
         this.scanMutex = new Mutex();
         this.operationMode = this.props.action.context?.operation_mode || "smt";
+        // workshop-functions grid entries open the action directly in an
+        // equipment sub-mode (tooling / consumable pills only)
+        this.initialEquipmentDomain = this.props.action.context?.initial_equipment_domain || false;
         this.state = useState({
             lines: [],
             stations: [],
@@ -120,6 +123,9 @@ export class WorkshopOperationAction extends Component {
         });
 
         this.cameraScannerSupported = isBarcodeScannerSupported();
+        if (this.initialEquipmentDomain) {
+            this.state.equipmentDomain = this.initialEquipmentDomain;
+        }
         this.barcodeVideoScannerProps = {
             delayBetweenScan: 1200,
             facingMode: "environment",
@@ -236,6 +242,13 @@ export class WorkshopOperationAction extends Component {
 
     get isSmtMode() {
         return this.operationMode === "smt";
+    }
+
+    // feeder control flag of the selected production line: when on, the
+    // online-load cycle scans the feeder channel SN before each loadpoint
+    get smtFeederControl() {
+        const line = this.state.lines.find((l) => l.id === this.state.selectedLineId);
+        return Boolean(line && line.is_feeder_control);
     }
 
     get isDipMode() {
@@ -457,7 +470,7 @@ export class WorkshopOperationAction extends Component {
         if (this.env.config.breadcrumbs.length > 1) {
             this.env.config.historyBack();
         } else {
-            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_production_menu_action");
+            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action");
         }
     }
 
@@ -660,7 +673,7 @@ export class WorkshopOperationAction extends Component {
 
     _smtStepHint(key) {
         if (key === "smt_online_load") {
-            return _t("TP: scan device table, for example 1.A.");
+            return _t("TP: scan the TABLE code, for example 3.T1.");
         }
         if (key === "smt_offline_prepare") {
             this.state.prepareCartSn = "";
@@ -840,33 +853,99 @@ export class WorkshopOperationAction extends Component {
         }
     }
 
-    async _handleOnlineLoadStep(barcode) {
-        const step = this.state.smtStep;
-        if (step === 0 || step === 1) {
-            if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
-                this.state.smtDeviceTable = barcode;
-                this.state.rawValue = barcode;
-                this.state.smtStep = 2;
-                this.state.command = "";
-                this.setResult(_t("Cart locked. Scan the feeder channel SN."), "success");
-            } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
-            }
+    async _handleOnlineLoadStep(rawBarcode) {
+        // Continuous stream: a TABLE barcode (N.T) is the table-switch
+        // signal from ANY state; everything else flows inside the cycle
+        // [channel ->] loadpoint -> material, one RPC per material.
+        const barcode = rawBarcode.trim();
+        if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
+            this.resetSmtScan();
+            this.state.smtDeviceTable = barcode;
+            this.state.rawValue = barcode;
+            this.state.command = "";
+            this.setResult(
+                this.smtFeederControl
+                    ? _t("Table %s. Scan the feeder channel SN.", barcode)
+                    : _t("Table %s. Scan the loadpoint.", barcode),
+                "success"
+            );
             return;
         }
-        if (step === 2) {
+        if (!this.state.smtDeviceTable) {
+            this.setResult(_t("Scan a TABLE code first, for example 3.T1."), "warning");
+            return;
+        }
+        if (this.smtFeederControl && !this.state.smtFeederSn) {
+            this.state.smtFeederSn = barcode;
+            this.state.rawValue = barcode;
+            this.state.command = "";
+            this.setResult(_t("Channel recorded. Scan the loadpoint."), "success");
+            return;
+        }
+        if (!this.state.smtLoadpoint) {
             this.state.smtLoadpoint = barcode;
             this.state.rawValue = barcode;
-            this.state.smtStep = 3;
             this.state.command = "";
-            this.setResult(_t("Channel recorded. Scan the material reel SN."), "success");
+            this.setResult(_t("Loadpoint %s. Scan the material reel SN.", barcode), "success");
             return;
         }
-        if (step === 3) {
-            this.state.smtMaterialSn = barcode;
-            this.state.rawValue = barcode;
-            await this._submitSmtOperation("smt_online_load");
+        this.state.smtMaterialSn = barcode;
+        this.state.rawValue = barcode;
+        await this._submitOnlineLoad();
+    }
+
+    // per-material submit of the continuous online-load cycle; the table
+    // context survives so the operator keeps scanning loadpoint -> reel
+    // until they scan the next TABLE code
+    async _submitOnlineLoad() {
+        const table = this.state.smtDeviceTable;
+        const loadpoint = this.state.smtLoadpoint;
+        const material = this.state.smtMaterialSn;
+        if (!this.state.selectedStationId) {
+            this.setResult(_t("Select a work center first."), "warning");
+            return;
         }
+        this.state.smtLoading = true;
+        try {
+            const barcode = this._buildSmtBarcode("smt_online_load");
+            const result = await rpc("/sn_wsd_barcode/smt/process_smt_scan", {
+                station_id: this.state.selectedStationId,
+                barcode,
+                operation: "online_load",
+            });
+            if (result.ok) {
+                this.state.total += 1;
+                this.state.command = "";
+                this._resetOnlineCycle(table);
+                this.setResult(
+                    _t(
+                        "Loaded %s / %s (%s). Scan the next loadpoint or a new TABLE.",
+                        table,
+                        loadpoint,
+                        material
+                    ),
+                    "success"
+                );
+                await this.loadSmtContext();
+            } else {
+                this._resetOnlineCycle(table);
+                this.setResult(result.message || _t("Operation failed."), "danger");
+            }
+        } catch (error) {
+            this._resetOnlineCycle(table);
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.state.smtLoading = false;
+            this.focusCommandInput();
+        }
+    }
+
+    _resetOnlineCycle(keepTable) {
+        this.state.smtStep = 0;
+        this.state.smtFeederSn = "";
+        this.state.smtLoadpoint = "";
+        this.state.smtMaterialSn = "";
+        this.state.smtDeviceTable = keepTable || "";
     }
 
     async _handleMaterialRefillStep(barcode) {
@@ -1001,7 +1080,7 @@ export class WorkshopOperationAction extends Component {
             if (operation.key === "smt_offline_prepare") {
                 this.setResult(_t("BL: scan device table, for example 1.A."), "info");
             } else if (operation.key === "smt_online_load") {
-                this.setResult(_t("TP: scan device table, for example 1.A."), "info");
+                this.setResult(_t("TP: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_cart_load") {
                 this.setResult(_t("LCSL: scan device table, for example 1.A."), "info");
             } else if (operation.key === "smt_material_refill") {
