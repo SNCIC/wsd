@@ -574,18 +574,25 @@ class SnSmtPdaController(http.Controller):
         return {'ok': False, 'message': _('No permission for this barcode operation.')}
 
     def _find_mes_order_by_barcode(self, barcode):
-        """扫制令单条码：mrp.production 名称（WH/MO/xxxx）→ 制令单。"""
+        """扫制令单条码：优先按制令单名（WH/MO/xxxx-N）查，回退按
+        mrp.production 名（WH/MO/xxxx）取其制令单。注意不要用 `_` 做
+        解包占位——本文件里 `_` 是翻译函数。"""
         name = (barcode or '').strip()
-        production = request.env['mrp.production'].search([
+        mes_order = request.env['sn.wsd.mes.order'].search([
             ('name', '=', name),
             ('company_id', 'in', request.env.companies.ids),
         ], limit=1)
-        if not production:
-            raise UserError(_('No manufacturing order was found for %s.', name))
-        _, mes_order = self._get_mes_order_by_production(production.id)
+        if not mes_order:
+            production = request.env['mrp.production'].search([
+                ('name', '=', name),
+                ('company_id', 'in', request.env.companies.ids),
+            ], limit=1)
+            mes_order = production.x_mes_order_id
+        if not mes_order:
+            raise UserError(_('No MES order was found for %s.', name))
         if mes_order.state in ('cancelled', 'done'):
             raise UserError(_('The MES order %s is closed.', mes_order.display_name))
-        return production, mes_order
+        return mes_order.production_id, mes_order
 
     @http.route('/sn_wsd_barcode/smt/do_drawing_open', type='jsonrpc', auth='user')
     def do_drawing_open(self, barcode):
@@ -610,7 +617,7 @@ class SnSmtPdaController(http.Controller):
         deny = self._shop_group_check()
         if deny:
             return deny
-        _, mes_order = self._get_mes_order_by_production(production_id)
+        _production, mes_order = self._get_mes_order_by_production(production_id)
         workcenter = self._get_workcenter(workcenter_id) if workcenter_id else False
         try:
             result = self._get_service().load_drawing_barcode(
@@ -630,7 +637,7 @@ class SnSmtPdaController(http.Controller):
         deny = self._shop_group_check()
         if deny:
             return deny
-        _, mes_order = self._get_mes_order_by_production(production_id)
+        _production, mes_order = self._get_mes_order_by_production(production_id)
         result = self._get_service().unload_drawing_all(mes_order)
         status = self._get_service().drawing_status(mes_order)
         status['ok'] = True
