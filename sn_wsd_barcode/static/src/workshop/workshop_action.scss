@@ -440,15 +440,19 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
     }
 }
 
-/* ❸ 动作坞：Tab + 胶囊 + 粘底扫码框 */
+/* ❸ 动作坞：Tab + 胶囊分组卡片（与上方反馈区留出空挡） */
 .o_sn_wsd_pda_tabs {
     display: flex;
     background: #fff;
-    border-bottom: 1px solid #e2e8f0;
+    margin: 14px 12px 0;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
 
     .o_sn_wsd_pda_tab {
         flex: 1;
-        min-height: 44px;
+        min-height: 46px;
         border: none;
         background: none;
         border-bottom: 3px solid transparent;
@@ -456,10 +460,14 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
         font-weight: 500;
         color: #475569;
 
+        &:not(:last-child) {
+            border-right: 1px solid #f1f5f9;
+        }
         &.is-active {
             color: #0f6b48;
             border-bottom-color: #0f6b48;
             font-weight: 700;
+            background: #f8fafc;
         }
     }
 }
@@ -467,11 +475,16 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
 .o_sn_wsd_pda_pills {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
-    padding: 8px 10px;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: 0 12px 14px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
 
     .btn {
-        min-height: 44px;
+        min-height: 46px;
         font-size: 0.9rem;
         padding: 4px 6px;
         white-space: nowrap;
@@ -479,6 +492,10 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
         text-overflow: ellipsis;
     }
 }
+
+/* 通用空挡：反馈块与上下文之间 */
+.o_sn_wsd_pda_progress { padding: 12px 12px 4px; }
+.o_sn_wsd_pda_feedback { margin: 6px 12px 12px; }
 
 .o_sn_wsd_pda_dock {
     background: #fff;
