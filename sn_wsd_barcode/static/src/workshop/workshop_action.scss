@@ -403,18 +403,37 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
     &.is-empty { background: #f1f5f9; color: #64748b; font-size: 15px; font-weight: 500; }
 }
 
-/* 清单行整行着色 */
+/* 清单行整行着色：左色条 + 明显底色 + 状态点 */
 .o_sn_wsd_pda_rows {
     .o_sn_wsd_pda_row {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 10px 12px;
+        padding: 12px;
+        min-height: 48px;
         font-size: 15px;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
 
-        &.is-unloaded { background: #fef2f2; }
-        &.is-loaded { background: #f0fdf4; }
+        &.is-unloaded {
+            background: #fdecec;
+            border-left: 4px solid #dc2626;
+        }
+        &.is-loaded {
+            background: #e7f8ee;
+            border-left: 4px solid #16a34a;
+        }
+        &.is-unloaded::after {
+            content: "○";
+            color: #dc2626;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        &.is-loaded::after {
+            content: "✓";
+            color: #16a34a;
+            font-size: 17px;
+            font-weight: 700;
+        }
         .o_sn_wsd_pda_row_name { flex: 1; word-break: break-all; }
         .o_sn_wsd_pda_row_op { font-size: 0.72rem; color: #64748b; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .o_sn_wsd_pda_row_val { font-weight: 600; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
