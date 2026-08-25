@@ -130,14 +130,6 @@
                 </section>
             </main>
 
-            <footer class="o_barcode_control o_action_buttons d-flex justify-content-between p-2 gap-2 border-top">
-                <button type="button" class="btn btn-secondary" disabled="disabled">
-                    <t t-out="totalLabel"/>
-                </button>
-                <button type="button" class="btn btn-primary" disabled="disabled">
-                    <t t-out="state.total"/>
-                </button>
-            </footer>
 
             <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">

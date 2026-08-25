@@ -332,9 +332,6 @@ export class WorkshopOperationAction extends Component {
         return _t("Result");
     }
 
-    get totalLabel() {
-        return _t("Total");
-    }
 
     get requiredQtyLabel() {
         return _t("Required");
@@ -803,7 +800,6 @@ export class WorkshopOperationAction extends Component {
                 production_id: this.state.productionId || false,
             });
             if (res.ok) {
-                this.state.total += 1;
                 this.resetSmtScan();
                 this.state.command = "";
                 // stay in the loop: cart stays locked, scan the next
@@ -908,7 +904,6 @@ export class WorkshopOperationAction extends Component {
                 operation: "online_load",
             });
             if (result.ok) {
-                this.state.total += 1;
                 this.state.command = "";
                 this._resetOnlineCycle(table);
                 this.setResult(
@@ -1024,7 +1019,6 @@ export class WorkshopOperationAction extends Component {
             });
             if (result.ok) {
                 this.setResult(result.message || _t("Operation completed."), "success");
-                this.state.total += 1;
                 this.resetSmtScan();
                 this.state.command = "";
                 await this.loadSmtContext();
@@ -1108,8 +1102,7 @@ export class WorkshopOperationAction extends Component {
         this.setResult(result.message || (result.ok ? _t("Scan accepted") : _t("Scan rejected")), result.ok ? "success" : "danger");
         if (result.ok) {
             this.state.command = "";
-            this.state.total += 1;
-        }
+                    }
     }
 
     cancelSmtOperation() {
