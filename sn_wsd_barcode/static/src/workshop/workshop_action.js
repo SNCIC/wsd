@@ -453,6 +453,18 @@ export class WorkshopOperationAction extends Component {
         return this.state.cameraScannerEnabled ? "bg-success text-white" : "text-primary";
     }
 
+    get progressPercent() {
+        const s = this.state.smtMaterialSummary;
+        if (!s || !s.required_qty) {
+            return 0;
+        }
+        return Math.round((s.loaded_qty / s.required_qty) * 100);
+    }
+
+    get cancelOperationLabel() {
+        return _t("Cancel");
+    }
+
     get resultClass() {
         return {
             "text-success": this.state.resultType === "success",

@@ -40,7 +40,9 @@ export class DrawingLoadAction extends Component {
             result: "",
             resultType: "info",
             loading: false,
+            confirmUnload: false,
         });
+        this.confirmUnloadTimer = null;
         useBus(this.mobileService.bus, "mobile_reader_scanned", (ev) => {
             for (const barcode of ev.detail.data || []) {
                 this.onScan(barcode);
@@ -141,6 +143,22 @@ export class DrawingLoadAction extends Component {
 
     get noControlLabel() {
         return _t("No critical material control for the current order.");
+    }
+
+    get progressPercent() {
+        const s = this.state.summary;
+        if (!s || !s.required_qty) {
+            return 0;
+        }
+        return Math.round((s.loaded_qty / s.required_qty) * 100);
+    }
+
+    get rowsLabel() {
+        return _t("Critical material rows");
+    }
+
+    get confirmUnloadLabel() {
+        return _t("Confirm unload all?");
     }
 
     typeLabel(type) {
@@ -298,6 +316,17 @@ export class DrawingLoadAction extends Component {
         if (!this.state.productionId || this.state.loading) {
             return;
         }
+        // 防误触：首击进入确认态（3 秒回退），再击才执行
+        if (!this.state.confirmUnload) {
+            this.state.confirmUnload = true;
+            clearTimeout(this.confirmUnloadTimer);
+            this.confirmUnloadTimer = setTimeout(() => {
+                this.state.confirmUnload = false;
+            }, 3000);
+            return;
+        }
+        this.state.confirmUnload = false;
+        clearTimeout(this.confirmUnloadTimer);
         this.state.loading = true;
         try {
             const status = await rpc("/sn_wsd_barcode/smt/do_drawing_unload_all", {

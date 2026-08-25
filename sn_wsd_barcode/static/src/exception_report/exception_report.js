@@ -63,6 +63,10 @@ export class ExceptionReportAction extends Component {
             : _t("Scan the product SN.");
     }
 
+    get resetLabel() {
+        return _t("Reset");
+    }
+
     get noteLabel() {
         return _t("Note (optional)");
     }

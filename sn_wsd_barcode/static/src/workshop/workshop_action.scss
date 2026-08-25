@@ -260,3 +260,220 @@
         min-height: 96px;
     }
 }
+
+/* ============================================================
+   PDA 终端三区设计系统（pda-ui-refresh）：
+   上下文带 / 反馈区 / 动作坞。仅样式层，交互逻辑不变。
+   ============================================================ */
+
+$o-pda-bar-bg: #1e293b;
+$o-pda-bar-btn: rgba(255, 255, 255, 0.14);
+
+/* ❶ 上下文带：深色状态栏（返回/屏名/选择器/相机） */
+.o_sn_wsd_pda_contextbar {
+    background: $o-pda-bar-bg;
+    color: #fff;
+
+    .o_sn_wsd_pda_contextbar_top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+
+        .o_sn_wsd_pda_title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+        .o_sn_wsd_pda_user {
+            font-size: 0.75rem;
+            opacity: 0.75;
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn {
+            background: $o-pda-bar-btn;
+            border: none;
+            color: #fff;
+            min-height: 40px;
+            min-width: 40px;
+        }
+    }
+    .o_sn_wsd_pda_contextbar_selectors {
+        display: flex;
+        gap: 6px;
+        padding: 0 10px 10px;
+
+        .btn {
+            flex: 1;
+            background: $o-pda-bar-btn;
+            border: none;
+            color: #fff;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.9rem;
+
+            small {
+                display: block;
+                font-size: 0.65rem;
+                opacity: 0.7;
+                line-height: 1;
+            }
+            .oi-chevron-bottom { opacity: 0.7; }
+        }
+    }
+}
+
+/* ❷ 反馈区：进度（条+大数字）与大色块 */
+.o_sn_wsd_pda_progress {
+    padding: 10px 12px 6px;
+
+    .o_sn_wsd_pda_progress_bar {
+        height: 10px;
+        border-radius: 6px;
+        background: #e2e8f0;
+        overflow: hidden;
+        margin-bottom: 6px;
+
+        > div {
+            height: 100%;
+            background: #16a34a;
+            border-radius: 6px;
+            transition: width 0.3s;
+        }
+    }
+    .o_sn_wsd_pda_progress_nums {
+        display: flex;
+        justify-content: space-around;
+
+        .o_sn_wsd_pda_num {
+            text-align: center;
+            line-height: 1.1;
+
+            strong {
+                font-size: 22px;
+                font-weight: 700;
+            }
+            span {
+                display: block;
+                font-size: 0.72rem;
+                color: #64748b;
+            }
+            &.is-loaded strong { color: #16a34a; }
+            &.is-unloaded strong { color: #dc2626; }
+        }
+    }
+    .o_sn_wsd_pda_order {
+        text-align: center;
+        font-size: 0.82rem;
+        color: #475569;
+        margin-top: 4px;
+    }
+}
+
+.o_sn_wsd_pda_feedback {
+    min-height: 64px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    margin: 8px 10px;
+
+    small {
+        font-size: 0.78rem;
+        font-weight: 400;
+        opacity: 0.8;
+        word-break: break-all;
+    }
+    &.is-success { background: #d1fae5; color: #065f46; }
+    &.is-danger { background: #fee2e2; color: #991b1b; }
+    &.is-warning { background: #fef3c7; color: #92400e; }
+    &.is-info { background: #dbeafe; color: #1e40af; }
+    &.is-empty { background: #f1f5f9; color: #64748b; font-size: 15px; font-weight: 500; }
+}
+
+/* 清单行整行着色 */
+.o_sn_wsd_pda_rows {
+    .o_sn_wsd_pda_row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 15px;
+        border-bottom: 1px solid #f1f5f9;
+
+        &.is-unloaded { background: #fef2f2; }
+        &.is-loaded { background: #f0fdf4; }
+        .o_sn_wsd_pda_row_name { flex: 1; word-break: break-all; }
+        .o_sn_wsd_pda_row_op { font-size: 0.72rem; color: #64748b; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .o_sn_wsd_pda_row_val { font-weight: 600; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+}
+
+/* ❸ 动作坞：Tab + 胶囊 + 粘底扫码框 */
+.o_sn_wsd_pda_tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+
+    .o_sn_wsd_pda_tab {
+        flex: 1;
+        min-height: 44px;
+        border: none;
+        background: none;
+        border-bottom: 3px solid transparent;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #475569;
+
+        &.is-active {
+            color: #0f6b48;
+            border-bottom-color: #0f6b48;
+            font-weight: 700;
+        }
+    }
+}
+
+.o_sn_wsd_pda_pills {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 10px;
+
+    .btn {
+        min-height: 44px;
+        font-size: 0.9rem;
+        padding: 4px 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.o_sn_wsd_pda_dock {
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    padding: 10px;
+    box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.06);
+
+    form {
+        display: flex;
+        gap: 8px;
+    }
+    .o_sn_wsd_workshop_command {
+        min-height: 52px;
+        font-size: 16px;
+    }
+    .btn { min-height: 52px; min-width: 52px; }
+}

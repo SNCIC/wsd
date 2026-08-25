@@ -3,81 +3,102 @@
 
     <t t-name="sn_wsd_barcode.DrawingLoadAction">
         <div class="o_sn_wsd_drawing_load o_sn_wsd_workshop d-flex flex-column h-100">
-            <header>
-                <nav class="o_barcode_header d-flex align-items-center justify-content-between p-2 border-bottom gap-2">
-                    <button type="button" class="btn btn-secondary" t-on-click="goBack">
-                        <i class="oi oi-chevron-left"/> <t t-out="backLabel"/>
+
+            <!-- ❶ 上下文带：返回 / 屏名 / 产线工位选择器 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
                     </button>
-                    <span class="fs-4 mx-auto" t-out="title"/>
-                    <span class="fs-4" style="visibility: hidden;"> <t t-out="backLabel"/></span>
-                </nav>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <span class="o_sn_wsd_pda_user" style="visibility: hidden;">
+                        <t t-out="backLabel"/>
+                    </span>
+                </div>
+                <div class="o_sn_wsd_pda_contextbar_selectors">
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('line')">
+                        <span class="text-center">
+                            <small t-out="lineLabel"/>
+                            <t t-out="selectedLineName"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('station')">
+                        <span class="text-center">
+                            <small t-out="workCenterLabel"/>
+                            <t t-out="selectedStationName"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                </div>
             </header>
 
-            <main class="flex-grow-1 overflow-auto p-2 d-flex flex-column gap-2">
-                <div class="d-flex gap-1">
-                    <button type="button" class="btn btn-outline-secondary flex-grow-1"
-                            t-on-click="() => this.openSelector('line')">
-                        <small class="text-muted d-block" t-out="lineLabel"/>
-                        <t t-out="selectedLineName"/> <i class="oi oi-chevron-bottom"/>
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary flex-grow-1"
-                            t-on-click="() => this.openSelector('station')">
-                        <small class="text-muted d-block" t-out="workCenterLabel"/>
-                        <t t-out="selectedStationName"/> <i class="oi oi-chevron-bottom"/>
-                    </button>
-                </div>
-
-                <div t-if="state.productionId" class="o_sn_wsd_workshop_smt_counts d-flex justify-content-around border rounded p-2">
-                    <div class="o_sn_wsd_workshop_smt_count">
-                        <span class="text-muted" t-out="requiredLabel"/>
-                        <strong t-out="state.summary.required_qty"/>
+            <!-- ❷ 反馈区：进度 + 大色块 + 清单 -->
+            <main class="flex-grow-1 overflow-auto">
+                <div class="o_sn_wsd_pda_progress">
+                    <div class="o_sn_wsd_pda_progress_bar">
+                        <div t-att-style="'width:' + progressPercent + '%'"/>
                     </div>
-                    <div class="o_sn_wsd_workshop_smt_count">
-                        <span class="text-muted" t-out="loadedLabel"/>
-                        <strong class="text-success" t-out="state.summary.loaded_qty"/>
+                    <div class="o_sn_wsd_pda_progress_nums">
+                        <div class="o_sn_wsd_pda_num">
+                            <strong t-out="state.summary.required_qty"/>
+                            <span t-out="requiredLabel"/>
+                        </div>
+                        <div class="o_sn_wsd_pda_num is-loaded">
+                            <strong t-out="state.summary.loaded_qty"/>
+                            <span t-out="loadedLabel"/>
+                        </div>
+                        <div class="o_sn_wsd_pda_num is-unloaded">
+                            <strong t-out="state.summary.unloaded_qty"/>
+                            <span t-out="unloadedLabel"/>
+                        </div>
                     </div>
-                    <div class="o_sn_wsd_workshop_smt_count">
-                        <span class="text-muted" t-out="unloadedLabel"/>
-                        <strong class="text-warning" t-out="state.summary.unloaded_qty"/>
+                    <div class="o_sn_wsd_pda_order">
+                        <t t-out="state.orderName"/>
                     </div>
                 </div>
 
-                <div t-if="state.productionId" class="text-center small">
-                    <span class="fw-bold" t-out="orderLabel"/>:
-                    <span t-out="state.orderName"/>
+                <div t-if="state.result"
+                     class="o_sn_wsd_pda_feedback"
+                     t-attf-class="o_sn_wsd_pda_feedback is-{{state.resultType || 'info'}}">
+                    <t t-out="state.result"/>
                 </div>
 
                 <div t-if="state.productionId &amp;&amp; state.summary.line_complete"
-                     class="alert alert-success py-2 px-3 mb-0" t-out="completeLabel"/>
-
-                <div t-if="state.productionId &amp;&amp; state.rows.length" class="list-group">
-                    <div t-foreach="state.rows" t-as="row" t-key="row.online_material_id"
-                         t-att-class="rowClass(row)">
-                        <div class="d-flex justify-content-between align-items-center gap-2">
-                            <span class="badge bg-secondary" t-out="typeLabel(row.material_type)"/>
-                            <span class="flex-grow-1 text-break" t-out="row.item_code"/>
-                            <small class="text-muted" t-out="row.operation"/>
-                            <span class="text-break" t-out="row.loaded_name or '—'"/>
-                        </div>
-                    </div>
+                     class="o_sn_wsd_pda_feedback is-success">
+                    <t t-out="completeLabel"/>
                 </div>
 
-                <form t-on-submit="onSubmit" class="o_sn_wsd_workshop_command_row list-group-item d-flex gap-1">
+                <div t-if="state.rows.length" class="o_sn_wsd_pda_rows">
+                    <div class="d-flex align-items-center justify-content-between px-3 py-1">
+                        <small class="text-muted" t-out="rowsLabel"/>
+                        <button t-if="state.summary.loaded_qty > 0" type="button"
+                                class="btn btn-sm"
+                                t-attf-class="{{state.confirmUnload ? 'btn-danger' : 'btn-outline-danger'}}"
+                                t-on-click="unloadAll">
+                            <t t-out="state.confirmUnload ? confirmUnloadLabel : unloadAllLabel"/>
+                        </button>
+                    </div>
+                    <div t-foreach="state.rows" t-as="row" t-key="row.online_material_id"
+                         class="o_sn_wsd_pda_row"
+                         t-att-class="row.load_status === 'Y' ? 'is-loaded' : 'is-unloaded'">
+                        <span class="badge bg-secondary" t-out="typeLabel(row.material_type)"/>
+                        <span class="o_sn_wsd_pda_row_name" t-out="row.item_code"/>
+                        <span class="o_sn_wsd_pda_row_op" t-out="row.operation"/>
+                        <span class="o_sn_wsd_pda_row_val" t-out="row.loaded_name or '—'"/>
+                    </div>
+                </div>
+            </main>
+
+            <!-- ❸ 动作坞：粘底扫码框 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="onSubmit">
                     <input class="o_sn_wsd_drawing_command form-control"
                            t-model="state.command"
                            t-att-placeholder="scanHint"
                            t-att-disabled="state.loading ? 'disabled' : null"/>
-                    <button t-if="state.productionId" type="button"
-                            class="btn btn-outline-danger text-nowrap"
-                            t-on-click="unloadAll" t-out="unloadAllLabel"/>
                 </form>
-
-                <section t-if="state.result" class="o_sn_wsd_workshop_result list-group-item">
-                    <div class="text-break fw-bold"
-                         t-att-class="state.resultType === 'success' ? 'text-success' : (state.resultType === 'danger' ? 'text-danger' : 'text-warning')"
-                         t-out="state.result"/>
-                </section>
-            </main>
+            </div>
 
             <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
