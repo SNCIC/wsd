@@ -18,6 +18,17 @@
                 </div>
             </header>
 
+
+            <!-- ❸ 动作坞 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="onSubmit">
+                    <input class="o_sn_wsd_exception_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
             <!-- ❷ 反馈区 -->
             <main class="flex-grow-1 overflow-auto">
                 <div t-if="state.serialId" class="o_sn_wsd_pda_progress">
@@ -40,16 +51,6 @@
                     <textarea class="form-control" rows="2" t-model="state.note"/>
                 </div>
             </main>
-
-            <!-- ❸ 动作坞 -->
-            <div class="o_sn_wsd_pda_dock">
-                <form t-on-submit="onSubmit">
-                    <input class="o_sn_wsd_exception_command form-control"
-                           t-model="state.command"
-                           t-att-placeholder="scanHint"
-                           t-att-disabled="state.loading ? 'disabled' : null"/>
-                </form>
-            </div>
         </div>
     </t>
 

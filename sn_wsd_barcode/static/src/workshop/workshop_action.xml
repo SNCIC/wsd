@@ -44,6 +44,24 @@
                 </div>
             </header>
 
+
+            <!-- 扫码输入：紧贴上下文带，置顶防略过 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="submitCommand">
+                    <input class="o_sn_wsd_workshop_command form-control"
+                           t-model="state.command"
+                           t-ref="commandInput"
+                           t-att-placeholder="enterCommandLabel"
+                           t-att-disabled="state.smtLoading ? 'disabled' : null"/>
+                    <button t-if="isSmtOperation" type="button"
+                            class="btn btn-secondary"
+                            t-att-aria-label="cancelOperationLabel"
+                            t-on-click="cancelSmtOperation">
+                        <i class="fa fa-times"/>
+                    </button>
+                </form>
+            </div>
+
             <!-- ❷ 反馈区：进度 + 大色块 + 域动作 -->
             <main class="o_sn_wsd_workshop_body o_barcode_lines flex-grow-1 overflow-auto text-bg-200">
                 <div t-if="state.smtLoading" class="o_sn_wsd_workshop_loading">
@@ -110,23 +128,6 @@
                     </button>
                 </section>
             </main>
-
-            <!-- ❸ 动作坞：粘底扫码框 -->
-            <div class="o_sn_wsd_pda_dock">
-                <form t-on-submit="submitCommand">
-                    <input class="o_sn_wsd_workshop_command form-control"
-                           t-model="state.command"
-                           t-ref="commandInput"
-                           t-att-placeholder="enterCommandLabel"
-                           t-att-disabled="state.smtLoading ? 'disabled' : null"/>
-                    <button t-if="isSmtOperation" type="button"
-                            class="btn btn-secondary"
-                            t-att-aria-label="cancelOperationLabel"
-                            t-on-click="cancelSmtOperation">
-                        <i class="fa fa-times"/>
-                    </button>
-                </form>
-            </div>
 
             <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">

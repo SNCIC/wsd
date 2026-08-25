@@ -33,6 +33,17 @@
                 </div>
             </header>
 
+
+            <!-- 扫码输入：紧贴上下文带，置顶防略过 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="onSubmit">
+                    <input class="o_sn_wsd_drawing_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
             <!-- ❷ 反馈区：进度 + 大色块 + 清单 -->
             <main class="flex-grow-1 overflow-auto">
                 <div class="o_sn_wsd_pda_progress">
@@ -89,16 +100,6 @@
                     </div>
                 </div>
             </main>
-
-            <!-- ❸ 动作坞：粘底扫码框 -->
-            <div class="o_sn_wsd_pda_dock">
-                <form t-on-submit="onSubmit">
-                    <input class="o_sn_wsd_drawing_command form-control"
-                           t-model="state.command"
-                           t-att-placeholder="scanHint"
-                           t-att-disabled="state.loading ? 'disabled' : null"/>
-                </form>
-            </div>
 
             <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
