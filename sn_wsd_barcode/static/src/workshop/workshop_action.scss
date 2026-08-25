@@ -443,31 +443,24 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
 /* ❸ 动作坞：Tab + 胶囊分组卡片（与上方反馈区留出空挡） */
 .o_sn_wsd_pda_tabs {
     display: flex;
-    background: #fff;
-    margin: 14px 12px 0;
-    border: 1px solid #e2e8f0;
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    overflow: hidden;
+    gap: 10px;
+    margin: 14px 12px 10px;
 
     .o_sn_wsd_pda_tab {
         flex: 1;
         min-height: 46px;
-        border: none;
-        background: none;
-        border-bottom: 3px solid transparent;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #fff;
         font-size: 0.95rem;
         font-weight: 500;
         color: #475569;
 
-        &:not(:last-child) {
-            border-right: 1px solid #f1f5f9;
-        }
         &.is-active {
             color: #0f6b48;
-            border-bottom-color: #0f6b48;
+            border-color: #0f6b48;
             font-weight: 700;
-            background: #f8fafc;
+            background: #e8f5f0;
         }
     }
 }
@@ -480,8 +473,7 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
     margin: 0 12px 14px;
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-top: none;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
 
     .btn {
         min-height: 46px;
