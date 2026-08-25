@@ -864,11 +864,6 @@ class MeterProcessRoute(models.Model):
                         'Only operations on the flow chart can be selected.',
                         label=label, op=op.display_name,
                     ))
-            if (
-                route.x_daily_input_operation_id
-                and route.x_daily_input_operation_id == route.x_daily_output_operation_id
-            ):
-                raise ValidationError(_('The daily input operation and the daily output operation cannot be the same.'))
             aging_start, aging_end = route.x_aging_start_operation_id, route.x_aging_end_operation_id
             if aging_start and aging_end and aging_start != aging_end:
                 if order_map.get(aging_start.id, 0) > order_map.get(aging_end.id, 0):

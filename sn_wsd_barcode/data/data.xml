@@ -34,13 +34,6 @@
         <field name="target">fullscreen</field>
     </record>
 
-    <record id="sn_wsd_barcode_production_menu_action" model="ir.actions.client">
-        <field name="name">Production Operation Types</field>
-        <field name="path">barcode-production</field>
-        <field name="tag">sn_wsd_barcode_production_menu</field>
-        <field name="target">fullscreen</field>
-    </record>
-
     <record model="ir.config_parameter" id="barcode_separator_regex" forcecreate="False">
         <field name="key">sn_wsd_barcode.barcode_separator_regex</field>
         <field name="value">[;,]</field>

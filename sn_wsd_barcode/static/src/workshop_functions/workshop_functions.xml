@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.WorkshopFunctionsMenu">
+        <div class="o_sn_wsd_workshop_functions container d-flex flex-column h-100 h-sm-auto bg-view shadow">
+            <header>
+                <div class="d-flex align-items-center justify-content-between my-3">
+                    <button type="button" class="btn btn-secondary me-3" t-on-click="goBack">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <span class="fs-2 me-auto" t-out="title"/>
+                </div>
+            </header>
+            <main class="flex-grow-1 d-flex flex-column justify-content-center pb-4">
+                <div t-if="state.ready &amp;&amp; !state.functions.length"
+                     class="text-center text-muted p-4" t-out="emptyLabel"/>
+                <div class="o_sn_wsd_grid2 d-grid gap-3 px-3">
+                    <button t-foreach="state.functions" t-as="fn" t-key="fn.menu_id"
+                            type="button"
+                            class="btn btn-primary p-4 d-flex flex-column align-items-center justify-content-center gap-2"
+                            t-on-click="() => this.openFunction(fn)">
+                        <i t-if="fn.web_icon" t-att-class="fn.web_icon" role="img"/>
+                        <span class="fs-4 fw-bold" t-out="fn.name"/>
+                        <small t-if="fn.description" class="opacity-75" t-out="fn.description"/>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </t>
+
+</templates>

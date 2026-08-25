@@ -31,6 +31,10 @@ export class MainMenu extends Component {
             this.packagesEnabled = data.groups.package;
             this.trackingEnabled = data.groups.tracking;
             this.quantCount = data.quant_count;
+            this.mesShop = !!data.groups.mes_shop;
+            this.mesSmt = !!data.groups.mes_smt;
+            this.mesWarehouse = !!data.groups.mes_warehouse;
+            this.state.ready = true;
             this.soundEnable = data.play_sound;
             if (this.soundEnable) {
                 const fileExtension = new Audio().canPlayType("audio/ogg; codecs=vorbis")
@@ -67,11 +71,15 @@ export class MainMenu extends Component {
     }
 
     get productionOperationsLabel() {
-        return _t("Production Operations");
+        return _t("Workshop Operations");
     }
 
     get countInventoryLabel() {
         return _t("Count Inventory");
+    }
+
+    get productionEnabled() {
+        return this.mesShop || this.mesSmt;
     }
 
     openManualBarcodeDialog() {
