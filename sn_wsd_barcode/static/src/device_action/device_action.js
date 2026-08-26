@@ -480,15 +480,6 @@ export class DevicePdaAction extends Component {
             `&field=guide_file&filename_field=guide_filename&download=true`;
     }
 
-    locationIcon(location) {
-        return {
-            factory: 'fa-building-o',
-            workshop: 'fa-industry',
-            line: 'fa-arrows-h',
-            station: 'fa-bullseye',
-        }[location.kind] || 'fa-map-marker';
-    }
-
     // ===== repair report =====
 
     openRepairModal() {

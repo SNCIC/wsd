@@ -153,7 +153,6 @@ class SnDeviceService(models.AbstractModel):
                 'name': location.name,
                 'full_name': location.complete_name,
                 'depth': depth,
-                'kind': location.kind or '',
             })
         return result
 

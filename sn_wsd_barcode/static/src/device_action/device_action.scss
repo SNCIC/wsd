@@ -195,16 +195,16 @@
         }
 
         .o_sn_wsd_device_locitem {
-            display: flex;
-            align-items: center;
+            display: block;
             width: calc(100% - 4px);
+            min-height: 52px;
             margin-bottom: 0;
-            padding: 11px 14px;
+            padding: 14px 16px;
             border: 1px solid transparent;
             border-radius: 10px;
             background: #f1f5f9;
             color: #334155;
-            font-size: 0.98rem;
+            font-size: 1.08rem;
             text-align: left;
             white-space: nowrap;
             overflow: hidden;
@@ -219,17 +219,6 @@
                 background: #0f172a;
                 border-color: #0f172a;
                 color: #ffffff;
-            }
-
-            > i {
-                width: 20px;
-                flex: 0 0 20px;
-                text-align: center;
-                opacity: .75;
-            }
-
-            &.is-active > i {
-                opacity: 1;
             }
         }
 

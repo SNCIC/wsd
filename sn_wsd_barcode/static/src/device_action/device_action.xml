@@ -234,18 +234,14 @@
                     <div class="o_sn_wsd_workshop_modal_list o_sn_wsd_device_loclist">
                         <button type="button" class="o_sn_wsd_device_locitem o_sn_wsd_device_locall"
                                 t-att-class="!state.locationId ? 'is-active' : ''"
-                                t-on-click="() => this.selectLocation(null)">
-                            <i class="fa fa-globe me-2"/>
-                            <t t-out="allLocationsLabel"/>
-                        </button>
+                                t-on-click="() => this.selectLocation(null)"
+                                t-out="allLocationsLabel"/>
                         <button t-foreach="state.locations" t-as="location" t-key="location.id"
                                 type="button" class="o_sn_wsd_device_locitem"
                                 t-att-class="state.locationId === location.id ? 'is-active' : ''"
-                                t-attf-style="margin-left: {{location.depth * 16}}px"
-                                t-on-click="() => this.selectLocation(location)">
-                            <i t-attf-class="fa {{locationIcon(location)}} me-2"/>
-                            <t t-out="location.name"/>
-                        </button>
+                                t-attf-style="margin-left: {{location.depth * 20}}px"
+                                t-on-click="() => this.selectLocation(location)"
+                                t-out="location.name"/>
                     </div>
                 </div>
             </div>
