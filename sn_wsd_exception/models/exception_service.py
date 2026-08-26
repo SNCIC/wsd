@@ -47,7 +47,31 @@ class SnWsdExceptionService(models.Model):
                 'code': category.code or '',
             } for category in categories],
             'open_exceptions': self.open_list(line_id=line.id) if line else [],
+            # the reporter confirms their own tickets from the PDA: only
+            # the current user's pending confirmations of this line
+            'my_pending_confirms': self._my_pending_confirms(line),
         }
+
+    @api.model
+    def _my_pending_confirms(self, line):
+        if not line:
+            return []
+        tickets = self.env['sn.wsd.exception.ticket'].search([
+            ('create_uid', '=', self.env.user.id),
+            ('state', '=', 'pending_confirm'),
+            ('production_line_id', '=', line.id),
+        ], order='reported_at desc, id desc')
+        return [{
+            'ticket_id': ticket.id,
+            'category': ticket.category_id.display_name,
+            'responsible': ticket.responsible_user_id.name or '',
+            # the reporter recognizes their ticket by their own words, not
+            # by the sequence number
+            'description': ticket.description or '',
+            'reported_at': fields.Datetime.context_timestamp(
+                ticket, ticket.reported_at).strftime('%m-%d %H:%M')
+            if ticket.reported_at else '',
+        } for ticket in tickets]
 
     @api.model
     def report(self, line_id, category_id, note, image_base64=None,
@@ -120,4 +144,39 @@ class SnWsdExceptionService(models.Model):
             'ticket_id': ticket.id,
             'state': ticket.state,
             'message': _('Exception %(name)s claimed.', name=ticket.name),
+        }
+
+    @api.model
+    def confirm(self, ticket_id):
+        """The reporter closes their own ticket from the PDA. The initiator
+        path runs sudo'd (plain users hold no write access to tickets);
+        anyone else falls back to their own access rights, which is the
+        handler-group path the PC side already uses."""
+        ticket = self.env['sn.wsd.exception.ticket'].browse(int(ticket_id))
+        if not ticket.exists():
+            raise UserError(_('Exception ticket not found.'))
+        if ticket.create_uid == self.env.user:
+            ticket = ticket.sudo()
+        ticket.action_confirm()
+        return {
+            'ticket_id': ticket.id,
+            'state': ticket.state,
+            'message': _('Exception %(name)s closed.', name=ticket.name),
+        }
+
+    @api.model
+    def reject(self, ticket_id, note):
+        """Reporter's rejection back to processing; the note is mandatory
+        (enforced again by action_reject)."""
+        ticket = self.env['sn.wsd.exception.ticket'].browse(int(ticket_id))
+        if not ticket.exists():
+            raise UserError(_('Exception ticket not found.'))
+        if ticket.create_uid == self.env.user:
+            ticket = ticket.sudo()
+        ticket.action_reject(note)
+        return {
+            'ticket_id': ticket.id,
+            'state': ticket.state,
+            'message': _('Exception %(name)s rejected; back to processing.',
+                         name=ticket.name),
         }

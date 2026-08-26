@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.StationPassAction">
+        <div class="o_sn_wsd_station_pass o_sn_wsd_workshop d-flex flex-column h-100">
+
+            <!-- ❶ 上下文带：返回 / 屏名 / 用户 / 产线工位选择器 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <span t-if="state.userName" class="o_sn_wsd_pda_user">
+                        <i class="fa fa-user-circle-o me-1"/>
+                        <t t-out="state.userName"/>
+                    </span>
+                </div>
+                <div class="o_sn_wsd_pda_contextbar_selectors">
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('line')">
+                        <span class="text-center">
+                            <small t-out="productionLineLabel"/>
+                            <t t-out="selectedLineName || productionLineLabel"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('workcenter')">
+                        <span class="text-center">
+                            <small t-out="workCenterLabel"/>
+                            <t t-out="selectedWorkcenterLabel || workCenterLabel"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                </div>
+            </header>
+
+            <!-- 扫码输入：紧贴上下文带，置顶防略过 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="submitCommand">
+                    <input class="o_sn_wsd_station_command form-control"
+                           t-model="state.command"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
+            <!-- ❷ 反馈区：上下文进度 + 大色块 + 粘滞模式胶囊 -->
+            <main class="flex-grow-1 overflow-auto">
+                <div t-if="state.selectedWorkcenterId" class="o_sn_wsd_pda_progress">
+                    <div class="o_sn_wsd_pda_order">
+                        <t t-out="state.orders.length"/>
+                        <small class="ms-1" t-out="ordersLabel"/>
+                        <t t-if="state.orders.length === 1">
+                            · <t t-out="state.orders[0].name"/>
+                        </t>
+                    </div>
+                    <div class="o_sn_wsd_pda_progress_nums">
+                        <div class="o_sn_wsd_pda_num">
+                            <strong t-out="state.wipTotal"/>
+                            <span t-out="inProgressLabel"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div t-if="state.result"
+                     class="o_sn_wsd_pda_feedback"
+                     t-attf-class="o_sn_wsd_pda_feedback is-{{state.resultType || 'info'}}">
+                    <t t-out="state.result"/>
+                </div>
+                <div t-if="!state.result" class="o_sn_wsd_pda_feedback is-empty">
+                    <t t-out="scanHint"/>
+                </div>
+
+                <div class="o_sn_wsd_pda_tabs">
+                    <t t-foreach="modes" t-as="mode" t-key="mode.key">
+                        <button type="button"
+                                class="o_sn_wsd_pda_tab"
+                                t-att-class="state.mode === mode.key ? 'is-active' : ''"
+                                t-on-click="() => this.setMode(mode.key)">
+                            <t t-out="mode.label"/>
+                        </button>
+                    </t>
+                </div>
+            </main>
+
+            <!-- 报废原因：必选点选 -->
+            <div t-if="state.scrapDialog" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="cancelScrap">
+                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
+                    <h2 t-out="scrapTitle"/>
+                    <div class="o_sn_wsd_workshop_records">
+                        <t t-foreach="state.scrapReasons" t-as="reason" t-key="reason.id">
+                            <button type="button"
+                                    class="btn"
+                                    t-att-class="state.scrapDialog.reasonId === reason.id ? 'btn-danger' : 'btn-outline-danger'"
+                                    t-on-click="() => this.pickScrapReason(reason.id)">
+                                <span t-out="reason.name"/>
+                            </button>
+                        </t>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="button" class="btn btn-danger flex-grow-1"
+                                t-out="confirmScrapLabel"
+                                t-on-click="confirmScrap"/>
+                        <button type="button" class="btn btn-outline-secondary"
+                                t-out="cancelLabel"
+                                t-on-click="cancelScrap"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 产线/工位选择器 -->
+            <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
+                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
+                    <h2 t-out="state.selector === 'line' ? productionLineLabel : workCenterLabel"/>
+                    <div class="o_sn_wsd_workshop_records">
+                        <t t-foreach="selectorRecords" t-as="record" t-key="record.id">
+                            <button type="button" t-on-click="() => this.selectRecord(record)">
+                                <span t-out="record.name"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

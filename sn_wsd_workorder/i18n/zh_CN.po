@@ -879,3 +879,27 @@ msgstr "已切换待出站 SN。"
 #: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
 msgid "rejected — scan its defect code"
 msgstr "判 NG 待出站，请扫不良代码"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "No operation is set on this work center."
+msgstr "该工作中心未设置工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "Nothing to scan."
+msgstr "没有扫码内容。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s is in progress at operation %(op)s of order %(order)s; use the matching station."
+msgstr "SN %(sn)s 正在制令单 %(order)s 的 %(op)s 工序在制，请到对应工站操作。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s is not in progress at this station."
+msgstr "SN %(sn)s 不在本工站在制。"

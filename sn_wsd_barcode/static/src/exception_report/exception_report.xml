@@ -4,40 +4,77 @@
     <t t-name="sn_wsd_barcode.ExceptionReportAction">
         <div class="o_sn_wsd_exception_report o_sn_wsd_workshop d-flex flex-column h-100">
 
-            <!-- ❶ 上下文带 -->
+            <!-- ❶ 上下文带：返回 / 屏名 / 用户 / 产线工位选择器 -->
             <header class="o_sn_wsd_pda_contextbar">
                 <div class="o_sn_wsd_pda_contextbar_top">
                     <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
                         <i class="oi oi-chevron-left"/>
                     </button>
                     <div class="o_sn_wsd_pda_title" t-out="title"/>
-                    <button type="button" class="btn" t-if="state.serialId"
-                            t-att-aria-label="resetLabel" t-on-click="resetSerial">
-                        <i class="oi oi-refresh"/>
-                    </button>
                     <span t-if="state.userName" class="o_sn_wsd_pda_user">
                         <i class="fa fa-user-circle-o me-1"/>
                         <t t-out="state.userName"/>
                     </span>
                 </div>
+                <div class="o_sn_wsd_pda_contextbar_selectors">
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('line')">
+                        <span class="text-center">
+                            <small t-out="productionLineLabel"/>
+                            <t t-out="selectedLineName || productionLineLabel"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                    <button type="button" class="btn" t-on-click="() => this.openSelector('workcenter')">
+                        <span class="text-center">
+                            <small t-out="workCenterLabel"/>
+                            <t t-out="selectedWorkcenterLabel || workCenterLabel"/>
+                        </span>
+                        <i class="oi oi-chevron-bottom"/>
+                    </button>
+                </div>
             </header>
 
-
-            <!-- ❸ 动作坞 -->
-            <div class="o_sn_wsd_pda_dock">
-                <form t-on-submit="onSubmit">
-                    <input class="o_sn_wsd_exception_command form-control"
-                           t-model="state.command"
-                           t-att-placeholder="scanHint"
-                           t-att-disabled="state.loading ? 'disabled' : null"/>
-                </form>
-            </div>
-
-            <!-- ❷ 反馈区 -->
+            <!-- ❷ 反馈区：我的待确认卡 + 大色块 + 建单表单 -->
             <main class="flex-grow-1 overflow-auto">
-                <div t-if="state.serialId" class="o_sn_wsd_pda_progress">
-                    <div class="o_sn_wsd_pda_order">
-                        <t t-out="snLabel"/>: <strong t-out="state.serialSn"/>
+                <div t-if="state.lineName" class="o_sn_wsd_pda_progress">
+                    <div class="o_sn_wsd_pda_order" t-out="state.lineName"/>
+                </div>
+
+                <div t-if="state.pendingConfirms.length" class="px-3 pt-2">
+                    <div class="form-label small text-muted" t-out="pendingTitleLabel"/>
+                    <div t-foreach="state.pendingConfirms" t-as="card" t-key="card.ticket_id"
+                         class="o_sn_wsd_exception_confirm_card border rounded p-2 mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                <strong t-out="card.category"/>
+                                <small class="text-muted ms-1" t-out="card.responsible"/>
+                                <small class="text-muted ms-1" t-out="card.reported_at"/>
+                            </span>
+                        </div>
+                        <div class="small" t-out="card.description"/>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-success flex-grow-1"
+                                    t-att-disabled="state.loading ? 'disabled' : null"
+                                    t-on-click="() => this.confirmCard(card)"
+                                    t-out="confirmCardLabel"/>
+                            <button type="button" class="btn btn-outline-danger flex-grow-1"
+                                    t-att-disabled="state.loading ? 'disabled' : null"
+                                    t-on-click="() => this.toggleReject(card)"
+                                    t-out="rejectLabel"/>
+                        </div>
+                        <div t-if="card.rejecting" class="mt-2">
+                            <label class="form-label small text-muted mb-1" t-out="rejectNoteLabel"/>
+                            <textarea class="form-control mb-2" rows="2" t-model="card.note"/>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-danger flex-grow-1"
+                                        t-att-disabled="state.loading ? 'disabled' : null"
+                                        t-on-click="() => this.submitReject(card)"
+                                        t-out="submitRejectLabel"/>
+                                <button type="button" class="btn btn-outline-secondary"
+                                        t-on-click="() => this.toggleReject(card)"
+                                        t-out="cancelLabel"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -47,15 +84,56 @@
                     <t t-out="state.result"/>
                 </div>
                 <div t-if="!state.result" class="o_sn_wsd_pda_feedback is-empty">
-                    <t t-out="scanHint"/>
+                    <t t-out="notePlaceholder"/>
                 </div>
 
-                <div t-if="state.serialId" class="px-3 pt-2">
+                <form t-if="state.lineId" class="px-3 pb-3" t-on-submit="submitReport">
+                    <section class="o_sn_wsd_pda_pills">
+                        <button t-foreach="state.categories" t-as="cat" t-key="cat.id"
+                                type="button"
+                                t-attf-class="btn {{state.categoryId === cat.id ? 'btn-primary' : 'btn-outline-primary'}}"
+                                t-on-click="() => this.pickCategory(cat.id)">
+                            <t t-out="cat.name"/>
+                        </button>
+                    </section>
                     <label class="form-label small text-muted" t-out="noteLabel"/>
-                    <textarea class="form-control" rows="2" t-model="state.note"/>
-                </div>
+                    <textarea class="form-control mb-2" rows="2"
+                              t-att-placeholder="notePlaceholder"
+                              t-model="state.note"/>
+                    <div class="d-flex gap-2 align-items-center mb-2">
+                        <label t-if="!state.photoBase64"
+                               class="btn btn-outline-secondary flex-grow-1 mb-0">
+                            <i class="fa fa-camera me-1"/>
+                            <t t-out="photoLabel"/>
+                            <input type="file" accept="image/*" capture="environment"
+                                   class="d-none" t-on-change="onPhotoPicked"/>
+                        </label>
+                        <button t-if="state.photoBase64" type="button"
+                                class="btn btn-outline-danger flex-grow-1"
+                                t-on-click="clearPhoto">
+                            <i class="fa fa-trash me-1"/>
+                            <t t-out="retakePhotoLabel"/>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100"
+                            t-att-disabled="state.loading ? 'disabled' : null"
+                            t-out="submitLabel"/>
+                </form>
             </main>
+
+            <!-- 产线/工位选择器 -->
+            <div t-if="state.selector" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="closeSelector">
+                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
+                    <h2 t-out="state.selector === 'line' ? productionLineLabel : workCenterLabel"/>
+                    <div class="o_sn_wsd_workshop_records">
+                        <t t-foreach="selectorRecords" t-as="record" t-key="record.id">
+                            <button type="button" t-on-click="() => this.selectRecord(record)">
+                                <span t-out="record.name"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
         </div>
     </t>
-
 </templates>

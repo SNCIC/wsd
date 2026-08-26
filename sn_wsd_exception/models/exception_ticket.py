@@ -424,9 +424,13 @@ class SnWsdExceptionTicket(models.Model):
             if ticket._level_needs_confirm():
                 ticket.state = 'pending_confirm'
                 ticket.message_post(body=_('Exception submitted for closure confirmation.'))
+                # the reporter confirms their own ticket (PDA card); the
+                # line leader and team leader stay cc'd as fallback
                 partners = ticket._line_leader_user().partner_id
                 if ticket.team_id and ticket.team_id.leader_id and ticket.team_id.leader_id.partner_id:
                     partners |= ticket.team_id.leader_id.partner_id
+                if ticket.create_uid and ticket.create_uid.partner_id:
+                    partners |= ticket.create_uid.partner_id
                 partners = partners.filtered(lambda partner: partner)
                 if partners:
                     ticket.message_notify(

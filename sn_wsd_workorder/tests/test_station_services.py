@@ -149,3 +149,88 @@ class TestStationServices(TransactionCase):
             ('serial_identity_id.name', '=', 'SN-T4')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, defect)
+
+    def test_05_scan_leave_resolves_wip(self):
+        """PDA exit-only scan: a WIP SN at this operation resolves to its
+        row; the payload is all the terminal needs to leave."""
+        self.order.sn_station_enter('SN-T5', self.wc_in.id)
+        hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
+            self.wc_in.id, 'SN-T5')
+        self.assertEqual(hit['order_id'], self.order.id)
+        wip = self.env['sn.wsd.serial.wip'].browse(hit['wip_id'])
+        self.assertEqual(wip.serial_identity_id.name, 'SN-T5')
+
+    def test_06_scan_leave_rejects_elsewhere_and_unknown(self):
+        """Exit-only contract: no feeding, no order switching -- a WIP SN
+        parked elsewhere and an unknown SN are both hard errors."""
+        self.order.sn_station_enter('SN-T6', self.wc_in.id)
+        MesOrder = self.env['sn.wsd.mes.order']
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T6')
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-UNKNOWN-404')
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_scan_leave(self.wc_in.id, '   ')
+
+    def test_07_scan_leave_then_ng(self):
+        """Resolve by scan, leave NG with a defect: the WIP row goes away
+        and the history row carries the defect code."""
+        defect = self.env['sn.wsd.quality.defect.code'].search(
+            [('company_id', 'in', [self.company.id, False])], limit=1)
+        if not defect:
+            defect = self.env['sn.wsd.quality.defect.code'].create({
+                'name': 'Scan Defect', 'code': 'SCND',
+                'category': 'other', 'severity': 'minor',
+            })
+        self.order.sn_station_enter('SN-T7', self.wc_in.id)
+        hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
+            self.wc_in.id, 'SN-T7')
+        payload = self.env['sn.wsd.mes.order'].sn_station_leave(
+            hit['wip_id'], 'ng', False, defect.id)
+        self.assertFalse(payload['finished'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-T7')])
+        self.assertEqual(history.result, 'ng')
+        self.assertEqual(history.defect_code_id, defect)
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-T7')]))
+
+    def test_08_scan_leave_then_scrap(self):
+        """Resolve by scan, leave scrap with a reason: the history row is
+        terminal and the native scrap order carries the MES reason."""
+        # component scrapping needs a BoM on the MO and a line-side location
+        component = self.env['product.product'].create({
+            'name': 'C-T8', 'uom_id': self.env.ref('uom.product_uom_unit').id,
+        })
+        bom = self.env['mrp.bom'].create({
+            'product_tmpl_id':
+                self.order.production_id.product_tmpl_id.id,
+            'product_qty': 1.0,
+            'bom_line_ids': [(0, 0, {
+                'product_id': component.id, 'product_qty': 2.0,
+            })],
+        })
+        self.order.production_id.bom_id = bom.id
+        line_side = self.env['stock.location'].create({
+            'name': 'LINE-SIDE-T8', 'usage': 'internal',
+        })
+        self.workshop.component_location_id = line_side.id
+        reason = self.env['sn.wsd.scrap.reason'].create({
+            'name': 'Scrap T8', 'code': 'SCT8',
+        })
+        self.order.sn_station_enter('SN-T8', self.wc_in.id)
+        hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
+            self.wc_in.id, 'SN-T8')
+        MesOrder = self.env['sn.wsd.mes.order']
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_leave(hit['wip_id'], 'scrap')  # reason required
+        payload = MesOrder.sn_station_leave(hit['wip_id'], 'scrap', reason.id)
+        self.assertFalse(payload['finished'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-T8')])
+        self.assertEqual(history.result, 'scrap')
+        scraps = self.env['stock.scrap'].search([
+            ('x_scrap_reason_id', '=', reason.id)])
+        self.assertTrue(scraps)
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-T8')]))

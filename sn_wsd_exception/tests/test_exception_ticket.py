@@ -226,3 +226,106 @@ class TestExceptionTicket(TransactionCase):
         self.assertEqual(ticket.state, 'pending_confirm')
         ticket.action_confirm()
         self.assertEqual(ticket.state, 'done')
+
+    def test_17_terminal_context(self):
+        """PDA exception screen payload: the work center's line, the root
+        categories and that line's open exceptions come in one call."""
+        workcenter = self.env['mrp.workcenter'].create({
+            'name': 'WC-CTX', 'x_workshop_id': self.workshop.id,
+            'x_production_line_id': self.line.id,
+        })
+        open_ticket = self._create_ticket(category=self.category_other)
+        closed = self._create_ticket()
+        closed.action_claim()
+        self._fill_closure(closed)
+        closed.action_submit_close()
+        closed.action_confirm()
+        data = self.env['sn.wsd.exception.service'].terminal_context(workcenter.id)
+        self.assertEqual(data['line_id'], self.line.id)
+        self.assertEqual(data['line_name'], self.line.name)
+        category_ids = [cat['id'] for cat in data['categories']]
+        self.assertIn(self.category_equipment.id, category_ids)
+        self.assertTrue(all(
+            not self.env['sn.wsd.exception.category'].browse(cat_id).parent_id
+            for cat_id in category_ids))
+        self.assertTrue(any(
+            item['ticket_id'] == open_ticket.id for item in data['open_exceptions']))
+        self.assertFalse(any(
+            item['ticket_id'] == closed.id for item in data['open_exceptions']))
+
+    def _ticket_pending_confirm(self):
+        ticket = self._create_ticket()
+        ticket.action_claim()
+        self._fill_closure(ticket)
+        ticket.action_submit_close()
+        self.assertEqual(ticket.state, 'pending_confirm')
+        return ticket
+
+    def test_18_service_confirm_by_initiator(self):
+        """The reporter closes their own ticket through the service: plain
+        users hold no write access, the initiator path runs sudo'd."""
+        ticket = self._ticket_pending_confirm()
+        result = self.env['sn.wsd.exception.service'].confirm(ticket.id)
+        self.assertEqual(result['state'], 'done')
+        self.assertEqual(ticket.state, 'done')
+        self.assertEqual(ticket.confirm_user_id, self.env.user)
+
+    def test_19_service_reject_by_initiator(self):
+        ticket = self._ticket_pending_confirm()
+        service = self.env['sn.wsd.exception.service']
+        with self.assertRaises(UserError):
+            service.reject(ticket.id, '')
+        result = service.reject(ticket.id, 'Solder paste was not replaced')
+        self.assertEqual(result['state'], 'processing')
+        self.assertEqual(ticket.state, 'processing')
+
+    def test_20_my_pending_confirms_only_own_line(self):
+        """terminal_context lists only the calling user's pending
+        confirmations of the work center's line."""
+        workcenter = self.env['mrp.workcenter'].create({
+            'name': 'WC-MINE', 'x_workshop_id': self.workshop.id,
+            'x_production_line_id': self.line.id,
+        })
+        mine = self._ticket_pending_confirm()
+        # a colleague's ticket on the same line must NOT surface: created
+        # as the colleague (create_uid is ORM-protected, write is ignored),
+        # lifecycle run sudo'd so plain-user ACLs don't get in the way
+        colleague = self.env['res.users'].create({
+            'name': 'Colleague Reporter',
+            'login': 'colleague_reporter',
+            'email': 'colleague@example.com',
+            'group_ids': [(6, 0, [
+                self.env.ref('base.group_user').id,
+                self.env.ref('sn_wsd_exception.group_sn_wsd_exception_user').id,
+            ])],
+        })
+        other_line_ticket = self.env['sn.wsd.exception.ticket'].with_user(
+            colleague).create({
+                'production_line_id': self.line.id,
+                'category_id': self.category_equipment.id,
+                'description': 'Colleague ticket on the same line',
+            })
+        other_line_ticket.sudo().action_claim()
+        self._fill_closure(other_line_ticket.sudo())
+        other_line_ticket.sudo().action_submit_close()
+        self.assertEqual(other_line_ticket.state, 'pending_confirm')
+        data = self.env['sn.wsd.exception.service'].terminal_context(workcenter.id)
+        ids = [item['ticket_id'] for item in data['my_pending_confirms']]
+        self.assertIn(mine.id, ids)
+        self.assertNotIn(other_line_ticket.id, ids)
+        # the colleague sees their own card, not mine
+        data = self.env['sn.wsd.exception.service'].with_user(
+            colleague).terminal_context(workcenter.id)
+        ids = [item['ticket_id'] for item in data['my_pending_confirms']]
+        self.assertIn(other_line_ticket.id, ids)
+        self.assertNotIn(mine.id, ids)
+
+    def test_21_submit_close_notifies_initiator(self):
+        ticket = self._ticket_pending_confirm()
+        msgs = self.env['mail.message'].search([
+            ('model', '=', 'sn.wsd.exception.ticket'),
+            ('res_id', '=', ticket.id),
+            ('message_type', '=', 'user_notification'),
+        ])
+        self.assertTrue(msgs)
+        self.assertIn(self.env.user.partner_id, msgs.mapped('partner_ids'))

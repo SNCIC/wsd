@@ -578,8 +578,6 @@ export class WorkshopOperationAction extends Component {
                 await this._handleEquipmentScan(cleanBarcode);
             } else if (this.isSmtOperation) {
                 await this._handleSmtScan(cleanBarcode);
-            } else if (this.state.selectedOperation) {
-                await this.processScan(cleanBarcode, this.state.selectedOperation);
             } else {
                 this.state.rawValue = cleanBarcode;
                 this.setResult(_t("Select an operation before scanning."), "warning");
@@ -1091,30 +1089,6 @@ export class WorkshopOperationAction extends Component {
             this.focusCommandInput();
             return;
         }
-
-        const command = this.state.command.trim();
-        if (!command) {
-            this.setResult(_t("Scan or enter a barcode first."), "warning");
-            return;
-        }
-        await this.processScan(command, operation.key);
-    }
-
-    async processScan(barcode, operation) {
-        if (!this.state.selectedStationId) {
-            this.setResult(_t("Select a work center first."), "warning");
-            return;
-        }
-        this.state.rawValue = barcode;
-        const result = await rpc("/sn_wsd_barcode/process_workshop_scan", {
-            station_id: this.state.selectedStationId,
-            barcode,
-            operation,
-        });
-        this.setResult(result.message || (result.ok ? _t("Scan accepted") : _t("Scan rejected")), result.ok ? "success" : "danger");
-        if (result.ok) {
-            this.state.command = "";
-                    }
     }
 
     cancelSmtOperation() {

@@ -1299,3 +1299,15 @@ msgstr "查看"
 msgid "No exception in this range."
 msgstr "该区间内没有异常。"
 
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s closed."
+msgstr "异常 %(name)s 已关闭。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s rejected; back to processing."
+msgstr "异常 %(name)s 已驳回，退回处理中。"

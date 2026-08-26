@@ -3,42 +3,46 @@
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { useBus } from "@web/core/utils/hooks";
 import { rpc } from "@web/core/network/rpc";
-import { Component, onMounted, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
-// 异常上报（全员）：第1扫 SN → 第2扫缺陷代码 → 生成质量问题单。
-// 备注输入框可选，提交后停在缺陷码步继续报下一处。
+const PHOTO_MAX_EDGE = 1280;
+
+// Exception reporting (everyone): pick a work center, the line context and
+// root categories come from the exception terminal service. Reporting is
+// one root category + a one-line description + an optional photo. Instead
+// of a ticket-number list, the screen carries the reporter's own closure
+// confirmations: cards with confirm / reject (note required), shown only
+// while the current user has tickets awaiting their confirmation.
 export class ExceptionReportAction extends Component {
     static props = { ...standardActionServiceProps };
     static template = "sn_wsd_barcode.ExceptionReportAction";
 
     setup() {
         this.action = useService("action");
-        this.mobileService = useService("sn_wsd_barcode_mobile");
+        this.orm = useService("orm");
         this.state = useState({
-            command: "",
+            workcenters: [],
+            lines: [],
+            selectedLineId: false,
+            selectedWorkcenterId: false,
+            lineId: false,
+            lineName: "",
+            categories: [],
+            pendingConfirms: [],
+            categoryId: null,
             note: "",
-            serialSn: "",
-            serialId: false,
+            photoBase64: false,
+            selector: false, // 'line' | 'workcenter'
             result: "",
             resultType: "info",
             loading: false,
-        userName: "",
+            userName: "",
         });
-        useBus(this.mobileService.bus, "mobile_reader_scanned", (ev) => {
-            for (const barcode of ev.detail.data || []) {
-                this.onScan(barcode);
-            }
-        });
+        onWillStart(() => this.loadWorkcenters(false));
         onMounted(() => {
-            this.mobileService.enableReader();
             this._loadUserInfo();
-            this.focusInput();
-        });
-        onWillUnmount(() => {
-            this.mobileService.stopReader();
         });
     }
 
@@ -49,15 +53,6 @@ export class ExceptionReportAction extends Component {
         } catch (error) { /* non-critical */ }
     }
 
-    focusInput() {
-        setTimeout(() => {
-            const input = this.el?.querySelector(".o_sn_wsd_exception_command");
-            if (input) {
-                input.focus();
-            }
-        }, 50);
-    }
-
     get title() {
         return _t("Exception Report");
     }
@@ -66,22 +61,82 @@ export class ExceptionReportAction extends Component {
         return _t("Back");
     }
 
-    get scanHint() {
-        return this.state.serialId
-            ? _t("Scan the defect code.")
-            : _t("Scan the product SN.");
+    get productionLineLabel() {
+        return _t("Production Line");
     }
 
-    get resetLabel() {
-        return _t("Reset");
+    get workCenterLabel() {
+        return _t("Work Center");
+    }
+
+    get pendingTitleLabel() {
+        return _t("Awaiting your confirmation");
+    }
+
+    get confirmCardLabel() {
+        return _t("Confirm closure");
+    }
+
+    get rejectLabel() {
+        return _t("Reject closure");
+    }
+
+    get rejectNoteLabel() {
+        return _t("Rejection note");
+    }
+
+    get submitRejectLabel() {
+        return _t("Submit");
+    }
+
+    get cancelLabel() {
+        return _t("Cancel");
     }
 
     get noteLabel() {
-        return _t("Note (optional)");
+        return _t("Description");
     }
 
-    get snLabel() {
-        return _t("SN");
+    get notePlaceholder() {
+        return _t("One line: what happened on the line?");
+    }
+
+    get photoLabel() {
+        return _t("Photo");
+    }
+
+    get retakePhotoLabel() {
+        return _t("Retake photo");
+    }
+
+    get submitLabel() {
+        return _t("Report Exception");
+    }
+
+    get categoryRequiredMsg() {
+        return _t("Select a category first.");
+    }
+
+    get selectedLineName() {
+        const line = this.state.lines.find(
+            (l) => l.id === this.state.selectedLineId);
+        return line ? line.name : "";
+    }
+
+    get selectedWorkcenterLabel() {
+        const wc = this.state.workcenters.find(
+            (w) => w.id === this.state.selectedWorkcenterId);
+        return wc ? wc.label : "";
+    }
+
+    get selectorRecords() {
+        if (this.state.selector === "line") {
+            return this.state.lines.map((l) => ({ id: l.id, name: l.name }));
+        }
+        return this.state.workcenters
+            .filter((w) => !this.state.selectedLineId
+                || w.line_id === this.state.selectedLineId)
+            .map((w) => ({ id: w.id, name: w.label }));
     }
 
     goBack() {
@@ -92,59 +147,208 @@ export class ExceptionReportAction extends Component {
         }
     }
 
-    async onScan(barcode) {
-        const code = String(barcode || "").trim();
-        if (!code || this.state.loading) {
+    async loadWorkcenters(workcenterId) {
+        this.state.loading = true;
+        try {
+            const data = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_floor_data", [workcenterId || false]);
+            this.state.workcenters = data.workcenters || [];
+            const lines = [];
+            for (const wc of this.state.workcenters) {
+                if (wc.line_id && !lines.some((l) => l.id === wc.line_id)) {
+                    lines.push({ id: wc.line_id, name: wc.line_name });
+                }
+            }
+            this.state.lines = lines;
+            this.state.selectedWorkcenterId = (data.workcenter || {}).id || false;
+            const wc = this.state.workcenters.find(
+                (w) => w.id === this.state.selectedWorkcenterId);
+            this.state.selectedLineId = (wc && wc.line_id) || false;
+            await this._loadExceptionContext();
+        } catch (error) {
+            this._error(error);
+        } finally {
+            this.state.loading = false;
+        }
+    }
+
+    async _loadExceptionContext() {
+        if (!this.state.selectedWorkcenterId) {
+            this.state.lineId = false;
+            this.state.lineName = "";
+            this.state.categories = [];
+            this.state.pendingConfirms = [];
+            return;
+        }
+        try {
+            const data = await this.orm.silent.call(
+                "sn.wsd.exception.service", "terminal_context",
+                [this.state.selectedWorkcenterId]);
+            this.state.lineId = data.line_id || false;
+            this.state.lineName = data.line_name || "";
+            this.state.categories = data.categories || [];
+            this.state.pendingConfirms = (data.my_pending_confirms || [])
+                .map((card) => ({ ...card, rejecting: false, note: "" }));
+            this.state.categoryId = null;
+        } catch (error) {
+            // exception module unavailable or no access: say it once
+            this.state.lineId = false;
+            this.state.lineName = "";
+            this.state.categories = [];
+            this.state.pendingConfirms = [];
+            this._error(error);
+        }
+    }
+
+    async confirmCard(card) {
+        this.state.loading = true;
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.exception.service", "confirm", [card.ticket_id]);
+            this._setResult(result.message || _t("Exception closed."), "success");
+            await this._loadExceptionContext();
+        } catch (error) {
+            this._error(error);
+        } finally {
+            this.state.loading = false;
+        }
+    }
+
+    toggleReject(card) {
+        card.rejecting = !card.rejecting;
+    }
+
+    async submitReject(card) {
+        if (!card.note.trim()) {
+            this._setResult(_t("Write a rejection note first."), "warning");
             return;
         }
         this.state.loading = true;
         try {
-            if (!this.state.serialId) {
-                const res = await rpc("/sn_wsd_barcode/quality/resolve_exception_sn", {
-                    sn: code,
-                });
-                this.state.serialId = res.serial_id;
-                this.state.serialSn = res.serial_sn;
-                this.state.result = _t("SN %s. Scan the defect code.", res.serial_sn);
-                this.state.resultType = "success";
-            } else {
-                const res = await rpc("/sn_wsd_barcode/quality/report_exception", {
-                    serial_id: this.state.serialId,
-                    defect_input: code,
-                    note: this.state.note,
-                });
-                this.state.result = res.message || _t("Exception reported.");
-                this.state.resultType = "success";
-                this.state.serialId = false;
-                this.state.serialSn = "";
-                this.state.note = "";
-            }
-            this.state.command = "";
+            const result = await this.orm.silent.call(
+                "sn.wsd.exception.service", "reject",
+                [card.ticket_id, card.note.trim()]);
+            this._setResult(result.message || _t("Exception rejected."),
+                "success");
+            await this._loadExceptionContext();
         } catch (error) {
-            this.state.result = error.message || _t("Operation failed.");
-            this.state.resultType = "danger";
+            this._error(error);
         } finally {
             this.state.loading = false;
-            this.focusInput();
         }
     }
 
-    async onSubmit(ev) {
+    openSelector(selector) {
+        this.state.selector = selector;
+    }
+
+    closeSelector() {
+        this.state.selector = false;
+    }
+
+    async selectRecord(record) {
+        if (this.state.selector === "line") {
+            this.state.selectedLineId = record.id || false;
+            const first = this.state.workcenters.find(
+                (w) => w.line_id === record.id);
+            this.state.selector = false;
+            if (first) {
+                await this.loadWorkcenters(first.id);
+            }
+            return;
+        }
+        this.state.selector = false;
+        await this.loadWorkcenters(record.id);
+    }
+
+    pickCategory(categoryId) {
+        this.state.categoryId = categoryId;
+    }
+
+    async onPhotoPicked(ev) {
+        const file = (ev.target.files || [])[0];
+        ev.target.value = "";
+        if (!file) {
+            return;
+        }
+        try {
+            this.state.photoBase64 = await this._compressPhoto(file);
+        } catch (error) {
+            this._error(error);
+        }
+    }
+
+    _compressPhoto(file) {
+        // camera pictures are multi-megabyte; keep the request body sane
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = () => reject(reader.error);
+            reader.onload = () => {
+                const img = new Image();
+                img.onerror = () => reject(new Error("Invalid image."));
+                img.onload = () => {
+                    const scale = Math.min(
+                        1, PHOTO_MAX_EDGE / Math.max(img.width, img.height));
+                    const canvas = document.createElement("canvas");
+                    canvas.width = Math.round(img.width * scale);
+                    canvas.height = Math.round(img.height * scale);
+                    canvas.getContext("2d").drawImage(img, 0, 0,
+                                                       canvas.width, canvas.height);
+                    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                    resolve(dataUrl.split(",")[1] || false);
+                };
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    clearPhoto() {
+        this.state.photoBase64 = false;
+    }
+
+    async submitReport(ev) {
         if (ev) {
             ev.preventDefault();
         }
-        const code = this.state.command.trim();
-        if (!code) {
+        if (!this.state.lineId) {
+            this._setResult(
+                _t("This work center has no production line; exceptions are reported per line."),
+                "warning");
             return;
         }
-        await this.onScan(code);
+        if (!this.state.categoryId) {
+            this._setResult(this.categoryRequiredMsg, "warning");
+            return;
+        }
+        this.state.loading = true;
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.exception.service", "report", [], {
+                    line_id: this.state.lineId,
+                    category_id: this.state.categoryId,
+                    note: this.state.note || "",
+                    image_base64: this.state.photoBase64 || false,
+                });
+            this._setResult(result.message || _t("Exception reported."), "success");
+            this.state.note = "";
+            this.state.photoBase64 = false;
+            await this._loadExceptionContext();
+        } catch (error) {
+            this._error(error);
+        } finally {
+            this.state.loading = false;
+        }
     }
 
-    resetSerial() {
-        this.state.serialId = false;
-        this.state.serialSn = "";
-        this.state.result = "";
-        this.focusInput();
+    _setResult(message, type) {
+        this.state.result = message;
+        this.state.resultType = type || "info";
+    }
+
+    _error(error) {
+        this._setResult(
+            error?.data?.message || error?.message || String(error), "danger");
     }
 }
 

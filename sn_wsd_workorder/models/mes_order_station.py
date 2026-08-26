@@ -24,6 +24,8 @@ class MesOrderStationServices(models.Model):
             'id': wc.id,
             'label': '%s [%s]' % (wc.display_name, wc.x_operation_id.display_name)
             if wc.x_operation_id else wc.display_name,
+            'line_id': wc.x_production_line_id.id or False,
+            'line_name': wc.x_production_line_id.name or '',
         } for wc in workcenters]}
         workcenter = workcenters.filtered(lambda wc: wc.id == workcenter_id)
         if not workcenter:
@@ -187,6 +189,39 @@ class MesOrderStationServices(models.Model):
             'order_id': target.id,
             'data': self.sn_station_floor_data(workcenter_id),
         }
+
+    @api.model
+    def sn_station_scan_leave(self, workcenter_id, code):
+        """PDA station-pass scan: resolve the WIP row a scanned SN must
+        leave at this work center's operation. Exit-only by contract --
+        no order switching, no feeding: an unknown SN is an error, never
+        an entry."""
+        workcenter = self.env['mrp.workcenter'].browse(workcenter_id)
+        if not workcenter.exists() or not workcenter.x_operation_id:
+            raise ValidationError(_('No operation is set on this work center.'))
+        code = (code or '').strip()
+        if not code:
+            raise ValidationError(_('Nothing to scan.'))
+        Wip = self.env['sn.wsd.serial.wip']
+        wip = Wip.search([
+            ('serial_identity_id.name', '=', code),
+            ('route_operation_id.operation_id', '=', workcenter.x_operation_id.id),
+            ('mes_order_id.state', 'not in', ('cancelled', 'done')),
+        ], limit=1)
+        if wip:
+            return {'wip_id': wip.id, 'order_id': wip.mes_order_id.id}
+        elsewhere = Wip.search([
+            ('serial_identity_id.name', '=', code),
+            ('mes_order_id.state', 'not in', ('cancelled', 'done')),
+        ], limit=1)
+        if elsewhere:
+            raise ValidationError(_(
+                'SN %(sn)s is in progress at operation %(op)s of order '
+                '%(order)s; use the matching station.',
+                sn=code, op=elsewhere.route_operation_id.display_label,
+                order=elsewhere.mes_order_id.name))
+        raise ValidationError(_(
+            'SN %(sn)s is not in progress at this station.', sn=code))
 
     def sn_station_enter(self, sn, workcenter_id):
         """Terminal entry: this order + SN + work center."""
