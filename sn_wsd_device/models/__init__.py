@@ -20,6 +20,7 @@ from . import cal_config
 from . import cal_import_wizard
 from . import repair_order
 from . import repair_wizard
+from . import device_service
 from . import knowledge
 from . import oee_record
 from . import oee_batch_wizard
