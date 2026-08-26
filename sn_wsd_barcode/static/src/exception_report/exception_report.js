@@ -25,6 +25,7 @@ export class ExceptionReportAction extends Component {
             result: "",
             resultType: "info",
             loading: false,
+        userName: "",
         });
         useBus(this.mobileService.bus, "mobile_reader_scanned", (ev) => {
             for (const barcode of ev.detail.data || []) {
@@ -33,11 +34,19 @@ export class ExceptionReportAction extends Component {
         });
         onMounted(() => {
             this.mobileService.enableReader();
+            this._loadUserInfo();
             this.focusInput();
         });
         onWillUnmount(() => {
             this.mobileService.stopReader();
         });
+    }
+
+    async _loadUserInfo() {
+        try {
+            const data = await rpc("/sn_wsd_barcode/get_workshop_operation_data");
+            this.state.userName = data.user_name || "";
+        } catch (error) { /* non-critical */ }
     }
 
     focusInput() {

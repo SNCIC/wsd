@@ -1,41 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+
     <t t-name="sn_wsd_barcode.PalletBindingAction">
         <div class="o_content o_sn_wsd_pallet_binding h-100 d-flex flex-column">
-            <header class="border-bottom p-2 d-flex align-items-center gap-3">
-                <button type="button" class="btn btn-secondary o_sn_wsd_touch" t-on-click="goBack" aria-label="Back">
-                    <i class="oi oi-chevron-left"/>
-                </button>
-                <h1 class="fs-3 m-0">Pallet Binding</h1>
+
+            <!-- ❶ 上下文带 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <span t-if="state.userName" class="o_sn_wsd_pda_user">
+                        <i class="fa fa-user-circle-o me-1"/>
+                        <t t-out="state.userName"/>
+                    </span>
+                </div>
             </header>
-            <main class="container py-3 flex-grow-1">
-                <div class="alert" t-att-class="messageClass" t-out="state.message"/>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <dl class="row mb-0">
-                            <dt class="col-5">Current Pallet</dt>
-                            <dd class="col-7 fw-bold text-break" t-out="state.palletNo || '-'"/>
-                            <dt class="col-5">Last Carton</dt>
-                            <dd class="col-7 text-break" t-out="state.lastCartonNo || '-'"/>
-                            <dt class="col-5">Cartons</dt>
-                            <dd class="col-7" t-out="state.cartonCount"/>
-                            <dt class="col-5">Meters</dt>
-                            <dd class="col-7" t-out="state.meterCount"/>
-                        </dl>
+
+            <!-- 置顶扫码 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="submitCommand">
+                    <input t-ref="scanInput" t-model="state.command"
+                           class="o_sn_wsd_workshop_command form-control"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
+            <!-- 模式 Tab -->
+            <div class="o_sn_wsd_pda_tabs">
+                <button type="button" class="o_sn_wsd_pda_tab"
+                        t-att-class="state.mode === 'bind' ? 'is-active' : ''"
+                        t-on-click="() => this.switchMode('bind')">
+                    <t t-out="bindTabLabel"/>
+                </button>
+                <button type="button" class="o_sn_wsd_pda_tab"
+                        t-att-class="state.mode === 'receive' ? 'is-active' : ''"
+                        t-on-click="() => this.switchMode('receive')">
+                    <t t-out="receiveTabLabel"/>
+                </button>
+            </div>
+
+            <main class="flex-grow-1 overflow-auto">
+                <div t-if="state.message"
+                     class="o_sn_wsd_pda_feedback"
+                     t-attf-class="o_sn_wsd_pda_feedback is-{{state.messageType || 'info'}}">
+                    <t t-out="state.message"/>
+                </div>
+
+                <!-- 绑定模式 -->
+                <div t-if="state.mode === 'bind'">
+                    <div class="o_sn_wsd_pda_progress">
+                        <div class="o_sn_wsd_pda_progress_nums">
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="state.cartonCount"/>
+                                <span t-out="cartonLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-loaded">
+                                <strong t-out="state.meterCount"/>
+                                <span t-out="meterLabel"/>
+                            </div>
+                        </div>
+                        <div class="o_sn_wsd_pda_order">
+                            <t t-out="currentPalletLabel"/>:
+                            <strong t-out="state.palletNo || '—'"/>
+                        </div>
+                    </div>
+                    <div class="o_sn_wsd_pda_pills">
+                        <button t-if="state.palletNo" type="button"
+                                class="btn btn-outline-primary"
+                                t-on-click="resetPallet" t-out="switchPalletLabel"/>
+                        <button t-if="state.palletNo" type="button"
+                                class="btn btn-primary"
+                                t-on-click="closePallet" t-out="closePalletLabel"/>
                     </div>
                 </div>
-                <form t-on-submit="submitCommand" class="d-flex gap-2 mb-3">
-                    <input t-ref="scanInput" t-model="state.command" class="form-control form-control-lg o_sn_wsd_touch" autofocus="autofocus" placeholder="Scan pallet or carton"/>
-                    <button type="submit" class="btn btn-primary o_sn_wsd_touch" t-att-disabled="state.loading ? 'disabled' : null">
-                        <i t-if="state.loading" class="fa fa-spinner fa-spin"/>
-                        <span t-else="">Apply</span>
-                    </button>
-                </form>
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-success btn-lg o_sn_wsd_touch" t-on-click="closePallet" t-att-disabled="!state.palletNo || state.loading ? 'disabled' : null">Close Pallet</button>
-                    <button type="button" class="btn btn-secondary btn-lg o_sn_wsd_touch" t-on-click="resetPallet" t-att-disabled="state.loading ? 'disabled' : null">Change Pallet</button>
+
+                <!-- 入库模式 -->
+                <div t-if="state.mode === 'receive'">
+                    <div class="o_sn_wsd_pda_rows">
+                        <t t-if="state.receiveList.length">
+                            <div t-foreach="state.receiveList" t-as="item" t-key="item.pallet_no"
+                                 class="o_sn_wsd_pda_row is-loaded">
+                                <span class="badge bg-secondary" t-out="item.carton_count"/>
+                                <span class="o_sn_wsd_pda_row_name" t-out="item.pallet_no"/>
+                                <span class="o_sn_wsd_pda_row_val" t-out="item.meter_count"/>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        t-on-click="() => this.removePallet(item.pallet_no)">
+                                    <i class="fa fa-times"/>
+                                </button>
+                            </div>
+                        </t>
+                        <div t-if="!state.receiveList.length" class="o_sn_wsd_pda_row is-unloaded">
+                            <span class="o_sn_wsd_pda_row_name" t-out="emptyReceiveLabel"/>
+                        </div>
+                    </div>
+                    <div class="o_sn_wsd_pda_progress" t-if="state.receiveList.length">
+                        <div class="o_sn_wsd_pda_progress_nums">
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="receiveTotals.pallets"/>
+                                <span t-out="palletLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="receiveTotals.cartons"/>
+                                <span t-out="cartonLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-loaded">
+                                <strong t-out="receiveTotals.meters"/>
+                                <span t-out="meterLabel"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_sn_wsd_pda_pills">
+                        <button t-if="state.receiveList.length" type="button"
+                                class="btn btn-outline-primary"
+                                t-on-click="() => { this.state.receiveList = []; }"
+                                t-out="clearLabel"/>
+                        <button t-if="state.receiveList.length" type="button"
+                                class="btn btn-primary"
+                                t-on-click="confirmReceive" t-out="receiveConfirmLabel"/>
+                    </div>
                 </div>
             </main>
         </div>
     </t>
+
 </templates>

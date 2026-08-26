@@ -334,6 +334,51 @@ class StockBarcodeController(http.Controller):
         except (UserError, ValidationError) as error:
             return {'ok': False, 'message': str(error)}
 
+    @http.route('/sn_wsd_barcode/pallet/unbind', type='jsonrpc', auth='user')
+    def unbind_carton_from_pallet(self, pallet_no, carton_no, device_code=False):
+        deny = self._pda_group_check([self.GROUP_WAREHOUSE])
+        if deny:
+            return deny
+        try:
+            return request.env['sn.wsd.carton.pallet.binding.log'].unbind_carton_from_pallet(
+                pallet_no=pallet_no,
+                carton_no=carton_no,
+                operator_code=request.env.user.login,
+                device_code=device_code,
+            )
+        except (UserError, ValidationError) as error:
+            return {'ok': False, 'message': str(error)}
+
+    @http.route('/sn_wsd_barcode/pallet/move', type='jsonrpc', auth='user')
+    def move_carton_to_pallet(self, pallet_no, carton_no, device_code=False):
+        deny = self._pda_group_check([self.GROUP_WAREHOUSE])
+        if deny:
+            return deny
+        try:
+            return request.env['sn.wsd.carton.pallet.binding.log'].move_carton_to_pallet(
+                pallet_no=pallet_no,
+                carton_no=carton_no,
+                operator_code=request.env.user.login,
+                device_code=device_code,
+            )
+        except (UserError, ValidationError) as error:
+            return {'ok': False, 'message': str(error)}
+
+    @http.route('/sn_wsd_barcode/pallet/receive', type='jsonrpc', auth='user')
+    def receive_pallets(self, pallet_nos, device_code=False, dry_run=False):
+        deny = self._pda_group_check([self.GROUP_WAREHOUSE])
+        if deny:
+            return deny
+        try:
+            return request.env['sn.wsd.carton.pallet.binding.log'].receive_pallets(
+                pallet_nos=pallet_nos,
+                operator_code=request.env.user.login,
+                device_code=device_code,
+                dry_run=dry_run,
+            )
+        except (UserError, ValidationError) as error:
+            return {'ok': False, 'message': str(error)}
+
     @http.route('/sn_wsd_barcode/get_specific_barcode_data', type='jsonrpc', auth='user')
     def get_specific_barcode_data(self, **kwargs):
         """ This method gets multiple records data from different models for the given barcode(s).

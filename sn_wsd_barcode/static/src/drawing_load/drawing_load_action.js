@@ -41,6 +41,7 @@ export class DrawingLoadAction extends Component {
             resultType: "info",
             loading: false,
             confirmUnload: false,
+        userName: "",
         });
         this.confirmUnloadTimer = null;
         useBus(this.mobileService.bus, "mobile_reader_scanned", (ev) => {
@@ -50,6 +51,7 @@ export class DrawingLoadAction extends Component {
         });
         onMounted(async () => {
             this.mobileService.enableReader();
+            this._loadUserInfo();
             await this._loadSelectors();
             await this.loadContext();
             this.focusInput();
@@ -83,6 +85,13 @@ export class DrawingLoadAction extends Component {
         const station = this.state.stations.find(
             (s) => s.id === this.state.selectedStationId);
         return station ? station.display_name : _t("Work Center");
+    }
+
+    async _loadUserInfo() {
+        try {
+            const data = await rpc("/sn_wsd_barcode/get_workshop_operation_data");
+            this.state.userName = data.user_name || "";
+        } catch (error) { /* non-critical */ }
     }
 
     focusInput() {
