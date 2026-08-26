@@ -57,6 +57,6 @@ class SnPdaDeviceController(http.Controller):
                 **kwargs)
         except Exception as exc:
             return {'ok': False, 'message': str(exc)}
-        if isinstance(result, dict):
+        if isinstance(result, (dict, list)):
             return {'ok': True, 'message': '', 'data': result}
         return {'ok': True, 'message': str(result)}

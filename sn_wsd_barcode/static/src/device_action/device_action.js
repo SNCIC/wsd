@@ -299,7 +299,7 @@ export class DevicePdaAction extends Component {
         try {
             const result = await this._deviceCall("locations");
             if (result.ok) {
-                this.state.locations = result.data;
+                this.state.locations = result.data || [];
             }
         } catch (error) { /* filter stays on All */ }
     }

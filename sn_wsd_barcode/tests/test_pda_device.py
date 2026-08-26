@@ -216,3 +216,10 @@ class TestPdaDeviceCall(HttpCase):
         self.task_range.action_submit()
         self.assertEqual(self.task_range.task_status, 'completed')
         self.assertEqual(self.task_range.overall_result, 'pass')
+
+    def test_11_locations_route_returns_list_in_data(self):
+        res = self._call('locations')
+        self.assertTrue(res['ok'])
+        self.assertIsInstance(res['data'], list)
+        names = [item['name'] for item in res['data']]
+        self.assertIn('PDA-W1', names)
