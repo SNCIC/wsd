@@ -122,6 +122,14 @@ export class DevicePdaAction extends Component {
         return this.state.locationName || _t("All locations");
     }
 
+    get locationFilterTitle() {
+        return _t("Location Filter");
+    }
+
+    get allLocationsLabel() {
+        return _t("All locations");
+    }
+
     get scanHint() {
         return _t("Scan an equipment code at the machine");
     }
@@ -470,6 +478,15 @@ export class DevicePdaAction extends Component {
             : 'sn.wsd.device.check.task.line';
         return `/web/content?model=${model}&id=${line.id}` +
             `&field=guide_file&filename_field=guide_filename&download=true`;
+    }
+
+    locationIcon(location) {
+        return {
+            factory: 'fa-building-o',
+            workshop: 'fa-industry',
+            line: 'fa-arrows-h',
+            station: 'fa-bullseye',
+        }[location.kind] || 'fa-map-marker';
     }
 
     // ===== repair report =====

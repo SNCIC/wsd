@@ -226,23 +226,26 @@
                 </div>
             </main>
 
-            <!-- 位置筛选弹层 -->
+            <!-- 位置筛选弹层：树形 + 层级图标 -->
             <div t-if="state.showLocationModal" class="o_sn_wsd_workshop_modal_backdrop"
                  t-on-click="closeLocationModal">
-                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="() => {}">
-                    <div class="o_sn_wsd_workshop_modal_title" t-out="locationFilterLabel"/>
-                    <div class="o_sn_wsd_workshop_modal_list">
-                        <button type="button" class="o_sn_wsd_workshop_modal_item o_sn_wsd_device_locitem"
+                <div class="o_sn_wsd_workshop_modal o_sn_wsd_device_locmodal" t-on-click.stop="() => {}">
+                    <div class="o_sn_wsd_workshop_modal_title" t-out="locationFilterTitle"/>
+                    <div class="o_sn_wsd_workshop_modal_list o_sn_wsd_device_loclist">
+                        <button type="button" class="o_sn_wsd_device_locitem o_sn_wsd_device_locall"
                                 t-att-class="!state.locationId ? 'is-active' : ''"
-                                t-on-click="() => this.selectLocation(null)"
-                                t-out="locationFilterLabel"/>
+                                t-on-click="() => this.selectLocation(null)">
+                            <i class="fa fa-globe me-2"/>
+                            <t t-out="allLocationsLabel"/>
+                        </button>
                         <button t-foreach="state.locations" t-as="location" t-key="location.id"
-                                type="button"
-                                class="o_sn_wsd_workshop_modal_item o_sn_wsd_device_locitem"
+                                type="button" class="o_sn_wsd_device_locitem"
                                 t-att-class="state.locationId === location.id ? 'is-active' : ''"
-                                t-attf-style="padding-left: {{12 + location.depth * 20}}px"
-                                t-on-click="() => this.selectLocation(location)"
-                                t-out="location.name"/>
+                                t-attf-style="margin-left: {{location.depth * 16}}px"
+                                t-on-click="() => this.selectLocation(location)">
+                            <i t-attf-class="fa {{locationIcon(location)}} me-2"/>
+                            <t t-out="location.name"/>
+                        </button>
                     </div>
                 </div>
             </div>
