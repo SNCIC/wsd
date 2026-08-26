@@ -296,7 +296,7 @@ class TestExceptionTicket(TransactionCase):
             'email': 'colleague@example.com',
             'group_ids': [(6, 0, [
                 self.env.ref('base.group_user').id,
-                self.env.ref('sn_wsd_exception.group_sn_wsd_exception_user').id,
+                self.env.ref('mrp.group_mrp_user').id,
             ])],
         })
         other_line_ticket = self.env['sn.wsd.exception.ticket'].with_user(

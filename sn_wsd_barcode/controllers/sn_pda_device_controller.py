@@ -27,10 +27,8 @@ INT_PARAMS = {'location_id', 'task_id', 'line_id'}
 
 
 class SnPdaDeviceController(http.Controller):
-    GROUPS = (
-        'sn_wsd_mrp.group_mes_shop',
-        'sn_wsd_mrp.group_mes_smt_operator',
-    )
+    # 制造权限扁平化：只分 制造用户/制造管理员（PDA 场景即全体内部用户）
+    GROUPS = ('mrp.group_mrp_user',)
 
     @http.route('/sn_wsd_barcode/pda/device/call', type='jsonrpc',
                 auth='user')

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 本文件在 ir.model.access.csv 与全部视图之后装载：ACL 行已改挂
+         mrp 组，再清掉 csv 中已移除的 handler 行等遗留引用，最后删除
+         已扁平化的旧异常组（直接删组会被 ir_model_access 外键挡住）。 -->
+    <delete model="ir.model.access" search="['|', '|',
+        ('group_id', '=', ref('group_sn_wsd_exception_user')),
+        ('group_id', '=', ref('group_sn_wsd_exception_handler')),
+        ('group_id', '=', ref('group_sn_wsd_exception_manager'))]"/>
+    <delete model="res.groups" id="group_sn_wsd_exception_manager"/>
+    <delete model="res.groups" id="group_sn_wsd_exception_handler"/>
+    <delete model="res.groups" id="group_sn_wsd_exception_user"/>
+</odoo>

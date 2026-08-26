@@ -17,7 +17,7 @@
                        decoration-info="state == 'processing'"
                        decoration-warning="state == 'suspended'"
                        decoration-success="state == 'done'"/>
-                <field name="team_id" optional="show" groups="sn_wsd_exception.group_sn_wsd_exception_user"/>
+                <field name="team_id" optional="show" groups="mrp.group_mrp_user"/>
                 <field name="responsible_user_id" widget="many2one_avatar_user" optional="show"/>
                 <field name="is_repeat" optional="show" widget="boolean_toggle"/>
                 <field name="downtime_minutes" sum="Total Downtime" optional="show"/>
@@ -38,25 +38,25 @@
                 <header>
                     <button name="action_claim" type="object" string="Claim" class="btn-primary"
                             invisible="state != 'pending'"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_open_suspend_wizard" type="object" string="Suspend"
                             invisible="state != 'processing'"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_resume" type="object" string="Resume"
                             invisible="state != 'suspended'"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_submit_close" type="object" string="Submit for Closure" class="btn-primary"
                             invisible="state not in ('processing', 'suspended')"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_confirm" type="object" string="Confirm Closure" class="btn-primary"
                             invisible="state != 'pending_confirm'"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_open_reject_wizard" type="object" string="Reject Closure"
                             invisible="state != 'pending_confirm'"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <button name="action_open_cancel_wizard" type="object" string="Cancel"
                             invisible="state in ('done', 'cancelled')"
-                            groups="sn_wsd_exception.group_sn_wsd_exception_handler"/>
+                            groups="mrp.group_mrp_user"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="pending,processing,pending_confirm,done"/>
                 </header>
@@ -124,7 +124,7 @@
                             </field>
                         </page>
                         <page string="Escalation Log" name="escalation"
-                              groups="sn_wsd_exception.group_sn_wsd_exception_manager">
+                              groups="mrp.group_mrp_manager">
                             <field name="escalation_log_ids">
                                 <list>
                                     <field name="escalated_at"/>

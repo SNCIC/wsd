@@ -13,15 +13,20 @@
     <menuitem id="menu_sn_mrp_workshop" name="Workshops" parent="menu_sn_mrp_base_config" action="action_sn_mrp_workshop" sequence="5"/>
     <menuitem id="menu_sn_mrp_production_line" name="Production Lines" parent="menu_sn_mrp_base_config" action="action_sn_mrp_production_line" sequence="10"/>
     <menuitem id="menu_sn_mrp_team" name="Teams" parent="menu_sn_mrp_base_config" action="action_sn_mrp_team" sequence="15"/>
+    <!-- 工作中心/工序 被 core mrp 用 group_mrp_routings 门控（设置里的
+         "Operations" 开关组，默认无人持有）。既然已挂入工艺管理作为 MES
+         一级入口，改为跟随制造用户可见，不依赖设置开关。 -->
     <record id="mrp.menu_view_resource_search_mrp" model="ir.ui.menu">
         <field name="parent_id" ref="menu_sn_wsd_process_management"/>
         <field name="sequence">10</field>
+        <field name="group_ids" eval="[Command.set([ref('mrp.group_mrp_user')])]"/>
     </record>
     <record id="mrp.menu_mrp_routing_action" model="ir.ui.menu">
         <field name="name">Operations</field>
         <field name="parent_id" ref="menu_sn_wsd_process_management"/>
         <field name="sequence">20</field>
         <field name="action" ref="action_sn_wsd_process_route_operation"/>
+        <field name="group_ids" eval="[Command.set([ref('mrp.group_mrp_user')])]"/>
     </record>
     <menuitem id="menu_sn_wsd_process_route" name="Process Routes" parent="menu_sn_wsd_process_management" action="action_sn_wsd_process_route" sequence="30"/>
     <menuitem id="menu_sn_wsd_process_route_drawing" name="Drawing Number Binding" parent="menu_sn_wsd_process_management" action="action_sn_wsd_process_route_drawing" sequence="40"/>

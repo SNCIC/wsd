@@ -45,14 +45,14 @@
               parent="menu_workshop_functions"
               action="sn_wsd_barcode_workshop_client_action"
               sequence="10"
-              groups="sn_wsd_mrp.group_mes_smt_operator"/>
+              groups="mrp.group_mrp_user"/>
 
     <menuitem id="menu_workshop_fn_drawing_load"
               name="Critical Material Loading"
               parent="menu_workshop_functions"
               action="sn_wsd_barcode_drawing_load_action"
               sequence="20"
-              groups="sn_wsd_mrp.group_mes_shop"/>
+              groups="mrp.group_mrp_user"/>
 
 
 
@@ -63,7 +63,7 @@
               parent="menu_workshop_functions"
               action="sn_wsd_barcode_pallet_binding_action"
               sequence="50"
-              groups="sn_wsd_mrp.group_mes_shop,sn_wsd_mrp.group_mes_warehouse"/>
+              groups="mrp.group_mrp_user"/>
 
     <menuitem id="menu_workshop_fn_station_pass"
               name="Station Pass"

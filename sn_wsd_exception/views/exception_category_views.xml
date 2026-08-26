@@ -34,7 +34,7 @@
                         <group>
                             <field name="default_team_id"
                                    invisible="parent_id"
-                                   groups="sn_wsd_exception.group_sn_wsd_exception_manager"/>
+                                   groups="mrp.group_mrp_manager"/>
                             <field name="default_level" invisible="parent_id"/>
                             <field name="active" widget="boolean_toggle"/>
                             <field name="company_id" groups="base.group_multi_company"/>

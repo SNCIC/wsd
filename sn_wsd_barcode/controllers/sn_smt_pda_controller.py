@@ -6,7 +6,8 @@ from odoo.http import request
 
 
 class SnSmtPdaController(http.Controller):
-    GROUP_SMT = 'sn_wsd_mrp.group_mes_smt_operator'
+    # 制造权限扁平化：SMT PDA 门禁 = 制造用户
+    GROUP_SMT = 'mrp.group_mrp_user'
 
     def _pda_group_check(self):
         if request.env.user.has_group('base.group_system'):
@@ -572,7 +573,7 @@ class SnSmtPdaController(http.Controller):
     def _shop_group_check(self):
         if request.env.user.has_group('base.group_system'):
             return None
-        if request.env.user.has_group('sn_wsd_mrp.group_mes_shop'):
+        if request.env.user.has_group('mrp.group_mrp_user'):
             return None
         return {'ok': False, 'message': _('No permission for this barcode operation.')}
 

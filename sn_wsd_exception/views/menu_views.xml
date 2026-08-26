@@ -19,7 +19,7 @@
               action="action_sn_wsd_pareto_dashboard" sequence="30"/>
     <menuitem id="menu_sn_wsd_exception_config" name="Configuration"
               parent="menu_sn_wsd_exception_root" sequence="90"
-              groups="sn_wsd_exception.group_sn_wsd_exception_manager"/>
+              groups="mrp.group_mrp_manager"/>
     <menuitem id="menu_sn_wsd_exception_category" name="Exception Categories"
               parent="menu_sn_wsd_exception_config"
               action="action_sn_wsd_exception_category" sequence="10"/>

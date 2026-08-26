@@ -85,16 +85,17 @@ class TestPdaDeviceCall(HttpCase):
         return response.json().get('result', {})
 
     def test_01_group_guard(self):
-        no_group = self.env['res.users'].create({
-            'name': 'PDA Device No Group',
-            'login': 'pda_device_nogroup',
-            'email': 'pda_device_nogroup@example.com',
+        # 制造权限扁平化后只分 制造用户/制造管理员，且内部用户经
+        # Shop Floor 链即制造用户：门禁只拦门户(portal)等非内部账号。
+        portal_user = self.env['res.users'].create({
+            'name': 'PDA Device Portal',
+            'login': 'pda_device_portal',
+            'email': 'pda_device_portal@example.com',
             'password': 'pda123',
-            'group_ids': [(6, 0, [self.env.ref('base.group_user').id])],
+            'group_ids': [(6, 0, [self.env.ref('base.group_portal').id])],
         })
-        self.assertEqual(no_group.has_group(
-            'sn_wsd_mrp.group_mes_shop'), False)
-        self.authenticate('pda_device_nogroup', 'pda123')
+        self.assertEqual(portal_user.has_group('mrp.group_mrp_user'), False)
+        self.authenticate('pda_device_portal', 'pda123')
         res = self._call('today_board')
         self.assertFalse(res['ok'])
         self.assertIn('permission', res['message'].lower())

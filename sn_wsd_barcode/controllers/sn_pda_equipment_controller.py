@@ -26,16 +26,13 @@ EXTRA_PARAMS = {
 
 
 class SnPdaEquipmentController(http.Controller):
-    GROUPS = (
-        'sn_wsd_mrp.group_mes_shop',
-        'sn_wsd_mrp.group_mes_smt_operator',
-    )
+    # 制造权限扁平化：只分 制造用户/制造管理员（PDA 场景即全体内部用户）
+    GROUPS = ('mrp.group_mrp_user',)
 
     def _pda_call(self, service_model, allowed, action, params):
         user = request.env.user
-        if user.has_group('base.group_system'):
-            pass
-        elif not user.has_group(self.GROUPS[0]) and not user.has_group(self.GROUPS[1]):
+        if not user.has_group('base.group_system') and not any(
+                user.has_group(group) for group in self.GROUPS):
             return {'ok': False, 'message': _('No permission for this barcode operation.')}
         if action not in allowed:
             return {'ok': False, 'message': _('Unknown action %s.', action)}

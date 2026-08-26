@@ -15,9 +15,9 @@ from odoo.addons.sn_wsd_barcode.models.epc_encoder import EpcScheme
 
 class StockBarcodeController(http.Controller):
 
-    GROUP_SHOP = 'sn_wsd_mrp.group_mes_shop'
-    GROUP_SMT = 'sn_wsd_mrp.group_mes_smt_operator'
-    GROUP_WAREHOUSE = 'sn_wsd_mrp.group_mes_warehouse'
+    GROUP_SHOP = 'mrp.group_mrp_user'
+    GROUP_SMT = 'mrp.group_mrp_user'
+    GROUP_WAREHOUSE = 'mrp.group_mrp_user'
 
     def _pda_group_check(self, group_xmlids):
         """Frontend hiding is not security: every PDA route re-checks the

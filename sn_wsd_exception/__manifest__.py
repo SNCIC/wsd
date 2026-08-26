@@ -19,6 +19,7 @@
         'reports/exception_report_actions.xml',
         'views/menu_views.xml',
         'views/res_config_settings_views.xml',
+        'security/cleanup_groups.xml',
     ],
     'assets': {
         'web.assets_backend': [
