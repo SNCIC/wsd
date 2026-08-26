@@ -13,7 +13,7 @@ class SnSmtPcbPanelController(http.Controller):
     - DELETE /api/smt/panel/<id> - Panel deletion.
     """
 
-    @http.route('/api/smt/panel/add', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/smt/panel/add', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
     def api_panel_add(self, **kwargs):
         """
         F-001 panel creation.
@@ -45,7 +45,7 @@ class SnSmtPcbPanelController(http.Controller):
         except Exception as e:
             return {'code': 500, 'message': f'Server error: {str(e)}'}
 
-    @http.route('/api/smt/panel/query', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/smt/panel/query', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
     def api_panel_query(self, **kwargs):
         """
         F-002 panel query.
@@ -75,7 +75,7 @@ class SnSmtPcbPanelController(http.Controller):
         except Exception as e:
             return {'code': 500, 'message': f'Server error: {str(e)}'}
 
-    @http.route('/api/smt/panel/<int:panel_id>', type='json', auth='user', methods=['GET'], csrf=False)
+    @http.route('/api/smt/panel/<int:panel_id>', type='jsonrpc', auth='user', methods=['GET'], csrf=False)
     def api_panel_detail(self, panel_id, **kwargs):
         """
         Get panel details.
@@ -96,7 +96,7 @@ class SnSmtPcbPanelController(http.Controller):
         except Exception as e:
             return {'code': 500, 'message': f'Server error: {str(e)}'}
 
-    @http.route('/api/smt/panel/<int:panel_id>', type='json', auth='user', methods=['DELETE'], csrf=False)
+    @http.route('/api/smt/panel/<int:panel_id>', type='jsonrpc', auth='user', methods=['DELETE'], csrf=False)
     def api_panel_delete(self, panel_id, **kwargs):
         """
         Delete a panel record.

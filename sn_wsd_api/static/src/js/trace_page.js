@@ -387,8 +387,7 @@ export class SnTracePage extends Component {
         };
         const esc = (v) => {
             const s = String(v ?? "");
-            return /[",
-]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+            return /["\n,]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
         };
         const lines = [];
         for (const key of ["process", "material", "quality", "repair"]) {
@@ -406,9 +405,7 @@ export class SnTracePage extends Component {
         if (!lines.length) {
             return;
         }
-        const blob = new Blob(["﻿" + lines.join("
-
-")],
+        const blob = new Blob(["\ufeff" + lines.join("\n")],
             { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_form_material_specification" model="ir.ui.view">
+        <field name="name">purchase.order.form.material.specification</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//list/field[@name='product_id']" position="after">
+                <field name="material_specification" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//field[@name='product_id']" position="after">
+                <field name="material_specification"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_line_list_material_specification" model="ir.ui.view">
+        <field name="name">purchase.order.line.list.material.specification</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="material_specification" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
