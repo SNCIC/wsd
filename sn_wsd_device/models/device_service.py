@@ -142,10 +142,19 @@ class SnDeviceService(models.AbstractModel):
 
     @api.model
     def locations(self):
-        """Flat location list for the PDA filter selector (global tree)."""
-        return [{'id': location.id, 'name': location.complete_name}
-                for location in self.env['sn.wsd.device.location'].search(
-                    [], order='parent_path, id')]
+        """Location tree for the PDA filter selector: own name + depth for
+        indentation, full path for the context bar label."""
+        result = []
+        for location in self.env['sn.wsd.device.location'].search(
+                [], order='parent_path, id'):
+            depth = max((location.parent_path or '').count('/') - 1, 0)
+            result.append({
+                'id': location.id,
+                'name': location.name,
+                'full_name': location.complete_name,
+                'depth': depth,
+            })
+        return result
 
     @api.model
     def today_board(self, location_id=None):

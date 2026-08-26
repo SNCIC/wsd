@@ -174,4 +174,30 @@
             margin-bottom: 6px;
         }
     }
+
+    // ===== 位置筛选：树形缩进 + 上下文带省略号 =====
+
+    .o_sn_wsd_pda_selectbtn {
+        max-width: 36vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .o_sn_wsd_workshop_modal .o_sn_wsd_workshop_modal_list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: 52vh;
+        overflow-y: auto;
+
+        .o_sn_wsd_device_locitem {
+            display: block;
+            width: 100%;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }

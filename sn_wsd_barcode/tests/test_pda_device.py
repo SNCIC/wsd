@@ -218,8 +218,15 @@ class TestPdaDeviceCall(HttpCase):
         self.assertEqual(self.task_range.overall_result, 'pass')
 
     def test_11_locations_route_returns_list_in_data(self):
+        self.env['sn.wsd.device.location'].create({
+            'name': 'PDA-L1', 'kind': 'line',
+            'parent_id': self.workshop_w1.id})
         res = self._call('locations')
         self.assertTrue(res['ok'])
         self.assertIsInstance(res['data'], list)
-        names = [item['name'] for item in res['data']]
-        self.assertIn('PDA-W1', names)
+        w1 = next(item for item in res['data'] if item['name'] == 'PDA-W1')
+        self.assertEqual(w1['full_name'], 'PDA-W1')
+        self.assertEqual(w1['depth'], 0)
+        child = next(item for item in res['data'] if item['name'] == 'PDA-L1')
+        self.assertEqual(child['full_name'], 'PDA-W1 / PDA-L1')
+        self.assertEqual(child['depth'], 1)

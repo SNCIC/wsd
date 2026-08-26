@@ -232,13 +232,15 @@
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="() => {}">
                     <div class="o_sn_wsd_workshop_modal_title" t-out="locationFilterLabel"/>
                     <div class="o_sn_wsd_workshop_modal_list">
-                        <button type="button" class="o_sn_wsd_workshop_modal_item"
+                        <button type="button" class="o_sn_wsd_workshop_modal_item o_sn_wsd_device_locitem"
                                 t-att-class="!state.locationId ? 'is-active' : ''"
                                 t-on-click="() => this.selectLocation(null)"
                                 t-out="locationFilterLabel"/>
                         <button t-foreach="state.locations" t-as="location" t-key="location.id"
-                                type="button" class="o_sn_wsd_workshop_modal_item"
+                                type="button"
+                                class="o_sn_wsd_workshop_modal_item o_sn_wsd_device_locitem"
                                 t-att-class="state.locationId === location.id ? 'is-active' : ''"
+                                t-attf-style="padding-left: {{12 + location.depth * 20}}px"
                                 t-on-click="() => this.selectLocation(location)"
                                 t-out="location.name"/>
                     </div>

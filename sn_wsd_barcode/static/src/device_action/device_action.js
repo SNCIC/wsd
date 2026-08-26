@@ -315,7 +315,7 @@ export class DevicePdaAction extends Component {
 
     async selectLocation(location) {
         this.state.locationId = location ? location.id : null;
-        this.state.locationName = location ? location.name : "";
+        this.state.locationName = location ? location.full_name : "";
         this.state.showLocationModal = false;
         this.state.message = "";
         await this.loadBoard();
