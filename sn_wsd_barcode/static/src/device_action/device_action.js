@@ -8,7 +8,7 @@ import { Component, onMounted, onWillUnmount, useRef, useState } from "@odoo/owl
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 // 设备作业屏（先看后扫）：开屏=今日待办看板（跨设备聚合，不扫码），
-// 人到设备前扫设备编码进入该设备待办执行。
+// 人到设备前扫设备编码进入该设备待办执行；检查项默认全 OK，异常才改。
 export class DevicePdaAction extends Component {
     static props = { ...standardActionServiceProps };
     static template = "sn_wsd_barcode.DevicePdaAction";
@@ -19,7 +19,7 @@ export class DevicePdaAction extends Component {
         this.mobileService = useService("sn_wsd_barcode_mobile");
         this.inputRef = useRef("scanInput");
         this.state = useState({
-            view: "board",           // board | equipment
+            view: "board",           // board | equipment | task
             command: "",
             message: "",
             messageType: "info",
@@ -31,6 +31,14 @@ export class DevicePdaAction extends Component {
             showDone: false,
             equipment: null,
             tasks: [],
+            // task execution view
+            task: null,
+            lines: [],
+            // repair report modal
+            showRepairModal: false,
+            repairFaultType: null,
+            repairFaultLevel: null,
+            repairDescription: "",
             locations: [],
             locationId: null,
             locationName: "",
@@ -94,6 +102,10 @@ export class DevicePdaAction extends Component {
         return _t("Start");
     }
 
+    get continueLabel() {
+        return _t("Continue");
+    }
+
     get backToBoardLabel() {
         return _t("Back to list");
     }
@@ -120,6 +132,83 @@ export class DevicePdaAction extends Component {
 
     get lastMaintLabel() {
         return _t("Last maintenance");
+    }
+
+    // ===== task execution view labels =====
+
+    get taskViewTitle() {
+        return _t("Task Execution");
+    }
+
+    get backToEquipmentLabel() {
+        return _t("Back to equipment");
+    }
+
+    get defaultOkHintLabel() {
+        return _t("All items are pre-filled OK. Only touch abnormal ones.");
+    }
+
+    get normalLabel() {
+        return _t("Normal");
+    }
+
+    get abnormalLabel() {
+        return _t("Abnormal");
+    }
+
+    get noteLabel() {
+        return _t("Note");
+    }
+
+    get submitTaskLabel() {
+        return _t("Submit");
+    }
+
+    get viewGuideLabel() {
+        return _t("Guide");
+    }
+
+    // ===== repair modal labels =====
+
+    get repairLabel() {
+        return _t("Report Repair");
+    }
+
+    get faultTypeLabel() {
+        return _t("Fault Type");
+    }
+
+    get faultLevelLabel() {
+        return _t("Fault Level");
+    }
+
+    get faultDescriptionLabel() {
+        return _t("Fault Description");
+    }
+
+    get cancelLabel() {
+        return _t("Cancel");
+    }
+
+    get confirmLabel() {
+        return _t("Confirm");
+    }
+
+    get faultTypes() {
+        return [
+            ['mechanical', _t("Mechanical")],
+            ['electrical', _t("Electrical")],
+            ['software', _t("Software")],
+            ['other', _t("Other")],
+        ];
+    }
+
+    get faultLevels() {
+        return [
+            ['minor', _t("Minor")],
+            ['general', _t("General")],
+            ['critical', _t("Critical")],
+        ];
     }
 
     async _loadUserInfo() {
@@ -256,6 +345,14 @@ export class DevicePdaAction extends Component {
         this.focusInput();
     }
 
+    async backToEquipment() {
+        this.state.view = "equipment";
+        this.state.task = null;
+        this.state.lines = [];
+        await this.refreshEquipment();
+        this.focusInput();
+    }
+
     async startTask(task) {
         if (this.state.loading) {
             return;
@@ -270,12 +367,163 @@ export class DevicePdaAction extends Component {
                 this.state.message = result.message;
                 this.state.messageType = "danger";
             } else {
+                this.state.task = result.data.task;
+                this.state.equipment = result.data.equipment;
+                this.state.lines = result.data.lines;
+                this.state.view = "task";
                 this.state.message = _t(
-                    "Task %s started. Items are pre-filled OK, adjust any abnormal item.",
-                    task.name);
+                    "Task %s started. %s", task.name, this.defaultOkHintLabel);
                 this.state.messageType = "success";
             }
-            await this.refreshEquipment();
+        } catch (error) {
+            this.state.message = error.message || _t("Operation failed.");
+            this.state.messageType = "danger";
+        } finally {
+            this.state.loading = false;
+            this.focusInput();
+        }
+    }
+
+    _replaceLine(updated) {
+        const index = this.state.lines.findIndex((line) => line.id === updated.id);
+        if (index >= 0) {
+            this.state.lines.splice(index, 1, updated);
+        }
+    }
+
+    async updateLine(line, params) {
+        try {
+            const result = await this._deviceCall("task_update_line", {
+                kind: this.state.task.kind,
+                line_id: line.id,
+                ...params,
+            });
+            if (result.ok) {
+                this._replaceLine(result.data);
+            } else {
+                this.state.message = result.message;
+                this.state.messageType = "danger";
+            }
+        } catch (error) {
+            this.state.message = error.message || _t("Operation failed.");
+            this.state.messageType = "danger";
+        }
+    }
+
+    setLineResult(line, lineResult) {
+        if (line.line_result === lineResult) {
+            return;
+        }
+        this.updateLine(line, {line_result: lineResult});
+    }
+
+    setMeasuredValue(line, ev) {
+        const value = parseFloat(ev.target.value);
+        if (isNaN(value) || value === line.measured_value) {
+            return;
+        }
+        this.updateLine(line, {measured_value: value});
+    }
+
+    setLineNote(line, ev) {
+        const note = ev.target.value;
+        if (note === line.line_note) {
+            return;
+        }
+        this.updateLine(line, {line_note: note});
+    }
+
+    async submitTask() {
+        if (!this.state.task || this.state.loading) {
+            return;
+        }
+        this.state.loading = true;
+        try {
+            const result = await this._deviceCall("task_submit", {
+                kind: this.state.task.kind,
+                task_id: this.state.task.id,
+            });
+            if (!result.ok) {
+                this.state.message = result.message;
+                this.state.messageType = "danger";
+            } else {
+                const overall = result.data.overall_result === 'fail'
+                    ? _t("FAIL") : _t("PASS");
+                this.state.message = _t("Task %s submitted: %s.",
+                    result.data.name, overall);
+                this.state.messageType = result.data.overall_result === 'fail'
+                    ? "warning" : "success";
+                await this.backToEquipment();
+            }
+        } catch (error) {
+            this.state.message = error.message || _t("Operation failed.");
+            this.state.messageType = "danger";
+        } finally {
+            this.state.loading = false;
+            this.focusInput();
+        }
+    }
+
+    guideUrl(line) {
+        const model = this.state.task.kind === 'maint'
+            ? 'sn.wsd.device.maint.task.line'
+            : 'sn.wsd.device.check.task.line';
+        return `/web/content?model=${model}&id=${line.id}` +
+            `&field=guide_file&filename_field=guide_filename&download=true`;
+    }
+
+    // ===== repair report =====
+
+    openRepairModal() {
+        this.state.showRepairModal = true;
+        this.state.repairFaultType = null;
+        this.state.repairFaultLevel = null;
+        this.state.repairDescription = "";
+    }
+
+    closeRepairModal() {
+        this.state.showRepairModal = false;
+        this.focusInput();
+    }
+
+    selectRepairFaultType(value) {
+        this.state.repairFaultType = value;
+    }
+
+    selectRepairFaultLevel(value) {
+        this.state.repairFaultLevel = value;
+    }
+
+    async confirmRepair() {
+        if (!this.state.repairFaultType || !this.state.repairFaultLevel) {
+            this.state.message = _t("Select a fault type and a fault level.");
+            this.state.messageType = "danger";
+            return;
+        }
+        if (!this.state.repairDescription.trim()) {
+            this.state.message = this.faultDescriptionLabel + ': ' +
+                _t("required");
+            this.state.messageType = "danger";
+            return;
+        }
+        this.state.loading = true;
+        try {
+            const result = await this._deviceCall("repair_create", {
+                code: this.state.equipment.code,
+                fault_type: this.state.repairFaultType,
+                fault_level: this.state.repairFaultLevel,
+                description: this.state.repairDescription.trim(),
+            });
+            if (!result.ok) {
+                this.state.message = result.message;
+                this.state.messageType = "danger";
+            } else {
+                this.state.message = _t(
+                    "Repair order %s created for %s.",
+                    result.data.order, result.data.equipment);
+                this.state.messageType = "success";
+                this.state.showRepairModal = false;
+            }
         } catch (error) {
             this.state.message = error.message || _t("Operation failed.");
             this.state.messageType = "danger";

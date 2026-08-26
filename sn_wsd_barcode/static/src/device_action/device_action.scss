@@ -78,4 +78,100 @@
     .o_sn_wsd_device_donefold {
         padding: 8px 8px 16px;
     }
+
+    // ===== 任务执行视图 =====
+
+    .o_sn_wsd_device_lines {
+        padding: 0 8px 8px;
+    }
+
+    .o_sn_wsd_device_line {
+        padding: 8px 10px;
+        margin-bottom: 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+
+        &.is-pass {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        &.is-fail {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .o_sn_wsd_device_line_name {
+            font-weight: 600;
+            font-size: 0.98rem;
+
+            .o_sn_wsd_device_guide {
+                font-size: 0.85rem;
+                font-weight: 400;
+            }
+        }
+
+        .o_sn_wsd_device_line_method {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .o_sn_wsd_device_line_ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+
+            .o_sn_wsd_device_ok,
+            .o_sn_wsd_device_ng {
+                min-width: 88px;
+                min-height: 44px;
+                font-weight: 600;
+            }
+
+            .o_sn_wsd_device_ok.is-on {
+                background: #16a34a;
+                border-color: #16a34a;
+                color: #fff;
+            }
+
+            .o_sn_wsd_device_ng.is-on {
+                background: #dc2626;
+                border-color: #dc2626;
+                color: #fff;
+            }
+
+            .o_sn_wsd_device_measure {
+                max-width: 140px;
+                min-height: 44px;
+                font-size: 1.15rem;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            .o_sn_wsd_device_range {
+                color: #64748b;
+                font-size: 0.9rem;
+            }
+        }
+
+        .o_sn_wsd_device_note {
+            margin-top: 6px;
+        }
+    }
+
+    // ===== 报修弹层 =====
+
+    .o_sn_wsd_device_repair_modal {
+        .o_sn_wsd_device_repair_section {
+            margin-bottom: 12px;
+        }
+
+        .o_sn_wsd_device_repair_label {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+    }
 }

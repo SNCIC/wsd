@@ -56,10 +56,24 @@ class TestPdaDeviceCall(HttpCase):
             'line_ids': [(0, 0, {'name': 'Clean rail',
                                  'value_type': 'status'})],
         })
+        cls.task_range = env['sn.wsd.device.check.task'].create({
+            'plan_id': cls.check_plan.id,
+            'equipment_id': cls.equipment.id,
+            'task_date': fields.Date.today(),
+            'task_status': 'pending',
+            'line_ids': [
+                (0, 0, {'name': 'Furnace temperature',
+                        'value_type': 'range',
+                        'lower_limit': 230.0, 'upper_limit': 240.0}),
+                (0, 0, {'name': 'Belt check', 'value_type': 'status'}),
+            ],
+        })
 
     def setUp(self):
         super().setUp()
         self.authenticate('admin', 'admin')
+        # the HTTP session user is admin, NOT the test env user (OdooBot)
+        self.http_user = self.env.ref('base.user_admin')
 
     def _call(self, action, **params):
         response = self.url_open(
@@ -96,7 +110,8 @@ class TestPdaDeviceCall(HttpCase):
                      if g['equipment']['code'] == 'DEV-PDA-01')
         task_ids = {t['id'] for t in group['tasks']}
         self.assertEqual(task_ids,
-                         {self.task_check.id, self.task_overdue.id})
+                         {self.task_check.id, self.task_overdue.id,
+                          self.task_range.id})
         statuses = {t['status'] for t in group['tasks']}
         self.assertIn('overdue', statuses)
         codes = [g['equipment']['code'] for g in res['data']['groups']]
@@ -120,7 +135,8 @@ class TestPdaDeviceCall(HttpCase):
         self.assertIn('PDA-W1', card['location'])
         task_ids = {t['id'] for t in res['data']['tasks']}
         self.assertEqual(task_ids,
-                         {self.task_check.id, self.task_overdue.id})
+                         {self.task_check.id, self.task_overdue.id,
+                          self.task_range.id})
 
     def test_05_scan_equipment_without_tasks(self):
         res = self._call('resolve', code='DEV-PDA-02')
@@ -134,3 +150,69 @@ class TestPdaDeviceCall(HttpCase):
         res = self._call('resolve', code='NOPE-404')
         self.assertFalse(res['ok'])
         self.assertIn('NOPE-404', res['message'])
+
+    def test_07_task_flow_default_ok_submit(self):
+        res = self._call('task_start', kind='check', task_id=self.task_range.id)
+        self.assertTrue(res['ok'])
+        self.assertEqual(self.task_range.task_status, 'in_progress')
+        lines = {l['name']: l for l in res['data']['lines']}
+        # default all-OK prefill: range mid value, status pass
+        self.assertEqual(
+            lines['Furnace temperature']['measured_value'], 235.0)
+        self.assertEqual(lines['Belt check']['line_result'], 'pass')
+        submit = self._call('task_submit', kind='check',
+                            task_id=self.task_range.id)
+        self.assertTrue(submit['ok'])
+        self.assertEqual(submit['data']['overall_result'], 'pass')
+        self.assertEqual(self.task_range.task_status, 'completed')
+        self.assertEqual(self.task_range.executor_id, self.http_user)
+        self.assertTrue(self.equipment.last_spot_check_date)
+
+    def test_08_task_mark_abnormal_overall_fail(self):
+        self._call('task_start', kind='check', task_id=self.task_range.id)
+        range_line = self.task_range.line_ids.filtered(
+            lambda l: l.value_type == 'range')
+        status_line = self.task_range.line_ids.filtered(
+            lambda l: l.value_type == 'status')
+        updated = self._call('task_update_line', kind='check',
+                             line_id=range_line.id, measured_value=245.0)
+        self.assertTrue(updated['ok'])
+        self.assertEqual(updated['data']['line_result'], 'fail')
+        updated = self._call('task_update_line', kind='check',
+                             line_id=status_line.id,
+                             line_result='fail', line_note='belt loose')
+        self.assertEqual(updated['data']['line_result'], 'fail')
+        submit = self._call('task_submit', kind='check',
+                            task_id=self.task_range.id)
+        self.assertEqual(submit['data']['overall_result'], 'fail')
+        self.assertFalse(range_line.line_note)
+        self.assertEqual(status_line.line_note, 'belt loose')
+
+    def test_09_repair_create_route(self):
+        res = self._call('repair_create', code='DEV-PDA-01',
+                         fault_type='electrical', fault_level='general',
+                         description='belt noise\nstopped')
+        self.assertTrue(res['ok'])
+        order = self.env['sn.wsd.device.repair.order'].search([
+            ('name', '=', res['data']['order'])])
+        self.assertEqual(order.state, 'pending')
+        self.assertEqual(order.reported_user_id, self.http_user)
+        self.assertEqual(order.responsible_user_id,
+                         self.equipment.maintenance_user_id)
+        self.assertIn('belt noise', order.fault_phenomenon)
+        # empty description is rejected
+        res = self._call('repair_create', code='DEV-PDA-01',
+                         fault_type='electrical', fault_level='general',
+                         description='   ')
+        self.assertFalse(res['ok'])
+        self.assertFalse(self.env['sn.wsd.device.repair.order'].search([
+            ('fault_phenomenon', 'like', 'DEV-PDA-01-noise-xyz')]))
+
+    def test_10_mixed_pda_start_pc_submit(self):
+        # PDA starts the task (prefill + in_progress), PC form submits it:
+        # both go through the same model methods, no divergence.
+        self._call('task_start', kind='check', task_id=self.task_range.id)
+        self.assertEqual(self.task_range.task_status, 'in_progress')
+        self.task_range.action_submit()
+        self.assertEqual(self.task_range.task_status, 'completed')
+        self.assertEqual(self.task_range.overall_result, 'pass')

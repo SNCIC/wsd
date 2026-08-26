@@ -3976,3 +3976,303 @@ msgstr "箱 %s"
 #: code:addons/sn_wsd_mrp/models/stock_package.py:0
 msgid "receipt: %s"
 msgstr "入库单: %s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Device Operations"
+msgstr "设备作业"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Due"
+msgstr "应做"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Todo"
+msgstr "未做"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Overdue"
+msgstr "逾期"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Hide done today"
+msgstr "收起今日已完成"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Done today (%s)"
+msgstr "今日已完成（%s）"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "No open task today. Scan an equipment code to see its card."
+msgstr "今日无待办任务。扫设备编码可查看档案卡。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Continue"
+msgstr "继续"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Back to list"
+msgstr "返回清单"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "items"
+msgstr "项"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "No open task for this equipment today."
+msgstr "该设备今日无待办任务。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "All locations"
+msgstr "全部位置"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Scan an equipment code at the machine"
+msgstr "在设备前扫设备编码"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Last check"
+msgstr "上次点检"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Last maintenance"
+msgstr "上次保养"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Task Execution"
+msgstr "任务执行"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Back to equipment"
+msgstr "返回设备"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "All items are pre-filled OK. Only touch abnormal ones."
+msgstr "检查项已默认全部 OK，只改异常项。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Abnormal"
+msgstr "异常"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Guide"
+msgstr "指导"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Report Repair"
+msgstr "报修"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Fault Type"
+msgstr "故障类型"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Fault Level"
+msgstr "故障等级"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Fault Description"
+msgstr "故障描述"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Mechanical"
+msgstr "机械"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Electrical"
+msgstr "电气"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Software"
+msgstr "软件"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Minor"
+msgstr "次要"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "General"
+msgstr "一般"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Critical"
+msgstr "严重"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "%s: %s open task(s)."
+msgstr "%s：%s 个待办任务。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Task %s started. %s"
+msgstr "任务 %s 已开始。%s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Task %s submitted: %s."
+msgstr "任务 %s 已提交：%s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "FAIL"
+msgstr "NG"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "PASS"
+msgstr "OK"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Repair order %s created for %s."
+msgstr "报修单 %s 已创建（设备 %s）。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Select a fault type and a fault level."
+msgstr "请选择故障类型和故障等级。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "required"
+msgstr "必填"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Completed"
+msgstr "已完成"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Maintenance"
+msgstr "保养"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Spot Check"
+msgstr "点检"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "In Use"
+msgstr "在用"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Under Repair"
+msgstr "维修中"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Sealed"
+msgstr "已封存"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
+msgid "Scrapped"
+msgstr "已报废"

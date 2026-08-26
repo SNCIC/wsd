@@ -3911,3 +3911,69 @@ msgstr "第 %(row)s 行：班次“%(value)s”无效。"
 msgid "Row %(row)s: invalid number \"%(value)s\"."
 msgstr "第 %(row)s 行：数值“%(value)s”无效。"
 
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Unknown task kind %s."
+msgstr "未知的任务类型 %s。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Equipment %s does not exist."
+msgstr "设备 %s 不存在。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Task not found."
+msgstr "任务不存在。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Equipment %s is %s: check / maintenance tasks cannot be executed."
+msgstr "设备 %s 当前状态为 %s，不能执行点检/保养任务。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Task %s is already completed."
+msgstr "任务 %s 已完成。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Task %s is not in progress: start it first."
+msgstr "任务 %s 未开始，请先开始任务。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Item not found."
+msgstr "检查项不存在。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Fault description is required."
+msgstr "故障描述必填。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Unknown fault type."
+msgstr "未知的故障类型。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Unknown fault level."
+msgstr "未知的故障等级。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/device_service.py:0
+msgid "Pending initial handling (reported from PDA)."
+msgstr "待现场初步处理（PDA 报修）。"
