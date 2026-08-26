@@ -1,0 +1,81 @@
+.o_sn_wsd_device_action {
+    // 看板分组卡：设备头 + 任务行（行色复用 o_sn_wsd_pda_row）
+    .o_sn_wsd_device_group {
+        padding: 0 8px;
+
+        .o_sn_wsd_device_group_head {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 10px 4px 4px;
+            font-weight: 600;
+
+            .o_sn_wsd_device_code {
+                font-size: 1.05rem;
+            }
+
+            .o_sn_wsd_device_name {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: 400;
+            }
+
+            .o_sn_wsd_device_loc {
+                font-size: 0.85rem;
+                color: #64748b;
+                font-weight: 400;
+            }
+        }
+    }
+
+    // 逾期行（pda_row 自带红/绿，逾期=黄）
+    .o_sn_wsd_pda_row.is-overdue {
+        background-color: #fef9c3; // yellow-50
+        border-left: 4px solid #eab308;
+    }
+
+    // 进度第四格：逾期=琥珀
+    .o_sn_wsd_pda_num.is-overdue strong {
+        color: #d97706;
+    }
+
+    // 设备档案卡
+    .o_sn_wsd_device_card {
+        margin: 8px;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+
+        .o_sn_wsd_device_card_head {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+
+            .o_sn_wsd_device_code {
+                font-size: 1.15rem;
+                font-weight: 700;
+            }
+
+            .o_sn_wsd_device_name {
+                flex: 1;
+                font-weight: 500;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .o_sn_wsd_device_card_body {
+            padding-top: 6px;
+            color: #475569;
+            font-size: 0.92rem;
+        }
+    }
+
+    .o_sn_wsd_device_donefold {
+        padding: 8px 8px 16px;
+    }
+}

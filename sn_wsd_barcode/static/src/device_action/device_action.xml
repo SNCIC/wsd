@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.DevicePdaAction">
+        <div class="o_content o_sn_wsd_device_action h-100 d-flex flex-column">
+
+            <!-- ❶ 上下文带：返回 / 屏名 / 位置筛选 / 用户 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <button type="button" class="o_sn_wsd_pda_selectbtn"
+                            t-on-click="openLocationModal">
+                        <i class="fa fa-map-marker me-1"/>
+                        <t t-out="locationFilterLabel"/>
+                    </button>
+                    <span t-if="state.userName" class="o_sn_wsd_pda_user">
+                        <i class="fa fa-user-circle-o me-1"/>
+                        <t t-out="state.userName"/>
+                    </span>
+                </div>
+            </header>
+
+            <!-- 置顶扫码坞 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="submitCommand">
+                    <input t-ref="scanInput" t-model="state.command"
+                           class="o_sn_wsd_workshop_command form-control"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
+            <main class="flex-grow-1 overflow-auto">
+                <div t-if="state.message"
+                     class="o_sn_wsd_pda_feedback"
+                     t-attf-class="o_sn_wsd_pda_feedback is-{{state.messageType || 'info'}}">
+                    <t t-out="state.message"/>
+                </div>
+
+                <!-- 看板视图：进度 + 按设备分组清单 -->
+                <div t-if="state.view === 'board'">
+                    <div class="o_sn_wsd_pda_progress">
+                        <div class="o_sn_wsd_pda_progress_nums">
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="state.progress.due"/>
+                                <span t-out="dueLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-loaded">
+                                <strong t-out="state.progress.done"/>
+                                <span t-out="doneLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-unloaded">
+                                <strong t-out="state.progress.todo"/>
+                                <span t-out="todoLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-overdue">
+                                <strong t-out="state.progress.overdue"/>
+                                <span t-out="overdueLabel"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_rows">
+                        <t t-foreach="state.groups" t-as="group" t-key="group.equipment.id">
+                            <div class="o_sn_wsd_device_group">
+                                <div class="o_sn_wsd_device_group_head">
+                                    <span class="o_sn_wsd_device_code" t-out="group.equipment.code"/>
+                                    <span class="o_sn_wsd_device_name" t-out="group.equipment.name"/>
+                                    <span t-if="group.equipment.location"
+                                          class="o_sn_wsd_device_loc"
+                                          t-out="group.equipment.location"/>
+                                </div>
+                                <div t-foreach="group.tasks" t-as="task" t-key="task.id"
+                                     class="o_sn_wsd_pda_row"
+                                     t-attf-class="o_sn_wsd_pda_row is-{{task.status === 'overdue' ? 'overdue' : (task.status === 'in_progress' ? 'loaded' : 'unloaded')}}">
+                                    <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                                    <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                                    <span class="o_sn_wsd_pda_row_val">
+                                        <t t-out="task.item_count"/> <t t-out="itemsLabel"/>
+                                    </span>
+                                    <span t-if="task.status === 'overdue'"
+                                          class="badge bg-warning text-dark" t-out="taskStatusLabel(task.status)"/>
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                            t-on-click="() => this.startTask(task)" t-out="startLabel"/>
+                                </div>
+                            </div>
+                        </t>
+                        <div t-if="!state.groups.length" class="o_sn_wsd_pda_row is-unloaded">
+                            <span class="o_sn_wsd_pda_row_name" t-out="emptyBoardLabel"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_device_donefold" t-if="state.done.length">
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                t-on-click="() => { this.state.showDone = !this.state.showDone; }"
+                                t-out="doneFoldLabel"/>
+                        <div t-if="state.showDone" class="o_sn_wsd_pda_rows">
+                            <div t-foreach="state.done" t-as="task" t-key="task.id"
+                                 class="o_sn_wsd_pda_row is-loaded">
+                                <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                                <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                                <span class="o_sn_wsd_pda_row_val" t-out="task.executed_time"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 设备视图：档案卡 + 该设备待办 -->
+                <div t-if="state.view === 'equipment' and state.equipment">
+                    <div class="o_sn_wsd_device_card">
+                        <div class="o_sn_wsd_device_card_head">
+                            <span class="o_sn_wsd_device_code" t-out="state.equipment.code"/>
+                            <span class="o_sn_wsd_device_name" t-out="state.equipment.name"/>
+                            <span class="badge"
+                                  t-attf-class="badge {{state.equipment.status === 'enabled' ? 'bg-success' : (state.equipment.status === 'repair' ? 'bg-warning text-dark' : 'bg-dark')}}"
+                                  t-out="equipmentStatusLabel(state.equipment.status)"/>
+                        </div>
+                        <div class="o_sn_wsd_device_card_body" t-if="state.equipment.location">
+                            <i class="fa fa-map-marker me-1"/>
+                            <t t-out="state.equipment.location"/>
+                        </div>
+                        <div class="o_sn_wsd_device_card_body">
+                            <span class="me-3">
+                                <t t-out="lastCheckLabel"/>: <t t-out="state.equipment.last_spot_check || '—'"/>
+                            </span>
+                            <span>
+                                <t t-out="lastMaintLabel"/>: <t t-out="state.equipment.last_maintenance || '—'"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_rows">
+                        <div t-foreach="state.tasks" t-as="task" t-key="task.id"
+                             class="o_sn_wsd_pda_row"
+                             t-attf-class="o_sn_wsd_pda_row is-{{task.status === 'overdue' ? 'overdue' : (task.status === 'in_progress' ? 'loaded' : 'unloaded')}}">
+                            <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                            <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                            <span class="o_sn_wsd_pda_row_val">
+                                <t t-out="task.item_count"/> <t t-out="itemsLabel"/>
+                            </span>
+                            <span t-if="task.status === 'overdue'"
+                                  class="badge bg-warning text-dark" t-out="taskStatusLabel(task.status)"/>
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                    t-on-click="() => this.startTask(task)" t-out="startLabel"/>
+                        </div>
+                        <div t-if="!state.tasks.length" class="o_sn_wsd_pda_row is-unloaded">
+                            <span class="o_sn_wsd_pda_row_name" t-out="noTasksLabel"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_pills">
+                        <button type="button" class="btn btn-outline-primary"
+                                t-on-click="backToBoard" t-out="backToBoardLabel"/>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 位置筛选弹层 -->
+            <div t-if="state.showLocationModal" class="o_sn_wsd_workshop_modal_backdrop"
+                 t-on-click="closeLocationModal">
+                <div class="o_sn_wsd_workshop_modal" t-on-click.stop="() => {}">
+                    <div class="o_sn_wsd_workshop_modal_title" t-out="locationFilterLabel"/>
+                    <div class="o_sn_wsd_workshop_modal_list">
+                        <button type="button" class="o_sn_wsd_workshop_modal_item"
+                                t-att-class="!state.locationId ? 'is-active' : ''"
+                                t-on-click="() => this.selectLocation(null)"
+                                t-out="locationFilterLabel"/>
+                        <button t-foreach="state.locations" t-as="location" t-key="location.id"
+                                type="button" class="o_sn_wsd_workshop_modal_item"
+                                t-att-class="state.locationId === location.id ? 'is-active' : ''"
+                                t-on-click="() => this.selectLocation(location)"
+                                t-out="location.name"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

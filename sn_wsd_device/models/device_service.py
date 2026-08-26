@@ -141,6 +141,13 @@ class SnDeviceService(models.AbstractModel):
     # ===== board =====
 
     @api.model
+    def locations(self):
+        """Flat location list for the PDA filter selector (global tree)."""
+        return [{'id': location.id, 'name': location.complete_name}
+                for location in self.env['sn.wsd.device.location'].search(
+                    [], order='parent_path, id')]
+
+    @api.model
     def today_board(self, location_id=None):
         """Cross-equipment board: open tasks grouped by equipment plus the
         tasks already executed today, with progress counters."""
@@ -245,7 +252,7 @@ class SnDeviceService(models.AbstractModel):
         vals = {}
         if measured_value is not None:
             vals['measured_value'] = measured_value
-        if line_result is not None:
+        if line_result:
             vals['line_result'] = line_result
         if line_note is not None:
             vals['line_note'] = line_note

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 设备作业屏：独立文件注册（宫格入口 parent 挂 menu_workshop_functions，
+         与 workshop_functions_views.xml 解耦，便于并行开发）。 -->
+
+    <record id="sn_wsd_barcode_device_action" model="ir.actions.client">
+        <field name="name">Device Operations</field>
+        <field name="path">wsd-barcode-device</field>
+        <field name="tag">sn_wsd_barcode_device_action</field>
+        <field name="target">fullscreen</field>
+    </record>
+
+    <menuitem id="menu_workshop_fn_device"
+              name="Device Operations"
+              parent="sn_wsd_barcode.menu_workshop_functions"
+              action="sn_wsd_barcode_device_action"
+              sequence="30"
+              groups="sn_wsd_mrp.group_mes_shop,sn_wsd_mrp.group_mes_smt_operator"/>
+
+</odoo>

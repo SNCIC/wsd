@@ -4,3 +4,4 @@
 from . import sn_wsd_barcode
 from . import sn_smt_pda_controller
 from . import sn_pda_equipment_controller
+from . import sn_pda_device_controller
