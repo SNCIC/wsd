@@ -361,7 +361,9 @@ export class WorkshopOperationAction extends Component {
         if (!this.state.selectedLineId) {
             return this.state.stations;
         }
-        return this.state.stations.filter((station) => station.line_id === this.state.selectedLineId);
+        // 车间级工位（未挂产线）不随产线过滤隐藏；产线级工位按选中线显示
+        return this.state.stations.filter(
+            (station) => !station.line_id || station.line_id === this.state.selectedLineId);
     }
 
     get selectedStation() {

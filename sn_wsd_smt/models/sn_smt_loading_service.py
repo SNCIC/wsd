@@ -113,7 +113,7 @@ class SnSmtLoadingService(models.AbstractModel):
             'actual_product_id': material_lot.product_id.id,
             'lot_id': material_lot.id,
             'lot_name': material_lot.name,
-            'loaded_qty': material_lot.x_smt_point_balance,
+            'loaded_qty': material_lot._smt_on_hand_qty(),
             'state': 'verified',
             'verify_datetime': fields.Datetime.now(),
             'verify_user_id': self.env.user.id,
@@ -161,13 +161,6 @@ class SnSmtLoadingService(models.AbstractModel):
             'unload_scope': False,
         })
         online_material._set_loaded_quantity(material_lot, operation_type=operation_type)
-        lot_vals = {
-            'x_smt_is_reel': True,
-            'x_smt_reel_state': 'loaded',
-        }
-        if not material_lot.x_smt_initial_qty:
-            lot_vals['x_smt_initial_qty'] = material_lot.x_smt_point_balance
-        material_lot.write(lot_vals)
         self._bind_feeder(feeder, mes_order)
         self._sync_feeder_line(online_material, material_lot)
         self._log(
@@ -198,8 +191,6 @@ class SnSmtLoadingService(models.AbstractModel):
         })
         if not keep_feeder:
             self._release_feeder_if_unused(old_feeder)
-        if old_lot:
-            old_lot.write({'x_smt_reel_state': 'unloaded'})
         self._log(
             mes_order, online_material, operation_type,
             material_lot=old_lot, feeder=old_feeder,
@@ -269,7 +260,7 @@ class SnSmtLoadingService(models.AbstractModel):
         self._log(
             mes_order, position, 'offline_prepare',
             material_lot=material_lot, feeder=feeder, cart=cart,
-            qty_before=0.0, qty_after=material_lot.x_smt_point_balance, note='BL',
+            qty_before=0.0, qty_after=material_lot._smt_on_hand_qty(), note='BL',
         )
         return {'cart_line_id': line.id, 'online_material_id': position.id if position else False}
 
@@ -383,8 +374,6 @@ class SnSmtLoadingService(models.AbstractModel):
             'loaded_material_lot_id': False,
             'loaded_feeder_id': False,
         })
-        if old_lot:
-            old_lot.write({'x_smt_reel_state': 'unloaded'})
         self._release_feeder_if_unused(old_feeder)
         feeder = self._resolve_feeder(mes_order, online_material, new_feeder_sn)
         material_lot = self._resolve_material_lot(mes_order, new_material_sn)
@@ -441,7 +430,7 @@ class SnSmtLoadingService(models.AbstractModel):
         if not source_lines:
             raise UserError(_('The source MES order has no loaded SMT material positions.'))
         product_model = self.env['product.product']
-        inherited, manual = [], []
+        inherited, manual, fallback = [], [], []
         for target_line in target_mes_order.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y'):
             source_line = source_lines.filtered(
                 lambda line: line.device_seq == target_line.device_seq
@@ -469,7 +458,20 @@ class SnSmtLoadingService(models.AbstractModel):
                 'workcenter_id': workcenter.id if workcenter else source_line.workcenter_id.id,
                 'is_load': 'Y',
             })
-            target_line._set_loaded_quantity(loaded_lot, operation_type='changeover_inherit')
+            # 转机回退：卷仍挂在未完工单的在线料表上（完工倒冲未入账、
+            # 在手虚高）时，取旧单行剩余计数，防止新单按虚高上料中途断料。
+            pending_line = self.env['sn.smt.online.material'].search([
+                ('loaded_material_lot_id', '=', loaded_lot.id),
+                ('is_load', '=', 'Y'),
+                ('mes_order_id', '!=', target_mes_order.id),
+                ('mes_order_id.production_id.state', 'not in', ('done', 'cancel')),
+            ], limit=1)
+            if pending_line:
+                fallback.append(target_line.loadpoint)
+            target_line._set_loaded_quantity(
+                loaded_lot, operation_type='changeover_inherit',
+                fallback_qty=pending_line.remaining_qty if pending_line else False,
+            )
             if target_line.loaded_feeder_id:
                 production = target_mes_order.production_id
                 target_line.loaded_feeder_id.write({
@@ -487,6 +489,9 @@ class SnSmtLoadingService(models.AbstractModel):
         return {
             'inherited_slots': inherited,
             'manual_slots': sorted(set(manual)),
+            # 余量取自旧单行剩余（旧单未完工、在手虚高）的料站——提示
+            # 操作员这些卷的账面余量待旧单完工后才会与库存对齐
+            'fallback_slots': sorted(set(fallback)),
             'message': 'Changeover completed.',
         }
 

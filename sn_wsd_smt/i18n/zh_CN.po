@@ -572,20 +572,10 @@ msgid "DIRECTION"
 msgstr "进料方向"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_date_code
-msgid "Date Code"
-msgstr ""
-
-#. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Deleted successfully."
 msgstr "删除成功。"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__depleted
-msgid "Depleted"
-msgstr ""
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__description
@@ -1029,19 +1019,9 @@ msgid "In Repair"
 msgstr "报修中"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__in_stock
-msgid "In Stock"
-msgstr ""
-
-#. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__in_use
 msgid "In Use"
 msgstr "使用中"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_initial_qty
-msgid "Initial Reel Qty"
-msgstr "卷初始数量"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__installed_at
@@ -1160,7 +1140,6 @@ msgstr "最后更新时间"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__loaded
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__loaded
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 msgid "Loaded"
 msgstr "已备料"
@@ -1796,11 +1775,6 @@ msgid "Points Before"
 msgstr "扣点前余量"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__prepared
-msgid "Prepared"
-msgstr ""
-
-#. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__actual_product_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
 msgid "Product"
@@ -2230,11 +2204,6 @@ msgid ""
 msgstr ""
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_point_balance
-msgid "SMT Point Balance"
-msgstr "卷内剩余点数"
-
-#. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__smt_consumption_ids
 msgid "SMT Product Usage"
 msgstr "物料去向"
@@ -2245,15 +2214,9 @@ msgid "SMT Product Usage Count"
 msgstr "物料去向数量"
 
 #. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_is_reel
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_stock_lot_form_inherit_smt_consumption
 msgid "SMT Reel"
 msgstr "SMT 卷料"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_reel_state
-msgid "SMT Reel State"
-msgstr "卷料状态"
 
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_table_import_mixin
@@ -2335,7 +2298,6 @@ msgstr "确认报废该料车？此操作不可逆。"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_cart__status__scrapped
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder__status__scrapped
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__scrapped
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__scrapped
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_search
 msgid "Scrapped"
@@ -2443,11 +2405,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__lot_id
 msgid "Stock Lot"
 msgstr "库存批次"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_smt_supplier_lot_no
-msgid "Supplier Lot No"
-msgstr ""
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2959,11 +2916,6 @@ msgstr "下料"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__unload_scope
 msgid "Unload Scope"
 msgstr "下料范围"
-
-#. module: sn_wsd_smt
-#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__stock_lot__x_smt_reel_state__unloaded
-msgid "Unloaded"
-msgstr ""
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__unloaded_at

@@ -502,6 +502,12 @@ class MrpProduction(models.Model):
         self.ensure_one()
         return bool(self.x_has_meter_operations and self.product_tracking != 'lot' and self._get_meter_packed_serials())
 
+    def _smt_backfill_raw_moves(self):
+        """完工倒冲回填钩子：把消耗流水的批次与净值回填到领料 move。
+        实现在 sn_wsd_smt（覆写本方法）；未装该模块时无可回填流水，
+        空实现即原生 BOM 倒冲。"""
+        return False
+
     def _meter_mes_mark_done(self):
         for production in self:
             packed_serials = production._get_meter_packed_serials()
@@ -512,6 +518,7 @@ class MrpProduction(models.Model):
                 'qty_producing': done_qty,
                 'qty_produced': done_qty,
             })
+            production._smt_backfill_raw_moves()
 
             moves_to_do = production.move_raw_ids.filtered(lambda move: move.state not in ('done', 'cancel') and move.picked)
             moves_to_cancel = production.move_raw_ids.filtered(lambda move: move.state not in ('done', 'cancel') and not move.picked)

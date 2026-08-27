@@ -87,20 +87,29 @@ class SnSmtOnlineMaterialExtension(models.Model):
             else:
                 line.required_product_id = False
 
-    @api.depends('consumption_ids.consumed_qty', 'loaded_qty')
+    @api.depends('consumption_ids.consumed_qty', 'consumption_ids.material_lot_id',
+                 'loaded_qty', 'loaded_material_lot_id')
     def _compute_smt_quantities(self):
         for line in self:
-            consumed = sum(line.consumption_ids.mapped('consumed_qty'))
+            # 计数按"当前在机卷"分段：换料/续料/转机后，行上仍挂着历史卷
+            # 的流水，但余量只对当前卷有意义（loaded_qty 也是当前卷口径）。
+            current = line.loaded_material_lot_id
+            rows = line.consumption_ids
+            if current:
+                rows = rows.filtered(lambda record: record.material_lot_id == current)
+            consumed = sum(rows.mapped('consumed_qty'))
             line.consumed_qty = consumed
             line.remaining_qty = max(line.loaded_qty - consumed, 0.0)
 
-    def _set_loaded_quantity(self, material_lot, operation_type='online_load'):
-        """上料时取卷的点数账本余额作为本次上机的初始数量——
-        同一卷跨制令单再次上机时，余量自动延续。最近操作随调用方
-        （上料/换料/续料/转机继承）写入。"""
+    def _set_loaded_quantity(self, material_lot, operation_type='online_load', fallback_qty=False):
+        """上料时取该卷的在手数量作为本次上机的初始数量——同一卷跨
+        制令单再次上机时，余量随完工倒冲后的库存自动延续。转机继承时
+        若旧单未完工（倒冲未入账、在手虚高），调用方传 fallback_qty
+        （旧单行剩余）回退。最近操作随调用方（上料/换料/续料/转机
+        继承）写入。"""
         self.ensure_one()
         values = {
-            'loaded_qty': material_lot.x_smt_point_balance,
+            'loaded_qty': fallback_qty if fallback_qty is not False else material_lot._smt_on_hand_qty(),
             'loaded_at': fields.Datetime.now(),
             'last_operation_type': operation_type,
         }
@@ -167,6 +176,29 @@ class SnSmtMaterialConsumption(models.Model):
         'unique(serial_identity_id, route_operation_id, online_material_id, external_event_id)',
         'A product serial can only consume one material position per event.',
     )
+
+    @api.model
+    def _net_consumption_by_lot(self, production):
+        """按卷聚合一张制造单（含其制令单的 SMT 扣点与整机关键物料
+        usage_times 流水）的消耗净值：正向 − 冲销。完工倒冲回填的数量
+        与批次以此为准，不经过 BOM 翻译。"""
+        mes_orders = production.x_mes_order_ids
+        if not mes_orders:
+            return {}
+        groups = self._read_group(
+            [
+                ('mes_order_id', 'in', mes_orders.ids),
+                ('material_lot_id', '!=', False),
+            ],
+            groupby=['material_lot_id'],
+            aggregates=['consumed_qty:sum'],
+        )
+        net = {}
+        for lot, total in groups:
+            qty = total or 0.0
+            if qty > 0:
+                net[lot] = qty
+        return net
 
     @api.model
     def _get_active_lines(self, route_operation):

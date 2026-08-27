@@ -184,6 +184,19 @@ class MesOrderStationServices(models.Model):
                 'station to feed SN %(sn)s.',
                 op=op_row.display_label, order=target.name, sn=code))
         target.scan_enter(code, workcenter)
+        if op_row and op_row.x_allow_entry and op_row.x_allow_exit:
+            # 首尾同工序：一次扫码完成投入+出站——把刚建的 WIP 直接交给
+            # 出站动作，前端按当前 OK/NG/报废模式处理（与设备 API 的
+            # _pass_station「enter 后紧跟 leave」口径一致）
+            wip = self.env['sn.wsd.serial.wip'].search([
+                ('serial_identity_id.name', '=', code),
+                ('mes_order_id', '=', target.id),
+            ], limit=1)
+            return {
+                'action': 'leave',
+                'wip_id': wip.id,
+                'order_id': target.id,
+            }
         return {
             'action': 'entered',
             'order_id': target.id,
