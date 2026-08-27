@@ -82,3 +82,13 @@ class StockLot(models.Model):
     label_print_count = fields.Integer(
         string='Label Print Count', default=0, copy=False, readonly=True,
     )
+
+
+class StockQuant(models.Model):
+    _inherit = 'stock.quant'
+
+    supplier_batch_no = fields.Char(
+        related='lot_id.supplier_batch_no',
+        string='Supplier Batch',
+        readonly=True,
+    )

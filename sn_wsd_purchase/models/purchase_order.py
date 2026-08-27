@@ -165,6 +165,50 @@ class PurchaseOrder(models.Model):
         copy=True,
         default='浙江省温州乐清市',
     )
+    buyer_bank_id = fields.Many2one(
+        comodel_name='res.partner.bank',
+        string='Buyer Bank Account',
+        copy=True,
+        domain="[('partner_id', '=', company_id.partner_id), '|', "
+               "('company_id', '=', False), ('company_id', '=', company_id)]",
+        help='Bank account printed for the buyer on the purchase contract.',
+    )
+    supplier_bank_id = fields.Many2one(
+        comodel_name='res.partner.bank',
+        string='Supplier Bank Account',
+        copy=True,
+        domain="[('partner_id', '=', partner_id), '|', "
+               "('company_id', '=', False), ('company_id', '=', company_id)]",
+        help='Bank account printed for the supplier on the purchase contract.',
+    )
+    delivery_date_text = fields.Char(
+        string='Delivery Date Description',
+        copy=True,
+    )
+    technical_requirements = fields.Html(
+        string='Technical Requirements',
+        copy=True,
+    )
+    acceptance_terms = fields.Html(
+        string='Acceptance Terms',
+        copy=True,
+    )
+    payment_terms_text = fields.Html(
+        string='Payment Terms Description',
+        copy=True,
+    )
+    liability_terms = fields.Html(
+        string='Liability Terms',
+        copy=True,
+    )
+    buyer_agent = fields.Char(
+        string='Buyer Agent',
+        copy=True,
+    )
+    supplier_agent = fields.Char(
+        string='Supplier Agent',
+        copy=True,
+    )
 
     @api.depends('amount_total', 'amount_untaxed')
     def _compute_amount_total_chinese(self):

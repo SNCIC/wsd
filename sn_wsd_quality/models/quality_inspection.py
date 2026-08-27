@@ -614,7 +614,10 @@ class QualityInspection(models.Model):
             if not vals.get('mes_order_id'):
                 workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else self.env['sn.wsd.mes.order.route.operation']
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else (workorder.mes_order_id.production_id if workorder else False)
-                mes_order = (workorder.mes_order_id if workorder else False) or production.x_mes_order_id
+                mes_order = (
+                    (workorder.mes_order_id if workorder else False)
+                    or (production.x_mes_order_id if production else False)
+                )
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -1226,12 +1229,9 @@ class StockPicking(models.Model):
 
     def _is_iqc_control_picking(self):
         self.ensure_one()
-        warehouse = self.picking_type_id.warehouse_id
         return bool(
-            warehouse
-            and warehouse.reception_steps == 'three_steps'
-            and warehouse.qc_type_id
-            and self.picking_type_id == warehouse.qc_type_id
+            self.picking_type_code == 'incoming'
+            and not self.return_id
         )
 
     def _get_iqc_required_move_lines(self):
@@ -1319,7 +1319,9 @@ class StockPicking(models.Model):
         return result
 
     def action_confirm(self):
-        return super().action_confirm()
+        result = super().action_confirm()
+        self._create_iqc_inspections()
+        return result
 
     def action_assign(self):
         return super().action_assign()
@@ -1363,6 +1365,7 @@ class StockPicking(models.Model):
         result = super()._pre_action_done_hook()
         if result is not True:
             return result
+        self._create_iqc_inspections()
         self._check_iqc_before_validate()
         return True
 

@@ -23,6 +23,9 @@
                 <field name="reel_sequence" readonly="1" invisible="not is_reel_lot"/>
                 <field name="reel_split_line_id" readonly="1" invisible="not reel_split_line_id"/>
             </xpath>
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="supplier_batch_no" readonly="1"/>
+            </xpath>
         </field>
     </record>
 
@@ -35,6 +38,17 @@
                 <field name="parent_lot_id" optional="hide"/>
                 <field name="reel_sequence" optional="hide"/>
                 <field name="is_reel_lot" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_quant_list_editable_supplier_batch" model="ir.ui.view">
+        <field name="name">stock.quant.list.editable.supplier.batch</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="supplier_batch_no" readonly="1"/>
             </xpath>
         </field>
     </record>
