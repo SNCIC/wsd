@@ -70,6 +70,9 @@ class TestNgRepairLoop(TransactionCase):
             'date_plan': fields.Date.today(),
             'planned_qty': 4,
         })
+        # 上线硬闸脚手架（mes-picking-lifecycle R1）：占位领料单过闸
+        from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
+        give_pick(self.env, order)
         order.action_online()
         return mo, order
 
