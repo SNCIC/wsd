@@ -67,10 +67,12 @@ class MesOrderSmtOnline(models.Model):
     def leave_station(self, serial_identity, result, scrap_reason=False,
                       ng_defect=False, operator_code=False):
         """过站扣减收敛点：大屏（sn_station_leave）/ 设备 API（_pass_station）
-        / PDA 过站屏都汇到本方法，出站 OK 即扣 SMT 点数 / 整机关键物料
-        usage_times。设备 API 侧另有带 external_event_id 的显式调用
-        （api_scan_pass），幂等（SN+制令单）保证不重复扣；NG 不扣，
-        重过 OK 后再扣。"""
+        / PDA 过站屏都汇到本方法。出站 OK 时把扣减交给 consume_for_serial：
+        SMT 料站表只在出站工序=路线物料关联工序（x_material_operation_id）
+        时扣点（未维护且有料站表行会被拦，见其实现）；关键物料清单行
+        只在出站工序=清单工序时扣 usage_times。设备 API 侧另有带
+        external_event_id 的显式调用（api_scan_pass），幂等（SN+制令单）
+        保证不重复扣；NG 不扣，重过 OK 后再扣。"""
         wip = self.env['sn.wsd.serial.wip'].search([
             ('serial_identity_id', '=', serial_identity.id),
             ('mes_order_id', '=', self.id),
