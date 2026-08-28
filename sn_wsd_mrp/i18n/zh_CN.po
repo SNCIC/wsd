@@ -1747,8 +1747,8 @@ msgstr "制令单 %(name)s 尚未上线。"
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
-"MES order %(name)s must be online and in progress to complete products."
-msgstr "制令单 %(name)s 必须上线且在生产中才能完工入库。"
+"MES order %(name)s must be in progress to complete products."
+msgstr "制令单 %(name)s 必须在生产中才能完工入库。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -7084,7 +7084,7 @@ msgstr "只有未完成的制造订单才能强制关闭：%s"
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Material Issue"
-msgstr "发料"
+msgstr "领料单"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_issue_id
@@ -8125,4 +8125,34 @@ msgstr "来源托盘状态为 %s，不允许移托。"
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Carton %s"
 msgstr "箱 %s"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__lot_name
+msgid "Finished Goods Lot"
+msgstr "成品批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__lot_name
+msgid ""
+"Lot number stamped on the completion receipt lines. Leave empty to auto-"
+"generate one per MES order and day."
+msgstr "完工收货行上的批次号；留空按制令单+日期自动生成。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Component %(product)s of MES order %(order)s is lot/serial tracked but has "
+"no consumption flows: complete loading and station passes first, or review "
+"the BOM."
+msgstr "制令单 %(order)s 的组件 %(product)s 是批次追踪物料但没有消耗流水：请先完成上料与过站，或核对该 BOM。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Line-side stock of %(product)s%(lot)s is insufficient to complete MES order "
+"%(order)s: need %(need)s, available %(available)s. Issue the material first "
+"(领料) or validate the upstream receipt (半成品入库)."
+msgstr "线边库存不足：制令单 %(order)s 完工需要 %(product)s%(lot)s %(need)s，可用 %(available)s。请先领料，或先验证上游半成品入库收货。"
 

@@ -195,10 +195,11 @@ class StockBarcodeController(http.Controller):
             ('active', '=', True),
             ('company_id', 'in', allowed_company_ids),
         ]
+        # 工位可挂车间或挂产线（两级归属都合法），不强制编码；
+        # 投入站的产线匹配由 scan_enter 的 x_allow_entry 校验把关
         station_domain = [
             ('active', '=', True),
             ('company_id', 'in', allowed_company_ids),
-            ('code', '!=', False),
         ]
         lines = line_model.search(line_domain, order='sequence, code, id')
         stations = station_model.search(station_domain, order='x_production_line_id, sequence, name, id')

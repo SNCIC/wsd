@@ -6,14 +6,13 @@
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet" position="inside">
+                <!-- 单账本：卷档案只展示来料标签身份字段（sn_wsd_stock 出生
+                     建档）与在手数量，点数账本已删除；批次号由 sn_wsd_stock
+                     的视图在产品字段后展示，此处不重复。 -->
                 <group string="SMT Reel" name="smt_reel">
-                    <field name="x_smt_is_reel" readonly="1"/>
-                    <field name="x_smt_reel_state" readonly="1"/>
-                    <field name="x_smt_initial_qty" readonly="1"/>
-                    <field name="x_smt_consumed_points" readonly="1"/>
-                    <field name="x_smt_point_balance" readonly="1"/>
-                    <field name="x_smt_supplier_lot_no" readonly="1"/>
-                    <field name="x_smt_date_code" readonly="1"/>
+                    <field name="supplier_name" readonly="1"/>
+                    <field name="initial_quantity" readonly="1"/>
+                    <field name="x_smt_available_qty" readonly="1"/>
                 </group>
                 <group string="Lot Product Usage">
                     <field name="smt_consumption_count" readonly="1"/>

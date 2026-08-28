@@ -64,6 +64,38 @@ class MesOrderSmtOnline(models.Model):
         route = self.x_mes_route_id.route_id if self.x_mes_route_id else self.env['sn.wsd.process.route']
         return route.x_process_type == 'smt'
 
+    def leave_station(self, serial_identity, result, scrap_reason=False,
+                      ng_defect=False, operator_code=False):
+        """过站扣减收敛点：大屏（sn_station_leave）/ 设备 API（_pass_station）
+        / PDA 过站屏都汇到本方法，出站 OK 即扣 SMT 点数 / 整机关键物料
+        usage_times。设备 API 侧另有带 external_event_id 的显式调用
+        （api_scan_pass），幂等（SN+制令单）保证不重复扣；NG 不扣，
+        重过 OK 后再扣。"""
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id', '=', serial_identity.id),
+            ('mes_order_id', '=', self.id),
+        ], limit=1)
+        route_operation = wip.route_operation_id
+        finished = super().leave_station(
+            serial_identity, result, scrap_reason=scrap_reason,
+            ng_defect=ng_defect, operator_code=operator_code)
+        if result == 'ok' and route_operation:
+            self.env['sn.smt.material.consumption'].consume_for_serial(
+                route_operation, identity=serial_identity,
+                operator_code=operator_code)
+        return finished
+
+    def _mes_flow_net_by_lot(self):
+        """覆写倒冲钩子：本制令单的消耗流水按卷净值（正向 − 冲销），
+        SMT 扣点与整机关键物料 usage_times 流水同源同表。"""
+        self.ensure_one()
+        groups = self.env['sn.smt.material.consumption']._read_group(
+            [('mes_order_id', '=', self.id), ('material_lot_id', '!=', False)],
+            groupby=['material_lot_id'],
+            aggregates=['consumed_qty:sum'],
+        )
+        return {lot: total for lot, total in groups if (total or 0.0) > 0}
+
     def _check_can_generate_smt_online_materials(self):
         self.ensure_one()
         protected_lines = self.x_smt_online_material_ids.filtered(

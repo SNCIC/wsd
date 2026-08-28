@@ -29,6 +29,15 @@ class MesDoneWizard(models.TransientModel):
         help='Line-side workshop for the receipt destination. Only workshops '
              'of the order warehouse are offered.',
     )
+    product_tracking = fields.Selection(
+        related='mes_order_id.production_id.product_id.tracking',
+        string='Product Tracking',
+    )
+    lot_name = fields.Char(
+        string='Finished Goods Lot',
+        help='Lot number stamped on the completion receipt lines. Leave '
+             'empty to auto-generate one per MES order and day.',
+    )
     available_workshop_ids = fields.Many2many(
         'sn.mrp.workshop', string='可选车间', compute='_compute_available_workshops',
     )
@@ -66,5 +75,6 @@ class MesDoneWizard(models.TransientModel):
     def action_confirm(self):
         for wizard in self:
             wizard.mes_order_id.action_complete(
-                wizard.qty, wizard.destination, workshop=wizard.workshop_id)
+                wizard.qty, wizard.destination, workshop=wizard.workshop_id,
+                lot_name=wizard.lot_name)
         return {'type': 'ir.actions.act_window_close'}

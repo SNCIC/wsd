@@ -237,8 +237,8 @@ class SnSmtLoadingServiceDrawing(models.AbstractModel):
                 lot.name))
         line = target[0]
         # 与 SMT 共用的三条：同盘不得重复在线 / 未过期 / 数量为正。
-        # SMT 点数余量（x_smt_point_balance）不适用装配盘：无点数的盘按
-        # 不限量处理（loaded_qty=0，扣点只记台账，不做余量拦截）。
+        # 单账本：上料数量取该盘在手数量（_set_loaded_quantity 内统一），
+        # 余量拦截按 usage_times 与在手余量比对。
         if self.env['sn.smt.online.material'].search_count([
             ('loaded_material_lot_id', '=', lot.id),
             ('is_load', '=', 'Y'),
@@ -251,10 +251,6 @@ class SnSmtLoadingServiceDrawing(models.AbstractModel):
             'workcenter_id': (workcenter or line.workcenter_id).id,
         })
         line._set_loaded_quantity(lot, operation_type='drawing_load')
-        lot_vals = {'x_smt_is_reel': True, 'x_smt_reel_state': 'loaded'}
-        if not lot.x_smt_initial_qty:
-            lot_vals['x_smt_initial_qty'] = lot.x_smt_point_balance
-        lot.write(lot_vals)
         self._log(
             mes_order, line, 'drawing_load', material_lot=lot,
             workcenter=workcenter, qty_before=0.0,

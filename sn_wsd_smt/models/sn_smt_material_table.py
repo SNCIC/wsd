@@ -531,7 +531,7 @@ class SnSmtOperationMixin(models.AbstractModel):
         ], limit=1):
             raise ValidationError(_('The material is already loaded online.'))
         self._check_material_expiration(material_lot)
-        if material_lot.x_smt_point_balance <= 0:
+        if material_lot._smt_on_hand_qty() <= 0:
             raise ValidationError(_('The current material quantity is zero.'))
 
 
