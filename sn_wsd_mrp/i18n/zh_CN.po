@@ -5569,9 +5569,15 @@ msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围�
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
-"SN %(sn)s reached the retry limit (%(limit)s) of operation %(op)s; send it "
+"SN %(sn)s reached the pass limit (%(limit)s) of operation %(op)s; send it "
 "to repair."
-msgstr "SN %(sn)s 已达工序 %(op)s 的过站上限（%(limit)s 次），请送维修。"
+msgstr "SN %(sn)s 已达工序 %(op)s 的过站次数上限（%(limit)s 次），请送维修。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The max test count of operation %s must be at least 1."
+msgstr "工序 %s 的最大测试次数必须不小于 1。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__date_deadline

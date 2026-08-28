@@ -220,12 +220,20 @@ class MesOrder(models.Model):
                 def _entered(op):
                     # wip and history are mutually exclusive per (SN, op):
                     # the wip row is deleted as its history row is written.
-                    return len(op.serial_history_ids) + len(op.serial_wip_ids) if op else 0
+                    # 台数按 SN 去重：复测多行只算一台。
+                    if not op:
+                        return 0
+                    sn_ids = set(
+                        op.serial_history_ids.mapped('serial_identity_id').ids)
+                    sn_ids |= set(
+                        op.serial_wip_ids.mapped('serial_identity_id').ids)
+                    return len(sn_ids)
                 out_op = route.x_daily_output_operation_id
+                order.x_output_qty = len(set(
+                    out_op.serial_history_ids
+                    .filtered(lambda h: h.result == 'ok')
+                    .mapped('serial_identity_id').ids)) if out_op else 0.0
                 order.x_input_qty = _entered(route.x_daily_input_operation_id)
-                order.x_output_qty = len(
-                    out_op.serial_history_ids.filtered(lambda h: h.result == 'ok')
-                ) if out_op else 0.0
                 order.x_workorder_input_qty = _entered(route.x_workorder_input_operation_id)
             order.produced_qty = order.x_output_qty
 
@@ -616,40 +624,39 @@ class MesOrder(models.Model):
                     'must leave that order through its end operation before '
                     'being fed into another one.',
                     sn=serial_identity.name, order=bound_order.name))
-        passed_ok = walked.filtered(
+        # 过站次数上限：OK 与 NG 各占一次（测试工序复测口径）；截断点由
+        # sn_wsd_repair 注入（最新已关维修单的关单时间，之前的行不计=清零
+        # 重满）。尾站（结束/产出工序）固定一次，优先于工序配置。
+        cutoff = self.env.context.get('sn_wsd_pass_cutoff')
+        passes = walked.filtered(
             lambda h: h.route_operation_id == route_operation
-            and h.result == 'ok')
-        if passed_ok:
+            and h.result in ('ok', 'ng')
+            and (not cutoff or h.out_date > cutoff))
+        cap = 1 if route_operation.x_allow_exit \
+            else route_operation.operation_id.x_max_test_count
+        if len(passes) >= cap:
             raise ValidationError(_(
-                'SN %(sn)s already passed operation %(op)s.',
-                sn=serial_identity.name, op=route_operation.display_label))
-        # NG passes are free re-entries until the operation's retry limit;
-        # sn_wsd_repair marks the context to reset the count after a closed
-        # repair order.
-        retry_limit = route_operation.operation_id.x_max_test_count or 0
-        if retry_limit > 0 and not self.env.context.get('sn_wsd_repair_return'):
-            ng_count = len(walked.filtered(
-                lambda h: h.route_operation_id == route_operation
-                and h.result == 'ng'))
-            if ng_count >= retry_limit:
-                raise ValidationError(_(
-                    'SN %(sn)s reached the retry limit (%(limit)s) of '
-                    'operation %(op)s; send it to repair.',
-                    sn=serial_identity.name, limit=retry_limit,
-                    op=route_operation.display_label))
+                'SN %(sn)s reached the pass limit (%(limit)s) of operation '
+                '%(op)s; send it to repair.',
+                sn=serial_identity.name, limit=cap,
+                op=route_operation.display_label))
         if not walked and not route_operation.x_allow_entry:
             raise ValidationError(_(
                 'SN %(sn)s has not entered MES order %(order)s yet; it must '
                 'be fed in from a start operation (%(op)s is not one).',
                 sn=serial_identity.name, order=self.name,
                 op=route_operation.display_label))
-        reachable = self.get_reachable_operations(serial_identity)
-        if route_operation not in reachable:
-            raise ValidationError(_(
-                'Operation %(op)s is not reachable for SN %(sn)s: none of its '
-                'predecessors %(preds)s is completed yet.',
-                op=route_operation.display_label, sn=serial_identity.name,
-                preds=', '.join(route_operation.blocked_by_ids.mapped('display_label')) or '-'))
+        # 维修回流目标（关单授权的进站种子）跳过可达性；其余按
+        # "前驱在截断点后有 OK" 推进（无维修时截断点为空=全部历史）。
+        seed_ids = self.env.context.get('sn_wsd_repair_seed_ids', [])
+        if route_operation.id not in seed_ids:
+            reachable = self.get_reachable_operations(serial_identity)
+            if route_operation not in reachable:
+                raise ValidationError(_(
+                    'Operation %(op)s is not reachable for SN %(sn)s: none of its '
+                    'predecessors %(preds)s is completed yet.',
+                    op=route_operation.display_label, sn=serial_identity.name,
+                    preds=', '.join(route_operation.blocked_by_ids.mapped('display_label')) or '-'))
         Wip.sudo().create({
             'serial_identity_id': serial_identity.id,
             'mes_order_id': self.id,

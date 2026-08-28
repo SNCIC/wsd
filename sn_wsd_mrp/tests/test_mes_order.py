@@ -861,41 +861,36 @@ class TestMesOrder(TransactionCase):
         self._leave_ng(order, serial)
         return serial
 
-    def test_49_ng_reentry_until_limit(self):
-        """NG passes are free re-entries until the operation retry limit;
-        an ok row still seals the operation for that SN."""
+    def test_49_pass_cap_counts_ok_and_ng(self):
+        """The pass cap counts every pass (OK and NG alike): cap 2 allows
+        two passes and blocks the third; an OK pass no longer seals the
+        operation (mid-route ops only)."""
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
-        self.op_in.x_max_test_count = 2
+        self.op_in.x_max_test_count = 3
         self._ng_pass(order, wc_in, 'SN-NG-001')
-        self._ng_pass(order, wc_in, 'SN-NG-001')  # 2/2 used, still allowed
-        with self.assertRaises(ValidationError):
-            self._ng_pass(order, wc_in, 'SN-NG-001')  # 3rd pass blocked
-        # ok rows keep blocking re-entry regardless of the limit
-        self.op_in.x_max_test_count = 0
-        serial = order.scan_enter('SN-NG-002', wc_in)
+        serial = order.scan_enter('SN-NG-001', wc_in)
+        order.leave_station(serial, 'ok')
+        serial = order.scan_enter('SN-NG-001', wc_in)  # ok row does not seal
         order.leave_station(serial, 'ok')
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-NG-002', wc_in)
+            self._ng_pass(order, wc_in, 'SN-NG-001')  # 4th pass blocked
 
-    def test_49b_zero_limit_unlimited_and_reset_context(self):
-        """Limit 0 means unlimited re-passes; the repair-return context
-        marker skips the cap for a repaired SN."""
+    def test_49b_cap_must_be_at_least_one(self):
+        """Max test count is required and must be >= 1 (0 = unlimited was
+        dropped); no context marker may bypass the cap anymore."""
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
-        self.op_in.x_max_test_count = 0
-        for _i in range(3):
-            self._ng_pass(order, wc_in, 'SN-NG-003')
         self.op_in.x_max_test_count = 1
+        self._ng_pass(order, wc_in, 'SN-NG-003')
         with self.assertRaises(ValidationError):
-            self._ng_pass(order, wc_in, 'SN-NG-003')
-        # sn_wsd_repair marks this context after a closed repair order
-        order.with_context(sn_wsd_repair_return=True).scan_enter(
-            'SN-NG-003', wc_in)
+            self._ng_pass(order, wc_in, 'SN-NG-003')  # cap 1 used
+        with self.assertRaises(ValidationError):
+            self.op_in.x_max_test_count = 0
 
-    def test_49c_history_rows_coexist_one_ok(self):
-        """Multiple ng rows and one ok row may coexist per (SN, operation);
-        a second ok row is blocked at the database level."""
+    def test_49c_history_rows_coexist_many_ok(self):
+        """Multiple ng and ok rows may coexist per (SN, operation) — the
+        one-ok-row partial index is gone."""
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
         self.op_in.x_max_test_count = 3
@@ -903,17 +898,10 @@ class TestMesOrder(TransactionCase):
         self._leave_ng(order, serial)
         serial = order.scan_enter('SN-NG-004', wc_in)
         order.leave_station(serial, 'ok')
+        serial = order.scan_enter('SN-NG-004', wc_in)
+        order.leave_station(serial, 'ok')
         rows = self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id', '=', serial.id),
             ('route_operation_id.operation_id', '=', self.op_in.id),
         ])
-        self.assertEqual(sorted(rows.mapped('result')), ['ng', 'ok'])
-        History = self.env['sn.wsd.serial.operation.history']
-        route_op = rows[:1].route_operation_id
-        with self.assertRaises(IntegrityError):
-            History.create({
-                'serial_identity_id': serial.id,
-                'mes_order_id': order.id,
-                'route_operation_id': route_op.id,
-                'result': 'ok',
-            })
+        self.assertEqual(sorted(rows.mapped('result')), ['ng', 'ok', 'ok'])

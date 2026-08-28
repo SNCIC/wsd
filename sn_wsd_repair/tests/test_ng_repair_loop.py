@@ -113,8 +113,9 @@ class TestNgRepairLoop(TransactionCase):
         pending = self.env['sn.wsd.repair.pending'].search(
             [('serial_name', '=', sn_name)])
         self.assertEqual(len(pending), 1)
-        self.assertEqual(pending.ng_count, 2)
-        self.assertEqual(pending.retry_limit, 2)
+        self.assertEqual(pending.pass_count, 2)
+        self.assertEqual(pending.pass_cap, 2)
+        self.assertEqual(pending.last_result, 'ng')
         # the retry limit blocks further passes
         with self.assertRaises(ValidationError):
             self._ng_pass(order, wc_in, sn_name)
@@ -160,11 +161,11 @@ class TestNgRepairLoop(TransactionCase):
             'defect_code_id': self.defect_code.id,
         })
         repair_order.action_cancel()
-        # no open order anymore: the retry limit still applies (limit 1)
+        # no open order anymore: the pass cap still applies (cap 1 used)
         with self.assertRaises(ValidationError):
             order.scan_enter(sn_name, wc_in)
-        # but with the limit lifted the cancelled order does not block
-        self.op_in.x_max_test_count = 0
+        # the cancelled order itself does not block: lift the cap to re-enter
+        self.op_in.x_max_test_count = 2
         order.scan_enter(sn_name, wc_in)
 
     def test_04_manual_form_prefills_station_ng_defects(self):
@@ -187,7 +188,7 @@ class TestNgRepairLoop(TransactionCase):
         refused, NG leave allowed."""
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
-        self.op_in.x_max_test_count = 0
+        self.op_in.x_max_test_count = 2
         serial = order.scan_enter('SN-LP-005', wc_in)
         self.env['sn.wsd.quality.issue'].create({
             'serial_identity_id': serial.id,

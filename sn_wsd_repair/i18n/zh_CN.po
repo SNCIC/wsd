@@ -944,19 +944,24 @@ msgid "Operation"
 msgstr "工序"
 
 #. module: sn_wsd_repair
-#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__ng_count
-msgid "NG Count"
-msgstr "NG 次数"
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__pass_count
+msgid "Pass Count"
+msgstr "过站次数"
 
 #. module: sn_wsd_repair
-#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__retry_limit
-msgid "Retry Limit"
-msgstr "过站上限"
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__pass_cap
+msgid "Pass Cap"
+msgstr "次数上限"
 
 #. module: sn_wsd_repair
-#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__last_ng_time
-msgid "Last NG Time"
-msgstr "最近 NG 时间"
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__last_result
+msgid "Last Result"
+msgstr "末次结果"
+
+#. module: sn_wsd_repair
+#: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__last_pass_time
+msgid "Last Pass Time"
+msgstr "最近过站时间"
 
 #. module: sn_wsd_repair
 #. odoo-python

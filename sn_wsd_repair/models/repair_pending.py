@@ -1,10 +1,11 @@
 from odoo import _, fields, models
 from odoo.tools import drop_view_if_exists
 
-# SNs whose NG passes exhausted the operation retry limit: they can no
-# longer re-enter the operation and are waiting in the repair area. The
-# cap semantics (count only NG passes after the latest closed repair
-# order) are mirrored in the view's SQL.
+# SNs stuck at an operation: their pass count (OK and NG alike, counted
+# after the latest closed repair order -- the cutoff that restarts the
+# counters) reached the operation's pass cap AND the latest pass was NG
+# (the board never passed). End/output operations are always capped at 1.
+# The cap semantics mirror enter_station in sn_wsd_mrp.
 _PENDING_SQL = """
     SELECT MAX(h.id) AS id,
            h.serial_identity_id,
@@ -12,23 +13,20 @@ _PENDING_SQL = """
            h.mes_order_id,
            h.route_operation_id,
            ro.name AS operation_name,
-           COUNT(h.id) AS ng_count,
-           o.x_max_test_count AS retry_limit,
-           MAX(h.out_date) AS last_ng_time,
+           COUNT(h.id) AS pass_count,
+           CASE WHEN ro.x_allow_exit THEN 1 ELSE o.x_max_test_count END
+               AS pass_cap,
+           (ARRAY_AGG(h.result ORDER BY h.out_date, h.id))[COUNT(h.id)]
+               AS last_result,
+           MAX(h.out_date) AS last_pass_time,
            mo.company_id
       FROM sn_wsd_serial_operation_history h
       JOIN sn_wsd_serial_identity si ON si.id = h.serial_identity_id
       JOIN sn_wsd_mes_order_route_operation ro ON ro.id = h.route_operation_id
       JOIN sn_wsd_operation o ON o.id = ro.operation_id
       JOIN sn_wsd_mes_order mo ON mo.id = h.mes_order_id
-     WHERE h.result = 'ng'
-       AND o.x_max_test_count > 0
+     WHERE h.result IN ('ok', 'ng')
        AND mo.state NOT IN ('cancelled', 'done')
-       AND NOT EXISTS (
-               SELECT 1 FROM sn_wsd_serial_operation_history ok
-                WHERE ok.serial_identity_id = h.serial_identity_id
-                  AND ok.route_operation_id = h.route_operation_id
-                  AND ok.result = 'ok')
        AND NOT EXISTS (
                SELECT 1 FROM sn_wsd_repair_order r
                 WHERE r.state NOT IN ('done', 'scrapped', 'cancel')
@@ -37,14 +35,19 @@ _PENDING_SQL = """
                SELECT 1 FROM sn_wsd_quality_issue q
                 WHERE q.state IN ('open', 'analysis', 'repairing', 'verified')
                   AND q.serial_identity_id = h.serial_identity_id)
-       AND h.out_date >= COALESCE((
+       -- > not >=: an NG written in the same second as the repair
+       -- close precedes it (second-granular timestamps)
+       AND h.out_date > COALESCE((
                SELECT MAX(r2.repair_time) FROM sn_wsd_repair_order r2
                 WHERE r2.state = 'done' AND r2.result = 'ok'
                   AND r2.serial_identity_id = h.serial_identity_id),
                TIMESTAMP '-infinity')
      GROUP BY h.serial_identity_id, si.name, h.mes_order_id,
-              h.route_operation_id, ro.name, o.x_max_test_count, mo.company_id
-    HAVING COUNT(h.id) >= o.x_max_test_count
+              h.route_operation_id, ro.name, ro.x_allow_exit,
+              o.x_max_test_count, mo.company_id
+    HAVING COUNT(h.id) >= CASE WHEN ro.x_allow_exit THEN 1
+                               ELSE o.x_max_test_count END
+       AND (ARRAY_AGG(h.result ORDER BY h.out_date, h.id))[COUNT(h.id)] = 'ng'
 """
 
 
@@ -52,7 +55,7 @@ class SnWsdRepairPending(models.Model):
     _name = 'sn.wsd.repair.pending'
     _description = 'SNs Waiting for Repair'
     _auto = False
-    _order = 'last_ng_time desc'
+    _order = 'last_pass_time desc'
 
     serial_name = fields.Char(string='SN', readonly=True)
     serial_identity_id = fields.Many2one(
@@ -63,9 +66,10 @@ class SnWsdRepairPending(models.Model):
         'sn.wsd.mes.order.route.operation', string='Failed Operation',
         readonly=True)
     operation_name = fields.Char(string='Operation', readonly=True)
-    ng_count = fields.Integer(string='NG Count', readonly=True)
-    retry_limit = fields.Integer(string='Retry Limit', readonly=True)
-    last_ng_time = fields.Datetime(string='Last NG Time', readonly=True)
+    pass_count = fields.Integer(string='Pass Count', readonly=True)
+    pass_cap = fields.Integer(string='Pass Cap', readonly=True)
+    last_result = fields.Char(string='Last Result', readonly=True)
+    last_pass_time = fields.Datetime(string='Last Pass Time', readonly=True)
     company_id = fields.Many2one('res.company', readonly=True)
 
     def init(self):

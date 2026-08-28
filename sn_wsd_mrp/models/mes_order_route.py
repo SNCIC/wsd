@@ -506,14 +506,21 @@ class MesOrderRouteOperation(models.Model):
             op.x_reported_qty = ok_qty + ng_qty + scrap_qty
             op.x_wip_qty = len(op.serial_wip_ids)
             histories = op.serial_history_ids
-            op.x_ok_qty = len(histories.filtered(lambda h: h.result == 'ok'))
-            op.x_ng_qty = len(histories.filtered(lambda h: h.result == 'ng'))
+            # 台数按 SN 去重：一块板复测多行只算一台（测了几次查历史行）
+            op.x_ok_qty = len(set(
+                histories.filtered(lambda h: h.result == 'ok')
+                .mapped('serial_identity_id').ids))
+            op.x_ng_qty = len(set(
+                histories.filtered(lambda h: h.result == 'ng')
+                .mapped('serial_identity_id').ids))
             if op.mes_route_id.manage_mode == 'report':
                 op.x_scrap_qty = scrap_qty
                 passed = ok_qty + ng_qty + scrap_qty
                 op.x_yield_rate = (ok_qty / passed) if passed else 0.0
             else:
-                op.x_scrap_qty = len(histories.filtered(lambda h: h.result == 'scrap'))
+                op.x_scrap_qty = len(set(
+                    histories.filtered(lambda h: h.result == 'scrap')
+                    .mapped('serial_identity_id').ids))
                 passed = op.x_ok_qty + op.x_ng_qty + op.x_scrap_qty
                 op.x_yield_rate = (op.x_ok_qty / passed) if passed else 0.0
 
@@ -549,21 +556,30 @@ class MesOrderRouteOperation(models.Model):
         ]
         if serial_identity:
             domain.append(('serial_identity_id', '=', serial_identity.id))
+        # 维修截断：关单之后的 OK 才推进可达性（回流的板从回流点重走）
+        cutoff = self.env.context.get('sn_wsd_pass_cutoff')
+        if cutoff:
+            domain.append(('out_date', '>', cutoff))
         return self.env['sn.wsd.serial.operation.history'].search(domain).mapped('route_operation_id')
 
     def _reachable_operations(self, mes_order, serial_identity=None):
         done = self._completed_operations(mes_order, serial_identity)
+        if self.env.context.get('sn_wsd_pass_cutoff'):
+            # 维修截断后严格重走：只有"截断点后有 OK 前驱"的工序可达
+            # （授权种子由 enter_station 单判）；起点站不再默认可达。
+            return self.filtered(
+                lambda op: op.blocked_by_ids and op.blocked_by_ids & done)
         return self.filtered(lambda op: not op.blocked_by_ids or op.blocked_by_ids & done)
 
 
 class SerialOperationHistory(models.Model):
     """Append-only record: SN passed this operation of this MES order.
 
-    Only result='ok' counts as completed for reachability; 'ng' rows are
-    free re-entries until the operation retry limit sends the SN to repair.
-    A repaired SN may come back and pass, so at most one 'ok' row per
-    (SN, operation) is allowed while 'ng' rows may pile up (partial unique
-    index created in migration 19.0.7.1.0).
+    Every pass (OK or NG) writes one row and consumes one of the
+    operation's pass-limit attempts; multiple OK rows per (SN, operation)
+    are legitimate (test-station retests, rework revisits). The old
+    "at most one ok row" partial index was dropped in migration
+    19.0.10.0.0 — station-pass-count.
     """
     _name = 'sn.wsd.serial.operation.history'
     _description = 'SN Operation History'
