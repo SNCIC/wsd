@@ -7,6 +7,7 @@
         'data/purchase_contract_data.xml',
         'views/purchase_order_views.xml',
         'report/purchase_contract_templates.xml',
+        'report/purchase_contract_default_templates.xml',
         'report/purchase_contract_reports.xml',
     ],
     'installable': True,

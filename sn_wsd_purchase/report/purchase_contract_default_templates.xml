@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchase_contract_default">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_purchase.report_purchase_contract_default_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_purchase_contract_default_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="buyer" t-value="company.partner_id"/>
+        <t t-set="supplier" t-value="o.partner_id"/>
+        <t t-set="buyer_bank" t-value="o.buyer_bank_id or buyer.bank_ids[:1]"/>
+        <t t-set="supplier_bank" t-value="o.supplier_bank_id or supplier.bank_ids[:1]"/>
+        <t t-set="signing_date" t-value="o.signing_date or o.date_order"/>
+        <div class="article sn-purchase-contract-article"
+             t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <div class="page sn-purchase-contract"
+                 style="font-family: SimSun, serif; color: #111; font-size: 11px;">
+                <style>
+                    .sn-purchase-contract-article,
+                    .sn-purchase-contract {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                    .sn-purchase-contract h1 { margin: 0; padding: 0; text-align: center; font-size: 27px; letter-spacing: 10px; line-height: 1.1; }
+                    .sn-purchase-contract, .sn-purchase-contract table, .sn-purchase-contract td,
+                    .sn-purchase-contract th, .sn-purchase-contract span, .sn-purchase-contract b {
+                        font-family: SimSun, serif;
+                    }
+                    .sn-purchase-contract table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+                    .sn-purchase-contract td, .sn-purchase-contract th { padding: 4px 5px; vertical-align: middle; }
+                    .sn-purchase-contract > .plain,
+                    .sn-purchase-contract > .party,
+                    .sn-purchase-contract > table.plain,
+                    .sn-purchase-contract > table.party,
+                    .sn-purchase-contract > .plain tr,
+                    .sn-purchase-contract > .plain td,
+                    .sn-purchase-contract > .party tr,
+                    .sn-purchase-contract > .party td {
+                        border: 0 !important;
+                        border-style: none !important;
+                        border-width: 0 !important;
+                        outline: 0 !important;
+                        box-shadow: none !important;
+                    }
+                    .sn-purchase-contract table.plain *,
+                    .sn-purchase-contract table.party * {
+                        border: 0 !important;
+                        border-style: none !important;
+                        border-width: 0 !important;
+                        outline: 0 !important;
+                        box-shadow: none !important;
+                    }
+                    .sn-purchase-contract .plain td, .sn-purchase-contract .party td { padding: 2px 4px; }
+                    .sn-purchase-contract .product-table { table-layout: fixed; page-break-inside: avoid; }
+                    .sn-purchase-contract .product-table,
+                    .sn-purchase-contract .product-table td,
+                    .sn-purchase-contract .product-table th {
+                        border: 1px solid #111;
+                    }
+                    .sn-purchase-contract .product-table td,
+                    .sn-purchase-contract .product-table th {
+                        padding: 4px 5px;
+                        overflow-wrap: anywhere;
+                    }
+                    .sn-purchase-contract .product-table tfoot td:first-child {
+                        white-space: nowrap;
+                    }
+                    .sn-purchase-contract .label { font-weight: 700; white-space: nowrap; }
+                    .sn-purchase-contract .party-name { font-weight: 700; }
+                    .sn-purchase-contract .section-title { margin: 4px 0 1px; font-weight: 700; font-size: 12px; page-break-after: avoid; }
+                    .sn-purchase-contract .terms { margin: 1px 0; line-height: 1.38; white-space: pre-line; }
+                    .sn-purchase-contract .amount { text-align: right; white-space: nowrap; }
+                    .sn-purchase-contract .center { text-align: center; }
+                    .sn-purchase-contract .small { font-size: 10px; line-height: 1.34; }
+                    .sn-purchase-contract .date-blank {
+                        display: inline-block;
+                        width: 38px;
+                        height: 16px;
+                        margin: 0 2px;
+                        vertical-align: -3px;
+                        border-bottom: 1px solid #111;
+                    }
+                </style>
+
+                <table class="plain table-borderless o_ignore_layout_styling">
+                    <tr>
+                        <td style="width: 26%;">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                 style="max-width: 150px; max-height: 48px;"/>
+                            <span t-else="" style="font-size: 20px; font-weight: 700;" t-out="company.name"/>
+                        </td>
+                        <td><h1>购销合同</h1></td>
+                        <td style="width: 26%;"/>
+                    </tr>
+                </table>
+
+                <table class="party table-borderless o_ignore_layout_styling">
+                    <tr>
+                        <td style="width: 30%;">
+                            <span class="label">签订日期：</span>
+                            <span t-out="o._format_contract_date(signing_date)"/>
+                        </td>
+                        <td style="width: 25%;">
+                            <span class="label">签订地点：</span>
+                            <span t-out="o.signing_location or '浙江省温州乐清市'"/>
+                        </td>
+                        <td style="width: 45%;"><span class="label">合同号：</span> <span t-out="o.contract_number or o.name"/></td>
+                    </tr>
+                    <tr>
+                        <td><span class="label">需方：</span> <span class="party-name" t-out="buyer.name"/></td>
+                        <td/>
+                        <td><span class="label">供方：</span> <span class="party-name" t-out="supplier.name"/></td>
+                    </tr>
+                    <tr>
+                        <td><span class="label">开户行：</span> <span t-out="buyer_bank.bank_id.name if buyer_bank and buyer_bank.bank_id else ''"/></td>
+                        <td/>
+                        <td><span class="label">开户行：</span> <span t-out="supplier_bank.bank_id.name if supplier_bank and supplier_bank.bank_id else ''"/></td>
+                    </tr>
+                    <tr>
+                        <td><span class="label">账号：</span> <span t-out="buyer_bank.acc_number if buyer_bank else ''"/></td>
+                        <td/>
+                        <td><span class="label">账号：</span> <span t-out="supplier_bank.acc_number if supplier_bank else ''"/></td>
+                    </tr>
+                </table>
+
+                <div class="terms">供需双方本着“平等互利、等价有偿、协商一致”的原则，现就有关产品的采购和供应，达成如下协议。</div>
+
+                <div class="section-title">一、采购产品的明细表</div>
+                <table class="product-table">
+                    <thead>
+                        <tr class="center">
+                            <th style="width: 5%;">序号</th>
+                            <th style="width: 19%;">物料编码</th>
+                            <th style="width: 16%;">产品名称</th>
+                            <th style="width: 16%;">产品规格</th>
+                            <th style="width: 7%;">品牌</th>
+                            <th style="width: 5%;">单位</th>
+                            <th style="width: 10%;">数量</th>
+                            <th style="width: 11%;">含税单价</th>
+                            <th style="width: 11%;">含税金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.order_line.filtered(lambda line: not line.display_type and line.product_qty != 0)" t-as="line">
+                            <tr>
+                                <td class="center"><span t-out="line_index + 1"/></td>
+                                <td><span t-out="line.product_id.default_code or ''"/></td>
+                                <td><span t-out="line.product_id.name or line.name"/></td>
+                                <td><span t-out="line.product_id.material_specification or ''"/></td>
+                                <td/>
+                                <td class="center"><span t-out="line.product_uom_id.name or ''"/></td>
+                                <td class="amount"><span t-out="o._format_contract_quantity(line.product_qty)"/></td>
+                                <td class="amount"><span t-out="o._format_contract_unit_price(line.price_unit_tax_included)"/></td>
+                                <td class="amount"><span t-out="o._format_contract_amount(line.price_total)"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"><b>合计金额（含13%增值税）</b></td>
+                            <td colspan="5"><span t-out="o.amount_total_chinese"/></td>
+                            <td class="amount"><span t-out="o._format_contract_total(o.amount_total)"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>不含税金额</b></td>
+                            <td colspan="5"><span t-out="o.amount_untaxed_chinese"/></td>
+                            <td class="amount"><span t-out="o._format_contract_yuan(o.amount_untaxed)"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>增值税税额</b></td>
+                            <td colspan="5"><span t-out="o.amount_tax_chinese"/></td>
+                            <td class="amount"><span t-out="o._format_contract_yuan(o.amount_tax)"/></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="section-title">二、技术要求</div>
+                <div class="terms">该产品质量标准符合国家标准、行业标准、地方标准为原则。若双方对产品质量、技术有特殊要求的，应以附件形式明确；无特别要求的，按上述标准执行。同时，若双方需确认样品的，可采取双方共同封样确认并双方、第三方处进行封样保留。</div>
+
+                <div class="section-title">三、交货日期：
+                    <t t-if="o.delivery_date_text">
+                        <span t-out="o.delivery_date_text"/>
+                    </t>
+                    <t t-else="">
+                        供方承诺
+                        <span class="date-blank"/>
+                        年
+                        <span class="date-blank"/>
+                        月
+                        <span class="date-blank"/>
+                        日交付该批物料。（以产品到货验收合格时间为准）
+                    </t>
+                </div>
+                <div class="terms"><b>其它说明：</b></div>
+
+                <div class="section-title">四、交货及风险承担</div>
+                <div class="terms">交货地点为浙江省乐清市经济开发区十一路181号，且风险自到达指定地点，并经过需方验收合格后转移。交货时应提供送货单和出厂检验报告，期间产生运输费用的，由供方承担。</div>
+                <div class="section-title">五、验收方式</div>
+                <div class="terms">产品数量、外观检验期限不少于3个工作日，产品质量检验期限不少于15个工作日。另外，产品质量保证期不低于1年，自验收合格之日起算，且在质量保证期内，非可归责于需方的原因出现的产品质量问题，供方应当赔偿需方损失（损失难以确定的，赔偿金额不少于5000元），并需承担维修、更换、退货等责任，产生的全部费用由供方承担，需方通过本合同载明的供方联系方式或代理人提出的，供方应在2日内给予回复。</div>
+                <div class="section-title">六、结算与付款</div>
+                <div class="terms">1、双方于货款次月10日前/每次到货后7个工作日内，结账确认该周账/次内货值；<br/>2、付款时间：以双方约定的账期支付；<br/>3、付款方式：银行汇款/承兑汇票；<br/>4、供方先行足额开具合法的发票，系需方付款的先决条件，且供方应当在需方收到货物次月25日前开具其发票。</div>
+                <div class="section-title">七、违约责任</div>
+                <div class="terms small">1、供方迟延交货（包含因为货物验收不合格，进行退、换、修的情形），除应当赔偿需方的一切损失（如停线或不能及时向需方客户交货物的情形），还应当向需方支付迟延交付的违约金，以应交未交货物货值为基数，按0.05%/日的比例计算，逾期交货超过20日的，需方有权解除合同；<br/>2、供方必须保证本合同涉及产品为双方约定品牌的原厂正品，如果出现假冒伪劣或质量不合格产品，需方有权选择单方解除合同，停止支付并索回已支付的全部货款，由供方赔偿需方因此产生的一切经济损失，且供方还应当向需方支付不少于货值总金额25%的违约金；<br/>3、因产品验收不合格、合同解除等原因，供方应当提回货物的，应当在收到需方通知后三日内提回需方退回的货物，否则应当向需方支付保管费，保管费难以确认的，按100元/日计算，逾期超过15日的，视为供方放弃货物所有权，需方有权自行处置；<br/>4、除本合同另外约定的情形外，供方有应退未退款项的，应当在收到需方通知后三日内退还，否则应当以应退未退款项为基数按0.05%/日的比例计算违约金或占有使用费并向需方支付。</div>
+                <div class="section-title">八、执行本合同发生纠纷</div>
+                <div class="terms">执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向需方所在地人民法院提出诉讼。同时，守约方为维护合法权而支出的费用，由违约方一并承担，该费用的范围包括但不限于律师费、诉讼费、保全费、保函费、差旅费、误工费、伙食费等。本合同载明的双方基本信息及代理人，亦作为双方就本合同履行事宜有效的联系信息及联络人，如有变更需在三日内以书面方式通知。</div>
+                <div class="section-title">九、本合同自签订之日起生效</div>
+                <div class="terms">本合同自签订之日起生效，有效期为二年。到期后，由需方选择是否再行延期一年。合同经需方以一定方式确认的传真、扫描件均有效，手工填写处不得二次涂改，否则视为无效。</div>
+
+                <table class="party table-borderless o_ignore_layout_styling"
+                       style="margin-top: 10px; border: 0 !important; outline: 0 !important;">
+                    <tr>
+                        <td class="signature" style="width: 50%;">
+                            <b>需方：</b><span t-out="buyer.name"/>（盖章）
+                            <br/><br/>委托代理人：<span t-out="o.buyer_agent or ''"/>
+                            <br/><br/>日期：
+                        </td>
+                        <td class="signature" style="width: 50%;">
+                            <b>供方：</b><span t-out="supplier.name"/>（盖章）
+                            <br/><br/>委托代理人：<span t-out="o.supplier_agent or ''"/>
+                            <br/><br/>日期：
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="footer sn-purchase-contract report-footer">
+            <div class="o_footer_content text-center">
+                第<span class="page"/>页，共<span class="topage"/>页
+            </div>
+        </div>
+    </template>
+</odoo>

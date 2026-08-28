@@ -121,6 +121,16 @@ class PurchaseOrder(models.Model):
             return f'{symbol}{NON_BREAKING_SPACE}{formatted}'
         return f'{formatted}{NON_BREAKING_SPACE}{symbol}'
 
+    def _format_contract_yuan(self, value):
+        """Format an amount with a forced CNY symbol prefix and two decimals.
+
+        Used by the contract footer (untaxed amount and VAT amount) to keep
+        the printed output aligned with the Chinese purchase contract layout
+        regardless of the configured currency symbol position.
+        """
+        formatted = formatLang(self.env, value, digits=2)
+        return f'\u00a5{NON_BREAKING_SPACE}{formatted}'
+
     def _get_contract_address(self, partner):
         """Return a contract address from the largest region to the smallest."""
         self.ensure_one()
@@ -147,6 +157,10 @@ class PurchaseOrder(models.Model):
     )
     amount_untaxed_chinese = fields.Char(
         string='Untaxed Amount in Chinese',
+        compute='_compute_amount_total_chinese',
+    )
+    amount_tax_chinese = fields.Char(
+        string='Tax Amount in Chinese',
         compute='_compute_amount_total_chinese',
     )
 
@@ -210,11 +224,12 @@ class PurchaseOrder(models.Model):
         copy=True,
     )
 
-    @api.depends('amount_total', 'amount_untaxed')
+    @api.depends('amount_total', 'amount_untaxed', 'amount_tax')
     def _compute_amount_total_chinese(self):
         for order in self:
             order.amount_total_chinese = cncurrency(order.amount_total, prefix=True)
             order.amount_untaxed_chinese = cncurrency(order.amount_untaxed, prefix=True)
+            order.amount_tax_chinese = cncurrency(order.amount_tax, prefix=True)
 
 
 class PurchaseOrderLine(models.Model):

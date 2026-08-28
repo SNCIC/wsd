@@ -32,6 +32,7 @@
                             <field name="contract_number"/>
                             <field name="signing_date"/>
                             <field name="signing_location"/>
+                            <field name="amount_tax" readonly="1" string="VAT Amount"/>
                         </group>
                         <group string="Bank Accounts">
                             <field name="buyer_bank_id"

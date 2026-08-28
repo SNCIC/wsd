@@ -17,6 +17,21 @@ msgid "Contract Number"
 msgstr "合同号"
 
 #. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__amount_tax_chinese
+msgid "Tax Amount in Chinese"
+msgstr "税额大写"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__amount_total_chinese
+msgid "Total Amount in Chinese"
+msgstr "含税金额大写"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__amount_untaxed_chinese
+msgid "Untaxed Amount in Chinese"
+msgstr "不含税金额大写"
+
+#. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__signing_date
 msgid "Signing Date"
 msgstr "签订日期"
@@ -93,10 +108,13 @@ msgstr "合同条款"
 
 #. module: sn_wsd_purchase
 #: model:ir.actions.report,name:sn_wsd_purchase.action_report_purchase_contract
+msgid "Xinpeng Purchase Contract"
+msgstr "信平采购合同"
+
 #. module: sn_wsd_purchase
-#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
-msgid "Purchase Contract"
-msgstr "采购合同"
+#: model:ir.actions.report,name:sn_wsd_purchase.action_report_purchase_contract_default
+msgid "Default Purchase Contract"
+msgstr "默认采购合同"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
