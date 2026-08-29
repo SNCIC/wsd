@@ -368,17 +368,19 @@
                                     <field name="operation_id" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
+                                    <!-- ipqc：范围三件套=制令单(参考)+生产线+巡检工序 -->
+                                    <field name="x_patrol_operation_id" invisible="inspection_type != 'ipqc'"/>
                                     <field name="production_line_id"/>
-                                    <field name="area_sn"/>
-                                    <field name="model_code"/>
-                                    <field name="product_id"/>
+                                    <field name="area_sn" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="model_code" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="product_id" invisible="inspection_type == 'ipqc'"/>
                                 </group>
-                                <group>
+                                <group invisible="inspection_type == 'ipqc'">
                                     <field name="picking_id"/>
                                     <field name="move_line_id"/>
                                     <field name="lot_id"/>
                                 </group>
-                                <group>
+                                <group invisible="inspection_type == 'ipqc'">
                                     <field name="sample_window_start"/>
                                     <field name="sample_window_end"/>
                                     <field name="evidence_serial_identity_id"/>

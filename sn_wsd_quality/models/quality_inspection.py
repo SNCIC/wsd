@@ -711,6 +711,11 @@ class QualityInspection(models.Model):
                 inspection.line_ids.filtered(lambda line: line.result == 'fail')
             )
 
+    x_patrol_operation_id = fields.Many2one(
+        related='scheme_id.operation_id', string='Patrol Operation',
+        store=True, readonly=True, index=True,
+        help='Operation the patrol scheme watches (from the scheme).',
+    )
     # 巡检快捷数量（add-mes-ipqc-patrol）：报工模式无 SN，不落样本行，
     # 两个数字直接作为记录，已检/缺陷样本数把它们算进去
     # （合格=已检−缺陷；缺陷明细仍走缺陷页）
