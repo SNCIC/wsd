@@ -800,6 +800,13 @@ class QualityInspectionSample(models.Model):
         index=True,
     )
     lot_id = fields.Many2one('stock.lot', string='Lot/Serial Number', check_company=True, index=True)
+    # 不良归属的检验项目（add-mes-ipqc-patrol）：fail 行挂上"哪个项目
+    # 查出的"，统计/SPC 按 x_line_id.name 分组即得"哪个项目不良多"
+    x_line_id = fields.Many2one(
+        'sn.wsd.quality.inspection.line', string='Inspection Item',
+        index=True, copy=False,
+        ondelete='set null',
+    )
     result = fields.Selection(
         [
             ('pending', 'Pending'),

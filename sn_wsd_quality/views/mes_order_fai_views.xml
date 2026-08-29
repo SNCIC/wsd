@@ -33,29 +33,8 @@
         <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='scope']" position="after">
-                <page name="ipqc_samples" string="Patrol Samples"
-                      invisible="inspection_type != 'ipqc'">
-                    <!-- 无SN快捷数量（报工模式）：两个数字即记录，不落样本行，
-                         直接进已检/缺陷统计；缺陷明细走缺陷页 -->
-                    <group>
-                        <group string="Picked Qty (no SN)">
-                            <field name="x_ipqc_quick_ok" readonly="state == 'done'"/>
-                            <field name="x_ipqc_quick_ng" readonly="state == 'done'"/>
-                        </group>
-                    </group>
-                    <!-- 逐台判定（过站模式）：行内选SN（可扫码）+判结果。
-                         已检/缺陷样本数=行数+快捷数量（合格=已检−缺陷） -->
-                    <field name="sample_ids" nolabel="1"
-                           readonly="state == 'done'">
-                        <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
-                            <field name="sequence" widget="handle"/>
-                            <field name="serial_identity_id" options="{'no_create': 1}"/>
-                            <field name="result"/>
-                            <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
-                            <field name="note" placeholder="optional"/>
-                        </list>
-                    </field>
-                </page>
+                <!-- ipqc 无页签区段式表单：范围/抽检结果/检验项/备注 以标题分区，
+                     notebook 对 ipqc 整体隐藏 -->
                 <page name="fai_samples" string="First Article Samples"
                       invisible="inspection_type != 'fai'">
                     <group>
@@ -79,6 +58,81 @@
                     </group>
                 </page>
             </xpath>
+                <xpath expr="//notebook" position="before">
+                    <div name="ipqc_sections" invisible="inspection_type != 'ipqc'">
+                        <separator string="Scope"/>
+                        <group>
+                            <group>
+                                <field name="mes_order_id" readonly="state == 'done'"/>
+                                <field name="production_line_id"/>
+                                <field name="x_patrol_operation_id"/>
+                            </group>
+                        </group>
+                        <separator string="Patrol Results"/>
+                        <group>
+                            <group string="Statistics">
+                                <field name="sample_size" readonly="state != 'open'"/>
+                                <field name="sample_checked_qty"/>
+                                <field name="sample_defect_qty"/>
+                            </group>
+                            <group string="Picked Qty (no SN)">
+                                <field name="x_ipqc_quick_ok" readonly="state == 'done'"/>
+                                <field name="x_ipqc_quick_ng" readonly="state == 'done'"/>
+                                <field name="x_ipqc_quick_line_id"
+                                       invisible="x_ipqc_quick_ng &lt;= 0"
+                                       domain="[('inspection_id', '=', parent.id)]"
+                                       options="{'no_create': 1}" readonly="state == 'done'"/>
+                                <field name="x_ipqc_quick_defect_id"
+                                       invisible="x_ipqc_quick_ng &lt;= 0"
+                                       options="{'no_create': 1}" readonly="state == 'done'"/>
+                                <field name="x_ipqc_quick_note"
+                                       invisible="x_ipqc_quick_ng &lt;= 0"
+                                       readonly="state == 'done'"
+                                       placeholder="e.g. solder bridge after reflow"/>
+                            </group>
+                        </group>
+                        <!-- 逐台判定（过站模式）：行内选SN（可扫码）+判结果；
+                             fail 行可挂 检验项目+缺陷代码（不良归属，供统计/SPC） -->
+                        <field name="sample_ids" nolabel="1"
+                               readonly="state == 'done'">
+                            <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                <field name="sequence" widget="handle"/>
+                                <field name="serial_identity_id" options="{'no_create': 1}"/>
+                                <field name="result"/>
+                                <field name="x_line_id" invisible="result != 'fail'"
+                                       domain="[('inspection_id', '=', parent.id)]"
+                                       options="{'no_create': 1}"/>
+                                <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                <field name="note" placeholder="optional"/>
+                            </list>
+                        </field>
+                        <separator string="Inspection Items"/>
+                        <field name="line_ids" nolabel="1" readonly="state == 'done'">
+                            <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                <field name="sequence" widget="handle"/>
+                                <field name="item_code"/>
+                                <field name="name"/>
+                                <field name="item_type"/>
+                                <field name="required"/>
+                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                <field name="text_value" invisible="item_type == 'numeric'"/>
+                                <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                <field name="is_checked"/>
+                                <field name="result"/>
+                                <field name="unit"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                        <separator string="Notes"/>
+                        <field name="note" nolabel="1" readonly="state == 'done'"
+                               placeholder="Patrol remarks..."/>
+                    </div>
+                </xpath>
+                <xpath expr="//notebook" position="attributes">
+                    <attribute name="invisible">inspection_type == 'ipqc'</attribute>
+                </xpath>
         </field>
     </record>
 </odoo>

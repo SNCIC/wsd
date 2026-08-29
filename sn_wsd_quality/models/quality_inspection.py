@@ -728,6 +728,20 @@ class QualityInspection(models.Model):
         string='Picked NG Qty', copy=False,
         help='Patrol quick entry (no SN): how many picked boards failed.',
     )
+    x_ipqc_quick_line_id = fields.Many2one(
+        'sn.wsd.quality.inspection.line', string='Quick Inspection Item',
+        copy=False, ondelete='set null',
+        help='Which inspection item found the quick-entry defects.',
+    )
+    x_ipqc_quick_defect_id = fields.Many2one(
+        'sn.wsd.quality.defect.code', string='Quick Defect Code', copy=False,
+        ondelete='set null',
+        help='Defect code of the quick-entry NG boards.',
+    )
+    x_ipqc_quick_note = fields.Char(
+        string='Quick Defect Note', copy=False,
+        help='Free description of the quick-entry defects.',
+    )
 
     @api.onchange('scheme_id')
     def _onchange_scheme_id(self):

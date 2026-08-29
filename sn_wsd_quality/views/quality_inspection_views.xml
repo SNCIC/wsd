@@ -387,7 +387,8 @@
                                 </group>
                             </group>
                         </page>
-                        <page name="sampling" string="Sampling">
+                        <page name="sampling" string="Sampling"
+                              invisible="inspection_type == 'ipqc'">
                             <group>
                                 <!-- ipqc 巡检：定时固定小样本、不用 AQL——抽样页
                                      只留方式与数量，AQL/IQC 遗留字段隐藏 -->
@@ -500,7 +501,7 @@
                                 </form>
                             </field>
                         </page>
-                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai']">
                             <group>
                                 <!-- ipqc：只看抽样数量/已检/缺陷样本数（合格=已检−缺陷）；
                                      检验项口径的已检验/缺陷数量与 Ac/Re 为 OQC 维度 -->

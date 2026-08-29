@@ -1950,6 +1950,7 @@ msgstr "方案名称"
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Scope"
 msgstr "范围"
 
@@ -3262,9 +3263,34 @@ msgid "Patrol inspection of %(op)s on line %(line)s is due; sample hint: %(count
 msgstr "产线 %(line)s 的 %(op)s 巡检到期；建议抽样 %(count)s 件。"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__x_line_id
+msgid "Inspection Item"
+msgstr "检验项目"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_line_id
+msgid "Quick Inspection Item"
+msgstr "不良检验项目"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_defect_id
+msgid "Quick Defect Code"
+msgstr "不良代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_note
+msgid "Quick Defect Note"
+msgstr "不良说明"
+
+#. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "Patrol Samples"
-msgstr "巡检样本"
+msgid "Patrol Results"
+msgstr "抽检结果"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Statistics"
+msgstr "统计"
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_ok
 msgid "Picked OK Qty"
