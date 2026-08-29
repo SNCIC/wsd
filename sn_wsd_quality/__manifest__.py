@@ -5,6 +5,7 @@
     'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp'],
     'data': [
         'data/ir_sequence.xml',
+        'data/ipqc_patrol_cron.xml',
         'security/ir.model.access.csv',
         'views/sampling_views.xml',
         'views/meter_component_trace_views.xml',

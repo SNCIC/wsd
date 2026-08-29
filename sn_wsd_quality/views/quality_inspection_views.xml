@@ -358,12 +358,14 @@
                     <notebook>
                         <page name="scope" string="Scope">
                             <group>
+                                <!-- ipqc 巡检：范围=生产线(+制令单参考)；制造订单/
+                                     工序实例/工作中心/原生工序为 IQC/OQC 维度 -->
                                 <group>
-                                    <field name="production_id"/>
+                                    <field name="production_id" invisible="inspection_type == 'ipqc'"/>
                                     <field name="mes_order_id"/>
-                                    <field name="route_operation_id"/>
-                                    <field name="workcenter_id"/>
-                                    <field name="operation_id"/>
+                                    <field name="route_operation_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="workcenter_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="operation_id" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
                                     <field name="production_line_id"/>
@@ -385,26 +387,30 @@
                         </page>
                         <page name="sampling" string="Sampling">
                             <group>
+                                <!-- ipqc 巡检：定时固定小样本、不用 AQL——抽样页
+                                     只留方式与数量，AQL/IQC 遗留字段隐藏 -->
                                 <group>
                                     <field name="sampling_method" readonly="1"/>
-                                    <field name="sampling_standard_id" readonly="1"/>
-                                    <field name="lot_qty_source" readonly="1"/>
-                                    <field name="lot_qty" readonly="1"/>
-                                    <field name="sample_selection_method" readonly="state != 'open'"/>
+                                    <field name="sampling_standard_id" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="lot_qty_source" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="lot_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="sample_selection_method" readonly="state != 'open'" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
-                                    <field name="inspection_level" readonly="1"/>
-                                    <field name="switching_mode" readonly="1"/>
-                                    <field name="aql_value" readonly="1"/>
-                                    <field name="sample_size_code" readonly="1"/>
+                                    <field name="inspection_level" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="switching_mode" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="aql_value" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="sample_size_code" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                     <field name="sample_size" readonly="1"/>
                                     <field name="sample_checked_qty" readonly="1"/>
                                     <field name="sample_defect_qty" readonly="1"/>
-                                    <field name="accept_qty" readonly="1"/>
-                                    <field name="reject_qty" readonly="1"/>
+                                    <field name="accept_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="reject_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                             </group>
-                            <field name="sample_ids">
+                            <!-- ipqc：样本明细的家在"巡检样本"页（逐台判定）；
+                                 此处仅 IQC/OQC 使用（批次/逐件维度） -->
+                            <field name="sample_ids" invisible="inspection_type == 'ipqc'">
                                 <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
@@ -494,13 +500,15 @@
                         </page>
                         <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
                             <group>
+                                <!-- ipqc：只看抽样数量/已检/缺陷样本数（合格=已检−缺陷）；
+                                     检验项口径的已检验/缺陷数量与 Ac/Re 为 OQC 维度 -->
                                 <field name="sample_size"/>
                                 <field name="sample_checked_qty" readonly="1"/>
-                                <field name="inspected_qty" readonly="1"/>
-                                <field name="defect_qty" readonly="1"/>
+                                <field name="inspected_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                <field name="defect_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                 <field name="sample_defect_qty" readonly="1"/>
-                                <field name="accept_qty"/>
-                                <field name="reject_qty"/>
+                                <field name="accept_qty" invisible="inspection_type == 'ipqc'"/>
+                                <field name="reject_qty" invisible="inspection_type == 'ipqc'"/>
                             </group>
                             <field name="defect_line_ids">
                                 <list editable="bottom">

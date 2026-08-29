@@ -412,6 +412,7 @@ msgstr "电流互感器(CT)"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__code
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__defect_code_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__defect_code_id
 msgid "Defect Code"
 msgstr "缺陷代码"
 
@@ -1042,6 +1043,7 @@ msgstr "批次/序列号"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__lot_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__lot_id
 msgid "Lot/Serial Number"
 msgstr "批次/序列号"
 
@@ -3247,3 +3249,19 @@ msgstr "已报首件台数"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Reported Qty"
 msgstr "已报台数"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Patrol inspection due"
+msgstr "巡检到期"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Patrol inspection of %(op)s on line %(line)s is due; sample hint: %(count)s."
+msgstr "产线 %(line)s 的 %(op)s 巡检到期；建议抽样 %(count)s 件。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Patrol Samples"
+msgstr "巡检样本"

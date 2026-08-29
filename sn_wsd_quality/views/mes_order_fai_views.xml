@@ -33,6 +33,21 @@
         <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='scope']" position="after">
+                <page name="ipqc_samples" string="Patrol Samples"
+                      invisible="inspection_type != 'ipqc'">
+                    <!-- 逐台判定：过站模式行内选SN（可扫码）；报工模式SN留空只判结果。
+                         已检/缺陷样本数在抽样页自动统计（合格=已检−缺陷） -->
+                    <field name="sample_ids" nolabel="1"
+                           readonly="state == 'done'">
+                        <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                            <field name="sequence" widget="handle"/>
+                            <field name="serial_identity_id" options="{'no_create': 1}"/>
+                            <field name="result"/>
+                            <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                            <field name="note" placeholder="optional"/>
+                        </list>
+                    </field>
+                </page>
                 <page name="fai_samples" string="First Article Samples"
                       invisible="inspection_type != 'fai'">
                     <group>
