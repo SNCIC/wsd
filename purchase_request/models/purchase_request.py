@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 _STATES = [
     ("draft", "Draft"),
@@ -279,7 +280,51 @@ class PurchaseRequest(models.Model):
         return self.write({"state": "to_approve"})
 
     def button_approved(self):
-        return self.write({"state": "approved"})
+        for request in self.filtered(lambda rec: rec.state == "to_approve"):
+            request.write({"state": "approved"})
+            if request.assigned_to:
+                request.activity_schedule(
+                    act_type_xmlid="mail.mail_activity_data_todo",
+                    summary=self.env._("Purchase Request Approved"),
+                    note=self.env._(
+                        "Purchase Request %(name)s has been approved and is ready "
+                        "for purchasing.",
+                        name=request.name,
+                    ),
+                    user_id=request.assigned_to.id,
+                )
+            requested_partner = request.requested_by.partner_id
+            if requested_partner:
+                request.message_post(
+                    body=self.env._(
+                        "Purchase Request %(name)s has been approved.",
+                        name=request.name,
+                    ),
+                    partner_ids=requested_partner.ids,
+                    subtype_xmlid="purchase_request.mt_request_approved",
+                    message_type="notification",
+                )
+        return True
+
+    def _auto_set_done(self):
+        for request in self.filtered(
+            lambda rec: rec.state in ("approved", "in_progress")
+        ):
+            active_lines = request.line_ids.filtered(lambda line: not line.cancelled)
+            if active_lines and all(
+                float_compare(
+                    line.qty_done,
+                    line.product_qty,
+                    precision_rounding=(
+                        line.product_uom_id.rounding
+                        if line.product_uom_id
+                        else line.product_id.uom_id.rounding
+                    ),
+                )
+                >= 0
+                for line in active_lines
+            ):
+                request.button_done()
 
     def button_rejected(self):
         self.mapped("line_ids").do_cancel()

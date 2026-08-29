@@ -19,25 +19,29 @@ class PurchaseOrder(models.Model):
             po_name=self.name,
             pr_name=request.name,
         )
-        message = f"<h3>{title}</h3><ul>"
-        message += self.env._(
+        message_body = self.env._(
             "The following requested items from Purchase Request %(pr_name)s "
             "have now been confirmed in Purchase Order %(po_name)s:",
             po_name=self.name,
             pr_name=request.name,
         )
-
-        for line in request_dict.values():
-            message += self.env._(
+        product_lines = Markup().join(
+            Markup(self.env._(
                 "<li><b>%(prl_name)s</b>: Ordered quantity %(prl_qty)s %(prl_uom)s, "
-                "Planned date %(prl_date_planned)s</li>",
-                prl_name=html_escape(line["name"]),
-                prl_qty=line["product_qty"],
-                prl_uom=line["product_uom"],
-                prl_date_planned=line["date_planned"],
-            )
-        message += "</ul>"
-        return message
+                "Planned date %(prl_date_planned)s</li>"
+            )) % {
+                "prl_name": html_escape(line["name"]),
+                "prl_qty": line["product_qty"],
+                "prl_uom": html_escape(line["product_uom"]),
+                "prl_date_planned": line["date_planned"],
+            }
+            for line in request_dict.values()
+        )
+        return Markup("<h3>%(title)s</h3><p>%(message_body)s</p><ul>%(product_lines)s</ul>") % {
+            "title": title,
+            "message_body": message_body,
+            "product_lines": product_lines,
+        }
 
     def _purchase_request_confirm_message(self):
         request_obj = self.env["purchase.request"]
@@ -191,6 +195,7 @@ class PurchaseOrderLine(models.Model):
                 )
 
                 alloc.purchase_request_line_id._compute_qty()
+            rec.purchase_request_lines.mapped("request_id")._auto_set_done()
         return True
 
     @api.model

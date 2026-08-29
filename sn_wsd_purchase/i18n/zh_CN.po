@@ -310,3 +310,152 @@ msgstr "不含税金额"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 msgid "Tax Included Amount"
 msgstr "含税金额"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__approved_qty
+msgid "Approved Quantity"
+msgstr "批准数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__approved_pending_qty
+msgid "Approved Quantity to Purchase"
+msgstr "待采购批准数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__approved_qty
+msgid ""
+"Quantity approved for purchasing. It defaults to the requested quantity when"
+" approval is requested."
+msgstr "批准采购的数量。申请审批时，默认等于申请数量。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Approved quantity can only be changed before the request is approved."
+msgstr "批准数量只能在采购申请批准前修改。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "The approved quantity must be between zero and the requested quantity."
+msgstr "批准数量必须介于零和申请数量之间。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__create_user_id
+msgid "Created By"
+msgstr "创建人"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_code
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_name
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__material_specification
+msgid "Material Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__requested_qty
+msgid "Requested Quantity"
+msgstr "申请数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__purchase_order_ids
+msgid "Purchase Orders"
+msgstr "采购订单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__expected_arrival_date
+msgid "Expected Arrival"
+msgstr "预计到货日期"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
+msgid "Received Quantity"
+msgstr "入库数量"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+msgid "Purchase Detail"
+msgstr "采购明细"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_detail
+msgid "Purchase Details"
+msgstr "采购明细"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+msgid "Quantities"
+msgstr "数量"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+msgid "Purchasing"
+msgstr "采购"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Request"
+msgstr "申请单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Request Reference"
+msgstr "采购申请单号"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Data Status"
+msgstr "数据状态"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__date_required
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Request Date"
+msgstr "申请日期"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__receipt_status
+msgid "Receipt Status"
+msgstr "收货状态"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__receipt_status__not_received
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Not Received"
+msgstr "未收货"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__receipt_status__partially_received
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Partially Received"
+msgstr "部分收货"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__receipt_status__fully_received
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Fully Received"
+msgstr "全部收货"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+msgid "Purchase Order"
+msgstr "采购订单"

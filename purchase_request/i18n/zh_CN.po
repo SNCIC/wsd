@@ -29,6 +29,27 @@ msgid ""
 "<li><b>%(prl_name)s</b>: Ordered quantity %(prl_qty)s %(prl_uom)s, Planned "
 "date %(prl_date_planned)s</li>"
 msgstr ""
+"<li><b>%(prl_name)s</b>：订购数量 %(prl_qty)s %(prl_uom)s，计划日期 "
+"%(prl_date_planned)s</li>"
+
+#. module: purchase_request
+#. odoo-python
+#: code:addons/purchase_request/models/purchase_request.py:0
+msgid "Purchase Request Approved"
+msgstr "请购单已批准"
+
+#. module: purchase_request
+#. odoo-python
+#: code:addons/purchase_request/models/purchase_request.py:0
+msgid ""
+"Purchase Request %(name)s has been approved and is ready for purchasing."
+msgstr "请购单 %(name)s 已批准，可以开始采购。"
+
+#. module: purchase_request
+#. odoo-python
+#: code:addons/purchase_request/models/purchase_request.py:0
+msgid "Purchase Request %(name)s has been approved."
+msgstr "请购单 %(name)s 已批准。"
 
 #. module: purchase_request
 #. odoo-python
@@ -519,7 +540,7 @@ msgstr ""
 #. module: purchase_request
 #: model:ir.model.fields.selection,name:purchase_request.selection__purchase_request__state__in_progress
 msgid "In progress"
-msgstr ""
+msgstr "进行中"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__is_editable
@@ -683,7 +704,7 @@ msgstr "订单编号"
 #. odoo-python
 #: code:addons/purchase_request/models/purchase_order.py:0
 msgid "Order confirmation %(po_name)s for your Request %(pr_name)s"
-msgstr ""
+msgstr "采购订单 %(po_name)s 已确认，请购单 %(pr_name)s 的采购请求已处理"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__orderpoint_id
@@ -791,12 +812,12 @@ msgstr "采购订单明细"
 #. module: purchase_request
 #: model:mail.message.subtype,name:purchase_request.mt_request_po_confirmed
 msgid "Purchase Order confirmation"
-msgstr ""
+msgstr "采购订单确认"
 
 #. module: purchase_request
 #: model:mail.message.subtype,description:purchase_request.mt_request_po_confirmed
 msgid "Purchase Order is confirmed"
-msgstr ""
+msgstr "采购订单已确认"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
@@ -1011,7 +1032,7 @@ msgstr "询价单"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__purchased_qty
 msgid "RFQ/PO Qty"
-msgstr ""
+msgstr "订单数量"
 
 #. module: purchase_request
 #. odoo-python
@@ -1116,7 +1137,7 @@ msgstr "请购状态"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__requested_by
 msgid "Requested By"
-msgstr ""
+msgstr "请购人"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_allocation__requested_product_uom_qty
@@ -1262,7 +1283,7 @@ msgstr "发起请购的公司所选库位必须属于该公司。"
 msgid ""
 "The following requested items from Purchase Request %(pr_name)s have now "
 "been confirmed in Purchase Order %(po_name)s:"
-msgstr ""
+msgstr "请购单 %(pr_name)s 中以下请购项目现已在采购订单 %(po_name)s 中确认："
 
 #. module: purchase_request
 #. odoo-python
@@ -1323,7 +1344,7 @@ msgstr ""
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__estimated_cost
 msgid "Total Estimated Cost"
-msgstr ""
+msgstr "预计总成本"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_form

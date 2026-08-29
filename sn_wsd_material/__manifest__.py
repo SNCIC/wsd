@@ -6,6 +6,7 @@
     'depends': [
         'sale',
         'purchase',
+        'purchase_request',
         'stock',
         'mrp',
         'sn_wsd_mrp',
@@ -13,6 +14,7 @@
     'data': [
         'views/sale_order_line_views.xml',
         'views/purchase_order_line_views.xml',
+        'views/purchase_request_views.xml',
         'views/stock_move_views.xml',
         'views/mrp_bom_line_views.xml',
     ],

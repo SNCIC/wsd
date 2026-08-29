@@ -172,8 +172,13 @@ class PurchaseRequestLine(models.Model):
         "purchase_request_allocation_ids.stock_move_id",
         "purchase_request_allocation_ids.purchase_line_id",
         "purchase_request_allocation_ids.purchase_line_id.state",
+        "purchase_lines",
+        "purchase_lines.qty_received",
+        "purchase_lines.product_uom_id",
+        "purchase_lines.state",
         "request_id.state",
         "product_qty",
+        "product_uom_id",
     )
     def _compute_qty_to_buy(self):
         for pr in self:
@@ -187,15 +192,30 @@ class PurchaseRequestLine(models.Model):
         "purchase_request_allocation_ids.stock_move_id",
         "purchase_request_allocation_ids.purchase_line_id.state",
         "purchase_request_allocation_ids.purchase_line_id",
+        "purchase_lines",
+        "purchase_lines.qty_received",
+        "purchase_lines.product_uom_id",
+        "purchase_lines.state",
+        "product_uom_id",
     )
     def _compute_qty(self):
         for request in self:
-            done_qty = sum(
-                request.purchase_request_allocation_ids.mapped("allocated_product_qty")
-            )
-            open_qty = sum(
-                request.purchase_request_allocation_ids.mapped("open_product_qty")
-            )
+            allocations = request.purchase_request_allocation_ids
+            if allocations:
+                done_qty = sum(allocations.mapped("allocated_product_qty"))
+                open_qty = sum(allocations.mapped("open_product_qty"))
+            else:
+                received_qty = sum(
+                    purchase_line.product_uom_id._compute_quantity(
+                        purchase_line.qty_received,
+                        request.product_uom_id,
+                        rounding_method="HALF-UP",
+                    )
+                    for purchase_line in request.purchase_lines
+                    if purchase_line.state != "cancel" and purchase_line.qty_received
+                )
+                done_qty = received_qty
+                open_qty = max(request.purchased_qty - received_qty, 0.0)
             request.qty_done = done_qty
             request.qty_in_progress = open_qty
 
