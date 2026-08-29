@@ -117,6 +117,7 @@
                                 <list create="false" edit="false" delete="false"
                                       decoration-warning="x_mes_order_qty &lt; 0">
                                     <field name="name"/>
+                                    <field name="picking_type_id" optional="show"/>
                                     <field name="scheduled_date" optional="show"/>
                                     <field name="x_mes_order_qty" string="Units" sum="Total Units"/>
                                     <field name="origin" optional="hide"/>

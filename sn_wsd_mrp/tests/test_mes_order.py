@@ -1031,6 +1031,10 @@ class TestMesOrder(TransactionCase):
         order.action_generate_return(qty=1)
         ret = (order.picking_ids - p1)
         self.assertAlmostEqual(ret.x_mes_order_qty, -1.0)
+        self.assertEqual(ret.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.return',
+                         'returns carry their own WH/MR operation type')
+        self.assertIn('/MR/', ret.name)
         self.assertEqual(ret.location_id, line_side, 'return ships FROM the line side')
         self.assertEqual(ret.location_dest_id,
                          mo.picking_type_id.warehouse_id.lot_stock_id)
@@ -1126,6 +1130,10 @@ class TestMesOrder(TransactionCase):
         wizard.action_pick()
         p2 = (order.picking_ids - p1)
         self.assertTrue(p2.x_is_over_pick)
+        self.assertEqual(p2.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.over',
+                         'over-picks carry their own WH/OP operation type')
+        self.assertIn('/OP/', p2.name)
         self.assertEqual(p2.x_over_reason, 'scrap make-up')
         # BOM 2/台 → 超领 1 台发 2 件
         self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)

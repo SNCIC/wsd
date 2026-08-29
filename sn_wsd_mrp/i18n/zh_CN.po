@@ -8305,3 +8305,23 @@ msgstr "已领数量"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_pickings_button
 msgid "MES Transfers"
 msgstr "制令单出入库"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Return"
+msgstr "退料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_return_id
+msgid "Material Return Operation"
+msgstr "退料作业"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Over-pick"
+msgstr "超领补料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_over_pick_id
+msgid "Material Over-pick Operation"
+msgstr "超领补料作业"

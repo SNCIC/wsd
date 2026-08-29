@@ -1083,6 +1083,65 @@ class MesOrder(models.Model):
         warehouse.picking_type_receipt_id = picking_type.id
         return picking_type
 
+    def _mes_return_picking_type(self, warehouse):
+        """Dedicated per-warehouse material return operation type
+        (WH/MR)，created on first use (same pattern as material issue).
+        退料与领料分型：仓库按作业类型区分单据与报表。"""
+        self.ensure_one()
+        if warehouse.picking_type_return_id:
+            return warehouse.picking_type_return_id
+        seq = self.env['ir.sequence'].sudo().create({
+            'name': _('Material Return') + ': ' + warehouse.name,
+            'code': 'sn.wsd.mes.picking.return',
+            'prefix': (warehouse.code or 'WH') + '/MR/',
+            'padding': 4,
+            'company_id': warehouse.company_id.id,
+        })
+        picking_type = self.env['stock.picking.type'].create({
+            'name': _('Material Return'),
+            'code': 'internal',
+            'sequence_code': 'sn.wsd.mes.picking.return',
+            'sequence_id': seq.id,
+            'warehouse_id': warehouse.id,
+            'company_id': warehouse.company_id.id,
+        })
+        # 类型名是可翻译字段：懒创建只落创建者语言，这里按 po 给
+        # zh_CN 也写一份，避免中文界面看到英文类型名（源码仍全英文）
+        zh_name = self.with_context(lang='zh_CN').env._('Material Return')
+        if zh_name != 'Material Return':
+            picking_type.with_context(lang='zh_CN').name = zh_name
+        warehouse.picking_type_return_id = picking_type.id
+        return picking_type
+
+    def _mes_over_pick_picking_type(self, warehouse):
+        """Dedicated per-warehouse over-pick operation type (WH/OP)，
+        created on first use. 超领（补料）与账内领料分型。"""
+        self.ensure_one()
+        if warehouse.picking_type_over_pick_id:
+            return warehouse.picking_type_over_pick_id
+        seq = self.env['ir.sequence'].sudo().create({
+            'name': _('Material Over-pick') + ': ' + warehouse.name,
+            'code': 'sn.wsd.mes.picking.over',
+            'prefix': (warehouse.code or 'WH') + '/OP/',
+            'padding': 4,
+            'company_id': warehouse.company_id.id,
+        })
+        picking_type = self.env['stock.picking.type'].create({
+            'name': _('Material Over-pick'),
+            'code': 'internal',
+            'sequence_code': 'sn.wsd.mes.picking.over',
+            'sequence_id': seq.id,
+            'warehouse_id': warehouse.id,
+            'company_id': warehouse.company_id.id,
+        })
+        # 类型名是可翻译字段：懒创建只落创建者语言，这里按 po 给
+        # zh_CN 也写一份，避免中文界面看到英文类型名（源码仍全英文）
+        zh_name = self.with_context(lang='zh_CN').env._('Material Over-pick')
+        if zh_name != 'Material Over-pick':
+            picking_type.with_context(lang='zh_CN').name = zh_name
+        warehouse.picking_type_over_pick_id = picking_type.id
+        return picking_type
+
     def _mes_create_receipt(self, qty, destination, workshop=False, lot_name=False):
         """One completion receipt: production -> finished-goods stock
         (waiting for warehouse validation) or -> workshop line side
@@ -1331,10 +1390,14 @@ class MesOrder(models.Model):
                     'The workshop line-side location must differ from the '
                     'warehouse stock location.'
                 ))
-            # dedicated "Material Issue" operation type per warehouse: never
-            # guess from code='internal' (Quality Control shares that code
-            # and used to get picked by accident)
-            picking_type = warehouse.picking_type_issue_id
+            # dedicated operation types per warehouse: never guess from
+            # code='internal' (Quality Control shares that code and used to
+            # get picked by accident). Over-picks carry their own WH/OP type
+            # so the warehouse can tell issues and supplements apart.
+            if over_reason:
+                picking_type = order._mes_over_pick_picking_type(warehouse)
+            else:
+                picking_type = warehouse.picking_type_issue_id
             if not picking_type:
                 seq = self.env['ir.sequence'].sudo().create({
                     'name': _('Material Issue') + ': ' + warehouse.name,
@@ -1495,11 +1558,7 @@ class MesOrder(models.Model):
                     'The manufacturing order of %(order)s has no warehouse; '
                     'cannot generate the return.', order=order.name))
             dest = warehouse.lot_stock_id
-            picking_type = warehouse.picking_type_issue_id
-            if not picking_type:
-                raise UserError(_(
-                    'MES order %(order)s has no material issue operation type '
-                    'yet; issue material before returning it.', order=order.name))
+            picking_type = order._mes_return_picking_type(warehouse)
             batch_ratio = (qty / bom.product_qty) if bom.product_qty else 0.0
             picking = StockPicking.create({
                 'picking_type_id': picking_type.id,
@@ -1748,6 +1807,18 @@ class StockWarehouseMesIssue(models.Model):
         copy=False,
         help='Internal operation type used by MES-order material requisitions; '
              'created on first use.',
+    )
+    picking_type_return_id = fields.Many2one(
+        'stock.picking.type', string='Material Return Operation',
+        copy=False,
+        help='Internal operation type used by MES-order material returns; '
+             'created on first use.',
+    )
+    picking_type_over_pick_id = fields.Many2one(
+        'stock.picking.type', string='Material Over-pick Operation',
+        copy=False,
+        help='Internal operation type used by MES-order over-picks (beyond '
+             'the plan); created on first use.',
     )
     picking_type_receipt_id = fields.Many2one(
         'stock.picking.type', string='Finished Goods Receipt Operation',
