@@ -202,9 +202,13 @@
                                     <field name="product_categ_ids" widget="many2many_tags"/>
                                 </group>
                                 <group>
-                                    <field name="workcenter_id"/>
-                                    <field name="operation_id"/>
-                                    <field name="production_line_id"/>
+                                    <!-- 作用域三件套仅 IQC/OQC/IPQC 匹配时生效；
+                                         FAI 只按产品范围匹配（上线时一次性判定） -->
+                                    <field name="workcenter_id" invisible="inspection_type == 'fai'"/>
+                                    <field name="operation_id" invisible="inspection_type == 'fai'"/>
+                                    <field name="production_line_id" invisible="inspection_type == 'fai'"/>
+                                    <field name="x_fai_operation_id"
+                                           invisible="inspection_type != 'fai'"/>
                                 </group>
                             </group>
                         </page>
