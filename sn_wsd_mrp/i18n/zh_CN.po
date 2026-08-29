@@ -8298,3 +8298,10 @@ msgstr "排产数量"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
 msgid "Picked Quantity"
 msgstr "已领数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_pickings_button
+msgid "MES Transfers"
+msgstr "制令单出入库"

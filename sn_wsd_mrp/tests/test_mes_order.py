@@ -1294,3 +1294,17 @@ class TestMesOrder(TransactionCase):
         quant = self.env['stock.quant'].search([
             ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
         self.assertEqual(quant.quantity, 100.0)
+
+    # --- MO smart button: aggregate every MES-order stock document ---
+    def test_88_mo_smart_button_aggregates_pickings(self):
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        order.action_generate_picking(qty_this=2)
+        self.assertEqual(mo.x_mes_picking_count, 2)
+        act = mo.action_open_mes_pickings()
+        self.assertEqual(act['res_model'], 'stock.picking')
+        self.assertEqual(act['domain'],
+                         [('x_mes_order_id', 'in', mo.x_mes_order_ids.ids)])

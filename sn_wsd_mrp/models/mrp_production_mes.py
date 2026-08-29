@@ -22,6 +22,11 @@ class MrpProductionMesSchedule(models.Model):
     x_mes_order_ids = fields.One2many(
         'sn.wsd.mes.order', 'production_id', string='MES Orders',
     )
+    x_mes_picking_count = fields.Integer(
+        string='MES Transfers Count', compute='_compute_x_mes_picking_count',
+        help='Number of stock documents (issues, returns, completion '
+             'receipts) carried by this MO\'s MES orders.',
+    )
     x_mes_order_count = fields.Integer(
         compute='_compute_x_mes_schedule', store=True,
     )
@@ -177,6 +182,19 @@ class MrpProductionMesSchedule(models.Model):
             self.product_id.default_code, side,
             workshop_id=self.x_workshop_id.id)
 
+    def action_open_mes_pickings(self):
+        """Smart button on the MO: every stock document carried by its MES
+        orders (material issues, returns, completion receipts) -- they all
+        hang off ``x_mes_order_id``."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('MES Transfers'),
+            'res_model': 'stock.picking',
+            'view_mode': 'list,form',
+            'domain': [('x_mes_order_id', 'in', self.x_mes_order_ids.ids)],
+        }
+
     def action_mes_add_single_route(self):
         return self._mes_open_route_create('single')
 
@@ -185,6 +203,12 @@ class MrpProductionMesSchedule(models.Model):
 
     def action_mes_add_bottom_route(self):
         return self._mes_open_route_create('bottom')
+
+    @api.depends('x_mes_order_ids.picking_ids')
+    def _compute_x_mes_picking_count(self):
+        for production in self:
+            production.x_mes_picking_count = len(
+                production.x_mes_order_ids.picking_ids)
 
     @api.depends(
         'product_qty',

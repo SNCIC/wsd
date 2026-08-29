@@ -533,6 +533,22 @@
         </field>
     </record>
 
+    <!-- Smart button on the MO: every stock document of its MES orders
+         (issues, returns, completion receipts) -->
+    <record id="view_mrp_production_form_mes_pickings_button" model="ir.ui.view">
+        <field name="name">mrp.production.form.mes.pickings.button.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_mes_pickings" type="object" class="oe_stat_button"
+                        icon="fa-exchange" invisible="not x_mes_picking_count">
+                    <field name="x_mes_picking_count" widget="statinfo" string="MES Transfers"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
     <!-- Pre-issue flag on the BOM line (架构设计 2.4): flagged on the BOM
          itself, no separate management screen -->
     <record id="view_mrp_bom_form_advance_issue" model="ir.ui.view">
