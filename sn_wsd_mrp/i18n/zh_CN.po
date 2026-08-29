@@ -5923,6 +5923,7 @@ msgstr "日计划"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_pick_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_return_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_schedule_wizard_form
 msgid "Discard"
 msgstr "取消"
@@ -8277,3 +8278,23 @@ msgstr "超领原因"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_over_picked_qty
 msgid "Over-picked Quantity"
 msgstr "超领台数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__name
+msgid "MES Order No."
+msgstr "制令单号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__planned_qty
+msgid "Planned Quantity"
+msgstr "排产数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
+msgid "Picked Quantity"
+msgstr "已领数量"
