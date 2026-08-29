@@ -406,7 +406,9 @@
                                     <field name="reject_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                             </group>
-                            <field name="sample_ids">
+                            <!-- ipqc：样本唯一入口=巡检样本页；此表为 IQC 批次/逐件
+                                 维度（lot_id=物料批次），对巡检是重复噪音，隐藏 -->
+                            <field name="sample_ids" invisible="inspection_type == 'ipqc'">
                                 <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>

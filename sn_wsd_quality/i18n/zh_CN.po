@@ -412,6 +412,7 @@ msgstr "电流互感器(CT)"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_defect_code__code
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__defect_code_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__defect_code_id
 msgid "Defect Code"
 msgstr "缺陷代码"
 
@@ -1042,6 +1043,7 @@ msgstr "批次/序列号"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__lot_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__lot_id
 msgid "Lot/Serial Number"
 msgstr "批次/序列号"
 
