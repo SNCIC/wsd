@@ -385,23 +385,25 @@
                         </page>
                         <page name="sampling" string="Sampling">
                             <group>
+                                <!-- ipqc 巡检：定时固定小样本、不用 AQL——抽样页
+                                     只留方式与数量，AQL/IQC 遗留字段隐藏 -->
                                 <group>
                                     <field name="sampling_method" readonly="1"/>
-                                    <field name="sampling_standard_id" readonly="1"/>
-                                    <field name="lot_qty_source" readonly="1"/>
-                                    <field name="lot_qty" readonly="1"/>
-                                    <field name="sample_selection_method" readonly="state != 'open'"/>
+                                    <field name="sampling_standard_id" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="lot_qty_source" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="lot_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="sample_selection_method" readonly="state != 'open'" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
-                                    <field name="inspection_level" readonly="1"/>
-                                    <field name="switching_mode" readonly="1"/>
-                                    <field name="aql_value" readonly="1"/>
-                                    <field name="sample_size_code" readonly="1"/>
+                                    <field name="inspection_level" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="switching_mode" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="aql_value" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="sample_size_code" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                     <field name="sample_size" readonly="1"/>
                                     <field name="sample_checked_qty" readonly="1"/>
                                     <field name="sample_defect_qty" readonly="1"/>
-                                    <field name="accept_qty" readonly="1"/>
-                                    <field name="reject_qty" readonly="1"/>
+                                    <field name="accept_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="reject_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                             </group>
                             <field name="sample_ids">
