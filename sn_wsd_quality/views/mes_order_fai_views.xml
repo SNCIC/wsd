@@ -35,6 +35,21 @@
             <xpath expr="//page[@name='scope']" position="after">
                 <page name="ipqc_samples" string="Patrol Samples"
                       invisible="inspection_type != 'ipqc'">
+                    <!-- 快捷录入：报工模式（无SN）两个数字直接生成样本行 -->
+                    <group invisible="state == 'done'">
+                        <group string="Quick Entry (no SN)">
+                            <field name="x_ipqc_quick_ok"/>
+                            <field name="x_ipqc_quick_ng"/>
+                            <field name="x_ipqc_quick_defect_id"
+                                   invisible="x_ipqc_quick_ng &lt;= 0"
+                                   options="{'no_create': 1}"/>
+                        </group>
+                        <group>
+                            <button name="action_ipqc_quick_fill" type="object"
+                                    string="Generate Sample Lines" class="btn-primary"
+                                    invisible="state == 'done'"/>
+                        </group>
+                    </group>
                     <!-- 逐台判定：过站模式行内选SN（可扫码）；报工模式SN留空只判结果。
                          已检/缺陷样本数在抽样页自动统计（合格=已检−缺陷） -->
                     <field name="sample_ids" nolabel="1"
