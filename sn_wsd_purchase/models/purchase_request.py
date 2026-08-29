@@ -48,6 +48,16 @@ class PurchaseRequestLine(models.Model):
         string='Received Quantity',
         readonly=True,
     )
+    tax_included_unit_price = fields.Monetary(
+        string='Tax Included Unit Price',
+        currency_field='currency_id',
+        compute='_compute_tax_included_amounts',
+    )
+    tax_included_amount = fields.Monetary(
+        string='Tax Included Amount',
+        currency_field='currency_id',
+        compute='_compute_tax_included_amounts',
+    )
     purchase_order_ids = fields.Many2many(
         comodel_name='purchase.order',
         string='Purchase Orders',
@@ -81,6 +91,50 @@ class PurchaseRequestLine(models.Model):
     def _compute_approved_pending_qty(self):
         for line in self:
             line.approved_pending_qty = max(line.approved_qty - line.purchased_qty, 0.0)
+
+    @api.depends(
+        'purchase_lines',
+        'purchase_lines.state',
+        'purchase_lines.price_total',
+        'purchase_lines.tax_ids',
+        'purchase_lines.discount',
+        'purchase_lines.product_qty',
+        'purchase_lines.product_uom_id',
+        'purchase_lines.order_id',
+        'purchase_lines.order_id.currency_id',
+        'purchase_lines.order_id.date_order',
+        'currency_id',
+        'product_uom_id',
+    )
+    def _compute_tax_included_amounts(self):
+        for line in self:
+            tax_included_amount = 0.0
+            purchased_qty = 0.0
+            for purchase_line in line.purchase_lines.filtered(
+                lambda purchase_line: purchase_line.state != 'cancel'
+            ):
+                order = purchase_line.order_id
+                amount = purchase_line.price_total
+                if order.currency_id != line.currency_id:
+                    amount = order.currency_id._convert(
+                        amount,
+                        line.currency_id,
+                        line.company_id,
+                        (order.date_order or fields.Datetime.now()).date(),
+                        round=False,
+                    )
+                tax_included_amount += amount
+                if line.product_uom_id:
+                    purchased_qty += purchase_line.product_uom_id._compute_quantity(
+                        purchase_line.product_qty,
+                        line.product_uom_id,
+                    )
+                else:
+                    purchased_qty += purchase_line.product_qty
+            line.tax_included_amount = tax_included_amount
+            line.tax_included_unit_price = (
+                tax_included_amount / purchased_qty if purchased_qty else 0.0
+            )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -170,3 +224,22 @@ class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
         item = super()._prepare_item(line)
         item['product_qty'] = line.approved_pending_qty
         return item
+
+    @api.model
+    def _prepare_purchase_order_line(self, po, item):
+        vals = super()._prepare_purchase_order_line(po, item)
+        product = item.product_id
+        official_vals = self.env['purchase.order.line']._prepare_purchase_order_line(
+            product,
+            vals['product_qty'],
+            product.uom_id,
+            po.company_id,
+            po.partner_id,
+            po,
+        )
+        vals.update({
+            'price_unit': official_vals['price_unit'],
+            'tax_ids': official_vals['tax_ids'],
+            'discount': official_vals['discount'],
+        })
+        return vals

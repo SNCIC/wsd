@@ -20,6 +20,9 @@
                 <field name="purchased_qty"/>
                 <field name="received_qty"/>
                 <field name="product_uom_id" groups="uom.group_uom"/>
+                <field name="tax_included_unit_price" widget="monetary"/>
+                <field name="tax_included_amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="purchase_order_ids" widget="many2many_tags"/>
                 <field name="expected_arrival_date"/>
                 <field name="company_id" groups="base.group_multi_company"/>

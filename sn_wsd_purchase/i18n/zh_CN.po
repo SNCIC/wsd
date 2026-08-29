@@ -459,3 +459,13 @@ msgstr "全部收货"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
 msgid "Purchase Order"
 msgstr "采购订单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_unit_price
+msgid "Tax Included Unit Price"
+msgstr "含税单价"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_amount
+msgid "Tax Included Amount"
+msgstr "含税金额"

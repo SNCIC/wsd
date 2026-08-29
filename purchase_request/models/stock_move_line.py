@@ -131,6 +131,9 @@ class StockMoveLine(models.Model):
         res = super()._action_done()
         self.allocate()
         self.mapped(
-            "move_id.purchase_line_id.purchase_request_lines.request_id"
+            "move_id.purchase_request_allocation_ids.purchase_request_line_id"
+        )._compute_qty()
+        self.mapped(
+            "move_id.purchase_request_allocation_ids.purchase_request_line_id.request_id"
         )._auto_set_done()
         return res

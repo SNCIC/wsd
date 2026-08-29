@@ -96,6 +96,7 @@ class PurchaseRequest(models.Model):
                 self.env.ref("purchase_request.group_purchase_request_manager").id,
             )
         ],
+        default=lambda self: self.env.company.purchase_request_default_approver_id,
         index=True,
     )
     description = fields.Text()
@@ -255,11 +256,47 @@ class PurchaseRequest(models.Model):
             if vals.get("assigned_to"):
                 partner_id = self._get_partner_id(request)
                 request.message_subscribe(partner_ids=[partner_id])
+                if request.state == "to_approve":
+                    request._schedule_approval_activity()
         return res
 
     def _can_be_deleted(self):
         self.ensure_one()
         return self.state == "draft"
+
+    def _approval_activity_summary(self):
+        return self.env._("Purchase Request Approval Required")
+
+    def _applicant_activity_summary(self):
+        return self.env._("Purchase Request Approved")
+
+    def _get_approval_activities(self):
+        activity_type = self.env.ref(
+            "mail.mail_activity_data_todo",
+            raise_if_not_found=False,
+        )
+        if not activity_type:
+            return self.env["mail.activity"]
+        return self.activity_ids.filtered(
+            lambda activity: (
+                activity.automated
+                and activity.activity_type_id == activity_type
+                and activity.summary == self._approval_activity_summary()
+            )
+        )
+
+    def _schedule_approval_activity(self):
+        for request in self.filtered(lambda rec: rec.assigned_to):
+            request._get_approval_activities().unlink()
+            request.activity_schedule(
+                act_type_xmlid="mail.mail_activity_data_todo",
+                summary=request._approval_activity_summary(),
+                note=self.env._(
+                    "Purchase Request %(name)s is waiting for your approval.",
+                    name=request.name,
+                ),
+                user_id=request.assigned_to.id,
+            )
 
     @api.ondelete(at_uninstall=False)
     def _unlink_if_draft(self):
@@ -272,29 +309,31 @@ class PurchaseRequest(models.Model):
                 )
 
     def button_draft(self):
+        self._get_approval_activities().unlink()
         self.mapped("line_ids").do_uncancel()
         return self.write({"state": "draft"})
 
     def button_to_approve(self):
         self.to_approve_allowed_check()
-        return self.write({"state": "to_approve"})
+        result = self.write({"state": "to_approve"})
+        self._schedule_approval_activity()
+        return result
 
     def button_approved(self):
         for request in self.filtered(lambda rec: rec.state == "to_approve"):
+            request._get_approval_activities().action_feedback()
             request.write({"state": "approved"})
-            if request.assigned_to:
-                request.activity_schedule(
-                    act_type_xmlid="mail.mail_activity_data_todo",
-                    summary=self.env._("Purchase Request Approved"),
-                    note=self.env._(
-                        "Purchase Request %(name)s has been approved and is ready "
-                        "for purchasing.",
-                        name=request.name,
-                    ),
-                    user_id=request.assigned_to.id,
-                )
             requested_partner = request.requested_by.partner_id
             if requested_partner:
+                request.activity_schedule(
+                    act_type_xmlid="mail.mail_activity_data_todo",
+                    summary=request._applicant_activity_summary(),
+                    note=self.env._(
+                        "Purchase Request %(name)s has been approved.",
+                        name=request.name,
+                    ),
+                    user_id=request.requested_by.id,
+                )
                 request.message_post(
                     body=self.env._(
                         "Purchase Request %(name)s has been approved.",
@@ -327,6 +366,7 @@ class PurchaseRequest(models.Model):
                 request.button_done()
 
     def button_rejected(self):
+        self._get_approval_activities().unlink()
         self.mapped("line_ids").do_cancel()
         return self.write({"state": "rejected"})
 

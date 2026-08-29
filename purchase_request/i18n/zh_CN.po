@@ -48,6 +48,18 @@ msgstr "请购单 %(name)s 已批准，可以开始采购。"
 #. module: purchase_request
 #. odoo-python
 #: code:addons/purchase_request/models/purchase_request.py:0
+msgid "Purchase Request Approval Required"
+msgstr "请购单待审批"
+
+#. module: purchase_request
+#. odoo-python
+#: code:addons/purchase_request/models/purchase_request.py:0
+msgid "Purchase Request %(name)s is waiting for your approval."
+msgstr "请购单 %(name)s 正在等待您的审批。"
+
+#. module: purchase_request
+#. odoo-python
+#: code:addons/purchase_request/models/purchase_request.py:0
 msgid "Purchase Request %(name)s has been approved."
 msgstr "请购单 %(name)s 已批准。"
 
@@ -535,12 +547,34 @@ msgstr "如果选中，消息会附带交货错误信息。"
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
 msgid "In Progress"
-msgstr ""
+msgstr "进行中"
 
 #. module: purchase_request
 #: model:ir.model.fields.selection,name:purchase_request.selection__purchase_request__state__in_progress
 msgid "In progress"
 msgstr "进行中"
+
+#. module: purchase_request
+#: model:ir.model.fields,field_description:purchase_request.field_res_company__purchase_request_default_approver_id
+#: model:ir.model.fields,field_description:purchase_request.field_res_config_settings__purchase_request_default_approver_id
+#: model_terms:ir.ui.view,arch_db:purchase_request.res_config_settings_view_form_purchase_request
+msgid "Default Purchase Request Approver"
+msgstr "默认请购审批人"
+
+#. module: purchase_request
+#: model:ir.model.fields,help:purchase_request.field_res_company__purchase_request_default_approver_id
+msgid "Default approver automatically assigned to new purchase requests."
+msgstr "自动分配给新请购单的默认审批人。"
+
+#. module: purchase_request
+#: model_terms:ir.ui.view,arch_db:purchase_request.res_config_settings_view_form_purchase_request
+msgid "Purchase Request Default Approver"
+msgstr "请购单默认审批人"
+
+#. module: purchase_request
+#: model_terms:ir.ui.view,arch_db:purchase_request.res_config_settings_view_form_purchase_request
+msgid "Automatically assign this user as the approver of new purchase requests."
+msgstr "自动将此用户指定为新请购单的审批人。"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__is_editable
@@ -600,7 +634,7 @@ msgstr "手动开票"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order__sync_data_planned
 msgid "Match existing PO lines by Scheduled Date"
-msgstr ""
+msgstr "按计划日期匹配现有采购订单明细"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__message_has_error
@@ -725,7 +759,7 @@ msgstr "待收货数量"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 msgid "Picking"
-msgstr ""
+msgstr "收货"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__picking_type_id
@@ -735,7 +769,7 @@ msgstr "作业类型"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 msgid "Pickings"
-msgstr ""
+msgstr "收货单"
 
 #. module: purchase_request
 #. odoo-python
@@ -1038,24 +1072,24 @@ msgstr "订单数量"
 #. odoo-python
 #: code:addons/purchase_request/models/stock_move_line.py:0
 msgid "Receipt confirmation %(picking_name)s for your Request %(request_name)s"
-msgstr ""
+msgstr "请购单 %(request_name)s 的收货确认 %(picking_name)s"
 
 #. module: purchase_request
 #. odoo-python
 #: code:addons/purchase_request/models/stock_move_line.py:0
 msgid "Receipt confirmation for Request %(name)s"
-msgstr ""
+msgstr "请购单 %(name)s 的收货确认"
 
 #. module: purchase_request
 #: model:mail.message.subtype,description:purchase_request.mt_request_picking_done
 msgid "Receipt is done"
-msgstr ""
+msgstr "收货完成"
 
 #. module: purchase_request
 #. odoo-python
 #: code:addons/purchase_request/models/purchase_order.py:0
 msgid "Received quantity"
-msgstr ""
+msgstr "已收货数量"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
@@ -1292,6 +1326,8 @@ msgid ""
 "The following requested items from Purchase Request %(request_name)s have "
 "now been received in %(location_name)s using Picking %(picking_name)s:"
 msgstr ""
+"请购单 %(request_name)s 中的以下请购物料已通过收货单 %(picking_name)s "
+"收货至 %(location_name)s："
 
 #. module: purchase_request
 #. odoo-python
@@ -1300,6 +1336,8 @@ msgid ""
 "The following requested items from Purchase Request %(request_name)s "
 "requested by %(requestor)s have now been received in %(location_name)s:"
 msgstr ""
+"申请人 %(requestor)s 提交的请购单 %(request_name)s 中的以下请购物料已收货至 "
+"%(location_name)s："
 
 #. module: purchase_request
 #. odoo-python
@@ -1308,6 +1346,7 @@ msgid ""
 "The following requested services from Purchase Request %(request_name)s "
 "requested by %(requestor)s have now been received:"
 msgstr ""
+"申请人 %(requestor)s 提交的请购单 %(request_name)s 中的以下服务已收货："
 
 #. module: purchase_request
 #. odoo-python
@@ -1356,7 +1395,7 @@ msgstr "追踪"
 #. odoo-python
 #: code:addons/purchase_request/models/stock_move_line.py:0
 msgid "Transferred quantity"
-msgstr ""
+msgstr "转移数量"
 
 #. module: purchase_request
 #: model:ir.model.fields,help:purchase_request.field_purchase_request__activity_exception_decoration
@@ -1414,7 +1453,7 @@ msgstr "网站沟通记录"
 msgid ""
 "When checked, PO lines on the selected purchase order are only reused if the "
 "scheduled date matches as well."
-msgstr ""
+msgstr "勾选后，只有计划日期也匹配时，才会复用所选采购订单上的明细。"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order_item__wiz_id
