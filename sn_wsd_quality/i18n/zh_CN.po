@@ -3086,3 +3086,164 @@ msgstr "随不良数量记录的不良代码（预留字段，终端暂不填写
 #: code:addons/sn_wsd_quality/models/mes_order_ng_defect.py:0
 msgid "Select a defect code."
 msgstr "请扫描不良代码。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article confirmation is in progress on MES order %(order)s: wait for the inspection result before feeding more serial numbers."
+msgstr "制令单 %(order)s 首件确认中：请等待检验结论后再投入新 SN。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "Confirm round %(round)s of %(order)s within 30 minutes."
+msgstr "请在 30 分钟内完成制令单 %(order)s 第 %(round)s 轮首件确认。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article confirmation"
+msgstr "首件确认"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article samples ready"
+msgstr "首件样本已齐套"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "%(count)s samples reached the first-article operation of %(order)s; inspection can start."
+msgstr "制令单 %(order)s 已有 %(count)s 台样本到达首件工序，可以开始检验。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article inspection: complete every item (required or not) before finishing."
+msgstr "首件检验：完成全部检验项（含非必填）后才能结束检验。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article inspection: only %(arrived)s of %(need)s samples reached the first-article operation; wait for the full sample set."
+msgstr "首件检验：仅 %(arrived)s/%(need)s 台样本到达首件工序，请等样本齐套。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_round_number
+msgid "FAI Round"
+msgstr "首件轮次"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First Article Inspections"
+msgstr "首件检验单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_serial_ids
+msgid "FAI Samples"
+msgstr "首件样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_arrived_serial_ids
+msgid "FAI Arrived Samples"
+msgstr "已到检样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_removed_serial_ids
+msgid "FAI Removed Samples"
+msgstr "已剔除样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_state
+msgid "First Article State"
+msgstr "首件状态"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_round
+msgid "First Article Round"
+msgstr "首件轮次"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_inspection_id
+msgid "Current FAI Inspection"
+msgstr "当前首件检验单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_sample_count
+msgid "FAI Samples Fed"
+msgstr "已投样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_sample_done
+msgid "FAI Samples Arrived"
+msgstr "已到样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_inspection_count
+msgid "FAI Inspection Count"
+msgstr "首件检验数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_mes_order_form_fai
+msgid "First Article"
+msgstr "首件检验"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "First Article Samples"
+msgstr "首件样本"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Arrived Samples"
+msgstr "已到检样本"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Fed Samples"
+msgstr "已投入样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__none
+msgid "None"
+msgstr "无"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__in_progress
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__passed
+msgid "Passed"
+msgstr "已通过"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Inspection schemes of type %(type)s require an operation."
+msgstr "检验类型为 %(type)s 的方案必须配置工序。"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article confirmation is in progress on MES order %(order)s: report at most %(remaining)s OK unit(s) in this batch."
+msgstr "制令单 %(order)s 首件确认中：本笔最多可报 %(remaining)s 台合格。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "%(count)s first-article units were reported on %(order)s; inspection can start."
+msgstr "制令单 %(order)s 已报 %(count)s 台首件，可以开始检验。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_qty
+msgid "FAI Reported Qty"
+msgstr "已报首件台数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Reported Qty"
+msgstr "已报台数"

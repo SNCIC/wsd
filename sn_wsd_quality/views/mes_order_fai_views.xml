@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 制令单表单：首件状态徽标 + 轮次 + 首件检验入口（add-mes-fai） -->
+    <record id="view_sn_wsd_mes_order_form_fai" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.order.form.fai.sn.wsd.quality</field>
+        <field name="model">sn.wsd.mes.order</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_manage_mode']" position="after">
+                <field name="x_fai_state" widget="badge"
+                       invisible="x_fai_state == 'none'"
+                       decoration-success="x_fai_state == 'passed'"
+                       decoration-warning="x_fai_state == 'in_progress'"/>
+                <field name="x_fai_round" invisible="x_fai_state == 'none'"/>
+                <field name="x_fai_sample_count" invisible="x_fai_state != 'in_progress'"/>
+                <field name="x_fai_sample_done" invisible="x_fai_state != 'in_progress'"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_fai_inspections" type="object"
+                        class="oe_stat_button" icon="fa-flag-checkered"
+                        invisible="x_fai_inspection_count == 0">
+                    <field name="x_fai_inspection_count" widget="statinfo"
+                           string="First Article"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 检验单表单：FAI 样本清单（已到/未到） -->
+    <record id="view_sn_wsd_quality_inspection_form_fai" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.form.fai.sn.wsd.quality</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='scope']" position="after">
+                <page name="fai_samples" string="First Article Samples"
+                      invisible="inspection_type != 'fai'">
+                    <group>
+                        <group string="Reported Qty"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                            <field name="x_fai_reported_qty" nolabel="1"
+                                   readonly="state == 'done'"/>
+                        </group>
+                        <group string="Arrived Samples"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                            <field name="x_fai_arrived_serial_ids" nolabel="1"
+                                   widget="many2many_tags"
+                                   readonly="state == 'done'"/>
+                        </group>
+                        <group string="Fed Samples"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                            <field name="x_fai_serial_ids" nolabel="1"
+                                   widget="many2many_tags"
+                                   readonly="state == 'done'"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -60,17 +60,15 @@ class QualityInspectionScheme(models.Model):
         index=True,
         copy=False,
     )
-    workcenter_id = fields.Many2one(
-        'mrp.workcenter',
-        string='Work Center',
-        check_company=True,
-        index=True,
-    )
     operation_id = fields.Many2one(
-        'mrp.routing.workcenter',
+        'sn.wsd.operation',
         string='Operation',
         check_company=True,
         index=True,
+        help='Operation scope of the scheme. FAI: the first-article station '
+             'samples must leave with an OK result; IPQC: the patrolled '
+             'operation; OQC: the trigger-point operation. Not used by IQC '
+             '(incoming material has no route).',
     )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line',
@@ -114,6 +112,15 @@ class QualityInspectionScheme(models.Model):
         'unique(company_id, code)',
         'The inspection scheme code must be unique per company.',
     )
+
+    @api.constrains('inspection_type', 'operation_id')
+    def _check_operation_scope(self):
+        # QMS §1.1 方案维度=类别/工序/成品；除来料检外必有工序
+        for scheme in self:
+            if scheme.inspection_type != 'iqc' and not scheme.operation_id:
+                raise ValidationError(_(
+                    'Inspection schemes of type %(type)s require an '
+                    'operation.', type=scheme.inspection_type))
 
     @api.constrains('interval_minutes', 'sample_size', 'accept_qty', 'reject_qty')
     def _check_scheme_numbers(self):
@@ -556,6 +563,28 @@ class QualityInspection(models.Model):
     evidence_serial_identity_id = fields.Many2one(
         'sn.wsd.serial.identity', string='Evidence SN', check_company=True, index=True,
     )
+    # FAI 样本清单（add-mes-fai）：投入登记的样本 SN / 其中过首件工序出站
+    # OK 的样本；NG/报废出站的样本从清单剔除释放名额（维修回流不回补）
+    x_fai_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_serial_rel',
+        'inspection_id', 'serial_id', string='FAI Samples',
+        help='Serial numbers registered as first-article samples for this '
+             'round (fed in at the start operation while quota is open).',
+    )
+    x_fai_arrived_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_arrived_rel',
+        'inspection_id', 'serial_id', string='FAI Arrived Samples',
+        help='Samples that already left the first-article operation with an '
+             'OK result and wait for the inspector.',
+    )
+    x_fai_removed_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_removed_rel',
+        'inspection_id', 'serial_id', string='FAI Removed Samples',
+        help='Samples dropped from this round after an NG/scrap leave at '
+             'the first-article operation. Reworked boards never re-enter '
+             'the sample list (first articles must be untouched boards); '
+             'the quota they released is refilled by fresh feeds only.',
+    )
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
     defect_qty = fields.Integer(string='Defect Qty', compute='_compute_inspection_counts', store=True)
@@ -642,8 +671,6 @@ class QualityInspection(models.Model):
         for scheme in candidates:
             if not scheme._matches_product_scope(product):
                 continue
-            if scheme.workcenter_id and route_operation and scheme.workcenter_id != route_operation.workcenter_id:
-                continue
             if scheme.operation_id and route_operation and scheme.operation_id != route_operation.operation_id:
                 continue
             if scheme.production_line_id:
@@ -659,7 +686,6 @@ class QualityInspection(models.Model):
             return max(matched_schemes, key=lambda scheme: (
                 scheme._product_scope_score(product),
                 4 if scheme.operation_id else 0,
-                2 if scheme.workcenter_id else 0,
                 1 if scheme.production_line_id else 0,
                 -scheme.id,
             ))
@@ -1067,7 +1093,7 @@ class QualityInspectionSkip(models.Model):
     scheme_id = fields.Many2one('sn.wsd.quality.inspection.scheme', string='Inspection Scheme', check_company=True, index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True, index=True)
-    operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True, index=True)
+    operation_id = fields.Many2one('sn.wsd.operation', string='Operation', check_company=True, index=True)
     area_sn = fields.Char(string='Area SN', index=True)
     model_code = fields.Char(string='Model Code', index=True)
     scheduled_time = fields.Datetime(string='Scheduled Time', required=True, default=fields.Datetime.now, index=True)

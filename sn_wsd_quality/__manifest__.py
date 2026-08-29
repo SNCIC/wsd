@@ -2,7 +2,7 @@
     'name': 'SN WSD Quality',
     'version': '19.0.4.0.2',
     'summary': 'Quality management for WSD meter manufacturing',
-    'depends': ['sn_wsd_api', 'mail'],
+    'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp'],
     'data': [
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
@@ -12,6 +12,7 @@
         'views/serial_freeze_views.xml',
         'wizard/serial_freeze_wizard_views.xml',
         'views/quality_inspection_views.xml',
+        'views/mes_order_fai_views.xml',
         'views/stock_picking_iqc_views.xml',
         'views/internal_serial_quality_views.xml',
         'views/menu_views.xml',

@@ -10,8 +10,8 @@
                 <field name="inspection_type"/>
                 <field name="product_tmpl_ids" widget="many2many_tags"/>
                 <field name="product_categ_ids" widget="many2many_tags"/>
-                <field name="workcenter_id"/>
-                <field name="production_line_id"/>
+                <field name="operation_id" optional="show"/>
+                <field name="production_line_id" optional="hide"/>
                 <field name="interval_minutes"/>
                 <field name="state"/>
                 <field name="company_id" groups="base.group_multi_company"/>
@@ -202,9 +202,14 @@
                                     <field name="product_categ_ids" widget="many2many_tags"/>
                                 </group>
                                 <group>
-                                    <field name="workcenter_id"/>
-                                    <field name="operation_id"/>
-                                    <field name="production_line_id"/>
+                                    <!-- QMS §1.1 方案维度=类别/工序/成品（无工作中心）：
+                                         工序除来料检外必配（FAI=首件工序/IPQC=巡检工序/
+                                         OQC=触发点工序）；产线仅 IPQC 巡检可能使用 -->
+                                    <field name="operation_id"
+                                           invisible="inspection_type == 'iqc'"
+                                           required="inspection_type != 'iqc'"/>
+                                    <field name="production_line_id"
+                                           invisible="inspection_type != 'ipqc'"/>
                                 </group>
                             </group>
                         </page>
