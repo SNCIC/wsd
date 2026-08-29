@@ -3143,11 +3143,6 @@ msgid "First Article Inspections"
 msgstr "首件检验单"
 
 #. module: sn_wsd_quality
-#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__x_fai_operation_id
-msgid "First Article Operation"
-msgstr "首件工序"
-
-#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_serial_ids
 msgid "FAI Samples"
 msgstr "首件样本"
@@ -3226,3 +3221,8 @@ msgstr "进行中"
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__passed
 msgid "Passed"
 msgstr "已通过"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Inspection schemes of type %(type)s require an operation."
+msgstr "检验类型为 %(type)s 的方案必须配置工序。"

@@ -79,7 +79,7 @@ class TestMesFai(TransactionCase):
         cls.scheme = cls.env['sn.wsd.quality.inspection.scheme'].create({
             'name': 'FAI SCHEME', 'code': 'FAI-01',
             'inspection_type': 'fai', 'state': 'effective',
-            'x_fai_operation_id': cls.op_in.id,
+            'operation_id': cls.op_in.id,
             'sample_size': 2,
             'product_tmpl_ids': [(6, 0, cls.product.product_tmpl_id.ids)],
             'line_ids': [
@@ -132,10 +132,16 @@ class TestMesFai(TransactionCase):
         self.assertEqual(order.x_fai_state, 'none')
         self.assertFalse(order.x_fai_inspection_ids)
 
-    def test_11b_scheme_without_fai_operation_never_arms(self):
-        self.scheme.x_fai_operation_id = False
-        order = self._order()
-        self.assertEqual(order.x_fai_state, 'none')
+    def test_11b_non_iqc_scheme_requires_operation(self):
+        from odoo.exceptions import ValidationError as VE
+        with self.assertRaises(VE):
+            self.env['sn.wsd.quality.inspection.scheme'].create({
+                'name': 'FAI NO OP', 'code': 'FAI-NOOP',
+                'inspection_type': 'fai', 'state': 'effective',
+                'operation_id': False,
+                'sample_size': 2,
+                'product_tmpl_ids': [(6, 0, self.product.product_tmpl_id.ids)],
+            })
 
     def test_12_reonline_opens_new_round(self):
         order = self._order()

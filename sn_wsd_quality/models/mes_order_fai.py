@@ -78,14 +78,14 @@ class MesOrderFai(models.Model):
             scheme = Inspection._find_scheme(
                 'fai', product=order.production_id.product_id,
                 production=order.production_id)
-            if not scheme or not scheme.x_fai_operation_id:
+            if not scheme or not scheme.operation_id:
                 continue  # 未命中方案 / 方案未配首件工序 → 不触发
             order._fai_create_round(scheme)
 
     def _fai_create_round(self, scheme):
         self.ensure_one()
         route_op = self.x_route_operation_ids.filtered(
-            lambda r: r.operation_id == scheme.x_fai_operation_id)[:1]
+            lambda r: r.operation_id == scheme.operation_id)[:1]
         inspection = self.env['sn.wsd.quality.inspection'].create_from_scheme(
             scheme, {
                 'mes_order_id': self.id,
@@ -169,7 +169,7 @@ class MesOrderFai(models.Model):
             return
         if serial_identity not in inspection.x_fai_serial_ids:
             return
-        if route_operation.operation_id != inspection.scheme_id.x_fai_operation_id:
+        if route_operation.operation_id != inspection.scheme_id.operation_id:
             return  # 非首件工序的出站不参与样本判定
         if result == 'ok':
             if serial_identity not in inspection.x_fai_arrived_serial_ids:

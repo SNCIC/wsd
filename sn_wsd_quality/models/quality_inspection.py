@@ -60,26 +60,15 @@ class QualityInspectionScheme(models.Model):
         index=True,
         copy=False,
     )
-    workcenter_id = fields.Many2one(
-        'mrp.workcenter',
-        string='Work Center',
-        check_company=True,
-        index=True,
-    )
     operation_id = fields.Many2one(
-        'mrp.routing.workcenter',
+        'sn.wsd.operation',
         string='Operation',
         check_company=True,
         index=True,
-    )
-    x_fai_operation_id = fields.Many2one(
-        'sn.wsd.operation',
-        string='First Article Operation',
-        check_company=True,
-        index=True,
-        help='First-article station for FAI schemes: sample boards must '
-             'leave this operation with an OK result. A FAI scheme without '
-             'this operation never arms first-article control.',
+        help='Operation scope of the scheme. FAI: the first-article station '
+             'samples must leave with an OK result; IPQC: the patrolled '
+             'operation; OQC: the trigger-point operation. Not used by IQC '
+             '(incoming material has no route).',
     )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line',
@@ -123,6 +112,15 @@ class QualityInspectionScheme(models.Model):
         'unique(company_id, code)',
         'The inspection scheme code must be unique per company.',
     )
+
+    @api.constrains('inspection_type', 'operation_id')
+    def _check_operation_scope(self):
+        # QMS §1.1 方案维度=类别/工序/成品；除来料检外必有工序
+        for scheme in self:
+            if scheme.inspection_type != 'iqc' and not scheme.operation_id:
+                raise ValidationError(_(
+                    'Inspection schemes of type %(type)s require an '
+                    'operation.', type=scheme.inspection_type))
 
     @api.constrains('interval_minutes', 'sample_size', 'accept_qty', 'reject_qty')
     def _check_scheme_numbers(self):
@@ -673,8 +671,6 @@ class QualityInspection(models.Model):
         for scheme in candidates:
             if not scheme._matches_product_scope(product):
                 continue
-            if scheme.workcenter_id and route_operation and scheme.workcenter_id != route_operation.workcenter_id:
-                continue
             if scheme.operation_id and route_operation and scheme.operation_id != route_operation.operation_id:
                 continue
             if scheme.production_line_id:
@@ -690,7 +686,6 @@ class QualityInspection(models.Model):
             return max(matched_schemes, key=lambda scheme: (
                 scheme._product_scope_score(product),
                 4 if scheme.operation_id else 0,
-                2 if scheme.workcenter_id else 0,
                 1 if scheme.production_line_id else 0,
                 -scheme.id,
             ))
@@ -1098,7 +1093,7 @@ class QualityInspectionSkip(models.Model):
     scheme_id = fields.Many2one('sn.wsd.quality.inspection.scheme', string='Inspection Scheme', check_company=True, index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True, index=True)
-    operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True, index=True)
+    operation_id = fields.Many2one('sn.wsd.operation', string='Operation', check_company=True, index=True)
     area_sn = fields.Char(string='Area SN', index=True)
     model_code = fields.Char(string='Model Code', index=True)
     scheduled_time = fields.Datetime(string='Scheduled Time', required=True, default=fields.Datetime.now, index=True)
