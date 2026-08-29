@@ -1031,6 +1031,10 @@ class TestMesOrder(TransactionCase):
         order.action_generate_return(qty=1)
         ret = (order.picking_ids - p1)
         self.assertAlmostEqual(ret.x_mes_order_qty, -1.0)
+        self.assertEqual(ret.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.return',
+                         'returns carry their own WH/MR operation type')
+        self.assertIn('/MR/', ret.name)
         self.assertEqual(ret.location_id, line_side, 'return ships FROM the line side')
         self.assertEqual(ret.location_dest_id,
                          mo.picking_type_id.warehouse_id.lot_stock_id)
@@ -1126,6 +1130,10 @@ class TestMesOrder(TransactionCase):
         wizard.action_pick()
         p2 = (order.picking_ids - p1)
         self.assertTrue(p2.x_is_over_pick)
+        self.assertEqual(p2.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.over',
+                         'over-picks carry their own WH/OP operation type')
+        self.assertIn('/OP/', p2.name)
         self.assertEqual(p2.x_over_reason, 'scrap make-up')
         # BOM 2/台 → 超领 1 台发 2 件
         self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
@@ -1294,3 +1302,17 @@ class TestMesOrder(TransactionCase):
         quant = self.env['stock.quant'].search([
             ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
         self.assertEqual(quant.quantity, 100.0)
+
+    # --- MO smart button: aggregate every MES-order stock document ---
+    def test_88_mo_smart_button_aggregates_pickings(self):
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        order.action_generate_picking(qty_this=2)
+        self.assertEqual(mo.x_mes_picking_count, 2)
+        act = mo.action_open_mes_pickings()
+        self.assertEqual(act['res_model'], 'stock.picking')
+        self.assertEqual(act['domain'],
+                         [('x_mes_order_id', 'in', mo.x_mes_order_ids.ids)])

@@ -8298,3 +8298,30 @@ msgstr "排产数量"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
 msgid "Picked Quantity"
 msgstr "已领数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_pickings_button
+msgid "MES Transfers"
+msgstr "出入库单据"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Return"
+msgstr "退料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_return_id
+msgid "Material Return Operation"
+msgstr "退料作业"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Over-pick"
+msgstr "超领补料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_over_pick_id
+msgid "Material Over-pick Operation"
+msgstr "超领补料作业"

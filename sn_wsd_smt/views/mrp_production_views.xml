@@ -6,8 +6,11 @@
         <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="action_open_smt_online_materials" type="object" class="oe_stat_button" icon="fa-cubes">
-                    <field name="x_smt_online_material_count" widget="statinfo" string="SMT Materials"/>
+                <!-- 口径=is_load Y（当前在线）：下料后计数归零即隐藏，与
+                     批量下料按钮一致；料站历史行用户另有留存，不在此保留入口 -->
+                <button name="action_open_smt_online_materials" type="object" class="oe_stat_button" icon="fa-cubes"
+                        invisible="x_smt_loaded_material_count == 0">
+                    <field name="x_smt_loaded_material_count" widget="statinfo" string="SMT Materials"/>
                 </button>
                 <button name="action_smt_batch_unload" type="object" class="oe_stat_button" icon="fa-download"
                         invisible="x_smt_loaded_material_count == 0"
