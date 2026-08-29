@@ -43,7 +43,8 @@ class MesOrderFai(models.Model):
     @api.depends('x_fai_inspection_ids.state',
                  'x_fai_inspection_ids.result',
                  'x_fai_inspection_ids.x_fai_serial_ids',
-                 'x_fai_inspection_ids.x_fai_arrived_serial_ids')
+                 'x_fai_inspection_ids.x_fai_arrived_serial_ids',
+                 'x_fai_inspection_ids.x_fai_reported_qty')
     def _compute_x_fai(self):
         # inspection._order = scheduled_time desc, id desc → 列表首个即最新轮
         for order in self:
@@ -59,8 +60,13 @@ class MesOrderFai(models.Model):
             order.x_fai_state = state
             order.x_fai_round = len(inspections)
             order.x_fai_inspection_id = current
-            order.x_fai_sample_count = len(current.x_fai_serial_ids)
-            order.x_fai_sample_done = len(current.x_fai_arrived_serial_ids)
+            if order.x_manage_mode == 'report':
+                # 报工模式：样本口径 = 首件工序报工合格台数（add-mes-fai-report）
+                order.x_fai_sample_count = current.x_fai_reported_qty
+                order.x_fai_sample_done = current.x_fai_reported_qty
+            else:
+                order.x_fai_sample_count = len(current.x_fai_serial_ids)
+                order.x_fai_sample_done = len(current.x_fai_arrived_serial_ids)
             order.x_fai_inspection_count = len(inspections)
 
     # ------------------------------------------------------------------
@@ -68,8 +74,7 @@ class MesOrderFai(models.Model):
     # ------------------------------------------------------------------
     def action_online(self):
         res = super().action_online()
-        self.filtered(
-            lambda o: o.x_manage_mode == 'station')._fai_on_online()
+        self._fai_on_online()  # 过站/报工模式共用状态机（add-mes-fai-report）
         return res
 
     def _fai_on_online(self):
@@ -93,11 +98,14 @@ class MesOrderFai(models.Model):
                 'product_id': self.production_id.product_id.id,
                 'production_line_id': self.production_line_id.id,
                 'route_operation_id': route_op.id,
+                # 基线快照：本轮已存在的首件工序合格报工量（见字段 help）
+                'x_fai_reported_base': self._fai_existing_reported_base(scheme),
             })
-        # 30 分钟首件确认提醒（不硬拦，add-mes-fai 决策）
+        # 30 分钟首件确认提醒（不硬拦，add-mes-fai 决策）；
+        # 接收人：方案负责人 > 检验员（add-mes-fai-report 修正）
         inspection.activity_schedule(
             'mail.mail_activity_data_todo',
-            user_id=inspection.inspector_id.id or self.env.user.id,
+            user_id=self._fai_activity_user(inspection).id,
             date_deadline=fields.Date.context_today(
                 self) + timedelta(days=1),
             summary=_('First article confirmation'),
@@ -178,7 +186,7 @@ class MesOrderFai(models.Model):
                     and inspection.state == 'open':
                 inspection.activity_schedule(
                     'mail.mail_activity_data_todo',
-                    user_id=inspection.inspector_id.id or self.env.user.id,
+                    user_id=self._fai_activity_user(inspection).id,
                     summary=_('First article samples ready'),
                     note=_('%(count)s samples reached the first-article '
                            'operation of %(order)s; inspection can start.',
@@ -191,6 +199,73 @@ class MesOrderFai(models.Model):
             inspection.x_fai_serial_ids = [(3, serial_identity.id)]
             inspection.x_fai_arrived_serial_ids = [(3, serial_identity.id)]
             inspection.x_fai_removed_serial_ids = [(4, serial_identity.id)]
+
+    def _fai_existing_reported_base(self, scheme):
+        self.ensure_one()
+        if self.x_manage_mode != 'report' or not scheme.operation_id:
+            return 0.0
+        reports = self.env['sn.wsd.mes.operation.report'].search([
+            ('mes_order_id', '=', self.id),
+            ('route_operation_id.operation_id', '=', scheme.operation_id.id),
+        ])
+        return sum(reports.mapped('qty_ok'))
+
+    def _fai_activity_user(self, inspection):
+        inspection.ensure_one()
+        return (inspection.scheme_id.responsible_user_id
+                or inspection.inspector_id or self.env.user)
+
+    # ------------------------------------------------------------------
+    # 报工模式数量收集器（add-mes-fai-report）：闸在 super 前、齐套在后
+    # ------------------------------------------------------------------
+    def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
+                             qty_scrap=0.0, scrap_reason=False):
+        self.ensure_one()
+        self._fai_gate_report(route_operation, qty_ok)
+        res = super().report_operation_qty(
+            route_operation, qty_ok, qty_ng=qty_ng, qty_scrap=qty_scrap,
+            scrap_reason=scrap_reason)
+        self._fai_report_ready_notify(route_operation, qty_ok)
+        return res
+
+    def _fai_gate_report(self, route_operation, qty_ok):
+        self.ensure_one()
+        if self.x_manage_mode != 'report' or qty_ok <= 0:
+            return  # 纯 NG/报废报工：调机记账，不占样本名额
+        inspection = self.x_fai_inspection_id
+        if not inspection or inspection.state == 'done':
+            return
+        if route_operation.operation_id != inspection.scheme_id.operation_id:
+            return  # D1：只拦首件工序的报工
+        remaining = inspection.sample_size - inspection.x_fai_reported_qty
+        if qty_ok > remaining + 0.0001:
+            raise ValidationError(_(
+                'First article confirmation is in progress on MES order '
+                '%(order)s: report at most %(remaining)s OK unit(s) in '
+                'this batch.', order=self.name, remaining=max(remaining, 0.0)))
+
+    def _fai_report_ready_notify(self, route_operation, qty_ok):
+        self.ensure_one()
+        if self.x_manage_mode != 'report' or qty_ok <= 0:
+            return
+        inspection = self.x_fai_inspection_id
+        if not inspection or inspection.state != 'open':
+            return
+        if route_operation.operation_id != inspection.scheme_id.operation_id:
+            return
+        if inspection.x_fai_reported_qty < inspection.sample_size:
+            return
+        if inspection.activity_ids.filtered(
+                lambda a: a.summary == 'First article samples ready'):
+            return
+        inspection.activity_schedule(
+            'mail.mail_activity_data_todo',
+            user_id=self._fai_activity_user(inspection).id,
+            summary=_('First article samples ready'),
+            note=_('%(count)s first-article units were reported on '
+                   '%(order)s; inspection can start.',
+                   count=inspection.sample_size, order=self.name),
+        )
 
     # ------------------------------------------------------------------
     # 可见性：首件检验单入口
@@ -217,6 +292,42 @@ class QualityInspectionFai(models.Model):
     x_fai_round_number = fields.Integer(
         string='FAI Round', compute='_compute_x_fai_round_number',
     )
+    x_fai_reported_qty = fields.Float(
+        string='FAI Reported Qty', compute='_compute_x_fai_reported_qty',
+        help='First-article units accumulated on the first-article '
+             'operation since this round opened. Truth source: OK '
+             'quantities of the operation reports of this MES order '
+             '(report mode has no serial identities).',
+    )
+    x_fai_reported_base = fields.Float(
+        string='FAI Reported Base',
+        help='OK quantity already reported on the first-article operation '
+             'when this round opened; current round = total - base. '
+             'Snapshot instead of timestamps: datetime columns are '
+             'second-precise and rounds can open within the same second.',
+    )
+
+    def _fai_reported_total(self):
+        self.ensure_one()
+        order = self.mes_order_id
+        if not order or not self.scheme_id.operation_id:
+            return 0.0
+        reports = self.env['sn.wsd.mes.operation.report'].search([
+            ('mes_order_id', '=', order.id),
+            ('route_operation_id.operation_id', '=',
+             self.scheme_id.operation_id.id),
+        ])
+        return sum(reports.mapped('qty_ok'))
+
+    @api.depends('mes_order_id.sn_report_ids.qty_ok',
+                 'mes_order_id.sn_report_ids.route_operation_id',
+                 'scheme_id', 'x_fai_reported_base')
+    def _compute_x_fai_reported_qty(self):
+        for inspection in self:
+            if inspection.mes_order_id.x_manage_mode == 'report':
+                inspection.x_fai_reported_qty =                     inspection._fai_reported_total()                     - inspection.x_fai_reported_base
+            else:
+                inspection.x_fai_reported_qty = 0.0
 
     @api.depends('mes_order_id', 'mes_order_id.x_fai_inspection_ids')
     def _compute_x_fai_round_number(self):
@@ -233,7 +344,10 @@ class QualityInspectionFai(models.Model):
                 raise UserError(_(
                     'First article inspection: complete every item '
                     '(required or not) before finishing.'))
-            arrived = len(inspection.x_fai_arrived_serial_ids)
+            if inspection.mes_order_id.x_manage_mode == 'report':
+                arrived = inspection.x_fai_reported_qty
+            else:
+                arrived = len(inspection.x_fai_arrived_serial_ids)
             if arrived < inspection.sample_size:
                 raise UserError(_(
                     'First article inspection: only %(arrived)s of %(need)s '

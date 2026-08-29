@@ -36,12 +36,19 @@
                 <page name="fai_samples" string="First Article Samples"
                       invisible="inspection_type != 'fai'">
                     <group>
-                        <group string="Arrived Samples">
+                        <group string="Reported Qty"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                            <field name="x_fai_reported_qty" nolabel="1"
+                                   readonly="state == 'done'"/>
+                        </group>
+                        <group string="Arrived Samples"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
                             <field name="x_fai_arrived_serial_ids" nolabel="1"
                                    widget="many2many_tags"
                                    readonly="state == 'done'"/>
                         </group>
-                        <group string="Fed Samples">
+                        <group string="Fed Samples"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
                             <field name="x_fai_serial_ids" nolabel="1"
                                    widget="many2many_tags"
                                    readonly="state == 'done'"/>

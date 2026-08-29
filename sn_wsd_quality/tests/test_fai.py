@@ -164,9 +164,12 @@ class TestMesFai(TransactionCase):
         self.assertEqual(len(order.x_fai_inspection_ids), 2)
         self.assertEqual(inspection1.state, 'done')
 
-    def test_13_report_mode_not_triggered(self):
+    def test_13_report_mode_arms_too(self):
+        # add-mes-fai-report：两模式共用状态机，报工单同样开轮
+        # （数量收集器细节见 test_fai_report）
         order = self._order(mode='report')
-        self.assertEqual(order.x_fai_state, 'none')
+        self.assertEqual(order.x_fai_state, 'in_progress')
+        self.assertEqual(order.x_fai_round, 1)
 
     # ---------------- R2 样本收集与投入限流 ----------------
     def test_20_sample_registration_and_gate(self):

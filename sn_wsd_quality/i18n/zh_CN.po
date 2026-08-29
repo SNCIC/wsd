@@ -3226,3 +3226,24 @@ msgstr "已通过"
 #: code:addons/sn_wsd_quality/models/quality_inspection.py:0
 msgid "Inspection schemes of type %(type)s require an operation."
 msgstr "检验类型为 %(type)s 的方案必须配置工序。"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article confirmation is in progress on MES order %(order)s: report at most %(remaining)s OK unit(s) in this batch."
+msgstr "制令单 %(order)s 首件确认中：本笔最多可报 %(remaining)s 台合格。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "%(count)s first-article units were reported on %(order)s; inspection can start."
+msgstr "制令单 %(order)s 已报 %(count)s 台首件，可以开始检验。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_qty
+msgid "FAI Reported Qty"
+msgstr "已报首件台数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Reported Qty"
+msgstr "已报台数"
