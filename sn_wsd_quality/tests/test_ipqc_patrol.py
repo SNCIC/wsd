@@ -1,13 +1,12 @@
-from datetime import timedelta
+from psycopg2 import IntegrityError
 
 from odoo import fields
-from odoo.exceptions import ValidationError
-from odoo.tests import TransactionCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 
 
 @tagged('post_install', '-at_install')
 class TestIpqcPatrol(TransactionCase):
-    """过程巡检 IPQC·定时巡检（add-mes-ipqc-patrol）。"""
+    """过程巡检 IPQC·定时巡检+异常驱动样本录入（add-mes-ipqc-patrol）。"""
 
     @classmethod
     def setUpClass(cls):
@@ -79,6 +78,15 @@ class TestIpqcPatrol(TransactionCase):
                         'upper_limit': 245.0}),
             ],
         })
+        # 缺陷码：一板多不良时按缺陷码区分多行
+        cls.defect_a = cls.env['sn.wsd.quality.defect.code'].create({
+            'name': 'IPQC Defect A', 'code': 'IPQC-DGA',
+            'category': 'other', 'severity': 'minor',
+        })
+        cls.defect_b = cls.env['sn.wsd.quality.defect.code'].create({
+            'name': 'IPQC Defect B', 'code': 'IPQC-DGB',
+            'category': 'other', 'severity': 'major',
+        })
 
     def _order(self, line, qty=20):
         order = self.env['sn.wsd.mes.order'].create({
@@ -102,6 +110,11 @@ class TestIpqcPatrol(TransactionCase):
         order.leave_station(serial, 'ok')
         return serial
 
+    def _inspection(self):
+        # 巡检单按方案建（cron 同口径）：预填抽样数量、不预建样本行
+        return self.env['sn.wsd.quality.inspection'].create_from_scheme(
+            self.scheme, {'production_line_id': self.line_a.id})
+
     # ---------------- V0 手动巡检 ----------------
     def test_10_manual_inspection_brings_scheme_lines(self):
         inspection = self.env['sn.wsd.quality.inspection'].new({
@@ -112,29 +125,24 @@ class TestIpqcPatrol(TransactionCase):
         self.assertEqual(len(inspection.line_ids), 2,
                          'onchange brings scheme template lines')
         self.assertEqual(inspection.sample_size, 3)
+        self.assertEqual(inspection.x_picked_qty, 3,
+                         'picking the scheme pre-fills the picked qty')
 
-    def test_11_per_unit_sample_lines(self):
-        inspection = self.env['sn.wsd.quality.inspection'].create({
-            'inspection_type': 'ipqc', 'scheme_id': self.scheme.id,
-            'line_ids': self.env[
-                'sn.wsd.quality.inspection']._line_commands_from_scheme(
-                    self.scheme),
-        })
-        order = self._order(self.line_a)
-        wc = self._wc(self.line_a)
-        serial = self._make_activity(order, wc, 'SN-IPQC-001')
-        Sample = self.env['sn.wsd.quality.inspection.sample']
-        Sample.create({'inspection_id': inspection.id,
-                       'serial_identity_id': serial.id, 'result': 'pass'})
-        Sample.create({'inspection_id': inspection.id, 'result': 'pass'})
-        Sample.create({'inspection_id': inspection.id, 'result': 'fail'})
+    def test_11_zero_defect_zero_entry(self):
+        # 异常驱动：无不良零录入——不建任何样本行，统计只看抽样数量
+        inspection = self._inspection()
+        self.assertFalse(inspection.sample_ids,
+                         'no defect found means no sample rows at all')
+        self.assertEqual(inspection.x_picked_qty, 3,
+                         'creating from the scheme pre-fills the picked qty')
         inspection.invalidate_recordset()
         self.assertEqual(inspection.sample_checked_qty, 3,
-                         'checked = judged lines (station SN + report rows)')
-        self.assertEqual(inspection.sample_defect_qty, 1,
-                         'defect = failed lines; OK count = 3 - 1')
-        self.assertFalse(inspection.mes_order_id,
-                         'patrol inspection keeps the order as optional reference')
+                         'checked defaults to the scheme sample size')
+        self.assertEqual(inspection.sample_defect_qty, 0)
+        inspection.write({'x_picked_qty': 5})
+        inspection.invalidate_recordset()
+        self.assertEqual(inspection.sample_checked_qty, 5,
+                         'checked follows the picked qty')
 
     # ---------------- V1 定时引擎 ----------------
     def test_20_due_with_activity_creates_inspection(self):
@@ -228,19 +236,102 @@ class TestIpqcPatrol(TransactionCase):
             lambda a: a.summary == 'Patrol inspection due')
         self.assertEqual(due.user_id, responsible)
 
-    def test_26_quick_qty_no_rows_direct_stats(self):
-        # 无SN快捷数量：不落样本行，直接进统计（报工模式口径）
-        inspection = self.env['sn.wsd.quality.inspection'].create({
-            'inspection_type': 'ipqc', 'scheme_id': self.scheme.id,
-        })
-        inspection.write({'x_ipqc_quick_ok': 4, 'x_ipqc_quick_ng': 1})
-        self.assertFalse(inspection.sample_ids, 'no rows generated')
-        self.assertEqual(inspection.sample_checked_qty, 5)
-        self.assertEqual(inspection.sample_defect_qty, 1)
-        # 与过站行并存：行数 + 快捷数量
-        Sample = self.env['sn.wsd.quality.inspection.sample']
-        Sample.create({'inspection_id': inspection.id, 'result': 'pass'})
-        Sample.create({'inspection_id': inspection.id, 'result': 'fail'})
+    # ---------------- V2 异常驱动样本录入 ----------------
+    def test_30_scan_sn_auto_fail_onchange(self):
+        # 扫板：样本行填 SN，pending 自动翻 fail（Form 触发 onchange）
+        order = self._order(self.line_a)
+        wc = self._wc(self.line_a)
+        serial = self._make_activity(order, wc, 'SN-IPQC-501')
+        inspection = self._inspection()
+        with Form(inspection) as form:
+            with form.sample_ids.new() as sample:
+                sample.serial_identity_id = serial
         inspection.invalidate_recordset()
-        self.assertEqual(inspection.sample_checked_qty, 7)
-        self.assertEqual(inspection.sample_defect_qty, 2)
+        self.assertEqual(inspection.sample_ids.serial_identity_id, serial)
+        self.assertEqual(inspection.sample_ids.mapped('result'), ['fail'],
+                         'filling the SN flips the pending sample to fail')
+
+    def test_31_board_multiple_defects(self):
+        # 一板多不良：同 SN 不同缺陷多行合法；同 SN 同缺陷被唯一约束拦截
+        order = self._order(self.line_a)
+        wc = self._wc(self.line_a)
+        serial = self._make_activity(order, wc, 'SN-IPQC-601')
+        inspection = self._inspection()
+        Sample = self.env['sn.wsd.quality.inspection.sample']
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': serial.id,
+                       'defect_code_id': self.defect_a.id, 'result': 'fail'})
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': serial.id,
+                       'defect_code_id': self.defect_b.id, 'result': 'fail'})
+        inspection.invalidate_recordset()
+        self.assertEqual(len(inspection.sample_ids), 2,
+                         'one board, two defect codes: two rows allowed')
+        with self.assertRaises(IntegrityError):
+            with self.env.cr.savepoint():
+                Sample.create({'inspection_id': inspection.id,
+                               'serial_identity_id': serial.id,
+                               'defect_code_id': self.defect_a.id,
+                               'result': 'fail'})
+
+    def test_32_qty_rules(self):
+        # 有 SN 行必须 qty=1；无 SN 行记缺陷数量且可修改
+        order = self._order(self.line_a)
+        wc = self._wc(self.line_a)
+        serial = self._make_activity(order, wc, 'SN-IPQC-701')
+        inspection = self._inspection()
+        Sample = self.env['sn.wsd.quality.inspection.sample']
+        with self.assertRaises(IntegrityError):
+            with self.env.cr.savepoint():
+                Sample.create({'inspection_id': inspection.id,
+                               'serial_identity_id': serial.id,
+                               'defect_code_id': self.defect_a.id,
+                               'qty': 2, 'result': 'fail'})
+        row = Sample.create({'inspection_id': inspection.id,
+                             'defect_code_id': self.defect_b.id,
+                             'qty': 3, 'result': 'fail'})
+        self.assertEqual(row.qty, 3,
+                         'SN-less rows carry the defect quantity')
+        row.write({'qty': 2})
+        self.assertEqual(row.qty, 2, 'the SN-less quantity stays editable')
+
+    def test_33_stats_dedup_and_addition(self):
+        # 统计纯加法、板级按 SN 去重：SN-A 两行只算一片，无 SN 行按 qty 累加
+        order = self._order(self.line_a)
+        wc = self._wc(self.line_a)
+        sn_a = self._make_activity(order, wc, 'SN-IPQC-801')
+        sn_b = self._make_activity(order, wc, 'SN-IPQC-802')
+        inspection = self._inspection()
+        inspection.write({'x_picked_qty': 8})
+        Sample = self.env['sn.wsd.quality.inspection.sample']
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': sn_a.id,
+                       'defect_code_id': self.defect_a.id, 'result': 'fail'})
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': sn_a.id,
+                       'defect_code_id': self.defect_b.id, 'result': 'fail'})
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': sn_b.id,
+                       'defect_code_id': self.defect_a.id, 'result': 'fail'})
+        Sample.create({'inspection_id': inspection.id,
+                       'defect_code_id': self.defect_b.id,
+                       'qty': 3, 'result': 'fail'})
+        inspection.invalidate_recordset()
+        self.assertEqual(inspection.sample_defect_qty, 2 + 3,
+                         'defect = distinct fail SNs (2) + SN-less qty (3)')
+        self.assertEqual(inspection.sample_checked_qty, 8,
+                         'checked = picked qty, not the sample row count')
+
+    def test_34_history_lists_same_scope_inspections(self):
+        # 历史页签：同产线×同工序的过往巡检（新到旧，不含自身）
+        order = self._order(self.line_a)
+        first = self.env['sn.wsd.quality.inspection'].create_from_scheme(
+            self.scheme, {'production_line_id': self.line_a.id})
+        first.action_start()
+        first.line_ids._set_pass_values()
+        first.action_done()
+        inspection = self._inspection()
+        history = inspection.x_ipqc_history_ids
+        self.assertIn(first, history)
+        self.assertNotIn(inspection, history)
+        self.assertEqual(history[:1], first, 'newest first')

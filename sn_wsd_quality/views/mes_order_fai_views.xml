@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- 制令单表单：首件状态徽标 + 轮次 + 首件检验入口（add-mes-fai） -->
+    <!-- 制令单表单：首件状态徽标 + 轮次 + 首件检验入口（add-mes-fai）；
+         OQC 状态徽标 + 当前检验单入口（oqc-entry-trigger，无轮次、无
+         计数按钮，readonly 链接直达当前 OQC 单） -->
     <record id="view_sn_wsd_mes_order_form_fai" model="ir.ui.view">
         <field name="name">sn.wsd.mes.order.form.fai.sn.wsd.quality</field>
         <field name="model">sn.wsd.mes.order</field>
@@ -14,6 +16,14 @@
                 <field name="x_fai_round" invisible="x_fai_state == 'none'"/>
                 <field name="x_fai_sample_count" invisible="x_fai_state != 'in_progress'"/>
                 <field name="x_fai_sample_done" invisible="x_fai_state != 'in_progress'"/>
+                <!-- OQC 轻状态镜像 FAI 徽标（无轮次）；未接动作按钮，入口
+                     用只读 many2one 直达当前 OQC 检验单 -->
+                <field name="x_oqc_state" widget="badge"
+                       invisible="x_oqc_state == 'none'"
+                       decoration-success="x_oqc_state == 'passed'"
+                       decoration-warning="x_oqc_state == 'in_progress'"/>
+                <field name="x_oqc_inspection_id" readonly="1"
+                       invisible="x_oqc_state == 'none'"/>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_open_fai_inspections" type="object"
@@ -33,8 +43,8 @@
         <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='scope']" position="after">
-                <!-- ipqc 无页签区段式表单：范围/抽检结果/检验项/备注 以标题分区，
-                     notebook 对 ipqc 整体隐藏 -->
+                <!-- ipqc/fai/oqc 无页签区段式表单：范围/样本/检验项/备注 以标题
+                     分区，notebook 对 ipqc/fai/oqc 整体隐藏 -->
                 <page name="fai_samples" string="First Article Samples"
                       invisible="inspection_type != 'fai'">
                     <group>
@@ -68,70 +78,365 @@
                                 <field name="x_patrol_operation_id"/>
                             </group>
                         </group>
-                        <separator string="Patrol Results"/>
-                        <group>
-                            <group string="Statistics">
-                                <field name="sample_size" readonly="state != 'open'"/>
-                                <field name="sample_checked_qty"/>
-                                <field name="sample_defect_qty"/>
-                            </group>
-                            <group string="Picked Qty (no SN)">
-                                <field name="x_ipqc_quick_ok" readonly="state == 'done'"/>
-                                <field name="x_ipqc_quick_ng" readonly="state == 'done'"/>
-                                <field name="x_ipqc_quick_line_id"
-                                       invisible="x_ipqc_quick_ng &lt;= 0"
-                                       domain="[('inspection_id', '=', parent.id)]"
-                                       options="{'no_create': 1}" readonly="state == 'done'"/>
-                                <field name="x_ipqc_quick_defect_id"
-                                       invisible="x_ipqc_quick_ng &lt;= 0"
-                                       options="{'no_create': 1}" readonly="state == 'done'"/>
-                                <field name="x_ipqc_quick_note"
-                                       invisible="x_ipqc_quick_ng &lt;= 0"
-                                       readonly="state == 'done'"
-                                       placeholder="e.g. solder bridge after reflow"/>
-                            </group>
-                        </group>
-                        <!-- 逐台判定（过站模式）：行内选SN（可扫码）+判结果；
-                             fail 行可挂 检验项目+缺陷代码（不良归属，供统计/SPC） -->
-                        <field name="sample_ids" nolabel="1"
-                               readonly="state == 'done'">
-                            <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
-                                <field name="sequence" widget="handle"/>
-                                <field name="serial_identity_id" options="{'no_create': 1}"/>
-                                <field name="result"/>
-                                <field name="x_line_id" invisible="result != 'fail'"
-                                       domain="[('inspection_id', '=', parent.id)]"
-                                       options="{'no_create': 1}"/>
-                                <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
-                                <field name="note" placeholder="optional"/>
-                            </list>
-                        </field>
-                        <separator string="Inspection Items"/>
-                        <field name="line_ids" nolabel="1" readonly="state == 'done'">
-                            <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
-                                <field name="sequence" widget="handle"/>
-                                <field name="item_code"/>
-                                <field name="name"/>
-                                <field name="item_type"/>
-                                <field name="required"/>
-                                <field name="lower_limit" invisible="item_type != 'numeric'"/>
-                                <field name="upper_limit" invisible="item_type != 'numeric'"/>
-                                <field name="measured_value" invisible="item_type != 'numeric'"/>
-                                <field name="text_value" invisible="item_type == 'numeric'"/>
-                                <field name="manual_result" invisible="item_type == 'numeric'"/>
-                                <field name="is_checked"/>
-                                <field name="result"/>
-                                <field name="unit"/>
-                                <field name="note"/>
-                            </list>
-                        </field>
+                        <notebook>
+                            <page name="ipqc_inspect" string="Inspection">
+                                <separator string="Patrol Results"/>
+                                <group>
+                                    <group string="Statistics">
+                                        <field name="sample_size" readonly="state != 'open'"/>
+                                        <field name="x_picked_qty" readonly="state == 'done'"/>
+                                        <field name="sample_defect_qty"/>
+                                    </group>
+                                </group>
+                                <!-- 异常驱动录入：无不良零录入；有不良扫板 SN 落 fail 样本行；
+                                     无 SN 的不良在同一样本清单手工加行记数量（SN 行数量恒 1，
+                                     fail 行可挂 检验项目+缺陷代码，不良归属供统计/SPC） -->
+                                <separator string="Defect Samples (scan or add manually)"/>
+                                <field name="sample_ids" nolabel="1"
+                                       readonly="state == 'done'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="serial_identity_id" options="{'no_create': 1}"/>
+                                        <field name="qty" readonly="serial_identity_id != False"/>
+                                        <field name="result"/>
+                                        <field name="x_line_id" invisible="result != 'fail'"
+                                               domain="[('inspection_id', '=', parent.id)]"
+                                               options="{'no_create': 1}"/>
+                                        <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                        <field name="note" placeholder="optional"/>
+                                    </list>
+                                </field>
+                                <separator string="Inspection Items"/>
+                                <field name="line_ids" nolabel="1" readonly="state == 'done'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="item_code"/>
+                                        <field name="name"/>
+                                        <field name="item_type"/>
+                                        <field name="required"/>
+                                        <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="manual_result" invisible="item_type == 'numeric'"/>
+                                        <field name="is_checked"/>
+                                        <field name="result"/>
+                                        <field name="unit"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <separator string="Attachments"/>
+                                <field name="attachment_ids" nolabel="1"
+                                       widget="many2many_binary"
+                                       readonly="state == 'done'"/>
+                            </page>
+                            <page name="ipqc_history" string="History">
+                                <!-- 同产线×同巡检工序的过往巡检（只读趋势视图，
+                                     点击打开原单） -->
+                                <field name="x_ipqc_history_ids" nolabel="1"
+                                       readonly="1" create="false" delete="false">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="scheduled_time"/>
+                                        <field name="inspector_id"/>
+                                        <field name="state"/>
+                                        <field name="result"/>
+                                        <field name="sample_defect_qty"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                         <separator string="Notes"/>
                         <field name="note" nolabel="1" readonly="state == 'done'"
                                placeholder="Patrol remarks..."/>
                     </div>
+                    <!-- fai 首件检验：单页区段式——范围/抽检产品(扫码+数量记录)/
+                         检验·历史两页签/备注；术语用"抽检产品"，投入/到检中间态
+                         不占检验界面（门禁侧的制令单徽标保留） -->
+                    <div name="fai_sections" invisible="inspection_type != 'fai'">
+                        <separator string="First Article Scope"/>
+                        <group>
+                            <group>
+                                <field name="mes_order_id" readonly="state == 'done'"/>
+                                <field name="x_fai_round_number" readonly="1"/>
+                                <field name="route_operation_id"/>
+                                <field name="production_line_id"/>
+                                <field name="product_id"/>
+                                <field name="sample_size" readonly="1"/>
+                            </group>
+                        </group>
+                        <separator string="Picked Products"/>
+                        <group>
+                            <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="x_fai_scan"
+                                       placeholder="Scan or type a board SN..."
+                                       readonly="state == 'done'"/>
+                            </group>
+                            <group invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                <field name="x_fai_reported_qty" readonly="state == 'done'"/>
+                            </group>
+                            <group>
+                                <field name="x_fai_ok_qty"/>
+                                <field name="x_fai_ng_qty"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="fai_inspect" string="Inspection">
+                                <!-- 过站：扫码切换当前板，检验清单只显示当前板 -->
+                                <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                    <field name="x_fai_current_sn" readonly="1"
+                                           options="{'no_create': 1}"/>
+                                </group>
+                                <field name="cell_ids" nolabel="1" readonly="state == 'done'"
+                                       domain="[('serial_identity_id', '=', x_fai_current_sn)]"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'"
+                                       create="false" delete="false">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="line_id" readonly="1" string="Inspection Item"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="manual_result" invisible="item_type != 'pass_fail'"/>
+                                        <field name="result"/>
+                                        <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <!-- 报工：整单清单（默认合格）+ 不良板扫码记录 -->
+                                <separator string="Inspection Items"
+                                           invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
+                                <field name="line_ids" nolabel="1" readonly="state == 'done'"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="item_code"/>
+                                        <field name="name"/>
+                                        <field name="item_type"/>
+                                        <field name="required"/>
+                                        <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="manual_result" invisible="item_type != 'pass_fail'"/>
+                                        <field name="is_checked"/>
+                                        <field name="result"/>
+                                        <field name="unit"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <separator string="Defective Products (scan)"
+                                           invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
+                                <field name="sample_ids" nolabel="1" readonly="state == 'done'"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'">
+                                        <field name="serial_identity_id" options="{'no_create': 1}"/>
+                                        <field name="x_line_id" domain="[('inspection_id', '=', parent.id)]"
+                                               options="{'no_create': 1}"/>
+                                        <field name="defect_code_id" options="{'no_create': 1}"/>
+                                        <field name="result"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <separator string="Attachments"/>
+                                <field name="attachment_ids" nolabel="1"
+                                       widget="many2many_binary"
+                                       readonly="state == 'done'"/>
+                            </page>
+                            <page name="fai_history" string="History"
+                                  invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="cell_ids" nolabel="1" readonly="state == 'done'"
+                                       create="false" delete="false">
+                                    <list decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="serial_identity_id" readonly="1" options="{'no_create': 1}"/>
+                                        <field name="line_id" readonly="1"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="result"/>
+                                        <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                        <separator string="Notes"/>
+                        <field name="note" nolabel="1" readonly="state == 'done'"/>
+                    </div>
+                    <!-- oqc 出货检：fai_sections 同构（oqc-entry-trigger）——
+                         范围(制令单/工序/产品/批量=工单数量) / AQL 只读回显 /
+                         抽检产品(过站=扫码挑样+当前板+已到检·NG 回显；
+                         报工=抽检数+不良记录) / 检验·历史两页签 / 备注；
+                         样本矩阵与缺陷行在新结构内承接，旧 Samples/Items/
+                         Defects 平铺清单废弃；逐板字段复用 x_fai_*（决策 5） -->
+                    <div name="oqc_sections" invisible="inspection_type != 'oqc'">
+                        <separator string="Scope"/>
+                        <group>
+                            <group>
+                                <field name="mes_order_id" readonly="state == 'done'"/>
+                                <field name="route_operation_id"/>
+                                <field name="product_id"/>
+                                <field name="lot_qty" readonly="1"/>
+                            </group>
+                        </group>
+                        <separator string="Sampling"/>
+                        <group>
+                            <!-- AQL 只读回显：样本数/Ac/Re 建单时快照固化，
+                                 仅样本选择 open 态可改（判定逻辑不动） -->
+                            <group>
+                                <field name="sampling_method" readonly="1"/>
+                                <field name="sampling_standard_id" readonly="1"/>
+                                <field name="lot_qty_source" readonly="1"/>
+                                <field name="lot_qty" readonly="1"/>
+                                <field name="sample_selection_method" readonly="state != 'open'"/>
+                            </group>
+                            <group>
+                                <field name="inspection_level" readonly="1"/>
+                                <field name="switching_mode" readonly="1"/>
+                                <field name="aql_value" readonly="1"/>
+                                <field name="sample_size_code" readonly="1"/>
+                                <field name="sample_size" readonly="1"/>
+                                <field name="accept_qty" readonly="1"/>
+                                <field name="reject_qty" readonly="1"/>
+                            </group>
+                        </group>
+                        <separator string="Picked Products"/>
+                        <group>
+                            <!-- 过站：扫码挑样 + 当前检验板；NG 样本不剔除，
+                                 与已到检样本一并回显（计入 d） -->
+                            <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="x_fai_scan"
+                                       placeholder="Scan or type a board SN..."
+                                       readonly="state == 'done'"/>
+                                <field name="x_fai_current_sn" readonly="1"
+                                       options="{'no_create': 1}"/>
+                            </group>
+                            <!-- 报工：实际抽检数 -->
+                            <group invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                <field name="x_fai_reported_qty" readonly="state == 'done'"/>
+                            </group>
+                            <group>
+                                <field name="x_fai_ok_qty"/>
+                                <field name="x_fai_ng_qty"/>
+                            </group>
+                            <group string="Arrived Samples"
+                                   invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="x_fai_arrived_serial_ids" nolabel="1"
+                                       widget="many2many_tags"
+                                       readonly="state == 'done'"/>
+                            </group>
+                            <group string="OQC NG Samples"
+                                   invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="x_oqc_ng_serial_ids" nolabel="1"
+                                       widget="many2many_tags" readonly="1"/>
+                            </group>
+                        </group>
+                        <!-- 报工：缺陷行挂抽检产品区（扫不良板记录） -->
+                        <separator string="Defective Products (scan)"
+                                   invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
+                        <field name="sample_ids" nolabel="1" readonly="state == 'done'"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                            <list editable="bottom" decoration-danger="result == 'fail'">
+                                <field name="serial_identity_id" options="{'no_create': 1}"/>
+                                <field name="x_line_id" domain="[('inspection_id', '=', parent.id)]"
+                                       options="{'no_create': 1}"/>
+                                <field name="defect_code_id" options="{'no_create': 1}"/>
+                                <field name="result"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                        <notebook>
+                            <page name="oqc_inspect" string="Inspection">
+                                <!-- 过站：扫码切换当前板，检验清单只显示当前板 -->
+                                <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                    <field name="x_fai_current_sn" readonly="1"
+                                           options="{'no_create': 1}"/>
+                                </group>
+                                <field name="cell_ids" nolabel="1" readonly="state == 'done'"
+                                       domain="[('serial_identity_id', '=', x_fai_current_sn)]"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'"
+                                       create="false" delete="false">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="line_id" readonly="1" string="Inspection Item"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="manual_result" invisible="item_type != 'pass_fail'"/>
+                                        <field name="result"/>
+                                        <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <!-- 报工：整单清单（默认合格）+ 不良板扫码记录 -->
+                                <separator string="Inspection Items"
+                                           invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
+                                <field name="line_ids" nolabel="1" readonly="state == 'done'"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="item_code"/>
+                                        <field name="name"/>
+                                        <field name="item_type"/>
+                                        <field name="required"/>
+                                        <field name="lower_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="manual_result" invisible="item_type != 'pass_fail'"/>
+                                        <field name="is_checked"/>
+                                        <field name="result"/>
+                                        <field name="unit"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <separator string="Defective Products (scan)"
+                                           invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
+                                <field name="sample_ids" nolabel="1" readonly="state == 'done'"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'">
+                                    <list editable="bottom" decoration-danger="result == 'fail'">
+                                        <field name="serial_identity_id" options="{'no_create': 1}"/>
+                                        <field name="x_line_id" domain="[('inspection_id', '=', parent.id)]"
+                                               options="{'no_create': 1}"/>
+                                        <field name="defect_code_id" options="{'no_create': 1}"/>
+                                        <field name="result"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                                <separator string="Attachments"/>
+                                <field name="attachment_ids" nolabel="1"
+                                       widget="many2many_binary"
+                                       readonly="state == 'done'"/>
+                            </page>
+                            <page name="oqc_history" string="History"
+                                  invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <field name="cell_ids" nolabel="1" readonly="state == 'done'"
+                                       create="false" delete="false">
+                                    <list decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="serial_identity_id" readonly="1" options="{'no_create': 1}"/>
+                                        <field name="line_id" readonly="1"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
+                                        <field name="measured_value" invisible="item_type != 'numeric'"/>
+                                        <field name="text_value" invisible="item_type == 'numeric'"/>
+                                        <field name="result"/>
+                                        <field name="defect_code_id" invisible="result != 'fail'" options="{'no_create': 1}"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                        <separator string="Notes"/>
+                        <field name="note" nolabel="1" readonly="state == 'done'"/>
+                    </div>
                 </xpath>
-                <xpath expr="//notebook" position="attributes">
-                    <attribute name="invisible">inspection_type == 'ipqc'</attribute>
+                <xpath expr="//page[@name='scope']/.." position="attributes">
+                    <attribute name="invisible">inspection_type in ('ipqc', 'fai', 'oqc')</attribute>
                 </xpath>
         </field>
     </record>

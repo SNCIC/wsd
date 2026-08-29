@@ -617,14 +617,29 @@ class QualityInspection(models.Model):
     sample_checked_qty = fields.Integer(string='Checked Samples', compute='_compute_sample_counts', store=True)
     sample_defect_qty = fields.Integer(string='Defect Samples', compute='_compute_sample_counts', store=True)
 
-    @api.depends('sample_ids.result', 'x_ipqc_quick_ok', 'x_ipqc_quick_ng')
+    @api.depends(
+        'sample_ids.result',
+        'sample_ids.serial_identity_id',
+        'sample_ids.qty',
+        'sample_ids.defect_code_id',
+        'x_picked_qty',
+    )
     def _compute_sample_counts(self):
         for inspection in self:
-            checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
-            # 报工模式快捷数量（add-mes-ipqc-patrol）：无 SN 不落行，两数字直取
-            quick = (inspection.x_ipqc_quick_ok or 0) + (inspection.x_ipqc_quick_ng or 0)
-            inspection.sample_checked_qty = len(checked_samples) + quick
-            inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail')) + (inspection.x_ipqc_quick_ng or 0)
+            if inspection.inspection_type == 'ipqc':
+                # 异常驱动录入（add-mes-ipqc-patrol 重构）：无不良零录入；
+                # fail 行有 SN=板级按 SN 去重，无 SN 行按 qty 记数量；
+                # 已检数取实际抽取数（未填时回退方案样本量）
+                fail_samples = inspection.sample_ids.filtered(lambda s: s.result == 'fail')
+                with_sn = fail_samples.filtered(lambda s: s.serial_identity_id)
+                sn_less = fail_samples.filtered(lambda s: not s.serial_identity_id)
+                inspection.sample_checked_qty = inspection.x_picked_qty or inspection.sample_size
+                inspection.sample_defect_qty = len(set(with_sn.mapped('serial_identity_id').ids)) + sum(sn_less.mapped('qty'))
+            else:
+                # iqc/oqc 原口径：有结果行数 / fail 行数
+                checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
+                inspection.sample_checked_qty = len(checked_samples)
+                inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail'))
 
     @api.depends(
         'state',
@@ -660,8 +675,14 @@ class QualityInspection(models.Model):
         })
         for key, value in sampling_values.items():
             values.setdefault(key, value)
+        # 巡检实际抽取数随样本量提示一起预填（IPQC 巡检 cron 开单同走此处）
+        values.setdefault('x_picked_qty', values.get('sample_size'))
         inspection = self.create(values)
         inspection._ensure_sample_units()
+        if inspection.inspection_type == 'fai':
+            # FAI 检验项默认合格（报工模式行即录入面；过站模式行结果
+            # 由格派生，预填值仅作兜底）：建单即预填，检验员只改异常项
+            inspection.line_ids._set_pass_values()
         return inspection
 
     def _get_candidate_sample_serials(self):
@@ -820,11 +841,22 @@ class QualityInspectionSample(models.Model):
         index=True,
     )
     defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True)
+    # 行数量（add-mes-ipqc-patrol 重构）：扫 SN 行恒为 1 板；无 SN 手工
+    # 行按 qty 记不良数量
+    qty = fields.Integer(string='Qty', default=1, required=True)
     note = fields.Char(string='Notes')
 
-    _sample_serial_uniq = models.Constraint(
-        'unique(inspection_id, serial_identity_id)',
-        'The same serial number can only be sampled once in one inspection.',
+    _sample_serial_defect_uniq = models.Constraint(
+        'unique(inspection_id, serial_identity_id, defect_code_id)',
+        'The same serial number with the same defect code can only be recorded once in one inspection.',
+    )
+    _sample_qty_positive = models.Constraint(
+        'check(qty >= 1)',
+        'Sample quantity must be at least one.',
+    )
+    _sample_serial_qty_one = models.Constraint(
+        'check(serial_identity_id IS NULL OR qty = 1)',
+        'A sample row with a serial number always stands for exactly one board.',
     )
 
     @api.model_create_multi
@@ -836,6 +868,12 @@ class QualityInspectionSample(models.Model):
                 inspection = self.env['sn.wsd.quality.inspection'].browse(vals['inspection_id']).exists()
                 vals['company_id'] = inspection.company_id.id
         return super().create(vals_list)
+
+    @api.onchange('serial_identity_id')
+    def _onchange_serial_identity_id(self):
+        # 扫码=记不良：SN 填入且尚未判定时自动置 fail（检验员随后挂缺陷码/项目）
+        if self.serial_identity_id and self.result == 'pending':
+            self.result = 'fail'
 
     def action_set_pass(self):
         self.write({'result': 'pass'})

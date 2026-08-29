@@ -99,12 +99,18 @@ class TestMesFaiReport(TransactionCase):
 
     # ---------------- R1 触发融合 ----------------
     def test_10_report_order_online_arms_fai(self):
+        # oqc-entry-trigger: going online only arms the trigger; the first
+        # qualified report on the first-article operation creates the round
         order = self._order()
         self.assertEqual(order.x_manage_mode, 'report')
+        self.assertEqual(order.x_fai_state, 'none')
+        self.assertFalse(order.x_fai_inspection_ids)
+        order.report_operation_qty(self._op_row(order, self.op_in), 1)
         self.assertEqual(order.x_fai_state, 'in_progress')
         self.assertEqual(order.x_fai_round, 1)
         self.assertEqual(order.x_fai_inspection_id.sample_size, 2)
-        self.assertEqual(order.x_fai_sample_count, 0)
+        self.assertEqual(order.x_fai_sample_count, 1)
+        self.assertEqual(order.x_fai_inspection_id.x_fai_reported_qty, 1.0)
 
     # ---------------- R2 数量收集器 ----------------
     def test_20_within_quota_reports_accumulate(self):
@@ -131,7 +137,12 @@ class TestMesFaiReport(TransactionCase):
         order = self._order()
         op_row = self._op_row(order, self.op_in)
         order.report_operation_qty(op_row, 0, 5)  # 调机记账
-        self.assertEqual(order.x_fai_inspection_id.x_fai_reported_qty, 0.0)
+        # pure NG reporting opens no round and eats no quota: the full
+        # sample quota is still available
+        self.assertFalse(order.x_fai_inspection_ids,
+                         'pure NG reporting opens no round')
+        order.report_operation_qty(op_row, 2)
+        self.assertEqual(order.x_fai_inspection_id.x_fai_reported_qty, 2.0)
 
     def test_23_non_fai_operation_unrestricted(self):
         order = self._order(qty=2)  # planned=2：首件报满即可达产出工序
@@ -144,9 +155,9 @@ class TestMesFaiReport(TransactionCase):
     # ---------------- R3 判定联动 ----------------
     def test_30_pass_unlocks_reporting(self):
         order = self._order()
-        inspection = order.x_fai_inspection_id
         op_row = self._op_row(order, self.op_in)
         order.report_operation_qty(op_row, 2)
+        inspection = order.x_fai_inspection_id  # fetch after the first qualified report created it
         inspection.line_ids._set_pass_values()
         inspection.action_done()
         self.assertEqual(order.x_fai_state, 'passed')
@@ -154,11 +165,11 @@ class TestMesFaiReport(TransactionCase):
 
     def test_31_fail_new_round_keeps_reported_ledger(self):
         order = self._order()
-        inspection = order.x_fai_inspection_id
         op_row = self._op_row(order, self.op_in)
         order.report_operation_qty(op_row, 2)
-        inspection.line_ids.write(
-            {'is_checked': True, 'manual_result': 'fail'})
+        inspection = order.x_fai_inspection_id  # fetch after the first qualified report created it
+        # 判退打在值上（text 型：文本值偏离期望即 fail；快照默认预填 OK）
+        inspection.line_ids.write({'text_value': 'NG'})
         inspection.action_done()
         self.assertEqual(inspection.result, 'fail')
         self.assertEqual(order.x_fai_round, 2)
@@ -174,17 +185,47 @@ class TestMesFaiReport(TransactionCase):
 
     def test_32_done_guard_needs_full_samples(self):
         order = self._order()
-        inspection = order.x_fai_inspection_id
         op_row = self._op_row(order, self.op_in)
         order.report_operation_qty(op_row, 1)  # 只报 1/2
+        inspection = order.x_fai_inspection_id  # fetch after the first qualified report created it
         inspection.line_ids._set_pass_values()
         with self.assertRaises(UserError):
             inspection.action_done()
+
+    def test_33_matrix_degrades_to_document_lines(self):
+        # fai-inspection-matrix：报工模式无格——样本是数量不是 SN，
+        # line 保持单据级手填口径，一键合格走旧路径
+        order = self._order()
+        op_row = self._op_row(order, self.op_in)
+        order.report_operation_qty(op_row, 2)  # 样本满额（数量口径，无 SN）
+        inspection = order.x_fai_inspection_id  # fetch after the first qualified report created it
+        self.assertFalse(inspection.cell_ids,
+                         'report mode keeps document-level lines only')
+        inspection._fai_expand_result_cells()  # 展开守卫：报工单不建格
+        self.assertFalse(inspection.cell_ids)
+        # line.result 仍是手填口径：is_checked + 手填值驱动
+        line = inspection.line_ids
+        line.write({'is_checked': True, 'text_value': 'NG'})
+        self.assertEqual(line.result, 'fail',
+                         'text lines judge on the typed value (legacy caliber)')
+        # 一键全部合格走旧路径（line 单据级预填），不产生格
+        inspection.action_set_all_pass()
+        self.assertFalse(inspection.cell_ids)
+        self.assertTrue(line.is_checked)
+        self.assertEqual(line.text_value, 'OK',
+                         'legacy set-all-pass prefills the expected value')
+        self.assertEqual(line.result, 'pass')
+        inspection.action_done()
+        self.assertEqual(inspection.result, 'pass')
+        self.assertEqual(order.x_fai_state, 'passed')
 
     # ---------------- R4 提醒对象 ----------------
     def test_40_reminder_goes_to_scheme_responsible(self):
         self.scheme.responsible_user_id = self.responsible
         order = self._order()
+        # the reminder is scheduled at creation time: it exists only after
+        # the first qualified report created the round
+        order.report_operation_qty(self._op_row(order, self.op_in), 1)
         inspection = order.x_fai_inspection_id
         confirm = inspection.activity_ids.filtered(
             lambda a: a.summary == 'First article confirmation')
@@ -192,7 +233,31 @@ class TestMesFaiReport(TransactionCase):
 
     def test_41_reminder_falls_back_to_inspector(self):
         order = self._order()
+        order.report_operation_qty(self._op_row(order, self.op_in), 1)
         inspection = order.x_fai_inspection_id
         confirm = inspection.activity_ids.filtered(
             lambda a: a.summary == 'First article confirmation')
         self.assertEqual(confirm.user_id, inspection.inspector_id)
+
+    def test_34_defect_scan_creates_row_and_fails_item(self):
+        # 报工模式不良扫码：落 fail 样本行，挂项目后行结果翻转、数量联动
+        order = self._order()
+        op_row = self._op_row(order, self.op_in)
+        order.report_operation_qty(op_row, 2)
+        inspection = order.x_fai_inspection_id  # fetch after the first qualified report created it
+        serial = self.env['sn.wsd.serial.identity'].create({
+            'name': 'SN-RPT-NG-1', 'company_id': inspection.company_id.id,
+        })
+        inspection.x_fai_scan = serial.name
+        inspection._onchange_x_fai_scan()
+        row = inspection.sample_ids
+        self.assertEqual(row.serial_identity_id, serial)
+        self.assertEqual(row.result, 'fail', 'scanned boards land as fail rows')
+        row.x_line_id = inspection.line_ids[0]
+        self.assertEqual(inspection.line_ids[0].result, 'fail',
+                         'the item pointed at by a defect row flips to fail')
+        self.assertEqual((inspection.x_fai_ok_qty, inspection.x_fai_ng_qty), (1, 1),
+                         'one scanned defect counts 1 ng of a 2-board round')
+        inspection.x_fai_scan = serial.name
+        with self.assertRaises(UserError):
+            inspection._onchange_x_fai_scan()  # 重复扫码拦截
