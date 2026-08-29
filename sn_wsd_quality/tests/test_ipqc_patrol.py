@@ -228,23 +228,19 @@ class TestIpqcPatrol(TransactionCase):
             lambda a: a.summary == 'Patrol inspection due')
         self.assertEqual(due.user_id, responsible)
 
-    def test_26_quick_fill_generates_lines(self):
-        from odoo.exceptions import UserError
+    def test_26_quick_qty_no_rows_direct_stats(self):
+        # 无SN快捷数量：不落样本行，直接进统计（报工模式口径）
         inspection = self.env['sn.wsd.quality.inspection'].create({
             'inspection_type': 'ipqc', 'scheme_id': self.scheme.id,
         })
-        with self.assertRaises(UserError):
-            inspection.action_ipqc_quick_fill()  # 空输入拦截
-        defect = self.env['sn.wsd.quality.defect.code'].create({
-            'name': 'Patrol NG', 'code': 'PNG', 'category': 'other',
-            'severity': 'minor',
-        })
-        inspection.write({'x_ipqc_quick_ok': 4, 'x_ipqc_quick_ng': 1,
-                          'x_ipqc_quick_defect_id': defect.id})
-        inspection.action_ipqc_quick_fill()
+        inspection.write({'x_ipqc_quick_ok': 4, 'x_ipqc_quick_ng': 1})
+        self.assertFalse(inspection.sample_ids, 'no rows generated')
         self.assertEqual(inspection.sample_checked_qty, 5)
         self.assertEqual(inspection.sample_defect_qty, 1)
-        failed = inspection.sample_ids.filtered(lambda r: r.result == 'fail')
-        self.assertEqual(failed.defect_code_id, defect)
-        self.assertEqual((inspection.x_ipqc_quick_ok, inspection.x_ipqc_quick_ng), (0, 0),
-                         'inputs reset after generation')
+        # 与过站行并存：行数 + 快捷数量
+        Sample = self.env['sn.wsd.quality.inspection.sample']
+        Sample.create({'inspection_id': inspection.id, 'result': 'pass'})
+        Sample.create({'inspection_id': inspection.id, 'result': 'fail'})
+        inspection.invalidate_recordset()
+        self.assertEqual(inspection.sample_checked_qty, 7)
+        self.assertEqual(inspection.sample_defect_qty, 2)

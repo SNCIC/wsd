@@ -3267,31 +3267,15 @@ msgid "Patrol Samples"
 msgstr "巡检样本"
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_ok
-msgid "Quick OK Qty"
-msgstr "快捷合格数"
+msgid "Picked OK Qty"
+msgstr "抽检合格数"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_ng
-msgid "Quick NG Qty"
-msgstr "快捷不良数"
-
-#. module: sn_wsd_quality
-#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_quick_defect_id
-msgid "Quick Defect Code"
-msgstr "快捷缺陷代码"
+msgid "Picked NG Qty"
+msgstr "抽检不良数"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "Quick Entry (no SN)"
-msgstr "快捷录入（无SN）"
-
-#. module: sn_wsd_quality
-#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "Generate Sample Lines"
-msgstr "生成样本行"
-
-#. module: sn_wsd_quality
-#. odoo-python
-#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
-msgid "Enter at least one of OK / NG quantity."
-msgstr "请至少填写合格数或不良数之一。"
+msgid "Picked Qty (no SN)"
+msgstr "抽检数量（无SN）"

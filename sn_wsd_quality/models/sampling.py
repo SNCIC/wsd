@@ -617,12 +617,14 @@ class QualityInspection(models.Model):
     sample_checked_qty = fields.Integer(string='Checked Samples', compute='_compute_sample_counts', store=True)
     sample_defect_qty = fields.Integer(string='Defect Samples', compute='_compute_sample_counts', store=True)
 
-    @api.depends('sample_ids.result')
+    @api.depends('sample_ids.result', 'x_ipqc_quick_ok', 'x_ipqc_quick_ng')
     def _compute_sample_counts(self):
         for inspection in self:
             checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
-            inspection.sample_checked_qty = len(checked_samples)
-            inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail'))
+            # 报工模式快捷数量（add-mes-ipqc-patrol）：无 SN 不落行，两数字直取
+            quick = (inspection.x_ipqc_quick_ok or 0) + (inspection.x_ipqc_quick_ng or 0)
+            inspection.sample_checked_qty = len(checked_samples) + quick
+            inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail')) + (inspection.x_ipqc_quick_ng or 0)
 
     @api.depends(
         'state',

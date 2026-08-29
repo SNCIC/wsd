@@ -711,37 +711,18 @@ class QualityInspection(models.Model):
                 inspection.line_ids.filtered(lambda line: line.result == 'fail')
             )
 
-    # 巡检快捷录入（add-mes-ipqc-patrol）：报工模式无 SN，直接填数量生成样本行
+    # 巡检快捷数量（add-mes-ipqc-patrol）：报工模式无 SN，不落样本行，
+    # 两个数字直接作为记录，已检/缺陷样本数把它们算进去
+    # （合格=已检−缺陷；缺陷明细仍走缺陷页）
     x_ipqc_quick_ok = fields.Integer(
-        string='Quick OK Qty', copy=False,
-        help='Patrol quick entry: how many picked boards passed.',
+        string='Picked OK Qty', copy=False,
+        help='Patrol quick entry (no SN): how many picked boards passed. '
+             'Feeds the checked/defect sample statistics directly.',
     )
     x_ipqc_quick_ng = fields.Integer(
-        string='Quick NG Qty', copy=False,
-        help='Patrol quick entry: how many picked boards failed.',
+        string='Picked NG Qty', copy=False,
+        help='Patrol quick entry (no SN): how many picked boards failed.',
     )
-    x_ipqc_quick_defect_id = fields.Many2one(
-        'sn.wsd.quality.defect.code', string='Quick Defect Code', copy=False,
-        help='Defect code stamped on the generated failed rows.',
-    )
-
-    def action_ipqc_quick_fill(self):
-        # 按合格数/不良数一键生成样本行（不良行带缺陷代码），生成后清零。
-        # 报工模式免逐行录入（现场口径："抽5件坏1件"两个数字完事）
-        self.ensure_one()
-        Sample = self.env['sn.wsd.quality.inspection.sample']
-        ok_qty = max(self.x_ipqc_quick_ok or 0, 0)
-        ng_qty = max(self.x_ipqc_quick_ng or 0, 0)
-        if not ok_qty and not ng_qty:
-            raise UserError(_('Enter at least one of OK / NG quantity.'))
-        for _n in range(ng_qty):
-            Sample.create({'inspection_id': self.id, 'result': 'fail',
-                           'defect_code_id': self.x_ipqc_quick_defect_id.id})
-        for _n in range(ok_qty):
-            Sample.create({'inspection_id': self.id, 'result': 'pass'})
-        self.write({'x_ipqc_quick_ok': 0, 'x_ipqc_quick_ng': 0,
-                    'x_ipqc_quick_defect_id': False})
-        return True
 
     @api.onchange('scheme_id')
     def _onchange_scheme_id(self):
