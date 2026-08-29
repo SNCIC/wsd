@@ -33,6 +33,21 @@
         <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='scope']" position="after">
+                <page name="ipqc_samples" string="Patrol Samples"
+                      invisible="inspection_type != 'ipqc'">
+                    <group>
+                        <group string="Picked SNs">
+                            <field name="x_ipqc_serial_ids" nolabel="1"
+                                   widget="many2many_tags"
+                                   readonly="state == 'done'"/>
+                        </group>
+                        <group string="Sample Note">
+                            <field name="x_ipqc_sample_note" nolabel="1"
+                                   readonly="state == 'done'"
+                                   placeholder="e.g. 5 boards picked"/>
+                        </group>
+                    </group>
+                </page>
                 <page name="fai_samples" string="First Article Samples"
                       invisible="inspection_type != 'fai'">
                     <group>

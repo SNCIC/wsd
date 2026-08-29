@@ -3247,3 +3247,39 @@ msgstr "已报首件台数"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Reported Qty"
 msgstr "已报台数"
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Patrol inspection due"
+msgstr "巡检到期"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "Patrol inspection of %(op)s on line %(line)s is due; sample hint: %(count)s."
+msgstr "产线 %(line)s 的 %(op)s 巡检到期；建议抽样 %(count)s 件。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_serial_ids
+msgid "Patrol Sample SNs"
+msgstr "巡检抽检SN"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_sample_note
+msgid "Patrol Sample Note"
+msgstr "巡检样本说明"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Patrol Samples"
+msgstr "巡检样本"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Picked SNs"
+msgstr "抽检SN"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Sample Note"
+msgstr "样本说明"

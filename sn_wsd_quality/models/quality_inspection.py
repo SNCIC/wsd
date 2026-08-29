@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 from odoo import Command, api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
@@ -141,6 +142,82 @@ class QualityInspectionScheme(models.Model):
     def action_set_obsolete(self):
         self.write({'state': 'obsolete'})
         return True
+
+    # ------------------------------------------------------------------
+    # 定时巡检引擎（add-mes-ipqc-patrol V1）：活动驱动开单
+    # ------------------------------------------------------------------
+    def _ipqc_patrol_tick(self):
+        """每小时由 ir.cron 调用：对每张生效 ipqc 方案按(产线×工序)判定
+        ——到期（距上次巡检 ≥ 间隔）且自锚点后有产出活动（过站∪报工）
+        才开单；停线/无产出不开；方案未配产线=该工序有活动的产线逐线开。
+        锚点=该(方案,产线)最近一张巡检单的 scheduled_time（open 单在等
+        视为本周期已覆盖，不重复开）。"""
+        Inspection = self.env['sn.wsd.quality.inspection']
+        History = self.env['sn.wsd.serial.operation.history']
+        Report = self.env['sn.wsd.mes.operation.report']
+        now = fields.Datetime.now()
+        created = Inspection
+        for scheme in self.search([
+                ('inspection_type', '=', 'ipqc'),
+                ('state', '=', 'effective'),
+                ('operation_id', '!=', False)]):
+            op = scheme.operation_id
+            interval = timedelta(minutes=scheme.interval_minutes or 60)
+            lines = scheme.production_line_id
+            if not lines:
+                # 该工序近一个间隔内有活动的产线（发现候选线）
+                groups = History._read_group(
+                    [('route_operation_id.operation_id', '=', op.id),
+                     ('out_date', '>', now - interval)],
+                    groupby=['mes_order_id.production_line_id'],
+                    aggregates=['id:count'],
+                )
+                report_groups = Report._read_group(
+                    [('route_operation_id.operation_id', '=', op.id),
+                     ('create_date', '>', now - interval)],
+                    groupby=['mes_order_id.production_line_id'],
+                    aggregates=['id:count'],
+                )
+                line_ids = {g[0].id for g in groups if g[0]}                     | {g[0].id for g in report_groups if g[0]}
+                lines = self.env['sn.mrp.production.line'].browse(line_ids)
+            for line in lines:
+                last = Inspection.search([
+                    ('inspection_type', '=', 'ipqc'),
+                    ('scheme_id', '=', scheme.id),
+                    ('production_line_id', '=', line.id),
+                ], order='scheduled_time desc', limit=1)
+                if last and last.state in ('open', 'in_progress'):
+                    continue  # 有单在等：本周期已覆盖
+                anchor_time = last.scheduled_time if last                     else now - interval
+                if now - anchor_time < interval:
+                    continue  # 未到期
+                activity = History.search_count([
+                    ('route_operation_id.operation_id', '=', op.id),
+                    ('mes_order_id.production_line_id', '=', line.id),
+                    ('out_date', '>', anchor_time),
+                ]) or Report.search_count([
+                    ('route_operation_id.operation_id', '=', op.id),
+                    ('mes_order_id.production_line_id', '=', line.id),
+                    ('create_date', '>', anchor_time),
+                ])
+                if not activity:
+                    continue  # 停线/换线间隙：无产出不开单
+                inspection = Inspection.create_from_scheme(scheme, {
+                    'production_line_id': line.id,
+                    'scheduled_time': now,
+                })
+                inspection.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=(scheme.responsible_user_id
+                             or self.env.user).id,
+                    summary=_('Patrol inspection due'),
+                    note=_('Patrol inspection of %(op)s on line %(line)s '
+                           'is due; sample hint: %(count)s.',
+                           op=op.display_name, line=line.display_name,
+                           count=inspection.sample_size),
+                )
+                created |= inspection
+        return created
 
     def action_set_draft(self):
         self.write({'state': 'draft'})
@@ -585,6 +662,18 @@ class QualityInspection(models.Model):
              'the sample list (first articles must be untouched boards); '
              'the quota they released is refilled by fresh feeds only.',
     )
+    # 巡检样本（add-mes-ipqc-patrol）：检验员人工录入，系统不预填不指定
+    x_ipqc_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_ipqc_serial_rel',
+        'inspection_id', 'serial_id', string='Patrol Sample SNs',
+        help='Serial numbers the inspector actually picked during the '
+             'patrol (station mode; for traceability only).',
+    )
+    x_ipqc_sample_note = fields.Char(
+        string='Patrol Sample Note',
+        help='Free note for report-mode patrols, e.g. how many boards '
+             'were picked.',
+    )
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
     defect_qty = fields.Integer(string='Defect Qty', compute='_compute_inspection_counts', store=True)
@@ -633,6 +722,14 @@ class QualityInspection(models.Model):
             inspection.defect_qty = sum(inspection.defect_line_ids.mapped('defect_qty')) + len(
                 inspection.line_ids.filtered(lambda line: line.result == 'fail')
             )
+
+    @api.onchange('scheme_id')
+    def _onchange_scheme_id(self):
+        # 手动开单（add-mes-ipqc-patrol V0）：选方案即带模板行快照与样本量，
+        # 与 create_from_scheme 同口径（cron 开单不走此处）
+        if self.scheme_id:
+            self.line_ids = self._line_commands_from_scheme(self.scheme_id)
+            self.sample_size = self.scheme_id.sample_size
 
     @api.model_create_multi
     def create(self, vals_list):
