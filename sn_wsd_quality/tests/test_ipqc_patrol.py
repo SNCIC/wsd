@@ -113,7 +113,7 @@ class TestIpqcPatrol(TransactionCase):
                          'onchange brings scheme template lines')
         self.assertEqual(inspection.sample_size, 3)
 
-    def test_11_sample_entry_traceability(self):
+    def test_11_per_unit_sample_lines(self):
         inspection = self.env['sn.wsd.quality.inspection'].create({
             'inspection_type': 'ipqc', 'scheme_id': self.scheme.id,
             'line_ids': self.env[
@@ -123,9 +123,16 @@ class TestIpqcPatrol(TransactionCase):
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
         serial = self._make_activity(order, wc, 'SN-IPQC-001')
-        inspection.x_ipqc_serial_ids = [(4, serial.id)]
-        inspection.x_ipqc_sample_note = '3 boards picked'
-        self.assertIn(serial, inspection.x_ipqc_serial_ids)
+        Sample = self.env['sn.wsd.quality.inspection.sample']
+        Sample.create({'inspection_id': inspection.id,
+                       'serial_identity_id': serial.id, 'result': 'pass'})
+        Sample.create({'inspection_id': inspection.id, 'result': 'pass'})
+        Sample.create({'inspection_id': inspection.id, 'result': 'fail'})
+        inspection.invalidate_recordset()
+        self.assertEqual(inspection.sample_checked_qty, 3,
+                         'checked = judged lines (station SN + report rows)')
+        self.assertEqual(inspection.sample_defect_qty, 1,
+                         'defect = failed lines; OK count = 3 - 1')
         self.assertFalse(inspection.mes_order_id,
                          'patrol inspection keeps the order as optional reference')
 

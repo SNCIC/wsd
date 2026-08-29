@@ -662,18 +662,6 @@ class QualityInspection(models.Model):
              'the sample list (first articles must be untouched boards); '
              'the quota they released is refilled by fresh feeds only.',
     )
-    # 巡检样本（add-mes-ipqc-patrol）：检验员人工录入，系统不预填不指定
-    x_ipqc_serial_ids = fields.Many2many(
-        'sn.wsd.serial.identity', 'sn_quality_inspection_ipqc_serial_rel',
-        'inspection_id', 'serial_id', string='Patrol Sample SNs',
-        help='Serial numbers the inspector actually picked during the '
-             'patrol (station mode; for traceability only).',
-    )
-    x_ipqc_sample_note = fields.Char(
-        string='Patrol Sample Note',
-        help='Free note for report-mode patrols, e.g. how many boards '
-             'were picked.',
-    )
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
     defect_qty = fields.Integer(string='Defect Qty', compute='_compute_inspection_counts', store=True)
