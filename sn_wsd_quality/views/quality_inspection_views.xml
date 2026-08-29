@@ -358,12 +358,14 @@
                     <notebook>
                         <page name="scope" string="Scope">
                             <group>
+                                <!-- ipqc 巡检：范围=生产线(+制令单参考)；制造订单/
+                                     工序实例/工作中心/原生工序为 IQC/OQC 维度 -->
                                 <group>
-                                    <field name="production_id"/>
+                                    <field name="production_id" invisible="inspection_type == 'ipqc'"/>
                                     <field name="mes_order_id"/>
-                                    <field name="route_operation_id"/>
-                                    <field name="workcenter_id"/>
-                                    <field name="operation_id"/>
+                                    <field name="route_operation_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="workcenter_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="operation_id" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
                                     <field name="production_line_id"/>
@@ -498,13 +500,15 @@
                         </page>
                         <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
                             <group>
+                                <!-- ipqc：只看抽样数量/已检/缺陷样本数（合格=已检−缺陷）；
+                                     检验项口径的已检验/缺陷数量与 Ac/Re 为 OQC 维度 -->
                                 <field name="sample_size"/>
                                 <field name="sample_checked_qty" readonly="1"/>
-                                <field name="inspected_qty" readonly="1"/>
-                                <field name="defect_qty" readonly="1"/>
+                                <field name="inspected_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
+                                <field name="defect_qty" readonly="1" invisible="inspection_type == 'ipqc'"/>
                                 <field name="sample_defect_qty" readonly="1"/>
-                                <field name="accept_qty"/>
-                                <field name="reject_qty"/>
+                                <field name="accept_qty" invisible="inspection_type == 'ipqc'"/>
+                                <field name="reject_qty" invisible="inspection_type == 'ipqc'"/>
                             </group>
                             <field name="defect_line_ids">
                                 <list editable="bottom">
