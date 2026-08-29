@@ -92,14 +92,14 @@ class PurchaseRequestLine(models.Model):
     @api.onchange('product_qty')
     def _onchange_product_qty_set_approved_qty(self):
         for line in self:
-            if line.request_state in ('draft', 'to_approve') and not line.approved_qty:
+            if line.request_state in ('draft', 'to_approve'):
                 line.approved_qty = line.product_qty
 
     @api.onchange('product_id')
     def onchange_product_id(self):
         result = super().onchange_product_id()
         for line in self:
-            if line.request_state in ('draft', 'to_approve') and not line.approved_qty:
+            if line.request_state in ('draft', 'to_approve'):
                 line.approved_qty = line.product_qty
         return result
 
@@ -132,16 +132,8 @@ class PurchaseRequestLine(models.Model):
 
     def write(self, vals):
         if 'product_qty' in vals and 'approved_qty' not in vals:
-            result = True
-            for line in self:
-                line_vals = dict(vals)
-                line_vals['approved_qty'] = (
-                    vals['product_qty']
-                    if not line.approved_qty
-                    else min(vals['product_qty'], line.approved_qty)
-                )
-                result = super(PurchaseRequestLine, line).write(line_vals) and result
-            return result
+            vals = dict(vals)
+            vals['approved_qty'] = vals['product_qty']
         if 'approved_qty' in vals and not self.env.context.get('skip_approved_qty_lock'):
             for line in self:
                 if line.request_state not in ('draft', 'to_approve'):
