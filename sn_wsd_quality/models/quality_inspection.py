@@ -72,6 +72,15 @@ class QualityInspectionScheme(models.Model):
         check_company=True,
         index=True,
     )
+    x_fai_operation_id = fields.Many2one(
+        'sn.wsd.operation',
+        string='First Article Operation',
+        check_company=True,
+        index=True,
+        help='First-article station for FAI schemes: sample boards must '
+             'leave this operation with an OK result. A FAI scheme without '
+             'this operation never arms first-article control.',
+    )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line',
         string='Production Line',
@@ -555,6 +564,28 @@ class QualityInspection(models.Model):
     sample_window_end = fields.Datetime(string='Sample Window End')
     evidence_serial_identity_id = fields.Many2one(
         'sn.wsd.serial.identity', string='Evidence SN', check_company=True, index=True,
+    )
+    # FAI 样本清单（add-mes-fai）：投入登记的样本 SN / 其中过首件工序出站
+    # OK 的样本；NG/报废出站的样本从清单剔除释放名额（维修回流不回补）
+    x_fai_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_serial_rel',
+        'inspection_id', 'serial_id', string='FAI Samples',
+        help='Serial numbers registered as first-article samples for this '
+             'round (fed in at the start operation while quota is open).',
+    )
+    x_fai_arrived_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_arrived_rel',
+        'inspection_id', 'serial_id', string='FAI Arrived Samples',
+        help='Samples that already left the first-article operation with an '
+             'OK result and wait for the inspector.',
+    )
+    x_fai_removed_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_removed_rel',
+        'inspection_id', 'serial_id', string='FAI Removed Samples',
+        help='Samples dropped from this round after an NG/scrap leave at '
+             'the first-article operation. Reworked boards never re-enter '
+             'the sample list (first articles must be untouched boards); '
+             'the quota they released is refilled by fresh feeds only.',
     )
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
