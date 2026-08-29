@@ -1682,6 +1682,12 @@ msgstr "制令单 %(name)s 还没有私有工艺路线。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s has no material requisition yet; issue material before going online."
+msgstr "制令单 %(name)s 还没有领料单，请先领料再上线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "MES order %(name)s is already online."
 msgstr "制令单 %(name)s 已上线。"
 
@@ -1851,8 +1857,10 @@ msgstr "只有已下达的 MES 订单才能取消。受阻：%s"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
-msgid "Only Released MES orders can pick material (current: %s)."
-msgstr "只有已下达的制令单才能领料（当前状态：%s）。"
+msgid ""
+"Only active MES orders (released, picked or in progress) can pick material "
+"(current: %s)."
+msgstr "只有活跃状态（已下达/已领料/在产）的制令单才能领料（当前状态：%s）。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -5569,9 +5577,15 @@ msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围�
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
-"SN %(sn)s reached the retry limit (%(limit)s) of operation %(op)s; send it "
+"SN %(sn)s reached the pass limit (%(limit)s) of operation %(op)s; send it "
 "to repair."
-msgstr "SN %(sn)s 已达工序 %(op)s 的过站上限（%(limit)s 次），请送维修。"
+msgstr "SN %(sn)s 已达工序 %(op)s 的过站次数上限（%(limit)s 次），请送维修。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The max test count of operation %s must be at least 1."
+msgstr "工序 %s 的最大测试次数必须不小于 1。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production_split_line__date_deadline
@@ -5909,6 +5923,7 @@ msgstr "日计划"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_pick_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_return_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_schedule_wizard_form
 msgid "Discard"
 msgstr "取消"
@@ -8156,3 +8171,130 @@ msgid ""
 "(领料) or validate the upstream receipt (半成品入库)."
 msgstr "线边库存不足：制令单 %(order)s 完工需要 %(product)s%(lot)s %(need)s，可用 %(available)s。请先领料，或先验证上游半成品入库收货。"
 
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+#: code:addons/sn_wsd_mrp/wizard/mes_return_wizard.py:0
+msgid "A cancelled MES order cannot return material."
+msgstr "已取消的制令单不能退料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(order)s has no material issue operation type yet; issue material before returning it."
+msgstr "制令单 %(order)s 还没有领料作业类型，请先领料再退料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "No BOM on the manufacturing order; cannot generate the return."
+msgstr "制造订单没有 BOM，无法生成退料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "No component of MES order %(order)s is left on the line side to return."
+msgstr "制令单 %(order)s 的线边已没有可退的组件。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Nothing picked to return on MES order %(order)s."
+msgstr "制令单 %(order)s 没有已领数量，无可退料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+#: code:addons/sn_wsd_mrp/wizard/mes_return_wizard.py:0
+msgid "Over-return: only %(net)s unit(s) were net picked on %(order)s."
+msgstr "超退：制令单 %(order)s 的净领数量只有 %(net)s 台。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Over-return: %(qty)s units exceed the %(net)s net picked units of %(order)s."
+msgstr "超退：%(qty)s 台超过制令单 %(order)s 的净领数量 %(net)s 台。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "The manufacturing order of %(order)s has no warehouse; cannot generate the return."
+msgstr "制令单 %(order)s 的制造订单没有仓库，无法生成退料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_return_wizard.py:0
+msgid "The returned quantity must be a positive whole number of units."
+msgstr "退还数量必须是正整数（台）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Workshop %(workshop)s has no component (line-side) location configured; set it before generating the return."
+msgstr "车间 %(workshop)s 未配置线边库位，请先配置再生成退料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_return_wizard_form
+msgid "Return Material"
+msgstr "退料"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_return_wizard_form
+msgid "Create Return"
+msgstr "创建退料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_mes_return_wizard
+msgid "MES Material Return Wizard"
+msgstr "MES 退料向导"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__qty_return
+msgid "Quantity To Return"
+msgstr "退还台数"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
+msgid "An over-pick reason is required."
+msgstr "超领必须填写原因。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__is_over_pick
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_is_over_pick
+msgid "Over-pick"
+msgstr "超领"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__over_reason
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_over_reason
+msgid "Over-pick Reason"
+msgstr "超领原因"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_over_picked_qty
+msgid "Over-picked Quantity"
+msgstr "超领台数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__name
+msgid "MES Order No."
+msgstr "制令单号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__planned_qty
+msgid "Planned Quantity"
+msgstr "排产数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
+msgid "Picked Quantity"
+msgstr "已领数量"

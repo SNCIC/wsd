@@ -58,6 +58,12 @@ class MesOrder(models.Model):
         tracking=True,
         help='Finished-unit quantity accumulated from done material pickings.',
     )
+    x_over_picked_qty = fields.Float(
+        string='Over-picked Quantity', compute='_compute_x_over_picked_qty',
+        store=True, tracking=True,
+        help='Finished-unit quantity accumulated from done over-pick '
+             'pickings (issued beyond the plan, with a reason).',
+    )
     produced_qty = fields.Float(
         string='Produced Quantity', compute='_compute_execution_qty', store=True,
         help='Mirror of the output quantity, kept as the aggregation source '
@@ -220,12 +226,20 @@ class MesOrder(models.Model):
                 def _entered(op):
                     # wip and history are mutually exclusive per (SN, op):
                     # the wip row is deleted as its history row is written.
-                    return len(op.serial_history_ids) + len(op.serial_wip_ids) if op else 0
+                    # 台数按 SN 去重：复测多行只算一台。
+                    if not op:
+                        return 0
+                    sn_ids = set(
+                        op.serial_history_ids.mapped('serial_identity_id').ids)
+                    sn_ids |= set(
+                        op.serial_wip_ids.mapped('serial_identity_id').ids)
+                    return len(sn_ids)
                 out_op = route.x_daily_output_operation_id
+                order.x_output_qty = len(set(
+                    out_op.serial_history_ids
+                    .filtered(lambda h: h.result == 'ok')
+                    .mapped('serial_identity_id').ids)) if out_op else 0.0
                 order.x_input_qty = _entered(route.x_daily_input_operation_id)
-                order.x_output_qty = len(
-                    out_op.serial_history_ids.filtered(lambda h: h.result == 'ok')
-                ) if out_op else 0.0
                 order.x_workorder_input_qty = _entered(route.x_workorder_input_operation_id)
             order.produced_qty = order.x_output_qty
 
@@ -307,11 +321,23 @@ class MesOrder(models.Model):
     # ------------------------------------------------------------------
     # picked_qty = accumulated finished units covered by done pickings
     # ------------------------------------------------------------------
-    @api.depends('picking_ids.x_mes_order_qty', 'picking_ids.state')
+    @api.depends('picking_ids.x_mes_order_qty', 'picking_ids.state',
+                 'picking_ids.x_is_over_pick')
     def _compute_picked_qty(self):
         for order in self:
-            done = order.picking_ids.filtered(lambda p: p.state == 'done')
+            # 净领口径（mes-picking-lifecycle R2/R3）：退货单的台数为负数，
+            # 直接求和即净额；超领单走单独台账，不计入；未验证/取消不参与
+            done = order.picking_ids.filtered(
+                lambda p: p.state == 'done' and not p.x_is_over_pick)
             order.picked_qty = sum(done.mapped('x_mes_order_qty'))
+
+    @api.depends('picking_ids.x_mes_order_qty', 'picking_ids.state',
+                 'picking_ids.x_is_over_pick')
+    def _compute_x_over_picked_qty(self):
+        for order in self:
+            done_over = order.picking_ids.filtered(
+                lambda p: p.state == 'done' and p.x_is_over_pick)
+            order.x_over_picked_qty = sum(done_over.mapped('x_mes_order_qty'))
 
     # ------------------------------------------------------------------
     # reference = MO name + per-MO sequence, with a row lock to avoid races
@@ -377,6 +403,12 @@ class MesOrder(models.Model):
                 raise ValidationError(_(
                     'MES order %(name)s is cancelled and cannot go online.',
                     name=order.name))
+            # 排产→领料→上线：领料不可跳过（mes-picking-lifecycle R1），
+            # 存在任何未取消领料单即视为"领过"，宽松口径防误拦
+            if not order.picking_ids.filtered(lambda p: p.state != 'cancel'):
+                raise ValidationError(_(
+                    'MES order %(name)s has no material requisition yet; '
+                    'issue material before going online.', name=order.name))
             order.x_online_date = fields.Datetime.now()
             # 正常业务序（排产→领料→上线）走完的单停在 picked：
             # 上线即投产，released/picked 都转入 in_progress，否则
@@ -616,40 +648,39 @@ class MesOrder(models.Model):
                     'must leave that order through its end operation before '
                     'being fed into another one.',
                     sn=serial_identity.name, order=bound_order.name))
-        passed_ok = walked.filtered(
+        # 过站次数上限：OK 与 NG 各占一次（测试工序复测口径）；截断点由
+        # sn_wsd_repair 注入（最新已关维修单的关单时间，之前的行不计=清零
+        # 重满）。尾站（结束/产出工序）固定一次，优先于工序配置。
+        cutoff = self.env.context.get('sn_wsd_pass_cutoff')
+        passes = walked.filtered(
             lambda h: h.route_operation_id == route_operation
-            and h.result == 'ok')
-        if passed_ok:
+            and h.result in ('ok', 'ng')
+            and (not cutoff or h.out_date > cutoff))
+        cap = 1 if route_operation.x_allow_exit \
+            else route_operation.operation_id.x_max_test_count
+        if len(passes) >= cap:
             raise ValidationError(_(
-                'SN %(sn)s already passed operation %(op)s.',
-                sn=serial_identity.name, op=route_operation.display_label))
-        # NG passes are free re-entries until the operation's retry limit;
-        # sn_wsd_repair marks the context to reset the count after a closed
-        # repair order.
-        retry_limit = route_operation.operation_id.x_max_test_count or 0
-        if retry_limit > 0 and not self.env.context.get('sn_wsd_repair_return'):
-            ng_count = len(walked.filtered(
-                lambda h: h.route_operation_id == route_operation
-                and h.result == 'ng'))
-            if ng_count >= retry_limit:
-                raise ValidationError(_(
-                    'SN %(sn)s reached the retry limit (%(limit)s) of '
-                    'operation %(op)s; send it to repair.',
-                    sn=serial_identity.name, limit=retry_limit,
-                    op=route_operation.display_label))
+                'SN %(sn)s reached the pass limit (%(limit)s) of operation '
+                '%(op)s; send it to repair.',
+                sn=serial_identity.name, limit=cap,
+                op=route_operation.display_label))
         if not walked and not route_operation.x_allow_entry:
             raise ValidationError(_(
                 'SN %(sn)s has not entered MES order %(order)s yet; it must '
                 'be fed in from a start operation (%(op)s is not one).',
                 sn=serial_identity.name, order=self.name,
                 op=route_operation.display_label))
-        reachable = self.get_reachable_operations(serial_identity)
-        if route_operation not in reachable:
-            raise ValidationError(_(
-                'Operation %(op)s is not reachable for SN %(sn)s: none of its '
-                'predecessors %(preds)s is completed yet.',
-                op=route_operation.display_label, sn=serial_identity.name,
-                preds=', '.join(route_operation.blocked_by_ids.mapped('display_label')) or '-'))
+        # 维修回流目标（关单授权的进站种子）跳过可达性；其余按
+        # "前驱在截断点后有 OK" 推进（无维修时截断点为空=全部历史）。
+        seed_ids = self.env.context.get('sn_wsd_repair_seed_ids', [])
+        if route_operation.id not in seed_ids:
+            reachable = self.get_reachable_operations(serial_identity)
+            if route_operation not in reachable:
+                raise ValidationError(_(
+                    'Operation %(op)s is not reachable for SN %(sn)s: none of its '
+                    'predecessors %(preds)s is completed yet.',
+                    op=route_operation.display_label, sn=serial_identity.name,
+                    preds=', '.join(route_operation.blocked_by_ids.mapped('display_label')) or '-'))
         Wip.sudo().create({
             'serial_identity_id': serial_identity.id,
             'mes_order_id': self.id,
@@ -1250,23 +1281,26 @@ class MesOrder(models.Model):
             'context': {'default_mes_order_id': self.id},
         }
 
-    def action_generate_picking(self, qty_this=None):
+    def action_generate_picking(self, qty_this=None, over_reason=False):
         """Generate one internal picking for ``qty_this`` finished units.
 
         ``qty_this`` is the batch quantity of this issue (架构设计 3.3); it
         defaults to whatever remains of the order quantity. The accumulated
-        ``picked_qty`` may never exceed the order quantity.
+        ``picked_qty`` may never exceed the order quantity — unless
+        ``over_reason`` is given: then the picking is an over-pick (beyond
+        the plan, separate ledger, no caps).
         """
         StockMove = self.env['stock.move']
         StockPicking = self.env['stock.picking']
         PickingType = self.env['stock.picking.type']
-        for order in self.filtered(lambda o: o.state == 'released'):
+        for order in self.filtered(
+                lambda o: o.state in ('released', 'picked', 'in_progress')):
             if qty_this is None:
                 qty_this = order.planned_qty - order.picked_qty
             if qty_this <= 0.0001:
                 raise UserError(_(
                     'Nothing left to pick on MES order %(order)s.', order=order.name))
-            if qty_this + order.picked_qty > order.planned_qty + 0.0001:
+            if not over_reason and qty_this + order.picked_qty > order.planned_qty + 0.0001:
                 raise UserError(_(
                     'Over-picking: %(qty)s units would exceed the %(planned)s units '
                     'of %(order)s (already picked: %(picked)s).',
@@ -1330,15 +1364,10 @@ class MesOrder(models.Model):
             # 组件全部被 already 封顶跳过——此时不建空领料单
             def _issue_qty_for(line):
                 batch_qty = line.product_qty * batch_ratio
-                already = sum(
-                    sum(p.move_ids.filtered(
-                        lambda m: m.product_id == line.product_id
-                    ).mapped('product_uom_qty'))
-                    for p in open_pickings
-                )
+                already = order._mes_issued_qty(line.product_id, open_pickings)
                 remaining_total = line.product_qty * total_ratio - already
                 return min(batch_qty, remaining_total)
-            if all(
+            if not over_reason and all(
                 _issue_qty_for(line) <= 0.0001
                 for line in bom.bom_line_ids
                 if not line.x_advance_issue
@@ -1354,19 +1383,17 @@ class MesOrder(models.Model):
                 'company_id': order.company_id.id,
                 'x_mes_order_id': order.id,
                 'x_mes_order_qty': qty_this,
+                'x_is_over_pick': bool(over_reason),
+                'x_over_reason': over_reason or False,
             })
             for line in bom.bom_line_ids:
                 if line.x_advance_issue:
                     continue  # pre-issued to the line side, never on MES pickings
                 batch_qty = line.product_qty * batch_ratio
-                already = sum(
-                    sum(p.move_ids.filtered(
-                        lambda m: m.product_id == line.product_id
-                    ).mapped('product_uom_qty'))
-                    for p in open_pickings
-                )
+                already = order._mes_issued_qty(line.product_id, open_pickings)
                 remaining_total = line.product_qty * total_ratio - already
-                qty = min(batch_qty, remaining_total)
+                # 超领走账外：不占 BOM 行总封顶，按超领台数整份展开
+                qty = batch_qty if over_reason else min(batch_qty, remaining_total)
                 if qty <= 0.0001:
                     continue  # nothing left to issue for this component
                 move_vals = {
@@ -1406,9 +1433,151 @@ class MesOrder(models.Model):
             picking.action_confirm()
         return True
 
+    def _mes_issued_qty(self, product, pickings):
+        """BOM 行累计已发量（物理口径，open+done 单据均计）。退货单
+        （负台数）按负方向参与——退料回补额度，而不是被当作又一次发放
+        （mes-picking-lifecycle R2）。"""
+        self.ensure_one()
+        issued = 0.0
+        for picking in pickings:
+            sign = -1.0 if picking.x_mes_order_qty < 0 else 1.0
+            for move in picking.move_ids.filtered(lambda m: m.product_id == product):
+                issued += sign * move.product_uom_qty
+        return issued
+
+    def action_open_return_wizard(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Return Material'),
+            'res_model': 'sn.wsd.mes.return.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_mes_order_id': self.id},
+        }
+
+    def action_generate_return(self, qty=None):
+        """生成一张反向领料单：按 ``qty`` 台的 BOM 份额把组件从线边退回
+        仓库主库位。单据 ``x_mes_order_qty`` 记负数（净额账本约定），
+        批次料按线边在库批次整卷退（FEFO，一卷一行），散料数量上限为
+        线边实际持有量。"""
+        StockMove = self.env['stock.move']
+        StockPicking = self.env['stock.picking']
+        StockQuant = self.env['stock.quant']
+        for order in self:
+            if qty is None:
+                qty = order.picked_qty
+            if qty <= 0.0001:
+                raise UserError(_(
+                    'Nothing picked to return on MES order %(order)s.',
+                    order=order.name))
+            if qty > order.picked_qty + 0.0001:
+                raise UserError(_(
+                    'Over-return: %(qty)s units exceed the %(net)s net picked '
+                    'units of %(order)s.',
+                    qty=qty, net=order.picked_qty, order=order.name))
+            production = order.production_id
+            bom = production.bom_id
+            if not bom:
+                raise UserError(_(
+                    'No BOM on the manufacturing order; cannot generate '
+                    'the return.'))
+            line_side = order.production_line_id.workshop_id.component_location_id
+            if not line_side:
+                raise UserError(_(
+                    'Workshop %(workshop)s has no component (line-side) '
+                    'location configured; set it before generating the return.',
+                    workshop=order.production_line_id.workshop_id.display_name,
+                ))
+            warehouse = production.picking_type_id.warehouse_id
+            if not warehouse or not warehouse.lot_stock_id:
+                raise UserError(_(
+                    'The manufacturing order of %(order)s has no warehouse; '
+                    'cannot generate the return.', order=order.name))
+            dest = warehouse.lot_stock_id
+            picking_type = warehouse.picking_type_issue_id
+            if not picking_type:
+                raise UserError(_(
+                    'MES order %(order)s has no material issue operation type '
+                    'yet; issue material before returning it.', order=order.name))
+            batch_ratio = (qty / bom.product_qty) if bom.product_qty else 0.0
+            picking = StockPicking.create({
+                'picking_type_id': picking_type.id,
+                'origin': order.name,
+                'location_id': line_side.id,
+                'location_dest_id': dest.id,
+                'company_id': order.company_id.id,
+                'x_mes_order_id': order.id,
+                'x_mes_order_qty': -qty,
+            })
+            created_any = False
+            for line in bom.bom_line_ids:
+                if line.x_advance_issue:
+                    continue  # pre-issued lines never flow through MES pickings
+                qty_line = line.product_qty * batch_ratio
+                if qty_line <= 0.0001:
+                    continue
+                move_vals = {
+                    'product_id': line.product_id.id,
+                    'product_uom': line.product_uom_id.id,
+                    'product_uom_qty': qty_line,
+                    'picking_id': picking.id,
+                    'location_id': line_side.id,
+                    'location_dest_id': dest.id,
+                    'company_id': order.company_id.id,
+                }
+                if line.product_id.tracking == 'lot':
+                    # 整卷退：线边在库批次按 FEFO 覆盖份额即止，一卷一行；
+                    # 线边无该批次（已消耗）则该行不退
+                    need_base = line.product_uom_id._compute_quantity(
+                        qty_line, line.product_id.uom_id)
+                    reels = order._mes_issue_reel_lines(
+                        line.product_id, line_side, need_base)
+                    if not reels:
+                        continue
+                    move_vals['product_uom_qty'] = line.product_id.uom_id._compute_quantity(
+                        sum(reel_qty for _lot, reel_qty in reels),
+                        line.product_uom_id)
+                    move_vals['move_line_ids'] = [(0, 0, {
+                        'picking_id': picking.id,
+                        'product_id': line.product_id.id,
+                        'product_uom_id': line.product_id.uom_id.id,
+                        'quantity': reel_qty,
+                        'lot_id': lot.id,
+                        'lot_name': lot.name,
+                        'location_id': line_side.id,
+                        'location_dest_id': dest.id,
+                        'company_id': order.company_id.id,
+                    }) for lot, reel_qty in reels]
+                else:
+                    # 散料按线边实际持有量封顶（倒冲扣过的退不回来）
+                    groups = StockQuant._read_group(
+                        [('product_id', '=', line.product_id.id),
+                         ('location_id', '=', line_side.id)],
+                        groupby=[], aggregates=['quantity:sum'],
+                    )
+                    available_base = (groups[0][0] or 0.0) if groups else 0.0
+                    available = line.product_id.uom_id._compute_quantity(
+                        available_base, line.product_uom_id)
+                    qty_line = min(qty_line, available)
+                    if qty_line <= 0.0001:
+                        continue
+                    move_vals['product_uom_qty'] = qty_line
+                StockMove.create(move_vals)
+                created_any = True
+            if not created_any:
+                picking.action_cancel()
+                raise UserError(_(
+                    'No component of MES order %(order)s is left on the line '
+                    'side to return.', order=order.name))
+            picking.action_confirm()
+        return True
+
     def _mes_issue_reel_lines(self, product, src, need_qty):
         """整卷发放的挑卷：按 FEFO（先到期，再先进）取 ``src`` 库位在库
         批次的**当前余量**，累计覆盖 ``need_qty``（产品基本单位）即止。
+        在途互斥（mes-picking-lifecycle R4）：同制令单未验证领料单已挑
+        走的批次量先从在库量中扣减，避免两张在途单挑中同一卷。
         返回 [(lot, qty)]；无可发批次时返回空（回退散量领料）。"""
         self.ensure_one()
         need = product.uom_id.round(need_qty or 0.0)
@@ -1425,6 +1594,16 @@ class MesOrder(models.Model):
             aggregates=['quantity:sum'],
         )
         by_lot = {lot: (total or 0.0) for lot, total in groups}
+        # 同单在途占用：未验证领料单上挂在 src 的批次行（退货单的行在
+        # 线边，location 不同，天然不参与）
+        open_pickings = self.picking_ids.filtered(
+            lambda p: p.state not in ('done', 'cancel'))
+        for picking in open_pickings:
+            for line in picking.move_line_ids.filtered(
+                    lambda l: l.product_id == product
+                    and l.lot_id and l.location_id == src):
+                if line.lot_id.id in {lot.id for lot in by_lot}:
+                    by_lot[line.lot_id] -= line.quantity
         lines = []
         covered = 0.0
         for lot in sorted(by_lot, key=lambda l: (l.removal_date or '9999-12-31', l.id)):
@@ -1517,6 +1696,13 @@ class StockPickingMesOrder(models.Model):
         string='MES Order Units', copy=False,
         help='Finished-unit quantity this picking covers; used to '
              'accumulate the MES order picked quantity.',
+    )
+    x_is_over_pick = fields.Boolean(
+        string='Over-pick', copy=False,
+        help='This picking issues material beyond the planned quantity.',
+    )
+    x_over_reason = fields.Text(
+        string='Over-pick Reason', copy=False,
     )
 
     def action_open_mes_order(self):

@@ -6,3 +6,4 @@ from . import mes_schedule_wizard
 from . import mes_pick_wizard
 from . import mes_done_wizard
 from . import generate_sn_wizard
+from . import mes_return_wizard

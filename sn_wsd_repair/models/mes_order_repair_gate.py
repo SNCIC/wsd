@@ -12,9 +12,10 @@ class MesOrderRepairGate(models.Model):
     def enter_station(self, serial_identity, route_operation, workcenter=False):
         """Quality freeze gate on station entry: an SN with an open repair
         order or an open quality issue stays out of the flow until the
-        document reaches a terminal state; a closed order (repair_time
-        after the SN's last NG pass at this operation) resets the
-        retry-limit counter."""
+        document reaches a terminal state. A closed repair order supplies
+        the pass-count cutoff (its repair_time) and, when set on this
+        order, the authorized re-entry seed (its re-entry operation):
+        counters restart and the SN must re-walk from that point."""
         freeze_source = self._sn_quality_freeze_source(serial_identity)
         if freeze_source:
             raise ValidationError(_(
@@ -24,8 +25,12 @@ class MesOrderRepairGate(models.Model):
                 kind=freeze_source['kind'], ref=freeze_source['ref'],
                 state=freeze_source['state']))
         context = dict(self.env.context)
-        if self._sn_repair_returned(serial_identity, route_operation):
-            context['sn_wsd_repair_return'] = True
+        repair = self._sn_last_closed_repair(serial_identity)
+        if repair and repair.repair_time:
+            context['sn_wsd_pass_cutoff'] = repair.repair_time
+            seed = repair.repair_entry_route_operation_id
+            if seed and seed.mes_order_id == self:
+                context['sn_wsd_repair_seed_ids'] = [seed.id]
         return super(
             MesOrderRepairGate, self.with_context(context),
         ).enter_station(serial_identity, route_operation, workcenter=workcenter)
@@ -76,23 +81,13 @@ class MesOrderRepairGate(models.Model):
                     'state': state_label}
         return False
 
-    def _sn_repair_returned(self, serial_identity, route_operation):
-        """True when a repair order was closed after the SN's last NG pass
-        at this operation: the SN earned a fresh retry allowance."""
-        History = self.env['sn.wsd.serial.operation.history']
-        last_ng = History.search([
-            ('serial_identity_id', '=', serial_identity.id),
-            ('route_operation_id', '=', route_operation.id),
-            ('result', '=', 'ng'),
-        ], order='out_date desc, id desc', limit=1)
-        if not last_ng:
-            return False
-        return bool(self.env['sn.wsd.repair.order'].search([
+    def _sn_last_closed_repair(self, serial_identity):
+        """Latest successfully closed repair order of the SN: its repair_time
+        is the pass-count / reachability cutoff, its re-entry operation the
+        authorized station seed."""
+        return self.env['sn.wsd.repair.order'].search([
             ('serial_identity_id', '=', serial_identity.id),
             ('company_id', '=', serial_identity.company_id.id),
             ('state', '=', 'done'),
             ('result', '=', 'ok'),
-            # >= not >: Datetime.now() is second-granular, and the repair
-            # close may land in the same second as the last NG pass
-            ('repair_time', '>=', last_ng.out_date),
-        ], limit=1))
+        ], order='repair_time desc, id desc', limit=1)

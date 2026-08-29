@@ -161,6 +161,17 @@ msgid ""
 msgstr ""
 
 #. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_consumption.py:0
+msgid ""
+"The material operation is not maintained on the process route of MES order "
+"%(order)s. Maintain the material operation on the route before passing "
+"stations."
+msgstr "制令单 %(order)s 的工艺路线未维护物料关联工序：请先在路线上维护物料关联工序，再过站。"
+
+
+
+#. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__message_attachment_count
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__message_attachment_count
 msgid "Attachment Count"

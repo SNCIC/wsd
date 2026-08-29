@@ -218,42 +218,6 @@ class SnWsdApiService(models.AbstractModel):
             'source': 'api',
         })
 
-    def _key_material_lines(self, mes_order, route_operation, workcenter):
-        return self.env['sn.wsd.drawing.material'].search([
-            ('x_drawing_no', '=', mes_order.production_id.product_id.default_code or False),
-            ('workshop_id', '=', workcenter.x_workshop_id.id or False),
-            ('operation_id', '=', route_operation.operation_id.id),
-            ('x_side', '=', mes_order.x_side),
-        ])
-
-    def _register_tooling_usage(self, mes_order, route_operation, workcenter, payload, board_qty):
-        """Key-material controlled tooling/consumables count on pass; any
-        other uploaded tooling SN is recorded in the request log only."""
-        raw = (payload.get('M_TOOLING') or '').strip()
-        tooling_sns = [part.strip() for part in raw.split('|') if part.strip()]
-        tooling_templates = self.env['sn.tooling.template']
-        consumable_templates = self.env['sn.consumable.template']
-        for line in self._key_material_lines(
-                mes_order, route_operation, workcenter).line_ids:
-            ref = line.material_ref
-            if ref and ref._name == 'sn.tooling.template':
-                tooling_templates |= ref
-            elif ref and ref._name == 'sn.consumable.template':
-                consumable_templates |= ref
-        if not tooling_sns and not consumable_templates:
-            return
-        Tooling = self.env['sn.tooling']
-        for sn in tooling_sns:
-            tooling = Tooling.search([('sn', '=', sn)], limit=1)
-            if not tooling or tooling.template_id not in tooling_templates:
-                continue  # log-only
-            if tooling.state == 'online':
-                tooling.register_usage(board_qty)
-        for template in consumable_templates:
-            infos = self.env['sn.consumable.info'].search([
-                ('template_id', '=', template.id), ('state', '=', 'loaded')])
-            infos.register_usage(board_qty, mes_order=mes_order)
-
     def _handle_packing(self, identity, mes_order, route_operation, workcenter, payload, result):
         box = (payload.get('M_BOX_SN') or '').strip()
         pallet = (payload.get('M_SECOND_SN') or '').strip()
@@ -353,8 +317,9 @@ class SnWsdApiService(models.AbstractModel):
         self._check_process_documents(production, route_operation, payload)
         self._register_components(identity, route_operation, payload, test_result)
         self._bind_nameplate(identity, payload.get('M_STR1'))
-        self._register_tooling_usage(
-            mes_order, route_operation, workcenter, payload, len(members))
+        # M_TOOLING and device fields are record-only payloads (kept in the
+        # request log); key-material usage counting happens in the station
+        # kernel (leave_station) for every board that passes.
         # SMT online material deduction, one board at a time (idempotent
         # per SN+order)
         if mes_order._is_smt_route_order():

@@ -65,8 +65,19 @@ class SnWsdOperation(models.Model):
         string='Max Test Count',
         required=True,
         default=1,
+        help='Total station passes (OK and NG alike) allowed per SN at this '
+             'operation; end/output operations are always capped at 1.',
     )
     note = fields.Text(string='Notes')
+
+    @api.constrains('x_max_test_count')
+    def _check_max_test_count(self):
+        # 过站总次数上限：必填且 ≥1（0=不限语义已废弃，前端不可选 0）
+        for operation in self:
+            if operation.x_max_test_count < 1:
+                raise ValidationError(_(
+                    'The max test count of operation %s must be at least 1.',
+                    operation.display_name))
 
     _operation_code_company_uniq = models.Constraint(
         'unique(company_id, code)',

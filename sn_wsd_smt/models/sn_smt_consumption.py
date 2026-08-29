@@ -203,20 +203,21 @@ class SnSmtMaterialConsumption(models.Model):
     @api.model
     def _get_active_lines(self, route_operation):
         return route_operation.mes_order_id.x_smt_online_material_ids.filtered(
-            lambda line: line.is_skip != 'Y' and line.is_load == 'Y' and line.loaded_material_lot_id
+            lambda line: line.source == 'smt_table'
+            and line.is_skip != 'Y' and line.is_load == 'Y' and line.loaded_material_lot_id
         )
 
     @api.model
     def validate_for_serial(self, route_operation, identity=False):
-        # 触发条件：制令单路线工艺类型为 SMT，且已拆出在线料表行。
+        # 料站表门禁：只管 smt_table 行，与路线类型无关（没拆表行=不参与）。
         # 关键物料清单行（drawing_list）的门禁由 sn_wsd_barcode 扩展处理。
         mes_order = route_operation.mes_order_id
-        if not mes_order.x_smt_online_material_ids:
-            return self.env['sn.smt.online.material']
-        if not mes_order._is_smt_route_order():
+        table_rows = mes_order.x_smt_online_material_ids.filtered(
+            lambda line: line.source == 'smt_table')
+        if not table_rows:
             return self.env['sn.smt.online.material']
         lines = self._get_active_lines(route_operation)
-        expected_lines = mes_order.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
+        expected_lines = table_rows.filtered(lambda line: line.is_skip != 'Y')
         if len(lines) != len(expected_lines):
             raise ValidationError(_('All SMT material positions must be loaded before the product can pass this station.'))
         if not lines:
@@ -238,16 +239,32 @@ class SnSmtMaterialConsumption(models.Model):
     @api.model
     def consume_for_serial(self, route_operation, identity=False, operator_code=None,
                            external_event_id=None, source_system=None, note=None):
+        mes_order = route_operation.mes_order_id
+        # 料站表扣点只认路线维护的物料关联工序（x_material_operation_id，
+        # 私有路线头上即工序实例）：料站表本身不带工序；未维护（或维护的
+        # 实例不在本单路线）且有料站表行 = 扣点无从归属，拦截过站倒逼维护。
+        table_rows = mes_order.x_smt_online_material_ids.filtered(
+            lambda line: line.source == 'smt_table')
+        if table_rows:
+            material_rop = mes_order.x_material_operation_id
+            if not material_rop or material_rop.mes_route_id != mes_order.x_mes_route_id:
+                raise ValidationError(_(
+                    'The material operation is not maintained on the process '
+                    'route of MES order %(order)s. Maintain the material '
+                    'operation on the route before passing stations.',
+                    order=mes_order.name))
+            if route_operation != material_rop:
+                return self.env['sn.smt.material.consumption']
         lines = self.validate_for_serial(route_operation, identity)
         if not lines:
             return self.env['sn.smt.material.consumption']
-        mes_order = route_operation.mes_order_id
         # 一块板一张料站表只扣一次：同 SN 在本制令单已有正向扣点流水则跳过
         # （SMT 车间路线含多道工序，板会在多站过站，按单幂等防止重复扣点）。
         # drawing_list 行的扣减（按工序幂等 + usage_times）由 sn_wsd_barcode 扩展。
         existing_domain = [
             ('serial_identity_id', '=', identity.id),
             ('mes_order_id', '=', mes_order.id),
+            ('online_material_id.source', '=', 'smt_table'),
             ('product_qty', '>', 0),
         ]
         existing = self.search(existing_domain, limit=1)

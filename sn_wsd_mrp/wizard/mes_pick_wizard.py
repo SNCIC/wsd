@@ -23,6 +23,11 @@ class MesPickWizard(models.TransientModel):
         string='Remaining Quantity', compute='_compute_remaining_qty',
     )
     qty_this = fields.Float(string='Quantity To Pick', required=True)
+    is_over_pick = fields.Boolean(
+        string='Over-pick',
+        help='Issue beyond the planned quantity (consumption make-up); '
+             'requires a reason and is tracked on a separate ledger.')
+    over_reason = fields.Text(string='Over-pick Reason')
 
     @api.depends('mes_order_id')
     def _compute_remaining_qty(self):
@@ -39,13 +44,23 @@ class MesPickWizard(models.TransientModel):
     def action_pick(self):
         self.ensure_one()
         order = self.mes_order_id
-        if order.state != 'released':
+        if order.state not in ('released', 'picked', 'in_progress'):
             raise UserError(_(
-                'Only Released MES orders can pick material (current: %s).',
-                order.state))
+                'Only active MES orders (released, picked or in progress) '
+                'can pick material (current: %s).', order.state))
         if self.qty_this <= 0 or self.qty_this != int(self.qty_this):
             raise ValidationError(
                 _('The picked quantity must be a positive whole number of units.'))
+        if self.is_over_pick:
+            if not (self.over_reason or '').strip():
+                raise ValidationError(_('An over-pick reason is required.'))
+            # 账外补料：不占 planned 封顶，单独台账（mes-picking-lifecycle R3）
+            order.action_generate_picking(
+                qty_this=self.qty_this, over_reason=self.over_reason)
+            return {'type': 'ir.actions.act_window_close'}
+        if order.planned_qty - order.picked_qty <= 0.0001:
+            raise UserError(_(
+                'Nothing left to pick on MES order %(order)s.', order=order.name))
         if self.qty_this + order.picked_qty > order.planned_qty + 0.0001:
             raise ValidationError(_(
                 'Over-picking: only %(remaining)s unit(s) remain on %(order)s.',

@@ -60,6 +60,9 @@ class TestStationServices(TransactionCase):
             'date_plan': fields.Date.today(),
             'planned_qty': 4,
         })
+        # 上线硬闸脚手架（mes-picking-lifecycle R1）：占位领料单过闸
+        from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
+        give_pick(cls.env, cls.order)
         cls.order.action_online()
         cls.wc_in = cls.env['mrp.workcenter'].create({
             'name': 'WC-IN', 'x_workshop_id': cls.workshop.id,
@@ -111,6 +114,9 @@ class TestStationServices(TransactionCase):
             'planned_qty': 4,
             'x_manage_mode': 'report',
         })
+        # 上线硬闸脚手架（mes-picking-lifecycle R1）：占位领料单过闸
+        from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
+        give_pick(self.env, order)
         order.action_online()
         data = order.sn_station_report(self.wc_in.id, 3)
         card = next(o for o in data['orders'] if o['id'] == order.id)

@@ -12,7 +12,7 @@ quality → api → smt）。
 - sn.smt.loading.service 扩展：投料扫码 / 状态视图 / 全部下料 /
   下线时制具/辅料联动
 - sn.smt.material.consumption 扩展：关键物料行过站门禁 + usage_times
-  扣点（SMT 路线单走原逻辑）
+  扣点（不分路线类型；SMT 路线单与料站表扣点双轨并行）
 """
 
 from odoo import _, api, fields, models
@@ -96,13 +96,11 @@ class MesOrderDrawingSplit(models.Model):
     _inherit = 'sn.wsd.mes.order'
 
     def _prepare_drawing_online_materials(self):
-        """非 SMT 路线制令单：上线时按关键物料管控清单拆行。
-        图号+车间+工序+面别 命中已维护清单 → 每清单行一条 drawing_list
-        在线料行（挂工序实例，门禁按工序隔离）；没维护清单 → 0 行不管控。
-        SMT 路线单以料站表为准，不重复拆。"""
+        """制令单上线时按关键物料管控清单拆行（不分整机/SMT，行类型
+        制具/辅料/物料任意组合）。图号+车间+工序+面别 命中已维护清单 →
+        每清单行一条 drawing_list 在线料行（挂工序实例，门禁按工序隔离）；
+        没维护清单 → 0 行不管控。与料站表行并存，互不替代。"""
         self.ensure_one()
-        if self._is_smt_route_order():
-            return self.env['sn.smt.online.material']
         existing = self.x_smt_online_material_ids.filtered(
             lambda line: line.source == 'drawing_list')
         if existing:
@@ -152,9 +150,38 @@ class MesOrderDrawingSplit(models.Model):
 
     def action_online(self):
         res = super().action_online()
-        for order in self.filtered(lambda o: not o._is_smt_route_order()):
+        for order in self:
             order._prepare_drawing_online_materials()
         return res
+
+    def leave_station(self, serial_identity, result, scrap_reason=False,
+                      ng_defect=False, operator_code=False):
+        # 关键物料计数时机：出站工序 == 行挂的工序（=清单维护的工序）。
+        # 先取 WIP 所在工序（super 会清掉 WIP 行），出站 OK 后对当前工序
+        # 已上线的制具/辅料个体各计一次（按板计；API 拼板逐板过内核各 +1）。
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id', '=', serial_identity.id),
+            ('mes_order_id', '=', self.id),
+        ], limit=1)
+        route_operation = wip.route_operation_id
+        finished = super().leave_station(
+            serial_identity, result, scrap_reason=scrap_reason,
+            ng_defect=ng_defect, operator_code=operator_code)
+        if result == 'ok' and route_operation:
+            self._register_drawing_usage(route_operation)
+        return finished
+
+    def _register_drawing_usage(self, route_operation):
+        """当前工序在线的制具/辅料个体计使用次数（关键物料清单行；
+        物料行走消耗流水不在此时机）。仅个体累计/周期口径，不做幂等。"""
+        rows = self.env['sn.smt.material.consumption']._drawing_rows_for_operation(
+            route_operation)
+        for row in rows.filtered(
+                lambda line: line.drawing_material_type in ('tooling', 'consumable')):
+            if row.tooling_id:
+                row.tooling_id.register_usage(1)
+            elif row.consumable_info_id:
+                row.consumable_info_id.register_usage(1, mes_order=self)
 
 
 class SnSmtLoadingServiceDrawing(models.AbstractModel):
@@ -366,12 +393,9 @@ class SnSmtMaterialConsumptionDrawing(models.Model):
         return line.is_load == 'Y' and bool(line.loaded_material_lot_id)
 
     @api.model
-    def validate_for_serial(self, route_operation, identity=False):
-        mes_order = route_operation.mes_order_id
-        if mes_order._is_smt_route_order():
-            return super().validate_for_serial(route_operation, identity)
-        # 关键物料清单门禁：行在就管（与行类型无关），全部上线才放行；
-        # 该工序没拆行 = 没维护清单 = 不管控。制具/辅料行只上门禁不扣量。
+    def _validate_drawing_rows(self, route_operation):
+        """关键物料清单门禁（不分路线类型）：当前工序的清单行全部上线
+        才放行；没拆行 = 没维护清单 = 不管控。制具/辅料行只上门禁不扣量。"""
         drawing_rows = self._drawing_rows_for_operation(route_operation)
         if not drawing_rows:
             return self.env['sn.smt.online.material']
@@ -406,15 +430,10 @@ class SnSmtMaterialConsumptionDrawing(models.Model):
         return material_rows
 
     @api.model
-    def consume_for_serial(self, route_operation, identity=False, operator_code=None,
-                           external_event_id=None, source_system=None, note=None):
+    def _consume_drawing_rows(self, route_operation, identity=False, operator_code=None,
+                              external_event_id=None, source_system=None, note=None):
         mes_order = route_operation.mes_order_id
-        if mes_order._is_smt_route_order():
-            return super().consume_for_serial(
-                route_operation, identity=identity, operator_code=operator_code,
-                external_event_id=external_event_id,
-                source_system=source_system, note=note)
-        lines = self.validate_for_serial(route_operation, identity)
+        lines = self._validate_drawing_rows(route_operation)
         if not lines:
             return self.env['sn.smt.material.consumption']
         # 清单行按 (SN, 工序) 幂等：同单多工序各有清单，各扣各的。
@@ -456,3 +475,18 @@ class SnSmtMaterialConsumptionDrawing(models.Model):
                 'last_consumed_at': record.consumed_at,
             })
         return created
+
+    @api.model
+    def consume_for_serial(self, route_operation, identity=False, operator_code=None,
+                           external_event_id=None, source_system=None, note=None):
+        # 清单行与料站表扣点并存，互不区分路线类型：料站表路径只看单上
+        # 有没有 smt_table 行（无表行=基类空转），清单路径只看当前工序
+        # 有没有拆 drawing_list 行。
+        drawing = self._consume_drawing_rows(
+            route_operation, identity=identity, operator_code=operator_code,
+            external_event_id=external_event_id, source_system=source_system,
+            note=note)
+        return drawing | super().consume_for_serial(
+            route_operation, identity=identity, operator_code=operator_code,
+            external_event_id=external_event_id,
+            source_system=source_system, note=note)

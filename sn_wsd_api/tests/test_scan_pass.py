@@ -41,6 +41,9 @@ class TestScanPass(TransactionCase):
         cls.order = cls.env['sn.wsd.mes.order'].create({
             'production_id': cls.production.id, 'production_line_id': cls.line.id,
             'date_plan': fields.Date.today(), 'planned_qty': 100})
+        # 上线硬闸脚手架（mes-picking-lifecycle R1）：占位领料单过闸
+        from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
+        give_pick(cls.env, cls.order)
         cls.order.action_online()
         cls.wc_in = cls.env['mrp.workcenter'].create({
             'name': 'API-WC-IN', 'code': 'APIWCIN', 'x_workshop_id': cls.workshop.id,
