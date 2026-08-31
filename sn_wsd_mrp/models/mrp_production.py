@@ -46,6 +46,9 @@ class MrpProduction(models.Model):
         help='Independent route snapshot; no longer derived from the BOM.',
     )
 
+    x_nameplate_begin = fields.Char(string='Nameplate Begin')
+    x_nameplate_end = fields.Char(string='Nameplate End')
+
     @api.onchange('product_id')
     def _onchange_x_route_id_from_drawing_no(self):
         # The route is resolved through the product's 图号 (drawing number):
