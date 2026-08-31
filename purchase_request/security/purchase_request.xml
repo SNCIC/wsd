@@ -74,6 +74,18 @@
         <field name="perm_create" eval="True" />
         <field name="perm_unlink" eval="True" />
     </record>
+    <record id="purchase_request_approver_rule" model="ir.rule">
+        <field name="name">Purchase Request Assigned Approver</field>
+        <field name="model_id" ref="model_purchase_request" />
+        <field name="groups" eval="[(6,0, [ref('group_purchase_request_user')])]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="domain_force">
+            ['|',('requested_by','=',user.id),('assigned_to','=',user.id)]
+        </field>
+    </record>
     <record id="purchase_request_line_followers_rule" model="ir.rule">
         <field name="name">Follow Purchase Request Line</field>
         <field name="model_id" ref="model_purchase_request_line" />
@@ -106,5 +118,18 @@
         <field name="perm_write" eval="True" />
         <field name="perm_create" eval="True" />
         <field name="perm_unlink" eval="True" />
+    </record>
+    <record id="purchase_request_line_approver_rule" model="ir.rule">
+        <field name="name">Purchase Request Line Assigned Approver</field>
+        <field name="model_id" ref="model_purchase_request_line" />
+        <field name="groups" eval="[(6,0, [ref('group_purchase_request_user')])]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="domain_force">
+            ['|',('request_id.requested_by','=',user.id),
+                  ('request_id.assigned_to','=',user.id)]
+        </field>
     </record>
 </odoo>

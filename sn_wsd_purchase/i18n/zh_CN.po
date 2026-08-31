@@ -1,4 +1,4 @@
-#
+﻿#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
@@ -377,6 +377,33 @@ msgstr "预计到货日期"
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
 msgid "Received Quantity"
 msgstr "入库数量"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Contract Details"
+msgstr "合同详情"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Attachments"
+msgstr "附件"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__contract_attachment_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "Contract Attachments"
+msgstr "合同附件"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__has_contract_attachment
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_kpis_tree_contract_attachment
+msgid "Contract Attached"
+msgstr "合同已上传"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+msgid "VAT Amount"
+msgstr "增值税额"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form

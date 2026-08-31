@@ -57,6 +57,12 @@ class StockMoveLine(models.Model):
 class StockLot(models.Model):
     _inherit = 'stock.lot'
 
+    arrival_batch_no = fields.Char(
+        string='Arrival Batch',
+        copy=False,
+        readonly=True,
+        index=True,
+    )
     material_sn_base = fields.Char(
         string='Material SN Base', copy=False, index=True, readonly=True,
     )
@@ -90,5 +96,10 @@ class StockQuant(models.Model):
     supplier_batch_no = fields.Char(
         related='lot_id.supplier_batch_no',
         string='Supplier Batch',
+        readonly=True,
+    )
+    arrival_batch_no = fields.Char(
+        related='lot_id.arrival_batch_no',
+        string='Arrival Batch',
         readonly=True,
     )

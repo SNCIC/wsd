@@ -131,6 +131,9 @@ class IncomingMaterialLabelWizard(models.TransientModel):
             'name': material_sn,
             'product_id': line.product_id.id,
             'company_id': self.picking_id.company_id.id,
+            'arrival_batch_no': fields.Date.context_today(
+                self.picking_id
+            ).strftime('%Y%m%d'),
             'material_sn_base': base_sn,
             'material_sn_suffix': str(suffix) if suffix else False,
             'supplier_code': self.picking_id.partner_id.ref,

@@ -10,7 +10,7 @@
         <field name="print_report_name">'Xinpeng Purchase Contract - %s' % (object.contract_number or object.name)</field>
         <field name="binding_model_id" ref="purchase.model_purchase_order"/>
         <field name="binding_type">report</field>
-        <field name="binding_view_types">form</field>
+        <field name="binding_view_types">list,form</field>
     </record>
 
     <record id="action_report_purchase_contract_default" model="ir.actions.report">
@@ -23,6 +23,6 @@
         <field name="print_report_name">'Default Purchase Contract - %s' % (object.contract_number or object.name)</field>
         <field name="binding_model_id" ref="purchase.model_purchase_order"/>
         <field name="binding_type">report</field>
-        <field name="binding_view_types">form</field>
+        <field name="binding_view_types">list,form</field>
     </record>
 </odoo>

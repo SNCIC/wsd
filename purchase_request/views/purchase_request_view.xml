@@ -28,7 +28,7 @@
                         string="Approve"
                         type="object"
                         class="oe_highlight"
-                        groups="purchase_request.group_purchase_request_manager"
+                        groups="purchase_request.group_purchase_request_user"
                     />
                     <button
                         name="button_in_progress"
@@ -56,7 +56,7 @@
                         invisible="state not in ('to_approve', 'approved','in_progress')"
                         string="Reject"
                         type="object"
-                        groups="purchase_request.group_purchase_request_manager"
+                        groups="purchase_request.group_purchase_request_user"
                     />
                     <field
                         name="state"

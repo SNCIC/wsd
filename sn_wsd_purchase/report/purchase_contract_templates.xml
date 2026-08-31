@@ -13,8 +13,8 @@
         <t t-set="company" t-value="o.company_id"/>
         <t t-set="buyer" t-value="company.partner_id"/>
         <t t-set="supplier" t-value="o.partner_id"/>
-        <t t-set="buyer_bank" t-value="o.buyer_bank_id or buyer.bank_ids[:1]"/>
-        <t t-set="supplier_bank" t-value="o.supplier_bank_id or supplier.bank_ids[:1]"/>
+        <t t-set="buyer_bank" t-value="buyer.bank_ids.filtered_domain(['|', ('company_id', '=', False), ('company_id', '=', o.company_id.id)])[:1]"/>
+        <t t-set="supplier_bank" t-value="supplier.commercial_partner_id.bank_ids.filtered_domain(['|', ('company_id', '=', False), ('company_id', '=', o.company_id.id)])[:1]"/>
         <t t-set="buyer_address" t-value="o._get_contract_address(buyer)"/>
         <t t-set="supplier_address" t-value="o._get_contract_address(supplier)"/>
         <t t-set="signing_date" t-value="o.signing_date or o.date_order"/>
@@ -180,23 +180,17 @@
 
                 <div class="section-title">二、技术要求</div>
                 <div class="terms">
-                    <span t-if="o.technical_requirements" t-field="o.technical_requirements"/>
-                    <span t-else="">按照供需双方签订的技术协议、产品图纸验收要求，如无特殊约定按国家标准、行业标准验收。</span>
+                    按照供需双方签订的技术协议、产品图纸验收要求，如无特殊约定按国家标准、行业标准验收。
                 </div>
 
                 <div class="section-title">三、交货日期：
-                    <t t-if="o.delivery_date_text">
-                        <span t-out="o.delivery_date_text"/>
-                    </t>
-                    <t t-else="">
-                        供方承诺
-                        <span class="date-blank"/>
-                        年
-                        <span class="date-blank"/>
-                        月
-                        <span class="date-blank"/>
-                        日交付该批物料。（以产品到货验收合格时间为准）
-                    </t>
+                    供方承诺
+                    <span class="date-blank"/>
+                    年
+                    <span class="date-blank"/>
+                    月
+                    <span class="date-blank"/>
+                    日交付该批物料。（以产品到货验收合格时间为准）
                 </div>
                 <div class="terms"><b>其它说明：</b></div>
 
@@ -204,18 +198,14 @@
                 <div class="section-title">五、交货地点：□需方仓库　□托运部。交货时应提供送货单和出厂检验报告。</div>
                 <div class="section-title">六、验收方式：货到3天内验收，如有疑问10日内向供方提出；供方应在2日内给予回复。</div>
                 <div class="section-title">七、付款方式：
-                    <span t-if="o.payment_terms_text" t-field="o.payment_terms_text"/>
-                    <span t-else="">____月结/____电汇/____承兑汇票（需方）；月结发票应在到货后次月25日前提供。</span>
+                    ____月结/____电汇/____承兑汇票（需方）；月结发票应在到货后次月25日前提供。
                 </div>
 
                 <div class="section-title">八、违约责任：</div>
                 <div class="terms small">
-                    <span t-if="o.liability_terms" t-field="o.liability_terms"/>
-                    <span t-else="">
-                        1、供方必须保证本合同涉及产品为双方约定品牌的正品，如果出现假冒伪劣或质量不合格产品，需方有权选择单方解除合同，停止支付并索回已支付的货款，由供方赔偿需方因此产生的一切经济损失；
-                        <br/>2、由于供方供应的产品质量出现问题或瑕疵或交货延迟，致使需方待置信或不能及时向客户交货而造成的一切经济损失，应由供方负责赔偿；
-                        <br/>3、执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向需方所在地人民法院提起诉讼。
-                    </span>
+                    1、供方必须保证本合同涉及产品为双方约定品牌的正品，如果出现假冒伪劣或质量不合格产品，需方有权选择单方解除合同，停止支付并索回已支付的货款，由供方赔偿需方因此产生的一切经济损失；
+                    <br/>2、由于供方供应的产品质量出现问题或瑕疵或交货延迟，致使需方待置信或不能及时向客户交货而造成的一切经济损失，应由供方负责赔偿；
+                    <br/>3、执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向需方所在地人民法院提起诉讼。
                 </div>
 
                 <div class="section-title">九、合同有效期：本合同自签订之日起生效，有效期为一年。经需方以一定方式确认的传真、扫描件均有效，手工填写处不得二次涂改，否则视为无效。</div>
@@ -225,12 +215,10 @@
                     <tr>
                         <td class="signature" style="width: 50%;">
                             <b>需方：</b><span t-out="buyer.name"/>（盖章）
-                            <br/><br/>委托代理人：<span t-out="o.buyer_agent or ''"/>
                             <br/><br/>日期：
                         </td>
                         <td class="signature" style="width: 50%;">
                             <b>供方：</b><span t-out="supplier.name"/>（盖章）
-                            <br/><br/>委托代理人：<span t-out="o.supplier_agent or ''"/>
                             <br/><br/>日期：
                         </td>
                     </tr>

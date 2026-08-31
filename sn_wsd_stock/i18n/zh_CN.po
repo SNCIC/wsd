@@ -822,6 +822,12 @@ msgid "Supplier Batch"
 msgstr "批次号"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__arrival_batch_no
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_quant__arrival_batch_no
+msgid "Arrival Batch"
+msgstr "到货批次"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_sn_base
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_sn_base
 msgid "Material SN Base"
@@ -964,3 +970,39 @@ msgstr "没有可打印的物料批次。"
 #: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
 msgid "No material lots were selected for label printing."
 msgstr "未选择要打印标签的物料批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Batch"
+msgstr "批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Quantity Label"
+msgstr "数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "Supplier Label"
+msgstr "供应商"

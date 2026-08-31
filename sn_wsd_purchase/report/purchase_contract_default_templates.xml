@@ -13,8 +13,8 @@
         <t t-set="company" t-value="o.company_id"/>
         <t t-set="buyer" t-value="company.partner_id"/>
         <t t-set="supplier" t-value="o.partner_id"/>
-        <t t-set="buyer_bank" t-value="o.buyer_bank_id or buyer.bank_ids[:1]"/>
-        <t t-set="supplier_bank" t-value="o.supplier_bank_id or supplier.bank_ids[:1]"/>
+        <t t-set="buyer_bank" t-value="buyer.bank_ids.filtered_domain(['|', ('company_id', '=', False), ('company_id', '=', o.company_id.id)])[:1]"/>
+        <t t-set="supplier_bank" t-value="supplier.commercial_partner_id.bank_ids.filtered_domain(['|', ('company_id', '=', False), ('company_id', '=', o.company_id.id)])[:1]"/>
         <t t-set="signing_date" t-value="o.signing_date or o.date_order"/>
         <div class="article sn-purchase-contract-article"
              t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
@@ -183,18 +183,13 @@
                 <div class="terms">该产品质量标准符合国家标准、行业标准、地方标准为原则。若双方对产品质量、技术有特殊要求的，应以附件形式明确；无特别要求的，按上述标准执行。同时，若双方需确认样品的，可采取双方共同封样确认并双方、第三方处进行封样保留。</div>
 
                 <div class="section-title">三、交货日期：
-                    <t t-if="o.delivery_date_text">
-                        <span t-out="o.delivery_date_text"/>
-                    </t>
-                    <t t-else="">
-                        供方承诺
-                        <span class="date-blank"/>
-                        年
-                        <span class="date-blank"/>
-                        月
-                        <span class="date-blank"/>
-                        日交付该批物料。（以产品到货验收合格时间为准）
-                    </t>
+                    供方承诺
+                    <span class="date-blank"/>
+                    年
+                    <span class="date-blank"/>
+                    月
+                    <span class="date-blank"/>
+                    日交付该批物料。（以产品到货验收合格时间为准）
                 </div>
                 <div class="terms"><b>其它说明：</b></div>
 
@@ -216,12 +211,10 @@
                     <tr>
                         <td class="signature" style="width: 50%;">
                             <b>需方：</b><span t-out="buyer.name"/>（盖章）
-                            <br/><br/>委托代理人：<span t-out="o.buyer_agent or ''"/>
                             <br/><br/>日期：
                         </td>
                         <td class="signature" style="width: 50%;">
                             <b>供方：</b><span t-out="supplier.name"/>（盖章）
-                            <br/><br/>委托代理人：<span t-out="o.supplier_agent or ''"/>
                             <br/><br/>日期：
                         </td>
                     </tr>

@@ -45,33 +45,27 @@
                             <field name="signing_location"/>
                             <field name="amount_tax" readonly="1" string="VAT Amount"/>
                         </group>
-                        <group string="Bank Accounts">
-                            <field name="buyer_bank_id"
-                                   domain="[('partner_id', '=', company_id.partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
-                            <field name="supplier_bank_id"
-                                   domain="[('partner_id', '=', partner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Delivery">
-                            <field name="delivery_date_text"/>
-                        </group>
-                        <group string="Signatures">
-                            <field name="buyer_agent"/>
-                            <field name="supplier_agent"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Contract Terms">
-                            <field name="technical_requirements"/>
-                            <field name="acceptance_terms"/>
-                        </group>
-                        <group>
-                            <field name="payment_terms_text"/>
-                            <field name="liability_terms"/>
+                        <group string="Attachments">
+                            <field name="contract_attachment_ids" widget="many2many_binary"/>
+                            <field name="has_contract_attachment" widget="boolean_toggle" readonly="1"/>
                         </group>
                     </group>
                 </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_kpis_tree_contract_attachment" model="ir.ui.view">
+        <field name="name">purchase.order.kpis.tree.contract.attachment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="has_contract_attachment"
+                       string="Contract Attached"
+                       widget="boolean_toggle"
+                       readonly="1"
+                       optional="show"/>
             </xpath>
         </field>
     </record>

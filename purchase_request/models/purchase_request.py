@@ -89,14 +89,7 @@ class PurchaseRequest(models.Model):
         comodel_name="res.users",
         string="Approver",
         tracking=True,
-        domain=lambda self: [
-            (
-                "group_ids",
-                "in",
-                self.env.ref("purchase_request.group_purchase_request_manager").id,
-            )
-        ],
-        default=lambda self: self.env.company.purchase_request_default_approver_id,
+        domain=[("share", "=", False)],
         index=True,
     )
     description = fields.Text()
@@ -234,6 +227,72 @@ class PurchaseRequest(models.Model):
         return super().copy(default)
 
     @api.model
+    def default_get(self, fields_list):
+        values = super().default_get(fields_list)
+        if "assigned_to" in fields_list and not values.get("assigned_to"):
+            requested_by = self.env["res.users"].browse(
+                values.get("requested_by") or self.env.uid
+            )
+            company = self.env["res.company"].browse(
+                values.get("company_id") or self.env.company.id
+            )
+            approver = self._get_organizational_approver(requested_by, company)
+            if approver:
+                values["assigned_to"] = approver.id
+        return values
+
+    @api.model
+    def _get_organizational_approver(self, requested_by, company=None):
+        """Return the nearest manager linked to a user in the requester's hierarchy."""
+        if not requested_by:
+            return self.env["res.users"]
+
+        company = company or self.env.company
+        employees = requested_by.employee_ids.sudo().filtered(
+            lambda employee: not employee.company_id or employee.company_id == company
+        )
+        employee = employees[:1] or requested_by.employee_id.sudo()
+        visited = set()
+        while employee and employee.id not in visited:
+            visited.add(employee.id)
+            manager = employee.parent_id.sudo()
+            if not manager:
+                break
+            if manager.user_id and not manager.user_id.share:
+                return manager.user_id
+            employee = manager
+        return self.env["res.users"]
+
+    @api.onchange("requested_by")
+    def _onchange_requested_by_set_approver(self):
+        for request in self:
+            request.assigned_to = request._get_organizational_approver(
+                request.requested_by,
+                request.company_id,
+            )
+
+    def _check_approval_user(self):
+        for request in self:
+            if self.env.user.has_group("purchase_request.group_purchase_request_manager"):
+                continue
+            if not request.assigned_to:
+                raise UserError(
+                    self.env._(
+                        "No approver is configured for Purchase Request %(name)s. "
+                        "Set the requester's manager and link that manager to a user.",
+                        name=request.name,
+                    )
+                )
+            if request.assigned_to != self.env.user:
+                raise UserError(
+                    self.env._(
+                        "Only the assigned approver or a Purchase Request Manager "
+                        "can approve Purchase Request %(name)s.",
+                        name=request.name,
+                    )
+                )
+
+    @api.model
     def _get_partner_id(self, request):
         user_id = request.assigned_to or self.env.user
         return user_id.partner_id.id
@@ -245,18 +304,29 @@ class PurchaseRequest(models.Model):
                 vals["name"] = self._get_default_name()
         requests = super().create(vals_list)
         for vals, request in zip(vals_list, requests, strict=True):
-            if vals.get("assigned_to"):
+            if request.assigned_to:
                 partner_id = self._get_partner_id(request)
                 request.message_subscribe(partner_ids=[partner_id])
         return requests
 
     def write(self, vals):
+        if "requested_by" in vals and not self.env.context.get(
+            "skip_organizational_approver"
+        ):
+            for request in self:
+                if request.state != "draft" and request.requested_by.id != vals["requested_by"]:
+                    raise UserError(
+                        self.env._(
+                            "The requester cannot be changed after approval has been requested."
+                        )
+                    )
         res = super().write(vals)
         for request in self:
-            if vals.get("assigned_to"):
+            if vals.get("assigned_to") is not None:
                 partner_id = self._get_partner_id(request)
-                request.message_subscribe(partner_ids=[partner_id])
-                if request.state == "to_approve":
+                if partner_id:
+                    request.message_subscribe(partner_ids=[partner_id])
+                if request.state == "to_approve" and request.assigned_to:
                     request._schedule_approval_activity()
         return res
 
@@ -315,11 +385,21 @@ class PurchaseRequest(models.Model):
 
     def button_to_approve(self):
         self.to_approve_allowed_check()
+        for request in self:
+            if not request.assigned_to:
+                raise UserError(
+                    self.env._(
+                        "No approver is configured for Purchase Request %(name)s. "
+                        "Set the requester's manager and link that manager to a user.",
+                        name=request.name,
+                    )
+                )
         result = self.write({"state": "to_approve"})
         self._schedule_approval_activity()
         return result
 
     def button_approved(self):
+        self._check_approval_user()
         for request in self.filtered(lambda rec: rec.state == "to_approve"):
             request._get_approval_activities().action_feedback()
             request.write({"state": "approved"})
@@ -366,6 +446,7 @@ class PurchaseRequest(models.Model):
                 request.button_done()
 
     def button_rejected(self):
+        self._check_approval_user()
         self._get_approval_activities().unlink()
         self.mapped("line_ids").do_cancel()
         return self.write({"state": "rejected"})
