@@ -63,7 +63,7 @@
                             <field name="active"/>
                         </group>
                     </group>
-                    <notebook>
+                    <notebook name="main_nb">
                         <page name="instruction" string="Instruction">
                             <field name="instruction" nolabel="1"/>
                         </page>
@@ -358,34 +358,39 @@
                     <notebook>
                         <page name="scope" string="Scope">
                             <group>
-                                <!-- ipqc 巡检：范围=生产线(+制令单参考)；制造订单/
-                                     工序实例/工作中心/原生工序为 IQC/OQC 维度 -->
+                                <!-- 范围页归 IQC：ipqc/fai/oqc 各自的区段式表单
+                                     （mes_order_fai_views.xml）自带范围区；
+                                     制造订单/工作中心/原生工序/区域/型号仅 IQC -->
                                 <group>
-                                    <field name="production_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="production_id" invisible="inspection_type in ('ipqc', 'fai', 'oqc')"/>
                                     <field name="mes_order_id"/>
                                     <field name="route_operation_id" invisible="inspection_type == 'ipqc'"/>
-                                    <field name="workcenter_id" invisible="inspection_type == 'ipqc'"/>
-                                    <field name="operation_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="workcenter_id" invisible="inspection_type != 'iqc'"/>
+                                    <field name="operation_id" invisible="inspection_type != 'iqc'"/>
                                 </group>
                                 <group>
+                                    <!-- ipqc：范围三件套=制令单(参考)+生产线+巡检工序 -->
+                                    <field name="x_patrol_operation_id" invisible="inspection_type != 'ipqc'"/>
                                     <field name="production_line_id"/>
-                                    <field name="area_sn"/>
-                                    <field name="model_code"/>
-                                    <field name="product_id"/>
+                                    <field name="area_sn" invisible="inspection_type != 'iqc'"/>
+                                    <field name="model_code" invisible="inspection_type != 'iqc'"/>
+                                    <field name="product_id" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
-                                    <field name="picking_id"/>
-                                    <field name="move_line_id"/>
-                                    <field name="lot_id"/>
+                                    <!-- 调拨/明细行仅 IQC；批次 IQC/OQC（出货检挂批次） -->
+                                    <field name="picking_id" invisible="inspection_type != 'iqc'"/>
+                                    <field name="move_line_id" invisible="inspection_type != 'iqc'"/>
+                                    <field name="lot_id" invisible="inspection_type not in ('iqc', 'oqc')"/>
                                 </group>
-                                <group>
+                                <group invisible="inspection_type != 'iqc'">
                                     <field name="sample_window_start"/>
                                     <field name="sample_window_end"/>
                                     <field name="evidence_serial_identity_id"/>
                                 </group>
                             </group>
                         </page>
-                        <page name="sampling" string="Sampling">
+                        <page name="sampling" string="Sampling"
+                              invisible="inspection_type == 'ipqc'">
                             <group>
                                 <!-- ipqc 巡检：定时固定小样本、不用 AQL——抽样页
                                      只留方式与数量，AQL/IQC 遗留字段隐藏 -->
@@ -498,7 +503,7 @@
                                 </form>
                             </field>
                         </page>
-                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai', 'ipqc']">
+                        <page name="defects" string="Defects" invisible="inspection_type not in ['oqc', 'fai']">
                             <group>
                                 <!-- ipqc：只看抽样数量/已检/缺陷样本数（合格=已检−缺陷）；
                                      检验项口径的已检验/缺陷数量与 Ac/Re 为 OQC 维度 -->

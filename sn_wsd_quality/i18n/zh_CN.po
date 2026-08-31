@@ -159,6 +159,7 @@ msgstr "附件数量"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__attachment_ids
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__attachment_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Attachments"
 msgstr "附件"
 
@@ -413,6 +414,7 @@ msgstr "电流互感器(CT)"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_defect_line__defect_code_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__defect_code_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__defect_code_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__defect_code_id
 msgid "Defect Code"
 msgstr "缺陷代码"
 
@@ -452,6 +454,7 @@ msgstr "缺陷数量必须大于零。"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Defects"
 msgstr "缺陷"
 
@@ -897,6 +900,7 @@ msgstr "已检验数量"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__inspection_id
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_point__test_type__inspection
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__station_type__inspection
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Inspection"
 msgstr "检验/检查"
 
@@ -912,6 +916,7 @@ msgstr "检验间隔 (分钟)"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
 #: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_item
 #: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_item
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Inspection Items"
 msgstr "检验项"
 
@@ -1051,6 +1056,7 @@ msgstr "批次/序列号"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__lower_limit
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__lower_limit
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__lower_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__lower_limit
 msgid "Lower Limit"
 msgstr "下限"
 
@@ -1089,6 +1095,7 @@ msgstr "手工"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__manual_result
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__manual_result
 msgid "Manual Result"
 msgstr "手动判定结果"
 
@@ -1150,6 +1157,7 @@ msgstr "实测功率因数"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__measured_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__measured_value
 msgid "Measured Value"
 msgstr "测量值"
 
@@ -1354,6 +1362,8 @@ msgstr "备注"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_form
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__note
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__note
 msgid "Notes"
 msgstr "备注"
 
@@ -1404,7 +1414,14 @@ msgid "OQC"
 msgstr "出货检验（OQC）"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_oqc_ng_serial_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "OQC NG Samples"
+msgstr "OQC 不良产品"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_oqc_status
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_oqc_state
 msgid "OQC Status"
 msgstr "OQC 状态"
 
@@ -1834,6 +1851,7 @@ msgstr "责任用户"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__result
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__result
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__result
 msgid "Result"
 msgstr "结果"
 
@@ -1875,6 +1893,7 @@ msgstr "短信发送错误"
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__serial_no
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__serial_no
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__serial_identity_id
 msgid "SN"
 msgstr "序列号"
 
@@ -1950,6 +1969,7 @@ msgstr "方案名称"
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Scope"
 msgstr "范围"
 
@@ -2137,6 +2157,7 @@ msgstr "文本"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__text_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__text_value
 msgid "Text Value"
 msgstr "文本值"
 
@@ -2250,6 +2271,7 @@ msgstr "单位"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__upper_limit
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__upper_limit
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__upper_limit
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__upper_limit
 msgid "Upper Limit"
 msgstr "上限"
 
@@ -2558,6 +2580,8 @@ msgstr "WSD 质量检验方案项目"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__item_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__line_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Inspection Item"
 msgstr "检验项"
 
@@ -2809,6 +2833,7 @@ msgstr "样本选择"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Samples"
 msgstr "样本"
 
@@ -2854,6 +2879,7 @@ msgstr "系统等距"
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Sampling"
 msgstr "抽样"
 
@@ -2883,11 +2909,6 @@ msgid ""
 "The AQL sampling plan must be unique per standard, switching mode, sample "
 "code, and AQL."
 msgstr "同一标准、转移规则、样本量字码和 AQL 的抽样方案必须唯一。"
-
-#. module: sn_wsd_quality
-#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_sample_serial_uniq
-msgid "The same serial number can only be sampled once in one inspection."
-msgstr "同一检验中同一序列号只能抽样一次。"
 
 #. module: sn_wsd_quality
 #. odoo-python
@@ -3175,6 +3196,47 @@ msgid "Current FAI Inspection"
 msgstr "当前首件检验单"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_oqc_inspection_id
+msgid "Current OQC Inspection"
+msgstr "当前出货检验单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_oqc_inspection_ids
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_oqc.py:0
+msgid "Outgoing Inspections"
+msgstr "出货检验单"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_oqc.py:0
+msgid "Outgoing inspection is in progress on MES order %(order)s: wait for the inspection result before feeding more serial numbers."
+msgstr "制令单 %(order)s 出货检验进行中：等待检验结论后再投入新的序列号。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_oqc.py:0
+msgid "Outgoing inspection is in progress on MES order %(order)s: report at most %(remaining)s OK unit(s) in this batch."
+msgstr "制令单 %(order)s 出货检验进行中：本笔最多可报合格 %(remaining)s 台。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_oqc.py:0
+msgid "Outgoing inspection: only %(arrived)s of %(need)s samples reached the outgoing operation; wait for the full sample set."
+msgstr "出货检验：仅 %(arrived)s / %(need)s 台抽检产品到达出货工序；请等抽检产品集齐。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_oqc.py:0
+msgid "\"%s\" is not one of this round's picked products."
+msgstr "「%s」不属于本轮抽检产品。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_oqc_ng_serial_ids
+msgid "Samples that left the outgoing operation with an NG or scrap result. Unlike FAI they keep their slot: refilling would distort the AQL defect count, so they stay in the sample list and count towards the defect quantity."
+msgstr "在出货工序以 NG/报废结果出站的抽检产品。与 FAI 不同，它们保持样本名额不释放：补位会让 AQL 缺陷计数失真，因此留在样本清单中并计入不良数量。"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_sample_count
 msgid "FAI Samples Fed"
 msgstr "已投样本"
@@ -3190,14 +3252,14 @@ msgid "FAI Inspection Count"
 msgstr "首件检验数"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_online_round_base
+msgid "FAI Online Round Base"
+msgstr "首件上线轮次基线"
+
+#. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_mes_order_form_fai
 msgid "First Article"
 msgstr "首件检验"
-
-#. module: sn_wsd_quality
-#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "First Article Samples"
-msgstr "首件样本"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
@@ -3211,16 +3273,19 @@ msgstr "已投入样本"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__none
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_oqc_state__none
 msgid "None"
 msgstr "无"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__in_progress
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_oqc_state__in_progress
 msgid "In Progress"
 msgstr "进行中"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__passed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_oqc_state__passed
 msgid "Passed"
 msgstr "已通过"
 #. module: sn_wsd_quality
@@ -3262,6 +3327,108 @@ msgid "Patrol inspection of %(op)s on line %(line)s is due; sample hint: %(count
 msgstr "产线 %(line)s 的 %(op)s 巡检到期；建议抽样 %(count)s 件。"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__x_line_id
+msgid "Inspection Item"
+msgstr "检验项目"
+
+#. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "Patrol Samples"
-msgstr "巡检样本"
+msgid "Patrol Results"
+msgstr "抽检结果"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Statistics"
+msgstr "统计"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_patrol_operation_id
+msgid "Patrol Operation"
+msgstr "巡检工序"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_picked_qty
+msgid "Picked Qty"
+msgstr "实际抽检数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_picked_qty
+msgid ""
+"How many boards the inspector actually picked for this patrol. Defaults to "
+"the scheme sample size hint and stays editable."
+msgstr "本次巡检检验员实际抽取的板数。默认取方案抽样数量提示，且可继续修改。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__qty
+msgid "Qty"
+msgstr "数量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Defect Samples (scan or add manually)"
+msgstr "不良样本（扫码或手工加行）"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_sample_serial_defect_uniq
+msgid "The same serial number with the same defect code can only be recorded once in one inspection."
+msgstr "同一序列号同一缺陷代码在一张检验单只能记录一次。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_sample_qty_positive
+msgid "Sample quantity must be at least one."
+msgstr "样本数量至少为 1。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_sample_serial_qty_one
+msgid "A sample row with a serial number always stands for exactly one board."
+msgstr "带序列号的样本行数量恒为 1（一个序列号即一块板）。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "First Article Scope"
+msgstr "首件范围"
+
+#. module: sn_wsd_quality
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_cell_sample_line_uniq
+msgid "Each sample and inspection item pair can only have one result cell in one inspection."
+msgstr "同一样本与检验项在一张检验单只能有一个结果格。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_current_sn
+msgid "Inspecting SN"
+msgstr "检验中产品"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_scan
+msgid "Scan SN"
+msgstr "扫码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_ok_qty
+msgid "OK Qty"
+msgstr "合格数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_ng_qty
+msgid "NG Qty"
+msgstr "不良数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Picked Products"
+msgstr "抽检产品"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Scan or type a board SN..."
+msgstr "扫码或输入产品 SN..."
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "History"
+msgstr "历史"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Defective Products (scan)"
+msgstr "不良记录（扫不良板）"

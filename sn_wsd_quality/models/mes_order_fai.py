@@ -7,9 +7,9 @@ FAI_CONFIRM_MINUTES = 30
 
 
 class MesOrderFai(models.Model):
-    """首件检验（FAI）接线（add-mes-fai）：上线触发、投入限流、
-    出站登记、判定联动。全部钩子在质量模块继承制令单实现，
-    sn_wsd_mrp 主链不感知 FAI。"""
+    """首件检验（FAI）接线（add-mes-fai）：首台投入/首次合格报工惰性
+    建单、投入限流、出站登记、判定联动。全部钩子在质量模块继承制令单
+    实现，sn_wsd_mrp 主链不感知 FAI。"""
 
     _inherit = 'sn.wsd.mes.order'
 
@@ -38,6 +38,12 @@ class MesOrderFai(models.Model):
     )
     x_fai_inspection_count = fields.Integer(
         string='FAI Inspection Count', compute='_compute_x_fai',
+    )
+    # 上线时刻的轮次基线（oqc-entry-trigger）：惰性建单判定"再上线后
+    # 是否需要新一轮"用 计数>基线 而非时间戳比较——datetime 秒级精度
+    # 区分不了"本轮上线内判完"与"再上线前判完"的同秒场景
+    x_fai_online_round_base = fields.Integer(
+        string='FAI Online Round Base', copy=False, default=0,
     )
 
     @api.depends('x_fai_inspection_ids.state',
@@ -70,21 +76,39 @@ class MesOrderFai(models.Model):
             order.x_fai_inspection_count = len(inspections)
 
     # ------------------------------------------------------------------
-    # 触发：上线（每次上线必检，含同单再次上线→新一轮）
+    # 触发：首台投入 / 首件工序首次合格报工惰性建单（含同单再次上线→新一轮）
     # ------------------------------------------------------------------
     def action_online(self):
+        # 上线不再建单（oqc-entry-trigger D1：有产出才建单，上线时首件
+        # 尚不存在，空单无意义）；只记轮次基线——"再上线后是否需要新
+        # 一轮"用计数对比判定而非时间戳（datetime 秒级精度无法区分
+        # "本轮上线内完成"与"再上线前完成"的同秒场景，
+        # x_fai_reported_base 同源陷阱）
         res = super().action_online()
-        self._fai_on_online()  # 过站/报工模式共用状态机（add-mes-fai-report）
+        for order in self:
+            order.x_fai_online_round_base = len(order.x_fai_inspection_ids)
         return res
 
-    def _fai_on_online(self):
+    def _fai_maybe_open_round(self, route_operation=False):
         Inspection = self.env['sn.wsd.quality.inspection']
         for order in self:
+            if not order.x_online_date:
+                continue  # 下线状态不建单
             scheme = Inspection._find_scheme(
                 'fai', product=order.production_id.product_id,
                 production=order.production_id)
             if not scheme or not scheme.operation_id:
                 continue  # 未命中方案 / 方案未配首件工序 → 不触发
+            if route_operation \
+                    and route_operation.operation_id != scheme.operation_id:
+                continue  # 报工模式：非首件工序的合格报工不建单
+            inspections = order.x_fai_inspection_ids
+            if inspections.filtered(lambda i: i.state != 'done'):
+                continue  # 已有未完成轮 → 无需新开
+            if len(inspections) > order.x_fai_online_round_base:
+                # 本轮上线内已有判完的轮（通过即放行；判退轮在
+                # action_done 已即时接续）→ 不是新一轮的时机
+                continue
             order._fai_create_round(scheme)
 
     def _fai_create_round(self, scheme):
@@ -115,7 +139,7 @@ class MesOrderFai(models.Model):
         return inspection
 
     # ------------------------------------------------------------------
-    # 投入限流：样本未满 N 放行并登记，满 N 且未判定通过则拦
+    # 投入限流：首台建单、样本未满 N 放行并登记，满 N 且未判定通过则拦
     # ------------------------------------------------------------------
     def enter_station(self, serial_identity, route_operation,
                       workcenter=False):
@@ -125,6 +149,8 @@ class MesOrderFai(models.Model):
         res = super().enter_station(
             serial_identity, route_operation, workcenter=workcenter)
         if self.x_manage_mode == 'station' and route_operation.x_allow_entry:
+            # 建单在前、登记紧随 → 首台投入即建轮且该台登记为样本 1
+            self._fai_maybe_open_round()
             self._fai_register_sample(serial_identity)
         return res
 
@@ -182,6 +208,9 @@ class MesOrderFai(models.Model):
         if result == 'ok':
             if serial_identity not in inspection.x_fai_arrived_serial_ids:
                 inspection.x_fai_arrived_serial_ids = [(4, serial_identity.id)]
+            # 到检即展开该样本 × 全部检验项的结果格（幂等，仅过站模式；
+            # 逐台累铺，齐套时矩阵自然完整）
+            inspection._fai_expand_result_cells()
             if len(inspection.x_fai_arrived_serial_ids) >= inspection.sample_size \
                     and inspection.state == 'open':
                 inspection.activity_schedule(
@@ -234,7 +263,12 @@ class MesOrderFai(models.Model):
             return  # 纯 NG/报废报工：调机记账，不占样本名额
         inspection = self.x_fai_inspection_id
         if not inspection or inspection.state == 'done':
-            return
+            # 建单延迟到首件工序首次合格报工（oqc-entry-trigger）：先开轮，
+            # 本轮基数快照自然为 0，当次报工即计入已报首件台数
+            self._fai_maybe_open_round(route_operation)
+            inspection = self.x_fai_inspection_id
+            if not inspection or inspection.state == 'done':
+                return
         if route_operation.operation_id != inspection.scheme_id.operation_id:
             return  # D1：只拦首件工序的报工
         remaining = inspection.sample_size - inspection.x_fai_reported_qty
