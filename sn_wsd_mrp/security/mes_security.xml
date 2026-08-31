@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- MES 角色组已取消：制造权限只分 用户(mrp.group_mrp_user) /
-         管理员(mrp.group_mrp_manager)。本文件仅负责升级时清理历史组
-         与旧的独立权限区；引用处已全部改挂 mrp 组。 -->
-    <delete model="ir.model.access" search="['|', '|', '|', '|',
-        ('group_id', '=', ref('group_mes_planner')),
-        ('group_id', '=', ref('group_mes_shop')),
-        ('group_id', '=', ref('group_mes_warehouse')),
-        ('group_id', '=', ref('group_mes_smt_operator')),
-        ('group_id', '=', ref('group_mes_supervisor'))]"/>
-    <delete model="res.groups" id="group_mes_supervisor"/>
-    <delete model="res.groups" id="group_mes_planner"/>
-    <delete model="res.groups" id="group_mes_shop"/>
-    <delete model="res.groups" id="group_mes_warehouse"/>
-    <delete model="res.groups" id="group_mes_smt_operator"/>
-    <delete model="res.groups.privilege" id="res_groups_privilege_mes"/>
-    <delete model="ir.module.category" id="module_category_mes"/>
+         管理员(mrp.group_mrp_manager)。历史组与旧独立权限区的
+         清理已在早期升级中完成（数据库中已无对应记录），清理块
+         移除以免每次升级都对不存在的外部 ID 报 WARNING。 -->
 </odoo>
