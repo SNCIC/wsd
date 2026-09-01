@@ -8354,3 +8354,111 @@ msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，�
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Production line %(line)s already runs online MES order %(other)s; take it offline first or force this one online (which takes %(other)s offline)."
 msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，或强制上线本单（会把 %(other)s 下线）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Only manufacturing managers can clear station passes."
+msgstr "仅制造管理员可以清除过站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "SN %(sn)s has no station-pass records on MES order %(order)s."
+msgstr "SN %(sn)s 在制令单 %(order)s 上没有过站记录。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_clear_pass_log
+msgid "Station Pass Clear Log"
+msgstr "过站清除日志"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_history_count
+msgid "Cleared History Rows"
+msgstr "清除的历史行数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_wip
+msgid "Cleared WIP Row"
+msgstr "清除的在制行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__x_board_side
+msgid "Board Side"
+msgstr "面别"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__single
+msgid "Single"
+msgstr "单面"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__top
+msgid "Top (T)"
+msgstr "T面"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__bottom
+msgid "Bottom (B)"
+msgstr "B面"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is already done."
+msgstr "制令单 %(name)s 已完成。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is cancelled."
+msgstr "制令单 %(name)s 已取消。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_is_dual_side_non_final
+msgid "Dual-Sided Non-Final Side"
+msgstr "双面非最终面"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Complete Receipt"
+msgstr "完工入库"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Close (No Receipt)"
+msgstr "完结（不入库）"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Close this T-side MES order without stock receipt? Its own components (feeder-table flows, key materials, then BOM fallback) are backflushed from the line side; the boards continue on the paired side order. Normally this happens automatically when every board finishes the route."
+msgstr "完结本 T 面单（不产生库存收货）？其自身物料（先按料站表/关键物料消耗流水，再按 BOM 兜底）将从线边倒冲扣减；板子继续在对应面制令单上加工。正常情况下全部板过完工艺会自动完结，本按钮用于提前终止等特殊情况。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is not a dual-sided non-final (T-side) order; use Complete Receipt instead."
+msgstr "制令单 %(name)s 不是双面板的 T 面（非终面）单，不能完结（不入库）；请走完工入库。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Closed without receipt%(auto)s: %(boards)s board(s) finished the T-side route; %(moves)s component move(s) backflushed from the line side."
+msgstr "已完结（不入库）%(auto)s：%(boards)s 块板完成 T 面工艺；已从线边倒冲扣料 %(moves)s 笔。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid " (automatic)"
+msgstr "（自动）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES close without receipt %(order)s"
+msgstr "制令单 %(order)s 完结（不入库）倒冲"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."
+msgstr "强制上线本制令单？当前占用该产线的制令单将先被下线；已投入的在制板继续流转。"

@@ -42,7 +42,8 @@
                     <!-- the scan box: one entry for feed / leave / order switching -->
                     <div t-att-class="'o_sn_wsd_scanbox border rounded p-3 bg-view ' + (
                         state.station.mode === 'ng' ? 'o_scan_mode_ng' :
-                        state.station.mode === 'scrap' ? 'o_scan_mode_scrap' : 'o_scan_mode_ok')">
+                        state.station.mode === 'scrap' ? 'o_scan_mode_scrap' :
+                        state.station.mode === 'clear' ? 'o_scan_mode_clear' : 'o_scan_mode_ok')">
                         <div class="input-group input-group-lg">
                             <span class="input-group-text"><i class="fa fa-barcode" role="img"/></span>
                             <input class="form-control o_sn_wsd_scan_input"
@@ -75,6 +76,10 @@
                                 <button class="btn" t-att-class="state.station.mode === 'scrap' ? 'btn-dark' : 'btn-outline-dark'"
                                         t-on-click="() => this.setStationMode('scrap')">
                                     <i class="fa fa-trash me-1" role="img"/><t t-out="labels.modeScrap"/>
+                                </button>
+                                <button class="btn" t-att-class="state.station.mode === 'clear' ? 'btn-danger' : 'btn-outline-danger'"
+                                        t-on-click="() => this.setStationMode('clear')">
+                                    <i class="fa fa-eraser me-1" role="img"/><t t-out="labels.modeClear"/>
                                 </button>
                             </div>
                         </div>

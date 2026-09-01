@@ -763,20 +763,24 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=10)
         order_a = self._make_order(mo, 4)
         self._gate_online(order_a)
-        order_b = self._make_order(mo, 4)
+        # 一条产线同一时刻只有一张在线单：B 单上第二条线
+        other_line = self.env['sn.mrp.production.line'].create(
+            {'name': 'LB-BIND', 'workshop_id': self.workshop.id})
+        order_b = self._make_order(mo, 4, line=other_line)
         self._gate_online(order_b)
         wc_in, wc_out = self._done_workcenters()
+        wc_in_b = self._make_workcenter(self.op_in, line=other_line)
         serial = order_a.scan_enter('SN-BIND-001', wc_in)
         self._leave_ng(order_a, serial)
         # NG on A, not produced there -> cannot enter B
         with self.assertRaises(ValidationError):
-            order_b.scan_enter('SN-BIND-001', wc_in)
+            order_b.scan_enter('SN-BIND-001', wc_in_b)
         # a healthy board produced through the end operation is released
         serial2 = order_a.scan_enter('SN-BIND-002', wc_in)
         order_a.leave_station(serial2, 'ok')
         order_a.scan_enter('SN-BIND-002', wc_out)
         order_a.leave_station(serial2, 'ok')
-        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in)
+        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in_b)
         self.assertTrue(serial2_b)
 
     def test_47_station_scan_routing(self):
@@ -804,9 +808,10 @@ class TestMesOrder(TransactionCase):
         result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001')
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
-        # an unknown SN without a selected order is refused
-        with self.assertRaises(ValidationError):
-            Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        # 一扫内核：未知 SN 自动解析工位的在线单并投入（无在线单才拒绝）
+        result = Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        self.assertEqual(result['action'], 'entered')
+        self.assertEqual(result['order_id'], order_a.id)
         # scanning the order barcode switches the current order
         result = Station.sn_station_scan(wc_in.id, order_a.name)
         self.assertEqual(result['action'], 'select_order')

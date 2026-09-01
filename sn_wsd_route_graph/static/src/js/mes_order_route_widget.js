@@ -241,13 +241,16 @@ export class MesOrderRouteEditor extends Component {
                 markDirty();
             });
 
-            // restore the saved layout; unsaved rows fall back to a column
+            // restore the saved layout; unsaved rows fall back to a column.
+            // Stored rows default to (0, 0) -- that is "never placed", not a
+            // position: without this guard every card piles up at the origin.
             canvas.graph.nodes.forEach((n, i) => {
                 const nx = Number.parseFloat(n.x);
                 const ny = Number.parseFloat(n.y);
+                const placed = Number.isFinite(nx) && Number.isFinite(ny) && (nx || ny);
                 this._addNode(graph, n,
-                    Number.isFinite(nx) ? nx : 30,
-                    Number.isFinite(ny) ? ny : 30 + i * 90);
+                    placed ? nx : 30,
+                    placed ? ny : 30 + i * 90);
             });
             canvas.graph.edges.forEach(e => this._addEdge(graph, e));
             this._applyPortMagnets();

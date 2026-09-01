@@ -43,6 +43,7 @@
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='bom_line_ids']/list/field[@name='operation_id']" position="after">
+                <field name="x_board_side" optional="show"/>
                 <field name="substitute_rule_count" string="Subs." optional="show"/>
             </xpath>
             <xpath expr="//field[@name='bom_line_ids']" position="inside">
@@ -58,6 +59,7 @@
                             </group>
                             <group>
                                 <field name="sequence"/>
+                                <field name="x_board_side"/>
                                 <field name="operation_id" groups="mrp.group_mrp_routings"/>
                                 <field name="substitute_rule_count" readonly="1"/>
                             </group>

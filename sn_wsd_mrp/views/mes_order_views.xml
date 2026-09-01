@@ -61,9 +61,15 @@
                             invisible="state != 'released'"/>
                     <!-- 完工入库: same engine as the shop-floor terminal
                          (action_complete), kept visible on every live state;
-                         the wizard/backend carry the quantity gates -->
-                    <button name="action_open_done_wizard" type="object" string="完工入库"
-                            class="btn-primary" invisible="state not in ('released', 'picked', 'in_progress')"/>
+                         the wizard/backend carry the quantity gates.
+                         Dual-sided non-final orders (T-side) close without
+                         receipt instead — their boards continue on the
+                         paired B-side order. -->
+                    <button name="action_open_done_wizard" type="object" string="Complete Receipt"
+                            class="btn-primary" invisible="state not in ('released', 'picked', 'in_progress') or x_is_dual_side_non_final"/>
+                    <button name="action_close" type="object" string="Close (No Receipt)"
+                            class="btn-warning" invisible="state not in ('in_progress',) or not x_is_dual_side_non_final"
+                            confirm="Close this T-side MES order without stock receipt? Its own components (feeder-table flows, key materials, then BOM fallback) are backflushed from the line side; the boards continue on the paired side order. Normally this happens automatically when every board finishes the route."/>
                     <field name="state" widget="statusbar" statusbar_visible="released,picked,in_progress,done"/>
                 </header>
                 <sheet>
