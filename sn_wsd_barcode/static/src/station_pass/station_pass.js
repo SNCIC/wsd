@@ -12,6 +12,7 @@ const MODES = [
     { key: "ok", label: _t("OK") },
     { key: "ng", label: _t("NG") },
     { key: "scrap", label: _t("Scrap") },
+    { key: "clear", label: _t("Clear Pass") },
 ];
 
 // Station passing (everyone): pick a work center, pick a sticky result
@@ -114,6 +115,9 @@ export class StationPassAction extends Component {
     get scanHint() {
         if (this.state.ngPending) {
             return _t("Scan the defect code.");
+        }
+        if (this.state.mode === "clear") {
+            return _t("Scan the SN to clear.");
         }
         return _t("Scan the SN in progress.");
     }
@@ -237,6 +241,17 @@ export class StationPassAction extends Component {
     async _resolveAndLeave(code) {
         if (!this.state.selectedWorkcenterId) {
             this._setResult(_t("Select a work center first."), "warning");
+            return;
+        }
+        if (this.state.mode === "clear") {
+            // clear-pass mode: wipe the SN's traces instead of passing it
+            // (managers only, audit logged server-side)
+            const result = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_clear",
+                [this.state.selectedWorkcenterId, code]);
+            this._setResult(
+                _t("Cleared %s pass records.", result.cleared), "success");
+            await this._refreshCounts();
             return;
         }
         const hit = await this.orm.silent.call(

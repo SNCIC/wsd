@@ -933,3 +933,33 @@ msgstr "SN %(sn)s 在制令单 %(order)s 的 %(op)s 工序在制；本工位不�
 #: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
 msgid "SN %(sn)s is parked at %(op)s of order %(order)s (not the end operation): it flows on when the next station scans it. Use NG or scrap here if this station rejects it."
 msgstr "SN %(sn)s 停在制令单 %(order)s 的 %(op)s 工序（非结束工序）：下一站扫码即流转。本站判废请用 NG 或报废。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s is unknown; SNs register themselves when they enter a start operation."
+msgstr "SN %(sn)s 不存在；SN 会在进入开始工序时自动建档。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s has station-pass records on several live MES orders (%(orders)s); select one order first."
+msgstr "SN %(sn)s 在多张在线制令单（%(orders)s）上都有过站记录；请先选择一张制令单。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s has no station-pass records on a live MES order of this work center."
+msgstr "SN %(sn)s 在本工位的在线制令单上没有过站记录。"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Clear Pass"
+msgstr "清除过站"
+
+#. module: sn_wsd_workorder
+#. odoo-javascript
+#: code:addons/sn_wsd_workorder/static/src/js/shop_floor.js:0
+msgid "Cleared %s pass records."
+msgstr "已清除 %s 条过站记录。"

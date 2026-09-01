@@ -8354,3 +8354,76 @@ msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，�
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Production line %(line)s already runs online MES order %(other)s; take it offline first or force this one online (which takes %(other)s offline)."
 msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，或强制上线本单（会把 %(other)s 下线）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Only manufacturing managers can clear station passes."
+msgstr "仅制造管理员可以清除过站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "SN %(sn)s has no station-pass records on MES order %(order)s."
+msgstr "SN %(sn)s 在制令单 %(order)s 上没有过站记录。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_clear_pass_log
+msgid "Station Pass Clear Log"
+msgstr "过站清除日志"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_history_count
+msgid "Cleared History Rows"
+msgstr "清除的历史行数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_wip
+msgid "Cleared WIP Row"
+msgstr "清除的在制行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__x_board_side
+msgid "Board Side"
+msgstr "面别"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "Single Side"
+msgstr "单面"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "Top Side"
+msgstr "T面"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "Bottom Side"
+msgstr "B面"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid "All Sides"
+msgstr "全部"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is already done."
+msgstr "制令单 %(name)s 已完成。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES order %(name)s is cancelled."
+msgstr "制令单 %(name)s 已取消。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_is_dual_side_non_final
+msgid "Dual-Sided Non-Final Side"
+msgstr "双面非最终面"

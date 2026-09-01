@@ -335,6 +335,62 @@ class MesOrderStationServices(models.Model):
                 return order
         return self.env['sn.wsd.mes.order']
 
+    @api.model
+    def sn_station_clear(self, workcenter_id, code, order_id=False):
+        """Station clear entry (清除过站) shared by the PDA and the terminal.
+
+        Resolves the scanned SN against the live orders of this work center
+        -- the explicitly selected one, else the single order holding the
+        SN's pass records -- then runs the one clear kernel
+        ``action_clear_station_pass`` (managers only, audit logged).
+        Returns the cleared history-row count and the refreshed floor
+        payload."""
+        workcenter = self.env['mrp.workcenter'].browse(workcenter_id)
+        code = (code or '').strip()
+        if not code:
+            raise ValidationError(_('Nothing to scan.'))
+        serial = self.env['sn.wsd.serial.identity'].search([
+            ('name', '=', code),
+            '|',
+            ('company_id', '=', False),
+            ('company_id', '=', self.env.company.id),
+        ], limit=1)
+        if not serial:
+            raise ValidationError(_(
+                'SN %(sn)s is unknown; SNs register themselves when they '
+                'enter a start operation.', sn=code))
+        History = self.env['sn.wsd.serial.operation.history']
+        Wip = self.env['sn.wsd.serial.wip']
+        orders = (
+            History.search([('serial_identity_id', '=', serial.id)])
+            .mapped('mes_order_id')
+            | Wip.search([('serial_identity_id', '=', serial.id)])
+            .mapped('mes_order_id')
+        ).filtered(lambda o: o.state not in ('cancelled', 'done'))
+        if workcenter.x_operation_id:
+            orders = orders.filtered(lambda o: o.x_mes_route_id.operation_ids.filtered(
+                lambda r: r.operation_id == workcenter.x_operation_id))
+        if order_id:
+            # the terminal picked its order: clear there even when the SN's
+            # rows sit elsewhere -- the kernel then says "no records on it"
+            orders = orders.filtered(lambda o: o.id == order_id) \
+                or self.browse(order_id)
+        elif len(orders) > 1:
+            raise ValidationError(_(
+                'SN %(sn)s has station-pass records on several live MES '
+                'orders (%(orders)s); select one order first.',
+                sn=code, orders=', '.join(orders.mapped('name'))))
+        order = orders[:1] or self._find_live_order_for_workcenter(workcenter)
+        if not order:
+            raise ValidationError(_(
+                'SN %(sn)s has no station-pass records on a live MES order '
+                'of this work center.', sn=code))
+        cleared = order.action_clear_station_pass(serial)
+        return {
+            'cleared': cleared,
+            'data': self.sn_station_floor_data(workcenter_id),
+        }
+
     def sn_station_enter(self, sn, workcenter_id):
         """Terminal entry: this order + SN + work center."""
         workcenter = self.env['mrp.workcenter'].browse(workcenter_id)

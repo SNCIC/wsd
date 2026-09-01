@@ -62,6 +62,7 @@ const UI_LABELS = {
     okQtyLabel: _t("OK Qty"),
     ngQtyLabel: _t("NG Qty"),
     scrapBtn: _t("Scrap"),
+    modeClear: _t("Clear Pass"),
     modeNg: _t("NG mode"),
     modeOk: _t("OK pass-through"),
     modeScrap: _t("Scrap mode"),
@@ -378,6 +379,13 @@ export class SnWsdShopFloor extends Component {
             await this.onNgPendingScan(code);
             return;
         }
+        if (station.mode === "clear") {
+            // clear-pass mode: wipe the SN's traces on the selected order
+            // instead of feeding/parking it (managers only, audit logged)
+            station.scan = "";
+            await this.clearStationPass(code);
+            return;
+        }
         try {
             const result = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_scan", [
                 station.workcenterId, code, station.selectedOrderId || false,
@@ -417,6 +425,23 @@ export class SnWsdShopFloor extends Component {
             this.notifyError(error);
             this.focusScanInput();
         }
+    }
+
+    async clearStationPass(code) {
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_clear", [
+                    this.state.station.workcenterId, code,
+                    this.state.station.selectedOrderId || false,
+                ]);
+            this.applyStationData(result.data);
+            this.notification.add(
+                _t("Cleared %s pass records.", result.cleared),
+                { type: "success" });
+        } catch (error) {
+            this.notifyError(error);
+        }
+        this.focusScanInput();
     }
 
     focusScanInput() {

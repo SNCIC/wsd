@@ -97,6 +97,22 @@ class MesOrder(models.Model):
              'Report: operations are reported by quantity, no SN tracking.\n'
              'Locked once the order goes online.',
     )
+    x_is_dual_side_non_final = fields.Boolean(
+        string='Dual-Sided Non-Final Side',
+        compute='_compute_x_is_dual_side_non_final',
+        help='True when this order is a T-side (non-final) order of a '
+             'dual-sided product: it closes without stock receipt (the '
+             'paired B-side order does the final completion). Controls the '
+             '"Close" vs "Complete" button visibility.',
+    )
+
+    @api.depends('x_side', 'product_id.x_board_side')
+    def _compute_x_is_dual_side_non_final(self):
+        for order in self:
+            order.x_is_dual_side_non_final = (
+                order.product_id.x_board_side == 'double'
+                and order.x_side == 'top'
+            )
     x_online_date = fields.Datetime(
         string='Online Since', readonly=True, copy=False,
         help='Set by the "Go Online" action. SNs may only be fed in after it.',
@@ -782,6 +798,50 @@ class MesOrder(models.Model):
             'out_date': fields.Datetime.now(),
         }
 
+    def action_clear_station_pass(self, serial_identity):
+        """Clear all station-pass traces of an SN on this order (清除过站).
+
+        Deletes every history row and the WIP row of ``serial_identity`` on
+        this order, putting the SN back to "never fed in" (input/output
+        counters are stored computes on those rows and recompute by
+        themselves). Deliberately touches nothing else: FAI samples, SMT
+        points, key-material counts, quality documents and repair gates
+        stay as they are. Managers only; one audit row lands in
+        ``sn.wsd.clear.pass.log`` (who/when/what). Returns the number of
+        deleted history rows."""
+        self.ensure_one()
+        if isinstance(serial_identity, int):
+            serial_identity = self.env['sn.wsd.serial.identity'].browse(
+                serial_identity)
+        if not self.env.user.has_group('mrp.group_mrp_manager'):
+            raise ValidationError(_(
+                'Only manufacturing managers can clear station passes.'))
+        History = self.env['sn.wsd.serial.operation.history']
+        Wip = self.env['sn.wsd.serial.wip']
+        history = History.search([
+            ('serial_identity_id', '=', serial_identity.id),
+            ('mes_order_id', '=', self.id),
+        ])
+        wip = Wip.search([
+            ('serial_identity_id', '=', serial_identity.id),
+            ('mes_order_id', '=', self.id),
+        ])
+        if not history and not wip:
+            raise ValidationError(_(
+                'SN %(sn)s has no station-pass records on MES order '
+                '%(order)s.', sn=serial_identity.name, order=self.name))
+        cleared_count = len(history)
+        history.sudo().unlink()
+        wip.sudo().unlink()
+        self.env['sn.wsd.clear.pass.log'].sudo().create({
+            'mes_order_id': self.id,
+            'serial_identity_id': serial_identity.id,
+            'cleared_history_count': cleared_count,
+            'cleared_wip': bool(wip),
+            'company_id': self.company_id.id,
+        })
+        return cleared_count
+
     def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
                               qty_scrap=0.0, scrap_reason=False):
         """Report mode: report one batch of an operation.
@@ -897,7 +957,12 @@ class MesOrder(models.Model):
                 covered.add(origin.id)
 
         per_board = qty_scrap / bom.product_qty
-        for line in bom.bom_line_ids:
+        # 双面板按面别过滤：报废同一张 BOM 但只扣本面的料
+        scrap_side_lines = bom.bom_line_ids
+        if self.x_side in ('top', 'bottom'):
+            scrap_side_lines = scrap_side_lines.filtered(
+                lambda l: l.x_board_side in (self.x_side, 'all'))
+        for line in scrap_side_lines:
             need = line.product_qty * per_board
             if need <= 0.0001:
                 continue
@@ -1108,7 +1173,12 @@ class MesOrder(models.Model):
                 flow_product_ids.add(origin.id)
 
         bom_ratio = qty / bom.product_qty
-        for line in bom.bom_line_ids:
+        # 双面板按面别过滤：BOM 兜底散料只扣本面的行
+        backflush_side_lines = bom.bom_line_ids
+        if self.x_side in ('top', 'bottom'):
+            backflush_side_lines = backflush_side_lines.filtered(
+                lambda l: l.x_board_side in (self.x_side, 'all'))
+        for line in backflush_side_lines:
             if line.product_id.id in flow_product_ids:
                 continue
             consume_qty = line.product_qty * bom_ratio
@@ -1364,6 +1434,25 @@ class MesOrder(models.Model):
         picking.action_confirm()
         return picking
 
+    def action_close(self):
+        """Close a dual-sided non-final MES order (T-side): mark done
+        without any stock receipt or backflush. The physical boards stay
+        on the line and continue on the paired B-side order."""
+        for order in self:
+            if order.state == 'done':
+                raise ValidationError(_(
+                    'MES order %(name)s is already done.', name=order.name))
+            if order.state == 'cancelled':
+                raise ValidationError(_(
+                    'MES order %(name)s is cancelled.', name=order.name))
+            order.write({
+                'state': 'done',
+                'x_done_qty': order.x_output_qty,
+                'x_done_date': fields.Datetime.now(),
+            })
+            order._on_done()
+        return True
+
     def action_complete(self, qty, destination='stock', workshop=False, lot_name=False):
         """Complete (完工入库) -- the single execution entry used by both
         the form wizard and the shop-floor terminal.
@@ -1531,7 +1620,13 @@ class MesOrder(models.Model):
                 'x_is_over_pick': bool(over_reason),
                 'x_over_reason': over_reason or False,
             })
-            for line in bom.bom_line_ids:
+            # 双面板按面别过滤 BOM 行：T 面单只领 top+all，
+            # B 面单只领 bottom+all；单面产品不过滤
+            side_lines = bom.bom_line_ids
+            if order.x_side in ('top', 'bottom'):
+                side_lines = side_lines.filtered(
+                    lambda l: l.x_board_side in (order.x_side, 'all'))
+            for line in side_lines:
                 if line.x_advance_issue:
                     continue  # pre-issued to the line side, never on MES pickings
                 batch_qty = line.product_qty * batch_ratio

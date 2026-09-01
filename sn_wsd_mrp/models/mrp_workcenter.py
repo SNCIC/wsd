@@ -168,3 +168,26 @@ class MrpBom(models.Model):
              '(stored, editable) and resolve their process routes per '
              'workshop + drawing number + board side.',
     )
+
+
+BOARD_SIDE_SELECTION = [
+    ('single', 'Single Side'),
+    ('top', 'Top Side'),
+    ('bottom', 'Bottom Side'),
+    ('all', 'All Sides'),
+]
+
+
+class MrpBomLine(models.Model):
+    _inherit = 'mrp.bom.line'
+
+    x_board_side = fields.Selection(
+        BOARD_SIDE_SELECTION,
+        string='Board Side',
+        default='all',
+        help='Which side of the board this component goes on. "All Sides" '
+             'means the component is used regardless of side (bulk materials, '
+             'common connectors). The picking wizard filters BOM lines by '
+             'the MES order side (T-side orders pick top+all, B-side pick '
+             'bottom+all).',
+    )
