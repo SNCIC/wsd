@@ -957,11 +957,11 @@ class MesOrder(models.Model):
                 covered.add(origin.id)
 
         per_board = qty_scrap / bom.product_qty
-        # 双面板按面别过滤：报废同一张 BOM 但只扣本面的料
+        # 按面别过滤：报废同一张 BOM 但只扣本面的行（单面单=single 行）
         scrap_side_lines = bom.bom_line_ids
-        if self.x_side in ('top', 'bottom'):
+        if self.x_side:
             scrap_side_lines = scrap_side_lines.filtered(
-                lambda l: l.x_board_side in (self.x_side, 'all'))
+                lambda l: l.x_board_side == self.x_side)
         for line in scrap_side_lines:
             need = line.product_qty * per_board
             if need <= 0.0001:
@@ -1173,11 +1173,11 @@ class MesOrder(models.Model):
                 flow_product_ids.add(origin.id)
 
         bom_ratio = qty / bom.product_qty
-        # 双面板按面别过滤：BOM 兜底散料只扣本面的行
+        # 按面别过滤：BOM 兜底散料只扣本面的行（单面单=single 行）
         backflush_side_lines = bom.bom_line_ids
-        if self.x_side in ('top', 'bottom'):
+        if self.x_side:
             backflush_side_lines = backflush_side_lines.filtered(
-                lambda l: l.x_board_side in (self.x_side, 'all'))
+                lambda l: l.x_board_side == self.x_side)
         for line in backflush_side_lines:
             if line.product_id.id in flow_product_ids:
                 continue
@@ -1620,12 +1620,11 @@ class MesOrder(models.Model):
                 'x_is_over_pick': bool(over_reason),
                 'x_over_reason': over_reason or False,
             })
-            # 双面板按面别过滤 BOM 行：T 面单只领 top+all，
-            # B 面单只领 bottom+all；单面产品不过滤
+            # 按面别过滤 BOM 行：领料只领本面的行（单面单=single 行）
             side_lines = bom.bom_line_ids
-            if order.x_side in ('top', 'bottom'):
+            if order.x_side:
                 side_lines = side_lines.filtered(
-                    lambda l: l.x_board_side in (order.x_side, 'all'))
+                    lambda l: l.x_board_side == order.x_side)
             for line in side_lines:
                 if line.x_advance_issue:
                     continue  # pre-issued to the line side, never on MES pickings

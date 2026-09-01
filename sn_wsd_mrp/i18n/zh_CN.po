@@ -8388,28 +8388,19 @@ msgid "Board Side"
 msgstr "面别"
 
 #. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid "Single Side"
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__single
+msgid "Single"
 msgstr "单面"
 
 #. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid "Top Side"
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__top
+msgid "Top (T)"
 msgstr "T面"
 
 #. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid "Bottom Side"
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_bom_line__x_board_side__bottom
+msgid "Bottom (B)"
 msgstr "B面"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid "All Sides"
-msgstr "全部"
 
 #. module: sn_wsd_mrp
 #. odoo-python

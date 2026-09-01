@@ -171,10 +171,9 @@ class MrpBom(models.Model):
 
 
 BOARD_SIDE_SELECTION = [
-    ('single', 'Single Side'),
-    ('top', 'Top Side'),
-    ('bottom', 'Bottom Side'),
-    ('all', 'All Sides'),
+    ('single', 'Single'),
+    ('top', 'Top (T)'),
+    ('bottom', 'Bottom (B)'),
 ]
 
 
@@ -184,10 +183,28 @@ class MrpBomLine(models.Model):
     x_board_side = fields.Selection(
         BOARD_SIDE_SELECTION,
         string='Board Side',
-        default='all',
-        help='Which side of the board this component goes on. "All Sides" '
-             'means the component is used regardless of side (bulk materials, '
-             'common connectors). The picking wizard filters BOM lines by '
-             'the MES order side (T-side orders pick top+all, B-side pick '
-             'bottom+all).',
+        help='Which side of the board this component goes on. New lines '
+             'default to the board type: single-board products default to '
+             'Single, double-board products to Top (T). Pickings, backflush '
+             'and scrap filter BOM lines by the MES order side.',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # 面别默认跟随 BOM 产品板型：单面板→single，双面板→top。
+        # 不给字段级默认：所有创建路径（表单/脚本/复制）统一走这里。
+        Bom = self.env['mrp.bom']
+        for vals in vals_list:
+            if not vals.get('x_board_side'):
+                template = Bom.browse(vals.get('bom_id')).product_tmpl_id
+                vals['x_board_side'] = (
+                    'top' if template.x_board_side == 'double' else 'single')
+        return super().create(vals_list)
+
+    @api.onchange('product_id')
+    def _onchange_product_id_board_side(self):
+        """新行面别跟随 BOM 产品板型：单面板→单面，双面板→T面。"""
+        for line in self:
+            template = line.bom_id.product_tmpl_id
+            line.x_board_side = (
+                'top' if template.x_board_side == 'double' else 'single')
