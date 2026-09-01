@@ -48,6 +48,7 @@ class MrpProduction(models.Model):
 
     x_nameplate_begin = fields.Char(string='Nameplate Begin')
     x_nameplate_end = fields.Char(string='Nameplate End')
+    x_contract_no = fields.Char(string='Contract No')
 
     @api.onchange('product_id')
     def _onchange_x_route_id_from_drawing_no(self):

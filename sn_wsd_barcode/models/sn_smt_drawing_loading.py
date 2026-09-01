@@ -154,22 +154,15 @@ class MesOrderDrawingSplit(models.Model):
             order._prepare_drawing_online_materials()
         return res
 
-    def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False, operator_code=False):
-        # 关键物料计数时机：出站工序 == 行挂的工序（=清单维护的工序）。
-        # 先取 WIP 所在工序（super 会清掉 WIP 行），出站 OK 后对当前工序
-        # 已上线的制具/辅料个体各计一次（按板计；API 拼板逐板过内核各 +1）。
-        wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id', '=', serial_identity.id),
-            ('mes_order_id', '=', self.id),
-        ], limit=1)
-        route_operation = wip.route_operation_id
-        finished = super().leave_station(
-            serial_identity, result, scrap_reason=scrap_reason,
-            ng_defect=ng_defect, operator_code=operator_code)
-        if result == 'ok' and route_operation:
-            self._register_drawing_usage(route_operation)
-        return finished
+    def enter_station(self, serial_identity, route_operation,
+                      workcenter=False):
+        # 关键物料计数时机（到站口径，2026-08-31 用户规则）：清单维护
+        # 哪个工序，板到站该工序时就对已上线的制具/辅料个体计一次使用
+        # （按板计）；出站与其他工序不再计数。
+        res = super().enter_station(
+            serial_identity, route_operation, workcenter=workcenter)
+        self._register_drawing_usage(route_operation)
+        return res
 
     def _register_drawing_usage(self, route_operation):
         """当前工序在线的制具/辅料个体计使用次数（关键物料清单行；

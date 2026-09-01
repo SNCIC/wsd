@@ -99,6 +99,22 @@ class MesOrderFai(models.Model):
                 production=order.production_id)
             if not scheme or not scheme.operation_id:
                 continue  # 未命中方案 / 方案未配首件工序 → 不触发
+            # 双面产品 T/B 各配一套方案（同产品同工序字典不同面）：
+            # 只认首件工序在本单路线上的方案——面别不对的方案对这张单
+            # 永远等不到样本到位，属于错配
+            order_op_ids = set(
+                order.x_mes_route_id.operation_ids.mapped('operation_id').ids)
+            if scheme.operation_id.id not in order_op_ids:
+                alt = Inspection.search([
+                    ('inspection_type', '=', 'fai'),
+                    ('state', '=', 'effective'),
+                    ('active', '=', True),
+                    ('operation_id', 'in', list(order_op_ids)),
+                ]).filtered(lambda s: s._matches_product_scope(
+                    order.production_id.product_id) and s.operation_id)
+                scheme = alt[:1]
+                if not scheme:
+                    continue
             if route_operation \
                     and route_operation.operation_id != scheme.operation_id:
                 continue  # 报工模式：非首件工序的合格报工不建单
@@ -153,6 +169,44 @@ class MesOrderFai(models.Model):
             self._fai_maybe_open_round()
             self._fai_register_sample(serial_identity)
         return res
+
+    def must_hold_for_fai(self, serial_identity, next_route_operation):
+        """First-article hold: a sample board that has (just) completed the
+        first-article operation must wait for the round verdict -- the
+        operation directly downstream of the first-article operation may
+        not take it over yet. Returns the open inspection when the hold
+        applies, else an empty recordset. The one-scan kernel calls this
+        BEFORE parking a board downstream so the arrival registration
+        (the first-article OK written by the same pull) is not rolled back.
+        """
+        self.ensure_one()
+        if self.x_manage_mode != 'station':
+            return self.env['sn.wsd.quality.inspection']
+        inspection = self.x_fai_inspection_id
+        if not inspection or inspection.state == 'done':
+            return self.env['sn.wsd.quality.inspection']
+        first_article_op = inspection.scheme_id.operation_id
+        if not first_article_op:
+            return self.env['sn.wsd.quality.inspection']
+        if next_route_operation.operation_id == first_article_op:
+            return self.env['sn.wsd.quality.inspection']
+        if first_article_op not in next_route_operation.blocked_by_ids.mapped(
+                'operation_id'):
+            return self.env['sn.wsd.quality.inspection']
+        if serial_identity in inspection.x_fai_serial_ids \
+                or serial_identity in inspection.x_fai_arrived_serial_ids:
+            return inspection
+        return self.env['sn.wsd.quality.inspection']
+
+    def fai_hold_message(self, serial_identity, inspection):
+        self.ensure_one()
+        return _(
+            'First article confirmation is in progress on MES order '
+            '%(order)s: SN %(sn)s passed the first-article operation '
+            '%(op)s and waits for the inspection result before the next '
+            'operation can take it over.',
+            order=self.name, sn=serial_identity.name,
+            op=inspection.scheme_id.operation_id.display_name)
 
     def _fai_gate_feeding(self, serial_identity):
         self.ensure_one()

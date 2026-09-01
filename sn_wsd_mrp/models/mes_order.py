@@ -392,9 +392,16 @@ class MesOrder(models.Model):
                 continue
             order.x_mes_route_id = MesRoute._build_from_common(order).id
 
-    def action_online(self):
+    def action_online_force(self):
+        """Go Online button variant: takes the MES order occupying the
+        production line offline first (one online order per line)."""
+        return self.action_online(force=True)
+
+    def action_online(self, force=False):
         """Put the order online: SN feeding is allowed from this moment on,
-        the mode is locked and the common route stops auto-syncing in."""
+        the mode is locked and the common route stops auto-syncing in.
+        ``force`` takes the MES order currently occupying the production
+        line offline first (one online order per line)."""
         for order in self:
             if order.x_online_date:
                 raise ValidationError(_(
@@ -409,6 +416,23 @@ class MesOrder(models.Model):
                 raise ValidationError(_(
                     'MES order %(name)s has no material requisition yet; '
                     'issue material before going online.', name=order.name))
+            # 一条产线同一时刻只能有一张在线制令单：默认拦下并指明占
+            # 用者；force 模式（强制上线）先把占用单下线再上线本单
+            occupying = self.search([
+                ('production_line_id', '=', order.production_line_id.id),
+                ('id', '!=', order.id),
+                ('state', 'not in', ('cancelled', 'done')),
+                ('x_online_date', '!=', False),
+            ])
+            if occupying:
+                if not force:
+                    raise ValidationError(_(
+                        'Production line %(line)s already runs online MES order '
+                        '%(other)s; take it offline first or force this one '
+                        'online (which takes %(other)s offline).',
+                        line=order.production_line_id.display_name or '-',
+                        other=', '.join(occupying.mapped('name'))))
+                occupying.action_offline()
             order.x_online_date = fields.Datetime.now()
             # 正常业务序（排产→领料→上线）走完的单停在 picked：
             # 上线即投产，released/picked 都转入 in_progress，否则
@@ -510,6 +534,17 @@ class MesOrder(models.Model):
     # ------------------------------------------------------------------
     # station entry by work center (the field-facing interface)
     # ------------------------------------------------------------------
+    def _station_successors(self, route_operation):
+        """Direct successors of a route operation on this order's route.
+
+        Used by the one-scan pass kernel: after an operation completes a
+        board with OK, the board is auto-parked at the next station when
+        exactly one successor exists (a fork cannot auto-route -- the
+        branch station's own scan picks the board up)."""
+        self.ensure_one()
+        return self.x_mes_route_id.operation_ids.filtered(
+            lambda r: route_operation in r.blocked_by_ids)
+
     def _resolve_route_operation(self, workcenter):
         """Map a work center onto the private-route row of this order.
 
@@ -807,7 +842,15 @@ class MesOrder(models.Model):
 
     def _mes_scrap_components(self, route_operation, qty_scrap, scrap_reason=False):
         """Scrap the BOM components of qty_scrap boards from the line side
-        through native scrap orders (stock.scrap), validated immediately."""
+        through native scrap orders (stock.scrap), validated immediately.
+
+        Lot-tracked components are scrapped from the reels this order
+        actually scanned online (consumption flows, each lot taking its
+        net-flow share) -- never without a lot, which would drive a
+        lot-tracked line-side quant negative. Untracked components (screws,
+        standard parts) fall back to the BoM ratio; a tracked component
+        without consumption flows is a hard stop, mirroring the completion
+        backflush."""
         self.ensure_one()
         bom = self.production_id.bom_id
         if not bom or not bom.product_qty:
@@ -822,14 +865,11 @@ class MesOrder(models.Model):
                 ws=self.production_line_id.workshop_id.display_name,
                 order=self.name))
         Scrap = self.env['stock.scrap']
-        ratio = qty_scrap / bom.product_qty
-        for line in bom.bom_line_ids:
-            scrap_qty = line.product_qty * ratio
-            if scrap_qty <= 0.0001:
-                continue
-            Scrap.sudo().create({
-                'product_id': line.product_id.id,
-                'product_uom_id': line.product_uom_id.id,
+
+        def scrap_vals(product, lot, scrap_qty):
+            vals = {
+                'product_id': product.id,
+                'product_uom_id': product.uom_id.id,
                 'scrap_qty': scrap_qty,
                 'location_id': line_side.id,
                 'origin': self.name,
@@ -838,7 +878,49 @@ class MesOrder(models.Model):
                           reason=scrap_reason.display_name),
                 'x_scrap_reason_id': scrap_reason.id if scrap_reason else False,
                 'company_id': self.company_id.id,
-            }).do_scrap()
+            }
+            if lot:
+                vals['lot_id'] = lot.id
+            return vals
+
+        # flow lots per product: the reels this order scanned online
+        lots_by_product = {}
+        for lot, net_qty in self._mes_flow_net_by_lot().items():
+            if net_qty > 0.0001:
+                lots_by_product.setdefault(lot.product_id.id, []).append((lot, net_qty))
+        covered = set(lots_by_product)
+        if covered:
+            # BoM lines substituted by a scanned flow product are covered too
+            for origin in self.env['product.product'].search([
+                ('substitute_ids', 'in', list(covered)),
+            ]):
+                covered.add(origin.id)
+
+        per_board = qty_scrap / bom.product_qty
+        for line in bom.bom_line_ids:
+            need = line.product_qty * per_board
+            if need <= 0.0001:
+                continue
+            if line.product_id.id in covered:
+                total_net = sum(
+                    net for _, net in lots_by_product[line.product_id.id])
+                for lot, net_qty in lots_by_product[line.product_id.id]:
+                    scrap_qty = need * net_qty / total_net
+                    if scrap_qty <= 0.0001:
+                        continue
+                    Scrap.sudo().create(
+                        scrap_vals(line.product_id, lot, scrap_qty)
+                    ).do_scrap()
+                continue
+            if line.product_id.tracking != 'none':
+                raise ValidationError(_(
+                    'Component %(product)s of MES order %(order)s is lot/'
+                    'serial tracked but has no consumption flows: load the '
+                    'material and pass the stations first, or review the BOM.',
+                    product=line.product_id.display_name, order=self.name))
+            Scrap.sudo().create(
+                scrap_vals(line.product_id, False, need)
+            ).do_scrap()
 
     # ------------------------------------------------------------------
     # state transitions

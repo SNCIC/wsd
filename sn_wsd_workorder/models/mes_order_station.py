@@ -158,25 +158,109 @@ class MesOrderStationServices(models.Model):
                 'wip_id': wip.id,
                 'order_id': wip.mes_order_id.id,
             }
-        # 3) a WIP SN parked at another operation
+        # 3) a WIP SN parked at another operation: this scan is its ARRIVAL
+        #    here -- the parked operation completes OK and the board moves
+        #    into this station's WIP (one scan per board per station)
         elsewhere = Wip.search([
             ('serial_identity_id.name', '=', code),
             ('mes_order_id.state', 'not in', ('cancelled', 'done')),
         ], limit=1)
         if elsewhere:
-            raise ValidationError(_(
-                'SN %(sn)s is in progress at operation %(op)s of order '
-                '%(order)s; use the matching station.',
-                sn=code, op=elsewhere.route_operation_id.display_label,
-                order=elsewhere.mes_order_id.name))
-        # 4) new SN -> feed the currently selected order (start stations)
-        if not order_id:
+            target = elsewhere.mes_order_id
+            op_row = target.x_mes_route_id.operation_ids.filtered(
+                lambda o: o.operation_id == workcenter.x_operation_id)
+            if not op_row:
+                raise ValidationError(_(
+                    'SN %(sn)s is in progress at operation %(op)s of order '
+                    '%(order)s; this work center runs no operation of that '
+                    'order.', sn=code,
+                    op=elsewhere.route_operation_id.display_label,
+                    order=target.name))
+            passed = self.env['sn.wsd.serial.operation.history'].search_count([
+                ('serial_identity_id', '=', elsewhere.serial_identity_id.id),
+                ('mes_order_id', '=', target.id),
+                ('route_operation_id', '=', op_row.id),
+                ('result', '=', 'ok'),
+            ])
+            if passed:
+                raise ValidationError(_(
+                    'SN %(sn)s already passed %(op)s of order %(order)s.',
+                    sn=code, op=op_row.display_label, order=target.name))
+            # the parked operation hands the board over with OK; the enter
+            # below validates reachability against the fresh history row.
+            # Cache the fields first -- leave_station unlinks the WIP row,
+            # and stale record reads would raise MissingError.
+            serial_rec = elsewhere.serial_identity_id
+            held = target.must_hold_for_fai(serial_rec, op_row)
+            target.leave_station(serial_rec, 'ok')
+            # 首件保持：出站 OK 已把到位登记落库；检验未判定时下一工序
+            # 不得接板——板停在途，判定通过后再扫即接走（不得 raise 回滚
+            # 到位登记）
+            if held:
+                return {
+                    'action': 'entered',
+                    'order_id': target.id,
+                    'data': self.sn_station_floor_data(workcenter_id),
+                    'message': target.fai_hold_message(serial_rec, held),
+                }
+            target.scan_enter(code, workcenter)
+            if op_row.x_allow_exit:
+                return self._leave_action(code, target)
+            return {
+                'action': 'entered',
+                'order_id': target.id,
+                'data': self.sn_station_floor_data(workcenter_id),
+            }
+        # 4) no WIP row anywhere: new SN feeding (start operations only)
+        #    or an in-flow SN in transit (e.g. after a device report at a
+        #    fork) being picked up by this station
+        target = self.browse(order_id) if order_id \
+            else self._find_live_order_for_workcenter(workcenter)
+        if not target:
             raise ValidationError(_(
                 'Unknown SN %(sn)s: select a MES order first (scan its '
                 'barcode or tap it below).', sn=code))
-        target = self.browse(order_id)
         op_row = target.x_mes_route_id.operation_ids.filtered(
             lambda o: o.operation_id == workcenter.x_operation_id)
+        if not op_row:
+            raise ValidationError(_(
+                'Work center %(wc)s runs no operation of MES order '
+                '%(order)s.', wc=workcenter.display_name, order=target.name))
+        History = self.env['sn.wsd.serial.operation.history']
+        serial = self.env['sn.wsd.serial.identity'].search([
+            ('name', '=', code),
+            '|',
+            ('company_id', '=', False),
+            ('company_id', '=', target.company_id.id),
+        ], limit=1)
+        in_flow = serial and History.search_count([
+            ('serial_identity_id', '=', serial.id),
+            ('mes_order_id', '=', target.id),
+        ])
+        if in_flow:
+            passed = History.search_count([
+                ('serial_identity_id', '=', serial.id),
+                ('mes_order_id', '=', target.id),
+                ('route_operation_id', '=', op_row.id),
+                ('result', '=', 'ok'),
+            ])
+            if passed:
+                raise ValidationError(_(
+                    'SN %(sn)s already passed %(op)s of order %(order)s.',
+                    sn=code, op=op_row.display_label, order=target.name))
+            # 首件保持：样本在途且首件未判定 → 下道工序不得接板
+            held = target.must_hold_for_fai(serial, op_row)
+            if held:
+                raise ValidationError(target.fai_hold_message(serial, held))
+            # transit pickup: the upstream op is already OK in the history
+            target.scan_enter(code, workcenter)
+            if op_row.x_allow_exit:
+                return self._leave_action(code, target)
+            return {
+                'action': 'entered',
+                'order_id': target.id,
+                'data': self.sn_station_floor_data(workcenter_id),
+            }
         if op_row and not op_row.x_allow_entry:
             raise ValidationError(_(
                 'Feeding happens at a start operation only: this work '
@@ -184,57 +268,72 @@ class MesOrderStationServices(models.Model):
                 'station to feed SN %(sn)s.',
                 op=op_row.display_label, order=target.name, sn=code))
         target.scan_enter(code, workcenter)
-        if op_row and op_row.x_allow_entry and op_row.x_allow_exit:
-            # 首尾同工序：一次扫码完成投入+出站——把刚建的 WIP 直接交给
-            # 出站动作，前端按当前 OK/NG/报废模式处理（与设备 API 的
-            # _pass_station「enter 后紧跟 leave」口径一致）
-            wip = self.env['sn.wsd.serial.wip'].search([
-                ('serial_identity_id.name', '=', code),
-                ('mes_order_id', '=', target.id),
-            ], limit=1)
-            return {
-                'action': 'leave',
-                'wip_id': wip.id,
-                'order_id': target.id,
-            }
         return {
             'action': 'entered',
             'order_id': target.id,
             'data': self.sn_station_floor_data(workcenter_id),
         }
 
+    def _leave_action(self, code, target):
+        """WIP row of `code` on `target` as the leave payload for the
+        frontend (the station completes the board with its OK/NG/scrap
+        mode)."""
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', code),
+            ('mes_order_id', '=', target.id),
+        ], limit=1)
+        return {
+            'action': 'leave',
+            'wip_id': wip.id,
+            'order_id': target.id,
+        }
+
     @api.model
     def sn_station_scan_leave(self, workcenter_id, code):
-        """PDA station-pass scan: resolve the WIP row a scanned SN must
-        leave at this work center's operation. Exit-only by contract --
-        no order switching, no feeding: an unknown SN is an error, never
-        an entry."""
-        workcenter = self.env['mrp.workcenter'].browse(workcenter_id)
-        if not workcenter.exists() or not workcenter.x_operation_id:
-            raise ValidationError(_('No operation is set on this work center.'))
-        code = (code or '').strip()
-        if not code:
-            raise ValidationError(_('Nothing to scan.'))
-        Wip = self.env['sn.wsd.serial.wip']
-        wip = Wip.search([
-            ('serial_identity_id.name', '=', code),
-            ('route_operation_id.operation_id', '=', workcenter.x_operation_id.id),
+        """PDA station-pass scan: same one-scan kernel as the terminal.
+
+        Returns ``{'wip_id', 'order_id', 'leave'}``: ``leave=True`` means
+        the station must complete the board now with its OK/NG/scrap mode
+        (end operation, or NG/scrap on a parked board); ``leave=False``
+        means the scan merely parked the board here (feeding or arrival
+        pull) and the caller must NOT call sn_station_leave."""
+        result = self.sn_station_scan(workcenter_id, code, False)
+        if result.get('action') == 'leave':
+            return {
+                'wip_id': result['wip_id'],
+                'order_id': result['order_id'],
+                'leave': True,
+            }
+        # entered / select_order: nothing to leave -- surface the parked
+        # WIP row (if any) so the caller can refresh its counters
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', (code or '').strip()),
+            ('route_operation_id.operation_id', '=',
+             self.env['mrp.workcenter'].browse(workcenter_id).x_operation_id.id),
             ('mes_order_id.state', 'not in', ('cancelled', 'done')),
         ], limit=1)
-        if wip:
-            return {'wip_id': wip.id, 'order_id': wip.mes_order_id.id}
-        elsewhere = Wip.search([
-            ('serial_identity_id.name', '=', code),
-            ('mes_order_id.state', 'not in', ('cancelled', 'done')),
-        ], limit=1)
-        if elsewhere:
-            raise ValidationError(_(
-                'SN %(sn)s is in progress at operation %(op)s of order '
-                '%(order)s; use the matching station.',
-                sn=code, op=elsewhere.route_operation_id.display_label,
-                order=elsewhere.mes_order_id.name))
-        raise ValidationError(_(
-            'SN %(sn)s is not in progress at this station.', sn=code))
+        return {
+            'wip_id': wip.id if wip else False,
+            'order_id': wip.mes_order_id.id if wip else False,
+            'leave': False,
+        }
+
+    def _find_live_order_for_workcenter(self, workcenter):
+        """The online station-mode MES order running through this work center."""
+        if not workcenter or not workcenter.x_operation_id:
+            return self.env['sn.wsd.mes.order']
+        orders = self.search([
+            ('state', 'not in', ('cancelled', 'done')),
+            ('x_online_date', '!=', False),
+            ('x_manage_mode', '=', 'station'),
+        ]).filtered(lambda o: (
+            not workcenter.x_production_line_id
+            or o.production_line_id == workcenter.x_production_line_id))
+        for order in orders:
+            if order.x_mes_route_id.operation_ids.filtered(
+                    lambda r: r.operation_id == workcenter.x_operation_id):
+                return order
+        return self.env['sn.wsd.mes.order']
 
     def sn_station_enter(self, sn, workcenter_id):
         """Terminal entry: this order + SN + work center."""
@@ -249,6 +348,17 @@ class MesOrderStationServices(models.Model):
         wip = self.env['sn.wsd.serial.wip'].browse(wip_id)
         # capture before leave_station unlinks the WIP row
         workcenter_id = wip.workcenter_id.id or False
+        if result == 'ok' and not wip.route_operation_id.x_allow_exit:
+            # one-scan kernel: a mid-route station completes its boards when
+            # the NEXT station scans them (arrival pull); an OK scan on a
+            # board still parked here would write the OK prematurely
+            raise ValidationError(_(
+                'SN %(sn)s is parked at %(op)s of order %(order)s (not the '
+                'end operation): it flows on when the next station scans '
+                'it. Use NG or scrap here if this station rejects it.',
+                sn=wip.serial_identity_id.name,
+                op=wip.route_operation_id.display_label,
+                order=wip.mes_order_id.name))
         reason = self.env['sn.wsd.scrap.reason'].browse(
             int(scrap_reason_id) if scrap_reason_id else False)
         defect = self.env['sn.wsd.quality.defect.code'].browse(

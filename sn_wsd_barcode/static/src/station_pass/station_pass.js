@@ -242,6 +242,15 @@ export class StationPassAction extends Component {
         const hit = await this.orm.silent.call(
             "sn.wsd.mes.order", "sn_station_scan_leave",
             [this.state.selectedWorkcenterId, code]);
+        if (!hit.leave) {
+            // one-scan kernel: the scan parked the board at this station
+            // (feeding or arrival pull) -- no completion happens here
+            this._setResult(
+                _t("SN %s parked at %s.", code, this.state.operationLabel || ""),
+                "success");
+            await this._refreshCounts();
+            return;
+        }
         if (this.state.mode === "ng") {
             // two-step NG: hold the WIP row, wait for the defect code scan
             this.state.ngPending = { wipId: hit.wip_id, sn: code };
@@ -321,7 +330,13 @@ export class StationPassAction extends Component {
                 _t("SN %s scrapped.", dialog.sn), "success");
             await this._refreshCounts();
         } catch (error) {
+            // surface the failure inside the dialog -- the result strip
+            // sits behind the modal backdrop and would hide it
             this._error(error);
+            if (this.state.scrapDialog) {
+                this.state.scrapDialog.error =
+                    error.data?.message || error.message || String(error);
+            }
         } finally {
             this.state.loading = false;
             this.focusInput();

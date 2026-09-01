@@ -15,7 +15,7 @@ const SMT_OPS = new Set(["smt_offline_prepare", "smt_online_load", "smt_cart_loa
 // SMT material operations collapsed into one sub-mode button: picking a
 // pill routes to the same step flows the old top-level buttons used
 const SMT_MATERIAL_ACTIONS = [
-    { key: "smt_online_load", label: _t("Load") },
+    { key: "smt_online_load", label: _t("Load Material") },
     { key: "smt_offline_prepare", label: _t("Prepare") },
     { key: "smt_unload", label: _t("Unload") },
     { key: "smt_material_refill", label: _t("Refill") },
@@ -710,6 +710,9 @@ export class WorkshopOperationAction extends Component {
             return;
         }
         const payload = { action: this.state.equipmentAction, sn };
+        if (this.state.selectedStationId) {
+            payload.workcenter_id = this.state.selectedStationId;
+        }
         if (this.equipmentActionDef?.extra && this.state.equipmentExtra) {
             payload[this.equipmentActionDef.extra] = this.state.equipmentExtra;
         }

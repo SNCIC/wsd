@@ -3432,3 +3432,15 @@ msgstr "历史"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
 msgid "Defective Products (scan)"
 msgstr "不良记录（扫不良板）"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
+msgid "First article confirmation is in progress on MES order %(order)s: SN %(sn)s passed the first-article operation %(op)s and waits for the inspection result before the next operation can take it over."
+msgstr "制令单 %(order)s 首件确认中：SN %(sn)s 已过首件工序 %(op)s，等待检验结论后下一工序才能接板。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "\"%s\" is not one of this round's picked products (boards must reach the first-article operation first)."
+msgstr "\"%s\" 不在本轮已到检样本中（板须先过首件工序到检）。"
