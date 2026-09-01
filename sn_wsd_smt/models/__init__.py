@@ -8,3 +8,4 @@ from . import sn_smt_consumption
 from . import sn_smt_loading_service
 from . import stock_lot
 from . import sn_smt_pcb_panel
+from . import sn_smt_pcb_panel_api

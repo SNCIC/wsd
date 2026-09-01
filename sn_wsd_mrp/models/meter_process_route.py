@@ -787,7 +787,11 @@ class MeterProcessRoute(models.Model):
         skip = self.env.context.get('sn_wsd_skip_flow_versioning')
         routes = super().create(vals_list)
         if not skip:
-            routes.filtered(lambda r: r.route_flow_json)._apply_flow_versioning()
+            # 无流程图 JSON 的路线（如 ORM 直建、无画布保存）不参与版本化：
+            # filtered 结果可能为空，ensure_one 会把空记录集当错误抛出。
+            flow_routes = routes.filtered(lambda r: r.route_flow_json)
+            if len(flow_routes) == 1:
+                flow_routes._apply_flow_versioning()
         return routes
 
     def _check_route_graph_cycle(self, adjacency):

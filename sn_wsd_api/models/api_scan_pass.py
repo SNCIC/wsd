@@ -130,31 +130,60 @@ class SnWsdApiService(models.AbstractModel):
     # station kernel orchestration (one report = one station pass)
     # ------------------------------------------------------------------
     def _pass_station(self, identity, workcenter, result, defect, employee):
-        """Route one identity through the station kernel, mirroring the
-        terminal: WIP at this operation -> leave; parked elsewhere ->
-        error; not in flow -> enter (feed) then leave."""
+        """Route one identity through the one-scan station kernel, shared
+        with the terminal/PDA channels.
+
+        A device report at X means X finished this board: an SN parked at
+        another operation is pulled forward (that operation completes OK,
+        the board enters X), then X's own result is written. An OK at a
+        non-end operation auto-parks the board at the next station when the
+        route is linear; a fork leaves it in transit for the branch
+        station's own scan."""
         Wip = self.env['sn.wsd.serial.wip']
         operator_code = (
             employee.barcode
             or (employee.user_id.login if employee.user_id else False))
         wip = Wip.search([('serial_identity_id', '=', identity.id)], limit=1)
         if wip:
-            if wip.route_operation_id.operation_id != workcenter.x_operation_id:
-                raise ValidationError(_(
-                    'SN %(sn)s is in progress at operation %(op)s of order '
-                    '%(order)s; use the matching station.',
-                    sn=identity.name,
-                    op=wip.route_operation_id.display_label,
-                    order=wip.mes_order_id.name))
             mes_order = wip.mes_order_id
-            return mes_order.leave_station(
+            route_op = wip.route_operation_id
+            if route_op.operation_id != workcenter.x_operation_id:
+                # arrival pull: the parked operation hands the board over
+                mes_order.leave_station(identity, 'ok',
+                                        operator_code=operator_code)
+                target_op = mes_order.x_mes_route_id.operation_ids.filtered(
+                    lambda r: r.operation_id == workcenter.x_operation_id)[:1]
+                # 首件保持：到位已随出站登记，检验未判定时本站不接板——
+                # 板停在途（不 raise，防止回滚到位登记）
+                if mes_order.must_hold_for_fai(identity, target_op):
+                    return False, mes_order
+                mes_order.scan_enter(identity.name, workcenter)
+                route_op = target_op
+            finished = mes_order.leave_station(
                 identity, result, ng_defect=defect,
-                operator_code=operator_code), mes_order
+                operator_code=operator_code)
+            if result != RESULT_FAIL and not finished:
+                self._park_at_successor(mes_order, route_op, identity)
+            return finished, mes_order
         mes_order = self._find_live_order(workcenter)
         mes_order.scan_enter(identity.name, workcenter)
-        return mes_order.leave_station(
+        route_op = mes_order.x_mes_route_id.operation_ids.filtered(
+            lambda r: r.operation_id == workcenter.x_operation_id)[:1]
+        finished = mes_order.leave_station(
             identity, result, ng_defect=defect,
-            operator_code=operator_code), mes_order
+            operator_code=operator_code)
+        if result != RESULT_FAIL and not finished:
+            self._park_at_successor(mes_order, route_op, identity)
+        return finished, mes_order
+
+    def _park_at_successor(self, mes_order, route_op, identity):
+        """After an OK at a non-end operation, park the board at the next
+        station when the route is linear; forks stay in transit (the branch
+        station's own scan picks the board up)."""
+        successor = mes_order._station_successors(route_op)[:1]
+        if successor:
+            mes_order.enter_station(
+                identity, successor, workcenter=successor.workcenter_id)
 
     # ------------------------------------------------------------------
     # craft documents / components / nameplate / tooling / packing

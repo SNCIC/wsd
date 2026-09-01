@@ -4284,3 +4284,87 @@ msgstr "已报废"
 #: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
 msgid "Location Filter"
 msgstr "位置筛选"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_pda_equipment_controller.py:0
+msgid "Pick a work center with an operation before loading a consumable."
+msgstr "请先选择挂有工序的工位，再上线辅料。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_pda_equipment_controller.py:0
+msgid "No online MES order runs through work center %s."
+msgstr "没有在线制令单经过工位 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "SN %s parked at %s."
+msgstr "SN %s 已到站 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
+msgid "Load Material"
+msgstr "上料"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Station Pass"
+msgstr "过站"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "In progress"
+msgstr "在制"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Orders"
+msgstr "订单"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Scan the SN in progress."
+msgstr "扫描在制 SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Select a scrap reason."
+msgstr "请选择报废原因。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Scrap %s — pick a reason"
+msgstr "报废 %s — 选择原因"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Scrap — pick a reason"
+msgstr "报废 — 选择原因"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "SN %s passed %s."
+msgstr "SN %s 已过 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "SN %s scrapped."
+msgstr "SN %s 已报废。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "SN %s left %s with NG (%s)."
+msgstr "SN %s 以 NG(%s) 离开 %s。"

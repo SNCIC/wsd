@@ -1,6 +1,7 @@
 import base64
 import csv
 import io
+import re
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
@@ -224,6 +225,21 @@ class SnSmtMaterialTableDetail(models.Model):
         'unique(mt_id, device_seq, table_no, loadpoint, chanel_sn)',
         'The device sequence, table number, loadpoint, and channel must be unique per material table.',
     )
+
+    @api.constrains('table_no')
+    def _check_table_no_format(self):
+        # The TABLE barcode scanned on the floor is DEVICE.TABLE (e.g. 2.B1):
+        # DEVICE_SEQ carries the "2" and TABLE_NO must hold only "B1".
+        # Storing the whole barcode in TABLE_NO can never match the parsed
+        # station lookup, so every scan on that table would be rejected.
+        # (Pattern kept in sync with DEVICE_TABLE_PATTERN in
+        # sn_smt_loading_service.py.)
+        for detail in self:
+            if re.match(r'^\s*\d+\.', detail.table_no or ''):
+                raise ValidationError(_(
+                    'TABLE_NO must store the table name only (e.g. T1), not '
+                    'the whole DEVICE.TABLE barcode (e.g. 1.T1); the device '
+                    'sequence belongs in DEVICE_SEQ.'))
 
 
 class SnSmtOnlineMaterial(models.Model):

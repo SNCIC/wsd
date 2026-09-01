@@ -3119,3 +3119,81 @@ msgstr "已下料 %s 行在线料。"
 #: code:addons/sn_wsd_mrp/models/stock_package.py:0
 msgid "Meter carton %s has already been shipped."
 msgstr "箱 %s 已发货。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Product No is required."
+msgstr "产品号（Product No）必填。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel quantity must be an integer."
+msgstr "拼版数量必须是整数。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel quantity must be positive."
+msgstr "拼版数量必须为正数。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Bindings are required."
+msgstr "板SN绑定列表（bindings）必填。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Record #%(index)s: product SN is empty."
+msgstr "第%(index)s条记录：产品SN为空。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Record #%(index)s: product SN [%(sn)s] does not exist."
+msgstr "第%(index)s条记录：产品SN[%(sn)s]不存在。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Saved successfully."
+msgstr "保存成功。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Provide productNo or proSn to query."
+msgstr "请提供 productNo 或 proSn 进行查询。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Query successful."
+msgstr "查询成功。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Panel %s does not exist."
+msgstr "拼版 %s 不存在。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Deleted successfully."
+msgstr "删除成功。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_table_detail__check_table_no_format
+msgid "TABLE_NO must store the table name only (e.g. T1), not the whole DEVICE.TABLE barcode (e.g. 1.T1); the device sequence belongs in DEVICE_SEQ."
+msgstr "TABLE_NO 只能存表名（如 T1），不能存整条 DEVICE.TABLE 码（如 1.T1）；设备顺序应填在 DEVICE_SEQ。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "SN %(sn)s entering %(op)s of MES order %(order)s: %(msg)s"
+msgstr "SN %(sn)s 到站 %(op)s（制令单 %(order)s）：%(msg)s"

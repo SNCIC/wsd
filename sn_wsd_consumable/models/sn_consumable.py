@@ -298,9 +298,11 @@ class SnConsumableInfo(models.Model):
         """Station-pass usage counting (key-material controlled only):
         mirrors sn.tooling.register_usage."""
         for info in self:
-            if info.state != 'loaded':
+            # 状态字段是 aux_state，上线后的在用态是 in_use（与制具的
+            # online 对应）；原实现误用不存在的 state 字段与 loaded 键
+            if info.aux_state != 'in_use':
                 raise UserError(_(
-                    'Only a loaded consumable can register usage (%s).', info.sn))
+                    'Only an in-use consumable can register usage (%s).', info.sn))
             if not isinstance(qty, int) or qty <= 0:
                 raise UserError(_('The usage quantity must be a positive integer.'))
             info.total_usage_count = info.total_usage_count + qty

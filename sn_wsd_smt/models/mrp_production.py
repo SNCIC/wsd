@@ -64,28 +64,27 @@ class MesOrderSmtOnline(models.Model):
         route = self.x_mes_route_id.route_id if self.x_mes_route_id else self.env['sn.wsd.process.route']
         return route.x_process_type == 'smt'
 
-    def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False, operator_code=False):
-        """过站扣减收敛点：大屏（sn_station_leave）/ 设备 API（_pass_station）
-        / PDA 过站屏都汇到本方法。出站 OK 时把扣减交给 consume_for_serial：
-        SMT 料站表只在出站工序=路线物料关联工序（x_material_operation_id）
-        时扣点（未维护且有料站表行会被拦，见其实现）；关键物料清单行
-        只在出站工序=清单工序时扣 usage_times。设备 API 侧另有带
-        external_event_id 的显式调用（api_scan_pass），幂等（SN+制令单）
-        保证不重复扣；NG 不扣，重过 OK 后再扣。"""
-        wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id', '=', serial_identity.id),
-            ('mes_order_id', '=', self.id),
-        ], limit=1)
-        route_operation = wip.route_operation_id
-        finished = super().leave_station(
-            serial_identity, result, scrap_reason=scrap_reason,
-            ng_defect=ng_defect, operator_code=operator_code)
-        if result == 'ok' and route_operation:
+    def enter_station(self, serial_identity, route_operation,
+                      workcenter=False):
+        """过站扣减收敛点（到站口径，2026-08-31 用户规则）：关键物料
+        清单/料站表维护在哪个工序，校验和扣减就发生在板**到站**该工序
+        的扫码上（含投入站首扫）；出站与其他工序一律不校验、不扣减。
+        大屏（sn_station_scan）/ 设备 API（_pass_station）/ PDA 过站屏
+        的到站都汇到 enter_station。consume_for_serial 幂等（料站表按
+        SN+制令单、清单行按 SN+工序），重复到站安全；NG 不涉及——
+        到站只进站不出站。"""
+        res = super().enter_station(
+            serial_identity, route_operation, workcenter=workcenter)
+        try:
             self.env['sn.smt.material.consumption'].consume_for_serial(
-                route_operation, identity=serial_identity,
-                operator_code=operator_code)
-        return finished
+                route_operation, identity=serial_identity)
+        except ValidationError as exc:
+            raise ValidationError(_(
+                'SN %(sn)s entering %(op)s of MES order %(order)s: %(msg)s',
+                sn=serial_identity.name,
+                op=route_operation.display_label,
+                order=self.name, msg=str(exc))) from exc
+        return res
 
     def _mes_flow_net_by_lot(self):
         """覆写倒冲钩子：本制令单的消耗流水按卷净值（正向 − 冲销），

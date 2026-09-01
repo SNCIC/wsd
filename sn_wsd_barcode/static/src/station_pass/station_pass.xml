@@ -87,6 +87,8 @@
             <div t-if="state.scrapDialog" class="o_sn_wsd_workshop_modal_backdrop" t-on-click="cancelScrap">
                 <div class="o_sn_wsd_workshop_modal" t-on-click.stop="">
                     <h2 t-out="scrapTitle"/>
+                    <div t-if="state.scrapDialog.error" class="alert alert-danger mt-2" role="alert"
+                         t-out="state.scrapDialog.error"/>
                     <div class="o_sn_wsd_workshop_records">
                         <t t-foreach="state.scrapReasons" t-as="reason" t-key="reason.id">
                             <button type="button"

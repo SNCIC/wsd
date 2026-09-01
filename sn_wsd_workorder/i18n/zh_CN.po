@@ -903,3 +903,33 @@ msgstr "SN %(sn)s 正在制令单 %(order)s 的 %(op)s 工序在制，请到对�
 #: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
 msgid "SN %(sn)s is not in progress at this station."
 msgstr "SN %(sn)s 不在本工站在制。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "No online MES order runs through work center %s."
+msgstr "没有在线制令单经过工位 %s。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "Work center %(wc)s runs no operation of MES order %(order)s."
+msgstr "工位 %(wc)s 不执行制令单 %(order)s 的任何工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s already passed %(op)s of order %(order)s."
+msgstr "SN %(sn)s 已过制令单 %(order)s 的 %(op)s 工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s is in progress at operation %(op)s of order %(order)s; this work center runs no operation of that order."
+msgstr "SN %(sn)s 在制令单 %(order)s 的 %(op)s 工序在制；本工位不执行该单的任何工序。"
+
+#. module: sn_wsd_workorder
+#. odoo-python
+#: code:addons/sn_wsd_workorder/models/mes_order_station.py:0
+msgid "SN %(sn)s is parked at %(op)s of order %(order)s (not the end operation): it flows on when the next station scans it. Use NG or scrap here if this station rejects it."
+msgstr "SN %(sn)s 停在制令单 %(order)s 的 %(op)s 工序（非结束工序）：下一站扫码即流转。本站判废请用 NG 或报废。"

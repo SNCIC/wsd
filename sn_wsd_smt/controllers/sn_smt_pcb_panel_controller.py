@@ -1,5 +1,7 @@
+import json
+
 from odoo import http
-from odoo.http import request
+from odoo.http import Response, request
 
 
 class SnSmtPcbPanelController(http.Controller):
@@ -38,7 +40,7 @@ class SnSmtPcbPanelController(http.Controller):
         {"code": 400, "message": "\u7b2c2\u6761\u8bb0\u5f55\uff1a\u4ea7\u54c1SN[W23350859A01S012624553252]\u4e0d\u5b58\u5728"}
         """
         try:
-            params = request.jsonrequest
+            params = dict(kwargs)
             api_service = request.env['sn.smt.pcb.panel.api']
             result = api_service.sudo().api_panel_add(params)
             return result
@@ -68,14 +70,14 @@ class SnSmtPcbPanelController(http.Controller):
         }
         """
         try:
-            params = request.jsonrequest
+            params = dict(kwargs)
             api_service = request.env['sn.smt.pcb.panel.api']
             result = api_service.sudo().api_panel_query(params)
             return result
         except Exception as e:
             return {'code': 500, 'message': f'Server error: {str(e)}'}
 
-    @http.route('/api/smt/panel/<int:panel_id>', type='jsonrpc', auth='user', methods=['GET'], csrf=False)
+    @http.route('/api/smt/panel/<int:panel_id>', type='http', auth='user', methods=['GET'], csrf=False)
     def api_panel_detail(self, panel_id, **kwargs):
         """
         Get panel details.
@@ -92,11 +94,11 @@ class SnSmtPcbPanelController(http.Controller):
         try:
             api_service = request.env['sn.smt.pcb.panel.api']
             result = api_service.sudo().api_panel_detail(panel_id)
-            return result
         except Exception as e:
-            return {'code': 500, 'message': f'Server error: {str(e)}'}
+            result = {'code': 500, 'message': f'Server error: {str(e)}'}
+        return Response(json.dumps(result), content_type='application/json')
 
-    @http.route('/api/smt/panel/<int:panel_id>', type='jsonrpc', auth='user', methods=['DELETE'], csrf=False)
+    @http.route('/api/smt/panel/<int:panel_id>', type='http', auth='user', methods=['DELETE'], csrf=False)
     def api_panel_delete(self, panel_id, **kwargs):
         """
         Delete a panel record.
@@ -109,6 +111,6 @@ class SnSmtPcbPanelController(http.Controller):
         try:
             api_service = request.env['sn.smt.pcb.panel.api']
             result = api_service.sudo().api_panel_delete(panel_id)
-            return result
         except Exception as e:
-            return {'code': 500, 'message': f'Server error: {str(e)}'}
+            result = {'code': 500, 'message': f'Server error: {str(e)}'}
+        return Response(json.dumps(result), content_type='application/json')
