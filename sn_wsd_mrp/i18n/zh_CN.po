@@ -8427,3 +8427,23 @@ msgstr "制令单 %(name)s 已取消。"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_is_dual_side_non_final
 msgid "Dual-Sided Non-Final Side"
 msgstr "双面非最终面"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Complete Receipt"
+msgstr "完工入库"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Close (No Receipt)"
+msgstr "完结（不入库）"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Close this MES order without stock receipt? The boards continue on the paired side order."
+msgstr "完结本制令单（不产生库存收货）？板子继续在对应面制令单上加工。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."
+msgstr "强制上线本制令单？当前占用该产线的制令单将先被下线；已投入的在制板继续流转。"
