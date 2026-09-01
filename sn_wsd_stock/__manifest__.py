@@ -1,12 +1,11 @@
 {
     'name': 'SN WSD Stock',
     'version': '19.0.1.1.1',
-    'summary': 'Reel-level lot generation during the storage step of receipts',
+    'summary': 'Incoming material labels and internal lot generation',
     'category': 'Supply Chain/Inventory',
     'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp'],
     'data': [
         'data/ir_sequence.xml',
-        'security/lot_reel_split_security.xml',
         'security/ir.model.access.csv',
         'wizard/incoming_material_label_wizard_views.xml',
         'report/incoming_material_label_templates.xml',
@@ -14,8 +13,6 @@
         'views/stock_lot_views.xml',
         'views/stock_picking_views.xml',
         'views/stock_rule_views.xml',
-        'views/lot_reel_split_views.xml',
-        'wizard/lot_reel_split_wizard_views.xml',
     ],
     'installable': True,
     'application': False,

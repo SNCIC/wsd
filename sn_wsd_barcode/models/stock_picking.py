@@ -19,64 +19,6 @@ class StockPicking(models.Model):
             package_tree.write({'x_wsd_pack_state': 'shipped'})
         return result
 
-    def _get_auto_lot_base_name(self, move_line, quantity=None):
-        product = move_line.product_id
-        product_code = product.default_code or getattr(product, 'code', False)
-        supplier_code = (self.partner_id.ref or '').strip()
-        if not product_code or not supplier_code:
-            return False
-        batch_no = fields.Date.context_today(move_line).strftime('%Y%m%d')
-        quantity = quantity if quantity is not None else move_line.product_uom_id._compute_quantity(
-            move_line.quantity,
-            product.uom_id,
-            rounding_method='HALF-UP',
-        )
-        sequence = self.env['ir.sequence'].next_by_code(
-            'sn.wsd.material.serial',
-        )
-        if not sequence:
-            return False
-        return '$'.join([
-            product_code.strip(),
-            supplier_code,
-            batch_no,
-            str(int(quantity)),
-            sequence,
-        ])
-
-    def _get_auto_lot_name(self, move_line, sequence=False):
-        base_name = self._get_auto_lot_base_name(move_line)
-        if not base_name:
-            return False
-        return base_name
-
-    def _auto_generate_lot_names(self):
-        for picking in self:
-            if not picking.picking_type_id.use_create_lots:
-                continue
-            move_lines = picking.move_line_ids.filtered(
-                lambda line: line.product_id.tracking == 'lot'
-                and line.product_uom_id.compare(line.quantity, 0) > 0
-                and not line.lot_id
-                and not line.lot_name
-            )
-            for move in move_lines.mapped('move_id'):
-                lines = move_lines.filtered(lambda line: line.move_id == move)
-                quantity = move.product_uom._compute_quantity(
-                    move.product_uom_qty,
-                    move.product_id.uom_id,
-                    rounding_method='HALF-UP',
-                )
-                lot_name = picking._get_auto_lot_base_name(
-                    lines[0], quantity=quantity,
-                )
-                if lot_name:
-                    lines.lot_name = lot_name
-
-    def button_validate(self):
-        self._auto_generate_lot_names()
-        return super().button_validate()
-
     def action_cancel_from_barcode(self):
         self.ensure_one()
         view = self.env.ref('sn_wsd_barcode.sn_wsd_barcode_cancel_operation_view')
@@ -143,6 +85,10 @@ class StockPicking(models.Model):
 
     def action_print_barcode(self):
         return self.action_open_label_type()
+
+    def action_print_material_labels(self):
+        self.ensure_one()
+        return self.action_open_material_label_wizard()
 
     def action_print_delivery_slip(self):
         return self.env.ref('stock.action_report_delivery').report_action(self)

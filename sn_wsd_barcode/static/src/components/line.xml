@@ -14,7 +14,10 @@
                         t-esc="line.product_id.code"/>
                 </div>
                 <div class="o_product_label small" t-esc="line.product_id.display_name"/>
-                <div t-if="showDescription" name="description" class="text-muted o_sn_wsd_barcode_line_description" t-out="line.description_picking"/>
+                <div t-if="line.product_id.material_specification"
+                    name="material_specification"
+                    class="text-muted o_sn_wsd_barcode_line_description"
+                    t-out="line.product_id.material_specification"/>
             </div>
             <t t-if="upperButtons !== false" t-call="{{upperButtons || 'sn_wsd_barcode.LineUpperButtons'}}"/>
         </div>
@@ -75,22 +78,16 @@
                 <span t-if="quantityIsSet" class="fa fa-lg fa-question"/>
                 <span t-else="">0</span>
             </button>
-            <button t-if="isSelected &amp;&amp; qtyDone &amp;&amp; !isPackage" name="decrementButton"
-                    class="o_line_button o_remove_unit btn btn-light"
-                    t-att-disabled="!this.env.model.lineCanBeEdited(line)"
-                    t-on-click="() => this.addQuantity(-1)">
-                -1
-            </button>
-            <button t-if="displayIncrementButton" name="incrementButton"
-                    class="o_line_button o_add_quantity btn btn-light"
-                    t-att-disabled="!this.env.model.lineCanBeEdited(line)"
-                    t-on-click="() => this.addQuantity(1)">+1</button>
-            <button t-if="displayFulfillbutton" name="fulfillButton"
-                    t-on-click="() => this.addQuantity(incrementQty)"
-                    t-att-disabled="!this.env.model.lineCanBeEdited(line)"
-                    t-attf-class="o_line_button o_add_remaining_quantity btn btn-{{isSelected ? 'light' : 'secondary'}}">
-                <t t-if="incrementQty > 0">+</t><t t-esc="incrementQty"/>
-            </button>
+            <input t-if="isSelected &amp;&amp; !isPackage &amp;&amp; this.env.model.lineCanBeEdited(line)"
+                   class="o_line_quantity_input form-control"
+                   type="number"
+                   min="0"
+                   step="any"
+                   value=""
+                   placeholder="Quantity"
+                   t-on-click.stop=""
+                   t-on-change="onQuantityChange"
+                   aria-label="Quantity"/>
             <button t-if="displayDeleteButton" name="deleteButton"
                     t-on-click="delete"
                     t-att-disabled="!this.env.model.lineCanBeEdited(line)"

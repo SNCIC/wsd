@@ -1006,3 +1006,14 @@ msgstr "规格型号"
 #: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
 msgid "Supplier Label"
 msgstr "供应商"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.report,name:sn_wsd_stock.action_report_incoming_material_label_zpl
+msgid "Incoming Material Labels (ZPL)"
+msgstr "来料物料标签（ZPL）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "The selected material lot does not belong to this receipt."
+msgstr "选定的物料批次不属于此入库单。"
