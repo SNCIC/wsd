@@ -600,18 +600,21 @@ class TestMesOrder(TransactionCase):
 
     def test_34_report_mode_quantities(self):
         """Report-mode quantities read the reported amounts at the counter
-        operations; successors unlock once the plan quantity is reached."""
+        operations; successors unlock by cascade (report-offline)：下游累计
+        不得超过上游累计，不再要求前置报满。"""
         order = self._make_online_order(qty=4, mode='report')
         op_in_row = order.x_mes_route_id.x_daily_input_operation_id
         op_out_row = order.x_mes_route_id.x_daily_output_operation_id
         order.report_operation_qty(op_in_row, 3)
         self.assertEqual(order.x_input_qty, 3.0)
         self.assertEqual(op_in_row.x_reported_qty, 3.0)
+        order.report_operation_qty(op_out_row, 3)
+        self.assertEqual(order.x_output_qty, 3.0)
         with self.assertRaises(ValidationError):
             order.report_operation_qty(op_out_row, 1)
         order.report_operation_qty(op_in_row, 1)
-        order.report_operation_qty(op_out_row, 2)
-        self.assertEqual(order.x_output_qty, 2.0)
+        order.report_operation_qty(op_out_row, 1)
+        self.assertEqual(order.x_output_qty, 4.0)
 
     def test_44_report_quota_scrap_and_completion(self):
         """Quota rule (OK+scrap consume, NG is a statistic, the whole batch

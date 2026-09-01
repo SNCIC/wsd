@@ -848,6 +848,12 @@ class MesOrder(models.Model):
                               qty_scrap=0.0, scrap_reason=False):
         """Report mode: report one batch of an operation.
 
+        报工即开工（report-offline，2026-09-01 用户规则）：报工不要求
+        在线/上线；首笔报工把单据转入生产中（领料不可跳过，与上线硬闸
+        同口径）。顺序锁为级联制：本工序累计（OK+报废）+ 本批（OK+报废）
+        不得超过前置工序累计（OK+报废），多前置（OR-join）取最大；首工序
+        只受配额约束。
+
         Quota rule: this batch (OK + NG + scrap) must fit into the plan
         remainder -- planned minus accumulated OK and scrap. NG is a pure
         statistic (reworked boards come back as a later OK report); scrap
@@ -858,9 +864,6 @@ class MesOrder(models.Model):
             raise ValidationError(_(
                 'MES order %(name)s is managed by SN station tracking; '
                 'operation reporting is not available.', name=self.name))
-        if not self.x_online_date:
-            raise ValidationError(_(
-                'MES order %(name)s is not online yet.', name=self.name))
         if qty_ok < 0 or qty_ng < 0 or qty_scrap < 0:
             raise ValidationError(_('Reported quantities cannot be negative.'))
         batch = qty_ok + qty_ng + qty_scrap
@@ -884,12 +887,26 @@ class MesOrder(models.Model):
                 '(NG does not consume quota; scrap and OK do).',
                 batch=batch, remaining=max(remaining, 0.0),
                 planned=self.planned_qty))
-        reachable = self.get_reachable_operations()
-        if route_operation not in reachable:
-            raise ValidationError(_(
-                'Operation %(op)s cannot be reported yet: none of its '
-                'predecessors is fully reported.',
-                op=route_operation.display_label))
+        predecessors = route_operation.blocked_by_ids
+        if predecessors:
+            def _effective(op):
+                reports = op.report_ids
+                return sum(reports.mapped(
+                    lambda r: r.qty_ok + r.qty_scrap)) if reports else 0.0
+            upstream_cap = max(_effective(p) for p in predecessors)
+            if accumulated + qty_ok + qty_scrap > upstream_cap + 0.0001:
+                raise ValidationError(_(
+                    'Operation %(op)s: this report would exceed the '
+                    'accumulated quantity of its predecessors (%(cap)s).',
+                    op=route_operation.display_label, cap=upstream_cap))
+        if self.state in ('released', 'picked'):
+            # 首笔报工即开工；领料不可跳过（存在任何未取消领料单即算
+            # "领过"，宽松口径防误拦——与 action_online 硬闸一致）
+            if not self.picking_ids.filtered(lambda p: p.state != 'cancel'):
+                raise ValidationError(_(
+                    'MES order %(name)s has no material requisition yet; '
+                    'issue material before reporting.', name=self.name))
+            self.state = 'in_progress'
         if qty_scrap > 0:
             if not scrap_reason:
                 raise ValidationError(_('Select a scrap reason.'))
