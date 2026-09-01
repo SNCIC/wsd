@@ -780,6 +780,8 @@ class MesOrder(models.Model):
                 scrap_reason=scrap_reason, ng_defect=ng_defect,
                 operator_code=operator_code))
         wip.sudo().unlink()
+        # 一扫内核共用出口：T 面单全部流完时自动完结（含 T 面倒冲）
+        self._mes_maybe_auto_close()
         return bool(result == 'ok' and route_operation.x_allow_exit)
 
     def _prepare_leave_history_vals(self, serial_identity, route_operation,
@@ -1075,14 +1077,18 @@ class MesOrder(models.Model):
         self.ensure_one()
         return {}
 
-    def _mes_backflush(self, qty):
+    def _mes_backflush(self, qty, flow_ratio=False, move_label=None):
         """Consume materials x qty from the line side (no document,
         manufacturing-consumption style). Fails hard on line-side
         shortage -- the whole completion rolls back.
 
         有消耗流水的组件按 卷×净值×本次完工比例 带批次扣减——扣的是
         上线扫描的那个物料SN（含 BOM 没有的替代料/关键物料）；被流水
-        产品替代的 BOM 行不再重复扣；其余组件维持 BOM×比例。"""
+        产品替代的 BOM 行不再重复扣；其余组件维持 BOM×比例。
+
+        ``flow_ratio``：流水缩放比例，默认 本次数量÷产出数量（完工入
+        库口径）。T 面单完结（不入库）传 (过点板数−报废板数)÷过点板数
+        ——报废板的份额已由报废单扣过，不再重复扣。"""
         self.ensure_one()
         bom = self.production_id.bom_id
         if not bom or not bom.product_qty:
@@ -1131,13 +1137,14 @@ class MesOrder(models.Model):
         net_by_lot = self._mes_flow_net_by_lot()
         flow_product_ids = set()
         if net_by_lot:
-            output_qty = self.x_output_qty or 0.0
-            if output_qty <= 0:
-                raise ValidationError(_(
-                    'MES order %(order)s has consumption flows but no output '
-                    'quantity; cannot scale the backflush to %(qty)s units.',
-                    order=self.name, qty=qty))
-            flow_ratio = qty / output_qty
+            if flow_ratio is False:
+                output_qty = self.x_output_qty or 0.0
+                if output_qty <= 0:
+                    raise ValidationError(_(
+                        'MES order %(order)s has consumption flows but no output '
+                        'quantity; cannot scale the backflush to %(qty)s units.',
+                        order=self.name, qty=qty))
+                flow_ratio = qty / output_qty
             for lot, net_qty in net_by_lot.items():
                 consume_qty = net_qty * flow_ratio
                 if consume_qty <= 0.0001:
@@ -1145,7 +1152,7 @@ class MesOrder(models.Model):
                 ensure_available(lot.product_id, consume_qty, lot=lot)
                 flow_product_ids.add(lot.product_id.id)
                 moves |= StockMove.create({
-                    'description_picking_manual': _('MES completion %(order)s', order=self.name),
+                    'description_picking_manual': move_label or _('MES completion %(order)s', order=self.name),
                     'product_id': lot.product_id.id,
                     'product_uom': lot.product_id.uom_id.id,
                     'product_uom_qty': consume_qty,
@@ -1195,7 +1202,7 @@ class MesOrder(models.Model):
                     product=line.product_id.display_name, order=self.name))
             ensure_available(line.product_id, consume_qty)
             moves |= StockMove.create({
-                'description_picking_manual': _('MES completion %(order)s', order=self.name),
+                'description_picking_manual': move_label or _('MES completion %(order)s', order=self.name),
                 'product_id': line.product_id.id,
                 'product_uom': line.product_uom_id.id,
                 'product_uom_qty': consume_qty,
@@ -1434,10 +1441,14 @@ class MesOrder(models.Model):
         picking.action_confirm()
         return picking
 
-    def action_close(self):
-        """Close a dual-sided non-final MES order (T-side): mark done
-        without any stock receipt or backflush. The physical boards stay
-        on the line and continue on the paired B-side order."""
+    def action_close(self, auto=False):
+        """Close a dual-sided non-final MES order (T-side): backflush this
+        order's own components, then mark done without any stock receipt.
+        The physical boards stay on the line and continue on the paired
+        B-side order.
+
+        扣料优先级与完工入库同源（_mes_backflush）：有消耗流水的按流
+        水净值扣（料站表扣点 + 关键物料），没上的按 BOM 本面行兜底。"""
         for order in self:
             if order.state == 'done':
                 raise ValidationError(_(
@@ -1445,13 +1456,74 @@ class MesOrder(models.Model):
             if order.state == 'cancelled':
                 raise ValidationError(_(
                     'MES order %(name)s is cancelled.', name=order.name))
+            if not order.x_is_dual_side_non_final:
+                raise ValidationError(_(
+                    'MES order %(name)s is not a dual-sided non-final (T-side) '
+                    'order; use Complete Receipt instead.', name=order.name))
+            moves = order._mes_close_backflush()
             order.write({
                 'state': 'done',
                 'x_done_qty': order.x_output_qty,
                 'x_done_date': fields.Datetime.now(),
             })
             order._on_done()
+            order.message_post(body=_(
+                'Closed without receipt%(auto)s: %(boards)s board(s) finished '
+                'the T-side route; %(moves)s component move(s) backflushed '
+                'from the line side.',
+                auto=_(' (automatic)') if auto else '',
+                boards=order.x_output_qty or 0.0,
+                moves=len(moves)))
         return True
+
+    def _mes_close_backflush(self):
+        """T 面单完结时的自身倒冲：份额 = (过点板数 − 本单报废板数)。
+
+        过点板数 = 有消耗流水的板（贴片扣点/关键物料都算）；报废板的
+        份额已由报废单扣过，从比例里剔除；完全没有流水的单退回
+        BOM×产出 散料口径。"""
+        self.ensure_one()
+        passed_ids = set()
+        if 'sn.smt.material.consumption' in self.env:
+            passed_ids = set(self.env['sn.smt.material.consumption'].search([
+                ('mes_order_id', '=', self.id),
+                ('product_qty', '>', 0),
+            ]).mapped('serial_identity_id').ids)
+        scrapped_ids = set(self.sn_history_ids.filtered(
+            lambda h: h.result == 'scrap').mapped('serial_identity_id').ids)
+        billable = len(passed_ids - scrapped_ids)
+        if billable <= 0:
+            # 无流水的纯散料单：按产出板数走 BOM 兜底
+            billable = int(self.x_output_qty or 0)
+        if billable <= 0:
+            return self.env['stock.move']
+        ratio = (len(passed_ids) - len(passed_ids & scrapped_ids)) / len(passed_ids) \
+            if passed_ids else False
+        return self._mes_backflush(
+            billable, flow_ratio=ratio,
+            move_label=_('MES close without receipt %(order)s', order=self.name))
+
+    def _mes_maybe_auto_close(self):
+        """自动关结（架构约定：T 面全部流完 → 单据自动完结，少一步人工）。
+
+        触发条件（过站内核 leave_station 每次调用后判定）：
+        1. 双面产品的 T 面单，且仍处于生产中；
+        2. 产出 OK 数 + 本单报废数 ≥ 排产数量（没投满不自动关，按钮兜底）；
+        3. 线上无在制 WIP（有板在修/未流出则等）。
+        满足即走 action_close（含 T 面倒冲）。"""
+        for order in self:
+            if not order.x_is_dual_side_non_final or order.state != 'in_progress':
+                continue
+            if order.sn_wip_ids:
+                continue
+            scrapped = len(set(order.sn_history_ids.filtered(
+                lambda h: h.result == 'scrap').mapped('serial_identity_id').ids))
+            planned = order.planned_qty or 0.0
+            if planned <= 0:
+                continue
+            if (order.x_output_qty or 0.0) + scrapped + 0.0001 < planned:
+                continue
+            order.action_close(auto=True)
 
     def action_complete(self, qty, destination='stock', workshop=False, lot_name=False):
         """Complete (完工入库) -- the single execution entry used by both
