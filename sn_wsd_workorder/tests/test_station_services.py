@@ -76,9 +76,9 @@ class TestStationServices(TransactionCase):
         })
 
     def test_01_enter_then_leave_round_trip(self):
-        """Enter returns the payload; leave works although it unlinks the
-        WIP row it was keyed on (regression: reading workcenter_id after
-        the unlink raised MissingError)."""
+        """Enter returns the payload; a mid-route station no longer leaves
+        OK (one-scan kernel) -- the next station's arrival scan pulls the
+        board through and the end station finishes it."""
         data = self.order.sn_station_enter('SN-T1', self.wc_in.id)
         self.assertEqual(len(data['orders']), 1)
         card = data['orders'][0]
@@ -87,17 +87,26 @@ class TestStationServices(TransactionCase):
         self.assertEqual(card['input_qty'], 1.0)
         self.assertEqual([w['sn'] for w in data['wip']], ['SN-T1'])
         wip_id = data['wip'][0]['id']
-        payload = self.env['sn.wsd.mes.order'].sn_station_leave(wip_id, 'ok')
-        self.assertFalse(payload['finished'])  # input op is not an exit op
+        MesOrder = self.env['sn.wsd.mes.order']
+        # 一扫内核：中间站的板由下一站到站扫拉动出 OK，本站 OK 出站被拦
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_leave(wip_id, 'ok')
+        # 到站拉动：投入站出 OK、板停在产出站等待出站判定
+        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T1')
+        self.assertTrue(hit['leave'])
+        payload = MesOrder.sn_station_leave(hit['wip_id'], 'ok')
+        self.assertTrue(payload['finished'])
         self.assertEqual(payload['data']['wip'], [])
         self.assertEqual(payload['data']['orders'][0]['op']['ok_qty'], 1)
 
     def test_02_leave_through_exit_finishes(self):
-        data = self.order.sn_station_enter('SN-T2', self.wc_in.id)
-        self.env['sn.wsd.mes.order'].sn_station_leave(data['wip'][0]['id'], 'ok')
-        data = self.order.sn_station_enter('SN-T2', self.wc_out.id)
+        self.order.sn_station_enter('SN-T2', self.wc_in.id)
+        # 到站拉动把 SN-T2 带到产出站（尾站扫即返回待出站动作）
+        hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
+            self.wc_out.id, 'SN-T2')
+        self.assertTrue(hit['leave'])
         payload = self.env['sn.wsd.mes.order'].sn_station_leave(
-            data['wip'][0]['id'], 'ok')
+            hit['wip_id'], 'ok')
         self.assertTrue(payload['finished'])
         card = next(o for o in payload['data']['orders'] if o['id'] == self.order.id)
         self.assertEqual(card['output_qty'], 1.0)
@@ -105,7 +114,9 @@ class TestStationServices(TransactionCase):
             self.order.sn_station_enter('SN-T2', self.wc_in.id)
 
     def test_03_report_mode_service(self):
-        # dedicated report-mode order: the shared one is online and locked
+        # dedicated report-mode order: the shared one occupies the line (one
+        # online order per line) -- take it offline before going online here
+        self.order.action_offline()
         mo = self.order.production_id
         order = self.env['sn.wsd.mes.order'].create({
             'production_id': mo.id,
@@ -122,12 +133,16 @@ class TestStationServices(TransactionCase):
         card = next(o for o in data['orders'] if o['id'] == order.id)
         self.assertEqual(card['op']['reported_qty'], 3.0)
         self.assertEqual(card['input_qty'], 3.0)
+        # 级联顺序锁（report-offline）：下游可报量 ≤ 上游累计，不再要求报满
+        data = order.sn_station_report(self.wc_out.id, 3)
+        card = next(o for o in data['orders'] if o['id'] == order.id)
+        self.assertEqual(card['output_qty'], 3.0)
         with self.assertRaises(ValidationError):
             order.sn_station_report(self.wc_out.id, 1)
         order.sn_station_report(self.wc_in.id, 1)
-        data = order.sn_station_report(self.wc_out.id, 2)
+        data = order.sn_station_report(self.wc_out.id, 1)
         card = next(o for o in data['orders'] if o['id'] == order.id)
-        self.assertEqual(card['output_qty'], 2.0)
+        self.assertEqual(card['output_qty'], 4.0)
 
     def test_04_two_step_ng_defect_flow(self):
         """Two-step NG: sn_resolve_ng_defect resolves scanned codes and the
@@ -167,14 +182,23 @@ class TestStationServices(TransactionCase):
         self.assertEqual(wip.serial_identity_id.name, 'SN-T5')
 
     def test_06_scan_leave_rejects_elsewhere_and_unknown(self):
-        """Exit-only contract: no feeding, no order switching -- a WIP SN
-        parked elsewhere and an unknown SN are both hard errors."""
+        """一扫内核后停在他工序的板在本单路线工位扫=到站拉动（合法，见
+        test_01/02）；仍然硬拦的是：不在本单路线上的工位扫他单板、非投入
+        站扫未知 SN（投入站未知 SN=喂料自动注册，合法）、空码。"""
         self.order.sn_station_enter('SN-T6', self.wc_in.id)
         MesOrder = self.env['sn.wsd.mes.order']
+        other_op = self.env['sn.wsd.operation'].create(
+            {'name': 'OP-OTHER', 'code': 'OTH1', 'x_station_type': 'assembly'})
+        wc_other = self.env['mrp.workcenter'].create({
+            'name': 'WC-OTHER', 'x_workshop_id': self.workshop.id,
+            'x_production_line_id': self.line.id,
+            'x_operation_id': other_op.id,
+        })
         with self.assertRaises(ValidationError):
-            MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T6')
+            MesOrder.sn_station_scan_leave(
+                wc_other.id, 'SN-T6')  # 工位不在该单路线上
         with self.assertRaises(ValidationError):
-            MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-UNKNOWN-404')
+            MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-UNKNOWN-404')
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan_leave(self.wc_in.id, '   ')
 
