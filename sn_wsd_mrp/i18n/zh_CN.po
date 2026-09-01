@@ -931,6 +931,7 @@ msgstr "时间"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__mes_order_id
 msgid "Mes Order"
 msgstr "制令单"
 
@@ -1407,6 +1408,7 @@ msgstr "生成库存移动"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Group By"
 msgstr "分组"
 
@@ -1797,6 +1799,12 @@ msgstr "电表托盘 %s 已关闭。"
 #: code:addons/sn_wsd_mrp/models/stock_package.py:0
 msgid "Meter pallet %s was not found."
 msgstr "未找到电表托盘 %s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "MES order %s must be in progress to receive products."
+msgstr "制令单 %s 必须处于生产中才能收货。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -2842,6 +2850,7 @@ msgstr "打开工艺路线"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Operation"
 msgstr "工序"
 
@@ -2877,8 +2886,14 @@ msgstr "工序"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_operator_code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__operator_code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__operator_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__operator_code
 msgid "Operator Code"
 msgstr "操作员代码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__operator_code
+msgid "Employee who scanned the pass (API: M_EMP; terminal: current user employee). Old rows written before the column have no source to backfill."
+msgstr "扫描过站的员工（API：M_EMP；车间终端：当前登录用户的员工）。该列建立之前的旧行没有来源可回填。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_lot_id
@@ -3404,6 +3419,7 @@ msgstr "负责人"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Result"
 msgstr "结果"
 
@@ -3579,6 +3595,8 @@ msgstr "范围信息"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__scrap
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Scrap"
 msgstr "报废"
 
@@ -4724,6 +4742,8 @@ msgstr "已完成的原材料移动中是否包含可退回的超额物料。"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__workcenter_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_operation_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Work Center"
 msgstr "工作中心"
 
@@ -5857,11 +5877,13 @@ msgstr "制令单工艺路线"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__ng
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "NG"
 msgstr "NG"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__ok
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "OK"
 msgstr "OK"
 
@@ -5882,6 +5904,7 @@ msgstr "前置工序"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__skipped
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Skipped"
 msgstr "跳过"
 
@@ -5965,6 +5988,7 @@ msgstr "制令单领料向导"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "MES Order"
 msgstr "制令单"
 
@@ -6113,6 +6137,7 @@ msgstr "建议移库"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Today"
 msgstr "今天"
 
@@ -6484,6 +6509,11 @@ msgid "Out Date"
 msgstr "离开时间"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+msgid "Pass Date"
+msgstr "过站日期"
+
+#. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_stock_package
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_internal_serial__serial_type__package
 msgid "Package"
@@ -6576,6 +6606,8 @@ msgstr "工段统计设置"
 
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_serial_operation_history
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_serial_operation_history
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_serial_operation_history
 msgid "SN Operation History"
 msgstr "SN 过站历史"
 
@@ -6591,6 +6623,10 @@ msgstr "半成品"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__serial_identity_id
+msgid "Serial Identity"
+msgstr "产品SN"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__serial_identity_id
 msgid "Serial Identity"
 msgstr "序列号身份"
@@ -7108,6 +7144,8 @@ msgstr "领料作业"
 
 #. module: sn_wsd_mrp
 #: selection:sn.wsd.serial.operation.history,result
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "Scrap"
 msgstr "报废"
 
@@ -7141,6 +7179,7 @@ msgstr "SN 绑定关系"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 msgid "SN"
 msgstr "SN"
 
@@ -8326,7 +8365,6 @@ msgstr "超领补料单"
 msgid "Material Over-pick Operation"
 msgstr "超领补料作业"
 
-
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_nameplate_begin
 msgid "Nameplate Begin"
@@ -8341,7 +8379,6 @@ msgstr "铭牌尾"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_contract_no
 msgid "Contract No"
 msgstr "合同号"
-
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -8462,3 +8499,4 @@ msgstr "制令单 %(order)s 完结（不入库）倒冲"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
 msgid "Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."
 msgstr "强制上线本制令单？当前占用该产线的制令单将先被下线；已投入的在制板继续流转。"
+

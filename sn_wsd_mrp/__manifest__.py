@@ -19,6 +19,7 @@
         'views/meter_process_route_views.xml',
         'views/meter_pack_views.xml',
         'views/serial_identity_views.xml',
+        'views/serial_operation_history_views.xml',
         'views/production_process_doc_views.xml',
         'wizard/generate_sn_wizard_views.xml',
         'views/mes_order_views.xml',
