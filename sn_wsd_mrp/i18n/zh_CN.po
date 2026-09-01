@@ -932,6 +932,7 @@ msgstr "时间"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_operation_report__mes_order_id
 msgid "Mes Order"
 msgstr "制令单"
 
@@ -1409,6 +1410,7 @@ msgstr "生成库存移动"
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
 msgid "Group By"
 msgstr "分组"
 
@@ -1748,8 +1750,14 @@ msgstr "制令单 %(name)s 采用过站管理，不能使用工序报工。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid "MES order %(name)s is not online yet."
-msgstr "制令单 %(name)s 尚未上线。"
+msgid "MES order %(name)s has no material requisition yet; issue material before reporting."
+msgstr "制令单 %(name)s 尚无领料单；请先领料再报工。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Operation %(op)s: this report would exceed the accumulated quantity of its predecessors (%(cap)s)."
+msgstr "工序 %(op)s：本次报工将超过其前置工序的累计数量（%(cap)s）。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -2851,6 +2859,7 @@ msgstr "打开工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__operation_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
 msgid "Operation"
 msgstr "工序"
 
@@ -2889,6 +2898,11 @@ msgstr "工序"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__operator_code
 msgid "Operator Code"
 msgstr "操作员代码"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
+msgid "Reported by"
+msgstr "报工人"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__operator_code
@@ -3828,6 +3842,11 @@ msgstr "合格数"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty_scrap
 msgid "Scrap Quantity"
 msgstr "报废数量"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
+msgid "Report Day"
+msgstr "报工日期"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__picking_id
@@ -5989,6 +6008,7 @@ msgstr "制令单领料向导"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
 msgid "MES Order"
 msgstr "制令单"
 
@@ -6138,6 +6158,7 @@ msgstr "建议移库"
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
 msgid "Today"
 msgstr "今天"
 
@@ -6610,6 +6631,12 @@ msgstr "工段统计设置"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_serial_operation_history
 msgid "SN Operation History"
 msgstr "SN 过站历史"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_operation_report
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_operation_report
+msgid "Operation Reports"
+msgstr "工序报工记录"
 
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_serial_wip
@@ -8499,4 +8526,5 @@ msgstr "制令单 %(order)s 完结（不入库）倒冲"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
 msgid "Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."
 msgstr "强制上线本制令单？当前占用该产线的制令单将先被下线；已投入的在制板继续流转。"
+
 

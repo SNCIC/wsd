@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================================================================
+         Operation reports (追溯性菜单): report-mode quantity batches,
+         one row per 报工 submission. Browsing only - rows are created
+         by report_operation_qty, never by hand.
+         ================================================================== -->
+    <record id="view_sn_wsd_mes_operation_report_list" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.list</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="reported_at"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="qty_ok"/>
+                <field name="qty_ng"/>
+                <field name="qty_scrap"/>
+                <field name="reported_by" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_operation_report_search" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.search</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="reported_by"/>
+                <filter name="f_today" string="Today"
+                        domain="[('reported_at', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <separator string="Group By"/>
+                <filter string="MES Order" name="g_order" context="{'group_by': 'mes_order_id'}"/>
+                <filter string="Operation" name="g_op" context="{'group_by': 'route_operation_id'}"/>
+                <filter string="Reported by" name="g_user" context="{'group_by': 'reported_by'}"/>
+                <filter string="Report Day" name="g_day" context="{'group_by': 'reported_at:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_mes_operation_report" model="ir.actions.act_window">
+        <field name="name">Operation Reports</field>
+        <field name="res_model">sn.wsd.mes.operation.report</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_mes_operation_report" name="Operation Reports"
+              parent="menu_sn_wsd_traceability" action="action_sn_wsd_mes_operation_report"
+              sequence="21"/>
+</odoo>
