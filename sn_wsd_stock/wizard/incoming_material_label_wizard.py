@@ -30,6 +30,24 @@ class IncomingMaterialLabelWizard(models.TransientModel):
         ).exists()
         if not picking:
             return values
+        selected_move_line = self.env['stock.move.line'].browse(
+            self.env.context.get('default_move_line_id')
+        ).exists()
+        if (
+            selected_move_line
+            and selected_move_line.picking_id == picking
+            and selected_move_line.product_id.tracking == 'lot'
+        ):
+            values['line_ids'] = [Command.create({
+                'move_id': selected_move_line.move_id.id,
+                'move_line_id': selected_move_line.id,
+                'product_id': selected_move_line.product_id.id,
+                'quantity': selected_move_line.quantity_product_uom,
+                'quantity_per_label': selected_move_line.quantity_product_uom,
+                'official_batch_no': self._get_official_batch_name(selected_move_line),
+                'existing_lot_id': selected_move_line.lot_id.id,
+            })]
+            return values
         commands = []
         for move in picking.move_ids.filtered(
             lambda item: item.product_id and item.product_id.tracking == 'lot'
@@ -112,7 +130,7 @@ class IncomingMaterialLabelWizard(models.TransientModel):
             ('material_sn_base', '!=', False),
         ], limit=1)
 
-    def _get_material_sn(self, line, batch_no, quantity, sequence, suffix=False):
+    def _get_material_sn(self, line, batch_no, quantity, sequence):
         product_code = (line.product_id.default_code or '').strip()
         supplier_code = (self.picking_id.partner_id.ref or '').strip()
         if not product_code:
@@ -123,10 +141,9 @@ class IncomingMaterialLabelWizard(models.TransientModel):
         material_sn = '$'.join([
             product_code, supplier_code, batch_no, str(int(quantity)), sequence,
         ])
-        return f'{material_sn}-{suffix}' if suffix else material_sn
+        return material_sn
 
-    def _create_lot(self, line, batch_no, material_sn, quantity, suffix):
-        base_sn = material_sn.rsplit('-', 1)[0] if suffix else material_sn
+    def _create_lot(self, line, batch_no, material_sn, quantity):
         return self.env['stock.lot'].create({
             'name': material_sn,
             'product_id': line.product_id.id,
@@ -134,8 +151,8 @@ class IncomingMaterialLabelWizard(models.TransientModel):
             'arrival_batch_no': fields.Date.context_today(
                 self.picking_id
             ).strftime('%Y%m%d'),
-            'material_sn_base': base_sn,
-            'material_sn_suffix': str(suffix) if suffix else False,
+            'material_sn_base': material_sn,
+            'material_sn_suffix': False,
             'supplier_code': self.picking_id.partner_id.ref,
             'supplier_name': self.picking_id.partner_id.name,
             'supplier_batch_no': batch_no,
@@ -170,24 +187,26 @@ class IncomingMaterialLabelWizard(models.TransientModel):
             })
             line.move_line_id = source_line
         batch_no = (
-            self._get_official_batch_name(source_line)
+            (line.official_batch_no or '').strip()
+            or (source_line.supplier_batch_no or '').strip()
+            or self._get_official_batch_name(source_line)
             or fields.Date.context_today(self.picking_id).strftime('%Y%m%d')
         )
         if '$' in batch_no:
             raise ValidationError(
                 _('The supplier batch cannot contain the $ character.')
             )
-        sequence = self.env['ir.sequence'].next_by_code(
-            'sn.wsd.material.serial'
-        )
-        if not sequence:
-            raise UserError(_('The material serial sequence is not configured.'))
+        source_line.supplier_batch_no = batch_no
         created_lines = []
         quantities = self._get_quantities(line)
-        for index, quantity in enumerate(quantities, start=1):
-            suffix = index if len(quantities) > 1 else False
+        for quantity in quantities:
+            sequence = self.env['ir.sequence'].next_by_code(
+                'sn.wsd.material.serial'
+            )
+            if not sequence:
+                raise UserError(_('The material serial sequence is not configured.'))
             lot_name = self._get_material_sn(
-                line, batch_no, quantity, sequence, suffix,
+                line, batch_no, quantity, sequence,
             )
             if self.env['stock.lot'].search_count([
                 ('name', '=', lot_name),
@@ -196,7 +215,7 @@ class IncomingMaterialLabelWizard(models.TransientModel):
                 ('company_id', '=', self.picking_id.company_id.id),
             ]):
                 raise ValidationError(_('The material SN already exists: %s', lot_name))
-            lot = self._create_lot(line, batch_no, lot_name, quantity, suffix)
+            lot = self._create_lot(line, batch_no, lot_name, quantity)
             lots |= lot
             created_lines.append({
                 'move_id': source_line.move_id.id,
@@ -270,7 +289,7 @@ class IncomingMaterialLabelWizardLine(models.TransientModel):
     quantity_per_label = fields.Float(
         string='Quantity per Label', digits='Product Unit',
     )
-    official_batch_no = fields.Char(string='Official Batch', readonly=True)
+    official_batch_no = fields.Char(string='Supplier Batch')
     existing_lot_id = fields.Many2one(
         'stock.lot', string='Official Lot', readonly=True, check_company=True,
     )

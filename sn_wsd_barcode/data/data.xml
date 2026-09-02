@@ -45,6 +45,16 @@
     </record>
 
     <data noupdate="1">
+        <!-- Incoming receipts use the warehouse stock location directly. -->
+        <function model="stock.picking.type" name="write">
+            <value model="stock.picking.type" search="[('code', '=', 'incoming')]"/>
+            <value eval="{
+                'restrict_scan_product': True,
+                'restrict_scan_tracking_number': 'mandatory',
+                'restrict_scan_dest_location': 'mandatory',
+            }"/>
+        </function>
+
         <!-- Set `restrict_scan_source_location` on True for outgoing picking types. -->
         <function model="stock.picking.type" name="write">
             <value model="stock.picking.type" search="[('code', '=', 'outgoing')]"/>

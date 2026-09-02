@@ -419,9 +419,9 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     updateLineQty(virtualId, qty = 1) {
-        this.actionMutex.exec(() => {
+        return this.actionMutex.exec(async () => {
             const line = this.pageLines.find((l) => l.virtual_id === virtualId);
-            this.updateLine(line, { qty_done: qty });
+            await this.updateLine(line, { qty_done: qty });
             this.trigger("update");
         });
     }
@@ -876,6 +876,9 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     get displayPutInPackButton() {
+        if (this.record.picking_type_code === "incoming") {
+            return false;
+        }
         return this.groups.group_tracking_lot && this.config.restrict_put_in_pack != "no";
     }
 
@@ -1013,6 +1016,13 @@ export default class BarcodePickingModel extends BarcodeModel {
                 method: "action_print_barcode",
             },
         ];
+        if (this.record.picking_type_code === "incoming") {
+            buttons.push({
+                name: _t("Print Labels"),
+                class: "o_print_material_labels",
+                method: "action_print_material_labels",
+            });
+        }
         if (this.groups.group_tracking_lot) {
             buttons.push({
                 name: _t("Print Packages"),
@@ -1024,8 +1034,38 @@ export default class BarcodePickingModel extends BarcodeModel {
         return buttons;
     }
 
+    async print(action, method) {
+        if (method !== "action_print_material_labels") {
+            return super.print(...arguments);
+        }
+        await this.save();
+        const options = this._getPrintOptions();
+        if (options.warning) {
+            return this.notification(options.warning, { type: "warning" });
+        }
+        const selectedLine = this.selectedLine || this.lastScannedLine;
+        const line =
+            selectedLine?.lines?.find((subline) => subline.lot_id || subline.lot_name) ||
+            selectedLine;
+        const context = {
+            active_move_line_id: line?.id || false,
+            active_lot_id: line?.lot_id?.id || false,
+        };
+        action = await this.orm.call(this.resModel, method, [[this.resId]], {
+            context,
+        });
+        this.action.doAction(action, options);
+    }
+
     get reloadingMoveLines() {
         return this.currentState !== undefined;
+    }
+
+    get displayAddProductButton() {
+        if (this.record.picking_type_code === "incoming") {
+            return true;
+        }
+        return super.displayAddProductButton;
     }
 
     async save() {
@@ -2458,14 +2498,14 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     _updateLineQty(line, args) {
-        if (args.qty_done) {
+        if (args.qty_done !== undefined) {
             if (line.product_id.tracking === "serial") {
                 const nextQty = line.qty_done + args.qty_done;
                 if (nextQty > 1 && (this.record.use_create_lots || this.record.use_existing_lots)) {
                     return; // Can't have more than 1 qty by serial number.
                 }
             }
-            line.qty_done += args.qty_done;
+            line.qty_done = Math.max(0, line.qty_done + args.qty_done);
             this._setUser();
         }
     }

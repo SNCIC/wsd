@@ -636,10 +636,13 @@ class QualityInspection(models.Model):
                 inspection.sample_checked_qty = inspection.x_picked_qty or inspection.sample_size
                 inspection.sample_defect_qty = len(set(with_sn.mapped('serial_identity_id').ids)) + sum(sn_less.mapped('qty'))
             else:
-                # iqc/oqc 原口径：有结果行数 / fail 行数
+                # IQC/OQC rows may represent one serial or an aggregated
+                # quantity when no serial tracking is available.
                 checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
-                inspection.sample_checked_qty = len(checked_samples)
-                inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail'))
+                inspection.sample_checked_qty = sum(checked_samples.mapped('qty'))
+                inspection.sample_defect_qty = sum(
+                    checked_samples.filtered(lambda sample: sample.result == 'fail').mapped('qty')
+                )
 
     @api.depends(
         'state',
@@ -739,14 +742,14 @@ class QualityInspection(models.Model):
 
     def _sample_commands_from_placeholders(self):
         self.ensure_one()
-        return [
-            Command.create({
-                'sequence': sequence,
-                'company_id': self.company_id.id,
-                'lot_id': self.lot_id.id,
-            })
-            for sequence in range(1, self.sample_size + 1)
-        ]
+        if self.sample_size <= 0:
+            return []
+        return [Command.create({
+            'sequence': 1,
+            'company_id': self.company_id.id,
+            'lot_id': self.lot_id.id,
+            'qty': self.sample_size,
+        })]
 
     def _ensure_sample_units(self):
         for inspection in self.filtered(lambda record: not record.sample_ids and record.sample_size > 0):

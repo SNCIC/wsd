@@ -1,5 +1,5 @@
 from odoo import _, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class StockPicking(models.Model):
@@ -25,6 +25,21 @@ class StockPicking(models.Model):
         self.ensure_one()
         if not self.can_print_material_labels:
             raise UserError(_('Material labels can only be printed for active receipts.'))
+        context = dict(self.env.context)
+        lot_id = context.get('active_lot_id')
+        lot = self.env['stock.lot'].browse(lot_id).exists() if lot_id else self.env['stock.lot']
+        if lot:
+            if (
+                lot.product_id.tracking != 'lot'
+                or lot.source_picking_id != self
+                or lot.company_id != self.company_id
+            ):
+                raise UserError(_('The selected material lot does not belong to this receipt.'))
+            action = self.env.ref(
+                'sn_wsd_stock.action_report_incoming_material_label_zpl'
+            ).report_action(lot, config=False)
+            action['close_on_report_download'] = True
+            return action
         view = self.env.ref(
             'sn_wsd_stock.view_incoming_material_label_wizard_form'
         )
@@ -33,10 +48,37 @@ class StockPicking(models.Model):
             'name': _('Generate and Print Material Labels'),
             'res_model': 'sn.wsd.incoming.material.label.wizard',
             'view_mode': 'form',
+            'views': [(view.id, 'form')],
             'view_id': view.id,
             'target': 'new',
-            'context': {'default_picking_id': self.id},
+            'context': {
+                'default_picking_id': self.id,
+                'default_move_line_id': context.get('active_move_line_id'),
+            },
         }
+
+    def button_validate(self):
+        for picking in self:
+            if picking.picking_type_code != 'incoming':
+                continue
+            unlabelled_lines = picking.move_line_ids.filtered(
+                lambda line: (
+                    line.product_id.tracking in ('lot', 'serial')
+                    and line.quantity > 0
+                    and not line.lot_id
+                )
+            )
+            if unlabelled_lines:
+                raise UserError(
+                    _(
+                        'Generate material labels before validating tracked '
+                        'products: %(products)s',
+                        products=', '.join(
+                            unlabelled_lines.mapped('product_id.display_name')
+                        ),
+                    )
+                )
+        return super().button_validate()
 
 
 class StockMoveLine(models.Model):
@@ -52,6 +94,49 @@ class StockMoveLine(models.Model):
     material_label_printed = fields.Boolean(
         string='Material Label Printed', copy=False, readonly=True,
     )
+
+    def _sync_material_lot_quantity(self):
+        for line in self.filtered(
+            lambda item: item.lot_id
+            and item.lot_id.material_sn_base
+            and item.product_id.tracking == 'lot'
+        ):
+            lot = line.lot_id
+            quantity = line.product_uom_id._compute_quantity(
+                line.quantity, line.product_id.uom_id,
+            )
+            lot_vals = {'initial_quantity': quantity}
+            parts = (lot.name or '').split('$')
+            if len(parts) >= 5 and parts[3].isdigit():
+                parts[3] = str(int(quantity))
+                new_name = '$'.join(parts)
+                duplicate = self.env['stock.lot'].search([
+                    ('id', '!=', lot.id),
+                    ('name', '=', new_name),
+                    ('product_id', '=', lot.product_id.id),
+                    '|',
+                    ('company_id', '=', False),
+                    ('company_id', '=', lot.company_id.id),
+                ], limit=1)
+                if duplicate:
+                    raise ValidationError(
+                        _('The material SN already exists: %s', new_name)
+                    )
+                lot_vals.update({
+                    'name': new_name,
+                    'material_sn_base': new_name,
+                })
+            lot.write(lot_vals)
+            line.write({
+                'lot_name': lot.name,
+                'material_sn_base': lot.material_sn_base,
+            })
+
+    def write(self, vals):
+        result = super().write(vals)
+        if 'quantity' in vals or 'qty_done' in vals:
+            self._sync_material_lot_quantity()
+        return result
 
 
 class StockLot(models.Model):

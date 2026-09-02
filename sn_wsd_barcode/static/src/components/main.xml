@@ -165,7 +165,7 @@
             </div>
         </div>
         <footer t-if="displayActionButtons" class="o_barcode_control o_action_buttons d-flex justify-content-between p-2 gap-2 border-top">
-            <button t-if="env.model.displayAddProductButton" class="o_add_line btn btn-secondary" t-on-click="onOpenProductPage">
+            <button t-if="env.model.displayAddProductButton" class="o_add_line btn btn-secondary" t-on-click="addLineButtonAction">
                 <t t-out="addLineBtnName" />
             </button>
             <button t-if="env.model.displayPutInPackButton" t-on-click="putInPack"
