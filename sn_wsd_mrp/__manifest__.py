@@ -11,6 +11,7 @@
         'wizard/mrp_team_member_wizard_views.xml',
         'wizard/mrp_electronics_wizard_views.xml',
         'wizard/mrp_production_split_views.xml',
+        'wizard/mes_online_confirm_wizard_views.xml',
         'views/res_partner_views.xml',
         'views/mrp_base_config_views.xml',
         'views/mrp_workcenter_views.xml',

@@ -1994,17 +1994,25 @@ msgid "Production line %(line)s is disabled and cannot be scheduled."
 msgstr "产线 %(line)s 已停用，不能排产。"
 
 #. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
-#: code:addons/sn_wsd_mrp/views/mes_order_views.xml:0
-msgid ""
-"Put this MES order online? SNs may then be fed in and the management mode is"
-" locked."
-msgstr "确认将该制令单上线？上线后允许投入 SN，且管理模式锁定。"
-
-#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
 msgid "Record Substitute Usage"
 msgstr "记录替代使用"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_online_confirm_form
+msgid "Replace and Go Online"
+msgstr "顶替上线"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_online_confirm_form
+msgid "Discard"
+msgstr "取消"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_online_confirm_wizard.py:0
+msgid "Production line %(line)s currently runs online MES order(s) %(others)s. Confirm to replace: %(others)s is taken offline automatically (boards already in flow keep moving) and %(name)s goes online (SNs may then be fed in and the management mode is locked)."
+msgstr "产线 %(line)s 当前有在线制令单 %(others)s。确认顶替：%(others)s 将被自动下线（已投入的在制板继续流转），%(name)s 上线（此后 SN 可投入、管理模式锁定）。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -8410,18 +8418,6 @@ msgstr "合同号"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid "Production line %(line)s already runs online MES order %(other)s; take it offline before putting %(name)s online."
-msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，再上线 %(name)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid "Production line %(line)s already runs online MES order %(other)s; take it offline first or force this one online (which takes %(other)s offline)."
-msgstr "产线 %(line)s 已有在线制令单 %(other)s；请先将其下线，或强制上线本单（会把 %(other)s 下线）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Only manufacturing managers can clear station passes."
 msgstr "仅制造管理员可以清除过站。"
 
@@ -8521,10 +8517,4 @@ msgstr "（自动）"
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "MES close without receipt %(order)s"
 msgstr "制令单 %(order)s 完结（不入库）倒冲"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
-msgid "Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."
-msgstr "强制上线本制令单？当前占用该产线的制令单将先被下线；已投入的在制板继续流转。"
-
 

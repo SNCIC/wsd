@@ -50,11 +50,7 @@
                     <button name="action_open_return_wizard" type="object" string="Return Material"
                             class="btn-secondary" invisible="state == 'cancelled' or picked_qty &lt;= 0"/>
                     <button name="action_online" type="object" string="Go Online"
-                            class="btn-primary" invisible="x_online_date or state == 'cancelled'"
-                            confirm="Put this MES order online? SNs may then be fed in and the management mode is locked."/>
-                    <button name="action_online_force" type="object" string="Force Online"
-                            invisible="x_online_date or state == 'cancelled'"
-                            confirm="Force this MES order online? The MES order currently occupying its production line is taken offline first; boards already in flow keep moving."/>
+                            class="btn-primary" invisible="x_online_date or state == 'cancelled'"/>
                     <button name="action_sync_route" type="object" string="Sync Route"
                             invisible="x_online_date or state == 'cancelled'"/>
                     <button name="action_cancel" type="object" string="Cancel (Revoke)" class="btn-secondary"
