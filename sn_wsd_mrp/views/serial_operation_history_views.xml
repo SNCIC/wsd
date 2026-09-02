@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================================================================
+         SN pass-station history (追溯性菜单): append-only log written by
+         every station pass (OK / NG / scrap / skipped). Browsing only -
+         rows are created by scan_enter/leave_station, never by hand.
+         ================================================================== -->
+    <record id="view_sn_wsd_serial_operation_history_list" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.operation.history.list</field>
+        <field name="model">sn.wsd.serial.operation.history</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="out_date"/>
+                <field name="serial_identity_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="workcenter_id" optional="show"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'ok'"
+                       decoration-warning="result == 'ng'"
+                       decoration-danger="result == 'scrap'"
+                       decoration-info="result == 'skipped'"/>
+                <field name="in_date" optional="hide"/>
+                <field name="operator_code"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- 过站历史为 append-only 日志：仅列表浏览，无 form -->
+    <record id="view_sn_wsd_serial_operation_history_search" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.operation.history.search</field>
+        <field name="model">sn.wsd.serial.operation.history</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="workcenter_id"/>
+                <field name="operator_code"/>
+                <filter name="f_ok" string="OK" domain="[('result', '=', 'ok')]"/>
+                <filter name="f_ng" string="NG" domain="[('result', '=', 'ng')]"/>
+                <filter name="f_scrap" string="Scrap" domain="[('result', '=', 'scrap')]"/>
+                <filter name="f_skipped" string="Skipped" domain="[('result', '=', 'skipped')]"/>
+                <separator/>
+                <filter name="f_today" string="Today"
+                        domain="[('out_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="g_serial" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="MES Order" name="g_mes_order" context="{'group_by': 'mes_order_id'}"/>
+                <filter string="Operation" name="g_operation" context="{'group_by': 'route_operation_id'}"/>
+                <filter string="Work Center" name="g_workcenter" context="{'group_by': 'workcenter_id'}"/>
+                <filter string="Result" name="g_result" context="{'group_by': 'result'}"/>
+                <filter string="Pass Date" name="g_out_date" context="{'group_by': 'out_date:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_serial_operation_history" model="ir.actions.act_window">
+        <field name="name">SN Operation History</field>
+        <field name="res_model">sn.wsd.serial.operation.history</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_serial_operation_history" name="SN Operation History"
+              parent="menu_sn_wsd_traceability" action="action_sn_wsd_serial_operation_history"
+              sequence="17"/>
+</odoo>

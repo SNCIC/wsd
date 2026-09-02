@@ -103,6 +103,33 @@ class TestMesOrder(TransactionCase):
         picking.action_cancel()
         return order
 
+    def test_online_replaces_occupying_order(self):
+        """一产线一在线单：占用时 action_online 返回确认向导（指明占用者），
+        向导确认后占用单自动下线、本单上线。"""
+        from .pick_gate import give_pick
+        mo_a = self._make_mo()
+        order_a = self._make_order(mo_a, 4)
+        self._gate_online(order_a)
+        self.assertTrue(order_a.x_online_date)
+        mo_b = self._make_mo()
+        order_b = self._make_order(mo_b, 4)
+        give_pick(self.env, order_b)
+        action = order_b.action_online()
+        self.assertEqual(action.get('res_model'), 'sn.wsd.mes.online.confirm')
+        self.assertFalse(order_b.x_online_date, 'nothing happens before the confirm')
+        wizard = self.env['sn.wsd.mes.online.confirm'].create({
+            'mes_order_id': order_b.id,
+            'occupying_ids': [(6, 0, order_a.ids)],
+        })
+        self.assertIn(order_a.name, wizard.message)
+        wizard.action_confirm_replace()
+        self.assertFalse(order_a.x_online_date, 'the occupying order is taken offline')
+        self.assertTrue(order_b.x_online_date)
+        self.assertEqual(order_a.state, 'in_progress',
+                         'being replaced does not change the lifecycle state')
+        self.assertIn('offline', self.env['sn.wsd.mes.order.log'].search([
+            ('mes_order_id', '=', order_a.id)]).mapped('action'))
+
     def _stock_component(self, mo, qty=100):
         """Put component stock in the MO source location so pickings validate."""
         self.env['stock.quant'].create({
@@ -600,18 +627,21 @@ class TestMesOrder(TransactionCase):
 
     def test_34_report_mode_quantities(self):
         """Report-mode quantities read the reported amounts at the counter
-        operations; successors unlock once the plan quantity is reached."""
+        operations; successors unlock by cascade (report-offline)：下游累计
+        不得超过上游累计，不再要求前置报满。"""
         order = self._make_online_order(qty=4, mode='report')
         op_in_row = order.x_mes_route_id.x_daily_input_operation_id
         op_out_row = order.x_mes_route_id.x_daily_output_operation_id
         order.report_operation_qty(op_in_row, 3)
         self.assertEqual(order.x_input_qty, 3.0)
         self.assertEqual(op_in_row.x_reported_qty, 3.0)
+        order.report_operation_qty(op_out_row, 3)
+        self.assertEqual(order.x_output_qty, 3.0)
         with self.assertRaises(ValidationError):
             order.report_operation_qty(op_out_row, 1)
         order.report_operation_qty(op_in_row, 1)
-        order.report_operation_qty(op_out_row, 2)
-        self.assertEqual(order.x_output_qty, 2.0)
+        order.report_operation_qty(op_out_row, 1)
+        self.assertEqual(order.x_output_qty, 4.0)
 
     def test_44_report_quota_scrap_and_completion(self):
         """Quota rule (OK+scrap consume, NG is a statistic, the whole batch

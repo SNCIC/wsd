@@ -58,8 +58,6 @@ class MesOrderOqc(models.Model):
         对显式 lot_qty 短路）在建单时固化样本数 n 与 Ac/Re 快照。"""
         self.ensure_one()
         Inspection = self.env['sn.wsd.quality.inspection']
-        if not self.x_online_date:
-            return Inspection
         scheme = Inspection._find_scheme(
             'oqc', product=self.production_id.product_id,
             route_operation=route_operation,

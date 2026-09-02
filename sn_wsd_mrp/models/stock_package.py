@@ -367,9 +367,12 @@ class CartonPalletBindingLog(models.Model):
 
         receipts = []
         for order, entry in order_map.items():
-            if order.state not in ('in_progress',) or not order.x_online_date:
+            # 产出归产出（进箱）、入账归入账（开单）：收货是产后动作，
+            # 与产线在线无关（与 action_complete 同口径）；完结/未投产
+            # 单仍拦截——done 意味着账已入齐，再来即超产异常。
+            if order.state != 'in_progress':
                 raise ValidationError(_(
-                    'MES order %s must be online and in progress to receive products.',
+                    'MES order %s must be in progress to receive products.',
                     order.name))
             if order.x_done_qty + entry['qty'] > order.x_output_qty + 0.0001:
                 raise ValidationError(_(

@@ -78,12 +78,12 @@ msgstr ""
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
 msgid "<strong>CSV import instructions</strong>"
-msgstr ""
+msgstr "<strong>CSV 导入说明</strong>"
 
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_consumption_smt_consumption_event_unique
 msgid "A product serial can only consume one material position per event."
-msgstr ""
+msgstr "同一事件中一个产品SN只能消耗一个料站的物料。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_material_table_line_sn_smt_table_line_unique
@@ -94,7 +94,7 @@ msgstr "一条生产线只能与同一个料表关联一次。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "A scrapped feeder cannot be maintained."
-msgstr ""
+msgstr "已报废的料枪不能维护。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__area_sn
@@ -120,12 +120,12 @@ msgstr "需要采取行动"
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__active
 msgid "Active"
-msgstr ""
+msgstr "生效"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__active_line_ids
 msgid "Active Feeder Lines"
-msgstr ""
+msgstr "在用料枪行"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_ids
@@ -158,7 +158,7 @@ msgstr "实际料号"
 msgid ""
 "All SMT material positions must be loaded before the product can pass this "
 "station."
-msgstr ""
+msgstr "所有 SMT 料站物料完成上料后产品才能过站。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -168,8 +168,6 @@ msgid ""
 "%(order)s. Maintain the material operation on the route before passing "
 "stations."
 msgstr "制令单 %(order)s 的工艺路线未维护物料关联工序：请先在路线上维护物料关联工序，再过站。"
-
-
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__message_attachment_count
@@ -186,7 +184,7 @@ msgstr "卷可用数量"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Binding %s has invalid boardNo."
-msgstr ""
+msgstr "绑定 %s 的 boardNo 无效。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -226,7 +224,7 @@ msgstr "单板序列号 %s 已存在于此拼板中。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
 msgid "Board SN %s is already bound to this manufacturing order."
-msgstr ""
+msgstr "单板SN %s 已绑定到该制造订单。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__board_ids
@@ -237,13 +235,13 @@ msgstr "单板序列号列表"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Board SN values are already bound to this MES order: %s"
-msgstr ""
+msgstr "单板SN已绑定到该制令单：%s"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Board SN values are already linked to PCB boards: %s"
-msgstr ""
+msgstr "单板SN已关联到 PCB 单板记录：%s"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -295,7 +293,7 @@ msgstr "业务列名"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__cart_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_mount_wizard__cart_id
 msgid "CART_SN"
-msgstr ""
+msgstr "料车SN"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__chanel_sn
@@ -344,25 +342,25 @@ msgstr "料车"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Cart %s cleared: %s feeder(s) unbound."
-msgstr ""
+msgstr "料车 %s 已清空：解绑 %s 支料枪。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Cart %s mounted on %s."
-msgstr ""
+msgstr "料车 %s 已安装到 %s。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Cart %s scrapped."
-msgstr ""
+msgstr "料车 %s 已报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Cart %s unmounted from %s."
-msgstr ""
+msgstr "料车 %s 已从 %s 卸下。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_log__operation_type__cart_load
@@ -703,14 +701,14 @@ msgstr "双轨"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Duplicate board SN values in bindings: %s"
-msgstr ""
+msgstr "绑定中存在重复的单板SN：%s"
 
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_mrp_feeder_line_sn_smt_feeder_line_online_material_unique
 msgid ""
 "Each SMT online material position can only have one feeder verification "
 "line."
-msgstr ""
+msgstr "每个 SMT 在线物料料站只能有一条料枪校验行。"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_form
@@ -787,7 +785,7 @@ msgstr "设备序号"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__external_event_id
 msgid "External Event ID"
-msgstr ""
+msgstr "外部事件ID"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__feeder_id
@@ -798,7 +796,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_repair__feeder_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_feeder_scrap__feeder_id
 msgid "FEEDER_SN"
-msgstr ""
+msgstr "料枪SN"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__feeder_spec
@@ -839,13 +837,13 @@ msgstr "料车"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__feeder_count
 msgid "Feeder Count"
-msgstr ""
+msgstr "料枪数量"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__line_ids
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__feeder_line_ids
 msgid "Feeder Lines"
-msgstr ""
+msgstr "料枪行"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_feeder_line__feeder_spec
@@ -858,7 +856,7 @@ msgstr "飞达规格"
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid ""
 "Feeder control is enabled on the production line: scan the feeder SN first."
-msgstr ""
+msgstr "该产线已启用料枪管控：请先扫描料枪SN。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__feeder_ids
@@ -872,7 +870,7 @@ msgstr "Feeder"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Field proSn cannot be empty."
-msgstr ""
+msgstr "字段 proSn 不能为空。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_table_import_wizard__import_filename
@@ -1042,7 +1040,7 @@ msgstr "装车时间"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__actual_item_code
 msgid "Internal Reference"
-msgstr ""
+msgstr "内部编码"
 
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_sn_wsd_internal_serial
@@ -1063,7 +1061,7 @@ msgstr "无效"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Invalid usage item: %(item)s"
-msgstr ""
+msgstr "无效的使用条目：%(item)s"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__message_is_follower
@@ -1201,7 +1199,7 @@ msgstr "批次/序列号"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__material_sn
 msgid "Lot/Serial Number"
-msgstr ""
+msgstr "物料SN"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart_line__mes_order_id
@@ -1223,7 +1221,7 @@ msgstr "制令单"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "MES order has no active SMT manufacturing order."
-msgstr ""
+msgstr "制令单没有生效中的 SMT 制造订单。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__production_name
@@ -1312,7 +1310,7 @@ msgstr "手动"
 #. odoo-python
 #: code:addons/sn_wsd_smt/wizard/sn_smt_feeder_action_wizard.py:0
 msgid "Manual scrap."
-msgstr ""
+msgstr "人工报废。"
 
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_mrp_production
@@ -1444,7 +1442,7 @@ msgstr "否"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "No feeder found for SN \"%s\"."
-msgstr ""
+msgstr "未找到 SN 为 \"%s\" 的料枪。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -1544,7 +1542,7 @@ msgstr "上料"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__online_material_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__online_material_id
 msgid "Online Material"
-msgstr ""
+msgstr "在线物料"
 
 #. module: sn_wsd_smt
 #: model:ir.ui.menu,name:sn_wsd_smt.menu_sn_smt_online_material
@@ -1555,31 +1553,31 @@ msgstr "在线料表"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Only a disabled cart can be enabled."
-msgstr ""
+msgstr "只有已停用的料车才能启用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Only a disabled feeder can be enabled."
-msgstr ""
+msgstr "只有已停用的料枪才能启用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Only a feeder in repair can be completed."
-msgstr ""
+msgstr "只有送修中的料枪才能完成维修。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Only a normal feeder can be disabled."
-msgstr ""
+msgstr "只有正常状态的料枪才能停用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Only a normal feeder can be reported for repair."
-msgstr ""
+msgstr "只有正常状态的料枪才能报修。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__operated_at
@@ -1605,7 +1603,7 @@ msgstr "操作人"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__operator_code
 msgid "Operator Code"
-msgstr ""
+msgstr "操作员代码"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_form
@@ -1683,7 +1681,7 @@ msgstr "项目ID"
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_product_template_form_purchase_packaging
 msgid "Packagings"
-msgstr ""
+msgstr "包装"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__panel_id
@@ -1716,6 +1714,7 @@ msgstr "拼板数量（quantity）必须大于 0。"
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel.py:0
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Panel quantity must be positive."
 msgstr "拼板数量必须为正数。"
 
@@ -1806,7 +1805,7 @@ msgstr "产品编号"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__product_qty
 msgid "Product Qty"
-msgstr ""
+msgstr "产品数量"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__internal_serial_id
@@ -1819,7 +1818,7 @@ msgstr "产品SN"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Product SN [%s] does not exist."
-msgstr ""
+msgstr "产品SN [%s] 不存在。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_pcb_board__pro_sn
@@ -1913,7 +1912,7 @@ msgstr "换料次数"
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__replaced
 msgid "Replaced"
-msgstr ""
+msgstr "已替换"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_feeder_action_wizard__action__report_repair
@@ -1966,12 +1965,7 @@ msgstr "冲销单"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_consumption.py:0
 msgid "Reversal of SMT material consumption."
-msgstr ""
-
-#. module: sn_wsd_smt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_consumption_form
-msgid "Reverse"
-msgstr "冲销"
+msgstr "SMT 物料扣点冲销。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2064,7 +2058,7 @@ msgstr "扣点数量"
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder
 msgid "SMT Feeder"
-msgstr ""
+msgstr "SMT 料枪"
 
 #. module: sn_wsd_smt
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_feeder_channel
@@ -2099,7 +2093,7 @@ msgstr "SMT 飞达上料记录"
 #. module: sn_wsd_smt
 #: model:ir.actions.server,name:sn_wsd_smt.ir_cron_sn_smt_feeder_care_state_ir_actions_server
 msgid "SMT Feeder: Refresh Care State"
-msgstr ""
+msgstr "SMT 料枪：刷新 Feeder维护状态"
 
 #. module: sn_wsd_smt
 #: model:ir.actions.act_window,name:sn_wsd_smt.action_sn_smt_feeder
@@ -2212,7 +2206,7 @@ msgid ""
 "SMT PCB board quantity exceeds manufacturing order planned quantity. "
 "Planned: %(planned_qty)s, existing effective: %(existing_qty)s, requested: "
 "%(requested_qty)s, available: %(available_qty)s."
-msgstr ""
+msgstr "SMT PCB 单板数量超过制造订单排产数量。计划：%(planned_qty)s，现有生效：%(existing_qty)s，本次请求：%(requested_qty)s，可用：%(available_qty)s。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__smt_consumption_ids
@@ -2240,14 +2234,14 @@ msgstr "SMT 料表导入 Mixin"
 msgid ""
 "SMT material %(material)s at loadpoint %(loadpoint)s has insufficient "
 "points."
-msgstr ""
+msgstr "料站 %(loadpoint)s 的物料 %(material)s 点数不足。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/mrp_production.py:0
 msgid ""
 "SMT online materials cannot be regenerated after online loading has started."
-msgstr ""
+msgstr "上料开始后不能重新生成 SMT 在线物料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2255,13 +2249,13 @@ msgstr ""
 msgid ""
 "SMT online materials cannot be regenerated because SMT material logs already"
 " exist."
-msgstr ""
+msgstr "已存在 SMT 物料日志，不能重新生成在线物料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "SMT panel binding requires laser-generated board SN records."
-msgstr ""
+msgstr "SMT 拼板绑定需要激光生成的单板SN记录。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__consumption_ids
@@ -2273,7 +2267,7 @@ msgstr "扣点流水"
 msgid ""
 "Save the completed template as a UTF-8 CSV file. Keep the header names unchanged.\n"
 "                            The first four columns are required. Empty rows are ignored."
-msgstr ""
+msgstr "将填写完成的模板另存为 UTF-8 编码的 CSV 文件，表头名称保持不变。前四列必填，空行忽略。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__board_count
@@ -2326,8 +2320,8 @@ msgstr "报废人"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__serial_no
-msgid "Serial No"
-msgstr ""
+msgid "Physical SN"
+msgstr "产品SN"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
@@ -2365,7 +2359,7 @@ msgstr "保养前点数"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__source_system
 msgid "Source System"
-msgstr ""
+msgstr "来源系统"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
@@ -2381,13 +2375,13 @@ msgstr "料站号"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Stations on the cart but not required by the MES order: %s."
-msgstr ""
+msgstr "料车上存在制令单不需要的料站：%s。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "Stations required by the MES order but not on the cart: %s."
-msgstr ""
+msgstr "制令单需要的料站不在料车上：%s。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__status
@@ -2475,12 +2469,12 @@ msgstr "每个公司的 SMT 配置键必须是唯一的。"
 msgid ""
 "The cart %s is prepared for MES order %s. All feeder lines must target the "
 "same MES order."
-msgstr ""
+msgstr "料车 %s 是为制令单 %s 备料的，所有料枪行必须指向同一制令单。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_cart_sn_smt_cart_sn_unique
 msgid "The cart SN must be unique per company."
-msgstr ""
+msgstr "料车SN在公司内必须唯一。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2488,73 +2482,73 @@ msgstr ""
 msgid ""
 "The cart cannot be mounted because materials conflict with the MES order "
 "requirements: %s"
-msgstr ""
+msgstr "物料与制令单要求冲突，料车不能安装：%s"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "The cart has no active preparation lines for this MES order."
-msgstr ""
+msgstr "料车没有该制令单的有效备料行。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart holds feeders with an invalid status: %s."
-msgstr ""
+msgstr "料车上有状态无效的料枪：%s。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart is already mounted on %s."
-msgstr ""
+msgstr "料车已安装在 %s 上。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart is already scrapped."
-msgstr ""
+msgstr "料车已报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart is not mounted on any workcenter."
-msgstr ""
+msgstr "料车未安装到任何工作中心。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart is scrapped and cannot be disabled."
-msgstr ""
+msgstr "料车已报废，不能停用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart must be empty before it can be scrapped."
-msgstr ""
+msgstr "料车必须清空后才能报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart must be unmounted before it can be cleared."
-msgstr ""
+msgstr "料车必须卸下后才能清空。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart must be unmounted before it can be disabled."
-msgstr ""
+msgstr "料车必须卸下后才能停用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart must be unmounted before it can be scrapped."
-msgstr ""
+msgstr "料车必须卸下后才能报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The cart status is invalid."
-msgstr ""
+msgstr "料车状态无效。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2566,7 +2560,7 @@ msgstr "换料类型无效。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "The channel SN \"%s\" is ambiguous."
-msgstr ""
+msgstr "通道SN \"%s\" 不唯一。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_feeder_channel_sn_smt_channel_sn_unique
@@ -2577,7 +2571,7 @@ msgstr "通道SN必须在公司内唯一。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "The channel number must be 1, 2 or 3."
-msgstr ""
+msgstr "通道号必须是 1、2 或 3。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2626,7 +2620,7 @@ msgstr "每个料表中的设备顺序、台车/料表号、料站和通道必�
 #. odoo-python
 #: code:addons/sn_wsd_smt/wizard/sn_smt_feeder_action_wizard.py:0
 msgid "The fault description is required."
-msgstr ""
+msgstr "故障描述必填。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2634,7 +2628,7 @@ msgstr ""
 msgid ""
 "The feeder \"%(sn)s\" is bound to manufacturing order %(order)s. Unload it "
 "first."
-msgstr ""
+msgstr "料枪 \"%(sn)s\" 已绑定制造订单 %(order)s，请先下料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2642,7 +2636,7 @@ msgstr ""
 msgid ""
 "The feeder \"%(sn)s\" is still on cart %(cart)s. Unbind it from the cart "
 "first."
-msgstr ""
+msgstr "料枪 \"%(sn)s\" 仍在料车 %(cart)s 上，请先从料车解绑。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2650,31 +2644,31 @@ msgstr ""
 msgid ""
 "The feeder \"%(sn)s\" must have exactly %(expected)s channel SN line(s) for "
 "its channel type."
-msgstr ""
+msgstr "料枪 \"%(sn)s\" 按其通道类型必须恰好有 %(expected)s 行通道SN。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The feeder %s is already on cart %s."
-msgstr ""
+msgstr "料枪 %s 已在料车 %s 上。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The feeder %s is not available for cart loading."
-msgstr ""
+msgstr "料枪 %s 不可用于料车上料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "The feeder SN \"%s\" is ambiguous."
-msgstr ""
+msgstr "料枪SN \"%s\" 不唯一。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "The feeder SN \"%s\" is scrapped."
-msgstr ""
+msgstr "料枪SN \"%s\" 已报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2685,7 +2679,7 @@ msgstr "供料器序列号不存在。"
 #. module: sn_wsd_smt
 #: model:ir.model.constraint,message:sn_wsd_smt.constraint_sn_smt_feeder_sn_smt_feeder_sn_unique
 msgid "The feeder SN must be unique per company."
-msgstr ""
+msgstr "料枪SN在公司内必须唯一。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2697,13 +2691,13 @@ msgstr "供料器通道与 SMT 位置通道不匹配。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "The feeder is already bound to another MES order."
-msgstr ""
+msgstr "料枪已绑定到其他制令单。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "The feeder is already scrapped."
-msgstr ""
+msgstr "料枪已报废。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2716,7 +2710,7 @@ msgstr "供料器无法使用，因为保养状态无效。"
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid ""
 "The feeder reached its usage limit and must be scrapped, not maintained."
-msgstr ""
+msgstr "料枪已达使用上限，应报废而非维护。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2759,13 +2753,13 @@ msgstr "关联的生产线所属公司必须与料表所属公司一致。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The material %s does not match station %s. Required item code: %s."
-msgstr ""
+msgstr "物料 %s 与料站 %s 不匹配。要求料号：%s。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The material %s is already mounted on a cart."
-msgstr ""
+msgstr "物料 %s 已安装在料车上。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2793,7 +2787,7 @@ msgstr "物料序列号与当前在线物料表要求不匹配。"
 msgid ""
 "The material does not match the current SMT loadpoint requirement "
 "(%(required)s)."
-msgstr ""
+msgstr "物料与当前 SMT 料站要求不符（%(required)s）。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2821,31 +2815,31 @@ msgstr "每个制造订单的在线物料位置必须是唯一的。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "The source MES order has no loaded SMT material positions."
-msgstr ""
+msgstr "源制令单没有已上料的 SMT 料站物料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The station %s is not required by MES order %s."
-msgstr ""
+msgstr "料站 %s 不是制令单 %s 要求的。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "The station %s on cart %s is already occupied."
-msgstr ""
+msgstr "料车 %2$s 上的料站 %1$s 已被占用。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "The target MES order has no SMT online material positions."
-msgstr ""
+msgstr "目标制令单没有 SMT 在线料站物料。"
 
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
 msgid "The two MES orders must belong to the same company."
-msgstr ""
+msgstr "两个制令单必须属于同一公司。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -2857,7 +2851,7 @@ msgstr "下料范围无效。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_consumption.py:0
 msgid "This SMT consumption has already been reversed."
-msgstr ""
+msgstr "该 SMT 扣点已冲销。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__product_side__top
@@ -2878,7 +2872,7 @@ msgstr "轨道类型"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_feeder_line__is_tray
 msgid "Tray"
-msgstr ""
+msgstr "托盘"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form
@@ -2914,7 +2908,7 @@ msgstr "确认解绑料车上全部feeder？"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_consumption__material_sn
 msgid "Unique Lot/Serial Number"
-msgstr ""
+msgstr "唯一批号/序列号"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_log__operation_type__unload
@@ -2983,7 +2977,7 @@ msgstr "使用上限到期"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_feeder.py:0
 msgid "Usage count or usage period limit reached."
-msgstr ""
+msgstr "已达使用次数或使用期限上限。"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_table_search
@@ -2998,7 +2992,7 @@ msgstr "值"
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__voided
 msgid "Voided"
-msgstr ""
+msgstr "已作废"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_cart__website_message_ids
@@ -3059,19 +3053,11 @@ msgstr "panel_id 必须是数字。"
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_cart.py:0
 msgid "station %s: %s loaded, %s required."
-msgstr ""
-
-#. module: sn_wsd_smt
-msgid "Batch Unload"
-msgstr "批量下料"
+msgstr "料站 %s：已上料 %s，要求 %s。"
 
 #. module: sn_wsd_smt
 msgid "SMT Loaded Material Count"
 msgstr "在线物料数"
-
-#. module: sn_wsd_smt
-msgid "Batch unload ALL online materials of this MES order? Remaining points stay on the reels."
-msgstr "整单批量下料该制令单的全部在线物料？各卷余量将保留在卷上。"
 
 #. module: sn_wsd_smt
 msgid "%(count)s material positions were unloaded; remaining points stay on the reels."
@@ -3135,12 +3121,6 @@ msgstr "拼版数量必须是整数。"
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
-msgid "Panel quantity must be positive."
-msgstr "拼版数量必须为正数。"
-
-#. module: sn_wsd_smt
-#. odoo-python
-#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Bindings are required."
 msgstr "板SN绑定列表（bindings）必填。"
 
@@ -3171,20 +3151,8 @@ msgstr "请提供 productNo 或 proSn 进行查询。"
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
-msgid "Query successful."
-msgstr "查询成功。"
-
-#. module: sn_wsd_smt
-#. odoo-python
-#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
 msgid "Panel %s does not exist."
 msgstr "拼版 %s 不存在。"
-
-#. module: sn_wsd_smt
-#. odoo-python
-#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
-msgid "Deleted successfully."
-msgstr "删除成功。"
 
 #. module: sn_wsd_smt
 #. odoo-python
@@ -3197,3 +3165,37 @@ msgstr "TABLE_NO 只能存表名（如 T1），不能存整条 DEVICE.TABLE 码�
 #: code:addons/sn_wsd_smt/models/mrp_production.py:0
 msgid "SN %(sn)s entering %(op)s of MES order %(order)s: %(msg)s"
 msgstr "SN %(sn)s 到站 %(op)s（制令单 %(order)s）：%(msg)s"
+
+
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__serial_identity_id
+msgid "SN"
+msgstr "SN"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__route_operation_id
+msgid "Route Operation"
+msgstr "工序"
+
+#. module: sn_wsd_smt
+#: model:ir.model,name:sn_wsd_smt.model_sn_wsd_serial_identity
+msgid "Physical Serial Identity"
+msgstr "物理序列号身份"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
+msgid "The feeder channel SN does not exist."
+msgstr "料枪通道SN不存在。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_loading_service.py:0
+msgid "The feeder channel SN is required."
+msgstr "料枪通道SN必填。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_cart_line__mes_order_id
+msgid "The order the line is prepared for. May be empty during offline preparation before the order goes online; it is matched to the online material table when the cart is mounted (load_cart)."
+msgstr "该行所备料的制令单。制令单上线前的离线备料阶段可为空；安装料车（load_cart）时与在线料表匹配。"

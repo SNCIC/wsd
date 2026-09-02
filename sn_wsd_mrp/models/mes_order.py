@@ -408,55 +408,59 @@ class MesOrder(models.Model):
                 continue
             order.x_mes_route_id = MesRoute._build_from_common(order).id
 
-    def action_online_force(self):
-        """Go Online button variant: takes the MES order occupying the
-        production line offline first (one online order per line)."""
-        return self.action_online(force=True)
-
-    def action_online(self, force=False):
+    def action_online(self):
         """Put the order online: SN feeding is allowed from this moment on,
         the mode is locked and the common route stops auto-syncing in.
-        ``force`` takes the MES order currently occupying the production
-        line offline first (one online order per line)."""
-        for order in self:
-            if order.x_online_date:
-                raise ValidationError(_(
-                    'MES order %(name)s is already online.', name=order.name))
-            if order.state == 'cancelled':
-                raise ValidationError(_(
-                    'MES order %(name)s is cancelled and cannot go online.',
-                    name=order.name))
-            # 排产→领料→上线：领料不可跳过（mes-picking-lifecycle R1），
-            # 存在任何未取消领料单即视为"领过"，宽松口径防误拦
-            if not order.picking_ids.filtered(lambda p: p.state != 'cancel'):
-                raise ValidationError(_(
-                    'MES order %(name)s has no material requisition yet; '
-                    'issue material before going online.', name=order.name))
-            # 一条产线同一时刻只能有一张在线制令单：默认拦下并指明占
-            # 用者；force 模式（强制上线）先把占用单下线再上线本单
-            occupying = self.search([
-                ('production_line_id', '=', order.production_line_id.id),
-                ('id', '!=', order.id),
-                ('state', 'not in', ('cancelled', 'done')),
-                ('x_online_date', '!=', False),
-            ])
-            if occupying:
-                if not force:
-                    raise ValidationError(_(
-                        'Production line %(line)s already runs online MES order '
-                        '%(other)s; take it offline first or force this one '
-                        'online (which takes %(other)s offline).',
-                        line=order.production_line_id.display_name or '-',
-                        other=', '.join(occupying.mapped('name'))))
-                occupying.action_offline()
-            order.x_online_date = fields.Datetime.now()
-            # 正常业务序（排产→领料→上线）走完的单停在 picked：
-            # 上线即投产，released/picked 都转入 in_progress，否则
-            # action_complete 的 in_progress 门槛会把正规流程卡死
-            if order.state in ('released', 'picked'):
-                order.state = 'in_progress'
-            self.env['sn.wsd.mes.order.log'].create(
-                {'mes_order_id': order.id, 'action': 'online'})
+        One online order per line: when the line is occupied the confirm
+        wizard names the occupying order(s); confirming replaces them."""
+        self.ensure_one()
+        if self.x_online_date:
+            raise ValidationError(_(
+                'MES order %(name)s is already online.', name=self.name))
+        if self.state == 'cancelled':
+            raise ValidationError(_(
+                'MES order %(name)s is cancelled and cannot go online.',
+                name=self.name))
+        # 排产→领料→上线：领料不可跳过（mes-picking-lifecycle R1），
+        # 存在任何未取消领料单即视为"领过"，宽松口径防误拦
+        if not self.picking_ids.filtered(lambda p: p.state != 'cancel'):
+            raise ValidationError(_(
+                'MES order %(name)s has no material requisition yet; '
+                'issue material before going online.', name=self.name))
+        occupying = self.search([
+            ('production_line_id', '=', self.production_line_id.id),
+            ('id', '!=', self.id),
+            ('state', 'not in', ('cancelled', 'done')),
+            ('x_online_date', '!=', False),
+        ])
+        if occupying:
+            # 一条产线一在线单：弹确认向导（指明占用者），确认后顶替
+            return {
+                'type': 'ir.actions.act_window',
+                'name': _('Go Online'),
+                'res_model': 'sn.wsd.mes.online.confirm',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                    'default_mes_order_id': self.id,
+                    'default_occupying_ids': [(6, 0, occupying.ids)],
+                },
+            }
+        return self._apply_online(occupying)
+
+    def _apply_online(self, occupying):
+        """实际置位：占用单下线（顶替）→ 在线标记/状态推进/日志。"""
+        self.ensure_one()
+        if occupying:
+            occupying.action_offline()
+        self.x_online_date = fields.Datetime.now()
+        # 正常业务序（排产→领料→上线）走完的单停在 picked：
+        # 上线即投产，released/picked 都转入 in_progress，否则
+        # action_complete 的 in_progress 门槛会把正规流程卡死
+        if self.state in ('released', 'picked'):
+            self.state = 'in_progress'
+        self.env['sn.wsd.mes.order.log'].create(
+            {'mes_order_id': self.id, 'action': 'online'})
 
     def action_offline(self):
         """Take the order offline: feeding NEW SNs at start operations
@@ -848,6 +852,12 @@ class MesOrder(models.Model):
                               qty_scrap=0.0, scrap_reason=False):
         """Report mode: report one batch of an operation.
 
+        报工即开工（report-offline，2026-09-01 用户规则）：报工不要求
+        在线/上线；首笔报工把单据转入生产中（领料不可跳过，与上线硬闸
+        同口径）。顺序锁为级联制：本工序累计（OK+报废）+ 本批（OK+报废）
+        不得超过前置工序累计（OK+报废），多前置（OR-join）取最大；首工序
+        只受配额约束。
+
         Quota rule: this batch (OK + NG + scrap) must fit into the plan
         remainder -- planned minus accumulated OK and scrap. NG is a pure
         statistic (reworked boards come back as a later OK report); scrap
@@ -858,9 +868,6 @@ class MesOrder(models.Model):
             raise ValidationError(_(
                 'MES order %(name)s is managed by SN station tracking; '
                 'operation reporting is not available.', name=self.name))
-        if not self.x_online_date:
-            raise ValidationError(_(
-                'MES order %(name)s is not online yet.', name=self.name))
         if qty_ok < 0 or qty_ng < 0 or qty_scrap < 0:
             raise ValidationError(_('Reported quantities cannot be negative.'))
         batch = qty_ok + qty_ng + qty_scrap
@@ -884,12 +891,26 @@ class MesOrder(models.Model):
                 '(NG does not consume quota; scrap and OK do).',
                 batch=batch, remaining=max(remaining, 0.0),
                 planned=self.planned_qty))
-        reachable = self.get_reachable_operations()
-        if route_operation not in reachable:
-            raise ValidationError(_(
-                'Operation %(op)s cannot be reported yet: none of its '
-                'predecessors is fully reported.',
-                op=route_operation.display_label))
+        predecessors = route_operation.blocked_by_ids
+        if predecessors:
+            def _effective(op):
+                reports = op.report_ids
+                return sum(reports.mapped(
+                    lambda r: r.qty_ok + r.qty_scrap)) if reports else 0.0
+            upstream_cap = max(_effective(p) for p in predecessors)
+            if accumulated + qty_ok + qty_scrap > upstream_cap + 0.0001:
+                raise ValidationError(_(
+                    'Operation %(op)s: this report would exceed the '
+                    'accumulated quantity of its predecessors (%(cap)s).',
+                    op=route_operation.display_label, cap=upstream_cap))
+        if self.state in ('released', 'picked'):
+            # 首笔报工即开工；领料不可跳过（存在任何未取消领料单即算
+            # "领过"，宽松口径防误拦——与 action_online 硬闸一致）
+            if not self.picking_ids.filtered(lambda p: p.state != 'cancel'):
+                raise ValidationError(_(
+                    'MES order %(name)s has no material requisition yet; '
+                    'issue material before reporting.', name=self.name))
+            self.state = 'in_progress'
         if qty_scrap > 0:
             if not scrap_reason:
                 raise ValidationError(_('Select a scrap reason.'))

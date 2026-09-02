@@ -7,3 +7,4 @@ from . import mes_pick_wizard
 from . import mes_done_wizard
 from . import generate_sn_wizard
 from . import mes_return_wizard
+from . import mes_online_confirm_wizard

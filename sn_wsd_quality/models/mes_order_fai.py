@@ -92,8 +92,8 @@ class MesOrderFai(models.Model):
     def _fai_maybe_open_round(self, route_operation=False):
         Inspection = self.env['sn.wsd.quality.inspection']
         for order in self:
-            if not order.x_online_date:
-                continue  # 下线状态不建单
+            # 检验任务生成用户规则（2026-09-01）：检验配置命中工序，
+            # 报工/过站触发即建单，不依赖制令单上线
             scheme = Inspection._find_scheme(
                 'fai', product=order.production_id.product_id,
                 production=order.production_id)
