@@ -1322,11 +1322,12 @@ class MesOrder(models.Model):
         warehouse.picking_type_over_pick_id = picking_type.id
         return picking_type
 
-    def _mes_create_receipt(self, qty, destination, workshop=False, lot_name=False):
+    def _mes_create_receipt(self, qty, destination, workshop=False):
         """One completion receipt: production -> finished-goods stock
         (waiting for warehouse validation) or -> workshop line side
-        (auto-validated). 成品 tracking='lot' 时收货行挂批次：批次来自
-        调用方（向导输入），留空按 制令单+日期 自动生成/复用。"""
+        (auto-validated). 成品 tracking='lot' 时（finished-goods-material-sn）：
+        成品库路径收货行不带码，等标签向导建码挂行（无码验证由原生缺批次
+        约束拦截）；线边直验在过账前按批级码规则自动生成挂行。"""
         self.ensure_one()
         mo = self.production_id
         warehouse = mo.picking_type_id.warehouse_id
@@ -1358,36 +1359,22 @@ class MesOrder(models.Model):
             'x_mes_order_id': self.id,
             'x_mes_order_qty': qty,
         })
-        lot = False
-        if mo.product_id.tracking == 'lot':
-            lot_value = (lot_name or '').strip() or '%s-%s' % (
-                self.name, fields.Date.context_today(self).strftime('%Y%m%d'))
-            lot = self.env['stock.lot'].search([
-                ('name', '=', lot_value),
-                ('product_id', '=', mo.product_id.id),
-                ('company_id', 'in', [self.company_id.id, False]),
-            ], limit=1)
-            if not lot:
-                lot = self.env['stock.lot'].create({
-                    'name': lot_value,
-                    'product_id': mo.product_id.id,
-                    'company_id': self.company_id.id,
-                })
+        # 线边直验：原生约束要求过账前 lot 就位——批级物料SN在此生成挂行；
+        # 成品库路径不生成（lot=False），行不带码等标签向导
+        lot = (self._mes_finished_material_lot(qty, picking)
+               if destination == 'lineside' else self.env['stock.lot'])
         move_vals = {
             'description_picking_manual': _('MES completion %(order)s', order=self.name),
             'product_id': mo.product_id.id,
             'product_uom': mo.product_uom_id.id,
             'product_uom_qty': qty,
-            'quantity': qty,
-            'picked': True,
             'picking_id': picking.id,
             'location_id': src.id,
             'location_dest_id': dest.id,
             'company_id': self.company_id.id,
         }
         if lot:
-            # 批次挂到收货行（quantity 由行汇总），仓库验证/自动验证都不再缺批次
-            move_vals.pop('quantity', None)
+            # 批次挂到收货行（quantity 由行汇总），过账即带码
             move_vals['move_line_ids'] = [(0, 0, {
                 'product_id': mo.product_id.id,
                 'product_uom_id': mo.product_uom_id.id,
@@ -1399,11 +1386,44 @@ class MesOrder(models.Model):
                 'company_id': self.company_id.id,
                 'picked': True,
             })]
+        elif mo.product_id.tracking != 'lot':
+            move_vals.update({'quantity': qty, 'picked': True})
+        # tracking='lot' 且成品库路径：仅需求量（不带数量/行）——验证依赖
+        # 系统默认约束（无处理数量拦截），标签向导挂码行后方可过账
         self.env['stock.move'].create(move_vals)
         picking.action_confirm()
         if destination == 'lineside':
             picking.button_validate()
+        elif mo.product_id.tracking == 'lot':
+            # 确认即预留会在生产位留下无码预留行（可绕过原生约束直接过账）
+            # ——解除预留，让「无处理数量」成为默认闸，等标签向导挂码行
+            picking.do_unreserve()
         return picking
+
+    def _mes_finished_material_lot(self, qty, picking):
+        """批级物料SN hook（finished-goods-material-sn）：基础实现不生成
+        （成品裸数量过账）；sn_wsd_stock 扩展按
+        ``料号$公司码$批次段$数量$序号`` 生成 lot 并挂批次属性（批次段=
+        MO 合同号空则当天日期，序数复用来料全局序列）。"""
+        return self.env['stock.lot']
+
+    def _mes_meter_lot(self, sn, product, picking):
+        """台级物料SN hook（finished-goods-material-sn）：码=表 SN、数量
+        恒 1。基础实现 search-or-create 裸 lot；sn_wsd_stock 扩展补充批次
+        属性与来源收货单回链。"""
+        self.ensure_one()
+        lot = self.env['stock.lot'].search([
+            ('name', '=', sn),
+            ('product_id', '=', product.id),
+            ('company_id', 'in', [self.company_id.id, False]),
+        ], limit=1)
+        if not lot:
+            lot = self.env['stock.lot'].create({
+                'name': sn,
+                'product_id': product.id,
+                'company_id': self.company_id.id,
+            })
+        return lot
 
     def _mes_create_pallet_receipt(self, qty, cartons, origin_pallets=False):
         """Pallet receipt with per-carton move lines: production ->
@@ -1441,8 +1461,33 @@ class MesOrder(models.Model):
             'company_id': self.company_id.id,
         })
         # 每箱一条 move line（本系统包装体系为自建 stock.package，
-        # 与库存原生 package 无关联，箱号记入 picking 的 origin 注记）
+        # 与库存原生 package 无关联，箱号记入 picking 的 origin 注记）；
+        # lot 追踪成品升级为一台一行一lot（finished-goods-material-sn）：
+        # 码=表 SN（包装记录登记），数量恒 1，仓库验证零扫码
         for carton in cartons:
+            if mo.product_id.tracking == 'lot':
+                for record in carton.x_meter_pack_record_ids:
+                    sn = (record.serial_identity_id.name or '').strip()
+                    if not sn:
+                        raise ValidationError(_(
+                            'Pack record %(record)s has no meter SN; cannot '
+                            'build its material SN lot.',
+                            record=record.display_name))
+                    lot = self._mes_meter_lot(sn, mo.product_id, picking)
+                    self.env['stock.move.line'].create({
+                        'move_id': move.id,
+                        'picking_id': picking.id,
+                        'product_id': mo.product_id.id,
+                        'product_uom_id': mo.product_uom_id.id,
+                        'quantity': 1,
+                        'quantity_product_uom': 1,
+                        'lot_id': lot.id,
+                        'lot_name': lot.name,
+                        'location_id': src.id,
+                        'location_dest_id': dest.id,
+                        'company_id': self.company_id.id,
+                    })
+                continue
             meters = len(carton.x_meter_pack_record_ids)
             if not meters:
                 continue
@@ -1546,7 +1591,7 @@ class MesOrder(models.Model):
                 continue
             order.action_close(auto=True)
 
-    def action_complete(self, qty, destination='stock', workshop=False, lot_name=False):
+    def action_complete(self, qty, destination='stock', workshop=False):
         """Complete (完工入库) -- the single execution entry used by both
         the form wizard and the shop-floor terminal.
 
@@ -1555,8 +1600,9 @@ class MesOrder(models.Model):
         3. accumulate the done quantity; close the order and the MO when
            the output quantity is fully received
 
-        ``lot_name``：成品批次（tracking='lot' 时），向导可填；留空按
-        制令单+日期自动生成，车间终端等无输入入口走自动生成。"""
+        成品物料SN（finished-goods-material-sn）：tracking='lot' 时批级码由
+        sn_wsd_stock 扩展生成——线边直验过账前自动挂行，成品库路径行不带码
+        等标签向导（无码验证由原生缺批次约束拦截）。"""
         self.ensure_one()
         # 产出不要求在线（与 action_offline 语义一致）：下线只是停止投入
         # 新 SN，在制产出与完工入库照常进行；只要求单据处于生产中
@@ -1567,7 +1613,7 @@ class MesOrder(models.Model):
         if qty <= 0:
             raise ValidationError(_('The completion quantity must be positive.'))
         self._mes_backflush(qty)
-        self._mes_create_receipt(qty, destination, workshop=workshop, lot_name=lot_name)
+        self._mes_create_receipt(qty, destination, workshop=workshop)
         self.write({
             'x_done_qty': self.x_done_qty + qty,
             'x_done_date': fields.Datetime.now(),
@@ -1687,8 +1733,9 @@ class MesOrder(models.Model):
             batch_ratio = (qty_this / bom.product_qty) if bom.product_qty else 0.0
             total_ratio = (order.planned_qty / bom.product_qty) if bom.product_qty else 0.0
             open_pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel')
-            # 覆盖即止预检：整卷发放后（发 995 覆盖需求 3），后续领料的
-            # 组件全部被 already 封顶跳过——此时不建空领料单
+            # 覆盖即止预检：领满份额后（already ≥ BOM 行份额，批次料物理上
+            # 也常被整卷带走），后续领料的组件全部被 already 封顶跳过——
+            # 此时不建空领料单
             def _issue_qty_for(line):
                 batch_qty = line.product_qty * batch_ratio
                 already = order._mes_issued_qty(line.product_id, open_pickings)
@@ -1737,30 +1784,10 @@ class MesOrder(models.Model):
                     'location_dest_id': line_side.id,
                     'company_id': order.company_id.id,
                 }
-                # 整卷发放（2026-08-27 方案）：批次料剪不开——出入库扫物料SN、
-                # 数量=卷当前余量。BOM 需求只作覆盖门槛（够一卷发一卷），
-                # 行按 FEFO 挑卷，一卷一行；台数顶与 already 封顶不受影响
-                # （累计 1000 ≥ 需求 200 → 本单后续领料自动跳过该料）。
-                if line.product_id.tracking == 'lot':
-                    need_base = line.product_uom_id._compute_quantity(
-                        qty, line.product_id.uom_id)
-                    reels = order._mes_issue_reel_lines(
-                        line.product_id, src, need_base)
-                    if reels:
-                        move_vals['product_uom_qty'] = line.product_id.uom_id._compute_quantity(
-                            sum(reel_qty for _lot, reel_qty in reels),
-                            line.product_uom_id)
-                        move_vals['move_line_ids'] = [(0, 0, {
-                            'picking_id': picking.id,
-                            'product_id': line.product_id.id,
-                            'product_uom_id': line.product_id.uom_id.id,
-                            'quantity': reel_qty,
-                            'lot_id': lot.id,
-                            'lot_name': lot.name,
-                            'location_id': src.id,
-                            'location_dest_id': line_side.id,
-                            'company_id': order.company_id.id,
-                        }) for lot, reel_qty in reels]
+                # 批次料需求精确展开（picking-bom-exact-demand）：需求=BOM
+                # 份额，不预挑/不预填批次行；action_confirm 后原生预留按移出
+                # 策略自动挂批，扫 SN 带量 hook（含预留建行）把行数量抬到
+                # 该批次源库位当前余量——实发>需求允许，验证按行数量过账
                 StockMove.create(move_vals)
             picking.action_confirm()
         return True
@@ -1902,11 +1929,12 @@ class MesOrder(models.Model):
         return True
 
     def _mes_issue_reel_lines(self, product, src, need_qty):
-        """整卷发放的挑卷：按 FEFO（先到期，再先进）取 ``src`` 库位在库
+        """整卷退料的挑卷（picking-bom-exact-demand 后仅退料使用；领料侧
+        批次由原生预留挂批）：按 FEFO（先到期，再先进）取 ``src`` 库位在库
         批次的**当前余量**，累计覆盖 ``need_qty``（产品基本单位）即止。
-        在途互斥（mes-picking-lifecycle R4）：同制令单未验证领料单已挑
+        在途互斥（mes-picking-lifecycle R4）：同制令单未验证退料单已挑
         走的批次量先从在库量中扣减，避免两张在途单挑中同一卷。
-        返回 [(lot, qty)]；无可发批次时返回空（回退散量领料）。"""
+        返回 [(lot, qty)]；无可发批次时返回空（该行不退）。"""
         self.ensure_one()
         need = product.uom_id.round(need_qty or 0.0)
         if need <= 0:
@@ -1922,8 +1950,8 @@ class MesOrder(models.Model):
             aggregates=['quantity:sum'],
         )
         by_lot = {lot: (total or 0.0) for lot, total in groups}
-        # 同单在途占用：未验证领料单上挂在 src 的批次行（退货单的行在
-        # 线边，location 不同，天然不参与）
+        # 同单在途占用：未验证退料单上挂在 src（线边）的批次行；领料侧
+        # 在途行挂在仓库，location 不同，天然不参与
         open_pickings = self.picking_ids.filtered(
             lambda p: p.state not in ('done', 'cancel'))
         for picking in open_pickings:

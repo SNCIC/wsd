@@ -8518,3 +8518,9 @@ msgstr "（自动）"
 msgid "MES close without receipt %(order)s"
 msgstr "制令单 %(order)s 完结（不入库）倒冲"
 
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Pack record %(record)s has no meter SN; cannot build its material SN lot."
+msgstr "包装记录 %(record)s 没有仪表SN，无法生成对应的物料SN批次。"
