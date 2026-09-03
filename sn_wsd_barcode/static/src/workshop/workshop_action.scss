@@ -443,11 +443,13 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
 /* ❸ 动作坞：Tab + 胶囊分组卡片（与上方反馈区留出空挡） */
 .o_sn_wsd_pda_tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin: 14px 12px 10px;
 
     .o_sn_wsd_pda_tab {
-        flex: 1;
+        // 与胶囊一致：固定每行 3 个，放不下换行，行内平分剩余宽度
+        flex: 1 1 calc(33.333% - 7px);
         min-height: 46px;
         border: 1px solid #cbd5e1;
         border-radius: 10px;
@@ -455,6 +457,9 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
         font-size: 0.95rem;
         font-weight: 500;
         color: #475569;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &.is-active {
             color: #0f6b48;
@@ -467,6 +472,7 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
 
 .o_sn_wsd_pda_pills {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 10px 12px;
     margin: 0 12px 14px;
@@ -475,10 +481,11 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
     border-radius: 10px;
 
     .btn {
-        flex: 1;
+        // 固定每行 3 个：basis 按三分之一列宽，放不下自动换行，行内平分剩余宽度
+        flex: 1 1 calc(33.333% - 6px);
         min-height: 46px;
         font-size: 0.9rem;
-        padding: 4px 6px;
+        padding: 4px 10px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
