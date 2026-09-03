@@ -115,6 +115,45 @@
             </list>
         </field>
     </record>
+    <record id="view_picklight_location_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.location.list</field>
+        <field name="model">sn.wsd.picklight.location</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="shelf_id"/>
+                <field name="stock_location_id"/>
+                <field name="light_color"/>
+                <field name="twinkle"/>
+                <field name="is_must_collect"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_location_form" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.location.form</field>
+        <field name="model">sn.wsd.picklight.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="shelf_id"/>
+                        <field name="stock_location_id"/>
+                    </group>
+                    <group>
+                        <field name="light_color"/>
+                        <field name="twinkle"/>
+                        <field name="is_locked"/>
+                        <field name="is_must_collect"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
     <record id="view_picklight_sensor_list" model="ir.ui.view">
         <field name="name">sn.wsd.picklight.sensor.list</field>
         <field name="model">sn.wsd.picklight.sensor.reading</field>
