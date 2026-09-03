@@ -1238,7 +1238,8 @@ class TestMesOrder(TransactionCase):
             order.report_operation_qty(op_in_row, 1)
 
     def test_84_over_pick_lot_reels(self):
-        """超领的批次料整卷覆盖发放（FEFO、一卷一行、数量=卷余量）。"""
+        """批次料需求=BOM 份额（picking-bom-exact-demand）：预留自动挂批，
+        扫 SN 带量 hook 把行数量抬到该批次源库位当前余量（超领同口径）。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
@@ -1255,23 +1256,28 @@ class TestMesOrder(TransactionCase):
         Quant.create({'product_id': component.id, 'location_id': src.id,
                       'quantity': 5.0, 'lot_id': lot2.id})
         order = self._make_order(mo, 4)
-        # 账内领 1 台（需 2 件）：FEFO 整卷发 lot1（7 件，覆盖即止）
+        # 账内领 1 台：需求=2 件（不再改写成卷余量），确认后原生预留挂
+        # lot1（FIFO），hook 把预留行数量带成 lot1 当前余量 7
         order.action_generate_picking(qty_this=1)
         p1 = order.picking_ids
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
         self.assertEqual(p1.move_ids.move_line_ids.lot_id, lot1)
         self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
         p1.move_ids.picked = True
         p1.button_validate()
-        # 超领 1 台（需 2 件）：同样整卷发 lot2（5 件）
+        # 超领 1 台：同样需求 2 件；lot1 已随 p1 整卷发到线边，预留挑 lot2
         order.action_generate_picking(qty_this=1, over_reason='make-up')
         p2 = (order.picking_ids - p1)
         self.assertTrue(p2.x_is_over_pick)
+        self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
         self.assertEqual(p2.move_ids.move_line_ids.lot_id, lot2)
         self.assertAlmostEqual(p2.move_ids.move_line_ids.quantity, 5.0)
 
-    # --- mes-picking-lifecycle R4: 在途挑卷互斥 ---
+    # --- 在途互斥（新口径）：hook 带量经原生预留占满整卷，后单自动跳卷 ---
     def test_85_reel_mutex_skips_occupied_lot(self):
-        """前单未验证时后单挑卷互斥：已占批次视为 0，跳到下一卷。"""
+        """两张在途领料单同卷互斥（原生预留口径）：第一单预留行被 hook
+        抬到整卷 7（写入即占满 lot1 预留），第二单预留视 lot1 可用 0，
+        自动跳到 lot2 并带量 5——两单先后验证互不冲突。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
@@ -1288,17 +1294,28 @@ class TestMesOrder(TransactionCase):
         Quant.create({'product_id': component.id, 'location_id': src.id,
                       'quantity': 5.0, 'lot_id': lot2.id})
         order = self._make_order(mo, 8)
-        # 第一批领 1 台（需 2 件）：FEFO 整卷挑 lot1（7 件），保持未验证
+        # 第一批领 1 台（需 2 件）：预留挂 lot1，hook 带量 7（占满预留）
         order.action_generate_picking(qty_this=1)
         p1 = order.picking_ids
         self.assertEqual(p1.move_ids.move_line_ids.lot_id, lot1)
-        # 第二批领 1 台：lot1 在途占用 7 → 可用 0 → 跳过，整卷挑 lot2
+        self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
+        # 第二批领 1 台：lot1 预留已被 p1 整卷占满 → 预留自动挑 lot2
         order.action_generate_picking(qty_this=1)
         p2 = (order.picking_ids - p1)
         self.assertEqual(p2.move_ids.move_line_ids.lot_id, lot2)
+        self.assertAlmostEqual(p2.move_ids.move_line_ids.quantity, 5.0)
+        # 两单先后验证互不冲突（各走各的整卷）
+        p1.move_ids.picked = True
+        p1.button_validate()
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertEqual(p1.state, 'done')
+        self.assertEqual(p2.state, 'done')
 
     def test_86_reel_mutex_exhausted_falls_back_loose(self):
-        """批次全部被在途占用 → 无可发批次 → 回退散量领料。"""
+        """退料挑卷互斥（定制互斥仅剩退料域）：同单第一张退料单未验证时
+        已整卷挑走线边批次，第二张挑卷视该批为 0 → 无可发批次 → 该行
+        不退，整单无可退组件时拦截。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
@@ -1313,12 +1330,16 @@ class TestMesOrder(TransactionCase):
         order = self._make_order(mo, 8)
         order.action_generate_picking(qty_this=1)
         p1 = order.picking_ids
-        self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
-        # 唯一的卷已被 p1 在途占用 → 第二批回退散量（无批次行）
-        order.action_generate_picking(qty_this=1)
-        p2 = (order.picking_ids - p1)
-        self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
-        self.assertFalse(p2.move_ids.move_line_ids)
+        p1.move_ids.picked = True
+        p1.button_validate()  # 整卷 7 落线边
+        # 第一张退料单（1 台需 2 件）：整卷挑 lot1（7），保持未验证
+        order.action_generate_return(qty=1)
+        r1 = (order.picking_ids - p1)
+        self.assertEqual(r1.move_ids.move_line_ids.lot_id, lot)
+        self.assertAlmostEqual(r1.move_ids.move_line_ids.quantity, 7.0)
+        # 第二张退料单：lot1 在途已被 r1 整卷占用 → 无可发批次 → 拦截
+        with self.assertRaises(UserError):
+            order.action_generate_return(qty=1)
 
     # --- mes-picking-lifecycle R4: 全链回归（超领 × 完工倒冲） ---
     def test_87_completion_after_over_pick_backflush(self):
@@ -1351,3 +1372,42 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(act['res_model'], 'stock.picking')
         self.assertEqual(act['domain'],
                          [('x_mes_order_id', 'in', mo.x_mes_order_ids.ids)])
+
+    # --- picking-bom-exact-demand: 需求=BOM 份额、实发=卷余量、份额封顶 ---
+    def test_89_lot_exact_demand_over_issue_and_coverage(self):
+        """批次料需求按 BOM 份额；hook 带量后实发(7)>需求(2)照常过账，
+        台数账本按份额累计；份额领满后再领被「已覆盖」防呆拦截。"""
+        line_side = self._set_line_side()
+        mo = self._make_bom_mo(qty=1)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        lot = self.env['stock.lot'].create({
+            'product_id': component.id, 'name': 'LOT-EX-1',
+            'company_id': self.company.id})
+        self.env['stock.quant'].create({
+            'product_id': component.id, 'location_id': src.id,
+            'quantity': 7.0, 'lot_id': lot.id})
+        order = self._make_order(mo, 1)
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        # 需求=BOM 份额 2（不整卷改写、无预填批次行）；确认即预留挂批，
+        # hook 把行数量带成 lot 当前余量 7
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
+        line = p1.move_ids.move_line_ids
+        self.assertEqual(line.lot_id, lot)
+        self.assertAlmostEqual(line.quantity, 7.0)
+        # 实发 7 > 需求 2：验证照常过账，整卷落线边
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(p1.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id),
+            ('location_id', '=', line_side.id)])
+        self.assertAlmostEqual(quant.quantity, 7.0)
+        self.assertEqual(quant.lot_id, lot)
+        # 台数账本按份额：净领 1 台（不是 3.5）
+        self.assertAlmostEqual(order.picked_qty, 1.0)
+        # 份额已覆盖（already 2 ≥ 份额 2）→ 再领拦截、不建空单
+        with self.assertRaises(UserError):
+            order.action_generate_picking(qty_this=1)

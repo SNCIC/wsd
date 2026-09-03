@@ -1687,8 +1687,9 @@ class MesOrder(models.Model):
             batch_ratio = (qty_this / bom.product_qty) if bom.product_qty else 0.0
             total_ratio = (order.planned_qty / bom.product_qty) if bom.product_qty else 0.0
             open_pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel')
-            # 覆盖即止预检：整卷发放后（发 995 覆盖需求 3），后续领料的
-            # 组件全部被 already 封顶跳过——此时不建空领料单
+            # 覆盖即止预检：领满份额后（already ≥ BOM 行份额，批次料物理上
+            # 也常被整卷带走），后续领料的组件全部被 already 封顶跳过——
+            # 此时不建空领料单
             def _issue_qty_for(line):
                 batch_qty = line.product_qty * batch_ratio
                 already = order._mes_issued_qty(line.product_id, open_pickings)
@@ -1737,30 +1738,10 @@ class MesOrder(models.Model):
                     'location_dest_id': line_side.id,
                     'company_id': order.company_id.id,
                 }
-                # 整卷发放（2026-08-27 方案）：批次料剪不开——出入库扫物料SN、
-                # 数量=卷当前余量。BOM 需求只作覆盖门槛（够一卷发一卷），
-                # 行按 FEFO 挑卷，一卷一行；台数顶与 already 封顶不受影响
-                # （累计 1000 ≥ 需求 200 → 本单后续领料自动跳过该料）。
-                if line.product_id.tracking == 'lot':
-                    need_base = line.product_uom_id._compute_quantity(
-                        qty, line.product_id.uom_id)
-                    reels = order._mes_issue_reel_lines(
-                        line.product_id, src, need_base)
-                    if reels:
-                        move_vals['product_uom_qty'] = line.product_id.uom_id._compute_quantity(
-                            sum(reel_qty for _lot, reel_qty in reels),
-                            line.product_uom_id)
-                        move_vals['move_line_ids'] = [(0, 0, {
-                            'picking_id': picking.id,
-                            'product_id': line.product_id.id,
-                            'product_uom_id': line.product_id.uom_id.id,
-                            'quantity': reel_qty,
-                            'lot_id': lot.id,
-                            'lot_name': lot.name,
-                            'location_id': src.id,
-                            'location_dest_id': line_side.id,
-                            'company_id': order.company_id.id,
-                        }) for lot, reel_qty in reels]
+                # 批次料需求精确展开（picking-bom-exact-demand）：需求=BOM
+                # 份额，不预挑/不预填批次行；action_confirm 后原生预留按移出
+                # 策略自动挂批，扫 SN 带量 hook（含预留建行）把行数量抬到
+                # 该批次源库位当前余量——实发>需求允许，验证按行数量过账
                 StockMove.create(move_vals)
             picking.action_confirm()
         return True
@@ -1902,11 +1883,12 @@ class MesOrder(models.Model):
         return True
 
     def _mes_issue_reel_lines(self, product, src, need_qty):
-        """整卷发放的挑卷：按 FEFO（先到期，再先进）取 ``src`` 库位在库
+        """整卷退料的挑卷（picking-bom-exact-demand 后仅退料使用；领料侧
+        批次由原生预留挂批）：按 FEFO（先到期，再先进）取 ``src`` 库位在库
         批次的**当前余量**，累计覆盖 ``need_qty``（产品基本单位）即止。
-        在途互斥（mes-picking-lifecycle R4）：同制令单未验证领料单已挑
+        在途互斥（mes-picking-lifecycle R4）：同制令单未验证退料单已挑
         走的批次量先从在库量中扣减，避免两张在途单挑中同一卷。
-        返回 [(lot, qty)]；无可发批次时返回空（回退散量领料）。"""
+        返回 [(lot, qty)]；无可发批次时返回空（该行不退）。"""
         self.ensure_one()
         need = product.uom_id.round(need_qty or 0.0)
         if need <= 0:
@@ -1922,8 +1904,8 @@ class MesOrder(models.Model):
             aggregates=['quantity:sum'],
         )
         by_lot = {lot: (total or 0.0) for lot, total in groups}
-        # 同单在途占用：未验证领料单上挂在 src 的批次行（退货单的行在
-        # 线边，location 不同，天然不参与）
+        # 同单在途占用：未验证退料单上挂在 src（线边）的批次行；领料侧
+        # 在途行挂在仓库，location 不同，天然不参与
         open_pickings = self.picking_ids.filtered(
             lambda p: p.state not in ('done', 'cancel'))
         for picking in open_pickings:
