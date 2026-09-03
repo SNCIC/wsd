@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_picklight_config" model="ir.actions.act_window">
+        <field name="name">Service Configurations</field>
+        <field name="res_model">sn.wsd.picklight.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_picklight_shelf" model="ir.actions.act_window">
+        <field name="name">Shelves</field>
+        <field name="res_model">sn.wsd.picklight.shelf</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_picklight_command" model="ir.actions.act_window">
+        <field name="name">Commands</field>
+        <field name="res_model">sn.wsd.picklight.command</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_picklight_event" model="ir.actions.act_window">
+        <field name="name">Device Events</field>
+        <field name="res_model">sn.wsd.picklight.event</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_picklight_sensor" model="ir.actions.act_window">
+        <field name="name">Sensor Readings</field>
+        <field name="res_model">sn.wsd.picklight.sensor.reading</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_picklight_root" name="Picklight" parent="stock.menu_stock_root" sequence="80"
+              groups="sn_wsd_picklight.group_picklight_manager,stock.group_stock_user"/>
+    <menuitem id="menu_picklight_config" name="Service Configurations"
+              parent="menu_picklight_root" action="action_picklight_config"
+              groups="sn_wsd_picklight.group_picklight_manager"/>
+    <menuitem id="menu_picklight_shelf" name="Shelves"
+              parent="menu_picklight_root" action="action_picklight_shelf"
+              groups="sn_wsd_picklight.group_picklight_manager"/>
+    <menuitem id="menu_picklight_command" name="Commands"
+              parent="menu_picklight_root" action="action_picklight_command"
+              groups="stock.group_stock_user"/>
+    <menuitem id="menu_picklight_event" name="Device Events"
+              parent="menu_picklight_root" action="action_picklight_event"
+              groups="stock.group_stock_user"/>
+    <menuitem id="menu_picklight_sensor" name="Sensor Readings"
+              parent="menu_picklight_root" action="action_picklight_sensor"
+              groups="stock.group_stock_user"/>
+</odoo>

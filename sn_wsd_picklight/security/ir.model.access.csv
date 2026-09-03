@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_picklight_config_manager,picklight config manager,model_sn_wsd_picklight_config,sn_wsd_picklight.group_picklight_manager,1,1,1,1
+access_picklight_shelf_manager,picklight shelf manager,model_sn_wsd_picklight_shelf,sn_wsd_picklight.group_picklight_manager,1,1,1,1
+access_picklight_location_manager,picklight location manager,model_sn_wsd_picklight_location,sn_wsd_picklight.group_picklight_manager,1,1,1,1
+access_picklight_command_user,picklight command user,model_sn_wsd_picklight_command,stock.group_stock_user,1,1,1,0
+access_picklight_event_user,picklight event user,model_sn_wsd_picklight_event,stock.group_stock_user,1,0,1,0
+access_picklight_sensor_user,picklight sensor user,model_sn_wsd_picklight_sensor_reading,stock.group_stock_user,1,0,1,0
