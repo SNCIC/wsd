@@ -195,3 +195,42 @@ class TestStockPackagePallet(TransactionCase):
         ], limit=1)
         self.assertNotEqual(pallet.x_wsd_pack_state, 'received',
                             'a rejected receive must leave the pallet untouched')
+
+    # --- finished-goods-material-sn: 攒托开单一台一 lot ---
+    def test_10_pallet_receipt_per_meter_lots(self):
+        """lot 追踪成品攒托开单：一台一行一lot（码=表SN），验证后逐台
+        挂码落库；箱号快捷键按包装记录解析整箱 SN-lot。"""
+        order = self._order_with_output()
+        finished = order.production_id.product_id
+        finished.tracking = 'lot'
+        finished.is_storable = True
+        pallet = self._pack_and_close(order, 'CTN-SN-1', 'PLT-SN-0001')
+
+        result = self.env['sn.wsd.carton.pallet.binding.log'].receive_pallets(
+            ['PLT-SN-0001'])
+        self.assertTrue(result['ok'])
+
+        receipt = order.picking_ids.filtered(
+            lambda p: p.picking_type_id.sequence_code
+            == 'sn.wsd.mes.picking.receipt')
+        lines = receipt.move_ids.move_line_ids
+        self.assertEqual(len(lines), 1, 'one line per meter')
+        self.assertEqual(lines.lot_id.name, 'SN-PACK-CTN-SN-1')
+        self.assertAlmostEqual(lines.quantity, 1.0)
+        # 台级 lot 的批次属性与回链
+        self.assertEqual(lines.lot_id.source_picking_id, receipt)
+        self.assertTrue(lines.lot_id.arrival_batch_no)
+
+        # 仓库验证 → 库存按 SN-lot 落地
+        receipt.button_validate()
+        self.assertEqual(receipt.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', finished.id),
+            ('location_id', '=', receipt.location_dest_id.id),
+            ('lot_id', '=', lines.lot_id.id)])
+        self.assertAlmostEqual(quant.quantity, 1.0)
+
+        # 箱号快捷键：包装记录解析 → SN-lot
+        records = self.env['sn.wsd.meter.pack.record'].search([
+            ('carton_package_id.name', '=', 'CTN-SN-1')])
+        self.assertEqual(records._mes_sn_lots(), lines.lot_id)

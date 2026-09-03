@@ -398,9 +398,6 @@
                         <field name="output_qty"/>
                         <field name="done_qty"/>
                         <field name="qty"/>
-                        <field name="product_tracking" invisible="1"/>
-                        <field name="lot_name" invisible="product_tracking != 'lot'"
-                               placeholder="Auto when empty"/>
                     </group>
                     <group>
                         <field name="destination" widget="radio"/>

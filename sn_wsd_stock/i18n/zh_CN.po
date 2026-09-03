@@ -1017,3 +1017,25 @@ msgstr "来料物料标签（ZPL）"
 #: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
 msgid "The selected material lot does not belong to this receipt."
 msgstr "选定的物料批次不属于此入库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid ""
+"Product %(product)s must have an internal reference to generate its "
+"material SN."
+msgstr "产品 %(product)s 必须填写内部参考（料号）才能生成物料SN。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid ""
+"Material labels are only available on completion receipts linked to an MES"
+" order."
+msgstr "物料标签仅适用于关联制令单的完工收货单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid "Nothing to print: no tracked product on this receipt."
+msgstr "无可打印内容：这张收货单上没有批次追踪产品。"

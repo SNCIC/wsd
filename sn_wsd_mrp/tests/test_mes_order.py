@@ -1411,3 +1411,134 @@ class TestMesOrder(TransactionCase):
         # 份额已覆盖（already 2 ≥ 份额 2）→ 再领拦截、不建空单
         with self.assertRaises(UserError):
             order.action_generate_picking(qty_this=1)
+
+    # --- finished-goods-material-sn: 手动完工一批一码 ---
+    def _order_with_lot_output(self, contract_no=False):
+        """一台产出在制的 lot 追踪订单（成品批次口径由物料SN接管）。"""
+        self.company.partner_id.ref = 'SNCIC'
+        order = self._order_with_output()
+        finished = order.production_id.product_id
+        finished.tracking = 'lot'
+        finished.is_storable = True  # 库存断言需要真实库存记账
+        if contract_no:
+            order.production_id.x_contract_no = contract_no
+        return order
+
+    def _lineside_workshop(self, order):
+        """MO 仓库下的线边车间（完工线边直验目的地）。"""
+        wh = order.production_id.picking_type_id.warehouse_id
+        workshop = self.env['sn.mrp.workshop'].create(
+            {'name': 'WS-FGSN-%s' % order.id, 'code': 'WSFGSN%s' % order.id})
+        workshop.component_location_id = self.env['stock.location'].create({
+            'name': 'FGSN-LINE-SIDE-%s' % order.id, 'usage': 'internal',
+            'location_id': wh.lot_stock_id.location_id.id,
+        }).id
+        return workshop
+
+    def test_90_lineside_completion_batch_sn(self):
+        """线边直验自动生成批级码：5 段命名、批次段=合同号、来源回链。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertEqual(receipt.state, 'done')
+        line = receipt.move_ids.move_line_ids
+        self.assertEqual(line.lot_id.product_id, order.production_id.product_id)
+        parts = line.lot_id.name.split('$')
+        self.assertEqual(len(parts), 5)
+        self.assertEqual(parts[0], 'DWG-MES-TEST')
+        self.assertEqual(parts[1], 'SNCIC')
+        self.assertEqual(parts[2], 'HT2026-088')
+        self.assertEqual(parts[3], '1')
+        # 批次属性与来源链
+        self.assertEqual(line.lot_id.arrival_batch_no, 'HT2026-088')
+        self.assertEqual(line.lot_id.material_sn_base, line.lot_id.name)
+        self.assertEqual(line.lot_id.source_picking_id, receipt)
+        # 库存落线边且挂码
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', order.production_id.product_id.id),
+            ('location_id', '=', workshop.component_location_id.id),
+            ('lot_id', '=', line.lot_id.id)])
+        self.assertAlmostEqual(quant.quantity, 1.0)
+
+    def test_91_lineside_sn_fallback_date_batch(self):
+        """MO 无合同号（外贸）→ 批次段兜底当天日期，流程不拦截。"""
+        order = self._order_with_lot_output(contract_no=False)
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        lot = receipt.move_ids.move_line_ids.lot_id
+        today = fields.Date.context_today(order).strftime('%Y%m%d')
+        self.assertEqual(lot.name.split('$')[2], today)
+        self.assertEqual(lot.arrival_batch_no, today)
+
+    def test_92_stock_completion_no_auto_lot_native_gate(self):
+        """成品库路径：行不带码等标签向导；无码验证被原生缺批次约束拦截。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        component, line_side = self._stock_line_side(order)
+        order.action_complete(1.0, 'stock')
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertNotEqual(receipt.state, 'done')
+        # 纯需求量形态：不带处理数量、无带量行（确认预留只留 0 量占位）
+        # ——等标签向导挂码行
+        self.assertFalse(receipt.move_ids.move_line_ids)
+        self.assertFalse(receipt.move_ids.picked)
+        # 系统默认约束拦截：无处理数量不许验证（不建定制拦截）
+        with self.assertRaises(UserError):
+            receipt.button_validate()
+
+    def test_93_sn_sequence_increments(self):
+        """全局序列复用来料：两次完工序号递增、码唯一。"""
+        orders = []
+        for i in range(2):
+            order = self._order_with_lot_output(contract_no='HT2026-088')
+            self._stock_line_side(order)
+            workshop = self._lineside_workshop(order)
+            order.action_complete(1.0, 'lineside', workshop=workshop)
+            orders.append(order)
+        names = []
+        for order in orders:
+            receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+            names.append(receipt.move_ids.move_line_ids.lot_id.name)
+        self.assertNotEqual(names[0], names[1])
+        self.assertEqual(int(names[1].split('$')[4]), int(names[0].split('$')[4]) + 1)
+
+    def test_94_stock_label_print_then_validate(self):
+        """成品库路径：单据按钮一键补码（生成 lot+挂 picked 行）后可过账。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        component, line_side = self._stock_line_side(order)
+        order.action_complete(1.0, 'stock')
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertTrue(receipt.can_print_material_labels)
+        action = receipt.action_open_material_label_wizard()
+        self.assertIn('report', str(action.get('type', '')))
+        move = receipt.move_ids
+        line = move.move_line_ids.filtered(lambda l: l.quantity)
+        self.assertTrue(line.picked)
+        self.assertEqual(len(line.lot_id), 1)
+        self.assertEqual(line.lot_id.name.split('$')[2], 'HT2026-088')
+        # 补码后验证放行，库存挂码落成品库位
+        receipt.button_validate()
+        self.assertEqual(receipt.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', move.product_id.id),
+            ('location_id', '=', receipt.location_dest_id.id),
+            ('lot_id', '=', line.lot_id.id)])
+        self.assertAlmostEqual(quant.quantity, 1.0)
+
+    def test_95_lineside_receipt_reprint(self):
+        """已完成线边收货单：同按钮直接重打已有码（不重复生成）。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertEqual(receipt.state, 'done')
+        self.assertTrue(receipt.can_print_material_labels)
+        lot_before = receipt.move_ids.move_line_ids.lot_id
+        action = receipt.action_open_material_label_wizard()
+        self.assertIn('report', str(action.get('type', '')))
+        # 重打不新增码、不改行
+        self.assertEqual(receipt.move_ids.move_line_ids.lot_id, lot_before)

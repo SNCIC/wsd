@@ -12,17 +12,25 @@ class StockPicking(models.Model):
 
     def _compute_can_print_material_labels(self):
         for picking in self:
-            picking.can_print_material_labels = (
-                picking.picking_type_code == 'incoming'
-                and picking.state not in ('done', 'cancel')
-                and any(
-                    move.product_id and move.product_id.tracking == 'lot'
-                    for move in picking.move_ids
-                )
+            has_tracked = any(
+                move.product_id and move.product_id.tracking == 'lot'
+                for move in picking.move_ids
             )
+            if picking.picking_type_id.sequence_code == 'sn.wsd.mes.picking.receipt':
+                # 完工收货（finished-goods-material-sn）：含已完成单（补打）
+                picking.can_print_material_labels = (
+                    picking.state != 'cancel' and has_tracked)
+            else:
+                picking.can_print_material_labels = (
+                    picking.picking_type_code == 'incoming'
+                    and picking.state not in ('done', 'cancel')
+                    and has_tracked)
 
     def action_open_material_label_wizard(self):
         self.ensure_one()
+        if self.picking_type_id.sequence_code == 'sn.wsd.mes.picking.receipt':
+            # 完工收货：一键生成/重打批级物料SN（无向导输入项）
+            return self.action_print_finished_material_labels()
         if not self.can_print_material_labels:
             raise UserError(_('Material labels can only be printed for active receipts.'))
         context = dict(self.env.context)
