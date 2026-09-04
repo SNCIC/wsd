@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_piece_close_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.close.log.list</field>
+        <field name="model">sn.wsd.piece.close.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="period"/>
+                <field name="action" widget="badge"
+                       decoration-success="action == 'reopen'"
+                       decoration-muted="action == 'close'"/>
+                <field name="draft_count" optional="show"/>
+                <field name="user_id"/>
+                <field name="at"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_piece_close_log" model="ir.actions.act_window">
+        <field name="name">Monthly Closing</field>
+        <field name="res_model">sn.wsd.piece.close.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_sn_wsd_piece_close_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.close.wizard.form</field>
+        <field name="model">sn.wsd.piece.close.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Monthly Closing">
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="period" placeholder="YYYY-MM"/>
+                        <field name="draft_count" readonly="1"/>
+                        <field name="acknowledge_drafts"
+                               invisible="draft_count == 0"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_close" type="object"
+                            string="Close Period" class="btn-primary"/>
+                    <button name="action_reopen" type="object"
+                            string="Reopen Period" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_piece_close_wizard" model="ir.actions.act_window">
+        <field name="name">Close / Reopen Period</field>
+        <field name="res_model">sn.wsd.piece.close.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

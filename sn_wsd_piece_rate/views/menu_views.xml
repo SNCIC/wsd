@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sn_wsd_piece_rate_root"
+              name="Piece-rate Wages"
+              parent="mrp.menu_mrp_root"
+              sequence="95"
+              groups="sn_wsd_piece_rate.group_piece_rate_user"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_settlement"
+              name="Piece Settlements"
+              parent="menu_sn_wsd_piece_rate_root"
+              action="action_sn_wsd_piece_settlement"
+              sequence="10"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_generate"
+              name="Generate From Reports"
+              parent="menu_sn_wsd_piece_rate_root"
+              action="action_sn_wsd_piece_settlement_generate"
+              sequence="20"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_ledger"
+              name="Employee Piece Ledger"
+              parent="menu_sn_wsd_piece_rate_root"
+              action="action_sn_wsd_piece_participant_ledger"
+              sequence="30"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_config"
+              name="Configuration"
+              parent="menu_sn_wsd_piece_rate_root"
+              sequence="90"
+              groups="sn_wsd_piece_rate.group_piece_rate_manager"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_rate"
+              name="Piece Rates"
+              parent="menu_sn_wsd_piece_rate_config"
+              action="action_sn_wsd_piece_rate"
+              sequence="10"/>
+    <menuitem id="menu_sn_wsd_piece_rate_close_log"
+              name="Monthly Closing"
+              parent="menu_sn_wsd_piece_rate_config"
+              action="action_sn_wsd_piece_close_log"
+              sequence="20"/>
+
+    <menuitem id="menu_sn_wsd_piece_rate_close_wizard"
+              name="Close / Reopen Period"
+              parent="menu_sn_wsd_piece_rate_config"
+              action="action_sn_wsd_piece_close_wizard"
+              sequence="30"/>
+</odoo>
