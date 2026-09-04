@@ -136,6 +136,8 @@ msgstr "货架编码"
 
 #. module: sn_wsd_picklight
 #: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__location_ids
+#: model:ir.actions.act_window,name:sn_wsd_picklight.action_picklight_location
+#: model:ir.ui.menu,name:sn_wsd_picklight.menu_picklight_location
 msgid "Picklight Locations"
 msgstr "按灯库位"
 
@@ -333,6 +335,7 @@ msgstr "允许出库调拨使用按灯拣选。"
 
 #. module: sn_wsd_picklight
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_shelf_form
+#: model:ir.ui.menu,name:sn_wsd_picklight.menu_picklight_location
 msgid "Locations"
 msgstr "库位"
 
