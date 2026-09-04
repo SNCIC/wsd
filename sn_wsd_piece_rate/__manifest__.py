@@ -1,0 +1,23 @@
+{
+    'name': 'SN WSD Piece Rate',
+    'version': '19.0.1.0.0',
+    'summary': 'Piece-rate wage settlements: rate master data, crew allocation, monthly ledger',
+    'category': 'Manufacturing',
+    'depends': ['sn_wsd_mrp'],
+    'data': [
+        'security/piece_rate_security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence.xml',
+        'views/piece_rate_views.xml',
+        'views/piece_settlement_views.xml',
+        'views/piece_settlement_wizard_views.xml',
+        'views/mes_operation_report_views.xml',
+        'views/piece_close_views.xml',
+        'views/piece_ledger_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

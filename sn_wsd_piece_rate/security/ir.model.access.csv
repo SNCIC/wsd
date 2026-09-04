@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_wsd_piece_rate_manager,sn.wsd.piece.rate manager,model_sn_wsd_piece_rate,sn_wsd_piece_rate.group_piece_rate_manager,1,1,1,1
+access_sn_wsd_piece_settlement_user,sn.wsd.piece.settlement user,model_sn_wsd_piece_settlement,sn_wsd_piece_rate.group_piece_rate_user,1,1,1,0
+access_sn_wsd_piece_settlement_participant_user,sn.wsd.piece.settlement.participant user,model_sn_wsd_piece_settlement_participant,sn_wsd_piece_rate.group_piece_rate_user,1,1,1,0
+access_sn_wsd_piece_settle_generate_wizard_user,sn.wsd.piece.settlement.generate.wizard user,model_sn_wsd_piece_settlement_generate_wizard,sn_wsd_piece_rate.group_piece_rate_user,1,1,1,1
+access_sn_wsd_piece_close_log_manager,sn.wsd.piece.close.log manager,model_sn_wsd_piece_close_log,sn_wsd_piece_rate.group_piece_rate_manager,1,1,1,0
+access_sn_wsd_piece_close_wizard_manager,sn.wsd.piece.close.wizard manager,model_sn_wsd_piece_close_wizard,sn_wsd_piece_rate.group_piece_rate_manager,1,1,1,1

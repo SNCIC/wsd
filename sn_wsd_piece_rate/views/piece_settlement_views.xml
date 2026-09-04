@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_piece_settlement_list" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.list</field>
+        <field name="model">sn.wsd.piece.settlement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="qty_ok" sum="Total OK"/>
+                <field name="price"/>
+                <field name="amount" sum="Total Amount"/>
+                <field name="participant_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-muted="state == 'void'"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_piece_settlement_form" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.form</field>
+        <field name="model">sn.wsd.piece.settlement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object"
+                            string="Confirm" class="btn-primary"
+                            invisible="state != 'draft' or month_closed"/>
+                    <button name="action_void" type="object"
+                            string="Void" class="btn-secondary"
+                            groups="sn_wsd_piece_rate.group_piece_rate_manager"
+                            invisible="state == 'draft' or state == 'void' or month_closed"/>
+                    <button name="action_fill_from_team" type="object"
+                            string="Fill From Team" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_equal_split" type="object"
+                            string="Split Equally" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_compute_from_station" type="object"
+                            string="Compute From Station Passes" class="btn-primary"
+                            invisible="state != 'draft' or manage_mode != 'station'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_report" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="not operation_report_id">
+                            <field name="operation_report_id" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group name="source">
+                            <field name="mes_order_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="route_operation_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="operation_report_id"
+                                   invisible="manage_mode != 'report'"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"
+                                   domain="[('mes_order_id', '=', mes_order_id),
+                                            ('route_operation_id', '=', route_operation_id),
+                                            ('x_piece_settled', '=', False)]"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="operation_id" invisible="1"/>
+                            <field name="team_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="workshop_id" readonly="1" invisible="1"/>
+                            <field name="production_line_id" readonly="1" invisible="1"/>
+                        </group>
+                        <group name="amounts">
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="manage_mode" readonly="1"/>
+                            <field name="unsettled_qty" readonly="1"
+                                   invisible="manage_mode != 'station'"/>
+                            <field name="qty_ok" readonly="state != 'draft'"/>
+                            <field name="price" readonly="1"/>
+                            <field name="amount" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Participants" name="participants">
+                            <field name="participant_ids"
+                                   widget="sn_wsd_x2many_multi_add"
+                                   options="{'multi_add_model': 'hr.employee',
+                                             'multi_add_field': 'employee_id',
+                                             'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}"
+                                   readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="employee_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="employee_code"/>
+                                    <field name="performance_ratio"/>
+                                    <field name="amount"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="ratio_total"/>
+                                <field name="participant_count"/>
+                                <field name="allocated_total" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Covered Serials" name="serials"
+                              invisible="manage_mode != 'station'">
+                            <field name="serial_identity_ids"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'">
+                                <list>
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_piece_settlement" model="ir.actions.act_window">
+        <field name="name">Piece Settlements</field>
+        <field name="res_model">sn.wsd.piece.settlement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first piece settlement</p>
+            <p>One settlement pays one chunk of OK production to the crew that produced it.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 报工行列表：追加计件占用列 -->
+    <record id="view_sn_wsd_mes_operation_report_list_piece" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.list.piece</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_operation_report_list"/>
+        <field name="arch" type="xml">
+            <field name="reported_by" position="before">
+                <field name="x_piece_settled" widget="badge"
+                       decoration-success="x_piece_settled"
+                       optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- 报工行搜索：未结算/已结算过滤器 -->
+    <record id="view_sn_wsd_mes_operation_report_search_piece" model="ir.ui.view">
+        <field name="name">sn.wsd.mes.operation.report.search.piece</field>
+        <field name="model">sn.wsd.mes.operation.report</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_operation_report_search"/>
+        <field name="arch" type="xml">
+            <filter name="f_today" position="after">
+                <filter name="f_piece_unsettled" string="Unsettled"
+                        domain="[('x_piece_settled', '=', False)]"/>
+                <filter name="f_piece_settled" string="Settled"
+                        domain="[('x_piece_settled', '=', True)]"/>
+            </filter>
+        </field>
+    </record>
+</odoo>
