@@ -18,6 +18,14 @@
         <field name="model">sn.wsd.picklight.config</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_light_all_on" string="Turn On All Lights"
+                            type="object" class="btn-primary" icon="fa-lightbulb-o"
+                            confirm="Turn on all lights of this service configuration?"/>
+                    <button name="action_light_all_off" string="Turn Off All Lights"
+                            type="object" icon="fa-toggle-off"
+                            confirm="Turn off all lights of this service configuration?"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -128,6 +136,10 @@
                 <field name="twinkle"/>
                 <field name="is_must_collect"/>
                 <field name="active"/>
+                <button name="action_light_on" string="Light On" type="object"
+                        icon="fa-lightbulb-o" class="btn-link"/>
+                <button name="action_light_off" string="Light Off" type="object"
+                        icon="fa-toggle-off" class="btn-link"/>
             </list>
         </field>
     </record>
@@ -136,6 +148,12 @@
         <field name="model">sn.wsd.picklight.location</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_light_on" string="Light On"
+                            type="object" class="btn-primary" icon="fa-lightbulb-o"/>
+                    <button name="action_light_off" string="Light Off"
+                            type="object" icon="fa-toggle-off"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="code"/>

@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class PicklightShelf(models.Model):
@@ -63,3 +63,60 @@ class PicklightLocation(models.Model):
     _unique_stock_location = models.Constraint(
         'unique(company_id, stock_location_id)',
         'An Odoo stock location can only map to one active picklight location.')
+
+    def _send_debug_command(self, light_on):
+        """Light up (or turn off) the selected locations for debugging.
+
+        Commands are grouped by service configuration so each picklight
+        server receives one PostInfo request.
+        """
+        locations = self.filtered('shelf_id.config_id')
+        if not locations:
+            raise UserError(_('The selected locations are not linked to any service configuration.'))
+        grouped = {}
+        for location in locations:
+            grouped.setdefault(location.shelf_id.config_id, []).append(location)
+        for config, locs in grouped.items():
+            details = []
+            for location in locs:
+                if light_on:
+                    light_color = location.light_color or 64
+                    quantity = 1
+                else:
+                    light_color = 0
+                    quantity = 0
+                details.append({
+                    'LocationId': location.code,
+                    'LightColor': light_color,
+                    'Twinkle': int(location.twinkle) if light_on else 0,
+                    'IsLocked': int(location.is_locked) if light_on else 0,
+                    'IsMustCollect': int(location.is_must_collect) if light_on else 0,
+                    'Quantity': quantity,
+                    'SubText': location.code,
+                    'BatchCode': '',
+                    'Name': location.name or location.code,
+                    'R1': location.code,
+                    'R2': '',
+                    'R3': '',
+                    'SubTitle': '',
+                    'Title': 'Pick',
+                    'Unit': '',
+                    'RelateToTower': True,
+                })
+            command = self.env['sn.wsd.picklight.command'].create({
+                'company_id': config.company_id.id,
+                'config_id': config.id,
+                'command_type': 'post_info',
+                'endpoint': config.endpoint_url('/api/Light/PostInfo/'),
+                'request_payload': {'TwinkleTime': 0, 'Details': details},
+            })
+            command.send()
+        return True
+
+    def action_light_on(self):
+        """Test button: light up the selected location(s)."""
+        return self._send_debug_command(True)
+
+    def action_light_off(self):
+        """Test button: turn off the selected location(s)."""
+        return self._send_debug_command(False)

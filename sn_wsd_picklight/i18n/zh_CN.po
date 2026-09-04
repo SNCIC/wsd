@@ -488,3 +488,47 @@ msgstr "按灯服务拒绝了命令：%s"
 #: code:addons/sn_wsd_picklight/models/picklight_command.py:0
 msgid "The picklight service is unavailable: %s"
 msgstr "按灯服务不可用：%s"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/picklight_location.py:0
+msgid "The selected locations are not linked to any service configuration."
+msgstr "所选库位未关联任何按灯服务配置。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/picklight_config.py:0
+msgid "No shelf is linked to this service configuration."
+msgstr "该服务配置下没有关联货架。"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_config_form
+msgid "Turn On All Lights"
+msgstr "一键亮灯"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_config_form
+msgid "Turn Off All Lights"
+msgstr "一键灭灯"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_config_form
+msgid "Turn on all lights of this service configuration?"
+msgstr "确定要一键点亮该服务配置下的所有货架灯吗？"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_config_form
+msgid "Turn off all lights of this service configuration?"
+msgstr "确定要一键熄灭该服务配置下的所有货架灯吗？"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_form
+msgid "Light On"
+msgstr "亮灯"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_form
+msgid "Light Off"
+msgstr "灭灯"

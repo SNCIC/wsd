@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class PicklightConfig(models.Model):
@@ -91,6 +91,26 @@ class PicklightConfig(models.Model):
             'Shelf': shelf_codes,
             'LightColor': light_color,
         })
+
+    def _light_all_shelves(self, light_color):
+        self.ensure_one()
+        shelves = self.env['sn.wsd.picklight.shelf'].search([
+            ('config_id', '=', self.id),
+            ('active', '=', True),
+        ])
+        if not shelves:
+            raise UserError(_('No shelf is linked to this service configuration.'))
+        for shelf in shelves:
+            self.light_shelf([shelf.code], light_color)
+        return True
+
+    def action_light_all_on(self):
+        """Test button: light up every shelf bound to this configuration."""
+        return self._light_all_shelves(64)
+
+    def action_light_all_off(self):
+        """Test button: turn off every shelf bound to this configuration."""
+        return self._light_all_shelves(0)
 
     def light_ibs(self, ibs_models):
         self.ensure_one()

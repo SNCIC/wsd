@@ -6,7 +6,7 @@ This module integrates Odoo warehouse picking with smart shelf and pick-to-light
 services. It records outbound commands, device callbacks, and sensor readings.
     """,
     'category': 'Inventory/Warehouse',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'depends': ['stock', 'sn_wsd_barcode', 'sn_wsd_device'],
     'data': [
         'data/sequence.xml',
