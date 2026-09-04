@@ -5,7 +5,6 @@
     'category': 'Supply Chain/Inventory',
     'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp'],
     'data': [
-        'views/stock_orderpoint_views.xml',
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
         'wizard/incoming_material_label_wizard_views.xml',
