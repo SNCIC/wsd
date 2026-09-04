@@ -1039,3 +1039,16 @@ msgstr "物料标签仅适用于关联制令单的完工收货单。"
 #: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
 msgid "Nothing to print: no tracked product on this receipt."
 msgstr "无可打印内容：这张收货单上没有批次追踪产品。"
+
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.warehouse_orderpoint_search_effective_route
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.reorder_report_search_effective_route
+msgid "Route"
+msgstr "路线"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.warehouse_orderpoint_search_effective_route
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.reorder_report_search_effective_route
+msgid "Effective Route"
+msgstr "有效路线"
