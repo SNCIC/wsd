@@ -341,6 +341,7 @@ msgstr "计件结算单"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled_label
 msgid "Piece Settled"
 msgstr "已计件"
 
@@ -672,3 +673,15 @@ msgstr "取消"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Generate From Reports"
 msgstr "从报工生成"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Settled"
+msgstr "已计件"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Unsettled"
+msgstr "未计件"

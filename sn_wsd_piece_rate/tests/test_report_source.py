@@ -28,6 +28,12 @@ class TestReportSource(PieceRateTestCommon):
         self.assertNotIn(
             self._make_report(self.order, self.op_a, 1.0), settled)
         self.assertNotIn(report, Report.search([('x_piece_settled', '=', False)]))
+        # 人读徽章（Boolean 不能直接套 badge 部件，2026-09-04 浏览器修复）
+        self.assertEqual(settlement.state, 'draft')
+        self.assertEqual(report.x_piece_settled_label, 'Settled')
+        self.assertEqual(
+            self._make_report(self.order, self.op_a, 1.0).x_piece_settled_label,
+            'Unsettled')
         with self.assertRaises(ValidationError):
             self.env['sn.wsd.piece.settlement'].create({
                 'mes_order_id': self.order.id,

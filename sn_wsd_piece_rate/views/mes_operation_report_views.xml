@@ -7,9 +7,11 @@
         <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_mes_operation_report_list"/>
         <field name="arch" type="xml">
             <field name="reported_by" position="before">
-                <field name="x_piece_settled" widget="badge"
+                <field name="x_piece_settled_label" widget="badge"
                        decoration-success="x_piece_settled"
+                       decoration-muted="not x_piece_settled"
                        optional="show"/>
+                <field name="x_piece_settled" column_invisible="1"/>
             </field>
         </field>
     </record>
