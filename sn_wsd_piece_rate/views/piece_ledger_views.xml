@@ -7,8 +7,10 @@
         <field name="arch" type="xml">
             <pivot>
                 <field name="employee_id" type="row"/>
-                <field name="employee_code" type="col" widget="dropdown"/>
                 <field name="amount" type="measure"/>
+                <field name="settlement_qty_ok" invisible="1"/>
+                <field name="performance_ratio" invisible="1"/>
+                <field name="sequence" invisible="1"/>
             </pivot>
         </field>
     </record>
