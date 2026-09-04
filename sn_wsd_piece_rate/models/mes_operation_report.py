@@ -25,11 +25,13 @@ class MesOperationReport(models.Model):
                 report.piece_settlement_ids.filtered(lambda s: s.state != 'void'))
 
     def _search_piece_settled(self, operator, value):
+        # Odoo 19 会把 '= True' 规范成 ('in', [True]) 传入，value 可能是集合
+        values = value if isinstance(value, (list, tuple, set)) else [value]
+        truthy = any(bool(v) for v in values)
+        want_settled = truthy if operator in ('=', 'in') else not truthy
         settlements = self.env['sn.wsd.piece.settlement'].search([
             ('state', '!=', 'void'),
             ('operation_report_id', '!=', False),
         ])
         settled_ids = settlements.mapped('operation_report_id').ids
-        if (operator == '=' and value) or (operator == '!=' and not value):
-            return [('id', 'in', settled_ids)]
-        return [('id', 'not in', settled_ids)]
+        return [('id', 'in' if want_settled else 'not in', settled_ids)]

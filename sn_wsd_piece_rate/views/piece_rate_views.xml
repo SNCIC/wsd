@@ -35,10 +35,7 @@
     <record id="action_sn_wsd_piece_rate" model="ir.actions.act_window">
         <field name="name">Piece Rates</field>
         <field name="res_model">sn.wsd.piece.rate</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Create your first piece rate</p>
-            <p>One rate per product and operation: the crew is paid this amount for each OK unit.</p>
-        </field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Create your first piece rate</p><p>One rate per product and operation: the crew is paid this amount for each OK unit.</p></field>
     </record>
 </odoo>

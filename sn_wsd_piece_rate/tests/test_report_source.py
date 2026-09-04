@@ -21,6 +21,13 @@ class TestReportSource(PieceRateTestCommon):
             'qty_ok': report.qty_ok,
         })
         self.assertTrue(report.x_piece_settled)
+        # search 路径（'=' 会被 ORM 规范成 'in'，回归 2026-09-04 浏览器验证发现）
+        Report = self.env['sn.wsd.mes.operation.report']
+        settled = Report.search([('x_piece_settled', '=', True)])
+        self.assertIn(report, settled)
+        self.assertNotIn(
+            self._make_report(self.order, self.op_a, 1.0), settled)
+        self.assertNotIn(report, Report.search([('x_piece_settled', '=', False)]))
         with self.assertRaises(ValidationError):
             self.env['sn.wsd.piece.settlement'].create({
                 'mes_order_id': self.order.id,

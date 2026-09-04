@@ -136,9 +136,6 @@
         <field name="name">Piece Settlements</field>
         <field name="res_model">sn.wsd.piece.settlement</field>
         <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Create your first piece settlement</p>
-            <p>One settlement pays one chunk of OK production to the crew that produced it.</p>
-        </field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Create your first piece settlement</p><p>One settlement pays one chunk of OK production to the crew that produced it.</p></field>
     </record>
 </odoo>

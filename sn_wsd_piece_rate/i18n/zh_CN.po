@@ -58,15 +58,14 @@ msgid "Piece Rates"
 msgstr "计件单价"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_rate
-msgid ""
-"<p class=\"o_view_nocontent_smiling_face\">Create your first piece rate</p>\n"
-"        <p>One rate per product and operation: the crew is paid this amount for each OK unit.</p>\n"
-"        "
-msgstr ""
-"<p class=\"o_view_nocontent_smiling_face\">创建第一条计件单价</p>\n"
-"        <p>一个产品×工序一条单价：每 OK 一台，班组获得该金额。</p>\n"
-"        "
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_rate
+msgid "Create your first piece rate"
+msgstr "创建第一条计件单价"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_rate
+msgid "One rate per product and operation: the crew is paid this amount for each OK unit."
+msgstr "一个产品×工序一条单价：每 OK 一台，班组获得该金额。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root
@@ -153,16 +152,20 @@ msgstr "状态"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__settlement_date
 msgid "Business Date"
 msgstr "业务日期"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__route_operation_id
 msgid "Operation"
 msgstr "工序"
 
@@ -259,15 +262,14 @@ msgid "Piece Settlements"
 msgstr "计件结算单"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_settlement
-msgid ""
-"<p class=\"o_view_nocontent_smiling_face\">Create your first piece settlement</p>\n"
-"        <p>One settlement pays one chunk of OK production to the crew that produced it.</p>\n"
-"        "
-msgstr ""
-"<p class=\"o_view_nocontent_smiling_face\">创建第一张计件结算单</p>\n"
-"        <p>一张结算单把一块 OK 产量结算给生产它的班组。</p>\n"
-"        "
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_settlement
+msgid "Create your first piece settlement"
+msgstr "创建第一张计件结算单"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_settlement
+msgid "One settlement pays one chunk of OK production to the crew that produced it."
+msgstr "一张结算单把一块 OK 产量结算给生产它的班组。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_settlement
@@ -326,6 +328,7 @@ msgid "Select at least one report to settle."
 msgstr "请至少选择一笔要结算的报工行。"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__operation_report_id
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
 msgid "Operation Report"
@@ -610,15 +613,14 @@ msgid "Employee Piece Ledger"
 msgstr "员工计件台账"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_participant_ledger
-msgid ""
-"<p class=\"o_view_nocontent_smiling_face\">No confirmed settlements yet</p>\n"
-"        <p>The ledger aggregates allocated amounts per employee. Only confirmed, non-void settlements count.</p>\n"
-"        "
-msgstr ""
-"<p class=\"o_view_nocontent_smiling_face\">还没有已确认的结算单</p>\n"
-"        <p>台账按员工汇总分摊金额，只统计已确认且未作废的结算单。</p>\n"
-"        "
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_participant_ledger
+msgid "No confirmed settlements yet"
+msgstr "还没有已确认的结算单"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_participant_ledger
+msgid "The ledger aggregates allocated amounts per employee. Only confirmed, non-void settlements count."
+msgstr "台账按员工汇总分摊金额，只统计已确认且未作废的结算单。"
 
 #. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
@@ -634,3 +636,39 @@ msgstr "本月"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Business Month"
 msgstr "业务月"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__confirmed
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__void
+msgid "Void"
+msgstr "已作废"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_close_log__action__close
+msgid "Close"
+msgstr "关账"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_close_log__action__reopen
+msgid "Reopen"
+msgstr "重开"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Generate From Reports"
+msgstr "从报工生成"
