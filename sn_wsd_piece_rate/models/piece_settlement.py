@@ -499,8 +499,8 @@ class SnWsdPieceSettlement(models.Model):
                 ratio_by_employee.get(e.id, 0.0) or share for e in employees]
             ratios = self._distribute_ratios(weights)
             settlement.participant_ids = [
-                (5, 0)] + [
-                (0, 0, {
+                fields.Command.clear()] + [
+                fields.Command.create({
                     'employee_id': e.id,
                     'performance_ratio': r,
                     'x_ratio_baseline': r,
@@ -513,8 +513,8 @@ class SnWsdPieceSettlement(models.Model):
                 raise UserError(_('Add participants first.'))
             ratios = self._distribute_ratios([1.0] * len(employees))
             settlement.participant_ids = [
-                (5, 0)] + [
-                (0, 0, {
+                fields.Command.clear()] + [
+                fields.Command.create({
                     'employee_id': e.id,
                     'performance_ratio': r,
                     'x_ratio_baseline': r,
