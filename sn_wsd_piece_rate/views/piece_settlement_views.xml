@@ -106,6 +106,7 @@
                                            options="{'no_create': True}"/>
                                     <field name="employee_code"/>
                                     <field name="performance_ratio"/>
+                                    <field name="x_ratio_baseline" column_invisible="1"/>
                                     <field name="amount"/>
                                     <field name="currency_id" column_invisible="1"/>
                                 </list>

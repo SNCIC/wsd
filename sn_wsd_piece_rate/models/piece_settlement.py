@@ -117,6 +117,44 @@ class SnWsdPieceSettlement(models.Model):
             settlement.allocated_total = sum(
                 settlement.participant_ids.mapped('amount'))
 
+    @api.onchange('participant_ids')
+    def _onchange_participant_ids_rebalance(self):
+        """手改即锁定：改过绩效比的行（值≠基线）保持不动，
+        其余行按各自基线权重分摊剩余比例（基线合计≤0 退化为均分），
+        末行吸收舍入尾差；锁定行合计>100% 时不自动改（确认校验拦截）。
+
+        不变量：auto 行重分后基线同步改写为当前值（auto 集合内部
+        权重比例保持不变，重写不改变后续分摊结果），因此
+        "值==基线" 恒等于 "未被手改"。"""
+        for settlement in self:
+            lines = settlement.participant_ids
+            if not lines:
+                continue
+            manual = lines.filtered(
+                lambda l: abs(l.performance_ratio - l.x_ratio_baseline) > 0.0001)
+            auto = lines - manual
+            if not auto:
+                continue
+            manual_total = sum(manual.mapped('performance_ratio'))
+            remaining = 100.0 - manual_total
+            if remaining < -0.01:
+                continue
+            auto_lines = list(auto)
+            weights = [l.x_ratio_baseline for l in auto_lines]
+            weight_total = sum(weights)
+            if weight_total <= 0:
+                weights = [1.0] * len(auto_lines)
+                weight_total = float(len(auto_lines))
+            for i, line in enumerate(auto_lines):
+                if i < len(auto_lines) - 1:
+                    line.performance_ratio = round(
+                        remaining * weights[i] / weight_total, 4)
+                else:
+                    line.performance_ratio = round(
+                        100.0 - manual_total - sum(
+                            l.performance_ratio for l in auto_lines[:-1]), 4)
+                line.x_ratio_baseline = line.performance_ratio
+
     @api.constrains('participant_ids', 'participant_ids.performance_ratio')
     def _check_ratio_total(self):
         # 草稿期自由编辑（逐行加人时合计必然中途不等于100）；
@@ -465,6 +503,7 @@ class SnWsdPieceSettlement(models.Model):
                 (0, 0, {
                     'employee_id': e.id,
                     'performance_ratio': r,
+                    'x_ratio_baseline': r,
                 }) for e, r in zip(employees, ratios)]
 
     def action_equal_split(self):
@@ -478,6 +517,7 @@ class SnWsdPieceSettlement(models.Model):
                 (0, 0, {
                     'employee_id': e.id,
                     'performance_ratio': r,
+                    'x_ratio_baseline': r,
                 }) for e, r in zip(employees, ratios)]
 
 
@@ -519,6 +559,11 @@ class SnWsdPieceSettlementParticipant(models.Model):
         related='employee_id.barcode', string='Employee Code', store=True)
     performance_ratio = fields.Float(
         string='Performance Ratio', digits=(12, 4), required=True, default=0.0)
+    x_ratio_baseline = fields.Float(
+        string='Ratio Baseline', digits=(12, 4),
+        help='Weight used to auto-redistribute the leftover ratio: rows the '
+             'user typed over (ratio != baseline) keep their value, the rest '
+             'share the remainder proportionally to their baseline.')
     amount = fields.Monetary(
         string='Allocated Amount', compute='_compute_amount', store=True)
 
@@ -547,3 +592,4 @@ class SnWsdPieceSettlementParticipant(models.Model):
             others = self.settlement_id.participant_ids - self
             headcount = len(others) + 1
             self.performance_ratio = round(100.0 / headcount, 4)
+            self.x_ratio_baseline = self.performance_ratio
