@@ -29,6 +29,9 @@ msgstr "计件单价必须大于零。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -690,3 +693,71 @@ msgstr "已计件"
 #: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 msgid "Unsettled"
 msgstr "未计件"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__currency_id
+msgid "Currency"
+msgstr "币种"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__settlement_id
+msgid "Settlement"
+msgstr "结算单"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "Employee"
+msgstr "员工"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "Operation"
+msgstr "工序"
