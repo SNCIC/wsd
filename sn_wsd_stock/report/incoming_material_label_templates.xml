@@ -5,19 +5,19 @@
             <t t-translation="off">
 ^XA
 ^CI28
-^PW945
+^PW709
 ^LL709
 ^LH0,0
-^FO20,20^GB905,669,3^FS
-^FO20,155^GB905,3,3^FS
-^FO20,290^GB560,3,3^FS
-^FO20,425^GB560,3,3^FS
-^FO20,560^GB905,3,3^FS
-^FO190,20^GB3,540,3^FS
-^FO580,20^GB3,540,3^FS
-^FO680,20^GB3,270,3^FS
-^FO580,290^GB345,3,3^FS
-^FO580,290^GB3,270,3^FS
+^FO20,20^GB669,669,3^FS
+^FO20,155^GB669,3,3^FS
+^FO20,290^GB414,3,3^FS
+^FO20,425^GB414,3,3^FS
+^FO20,560^GB669,3,3^FS
+^FO146,20^GB3,540,3^FS
+^FO434,20^GB3,540,3^FS
+^FO508,20^GB3,270,3^FS
+^FO434,290^GB255,3,3^FS
+^FO434,290^GB3,270,3^FS
 <t t-out="label['material_code_label']"/>
 <t t-out="label['batch_label']"/>
 <t t-out="label['material_name_label']"/>
@@ -30,7 +30,7 @@
 <t t-out="label['quantity']"/>
 <t t-out="label['specification']"/>
 <t t-out="label['supplier_name']"/>
-^FO635,308<t t-out="label['qr_image']"/>
+^FO453,308<t t-out="label['qr_image']"/>
 <t t-out="label['material_sn']"/>
 ^XZ
             </t>

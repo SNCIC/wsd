@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_picklight_command" model="ir.sequence">
+            <field name="name">Picklight Command</field>
+            <field name="code">sn.wsd.picklight.command</field>
+            <field name="prefix">PL/CMD/</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_picklight_sensor" model="ir.sequence">
+            <field name="name">Picklight Sensor Reading</field>
+            <field name="code">sn.wsd.picklight.sensor</field>
+            <field name="prefix">PL/SENSOR/</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

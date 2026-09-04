@@ -132,12 +132,12 @@ class ReportIncomingMaterialLabelZpl(models.AbstractModel):
     @classmethod
     def _label_images(cls, labels):
         return {
-            'material_code_label': Markup(cls._field_image(labels['material_code'], 40, 20, 135, 34, 135)),
-            'batch_label': Markup(cls._field_image(labels['batch'], 595, 20, 135, 34, 75)),
-            'material_name_label': Markup(cls._field_image(labels['material_name'], 40, 155, 135, 34, 135)),
-            'quantity_label': Markup(cls._field_image(labels['quantity'], 595, 155, 135, 34, 75)),
-            'specification_label': Markup(cls._field_image(labels['specification'], 40, 290, 135, 34, 135)),
-            'supplier_label': Markup(cls._field_image(labels['supplier'], 40, 425, 135, 34, 135)),
+            'material_code_label': Markup(cls._field_image(labels['material_code'], 35, 20, 135, 34, 100)),
+            'batch_label': Markup(cls._field_image(labels['batch'], 445, 20, 135, 34, 55)),
+            'material_name_label': Markup(cls._field_image(labels['material_name'], 35, 155, 135, 34, 100)),
+            'quantity_label': Markup(cls._field_image(labels['quantity'], 445, 155, 135, 34, 55)),
+            'specification_label': Markup(cls._field_image(labels['specification'], 35, 290, 135, 34, 100)),
+            'supplier_label': Markup(cls._field_image(labels['supplier'], 35, 425, 135, 34, 100)),
         }
 
     def _get_report_values(self, docids, data=None):
@@ -159,14 +159,14 @@ class ReportIncomingMaterialLabelZpl(models.AbstractModel):
         for lot in lots:
             label = self._label_images(titles)
             label.update({
-                'material_code': Markup(self._field_image(lot.product_id.default_code, 205, 20, 135, 32, 365, 2)),
-                'batch_no': Markup(self._field_image(lot.supplier_batch_no, 690, 20, 135, 32, 225, 2)),
-                'material_name': Markup(self._field_image(lot.product_id.name, 205, 155, 135, 32, 365, 2)),
-                'quantity': Markup(self._field_image(self._format_quantity(lot.initial_quantity), 690, 155, 135, 36, 225, 2)),
-                'specification': Markup(self._field_image(lot.product_id.material_specification, 205, 290, 135, 30, 365, 2)),
-                'supplier_name': Markup(self._field_image(lot.supplier_name, 205, 425, 135, 30, 365, 2)),
-                'material_sn': Markup(self._field_image(lot.name, 40, 560, 129, 30, 885, 2)),
-                'qr_image': Markup(self._render_qr_gfa(lot.name, 345, 270)),
+                'material_code': Markup(self._field_image(lot.product_id.default_code, 157, 20, 135, 38, 270, 2)),
+                'batch_no': Markup(self._field_image(lot.supplier_batch_no, 515, 20, 135, 32, 166, 2)),
+                'material_name': Markup(self._field_image(lot.product_id.name, 157, 155, 135, 32, 270, 2)),
+                'quantity': Markup(self._field_image(self._format_quantity(lot.initial_quantity), 515, 155, 135, 36, 166, 2)),
+                'specification': Markup(self._field_image(lot.product_id.material_specification, 157, 290, 135, 30, 270, 2)),
+                'supplier_name': Markup(self._field_image(lot.supplier_name, 157, 425, 135, 30, 270, 2)),
+                'material_sn': Markup(self._field_image(lot.name, 35, 560, 129, 30, 654, 2)),
+                'qr_image': Markup(self._render_qr_gfa(lot.name, 255, 270)),
             })
             labels.append(label)
         return {'doc_ids': lots.ids, 'doc_model': 'stock.lot', 'docs': lots, 'labels': labels}

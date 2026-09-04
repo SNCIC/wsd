@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picklight_config_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.config.list</field>
+        <field name="model">sn.wsd.picklight.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="base_url"/>
+                <field name="timeout_seconds"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_config_form" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.config.form</field>
+        <field name="model">sn.wsd.picklight.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_light_all_on" string="Turn On All Lights"
+                            type="object" class="btn-primary" icon="fa-lightbulb-o"
+                            confirm="Turn on all lights of this service configuration?"/>
+                    <button name="action_light_all_off" string="Turn Off All Lights"
+                            type="object" icon="fa-toggle-off"
+                            confirm="Turn off all lights of this service configuration?"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="base_url"/>
+                        <field name="api_token" password="True"/>
+                        <field name="timeout_seconds"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_picklight_shelf_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.shelf.list</field>
+        <field name="model">sn.wsd.picklight.shelf</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="config_id"/>
+                <field name="battery_level"/>
+                <field name="humidity"/>
+                <field name="temperature"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_shelf_form" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.shelf.form</field>
+        <field name="model">sn.wsd.picklight.shelf</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="config_id"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="battery_level"/>
+                        <field name="humidity"/>
+                        <field name="temperature"/>
+                        <field name="last_sensor_at"/>
+                    </group>
+                    <notebook>
+                        <page string="Locations">
+                            <field name="location_ids">
+                                <list editable="bottom">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="stock_location_id"/>
+                                    <field name="light_color"/>
+                                    <field name="twinkle"/>
+                                    <field name="is_must_collect"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_picklight_command_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.command.list</field>
+        <field name="model">sn.wsd.picklight.command</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="command_type"/>
+                <field name="picking_id"/>
+                <field name="state"/>
+                <field name="result_code"/>
+                <field name="sent_at"/>
+                <field name="finished_at"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_event_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.event.list</field>
+        <field name="model">sn.wsd.picklight.event</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="event_type"/>
+                <field name="location_code"/>
+                <field name="shelf_code"/>
+                <field name="barcode"/>
+                <field name="quantity"/>
+                <field name="event_time"/>
+                <field name="processed"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_location_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.location.list</field>
+        <field name="model">sn.wsd.picklight.location</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="shelf_id"/>
+                <field name="stock_location_id"/>
+                <field name="light_color"/>
+                <field name="twinkle"/>
+                <field name="is_must_collect"/>
+                <field name="active"/>
+                <button name="action_light_on" string="Light On" type="object"
+                        icon="fa-lightbulb-o" class="btn-link"/>
+                <button name="action_light_off" string="Light Off" type="object"
+                        icon="fa-toggle-off" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picklight_location_form" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.location.form</field>
+        <field name="model">sn.wsd.picklight.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_light_on" string="Light On"
+                            type="object" class="btn-primary" icon="fa-lightbulb-o"/>
+                    <button name="action_light_off" string="Light Off"
+                            type="object" icon="fa-toggle-off"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="shelf_id"/>
+                        <field name="stock_location_id"/>
+                    </group>
+                    <group>
+                        <field name="light_color"/>
+                        <field name="twinkle"/>
+                        <field name="is_locked"/>
+                        <field name="is_must_collect"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_picklight_sensor_list" model="ir.ui.view">
+        <field name="name">sn.wsd.picklight.sensor.list</field>
+        <field name="model">sn.wsd.picklight.sensor.reading</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="shelf_id"/>
+                <field name="reading_type"/>
+                <field name="battery_level"/>
+                <field name="humidity"/>
+                <field name="temperature"/>
+                <field name="reading_time"/>
+            </list>
+        </field>
+    </record>
+</odoo>
