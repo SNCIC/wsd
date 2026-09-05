@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_stock
 #
@@ -819,7 +819,7 @@ msgstr "打印物料标签"
 #: model_terms:ir.ui.view,arch_db:stock.view_production_lot_form
 #: model_terms:ir.ui.view,arch_db:stock.view_stock_quant_tree_editable
 msgid "Supplier Batch"
-msgstr "批次号"
+msgstr "供应商批次"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__arrival_batch_no
@@ -893,6 +893,7 @@ msgstr "操作明细"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__quantity_per_label
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__quantity_per_label
 msgid "Quantity per Label"
 msgstr "每张标签数量"
 
@@ -1017,6 +1018,69 @@ msgstr "来料物料标签（ZPL）"
 #: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
 msgid "The selected material lot does not belong to this receipt."
 msgstr "选定的物料批次不属于此入库单。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__internal_lot_name
+msgid "Internal Batch"
+msgstr "内部批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Generate Internal Batches"
+msgstr "生成内部批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Print Material Labels"
+msgstr "打印物料标签"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Generate internal batches from the move details before printing material labels."
+msgstr "请先在移动明细中生成内部批次，再打印物料标签。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Material labels can only be generated for active incoming lot moves."
+msgstr "只有有效的按批次追踪入库明细才能生成物料标签。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "A supplier reference code is required to generate material labels."
+msgstr "生成物料标签前必须填写供应商参考编号。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "There are no material lines to generate."
+msgstr "没有可生成内部批次的物料明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Internal batches have already been generated for this move."
+msgstr "此移动已生成内部批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Enter a supplier batch for every line before generating material labels."
+msgstr "生成物料标签前，请为每条明细填写供应商批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Generate internal batches before printing material labels."
+msgstr "请先生成内部批次，再打印物料标签。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Enter a quantity per label greater than zero for every line before generating material labels."
+msgstr "生成物料标签前，请为每条明细填写大于零的每张标签数量。"
 
 #. module: sn_wsd_stock
 #. odoo-python

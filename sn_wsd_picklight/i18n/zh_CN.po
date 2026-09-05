@@ -1,4 +1,4 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_picklight
 #
@@ -14,6 +14,97 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
+msgid "Large Rack Locations"
+msgstr "大料架库位"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__allocation_sequence
+msgid "Allocation Sequence"
+msgstr "分配顺序"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__position_group
+msgid "Position Group"
+msgstr "库位分组"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__position_layer_number
+msgid "Position Layer Number"
+msgstr "库位层号"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
+msgid "Small Rack Locations"
+msgstr "小料架库位"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
+msgid "Auto Fill Large Rack Locations"
+msgstr "自动填充大料架库位"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
+msgid "Auto Fill Small Rack Locations"
+msgstr "自动填充小料架库位"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Automatic rack allocation is only available for receipt operations."
+msgstr "自动料架分配仅适用于收货操作。"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move.py:0
+msgid "Receipt picklight is only available for open receipt operations."
+msgstr "收货按灯仅适用于未完成的收货操作。"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Completed or cancelled operation lines cannot be allocated."
+msgstr "已完成或已取消的操作明细无法分配库位。"
+
+#. module: sn_wsd_picklight
+#: selection:sn.wsd.picklight.shelf,shelf_type:0
+msgid "Large Rack"
+msgstr "大料架"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "No active picklight locations are configured for this rack type."
+msgstr "此料架类型尚未配置启用的电子料架库位。"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+#, python-format
+msgid "Not enough free picklight locations. %(required)s are required, but only %(available)s are available."
+msgstr "可用电子料架库位不足。需要 %(required)s 个，当前仅有 %(available)s 个。"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Select at least one receipt operation line."
+msgstr "请至少选择一条收货操作明细。"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Select operation lines from one receipt only."
+msgstr "只能选择同一张收货单的操作明细。"
+
+#. module: sn_wsd_picklight
+#: selection:sn.wsd.picklight.shelf,shelf_type:0
+msgid "Small Rack"
+msgstr "小料架"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__shelf_type
+msgid "Shelf Type"
+msgstr "料架类型"
+
+#. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "The selected operation lines already have picklight locations."
+msgstr "所选操作明细已指定电子料架库位。"
 
 #. module: sn_wsd_picklight
 #: model:ir.module.category,name:sn_wsd_picklight.module_category_picklight
@@ -481,6 +572,11 @@ msgid "No picklight location is mapped to this transfer source location."
 msgstr "该调拨单的源库位没有映射按灯库位。"
 
 #. module: sn_wsd_picklight
+#: code:addons/sn_wsd_picklight/models/stock_move.py:0
+msgid "No picklight location is mapped to this receipt destination location."
+msgstr "该收货操作的目标库位没有映射电子料架库位。"
+
+#. module: sn_wsd_picklight
 #. odoo-python
 #: code:addons/sn_wsd_picklight/models/picklight_command.py:0
 msgid "The picklight service rejected the command: %s"
@@ -527,11 +623,13 @@ msgstr "确定要一键熄灭该服务配置下的所有货架灯吗？"
 #. module: sn_wsd_picklight
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
 msgid "Light On"
 msgstr "亮灯"
 
 #. module: sn_wsd_picklight
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_picklight_location_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
 msgid "Light Off"
 msgstr "灭灯"

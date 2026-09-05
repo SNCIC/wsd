@@ -45,8 +45,10 @@
         <field name="model">sn.wsd.picklight.shelf</field>
         <field name="arch" type="xml">
             <list>
+                <field name="allocation_sequence"/>
                 <field name="code"/>
                 <field name="name"/>
+                <field name="shelf_type"/>
                 <field name="config_id"/>
                 <field name="battery_level"/>
                 <field name="humidity"/>
@@ -62,8 +64,10 @@
             <form>
                 <sheet>
                     <group>
+                        <field name="allocation_sequence"/>
                         <field name="code"/>
                         <field name="name"/>
+                        <field name="shelf_type"/>
                         <field name="company_id"/>
                         <field name="config_id"/>
                         <field name="active"/>

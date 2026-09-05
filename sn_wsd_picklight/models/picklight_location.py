@@ -1,3 +1,5 @@
+import re
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -6,10 +8,17 @@ class PicklightShelf(models.Model):
     _name = 'sn.wsd.picklight.shelf'
     _description = 'Picklight Shelf'
     _check_company_auto = True
-    _order = 'code, id'
+    _order = 'allocation_sequence, rack_prefix, rack_number, code, id'
 
     name = fields.Char(string='Name', required=True)
     code = fields.Char(string='Shelf Code', required=True, index=True)
+    allocation_sequence = fields.Integer(
+        string='Allocation Sequence', default=10, required=True, index=True)
+    rack_prefix = fields.Char(compute='_compute_rack_sort_values', store=True, index=True)
+    rack_number = fields.Integer(compute='_compute_rack_sort_values', store=True, index=True)
+    shelf_type = fields.Selection(
+        [('large', 'Large Rack'), ('small', 'Small Rack')],
+        string='Shelf Type', required=True, default='small', index=True)
     company_id = fields.Many2one(
         'res.company', string='Company', required=True,
         default=lambda self: self.env.company, index=True)
@@ -28,6 +37,13 @@ class PicklightShelf(models.Model):
         'unique(company_id, code)',
         'A shelf code must be unique per company.')
 
+    @api.depends('code')
+    def _compute_rack_sort_values(self):
+        for shelf in self:
+            match = re.fullmatch(r'([A-Za-z]+)([0-9]+)', (shelf.code or '').strip())
+            shelf.rack_prefix = match.group(1).upper() if match else (shelf.code or '').upper()
+            shelf.rack_number = int(match.group(2)) if match else 0
+
     @api.constrains('config_id')
     def _check_config_company(self):
         for record in self:
@@ -39,13 +55,20 @@ class PicklightLocation(models.Model):
     _name = 'sn.wsd.picklight.location'
     _description = 'Picklight Location'
     _check_company_auto = True
-    _order = 'shelf_id, code'
+    _order = ('shelf_allocation_sequence, shelf_id, position_group, '
+              'position_layer_number, position_number, code, id')
 
     name = fields.Char(string='Name', required=True)
     code = fields.Char(string='Location Code', required=True, index=True)
+    position_group = fields.Char(compute='_compute_position_values', store=True, index=True)
+    position_layer_number = fields.Integer(
+        compute='_compute_position_values', store=True, index=True)
+    position_number = fields.Integer(compute='_compute_position_values', store=True, index=True)
     shelf_id = fields.Many2one(
         'sn.wsd.picklight.shelf', string='Shelf', required=True,
         ondelete='cascade', check_company=True)
+    shelf_allocation_sequence = fields.Integer(
+        related='shelf_id.allocation_sequence', store=True, readonly=True, index=True)
     stock_location_id = fields.Many2one(
         'stock.location', string='Odoo Stock Location', required=True,
         ondelete='restrict', check_company=True)
@@ -63,6 +86,22 @@ class PicklightLocation(models.Model):
     _unique_stock_location = models.Constraint(
         'unique(company_id, stock_location_id)',
         'An Odoo stock location can only map to one active picklight location.')
+
+    @api.depends('code', 'shelf_id.code')
+    def _compute_position_values(self):
+        for location in self:
+            code = (location.code or '').strip().upper()
+            shelf_code = (location.shelf_id.code or '').strip().upper()
+            position_code = code[len(shelf_code):] if code.startswith(shelf_code) else code
+            match = re.fullmatch(r'([A-Z]+)([0-9]+)([0-9]{3})', position_code)
+            if match:
+                location.position_group = match.group(1)
+                location.position_layer_number = int(match.group(2))
+                location.position_number = int(match.group(3))
+            else:
+                location.position_group = ''
+                location.position_layer_number = 0
+                location.position_number = 0
 
     def _send_debug_command(self, light_on):
         """Light up (or turn off) the selected locations for debugging.
