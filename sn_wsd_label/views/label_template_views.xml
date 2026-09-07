@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_label_template_form" model="ir.ui.view">
+        <field name="name">sn.label.template.form</field>
+        <field name="model">sn.label.template</field>
+        <field name="arch" type="xml">
+            <form string="Label Template">
+                <header>
+                    <button name="action_duplicate_template" type="object"
+                            string="Duplicate Template" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Stencil SN Label"/></h1>
+                    </div>
+                    <group>
+                        <group string="Layout">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="paper_preset"/>
+                            <field name="width_dots"/>
+                            <field name="height_dots"/>
+                            <field name="dpi"/>
+                            <field name="sn_field"/>
+                            <field name="domain"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Preview">
+                            <field name="preview_res_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Elements" name="elements">
+                            <div class="mb-3">
+                                <field name="preview_image" nolabel="1"
+                                       widget="sn_wsd_label_designer" readonly="0"/>
+                            </div>
+                            <field name="element_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="element_type"/>
+                                    <field name="content"
+                                           invisible="element_type in ('box', 'line')"
+                                           readonly="element_type in ('box', 'line')"/>
+                                    <field name="fixed_text"
+                                           invisible="element_type in ('box', 'line') or content != 'fixed'"
+                                           required="content == 'fixed' and element_type not in ('box', 'line')"/>
+                                    <field name="field_path"
+                                           widget="field_selector"
+                                           options="{'model': 'template_model_name'}"
+                                           invisible="element_type in ('box', 'line') or content != 'field'"
+                                           required="content == 'field' and element_type not in ('box', 'line')"/>
+                                    <field name="x"/>
+                                    <field name="y"/>
+                                    <field name="width"/>
+                                    <field name="height"/>
+                                    <field name="thickness"
+                                           invisible="element_type not in ('box', 'line')"/>
+                                    <field name="font_size" invisible="element_type != 'text'"/>
+                                    <field name="max_lines" invisible="element_type != 'text'"/>
+                                    <field name="align" invisible="element_type != 'text'"
+                                           widget="badges"/>
+                                    <field name="rendering" invisible="element_type != 'qrcode'"
+                                           widget="badges"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_label_template_list" model="ir.ui.view">
+        <field name="name">sn.label.template.list</field>
+        <field name="model">sn.label.template</field>
+        <field name="arch" type="xml">
+            <list string="Label Templates">
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="width_dots" string="W"/>
+                <field name="height_dots" string="H"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_label_template_search" model="ir.ui.view">
+        <field name="name">sn.label.template.search</field>
+        <field name="model">sn.label.template</field>
+        <field name="arch" type="xml">
+            <search string="Label Templates">
+                <field name="name"/>
+                <field name="model_id"/>
+                <filter string="Archived" name="archived"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_label_template" model="ir.actions.act_window">
+        <field name="name">Label Templates</field>
+        <field name="res_model">sn.label.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first label template</p>
+            <p>Pick a model, lay out elements, check the live preview.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_label_center" name="Label Center" sequence="70"/>
+    <menuitem id="menu_label_templates" name="Label Templates" sequence="10"
+              parent="menu_label_center" action="action_sn_label_template"
+              groups="sn_wsd_label.group_designer"/>
+    <!-- Menuitem updates ignore absent attributes: clear the designer group
+         loaded by earlier versions so Print Logs stays visible to regular
+         users (batch 3 print audit). -->
+    <record id="menu_label_center" model="ir.ui.menu">
+        <field name="group_ids" eval="[(5, 0, 0)]"/>
+    </record>
+</odoo>

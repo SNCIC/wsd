@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PDA label print screen (design decision 7): pick a template, scan the
+         SN, fetch CPCL-JSON commands and hand them to the PrintServer APP. -->
+    <record id="action_label_print_screen" model="ir.actions.client">
+        <field name="name">Label Print</field>
+        <field name="tag">sn_wsd_label.label_print_screen</field>
+    </record>
+
+    <menuitem id="menu_label_print_screen" name="Label Print" sequence="5"
+              parent="menu_label_center" action="action_label_print_screen"
+              groups="base.group_user"/>
+</odoo>

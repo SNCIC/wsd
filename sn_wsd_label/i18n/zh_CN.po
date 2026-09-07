@@ -1,0 +1,914 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_label
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid "The label field path cannot be empty."
+msgstr "标签字段路径不能为空。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid "Unknown model %s in label field path."
+msgstr "标签字段路径中的模型 %s 不存在。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid "The label field path %s contains an empty segment."
+msgstr "标签字段路径 %s 含有空段。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid "Unknown field %s in label field path %s."
+msgstr "标签字段路径 %s 中的字段 %s 不存在。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid "Field %s (type %s) cannot be printed on a label: %s."
+msgstr "字段 %s（类型 %s）不能打印到标签上：%s。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_reader.py:0
+msgid ""
+"Only many2one hops are allowed in label field path %s (field %s is a %s)."
+msgstr "标签字段路径 %s 只允许经过多对一字段（字段 %s 是 %s 类型）。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_renderer.py:0
+msgid "Unknown label element type: %s"
+msgstr "未知的标签元素类型：%s"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_renderer.py:0
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "The label template width and height must be positive integers."
+msgstr "标签模板的宽和高必须是正整数。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "The label template name must be unique per company."
+msgstr "每个公司的标签模板名称必须唯一。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "Fixed text is required for fixed-content elements."
+msgstr "固定内容元素必须填写固定文本。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "A field path is required for field-content elements."
+msgstr "字段内容元素必须填写字段路径。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "Element coordinates and sizes cannot be negative."
+msgstr "元素的坐标和尺寸不能为负数。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid ""
+"Text, QR code and barcode elements need a positive width and height."
+msgstr "文本、二维码和一维码元素的宽和高必须为正数。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "No record available for preview."
+msgstr "没有可用于预览的记录。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__model_id
+msgid "Model"
+msgstr "模型"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__model_name
+msgid "Model Name"
+msgstr "模型名称"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__width_dots
+msgid "Width (dots)"
+msgstr "宽（点）"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__height_dots
+msgid "Height (dots)"
+msgstr "高（点）"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__dpi
+msgid "DPI"
+msgstr "分辨率（DPI）"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__sn_field
+msgid "SN Field"
+msgstr "SN 字段"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__domain
+msgid "Record Domain"
+msgstr "记录过滤域"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__preview_res_id
+msgid "Preview Record"
+msgstr "预览记录"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__preview_image
+msgid "Preview"
+msgstr "预览"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__element_ids
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__element_type
+msgid "Elements"
+msgstr "元素"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__content
+msgid "Content"
+msgstr "内容"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__fixed_text
+msgid "Fixed Text"
+msgstr "固定文本"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__field_path
+msgid "Field"
+msgstr "字段"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__x
+msgid "X"
+msgstr "X 坐标"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__y
+msgid "Y"
+msgstr "Y 坐标"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__width
+msgid "Width"
+msgstr "宽"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__height
+msgid "Height"
+msgstr "高"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__thickness
+msgid "Thickness"
+msgstr "线宽"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__font_size
+msgid "Font Size"
+msgstr "字号"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__max_lines
+msgid "Max Lines"
+msgstr "最大行数"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__align
+msgid "Align"
+msgstr "对齐"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__rendering
+msgid "Rendering"
+msgstr "渲染方式"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__company_id
+msgid "Leave empty to share the template across companies."
+msgstr "留空表示全公司共用该模板。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__dpi
+msgid "Dot density the coordinates are designed for (203 = 8 dots/mm)."
+msgstr "坐标所按的点密度设计（203 = 每毫米 8 点）。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__sn_field
+msgid ""
+"Name of the record field holding the scanned SN on the PDA label screen "
+"(stock.lot templates use \"name\")."
+msgstr "PDA 标签屏扫码定位记录时使用的 SN 字段名（stock.lot 模板填 \"name\"）。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__preview_res_id
+msgid ""
+"Optional record id rendered in the preview; defaults to the most recent "
+"readable record of the model."
+msgstr "可选：预览使用的记录 id；缺省取该模型最近一条可读记录。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_element__field_path
+msgid ""
+"Record field rendered as the element value, dot notation across many2one "
+"hops (e.g. template_id.code)."
+msgstr "作为元素值渲染的记录字段，点号跨多对一（如 template_id.code）。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_element__rendering
+msgid ""
+"Native uses the printer QR command; bitmap rasterizes server-side "
+"(Chinese text is always bitmap)."
+msgstr "原生=用打印机二维码指令；位图=服务端栅格化（中文文本恒为位图）。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_element__thickness
+msgid "Line thickness of box and line elements."
+msgstr "框线/直线元素的线条粗细。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__element_type__text
+msgid "Text"
+msgstr "文本"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__element_type__qrcode
+msgid "QR Code"
+msgstr "二维码"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__element_type__barcode
+msgid "Barcode"
+msgstr "一维码"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__element_type__box
+msgid "Box"
+msgstr "框线"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__element_type__line
+msgid "Line"
+msgstr "直线"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__content__fixed
+msgid "Fixed Text"
+msgstr "固定文本"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__content__field
+msgid "Field"
+msgstr "字段"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__align__left
+msgid "Left"
+msgstr "左对齐"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__align__center
+msgid "Center"
+msgstr "居中"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__align__right
+msgid "Right"
+msgstr "右对齐"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rendering__native
+msgid "Native"
+msgstr "原生"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rendering__bitmap
+msgid "Bitmap"
+msgstr "位图"
+
+#. module: sn_wsd_label
+#: model:res.groups,name:sn_wsd_label.group_designer
+msgid "Label Designer"
+msgstr "标签设计员"
+
+#. module: sn_wsd_label
+#: model:ir.ui.menu,name:sn_wsd_label.menu_label_center
+msgid "Label Center"
+msgstr "标签中心"
+
+#. module: sn_wsd_label
+#: model:ir.ui.menu,name:sn_wsd_label.menu_label_templates
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_search
+msgid "Label Templates"
+msgstr "标签模板"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Label Template"
+msgstr "标签模板"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Stencil SN Label"
+msgstr "钢网SN标签"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Elements"
+msgstr "元素"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Preview"
+msgstr "预览"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Layout"
+msgstr "版面"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_label
+#: model_terms:ir.actions.act_window,help:sn_wsd_label.action_sn_label_template
+msgid "Create your first label template"
+msgstr "创建第一个标签模板"
+
+#. module: sn_wsd_label
+#: model_terms:ir.actions.act_window,help:sn_wsd_label.action_sn_label_template
+msgid "Pick a model, lay out elements, check the live preview."
+msgstr "选择模型、排布元素、实时查看预览。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+msgid "The wizard record ids must be a JSON list of integers."
+msgstr "向导的记录 ID 必须是整数的 JSON 数组。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+msgid ""
+"The label template %s targets model %s and cannot print records of model "
+"%s."
+msgstr "标签模板 %s 面向模型 %s，无法打印模型 %s 的记录。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+#: code:addons/sn_wsd_label/models/label_pda.py:0
+msgid "The number of copies must be a positive integer."
+msgstr "打印份数必须是正整数。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+#: code:addons/sn_wsd_label/models/label_pda.py:0
+msgid "Unknown model %s."
+msgstr "未知模型 %s。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+#: code:addons/sn_wsd_label/models/label_pda.py:0
+msgid "No records were selected for label printing."
+msgstr "未选择要打印标签的记录。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_print_wizard.py:0
+#: code:addons/sn_wsd_label/models/label_pda.py:0
+msgid "Some of the selected records no longer exist."
+msgstr "部分所选记录已不存在。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_pda.py:0
+msgid "The label template %s does not exist."
+msgstr "标签模板 %s 不存在。"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_print_log
+msgid "Label Print Log"
+msgstr "标签打印日志"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_print_wizard
+msgid "Label Print Wizard"
+msgstr "标签打印向导"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__template_id
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Template"
+msgstr "模板"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__res_model
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__res_model
+msgid "Record Model"
+msgstr "记录模型"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__res_id
+msgid "Record ID"
+msgstr "记录 ID"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__res_ids
+msgid "Record IDs"
+msgstr "记录 ID"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__copies
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__copies
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Copies"
+msgstr "份数"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__user_id
+msgid "Printed By"
+msgstr "打印人"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__template_id
+msgid "Label Template"
+msgstr "标签模板"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__preview_png
+msgid "Preview"
+msgstr "预览"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__zpl_data
+msgid "ZPL Data"
+msgstr "ZPL 数据"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_print_wizard__res_ids
+msgid "JSON array of the record ids to print, e.g. \"[1,2]\"."
+msgstr "要打印的记录 ID 的 JSON 数组，如 \"[1,2]\"。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_print_wizard__zpl_data
+msgid ""
+"ZPL rendered when the print action is confirmed; consumed by the qweb-text "
+"report shell."
+msgstr "确认打印时渲染出的 ZPL，由 qweb-text 报表壳输出。"
+
+#. module: sn_wsd_label
+#: model:ir.ui.menu,name:sn_wsd_label.menu_label_print_logs
+#: model:ir.actions.act_window,name:sn_wsd_label.action_sn_label_print_log
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "Print Logs"
+msgstr "打印日志"
+
+#. module: sn_wsd_label
+#: model:ir.actions.act_window,name:sn_wsd_label.action_sn_label_print_wizard
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_wizard_form
+msgid "Print Labels"
+msgstr "打印标签"
+
+#. module: sn_wsd_label
+#: model:ir.actions.report,name:sn_wsd_label.action_report_label_zpl
+msgid "Label ZPL"
+msgstr "标签 ZPL"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_wizard_form
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Print"
+msgstr "打印"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_form
+msgid "Print Log"
+msgstr "打印日志"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "Model"
+msgstr "模型"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "Printed on"
+msgstr "打印时间"
+
+#. module: sn_wsd_label
+#: model:ir.actions.client,name:sn_wsd_label.action_label_print_screen
+#: model:ir.ui.menu,name:sn_wsd_label.menu_label_print_screen
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Label Print"
+msgstr "标签打印"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Scan or type the SN"
+msgstr "扫描或输入 SN"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Find"
+msgstr "查找"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Clear"
+msgstr "清除"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "No active label template available."
+msgstr "没有可用的启用标签模板。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Select a label template first."
+msgstr "请先选择标签模板。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Record found: %s"
+msgstr "找到记录：%s"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "No record found for SN %s."
+msgstr "未找到 SN 为 %s 的记录。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Find a record by scanning or typing its SN first."
+msgstr "请先扫描或输入 SN 定位记录。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Print commands sent to the PrintServer app."
+msgstr "打印指令已发送到 PrintServer 应用。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Print failed."
+msgstr "打印失败。"
+
+#. module: sn_wsd_label
+#. odoo-python
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "%s (copy)"
+msgstr "%s（副本）"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__paper_preset
+msgid "Paper Preset"
+msgstr "纸型预设"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__paper_preset
+msgid ""
+"Pick a label stock to set width and height; Custom keeps manual values."
+msgstr "选纸型自动设置宽高；选“自定义”保留手填值。"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_template__paper_preset__70x40
+msgid "70 × 40 mm"
+msgstr "70 × 40 mm"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_template__paper_preset__60x40
+msgid "60 × 40 mm"
+msgstr "60 × 40 mm"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_template__paper_preset__50x30
+msgid "50 × 30 mm"
+msgstr "50 × 30 mm"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_template__paper_preset__88x88
+msgid "88.6 × 88.6 mm"
+msgstr "88.6 × 88.6 mm"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_template__paper_preset__custom
+msgid "Custom"
+msgstr "自定义"
+
+#. module: sn_wsd_label
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_template_form
+msgid "Duplicate Template"
+msgstr "复制模板"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Label Designer"
+msgstr "标签设计器"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Drag to move · corner to resize"
+msgstr "拖动移动 · 拉角调整大小"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid ""
+"Unsaved moves are kept by the form; press Save to refresh the preview."
+msgstr "未保存的移动会保留在表单里；点“保存”后预览图刷新。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Label preview"
+msgstr "标签预览"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Text"
+msgstr "文本"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "QR Code"
+msgstr "二维码"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Barcode"
+msgstr "一维码"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Box"
+msgstr "框线"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Line"
+msgstr "直线"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Add a text element"
+msgstr "添加文本元素"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Add a QR code"
+msgstr "添加二维码"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Add a barcode"
+msgstr "添加一维码"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Add a line"
+msgstr "添加直线"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Add a box"
+msgstr "添加框线"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Zoom out"
+msgstr "缩小"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Zoom in"
+msgstr "放大"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Fit zoom"
+msgstr "适应宽度"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Click an element to edit its properties."
+msgstr "点击画布中的元素即可在此编辑属性。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "nudge 1 dot (Shift: 10)"
+msgstr "微调 1 点（Shift 加速 10 点）"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "remove selected"
+msgstr "删除选中元素"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Delete element"
+msgstr "删除元素"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Nothing selected"
+msgstr "未选中元素"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Content"
+msgstr "内容"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Fixed Text"
+msgstr "固定文本"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Field"
+msgstr "字段"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Font Size"
+msgstr "字号"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Max Lines"
+msgstr "最大行数"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Align"
+msgstr "对齐"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Left"
+msgstr "左对齐"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Center"
+msgstr "居中"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Right"
+msgstr "右对齐"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Rendering"
+msgstr "渲染方式"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Native"
+msgstr "原生"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Bitmap"
+msgstr "位图"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Thickness"
+msgstr "线宽"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid ""
+"Unsaved changes are kept by the form; press Save to refresh the preview."
+msgstr "未保存的修改会保留在表单里；点“保存”后预览图刷新。"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.js:0
+msgid "Fit out-of-bounds elements"
+msgstr "收回出界元素"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
+msgid "Select a template…"
+msgstr "请选择标签模板…"

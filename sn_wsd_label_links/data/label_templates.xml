@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Seed label templates for the first batch of label-center models
+    (design decision 8). noupdate="1" so on-site layout tweaks made in
+    the designer survive module upgrades.
+
+    All templates are global (company_id empty) and target 560x320 dots
+    (70x40 mm at 203 dpi). Fixed texts are English record values; they
+    can be reworded per site in the designer.
+-->
+<odoo noupdate="1">
+
+    <!-- ================= Stencil SN Label (sn.tooling) ================= -->
+    <record id="label_template_stencil_sn" model="sn.label.template">
+        <field name="name">Stencil SN Label</field>
+        <field name="company_id" eval="False"/>
+        <field name="model_id" ref="sn_wsd_tooling.model_sn_tooling"/>
+        <field name="width_dots">560</field>
+        <field name="height_dots">320</field>
+        <field name="dpi">203</field>
+        <field name="sn_field">sn</field>
+        <field name="active" eval="True"/>
+        <field name="element_ids" eval="[
+            (0, 0, {'sequence': 10, 'element_type': 'box',
+                    'x': 8, 'y': 8, 'width': 544, 'height': 304, 'thickness': 2}),
+            (0, 0, {'sequence': 20, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'SN',
+                    'x': 20, 'y': 34, 'width': 44, 'height': 30,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 30, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'sn',
+                    'x': 72, 'y': 32, 'width': 312, 'height': 34,
+                    'font_size': 32, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 40, 'element_type': 'line',
+                    'x': 20, 'y': 78, 'width': 372, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 50, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Tooling Code',
+                    'x': 20, 'y': 100, 'width': 130, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 60, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.code',
+                    'x': 155, 'y': 100, 'width': 235, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 70, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Name',
+                    'x': 20, 'y': 136, 'width': 130, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 80, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.name',
+                    'x': 155, 'y': 136, 'width': 235, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 90, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Spec',
+                    'x': 20, 'y': 172, 'width': 130, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 100, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.spec',
+                    'x': 155, 'y': 172, 'width': 235, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 110, 'element_type': 'line',
+                    'x': 8, 'y': 212, 'width': 544, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 120, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Mfg. Date',
+                    'x': 20, 'y': 236, 'width': 130, 'height': 28,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 130, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'manufacture_date',
+                    'x': 155, 'y': 236, 'width': 240, 'height': 28,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 140, 'element_type': 'qrcode', 'content': 'field',
+                    'field_path': 'sn', 'rendering': 'native',
+                    'x': 404, 'y': 24, 'width': 132, 'height': 132}),
+        ]"/>
+    </record>
+
+    <!-- ============= Consumable SN Label (sn.consumable.info) ============= -->
+    <record id="label_template_consumable_sn" model="sn.label.template">
+        <field name="name">Consumable SN Label</field>
+        <field name="company_id" eval="False"/>
+        <field name="model_id" ref="sn_wsd_consumable.model_sn_consumable_info"/>
+        <field name="width_dots">560</field>
+        <field name="height_dots">320</field>
+        <field name="dpi">203</field>
+        <field name="sn_field">sn</field>
+        <field name="active" eval="True"/>
+        <field name="element_ids" eval="[
+            (0, 0, {'sequence': 10, 'element_type': 'box',
+                    'x': 8, 'y': 8, 'width': 544, 'height': 304, 'thickness': 2}),
+            (0, 0, {'sequence': 20, 'element_type': 'qrcode', 'content': 'field',
+                    'field_path': 'sn', 'rendering': 'native',
+                    'x': 416, 'y': 20, 'width': 120, 'height': 120}),
+            (0, 0, {'sequence': 30, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'SN',
+                    'x': 20, 'y': 26, 'width': 44, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 40, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'sn',
+                    'x': 70, 'y': 24, 'width': 330, 'height': 30,
+                    'font_size': 28, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 50, 'element_type': 'line',
+                    'x': 20, 'y': 60, 'width': 376, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 60, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Consumable Code',
+                    'x': 20, 'y': 74, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 70, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.code',
+                    'x': 175, 'y': 74, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 80, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Name',
+                    'x': 20, 'y': 104, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 90, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.name',
+                    'x': 175, 'y': 104, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 100, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Spec',
+                    'x': 20, 'y': 134, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 110, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'template_id.spec',
+                    'x': 175, 'y': 134, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 120, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Supplier',
+                    'x': 20, 'y': 164, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 130, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'supplier_id',
+                    'x': 175, 'y': 164, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 140, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Prod. Date',
+                    'x': 20, 'y': 194, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 150, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'production_date',
+                    'x': 175, 'y': 194, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 160, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Expiry Date',
+                    'x': 20, 'y': 224, 'width': 150, 'height': 24,
+                    'font_size': 20, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 170, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'expiry_date',
+                    'x': 175, 'y': 224, 'width': 215, 'height': 24,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+        ]"/>
+    </record>
+
+    <!-- ============ Equipment Nameplate (sn.wsd.device.equipment) ============ -->
+    <record id="label_template_equipment_nameplate" model="sn.label.template">
+        <field name="name">Equipment Nameplate</field>
+        <field name="company_id" eval="False"/>
+        <field name="model_id" ref="sn_wsd_device.model_sn_wsd_device_equipment"/>
+        <field name="width_dots">560</field>
+        <field name="height_dots">400</field>
+        <field name="dpi">203</field>
+        <field name="sn_field">code</field>
+        <field name="active" eval="True"/>
+        <field name="element_ids" eval="[
+            (0, 0, {'sequence': 10, 'element_type': 'box',
+                    'x': 8, 'y': 8, 'width': 544, 'height': 384, 'thickness': 3}),
+            (0, 0, {'sequence': 20, 'element_type': 'qrcode', 'content': 'field',
+                    'field_path': 'code', 'rendering': 'native',
+                    'x': 400, 'y': 28, 'width': 136, 'height': 136}),
+            (0, 0, {'sequence': 30, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Code',
+                    'x': 20, 'y': 44, 'width': 70, 'height': 32,
+                    'font_size': 26, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 40, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'code',
+                    'x': 98, 'y': 42, 'width': 288, 'height': 36,
+                    'font_size': 34, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 50, 'element_type': 'line',
+                    'x': 20, 'y': 96, 'width': 360, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 60, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Name',
+                    'x': 20, 'y': 128, 'width': 110, 'height': 32,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 70, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'name',
+                    'x': 136, 'y': 128, 'width': 252, 'height': 32,
+                    'font_size': 28, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 80, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Model',
+                    'x': 20, 'y': 178, 'width': 110, 'height': 32,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 90, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'model',
+                    'x': 136, 'y': 178, 'width': 252, 'height': 32,
+                    'font_size': 28, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 100, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Type',
+                    'x': 20, 'y': 228, 'width': 110, 'height': 32,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 110, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'equipment_type_id',
+                    'x': 136, 'y': 228, 'width': 252, 'height': 32,
+                    'font_size': 28, 'max_lines': 1, 'align': 'left'}),
+        ]"/>
+    </record>
+
+    <!-- ================== Carton Label (sn.wsd.meter.pack.record) ================== -->
+    <record id="label_template_carton" model="sn.label.template">
+        <field name="name">Carton Label</field>
+        <field name="company_id" eval="False"/>
+        <field name="model_id" ref="sn_wsd_mrp.model_sn_wsd_meter_pack_record"/>
+        <field name="width_dots">560</field>
+        <field name="height_dots">320</field>
+        <field name="dpi">203</field>
+        <field name="sn_field">carton_no</field>
+        <field name="active" eval="True"/>
+        <field name="element_ids" eval="[
+            (0, 0, {'sequence': 10, 'element_type': 'box',
+                    'x': 8, 'y': 8, 'width': 544, 'height': 304, 'thickness': 2}),
+            (0, 0, {'sequence': 20, 'element_type': 'qrcode', 'content': 'field',
+                    'field_path': 'carton_no', 'rendering': 'native',
+                    'x': 404, 'y': 24, 'width': 132, 'height': 132}),
+            (0, 0, {'sequence': 30, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Carton No',
+                    'x': 20, 'y': 40, 'width': 116, 'height': 30,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 40, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'carton_no',
+                    'x': 144, 'y': 38, 'width': 250, 'height': 34,
+                    'font_size': 32, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 50, 'element_type': 'line',
+                    'x': 20, 'y': 84, 'width': 372, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 60, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Product',
+                    'x': 20, 'y': 108, 'width': 116, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 70, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'product_id',
+                    'x': 144, 'y': 108, 'width': 250, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 80, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Seal No',
+                    'x': 20, 'y': 144, 'width': 116, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 90, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'seal_no',
+                    'x': 144, 'y': 144, 'width': 250, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 100, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Pack Time',
+                    'x': 20, 'y': 180, 'width': 116, 'height': 26,
+                    'font_size': 22, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 110, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'pack_time',
+                    'x': 144, 'y': 180, 'width': 250, 'height': 26,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+        ]"/>
+    </record>
+
+    <!-- ================== Pallet Label (sn.wsd.meter.pack.record) ================== -->
+    <record id="label_template_pallet" model="sn.label.template">
+        <field name="name">Pallet Label</field>
+        <field name="company_id" eval="False"/>
+        <field name="model_id" ref="sn_wsd_mrp.model_sn_wsd_meter_pack_record"/>
+        <field name="width_dots">560</field>
+        <field name="height_dots">320</field>
+        <field name="dpi">203</field>
+        <field name="sn_field">pallet_no</field>
+        <field name="active" eval="True"/>
+        <field name="element_ids" eval="[
+            (0, 0, {'sequence': 10, 'element_type': 'box',
+                    'x': 8, 'y': 8, 'width': 544, 'height': 304, 'thickness': 2}),
+            (0, 0, {'sequence': 20, 'element_type': 'qrcode', 'content': 'field',
+                    'field_path': 'pallet_no', 'rendering': 'native',
+                    'x': 356, 'y': 76, 'width': 168, 'height': 168}),
+            (0, 0, {'sequence': 30, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Pallet No',
+                    'x': 24, 'y': 66, 'width': 128, 'height': 32,
+                    'font_size': 26, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 40, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'pallet_no',
+                    'x': 160, 'y': 62, 'width': 180, 'height': 38,
+                    'font_size': 36, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 50, 'element_type': 'line',
+                    'x': 24, 'y': 116, 'width': 312, 'height': 0, 'thickness': 1}),
+            (0, 0, {'sequence': 60, 'element_type': 'text', 'content': 'fixed',
+                    'fixed_text': 'Product',
+                    'x': 24, 'y': 146, 'width': 128, 'height': 30,
+                    'font_size': 24, 'max_lines': 1, 'align': 'left'}),
+            (0, 0, {'sequence': 70, 'element_type': 'text', 'content': 'field',
+                    'field_path': 'product_id',
+                    'x': 160, 'y': 144, 'width': 184, 'height': 30,
+                    'font_size': 28, 'max_lines': 1, 'align': 'left'}),
+        ]"/>
+    </record>
+
+</odoo>

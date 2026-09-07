@@ -711,11 +711,25 @@ class MeterProcessRoute(models.Model):
             # Orders not yet online follow the common route automatically —
             # unless they were locally edited (customized): their edits are
             # preserved until a manual sync accepts the common version back.
-            self.env['sn.wsd.mes.order'].search([
+            # Orders whose drawing binding was removed (or rebound to another
+            # route) no longer resolve here: they keep their private snapshot
+            # instead of blocking route maintenance with a resolver error.
+            followers = self.env['sn.wsd.mes.order'].search([
                 ('x_mes_route_id.route_id', '=', self.id),
                 ('x_online_date', '=', False),
                 ('x_mes_route_id.is_customized', '=', False),
-            ]).action_sync_route()
+            ])
+            Route = self.env['sn.wsd.process.route']
+            for order in followers:
+                drawing = order.product_id.default_code
+                side = order.x_side if order.product_id.x_board_side else None
+                workshop = order.production_line_id.workshop_id
+                current = Route._find_current_route_by_drawing_no(
+                    drawing, order.company_id.id, side=side,
+                    workshop_id=workshop.id)
+                if current not in self:
+                    continue
+                order.action_sync_route()
         elif self.state == 'draft' and nodes:
             # Unchanged structure but never went live (e.g. layout-only edit
             # before any save): go live without a new version.
@@ -1142,12 +1156,16 @@ class ProcessRouteDrawing(models.Model):
         string='Route Code',
         related='route_id.code',
     )
-    # 带出信息（只读展示，不落库，实时反映产品当前值）。
-    # 路线信息由 route_id 选择列承载，物料标识由图号本身承载，不再重复带出。
+    # 图号选择：绑定时按产品下拉选（图号=default_code），选中即回填
+    # x_drawing_no；解析器仍按图号字符串工作，直填图号的老通道保留。
     product_id = fields.Many2one(
         'product.product',
-        string='Product',
-        compute='_compute_product_info',
+        string='Product (by Drawing No.)',
+        index=True,
+        ondelete='set null',
+        domain="[('default_code', '!=', False)]",
+        help='Pick the product by its drawing number; the drawing key is '
+             'filled from the product internal reference.',
     )
     product_name = fields.Char(
         string='Product Name',
@@ -1186,22 +1204,34 @@ class ProcessRouteDrawing(models.Model):
         'and production side.',
     )
 
-    @api.depends('x_drawing_no')
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        for drawing in self:
+            code = drawing.product_id.default_code
+            if code:
+                drawing.x_drawing_no = code
+
+    @api.depends('x_drawing_no', 'product_id')
     def _compute_product_info(self):
-        """按图号带出产品信息：产品名称/面别/规格。
+        """带出产品信息：优先用选中的产品，否则按图号搜索。
 
         图号是 Char 关联键（product.product.default_code，界面上即"图号"
         字段），一个图号正常只对应一个产品；多个匹配时取第一条。
         """
         ProductProduct = self.env['product.product']
         for drawing in self:
-            product = ProductProduct
-            if drawing.x_drawing_no:
-                product = ProductProduct.search(
-                    [('default_code', '=', drawing.x_drawing_no)],
-                    limit=1,
-                )
-            drawing.product_id = product
+            if drawing.product_id:
+                product = drawing.product_id
+            else:
+                product = ProductProduct
+                if drawing.x_drawing_no:
+                    product = ProductProduct.search(
+                        [('default_code', '=', drawing.x_drawing_no)],
+                        limit=1,
+                    )
+            drawing.product_name = product.product_tmpl_id.name or False
+            drawing.product_board_side = product.x_board_side or False
+            drawing.product_specification = product.material_specification or False
             drawing.product_name = product.product_tmpl_id.name or False
             drawing.product_board_side = product.x_board_side or False
             drawing.product_specification = product.material_specification or False

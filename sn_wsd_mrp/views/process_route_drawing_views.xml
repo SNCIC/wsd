@@ -11,7 +11,8 @@
                 <field name="product_board_side" readonly="1" widget="badge"
                        decoration-success="product_board_side == 'single'"
                        decoration-info="product_board_side == 'double'"/>
-                <field name="x_drawing_no"/>
+                <field name="product_id" options="{'no_create': True}"/>
+                <field name="x_drawing_no" readonly="1" string="Drawing Key"/>
                 <field name="product_name" readonly="1"/>
                 <field name="product_specification" readonly="1"/>
                 <field name="create_uid" readonly="1" optional="hide"/>
@@ -33,7 +34,8 @@
                         <group string="Binding">
                             <field name="route_id"/>
                             <field name="product_board_side" readonly="1"/>
-                            <field name="x_drawing_no"/>
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="x_drawing_no" readonly="1" string="Drawing Key"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         <group string="Brought Out Information">
