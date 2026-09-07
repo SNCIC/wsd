@@ -18,19 +18,12 @@
                         class="btn btn-link"
                         groups="stock.group_stock_user"
                         invisible="picking_code != 'incoming' or state in ['done', 'cancel']"/>
-                <button name="action_reallocate_large_rack_locations"
-                        string="Reallocate Large Rack Locations"
+                <button name="action_reset_rack_locations"
+                        string="Reset Rack Locations"
                         type="object"
                         class="btn btn-link"
                         groups="stock.group_stock_user"
-                        confirm="This will replace automatically assigned large rack locations. Continue?"
-                        invisible="picking_code != 'incoming' or state in ['done', 'cancel']"/>
-                <button name="action_reallocate_small_rack_locations"
-                        string="Reallocate Small Rack Locations"
-                        type="object"
-                        class="btn btn-link"
-                        groups="stock.group_stock_user"
-                        confirm="This will replace automatically assigned small rack locations. Continue?"
+                        confirm="This will reset all automatically assigned rack locations. Continue?"
                         invisible="picking_code != 'incoming' or state in ['done', 'cancel']"/>
                 <button name="action_light_receipt_destination_locations"
                         string="Light On"

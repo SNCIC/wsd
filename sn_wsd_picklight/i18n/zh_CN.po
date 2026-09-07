@@ -656,13 +656,8 @@ msgstr "人工指定"
 
 #. module: sn_wsd_picklight
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
-msgid "Reallocate Large Rack Locations"
-msgstr "重新分配大料架库位"
-
-#. module: sn_wsd_picklight
-#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
-msgid "Reallocate Small Rack Locations"
-msgstr "重新分配小料架库位"
+msgid "Reset Rack Locations"
+msgstr "重置库位"
 
 #. module: sn_wsd_picklight
 #: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
@@ -677,5 +672,5 @@ msgstr "这将替换自动分配的小料架库位。是否继续？"
 #. module: sn_wsd_picklight
 #. odoo-python
 #: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
-msgid "There are no automatically allocated rack locations to reallocate."
-msgstr "没有可重新分配的自动料架库位。"
+msgid "There are no automatically allocated rack locations to reset."
+msgstr "没有可重置的自动料架库位。"

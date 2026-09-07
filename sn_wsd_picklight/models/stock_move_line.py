@@ -17,11 +17,8 @@ class StockMoveLine(models.Model):
     def action_auto_fill_small_rack_locations(self):
         return self._action_auto_fill_picklight_locations('small')
 
-    def action_reallocate_large_rack_locations(self):
-        return self._action_reallocate_picklight_locations('large')
-
-    def action_reallocate_small_rack_locations(self):
-        return self._action_reallocate_picklight_locations('small')
+    def action_reset_rack_locations(self):
+        return self._action_reset_picklight_locations()
 
     def write(self, vals):
         location_changed = 'location_dest_id' in vals
@@ -42,7 +39,7 @@ class StockMoveLine(models.Model):
                     })
         return result
 
-    def _action_reallocate_picklight_locations(self, shelf_type):
+    def _action_reset_picklight_locations(self):
         if not self:
             raise UserError(_('Select at least one receipt operation line.'))
         if any(line.picking_code != 'incoming' for line in self):
@@ -51,14 +48,17 @@ class StockMoveLine(models.Model):
             raise UserError(_('Completed or cancelled operation lines cannot be allocated.'))
         auto_lines = self.filtered(lambda line: line.picklight_allocation_state == 'auto')
         if not auto_lines:
-            raise UserError(_('There are no automatically allocated rack locations to reallocate.'))
+            raise UserError(_('There are no automatically allocated rack locations to reset.'))
         for line in auto_lines:
             default_location = line.move_id.location_dest_id or line.picking_id.location_dest_id
             line.with_context(picklight_allocation_write=True).write({
                 'location_dest_id': default_location.id,
                 'picklight_allocation_state': 'none',
             })
-        return auto_lines._action_auto_fill_picklight_locations(shelf_type)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'sn_wsd_stock.refresh_current_view',
+        }
 
     def _action_auto_fill_picklight_locations(self, shelf_type):
         if not self:
@@ -133,7 +133,10 @@ class StockMoveLine(models.Model):
                 'location_dest_id': location.stock_location_id.id,
                 'picklight_allocation_state': 'auto',
             })
-        return True
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'sn_wsd_stock.refresh_current_view',
+        }
 
     def _get_continuous_locations(self, free_locations, required_count):
         current_run = self.env['sn.wsd.picklight.location']
