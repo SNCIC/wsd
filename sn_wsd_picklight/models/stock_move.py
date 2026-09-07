@@ -11,6 +11,12 @@ class StockMove(models.Model):
     def action_auto_fill_small_rack_locations(self):
         return self._action_auto_fill_picklight_locations('small')
 
+    def action_reallocate_large_rack_locations(self):
+        return self.move_line_ids._action_reallocate_picklight_locations('large')
+
+    def action_reallocate_small_rack_locations(self):
+        return self.move_line_ids._action_reallocate_picklight_locations('small')
+
     def action_light_receipt_destination_locations(self):
         return self._action_light_receipt_destination_locations(True)
 

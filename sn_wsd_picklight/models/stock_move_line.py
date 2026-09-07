@@ -1,15 +1,64 @@
-from odoo import _, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
 class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
+    picklight_allocation_state = fields.Selection([
+        ('none', 'Not Allocated'),
+        ('auto', 'Automatically Allocated'),
+        ('manual', 'Manually Assigned'),
+    ], string='Picklight Allocation', default='none', copy=False, index=True)
+
     def action_auto_fill_large_rack_locations(self):
         return self._action_auto_fill_picklight_locations('large')
 
     def action_auto_fill_small_rack_locations(self):
         return self._action_auto_fill_picklight_locations('small')
+
+    def action_reallocate_large_rack_locations(self):
+        return self._action_reallocate_picklight_locations('large')
+
+    def action_reallocate_small_rack_locations(self):
+        return self._action_reallocate_picklight_locations('small')
+
+    def write(self, vals):
+        location_changed = 'location_dest_id' in vals
+        result = super().write(vals)
+        if location_changed and not self.env.context.get('picklight_allocation_write'):
+            mapped_locations = self.env['sn.wsd.picklight.location'].search([
+                ('company_id', 'in', self.company_id.ids),
+                ('stock_location_id', '=', vals['location_dest_id']),
+            ])
+            for line in self:
+                if line.location_dest_id in mapped_locations.mapped('stock_location_id'):
+                    line.with_context(picklight_allocation_write=True).write({
+                        'picklight_allocation_state': 'manual',
+                    })
+                elif line.picklight_allocation_state != 'none':
+                    line.with_context(picklight_allocation_write=True).write({
+                        'picklight_allocation_state': 'none',
+                    })
+        return result
+
+    def _action_reallocate_picklight_locations(self, shelf_type):
+        if not self:
+            raise UserError(_('Select at least one receipt operation line.'))
+        if any(line.picking_code != 'incoming' for line in self):
+            raise UserError(_('Automatic rack allocation is only available for receipt operations.'))
+        if any(line.state in ('done', 'cancel') for line in self):
+            raise UserError(_('Completed or cancelled operation lines cannot be allocated.'))
+        auto_lines = self.filtered(lambda line: line.picklight_allocation_state == 'auto')
+        if not auto_lines:
+            raise UserError(_('There are no automatically allocated rack locations to reallocate.'))
+        for line in auto_lines:
+            default_location = line.move_id.location_dest_id or line.picking_id.location_dest_id
+            line.with_context(picklight_allocation_write=True).write({
+                'location_dest_id': default_location.id,
+                'picklight_allocation_state': 'none',
+            })
+        return auto_lines._action_auto_fill_picklight_locations(shelf_type)
 
     def _action_auto_fill_picklight_locations(self, shelf_type):
         if not self:
@@ -80,7 +129,10 @@ class StockMoveLine(models.Model):
         if not allocated_locations:
             allocated_locations = free_locations[:required_count]
         for line, location in zip(lines_to_allocate, allocated_locations):
-            line.location_dest_id = location.stock_location_id
+            line.with_context(picklight_allocation_write=True).write({
+                'location_dest_id': location.stock_location_id.id,
+                'picklight_allocation_state': 'auto',
+            })
         return True
 
     def _get_continuous_locations(self, free_locations, required_count):
