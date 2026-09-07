@@ -29,7 +29,7 @@ class StockPicking(models.Model):
 
         lots = self.move_line_ids.lot_id.filtered(
             lambda lot: lot.material_sn_base
-        )
+        ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
         if lots:
             action = self.env.ref(
                 'sn_wsd_stock.action_report_incoming_material_label_zpl'
@@ -118,7 +118,7 @@ class StockMove(models.Model):
         self.ensure_one()
         lots = self.move_line_ids.lot_id.filtered(
             lambda lot: lot.material_sn_base
-        )
+        ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
         if not lots:
             raise UserError(
                 _('Generate internal batches before printing material labels.')
