@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_sn_smt_root" name="SMT" parent="mrp.menu_mrp_root" sequence="85"/>
+    <menuitem id="menu_sn_smt_root" name="SMT" parent="mrp.menu_mrp_root" sequence="30"/>
     <menuitem id="menu_sn_smt_material_table" name="Material Tables" parent="menu_sn_smt_root" action="action_sn_smt_material_table" sequence="10"/>
     <menuitem id="menu_sn_smt_online_material" name="Online Materials" parent="menu_sn_smt_root" action="action_sn_smt_online_material" sequence="20"/>
     <menuitem id="menu_sn_smt_feeder" name="Feeders" parent="menu_sn_smt_root" action="action_sn_smt_feeder" sequence="30"/>

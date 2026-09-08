@@ -936,3 +936,58 @@ msgstr "确认"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_scrap_wizard_form
 msgid "Cancel"
 msgstr "取消"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__scrap_count_limit
+msgid "Scrap Count Limit"
+msgstr "报废次数上限"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__scrap_count_reminder
+msgid "Scrap Count Reminder"
+msgstr "报废提醒次数"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__scrap_status
+msgid "Scrap Status"
+msgstr "报废状态"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__remaining_scrap_count
+msgid "Remaining Usages before Scrap"
+msgstr "剩余报废次数"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid "Scrap count values cannot be negative."
+msgstr "报废次数参数不能为负数。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid "The scrap count reminder cannot exceed the scrap count limit."
+msgstr "报废提醒次数不能超过报废次数上限。"
+
+#. module: sn_wsd_tooling
+#. odoo-python
+#: code:addons/sn_wsd_tooling/models/tooling.py:0
+msgid ""
+"The tooling %s reached its scrap count limit (%s/%s). Scrap it and mount "
+"another one before passing stations."
+msgstr "制具 %s 已达报废次数上限（%s/%s）。请先报废并更换制具后再过站。"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "Scrap by Lifetime Count"
+msgstr "按终身次数报废"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_list
+msgid "Scrap Due"
+msgstr "报废提醒"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_list
+msgid "Scrap Limit Reached"
+msgstr "已达报废上限"

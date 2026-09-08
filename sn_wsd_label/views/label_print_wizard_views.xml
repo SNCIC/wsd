@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_label_print_wizard_form" model="ir.ui.view">
+        <field name="name">sn.label.print.wizard.form</field>
+        <field name="model">sn.label.print.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Print Labels">
+                <field name="res_model" invisible="1"/>
+                <field name="res_ids" invisible="1"/>
+                <group>
+                    <group string="Print">
+                        <field name="template_id" options="{'no_create': True}"/>
+                        <field name="copies"/>
+                    </group>
+                    <group string="Preview">
+                        <field name="preview_png" widget="image" nolabel="1"
+                               options="{'size': [0, 320]}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Print" name="action_print" type="object"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"
+                            data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_label_print_wizard" model="ir.actions.act_window">
+        <field name="name">Print Labels</field>
+        <field name="res_model">sn.label.print.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

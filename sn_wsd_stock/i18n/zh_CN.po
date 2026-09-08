@@ -973,40 +973,39 @@ msgid "No material lots were selected for label printing."
 msgstr "未选择要打印标签的物料批次。"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_material_code
 msgid "Material Code"
 msgstr "物料编码"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_batch
 msgid "Batch"
 msgstr "批次"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_material_name
 msgid "Material Name"
 msgstr "物料名称"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_quantity
 msgid "Quantity Label"
 msgstr "数量"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_specification
 msgid "Specification"
 msgstr "规格型号"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_supplier
 msgid "Supplier Label"
 msgstr "供应商"
+
+#. module: sn_wsd_stock
+#: model:sn.label.template,name:sn_wsd_stock.label_template_incoming_material
+msgid "Incoming Material Label"
+msgstr "来料物料标签"
 
 #. module: sn_wsd_stock
 #: model:ir.actions.report,name:sn_wsd_stock.action_report_incoming_material_label_zpl

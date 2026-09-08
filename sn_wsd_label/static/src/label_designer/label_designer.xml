@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="sn_wsd_label.LabelDesignerField">
+    <div t-ref="root" class="o_label_designer d-flex flex-column gap-2" t-attf-class="{{ props.readonly ? 'o_readonly' : '' }}">
+        <div class="o_label_designer_toolbar d-flex flex-wrap gap-2 align-items-center small">
+            <div class="btn-group btn-group-sm" role="toolbar" t-if="!props.readonly">
+                <button type="button" class="btn btn-outline-secondary"
+                        t-on-click="() => this.addElement('text')"
+                        t-att-title="labels.addText">+ <t t-esc="typeLabels.text"/></button>
+                <button type="button" class="btn btn-outline-secondary"
+                        t-on-click="() => this.addElement('qrcode')"
+                        t-att-title="labels.addQrcode">+ <t t-esc="typeLabels.qrcode"/></button>
+                <button type="button" class="btn btn-outline-secondary"
+                        t-on-click="() => this.addElement('barcode')"
+                        t-att-title="labels.addBarcode">+ <t t-esc="typeLabels.barcode"/></button>
+                <button type="button" class="btn btn-outline-secondary"
+                        t-on-click="() => this.addElement('line')"
+                        t-att-title="labels.addLine">+ <t t-esc="typeLabels.line"/></button>
+                <button type="button" class="btn btn-outline-secondary"
+                        t-on-click="() => this.addElement('box')"
+                        t-att-title="labels.addBox">+ <t t-esc="typeLabels.box"/></button>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm"
+                    t-if="!props.readonly" t-on-click="normalizeElements"
+                    t-att-title="labels.normalize">
+                <t t-esc="labels.normalize"/>
+            </button>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-outline-secondary" t-on-click="zoomOut"
+                        t-att-title="labels.zoomOut">−</button>
+                <button type="button" class="btn btn-outline-secondary" t-on-click="fitZoom"
+                        t-att-title="labels.fitZoom">1:1</button>
+                <button type="button" class="btn btn-outline-secondary" t-on-click="zoomIn"
+                        t-att-title="labels.zoomIn">+</button>
+            </div>
+            <span class="text-muted">
+                <span t-esc="width"/> × <span t-esc="height"/>
+                (<t t-esc="mmSize"/> @ <t t-esc="dpi"/> dpi)
+            </span>
+            <span class="o_label_designer_selection text-truncate fw-bold flex-grow-1 text-end"
+                  t-esc="selectionInfo"/>
+        </div>
+        <div class="o_label_designer_body d-flex gap-3">
+            <div class="o_label_designer_canvas_wrap flex-grow-1 d-flex justify-content-center">
+                <div class="o_label_designer_canvas position-relative bg-white border flex-shrink-0"
+                     t-att-style="canvasStyle" tabindex="0"
+                     t-on-keydown="onCanvasKeydown"
+                     t-on-pointerdown.self="() => (state.selectedId = null)">
+                    <img t-if="imageUrl" class="o_label_designer_bg" t-att-src="imageUrl"
+                         t-att-alt="altText" draggable="false"/>
+                    <t t-foreach="elements" t-as="element" t-key="element.id">
+                        <div class="o_label_designer_element position-absolute"
+                             t-att-class="{ 'o_selected': state.selectedId === element.id, 'o_readonly': props.readonly }"
+                             t-att-style="elementStyle(element)"
+                             t-att-title="elementLabel(element)"
+                             t-on-pointerdown="(ev) => this.onElementPointerDown(ev, element)"
+                             t-on-mousedown="(ev) => this.onElementMouseDown(ev, element)">
+                            <span class="o_label_designer_tag badge text-bg-secondary"
+                                  t-esc="elementLabel(element)"/>
+                            <span class="o_label_designer_handle position-absolute"
+                                  t-on-pointerdown="(ev) => this.onResizePointerDown(ev, element)"
+                                  t-on-mousedown="(ev) => this.onResizeMouseDown(ev, element)"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
+            <div class="o_label_designer_panel flex-shrink-0" t-if="!props.readonly">
+                <div class="o_label_designer_panel_empty text-muted small"
+                     t-if="!selectedElement">
+                    <t t-esc="labels.clickToEdit"/>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li>← → ↑ ↓ : <t t-esc="labels.nudge"/></li>
+                        <li>Del : <t t-esc="labels.removeSelected"/></li>
+                    </ul>
+                </div>
+                <div class="o_label_designer_panel_form d-flex flex-column gap-2" t-if="selectedElement">
+                    <div class="fw-bold small text-truncate" t-esc="selectionInfo"/>
+                    <t t-if="['text', 'qrcode', 'barcode'].includes(selectedElement.data.element_type)">
+                        <label class="col-form-label-sm mb-0 d-block">
+                            <t t-esc="labels.content"/>
+                            <select class="form-select form-select-sm"
+                                    t-on-change="(ev) => this.onPanelSelect('content', ev.target.value)">
+                                <option value="fixed" t-att-selected="selectedElement.data.content === 'fixed'">
+                                    <t t-esc="labels.fixedText"/>
+                                </option>
+                                <option value="field" t-att-selected="selectedElement.data.content === 'field'">
+                                    <t t-esc="labels.field"/>
+                                </option>
+                            </select>
+                        </label>
+                        <label class="col-form-label-sm mb-0 d-block" t-if="selectedElement.data.content === 'fixed'">
+                            <t t-esc="labels.fixedText"/>
+                            <input type="text" class="form-control form-control-sm"
+                                   t-att-value="selectedElement.data.fixed_text || ''"
+                                   t-on-input="(ev) => this.updateSelected({ fixed_text: ev.target.value })"/>
+                        </label>
+                        <label class="col-form-label-sm mb-0 d-block" t-if="selectedElement.data.content === 'field'">
+                            <t t-esc="labels.field"/>
+                            <select class="form-select form-select-sm"
+                                    t-on-change="(ev) => this.updateSelected({ field_path: ev.target.value })">
+                                <t t-foreach="state.fieldOptions" t-as="option" t-key="option[0]">
+                                    <option t-att-value="option[0]"
+                                            t-att-selected="selectedElement.data.field_path === option[0]">
+                                        <t t-esc="option[1]"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </label>
+                    </t>
+                    <t t-if="selectedElement.data.element_type === 'text'">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="col-form-label-sm mb-0 d-block">
+                                    <t t-esc="labels.fontSize"/>
+                                    <input type="number" class="form-control form-control-sm"
+                                           t-att-value="selectedElement.data.font_size"
+                                           t-on-input="(ev) => this.onPanelNumber('font_size', ev.target.value)"/>
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label class="col-form-label-sm mb-0 d-block">
+                                    <t t-esc="labels.maxLines"/>
+                                    <input type="number" class="form-control form-control-sm" min="1"
+                                           t-att-value="selectedElement.data.max_lines"
+                                           t-on-input="(ev) => this.onPanelNumber('max_lines', ev.target.value)"/>
+                                </label>
+                            </div>
+                        </div>
+                        <label class="col-form-label-sm mb-0 d-block">
+                            <t t-esc="labels.align"/>
+                            <select class="form-select form-select-sm"
+                                    t-on-change="(ev) => this.onPanelSelect('align', ev.target.value)">
+                                <option value="left" t-att-selected="selectedElement.data.align === 'left'"><t t-esc="labels.left"/></option>
+                                <option value="center" t-att-selected="selectedElement.data.align === 'center'"><t t-esc="labels.center"/></option>
+                                <option value="right" t-att-selected="selectedElement.data.align === 'right'"><t t-esc="labels.right"/></option>
+                            </select>
+                        </label>
+                    </t>
+                    <t t-if="selectedElement.data.element_type === 'qrcode'">
+                        <label class="col-form-label-sm mb-0 d-block">
+                            <t t-esc="labels.rendering"/>
+                            <select class="form-select form-select-sm"
+                                    t-on-change="(ev) => this.onPanelSelect('rendering', ev.target.value)">
+                                <option value="native" t-att-selected="selectedElement.data.rendering === 'native'"><t t-esc="labels.native"/></option>
+                                <option value="bitmap" t-att-selected="selectedElement.data.rendering === 'bitmap'"><t t-esc="labels.bitmap"/></option>
+                            </select>
+                        </label>
+                    </t>
+                    <t t-if="['box', 'line'].includes(selectedElement.data.element_type)">
+                        <label class="col-form-label-sm mb-0 d-block">
+                            <t t-esc="labels.thickness"/>
+                            <input type="number" class="form-control form-control-sm" min="1"
+                                   t-att-value="selectedElement.data.thickness"
+                                   t-on-input="(ev) => this.onPanelNumber('thickness', ev.target.value)"/>
+                        </label>
+                    </t>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="col-form-label-sm mb-0 d-block">X
+                                <input type="number" class="form-control form-control-sm"
+                                       t-att-value="selectedElement.data.x"
+                                       t-on-input="(ev) => this.onPanelNumber('x', ev.target.value)"/>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-form-label-sm mb-0 d-block">Y
+                                <input type="number" class="form-control form-control-sm"
+                                       t-att-value="selectedElement.data.y"
+                                       t-on-input="(ev) => this.onPanelNumber('y', ev.target.value)"/>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-form-label-sm mb-0 d-block">W
+                                <input type="number" class="form-control form-control-sm"
+                                       t-att-value="selectedElement.data.width"
+                                       t-on-input="(ev) => this.onPanelNumber('width', ev.target.value)"/>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-form-label-sm mb-0 d-block">H
+                                <input type="number" class="form-control form-control-sm"
+                                       t-att-value="selectedElement.data.height"
+                                       t-on-input="(ev) => this.onPanelNumber('height', ev.target.value)"/>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger"
+                            t-if="selectionDeletable"
+                            t-on-click="removeSelected">
+                        <t t-esc="labels.deleteElement"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="o_label_designer_hint small text-muted" t-if="!props.readonly" t-esc="saveHint"/>
+    </div>
+</t>
+
+</templates>

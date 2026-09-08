@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================================================================
+         Print Label entry points (label-center design decision 1/6):
+         a form button per model (opens the wizard on the current record;
+         res_ids is the JSON id array the wizard parses) and a list header
+         button (wizard default_get reads active_ids). Both call the
+         sn_wsd_label wizard action; no business code here.
+         ================================================================== -->
+
+    <!-- ======================= sn.tooling ======================= -->
+    <record id="view_sn_tooling_form_print_label" model="ir.ui.view">
+        <field name="name">sn.tooling.form.print.label</field>
+        <field name="model">sn.tooling</field>
+        <field name="inherit_id" ref="sn_wsd_tooling.view_sn_tooling_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                        string="Print Label"
+                        context="{'default_res_model': 'sn.tooling', 'default_res_ids': [id]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_tooling_list_print_label" model="ir.ui.view">
+        <field name="name">sn.tooling.list.print.label</field>
+        <field name="model">sn.tooling</field>
+        <field name="inherit_id" ref="sn_wsd_tooling.view_sn_tooling_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.tooling'}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== sn.consumable.info ==================== -->
+    <record id="view_sn_consumable_info_form_print_label" model="ir.ui.view">
+        <field name="name">sn.consumable.info.form.print.label</field>
+        <field name="model">sn.consumable.info</field>
+        <field name="inherit_id" ref="sn_wsd_consumable.view_sn_consumable_info_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='aux_state']" position="before">
+                <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                        string="Print Label"
+                        context="{'default_res_model': 'sn.consumable.info', 'default_res_ids': [id]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_consumable_info_list_print_label" model="ir.ui.view">
+        <field name="name">sn.consumable.info.list.print.label</field>
+        <field name="model">sn.consumable.info</field>
+        <field name="inherit_id" ref="sn_wsd_consumable.view_sn_consumable_info_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.consumable.info'}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ================ sn.wsd.device.equipment ================= -->
+    <record id="view_equipment_form_print_label" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.form.print.label</field>
+        <field name="model">sn.wsd.device.equipment</field>
+        <field name="inherit_id" ref="sn_wsd_device.view_equipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet[1]" position="before">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.wsd.device.equipment', 'default_res_ids': [id]}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_equipment_list_print_label" model="ir.ui.view">
+        <field name="name">sn.wsd.device.equipment.list.print.label</field>
+        <field name="model">sn.wsd.device.equipment</field>
+        <field name="inherit_id" ref="sn_wsd_device.view_equipment_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.wsd.device.equipment'}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ================ sn.wsd.meter.pack.record ================ -->
+    <record id="view_sn_wsd_meter_pack_record_form_print_label" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.record.form.print.label</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_meter_pack_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet[1]" position="before">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.wsd.meter.pack.record', 'default_res_ids': [id]}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_meter_pack_record_list_print_label" model="ir.ui.view">
+        <field name="name">sn.wsd.meter.pack.record.list.print.label</field>
+        <field name="model">sn.wsd.meter.pack.record</field>
+        <field name="inherit_id" ref="sn_wsd_mrp.view_sn_wsd_meter_pack_record_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
+                            string="Print Label"
+                            context="{'default_res_model': 'sn.wsd.meter.pack.record'}"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

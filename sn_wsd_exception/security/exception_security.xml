@@ -3,8 +3,6 @@
     <!-- 异常权限并入制造：日常处理（读/建/改/验证）= mrp.group_mrp_user，
          配置与删除 = mrp.group_mrp_manager。旧组的删除在
          security/cleanup_groups.xml（本模块装载序列末尾）执行。 -->
-    <delete model="res.groups.privilege" id="res_groups_privilege_sn_wsd_exception"/>
-    <delete model="ir.module.category" id="module_category_sn_wsd_exception"/>
 
     <data noupdate="1">
         <record id="rule_sn_wsd_exception_ticket_company" model="ir.rule">

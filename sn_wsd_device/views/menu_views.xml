@@ -7,6 +7,13 @@
               web_icon="sn_wsd_device,static/description/icon.png"
               sequence="179"/>
 
+    <!-- Equipment information section (defined before the children that
+         reference it: menu parents resolve at parse time on fresh installs) -->
+    <menuitem id="menu_device_info"
+              name="Equipment Information"
+              parent="menu_device_root"
+              sequence="5"/>
+
     <!-- Equipment knowledge base -->
     <menuitem id="menu_knowledge"
               name="Equipment Knowledge Base"
@@ -61,11 +68,6 @@
               parent="menu_device_data_collection"
               action="action_wave_data"
               sequence="20"/>
-
-    <menuitem id="menu_device_info"
-              name="Equipment Information"
-              parent="menu_device_root"
-              sequence="5"/>
 
     <menuitem id="menu_equipment_ledger"
               name="Equipment Ledger"
