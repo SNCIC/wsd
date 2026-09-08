@@ -1,0 +1,278 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_code_rule
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__name
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__text_value
+msgid "Name"
+msgstr "名称"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__model_id
+msgid "Document Model"
+msgstr "单据模型"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__picking_type_id
+msgid "Operation Type"
+msgstr "作业类型"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__target_field
+msgid "Target Field"
+msgstr "写入字段"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__separator
+msgid "Separator"
+msgstr "分隔符"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Segments"
+msgstr "段配置"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__segment_type
+msgid "Segment Type"
+msgstr "段类型"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__field_path
+msgid "Field Path"
+msgstr "字段路径"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__empty_policy
+msgid "When Empty"
+msgstr "空值策略"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__lookup_model_id
+msgid "Lookup Model"
+msgstr "查表模型"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Lookup Domain"
+msgstr "查表条件"
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid ""
+"Lookup segments configure their domain and sequence segments their reset "
+"dimensions in the segment form below the list."
+msgstr "查表段的查表条件和序列段的重置维度在列表下方的段表单中配置。"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__lookup_field_path
+msgid "Lookup Field"
+msgstr "查表取值字段"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__date_format
+msgid "Date Format"
+msgstr "日期格式"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__date_source
+msgid "Date Source"
+msgstr "日期来源"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__date_field_path
+msgid "Date Field"
+msgstr "日期字段"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__padding
+msgid "Padding"
+msgstr "补零位数"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__number_next
+msgid "Start Value"
+msgstr "起始值"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__period
+msgid "Reset Period"
+msgstr "重置周期"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__group_field_paths
+msgid "Reset Group Fields"
+msgstr "重置分组字段"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__seq_impl
+msgid "Counter Implementation"
+msgstr "计数器实现"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__sequence_code
+msgid "ir.sequence Code"
+msgstr "ir.sequence 代码"
+
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule.py:0
+msgid "Operation type only applies to stock.picking rules."
+msgstr "作业类型仅适用于 stock.picking 的规则。"
+
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule.py:0
+msgid "The ir.sequence %(code)s does not exist."
+msgstr "ir.sequence %(code)s 不存在。"
+
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule.py:0
+msgid "Sequence padding must be at least 1 (rule %(rule)s)."
+msgstr "序列补零位数至少为 1（规则 %(rule)s）。"
+
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule.py:0
+msgid "The coding counter key must be unique per segment."
+msgstr "计数器键在每个段内必须唯一。"
+
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule_preview.py:0
+msgid "Record %s of model %s does not exist."
+msgstr "模型 %s 的记录 %s 不存在。"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__segment_type__fixed
+msgid "Fixed Text"
+msgstr "固定文本"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__segment_type__field
+msgid "Field Value"
+msgstr "字段值"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Lookup"
+msgstr "查表"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__segment_type__date
+msgid "Date"
+msgstr "日期"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__segment_type__seq
+msgid "Sequence"
+msgstr "序列段"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__period__none
+msgid "No Reset"
+msgstr "不重置"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__period__year
+msgid "Yearly"
+msgstr "按年"
+
+
+#. module: sn_wsd_code_rule
+#: model:ir.ui.menu,name:sn_wsd_code_rule.menu_code_rule
+#: model_terms:ir.actions.act_window,help:sn_wsd_code_rule.action_sn_code_rule
+msgid "Coding Rules"
+msgstr "编码规则"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_preview_form
+msgid "Preview"
+msgstr "预览"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Applies To"
+msgstr "适用范围"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Output"
+msgstr "输出"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_segment_form
+msgid "Segment"
+msgstr "段"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_preview_form
+msgid "Render"
+msgstr "渲染"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_preview_form
+msgid "Close"
+msgstr "关闭"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.actions.act_window,help:sn_wsd_code_rule.action_sn_code_rule
+msgid "Create your first coding rule"
+msgstr "创建第一条编码规则"
+
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.actions.act_window,help:sn_wsd_code_rule.action_sn_code_rule
+msgid "Pick a document model, lay out segments, preview on a record."
+msgstr "选择单据模型、排布段、在记录上预览。"

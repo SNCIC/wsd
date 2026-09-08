@@ -3444,3 +3444,29 @@ msgstr "制令单 %(order)s 首件确认中：SN %(sn)s 已过首件工序 %(op)
 #: code:addons/sn_wsd_quality/models/quality_inspection.py:0
 msgid "\"%s\" is not one of this round's picked products (boards must reach the first-article operation first)."
 msgstr "\"%s\" 不在本轮已到检样本中（板须先过首件工序到检）。"
+
+
+#. module: sn_wsd_quality
+msgid "Quality Issue Coding"
+msgstr "质量问题编码"
+
+#. module: sn_wsd_quality
+msgid "SN Freeze Coding"
+msgstr "SN 冻结编码"
+
+#. module: sn_wsd_quality
+msgid "Inspection Skip Coding"
+msgstr "检验跳过编码"
+
+#. module: sn_wsd_quality
+msgid "Inspection Sample Coding"
+msgstr "抽检编码"
+
+#. module: sn_wsd_quality
+msgid "Quality Inspection Coding"
+msgstr "质量检验编码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_coding_prefix
+msgid "Coding Prefix"
+msgstr "编码前缀"

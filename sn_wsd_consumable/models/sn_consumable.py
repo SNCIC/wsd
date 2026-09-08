@@ -266,6 +266,21 @@ class SnConsumableInfo(models.Model):
         for info in self:
             info.record_count = len(info.record_ids)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Individual SN comes from the coding rule engine when not typed in
+        # (mes-coding-rule batch 5); a manual value always wins and without
+        # any rule the field stays manual (progressive rollout).
+        rule_env = self.env['sn.code.rule']
+        for vals in vals_list:
+            if not vals.get('sn'):
+                proxy = self.new(dict(
+                    vals, company_id=vals.get('company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['sn'] = rule.render(proxy)
+        return super().create(vals_list)
+
     # ------------------------------------------------------------------
     # Guards
     # ------------------------------------------------------------------

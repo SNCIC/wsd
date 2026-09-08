@@ -360,8 +360,17 @@ class MesOrder(models.Model):
     # ------------------------------------------------------------------
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 2); fallback to
+                # the MO-based numbering when no rule is configured
+                proxy = self.new(dict(vals, company_id=vals.get(
+                    'company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 mo_id = vals.get('production_id')
                 if mo_id:
                     self.env.cr.execute('SELECT id FROM mrp_production WHERE id = %s FOR UPDATE', [mo_id])

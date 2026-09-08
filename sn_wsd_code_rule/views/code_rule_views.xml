@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_code_rule_form" model="ir.ui.view">
+        <field name="name">sn.code.rule.form</field>
+        <field name="model">sn.code.rule</field>
+        <field name="arch" type="xml">
+            <form string="Coding Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Material Issue Coding"/></h1>
+                    </div>
+                    <group>
+                        <group string="Applies To">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="picking_type_id"
+                                   invisible="model_name != 'stock.picking'"
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Output">
+                            <field name="target_field"/>
+                            <field name="separator"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Segments" name="segments">
+                            <field name="segment_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="segment_type"/>
+                                    <field name="text_value"
+                                           invisible="segment_type != 'fixed'"
+                                           required="segment_type == 'fixed'"/>
+                                    <field name="field_path"
+                                           widget="field_selector"
+                                           options="{'model': 'rule_model_name'}"
+                                           invisible="segment_type not in ('field', 'date', 'seq')"
+                                           required="segment_type == 'field'"/>
+                                    <field name="empty_policy"
+                                           invisible="segment_type != 'field'"/>
+                                    <field name="lookup_model_id"
+                                           invisible="segment_type != 'lookup'"
+                                           required="segment_type == 'lookup'"
+                                           options="{'no_create': True}"/>
+                                    <field name="lookup_field_path"
+                                           invisible="segment_type != 'lookup'"
+                                           required="segment_type == 'lookup'"/>
+                                    <field name="date_format"
+                                           invisible="segment_type != 'date'"
+                                           required="segment_type == 'date'"/>
+                                    <field name="padding"
+                                           invisible="segment_type != 'seq'"/>
+                                    <field name="period"
+                                           invisible="segment_type != 'seq'"/>
+                                </list>
+                            </field>
+                            <group string="Lookup Domain" colspan="4"
+                                   invisible="not segment_ids">
+                                <div colspan="2" class="text-muted">
+                                    Lookup segments configure their domain and
+                                    sequence segments their reset dimensions in
+                                    the segment form below the list.
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_code_rule_segment_form" model="ir.ui.view">
+        <field name="name">sn.code.rule.segment.form</field>
+        <field name="model">sn.code.rule.segment</field>
+        <field name="arch" type="xml">
+            <form string="Segment">
+                <group>
+                    <group>
+                        <field name="segment_type" readonly="1"/>
+                        <field name="text_value" invisible="segment_type != 'fixed'"/>
+                        <field name="field_path"
+                               widget="field_selector"
+                               options="{'model': 'rule_model_name'}"
+                               invisible="segment_type != 'field'"/>
+                        <field name="empty_policy" invisible="segment_type != 'field'"/>
+                        <field name="date_format" invisible="segment_type != 'date'"/>
+                        <field name="date_source"
+                               invisible="segment_type not in ('date', 'seq')"/>
+                        <field name="date_field_path"
+                               invisible="segment_type not in ('date', 'seq') or date_source != 'field'"
+                               widget="field_selector"
+                               options="{'model': 'rule_model_name'}"/>
+                    </group>
+                    <group>
+                        <field name="padding" invisible="segment_type != 'seq'"/>
+                        <field name="number_next" invisible="segment_type != 'seq'"/>
+                        <field name="period" invisible="segment_type != 'seq'"/>
+                        <field name="group_field_paths" invisible="segment_type != 'seq'"
+                               placeholder="product_id.default_code"/>
+                        <field name="seq_impl" invisible="segment_type != 'seq'"/>
+                        <field name="sequence_code"
+                               invisible="segment_type != 'seq' or seq_impl != 'sequence'"/>
+                    </group>
+                </group>
+                <group string="Lookup" invisible="segment_type != 'lookup'">
+                    <field name="lookup_model_id" options="{'no_create': True}"/>
+                    <field name="lookup_field_path"/>
+                    <field name="lookup_domain" placeholder="[('x_drawing_no', '=', {{product_id.default_code}})]"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_code_rule_list" model="ir.ui.view">
+        <field name="name">sn.code.rule.list</field>
+        <field name="model">sn.code.rule</field>
+        <field name="arch" type="xml">
+            <list string="Coding Rules">
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="picking_type_id" optional="show"/>
+                <field name="target_field"/>
+                <field name="segment_count" string="Segments"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_code_rule_search" model="ir.ui.view">
+        <field name="name">sn.code.rule.search</field>
+        <field name="model">sn.code.rule</field>
+        <field name="arch" type="xml">
+            <search string="Coding Rules">
+                <field name="name"/>
+                <field name="model_id"/>
+                <filter string="Archived" name="archived"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_code_rule" model="ir.actions.act_window">
+        <field name="name">Coding Rules</field>
+        <field name="res_model">sn.code.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first coding rule</p>
+            <p>Pick a document model, lay out segments, preview on a record.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_code_rule" name="Coding Rules" sequence="60"
+              parent="mrp.menu_mrp_configuration"
+              action="action_sn_code_rule"/>
+
+    <record id="view_sn_code_rule_preview_form" model="ir.ui.view">
+        <field name="name">sn.code.rule.preview.form</field>
+        <field name="model">sn.code.rule.preview</field>
+        <field name="arch" type="xml">
+            <form string="Preview">
+                <group>
+                    <field name="rule_id" invisible="1"/>
+                    <field name="res_id"/>
+                    <field name="result" readonly="1"/>
+                    <field name="error" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Render" type="object" name="action_render"
+                            class="btn-primary"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_code_rule_preview" model="ir.actions.act_window">
+        <field name="name">Preview on Record</field>
+        <field name="res_model">sn.code.rule.preview</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sn_code_rule"/>
+    </record>
+</odoo>

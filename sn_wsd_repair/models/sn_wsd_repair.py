@@ -405,9 +405,18 @@ class SnWsdRepairOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.repair.order') or _('New')
+                # coding rule first (mes-coding-rule batch 3); fall back to
+                # the legacy ir.sequence when no rule is configured
+                proxy = self.new(dict(vals, company_id=vals.get(
+                    'company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                else:
+                    vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.repair.order') or _('New')
             if not vals.get('mes_order_id'):
                 identity = self.env['sn.wsd.serial.identity'].browse(
                     vals.get('serial_identity_id')).exists() if vals.get('serial_identity_id') else self.env['sn.wsd.serial.identity']

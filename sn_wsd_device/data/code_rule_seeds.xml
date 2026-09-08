@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Seed coding rules for the device family (mes-coding-rule batch 4).
+         The seeder reads the legacy ir.sequence current values at load
+         time, so it must load after the *_sequence.xml data files. -->
+    <function model="sn.code.rule.seed.device" name="seed" eval="[]"/>
+</odoo>
