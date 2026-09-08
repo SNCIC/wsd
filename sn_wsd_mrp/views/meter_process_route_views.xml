@@ -112,8 +112,11 @@
                     </div>
                     <notebook>
                         <!-- 图号绑定：[Maintain Route] 从排产弹窗/齐套检查跳转过来时，
-                             预填的图号行落在这里，保存即建绑定。 -->
-                        <page string="Drawing Numbers" name="drawing_bindings">
+                             预填的图号行落在这里，保存即建绑定。仅新建记录可见；
+                             已保存路线的绑定统一在图号绑定视图维护（2026-09-07
+                             用户要求：配错图号要能随时删，表单内联编辑移除）。 -->
+                        <page string="Drawing Numbers" name="drawing_bindings"
+                              invisible="id">
                             <field name="x_drawing_ids" nolabel="1">
                                 <list editable="bottom">
                                     <field name="x_drawing_no"/>

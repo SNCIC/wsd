@@ -2,7 +2,7 @@
     'name': 'SN WSD Consumable Control',
     'version': '19.0.3.1.0',
     'summary': 'SMT auxiliary material lifecycle control',
-    'depends': ['sn_wsd_mrp', 'stock'],
+    'depends': ['sn_wsd_mrp', 'stock', 'sn_wsd_smt'],
     'data': [
         'security/ir.model.access.csv',
         'views/sn_consumable_views.xml',

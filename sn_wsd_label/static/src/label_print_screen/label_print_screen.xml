@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_label.LabelPrintScreen">
+        <div class="o_content o_sn_label_pda_screen h-100 d-flex flex-column">
+
+            <!-- 上下文带：屏名 -->
+            <header class="o_sn_label_pda_contextbar">
+                <div class="o_sn_label_pda_contextbar_top">
+                    <i class="fa fa-print me-2"/>
+                    <div class="o_sn_label_pda_title" t-out="title"/>
+                </div>
+            </header>
+
+            <main class="o_sn_label_pda_body flex-grow-1 overflow-auto">
+
+                <div t-if="state.message"
+                     class="o_sn_label_pda_feedback"
+                     t-attf-class="o_sn_label_pda_feedback is-{{state.messageType || 'info'}}">
+                    <t t-out="state.message"/>
+                </div>
+
+                <div class="o_sn_label_pda_form">
+                    <label class="form-label" for="sn_label_pda_template" t-out="templateLabel"/>
+                    <select id="sn_label_pda_template" class="form-select o_sn_label_pda_select"
+                            t-model="state.templateId"
+                            t-on-change="onTemplateChange"
+                            t-att-disabled="state.loading ? 'disabled' : null">
+                        <option t-if="!state.templateId" value=""
+                                t-out="placeholderLabel"/>
+                        <t t-foreach="state.templates" t-as="template" t-key="template.id">
+                            <option t-att-value="template.id" t-out="template.name"/>
+                        </t>
+                    </select>
+
+                    <label class="form-label" for="sn_label_pda_sn" t-out="snLabel"/>
+                    <form t-on-submit="submitSn">
+                        <div class="o_sn_label_pda_sn_row">
+                            <input t-ref="snInput" id="sn_label_pda_sn" t-model="state.sn"
+                                   class="form-control o_sn_label_pda_input"
+                                   t-att-disabled="state.loading ? 'disabled' : null"/>
+                            <button type="submit" class="btn btn-secondary o_sn_label_pda_btn"
+                                    t-out="searchLabel"
+                                    t-att-disabled="state.loading ? 'disabled' : null"/>
+                        </div>
+                    </form>
+
+                    <label class="form-label" for="sn_label_pda_copies" t-out="copiesLabel"/>
+                    <input id="sn_label_pda_copies" type="number" min="1" step="1"
+                           t-model.number="state.copies"
+                           class="form-control o_sn_label_pda_copies"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </div>
+
+                <div t-if="state.record" class="o_sn_label_pda_record">
+                    <i class="fa fa-check-circle me-2"/>
+                    <span class="o_sn_label_pda_record_name" t-out="state.record.display_name"/>
+                </div>
+
+                <div class="o_sn_label_pda_dock">
+                    <button type="button" class="btn btn-outline-secondary o_sn_label_pda_btn"
+                            t-on-click="clearRecord" t-out="clearLabel"
+                            t-att-disabled="state.loading ? 'disabled' : null"/>
+                    <button type="button" class="btn btn-primary o_sn_label_pda_print"
+                            t-on-click="print" t-out="printLabel"
+                            t-att-disabled="state.loading ? 'disabled' : null"/>
+                </div>
+            </main>
+        </div>
+    </t>
+
+</templates>

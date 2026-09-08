@@ -5,7 +5,6 @@
     </record>
 
     <menuitem id="menu_sn_mrp_base_config" name="Meter MES" parent="mrp.menu_mrp_configuration" sequence="85"/>
-    <menuitem id="menu_sn_wsd_process_management" name="Process Management" parent="mrp.menu_mrp_root" sequence="25"/>
     <menuitem id="menu_sn_quality_root" name="Quality Management" parent="mrp.menu_mrp_root" sequence="70"/>
     <menuitem id="menu_sn_quality_config" name="Quality Configuration" parent="menu_sn_quality_root" sequence="1"/>
     <menuitem id="menu_sn_quality_operation" name="Quality Operations" parent="menu_sn_quality_root" sequence="2"/>
@@ -34,6 +33,5 @@
         <field name="sequence">95</field>
     </record>
     <menuitem id="menu_sn_wsd_serial_identity" name="Serial Identities" parent="menu_sn_wsd_traceability" action="action_sn_wsd_serial_identity" sequence="10"/>
-    <menuitem id="menu_sn_wsd_traceability" name="Traceability" parent="mrp.menu_mrp_root" sequence="90"/>
     <menuitem id="menu_sn_wsd_meter_pack_record" name="Pack Records" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_pack_record" sequence="30"/>
 </odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_label_template_designer,sn.label.template designer,model_sn_label_template,group_designer,1,1,1,1
+access_sn_label_template_user,sn.label.template user,model_sn_label_template,base.group_user,1,0,0,0
+access_sn_label_element_designer,sn.label.element designer,model_sn_label_element,group_designer,1,1,1,1
+access_sn_label_element_user,sn.label.element user,model_sn_label_element,base.group_user,1,0,0,0
+access_sn_label_print_log_designer,sn.label.print.log designer,model_sn_label_print_log,group_designer,1,1,1,1
+access_sn_label_print_log_user,sn.label.print.log user,model_sn_label_print_log,base.group_user,1,0,0,0
+access_sn_label_print_wizard,sn.label.print wizard,model_sn_label_print_wizard,base.group_user,1,1,1,1

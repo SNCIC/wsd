@@ -2,7 +2,7 @@
     'name': 'SN WSD Tooling',
     'version': '19.0.4.1.0',
     'summary': 'Tooling types, templates, tooling lifecycle, and PDA service',
-    'depends': ['mrp', 'stock', 'mail'],
+    'depends': ['mrp', 'stock', 'mail', 'sn_wsd_smt'],
     'data': [
         'security/ir.model.access.csv',
         'views/tooling_views.xml',
