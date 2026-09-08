@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sn_bom_import_wizard_form" model="ir.ui.view">
+        <field name="name">sn.bom.import.wizard.form</field>
+        <field name="model">sn.bom.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import BOMs from Excel Template">
+                <group>
+                    <group string="Template">
+                        <field name="file" filename="file_name" accept=".xlsx"
+                               help="Upload the ERP tree BOM template exported to xlsx."/>
+                        <field name="file_name" invisible="1"/>
+                        <field name="skip_existing"/>
+                    </group>
+                </group>
+                <group invisible="not report_html">
+                    <field name="report_html" nolabel="1"/>
+                </group>
+                <group invisible="not result_html">
+                    <field name="result_html" nolabel="1"/>
+                </group>
+                <field name="log_id" invisible="1"/>
+                <footer>
+                    <button name="action_parse" type="object"
+                            string="Parse &amp; Preview" class="btn-primary"/>
+                    <button name="action_import" type="object" string="Import"
+                            class="btn-secondary"/>
+                    <button string="Close" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bom_import_open" model="ir.actions.server">
+        <field name="name">Import BOMs from Excel Template</field>
+        <field name="model_id" ref="model_sn_bom_import_wizard"/>
+        <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">action = env['sn.bom.import.wizard']._open_wizard()</field>
+    </record>
+
+    <menuitem id="menu_sn_bom_import_open" name="BOM Import"
+              parent="mrp.menu_mrp_bom" sequence="12"
+              groups="mrp.group_mrp_user"
+              action="action_bom_import_open"/>
+</odoo>
