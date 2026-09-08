@@ -18,7 +18,7 @@
             <xpath expr="//header/field[@name='state']" position="before">
                 <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
                         string="Print Label"
-                        context="{'default_res_model': 'sn.tooling', 'default_res_ids': str([id])}"/>
+                        context="{'default_res_model': 'sn.tooling', 'default_res_ids': [id]}"/>
             </xpath>
         </field>
     </record>
@@ -47,7 +47,7 @@
             <xpath expr="//header/field[@name='aux_state']" position="before">
                 <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
                         string="Print Label"
-                        context="{'default_res_model': 'sn.consumable.info', 'default_res_ids': str([id])}"/>
+                        context="{'default_res_model': 'sn.consumable.info', 'default_res_ids': [id]}"/>
             </xpath>
         </field>
     </record>
@@ -77,7 +77,7 @@
                 <header>
                     <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
                             string="Print Label"
-                            context="{'default_res_model': 'sn.wsd.device.equipment', 'default_res_ids': str([id])}"/>
+                            context="{'default_res_model': 'sn.wsd.device.equipment', 'default_res_ids': [id]}"/>
                 </header>
             </xpath>
         </field>
@@ -108,7 +108,7 @@
                 <header>
                     <button name="sn_wsd_label.action_sn_label_print_wizard" type="action"
                             string="Print Label"
-                            context="{'default_res_model': 'sn.wsd.meter.pack.record', 'default_res_ids': str([id])}"/>
+                            context="{'default_res_model': 'sn.wsd.meter.pack.record', 'default_res_ids': [id]}"/>
                 </header>
             </xpath>
         </field>
