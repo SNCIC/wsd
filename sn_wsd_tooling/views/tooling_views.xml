@@ -97,6 +97,10 @@
                                         <field name="maintenance_cycle_days" invisible="not maintenance_by_cycle"/>
                                         <field name="maintenance_cycle_reminder_days" invisible="not maintenance_by_cycle"/>
                                     </group>
+                                    <group string="Scrap by Lifetime Count">
+                                        <field name="scrap_count_limit"/>
+                                        <field name="scrap_count_reminder" invisible="not scrap_count_limit"/>
+                                    </group>
                                 </group>
                                 <separator string="Maintenance Items"/>
                                 <field name="maintenance_item_ids">
@@ -150,6 +154,11 @@
                            decoration-success="maintenance_status == 'normal'"
                            decoration-warning="maintenance_status == 'due'"
                            decoration-danger="maintenance_status == 'expired'"/>
+                    <field name="scrap_status" widget="badge" optional="hide"
+                           decoration-success="scrap_status == 'normal'"
+                           decoration-warning="scrap_status == 'due'"
+                           decoration-danger="scrap_status == 'expired'"/>
+                    <field name="remaining_scrap_count" optional="hide"/>
                     <field name="location_id" optional="show"/>
                     <field name="issued_user_id" optional="show"/>
                     <field name="issued_date" optional="hide"/>
@@ -213,6 +222,11 @@
                                 <field name="cycle_usage_count"/>
                                 <field name="last_maintenance_date"/>
                                 <field name="maintenance_status"/>
+                                <field name="scrap_status" widget="badge"
+                                       decoration-success="scrap_status == 'normal'"
+                                       decoration-warning="scrap_status == 'due'"
+                                       decoration-danger="scrap_status == 'expired'"/>
+                                <field name="remaining_scrap_count" invisible="not scrap_status"/>
                             </group>
                             <group string="Issue Info">
                                 <field name="issued_user_id"/>
@@ -258,6 +272,8 @@
                     <separator/>
                     <filter name="maint_due" string="Maintenance Due" domain="[('maintenance_status', '=', 'due')]"/>
                     <filter name="maint_expired" string="Maintenance Expired" domain="[('maintenance_status', '=', 'expired')]"/>
+                    <filter name="scrap_due" string="Scrap Due" domain="[('scrap_status', '=', 'due')]"/>
+                    <filter name="scrap_expired" string="Scrap Limit Reached" domain="[('scrap_status', '=', 'expired')]"/>
                     <group>
                         <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
                         <filter name="group_type" string="Tooling Type" context="{'group_by': 'type_id'}"/>

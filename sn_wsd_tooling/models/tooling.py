@@ -103,6 +103,14 @@ class SnToolingTemplate(models.Model):
     maintenance_by_cycle = fields.Boolean(string='Maintenance by Cycle', default=False)
     maintenance_cycle_days = fields.Integer(string='Maintenance Cycle (days)', default=0, tracking=True)
     maintenance_cycle_reminder_days = fields.Integer(string='Cycle Reminder (days)', default=0)
+    scrap_count_limit = fields.Integer(
+        string='Scrap Count Limit', default=0, tracking=True,
+        help='Lifetime usage count at which the tooling must be scrapped '
+             '(0 = disabled).')
+    scrap_count_reminder = fields.Integer(
+        string='Scrap Count Reminder', default=0,
+        help='Usage count threshold turning the tooling scrap status to '
+             '"due" (yellow).')
     maintenance_item_ids = fields.One2many(
         'sn.tooling.template.maintenance.item', 'template_id', string='Maintenance Items')
     default_tension = fields.Float(string='Default Tension')
@@ -148,7 +156,9 @@ class SnToolingTemplate(models.Model):
         'maintenance_count_limit',
         'maintenance_count_reminder',
         'maintenance_cycle_days',
-        'maintenance_cycle_reminder_days')
+        'maintenance_cycle_reminder_days',
+        'scrap_count_limit',
+        'scrap_count_reminder')
     def _check_maintenance_params(self):
         for template in self:
             if template.maintenance_count_reminder < 0 or template.maintenance_cycle_reminder_days < 0:
@@ -161,6 +171,12 @@ class SnToolingTemplate(models.Model):
                     template.maintenance_cycle_reminder_days > template.maintenance_cycle_days:
                 raise ValidationError(_(
                     'The cycle reminder days cannot exceed the maintenance cycle days.'))
+            if template.scrap_count_limit < 0 or template.scrap_count_reminder < 0:
+                raise ValidationError(_('Scrap count values cannot be negative.'))
+            if template.scrap_count_limit and \
+                    template.scrap_count_reminder > template.scrap_count_limit:
+                raise ValidationError(_(
+                    'The scrap count reminder cannot exceed the scrap count limit.'))
 
     def action_view_tooling(self):
         self.ensure_one()
@@ -231,6 +247,17 @@ class SnTooling(models.Model):
         store=True,
         index=True,
     )
+    scrap_status = fields.Selection(
+        MAINTENANCE_STATUS_SELECTION,
+        string='Scrap Status',
+        compute='_compute_scrap_status',
+        store=True,
+        index=True,
+    )
+    remaining_scrap_count = fields.Integer(
+        string='Remaining Usages before Scrap',
+        compute='_compute_scrap_status',
+        help='Lifetime usages left before the tooling must be scrapped.')
     issued_user_id = fields.Many2one('res.users', string='Issued By')
     issued_date = fields.Datetime(string='Issued Date')
     disable_reason = fields.Char(string='Disable Reason')
@@ -313,6 +340,23 @@ class SnTooling(models.Model):
                     if not vals.get(param):
                         vals[param] = template[f'default_{param}']
         return super().create(vals_list)
+
+    @api.depends(
+        'total_usage_count',
+        'template_id.scrap_count_limit',
+        'template_id.scrap_count_reminder')
+    def _compute_scrap_status(self):
+        for tooling in self:
+            limit = tooling.template_id.scrap_count_limit
+            reminder = tooling.template_id.scrap_count_reminder
+            status = 'normal'
+            if limit and tooling.total_usage_count >= limit:
+                status = 'expired'
+            elif limit and reminder and tooling.total_usage_count >= reminder:
+                status = 'due'
+            tooling.scrap_status = status
+            tooling.remaining_scrap_count = (
+                max(0, limit - tooling.total_usage_count) if limit else 0)
 
     # ------------------------------------------------------------------
     # Guards
@@ -483,6 +527,12 @@ class SnTooling(models.Model):
                     'Only an online tooling can register usage (%s).', tooling.sn))
             if not isinstance(qty, int) or qty <= 0:
                 raise UserError(_('The usage quantity must be a positive integer.'))
+            limit = tooling.template_id.scrap_count_limit
+            if limit and tooling.total_usage_count >= limit:
+                raise UserError(_(
+                    'The tooling %s reached its scrap count limit (%s/%s). '
+                    'Scrap it and mount another one before passing stations.',
+                    tooling.sn, tooling.total_usage_count, limit))
             tooling.write({
                 'total_usage_count': tooling.total_usage_count + qty,
                 'cycle_usage_count': tooling.cycle_usage_count + qty,
