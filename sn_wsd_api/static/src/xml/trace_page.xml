@@ -60,6 +60,8 @@
                                     <td class="o_form_value" t-esc="state.productInfo.orderName"/>
                                     <td class="o_form_label">Product</td>
                                     <td class="o_form_value" t-esc="state.productInfo.productCode"/>
+                                    <td class="o_form_label">Spec</td>
+                                    <td class="o_form_value" t-esc="state.productInfo.spec"/>
                                 </tr>
                                 <tr>
                                     <td class="o_form_label">Line</td>
@@ -108,6 +110,7 @@
                                         <th>MES Order</th>
                                         <th>Production</th>
                                         <th>Product</th>
+                                        <th>Spec</th>
                                         <th>Operator</th>
                                         <th>Device SN</th>
                                         <th>Tooling</th>
@@ -129,6 +132,7 @@
                                         <td t-esc="r.orderName"/>
                                         <td t-esc="r.productionName"/>
                                         <td t-esc="r.productCode"/>
+                                        <td t-esc="r.spec"/>
                                         <td t-esc="r.operator"/>
                                         <td t-esc="r.equipment"/>
                                         <td t-esc="r.tooling"/>

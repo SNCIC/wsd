@@ -331,6 +331,7 @@ class SnTooling(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             template = self.env['sn.tooling.template'].browse(vals.get('template_id'))
             if template:
@@ -339,6 +340,15 @@ class SnTooling(models.Model):
                 for param in ('tension', 'thickness', 'flatness'):
                     if not vals.get(param):
                         vals[param] = template[f'default_{param}']
+            # Individual SN comes from the coding rule engine when not typed
+            # in (mes-coding-rule batch 5); a manual value always wins and
+            # without any rule the field stays manual (progressive rollout).
+            if not vals.get('sn'):
+                proxy = self.new(dict(
+                    vals, company_id=vals.get('company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['sn'] = rule.render(proxy)
         return super().create(vals_list)
 
     @api.depends(

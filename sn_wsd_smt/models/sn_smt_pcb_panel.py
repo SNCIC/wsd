@@ -53,6 +53,8 @@ class SnSmtPcbPanel(models.Model):
         copy=False,
         help='Internal reference of the PCB material item. Example: 3111001398.'
     )
+    # PCB 物料规格（按 pcb_item_sn 编码快照反查产品档案）。
+    pcb_item_spec = fields.Char(string='Specification', compute='_compute_pcb_item_spec')
 
     # Board links.
     board_ids = fields.One2many(
@@ -87,6 +89,20 @@ class SnSmtPcbPanel(models.Model):
     def _compute_board_count(self):
         for panel in self:
             panel.board_count = len(panel.board_ids)
+
+    @api.depends('pcb_item_sn')
+    def _compute_pcb_item_spec(self):
+        # 规格按 PCB 物料编码批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {panel.pcb_item_sn for panel in self if panel.pcb_item_sn}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for panel in self:
+            panel.pcb_item_spec = mapping.get(panel.pcb_item_sn)
 
     @api.constrains('quantity', 'board_ids')
     def _check_board_count(self):

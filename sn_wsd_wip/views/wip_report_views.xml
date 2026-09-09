@@ -101,6 +101,7 @@
                 <field name="step_sequence"/>
                 <field name="route_step_id"/>
                 <field name="product_id" optional="hide"/>
+                <field name="material_specification" optional="show"/>
                 <field name="route_id" optional="hide"/>
                 <field name="route_operation_count" sum="Total"/>
                 <field name="production_count" sum="Total"/>
@@ -155,6 +156,7 @@
                 <field name="mes_order_id" optional="show"/>
                 <field name="production_id"/>
                 <field name="product_id"/>
+                <field name="material_specification" optional="show"/>
                 <field name="route_id"/>
                 <field name="step_count" sum="Total"/>
                 <field name="total_input_qty" sum="Total"/>
@@ -178,6 +180,7 @@
                         <group>
                             <field name="production_id"/>
                             <field name="product_id"/>
+                            <field name="material_specification"/>
                             <field name="route_id"/>
                         </group>
                         <group>

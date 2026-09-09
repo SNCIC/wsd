@@ -50,6 +50,7 @@ class SnSmtMaterialTable(models.Model):
     table_type = fields.Selection(TABLE_TYPE_SELECTION, string='TABLE_TYPE', default='smt', required=True)
     # 产品料号：取产品上的图号（product.default_code）
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True, tracking=True)
+    model_spec = fields.Char(string='Specification', compute='_compute_model_spec')
     product_side = fields.Selection(PRODUCT_SIDE_SELECTION, string='PRODUCT_SIDE', required=True, index=True, tracking=True)
     item_count = fields.Integer(string='ITEM_COUNT')
     total_point_qty = fields.Integer(compute='_compute_total_point_qty', string='Total Points')
@@ -86,6 +87,20 @@ class SnSmtMaterialTable(models.Model):
             record.name = record.table_name or ' / '.join(
                 item for item in [record.model_code, record.product_side] if item
             )
+
+    @api.depends('model_code')
+    def _compute_model_spec(self):
+        # 规格按图号批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {record.model_code for record in self if record.model_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for record in self:
+            record.model_spec = mapping.get(record.model_code)
 
     @api.depends('detail_ids')
     def _compute_detail_count(self):
@@ -209,6 +224,8 @@ class SnSmtMaterialTableDetail(models.Model):
     )
     company_id = fields.Many2one(related='mt_id.company_id', store=True, readonly=True)
     item_code = fields.Char(string='ITEM_CODE', required=True, index=True)
+    # 物料规格（按 item_code 反查），与 feeder_spec（飞达规格/胶带宽度）无关。
+    item_spec = fields.Char(string='Specification', compute='_compute_item_spec')
     device_seq = fields.Integer(string='DEVICE_SEQ', required=True)
     table_no = fields.Char(string='TABLE_NO', required=True)
     loadpoint = fields.Char(string='LOADPOINT', required=True)
@@ -240,6 +257,20 @@ class SnSmtMaterialTableDetail(models.Model):
                     'TABLE_NO must store the table name only (e.g. T1), not '
                     'the whole DEVICE.TABLE barcode (e.g. 1.T1); the device '
                     'sequence belongs in DEVICE_SEQ.'))
+
+    @api.depends('item_code')
+    def _compute_item_spec(self):
+        # 规格按物料编码批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {detail.item_code for detail in self if detail.item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for detail in self:
+            detail.item_spec = mapping.get(detail.item_code)
 
 
 class SnSmtOnlineMaterial(models.Model):
@@ -278,6 +309,7 @@ class SnSmtOnlineMaterial(models.Model):
     )
     project_id = fields.Char(string='PROJECT_ID')
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True)
+    model_spec = fields.Char(string='Specification', compute='_compute_model_spec')
     area_sn = fields.Char(string='AREA_SN', index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True)
     process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE')
@@ -349,6 +381,20 @@ class SnSmtOnlineMaterial(models.Model):
     def _compute_loaded_product_id(self):
         for record in self:
             record.loaded_product_id = record.loaded_material_lot_id.product_id
+
+    @api.depends('model_code')
+    def _compute_model_spec(self):
+        # 规格按图号批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {record.model_code for record in self if record.model_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for record in self:
+            record.model_spec = mapping.get(record.model_code)
 
     @api.model
     def _get_active_lines(self, mes_order, include_skipped=False):
@@ -468,7 +514,9 @@ class SnSmtMaterialLog(models.Model):
     loadpoint = fields.Char(string='Loadpoint')
     chanel_sn = fields.Char(string='Channel')
     required_item_code = fields.Char(string='Required Item Code', index=True)
+    required_item_spec = fields.Char(string='Specification', compute='_compute_required_item_spec')
     actual_item_code = fields.Char(string='Actual Item Code', index=True)
+    actual_item_spec = fields.Char(string='Specification', compute='_compute_actual_item_spec')
     qty_before = fields.Float(string='Points Before', copy=False)
     qty_after = fields.Float(string='Points After', copy=False)
     operator_id = fields.Many2one(
@@ -487,6 +535,33 @@ class SnSmtMaterialLog(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+
+    @api.depends('required_item_code')
+    def _compute_required_item_spec(self):
+        # 规格按料号批量反查产品档案（日志只存编码快照，无产品 m2o）。
+        codes = {log.required_item_code for log in self if log.required_item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for log in self:
+            log.required_item_spec = mapping.get(log.required_item_code)
+
+    @api.depends('actual_item_code')
+    def _compute_actual_item_spec(self):
+        codes = {log.actual_item_code for log in self if log.actual_item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for log in self:
+            log.actual_item_spec = mapping.get(log.actual_item_code)
 
 
 class SnSmtOperationMixin(models.AbstractModel):

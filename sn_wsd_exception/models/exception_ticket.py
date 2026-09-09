@@ -231,9 +231,18 @@ class SnWsdExceptionTicket(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if not vals.get('name') or vals['name'] == _('New'):
-                vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.exception.ticket') or _('New')
+                # coding rule first (mes-coding-rule batch 3); fall back to
+                # the legacy ir.sequence when no rule is configured
+                proxy = self.new(dict(vals, company_id=vals.get(
+                    'company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                else:
+                    vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.exception.ticket') or _('New')
             category = False
             if vals.get('category_id'):
                 category = self.env['sn.wsd.exception.category'].browse(vals['category_id']).exists()

@@ -2,8 +2,9 @@
     'name': 'SN WSD MRP',
     'version': '19.0.12.0.0',
     'summary': 'Manufacturing extensions built on Odoo MRP (MES orders, station flow)',
-    'depends': ['product', 'mrp', 'stock', 'purchase', 'hr', 'mail', 'sn_wsd_device'],
+    'depends': ['product', 'mrp', 'stock', 'purchase', 'hr', 'mail', 'sn_wsd_device', 'sn_wsd_code_rule'],
     'data': [
+        'data/code_rule_seeds.xml',
         'data/stock_package_type.xml',
         'data/scrap_reason_data.xml',
         'security/mes_security.xml',

@@ -588,6 +588,12 @@ class QualityInspection(models.Model):
         tracking=True,
     )
     scheme_code = fields.Char(string='Scheme Code', related='scheme_id.code', store=True, readonly=True)
+    x_coding_prefix = fields.Char(
+        string='Coding Prefix',
+        compute='_compute_x_coding_prefix',
+        help='Uppercase inspection type (FAI/IQC/IPQC/OQC) rendered as the '
+             'document-number prefix by the coding rule engine.',
+    )
     state = fields.Selection(
         [
             ('open', 'Open'),
@@ -626,6 +632,7 @@ class QualityInspection(models.Model):
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     product_id = fields.Many2one('product.product', string='Product', check_company=True, index=True)
     product_tmpl_id = fields.Many2one(related='product_id.product_tmpl_id', string='Product Template', store=True, readonly=True)
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     picking_id = fields.Many2one('stock.picking', string='Transfer', check_company=True, index=True)
     move_line_id = fields.Many2one('stock.move.line', string='Operation Line', check_company=True, index=True)
     lot_id = fields.Many2one('stock.lot', string='Lot/Serial Number', check_company=True, index=True)
@@ -789,6 +796,11 @@ class QualityInspection(models.Model):
     )
     note = fields.Text(string='Notes')
 
+    @api.depends('inspection_type')
+    def _compute_x_coding_prefix(self):
+        for inspection in self:
+            inspection.x_coding_prefix = (inspection.inspection_type or '').upper()
+
     @api.depends('state', 'line_ids.result', 'defect_line_ids.defect_qty', 'sample_size', 'accept_qty', 'reject_qty')
     def _compute_result(self):
         for inspection in self:
@@ -882,10 +894,18 @@ class QualityInspection(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                inspection_type = vals.get('inspection_type') or 'quality'
-                vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the per-type legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                else:
+                    inspection_type = vals.get('inspection_type') or 'quality'
+                    vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
             if not vals.get('mes_order_id'):
                 workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else self.env['sn.wsd.mes.order.route.operation']
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else (workorder.mes_order_id.production_id if workorder else False)
@@ -1526,8 +1546,16 @@ class QualityInspectionSkip(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.quality.inspection.skip') or _('New')
         return super().create(vals_list)
 

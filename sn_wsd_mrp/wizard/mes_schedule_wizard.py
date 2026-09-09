@@ -27,6 +27,10 @@ class MesScheduleWizard(models.TransientModel):
         'product.product', string='Product',
         related='production_id.product_id',
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     product_qty = fields.Float(
         string='MO Quantity', related='production_id.product_qty',
     )

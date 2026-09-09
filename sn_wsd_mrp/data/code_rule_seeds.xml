@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Seed coding rules for the four manufacturing picking types
+         (mes-coding-rule batch 2). Picking types are created dynamically
+         in Python (no xmlids), so seeding goes through a function call. -->
+    <function model="sn.code.rule" name="_seed_manufacturing_rules"
+              eval="[]"/>
+
+    <!-- Seed the default operation code rule (mes-coding-rule batch 5):
+         OP-NNNNN. The seeder is idempotent: an existing rule for the
+         model wins. -->
+    <function model="sn.wsd.operation" name="_seed_operation_code_rule"
+              eval="[]"/>
+</odoo>

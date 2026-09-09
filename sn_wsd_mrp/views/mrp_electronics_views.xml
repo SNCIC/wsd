@@ -8,7 +8,9 @@
             <list string="Substitute Materials" editable="bottom">
                 <field name="priority"/>
                 <field name="original_product_id" readonly="1"/>
+                <field name="original_material_specification" optional="show"/>
                 <field name="substitute_product_id"/>
+                <field name="substitute_material_specification" optional="show"/>
                 <field name="company_id" column_invisible="True"/>
             </list>
         </field>
@@ -25,9 +27,11 @@
                             <field name="bom_id"/>
                             <field name="bom_line_id"/>
                             <field name="original_product_id"/>
+                            <field name="original_material_specification"/>
                         </group>
                         <group>
                             <field name="substitute_product_id"/>
+                            <field name="substitute_material_specification"/>
                             <field name="priority"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
@@ -72,13 +76,17 @@
                                     <list editable="bottom">
                                         <field name="priority"/>
                                         <field name="original_product_id" readonly="1"/>
+                                        <field name="original_material_specification"/>
                                         <field name="substitute_product_id"/>
+                                        <field name="substitute_material_specification"/>
                                     </list>
                                     <form string="Substitute Material">
                                         <group>
                                             <group>
                                                 <field name="original_product_id" readonly="1"/>
+                                                <field name="original_material_specification"/>
                                                 <field name="substitute_product_id"/>
+                                                <field name="substitute_material_specification"/>
                                             </group>
                                             <group>
                                                 <field name="priority"/>
@@ -135,8 +143,10 @@
                 <field name="production_id"/>
                 <field name="route_operation_id"/>
                 <field name="original_product_id"/>
+                <field name="original_material_specification" optional="show"/>
                 <field name="original_lot_id" optional="hide"/>
                 <field name="substitute_product_id"/>
+                <field name="substitute_material_specification" optional="show"/>
                 <field name="substitute_bom_line_id" optional="show"/>
                 <field name="substitute_lot_id" optional="hide"/>
                 <field name="substitute_uom_qty" sum="Total Substitute Qty"/>
@@ -177,11 +187,13 @@
                     <group>
                         <group>
                             <field name="original_product_id"/>
+                            <field name="original_material_specification"/>
                             <field name="original_lot_id"/>
                             <field name="original_uom_qty"/>
                         </group>
                         <group>
                             <field name="substitute_product_id"/>
+                            <field name="substitute_material_specification"/>
                             <field name="substitute_lot_id"/>
                             <field name="substitute_uom_qty"/>
                             <field name="uom_id" groups="uom.group_uom"/>
@@ -238,8 +250,10 @@
                 <field name="route_operation_id"/>
                 <field name="feeder_no"/>
                 <field name="expected_product_id"/>
+                <field name="expected_material_specification" optional="show"/>
                 <field name="expected_qty" sum="Total Expected Qty"/>
                 <field name="actual_product_id"/>
+                <field name="actual_material_specification" optional="show"/>
                 <field name="lot_id"/>
                 <field name="loaded_qty" sum="Total Loaded Qty"/>
                 <field name="consumed_qty" sum="Total Consumed Qty"/>
@@ -281,12 +295,14 @@
                         <group>
                             <field name="expected_product_id"/>
                             <field name="expected_product_code"/>
+                            <field name="expected_material_specification"/>
                             <field name="expected_qty"/>
                             <field name="uom_id" groups="uom.group_uom"/>
                         </group>
                         <group>
                             <field name="actual_product_id"/>
                             <field name="actual_product_code"/>
+                            <field name="actual_material_specification"/>
                             <field name="lot_id"/>
                             <field name="lot_name"/>
                         </group>
@@ -390,6 +406,7 @@
                                 <list>
                                     <field name="move_id"/>
                                     <field name="product_id"/>
+                                    <field name="material_specification"/>
                                     <field name="lot_id"/>
                                     <field name="location_id"/>
                                     <field name="picked_qty"/>

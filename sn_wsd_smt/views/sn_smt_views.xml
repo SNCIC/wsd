@@ -27,6 +27,7 @@
                 <field name="table_name"/>
                 <field name="table_type"/>
                 <field name="model_code"/>
+                <field name="model_spec" optional="show"/>
                 <field name="product_side"/>
                 <field name="track_type"/>
                 <field name="item_count"/>
@@ -54,6 +55,7 @@
                                 <field name="table_name"/>
                                 <field name="table_type"/>
                                 <field name="model_code"/>
+                                <field name="model_spec"/>
                             </group>
                             <group>
                                 <field name="product_side"/>
@@ -80,6 +82,7 @@
                                     <field name="loadpoint"/>
                                     <field name="chanel_sn"/>
                                     <field name="item_code"/>
+                                    <field name="item_spec"/>
                                     <field name="feeder_spec"/>
                                     <field name="point_qty"/>
                                     <field name="is_skip"/>
@@ -112,6 +115,7 @@
             <list open_form_view="false">
                 <field name="mes_order_id"/>
                 <field name="model_code"/>
+                <field name="model_spec" optional="show"/>
                 <field name="process_face"/>
                 <field name="production_line_id"/>
                 <field name="workcenter_id" optional="show"/>

@@ -311,6 +311,7 @@
                 <field name="product_id"/>
                 <field name="area_sn"/>
                 <field name="model_code"/>
+                <field name="material_specification" optional="show"/>
                 <field name="scheduled_time"/>
                 <field name="inspector_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
@@ -432,6 +433,7 @@
                                     <field name="area_sn" invisible="inspection_type != 'iqc'"/>
                                     <field name="model_code" invisible="inspection_type != 'iqc'"/>
                                     <field name="product_id" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="material_specification" invisible="inspection_type == 'ipqc'"/>
                                 </group>
                                 <group>
                                     <!-- 调拨/明细行仅 IQC；批次 IQC/OQC（出货检挂批次） -->

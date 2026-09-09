@@ -152,7 +152,7 @@ export class SnTracePage extends Component {
         const product = production.product_id
             ? (await this.orm.silent.read(
                 "product.product", [production.product_id[0]],
-                ["default_code"]))[0] || {}
+                ["default_code", "material_specification"]))[0] || {}
             : {};
         // flow finished (option A): an OK leave on the route's exit operation
         let finished = false;
@@ -171,6 +171,7 @@ export class SnTracePage extends Component {
             productionName: production.name || "",
             orderName: o.name || "",
             productCode: product.default_code || "",
+            spec: product.material_specification || "",
             line: o.production_line_id ? o.production_line_id[1] : "",
             side: o.x_side || "",
             route: o.x_mes_route_id ? o.x_mes_route_id[1] : "",
@@ -192,7 +193,8 @@ export class SnTracePage extends Component {
                 .filter(Boolean))];
         const products = productIds.length
             ? await this.orm.silent.read(
-                "product.product", productIds, ["default_code", "name"])
+                "product.product", productIds,
+                ["default_code", "name", "material_specification"])
             : [];
         const productById = Object.fromEntries(
             products.map((p) => [p.id, p]));
@@ -205,7 +207,7 @@ export class SnTracePage extends Component {
                 itemCode: r.required_item_code
                     || (product ? product.default_code || "" : ""),
                 name: product ? product.name || "" : "",
-                spec: "",
+                spec: product ? product.material_specification || "" : "",
                 lotDate: /^\d{8}$/.test(parts[2] || "") ? parts[2] : "",
                 loadpoint: r.loadpoint || "",
                 qty: r.point_qty,
@@ -304,6 +306,7 @@ export class SnTracePage extends Component {
                 orderId: h.mes_order_id ? h.mes_order_id[0] : false,
                 productionName: productInfo && productInfo.productionName,
                 productCode: productInfo && productInfo.productCode,
+                spec: productInfo && productInfo.spec,
                 operator: h.operator_code || "",
                 equipment: test ? test.equipment_sn || "" : "",
                 tooling: test ? test.tooling_sns || "" : "",
@@ -350,12 +353,12 @@ export class SnTracePage extends Component {
                 title: _t("Process"),
                 headers: ["#", _t("Operation"), _t("Operation Name"),
                     _t("Work Center"), _t("Line"), _t("Flag"), _t("MES Order"),
-                    _t("Production"), _t("Product"), _t("Operator"),
+                    _t("Production"), _t("Product"), _t("Spec"), _t("Operator"),
                     _t("Device SN"), _t("Tooling"), _t("Time")],
                 rows: this.state.processRows.map((r) => [r.seq, r.opCode,
                     r.opName, r.workcenter, r.line, r.flag, r.orderName,
-                    r.productionName, r.productCode, r.operator, r.equipment,
-                    r.tooling, r.time]),
+                    r.productionName, r.productCode, r.spec, r.operator,
+                    r.equipment, r.tooling, r.time]),
             },
             material: {
                 title: _t("Material"),

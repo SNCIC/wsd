@@ -24,6 +24,10 @@ class SnWsdPieceRate(models.Model):
         check_company=True,
         ondelete='restrict',
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     operation_id = fields.Many2one(
         'sn.wsd.operation',
         string='Operation',

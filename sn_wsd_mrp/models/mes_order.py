@@ -34,6 +34,10 @@ class MesOrder(models.Model):
         'product.product', string='Product',
         related='production_id.product_id', store=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line', string='Production Line', required=True,
         check_company=True, tracking=True,
@@ -360,8 +364,17 @@ class MesOrder(models.Model):
     # ------------------------------------------------------------------
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 2); fallback to
+                # the MO-based numbering when no rule is configured
+                proxy = self.new(dict(vals, company_id=vals.get(
+                    'company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 mo_id = vals.get('production_id')
                 if mo_id:
                     self.env.cr.execute('SELECT id FROM mrp_production WHERE id = %s FOR UPDATE', [mo_id])
@@ -1989,23 +2002,11 @@ class MesOrder(models.Model):
             order.picking_count = len(order.picking_ids)
 
     def _sn_sequence(self):
-        """SN numbering sequence of this order's product: drawing-number
-        prefix + serial. The prefix stays empty until drawing numbers are
-        configured (test phase)."""
+        """SN numbering sequence of this order's product (the product-level
+        shared sequence; the prefix stays empty until drawing numbers are
+        configured, test phase)."""
         self.ensure_one()
-        production = self.production_id
-        prefix = production.product_id.default_code or ''
-        code = 'sn.wsd.serial.identity.product.%s' % production.product_id.id
-        sequence = self.env['ir.sequence'].sudo().search([('code', '=', code)], limit=1)
-        if not sequence:
-            sequence = self.env['ir.sequence'].sudo().create({
-                'name': 'SN %s' % production.display_name,
-                'code': code,
-                'prefix': prefix,
-                'padding': 5,
-                'company_id': production.company_id.id,
-            })
-        return sequence
+        return self.production_id._sn_product_sequence()
 
     def generate_sn(self):
         """Reserve the next SN identity for this order (device calls the

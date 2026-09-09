@@ -37,6 +37,9 @@ class SnWsdPieceSettlement(models.Model):
         related='mes_order_id.x_manage_mode', string='Manage Mode', store=True)
     product_id = fields.Many2one(
         related='mes_order_id.product_id', string='Product', store=True)
+    material_specification = fields.Char(
+        related='product_id.material_specification',
+        string='Material Specification')
     operation_id = fields.Many2one(
         related='route_operation_id.operation_id', string='Operation (Dict)',
         store=True)

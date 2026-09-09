@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Seed the coding rule for repair orders (mes-coding-rule batch 3).
+         Deliberately NOT inside <data noupdate="1">: Odoo skips <function>
+         tags under noupdate on module update, and the seed method itself
+         is idempotent (skips when a rule exists). -->
+    <function model="sn.code.rule" name="_seed_repair_rules"
+              eval="[]"/>
+</odoo>

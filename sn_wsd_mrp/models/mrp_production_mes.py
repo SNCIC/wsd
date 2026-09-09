@@ -66,6 +66,10 @@ class MrpProductionMesSchedule(models.Model):
     x_drawing_no = fields.Char(
         related='product_id.default_code', string='Drawing No.',
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     x_board_side = fields.Selection(
         related='product_id.x_board_side', string='Board Side Type',
     )

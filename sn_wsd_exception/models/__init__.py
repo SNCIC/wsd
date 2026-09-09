@@ -5,6 +5,7 @@ from . import exception_ticket_pause
 from . import exception_ticket_escalation
 from . import exception_ticket
 from . import exception_service
+from . import code_rule
 from . import res_company
 from . import res_config_settings
 from . import report_exception_pareto

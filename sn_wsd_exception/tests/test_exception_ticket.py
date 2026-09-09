@@ -329,3 +329,14 @@ class TestExceptionTicket(TransactionCase):
         ])
         self.assertTrue(msgs)
         self.assertIn(self.env.user.partner_id, msgs.mapped('partner_ids'))
+
+    def test_22_reference_from_coding_rule(self):
+        """mes-coding-rule batch 3: ticket references come from the
+        sn.code.rule engine (EXC-<year>-<4 digit yearly counter>); the
+        legacy ir.sequence only serves as the no-rule fallback."""
+        self.env['sn.code.rule']._seed_exception_rules()
+        rule = self.env['sn.code.rule'].search([
+            ('model_id.model', '=', 'sn.wsd.exception.ticket')])
+        self.assertTrue(rule)
+        ticket = self._create_ticket()
+        self.assertRegex(ticket.name, r'^EXC-\d{4}-\d{4,}$')

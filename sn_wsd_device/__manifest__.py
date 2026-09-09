@@ -3,7 +3,7 @@
     'summary': "Device data collection (reflow soldering, etc.)",
     'category': 'Manufacturing/Device Management',
     'version': '19.0.4.0.0',
-    'depends': ['base', 'product', 'hr'],
+    'depends': ['base', 'product', 'hr', 'sn_wsd_code_rule'],
     'data': [
         'security/ir.model.access.csv',
         'security/company_rules.xml',
@@ -35,6 +35,7 @@
         'views/knowledge_views.xml',
         'data/oee_sequence.xml',
         'views/oee_views.xml',
+        'data/code_rule_seeds.xml',
         'data/equipment_seed.xml',
         'views/menu_views.xml',
     ],

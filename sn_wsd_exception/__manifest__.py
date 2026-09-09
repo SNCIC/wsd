@@ -1,12 +1,13 @@
 {
     'name': 'SN WSD Exception Management',
-    'version': '19.0.4.1.0',
+    'version': '19.0.4.2.0',
     'summary': 'MES exception tickets: terminal reporting, category routing, claim, suspension, closure confirmation, Pareto',
-    'depends': ['mail', 'sn_wsd_mrp'],
+    'depends': ['mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
     'data': [
         'security/exception_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence.xml',
+        'data/code_rule_seeds.xml',
         'data/exception_team_data.xml',
         'data/exception_category_data.xml',
         'data/exception_cron.xml',

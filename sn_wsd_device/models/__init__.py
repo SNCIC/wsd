@@ -25,3 +25,4 @@ from . import knowledge
 from . import oee_record
 from . import oee_batch_wizard
 from . import oee_import_wizard
+from . import coding_seed

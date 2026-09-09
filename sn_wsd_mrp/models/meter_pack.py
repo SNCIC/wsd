@@ -46,6 +46,10 @@ class MeterPackRecord(models.Model):
     product_id = fields.Many2one(
         'product.product', string='Product',
         related='production_id.product_id', readonly=True)
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     nameplate_sn = fields.Char(
         string='Nameplate SN', compute='_compute_nameplate_sn',
         help='Current nameplate bound to this SN (latest current binding).')

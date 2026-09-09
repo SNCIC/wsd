@@ -2,9 +2,10 @@
     'name': 'SN WSD Quality',
     'version': '19.0.4.0.2',
     'summary': 'Quality management for WSD meter manufacturing',
-    'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp'],
+    'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
     'data': [
         'data/ir_sequence.xml',
+        'data/code_rule_seeds.xml',
         'data/ipqc_patrol_cron.xml',
         'security/ir.model.access.csv',
         'views/sampling_views.xml',

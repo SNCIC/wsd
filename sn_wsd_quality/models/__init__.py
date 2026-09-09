@@ -6,3 +6,4 @@ from . import quality_inspection
 from . import sampling
 from . import mes_order_fai
 from . import mes_order_oqc
+from . import coding_seed

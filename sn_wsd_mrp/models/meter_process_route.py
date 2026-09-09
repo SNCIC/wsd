@@ -86,8 +86,17 @@ class SnWsdOperation(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if not vals.get('code'):
+                # coding rule first (mes-coding-rule batch 5); fallback to
+                # the legacy ir.sequence when no rule is configured
+                proxy = self.new(dict(
+                    vals, company_id=vals.get('company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['code'] = rule.render(proxy)
+                    continue
                 code = self.env['ir.sequence'].next_by_code('sn.wsd.operation')
                 if not code:
                     raise UserError(_(
@@ -96,6 +105,31 @@ class SnWsdOperation(models.Model):
                     ) % 'sn.wsd.operation')
                 vals['code'] = code
         return super().create(vals_list)
+
+    @api.model
+    def _seed_operation_code_rule(self):
+        """Seed the default coding rule for operation codes
+        (mes-coding-rule batch 5): OP-NNNNN, counter never reset.
+
+        Idempotent: an existing rule targeting the model wins, so a
+        user-configured rule is never duplicated or overwritten.
+        """
+        Rule = self.env['sn.code.rule']
+        model_id = self.env['ir.model']._get_id('sn.wsd.operation')
+        if not model_id or Rule.search_count([
+                ('model_id', '=', model_id), ('picking_type_id', '=', False)]):
+            return
+        Rule.create({
+            'name': 'Operation Code Coding',
+            'model_id': model_id,
+            'target_field': 'code',
+            'separator': '-',
+            'segment_ids': [
+                (0, 0, {'segment_type': 'fixed', 'text_value': 'OP'}),
+                (0, 0, {'segment_type': 'seq', 'padding': 5,
+                        'period': 'none', 'seq_impl': 'engine'}),
+            ],
+        })
 
 class MeterProcessRoute(models.Model):
     _name = 'sn.wsd.process.route'

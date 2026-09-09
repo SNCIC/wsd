@@ -1,116 +1,50 @@
-import json
-
 from odoo import http
-from odoo.http import Response, request
+from odoo.http import request
 
 
 class SnSmtPcbPanelController(http.Controller):
-    """
-    SMT PCB Panel HTTP API Controller
-
-    Provides REST API endpoints for external MES systems:
-    - POST /api/smt/panel/add - F-001 panel creation.
-    - POST /api/smt/panel/query - F-002 panel query.
-    - GET /api/smt/panel/<id> - Panel detail.
-    - DELETE /api/smt/panel/<id> - Panel deletion.
+    """SMT PCB Panel HTTP API (old-MES contract paths):
+    - POST /api/v1/panels/add - F-001 panel creation.
+    - POST /api/v1/panels/query - F-002 panel query.
+    Plain JSON POST, no authentication; M_DATA_AUTH in the payload scopes
+    the company.
     """
 
-    @http.route('/api/smt/panel/add', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    def _body_or_error(self):
+        try:
+            data = request.get_json_data()
+        except (ValueError, TypeError):
+            data = None
+        if not isinstance(data, dict):
+            return None, request.make_json_response(
+                {'code': 400, 'message': 'invalid json body', 'data': False},
+                status=400)
+        return dict(data), None
+
+    def _call(self, service_method, params):
+        try:
+            result = service_method(params)
+        except Exception as error:  # noqa: BLE001 - devices need a JSON body
+            result = {'code': 500, 'message': f'Server error: {str(error)}'}
+        status = result.get('code', 200) if isinstance(result, dict) else 200
+        return request.make_json_response(result, status=status)
+
+    def _service(self):
+        return request.env['sn.smt.pcb.panel.api'].sudo().with_context(
+            lang='zh_CN')
+
+    @http.route('/api/v1/panels/add', type='http', auth='public',
+                methods=['POST'], csrf=False)
     def api_panel_add(self, **kwargs):
-        """
-        F-001 panel creation.
+        payload, error = self._body_or_error()
+        if error:
+            return error
+        return self._call(self._service().api_panel_add, payload)
 
-        Request example:
-        {
-            "productNo": "MO20260525123589",
-            "quantity": 4,
-            "pcbItemSn": "3111001398",
-            "bindings": [
-                {"boardNo": "1", "proSn": "W23350859A01S012624553250"},
-                {"boardNo": "2", "proSn": "W23350859A01S012624553252"},
-                {"boardNo": "3", "proSn": "W23350859A01S012624553253"},
-                {"boardNo": "4", "proSn": "W23350859A01S012624553251"}
-            ]
-        }
-
-        Success response:
-        {"code": 200, "message": "\u4fdd\u5b58\u6210\u529f"}
-
-        Error response:
-        {"code": 400, "message": "\u7b2c2\u6761\u8bb0\u5f55\uff1a\u4ea7\u54c1SN[W23350859A01S012624553252]\u4e0d\u5b58\u5728"}
-        """
-        try:
-            params = dict(kwargs)
-            api_service = request.env['sn.smt.pcb.panel.api']
-            result = api_service.sudo().api_panel_add(params)
-            return result
-        except Exception as e:
-            return {'code': 500, 'message': f'Server error: {str(e)}'}
-
-    @http.route('/api/smt/panel/query', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/v1/panels/query', type='http', auth='public',
+                methods=['POST'], csrf=False)
     def api_panel_query(self, **kwargs):
-        """
-        F-002 panel query.
-
-        Request example:
-        // Query by MES order number.
-        {"productNo": "BATCH20260525123589"}
-
-        // Query by board internal serial number.
-        {"proSn": "W23350859A01S012624553252"}
-
-        Success response:
-        {
-            "code": 200,
-            "message": "Query successful.",
-            "data": {
-                "panels": [...],
-                "total": 1
-            }
-        }
-        """
-        try:
-            params = dict(kwargs)
-            api_service = request.env['sn.smt.pcb.panel.api']
-            result = api_service.sudo().api_panel_query(params)
-            return result
-        except Exception as e:
-            return {'code': 500, 'message': f'Server error: {str(e)}'}
-
-    @http.route('/api/smt/panel/<int:panel_id>', type='http', auth='user', methods=['GET'], csrf=False)
-    def api_panel_detail(self, panel_id, **kwargs):
-        """
-        Get panel details.
-
-        GET /api/smt/panel/<panel_id>
-
-        Success response:
-        {
-            "code": 200,
-            "message": "Query successful.",
-            "data": {...}
-        }
-        """
-        try:
-            api_service = request.env['sn.smt.pcb.panel.api']
-            result = api_service.sudo().api_panel_detail(panel_id)
-        except Exception as e:
-            result = {'code': 500, 'message': f'Server error: {str(e)}'}
-        return Response(json.dumps(result), content_type='application/json')
-
-    @http.route('/api/smt/panel/<int:panel_id>', type='http', auth='user', methods=['DELETE'], csrf=False)
-    def api_panel_delete(self, panel_id, **kwargs):
-        """
-        Delete a panel record.
-
-        DELETE /api/smt/panel/<panel_id>
-
-        Success response:
-        {"code": 200, "message": "Deleted successfully."}
-        """
-        try:
-            api_service = request.env['sn.smt.pcb.panel.api']
-            result = api_service.sudo().api_panel_delete(panel_id)
-        except Exception as e:
-            result = {'code': 500, 'message': f'Server error: {str(e)}'}
-        return Response(json.dumps(result), content_type='application/json')
+        payload, error = self._body_or_error()
+        if error:
+            return error
+        return self._call(self._service().api_panel_query, payload)

@@ -7,6 +7,7 @@
             <list editable="bottom">
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="product_id"/>
+                <field name="material_specification"/>
                 <field name="operation_id"/>
                 <field name="price"/>
             </list>
@@ -21,6 +22,7 @@
                 <group>
                     <group>
                         <field name="product_id"/>
+                        <field name="material_specification"/>
                         <field name="operation_id"/>
                         <field name="price"/>
                     </group>

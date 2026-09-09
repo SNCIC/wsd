@@ -93,6 +93,7 @@ class SnWsdRepairOrder(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',
@@ -165,6 +166,10 @@ class SnWsdRepairOrder(models.Model):
         string='Replacement Product',
         check_company=True,
         index=True,
+    )
+    replacement_material_specification = fields.Char(
+        string='Replacement Material Specification',
+        related='replacement_product_id.material_specification',
     )
     board_sn = fields.Char(string='Board SN', index=True)
     defect_qty = fields.Float(string='Defect Quantity', digits='Product Unit', tracking=True)
@@ -405,9 +410,18 @@ class SnWsdRepairOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.repair.order') or _('New')
+                # coding rule first (mes-coding-rule batch 3); fall back to
+                # the legacy ir.sequence when no rule is configured
+                proxy = self.new(dict(vals, company_id=vals.get(
+                    'company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                else:
+                    vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.repair.order') or _('New')
             if not vals.get('mes_order_id'):
                 identity = self.env['sn.wsd.serial.identity'].browse(
                     vals.get('serial_identity_id')).exists() if vals.get('serial_identity_id') else self.env['sn.wsd.serial.identity']

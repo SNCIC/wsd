@@ -253,7 +253,7 @@ class TestRepair(TransactionCase):
     def test_service_scrap_flow(self):
         service = self.env['sn.wsd.repair.service']
         self._make_serial_defective(self.serial)
-        
+
         service.report('RP-SN-001', 'D01')
         service.start('RP-SN-001')
         message = service.scrap('RP-SN-001', 'SCR01')
@@ -262,6 +262,17 @@ class TestRepair(TransactionCase):
             [('serial_identity_id', '=', self.serial.id)], order='id desc', limit=1)
         self.assertEqual(order.state, 'scrapped')
         self.assertTrue(order.scrap_record_id)
+
+    def test_reference_from_coding_rule(self):
+        """mes-coding-rule batch 3: repair order references come from the
+        sn.code.rule engine (REP-<year>-<4 digit yearly counter>); the
+        legacy ir.sequence only serves as the no-rule fallback."""
+        self.env['sn.code.rule']._seed_repair_rules()
+        rule = self.env['sn.code.rule'].search([
+            ('model_id.model', '=', 'sn.wsd.repair.order')])
+        self.assertTrue(rule)
+        order = self._create_order()
+        self.assertRegex(order.name, r'^REP-\d{4}-\d{4,}$')
 
 class TestRepairDefectLines(TestRepair):
 

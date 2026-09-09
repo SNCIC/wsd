@@ -18,6 +18,7 @@
                 <field name="production_line_id"/>
                 <field name="production_id"/>
                 <field name="product_id" optional="hide"/>
+                <field name="material_specification" optional="show"/>
                 <field name="x_side" widget="badge"
                        decoration-info="x_side in ('top', 'bottom')"
                        decoration-success="x_side == 'single'"/>
@@ -79,6 +80,7 @@
                         <group string="Order">
                             <field name="production_id" readonly="1"/>
                             <field name="product_id" readonly="1"/>
+                            <field name="material_specification"/>
                             <field name="production_line_id" readonly="1"/>
                         </group>
                         <group string="Schedule">
@@ -233,6 +235,7 @@
                 <field name="date_plan"/>
                 <field name="production_id"/>
                 <field name="product_id"/>
+                <field name="material_specification"/>
                 <field name="planned_qty"/>
                 <field name="x_side"/>
                 <field name="state"/>
@@ -247,6 +250,7 @@
                                        decoration-success="x_side == 'single'"/>
                             </div>
                             <div><field name="product_id"/></div>
+                            <div class="text-muted" t-if="record.material_specification.raw_value"><field name="material_specification"/></div>
                             <div class="text-muted" t-if="record.x_partner_id.raw_value">
                                 <field name="x_partner_id"/>
                             </div>
@@ -350,6 +354,7 @@
             <list>
                 <field name="name"/>
                 <field name="product_id"/>
+                <field name="material_specification" optional="show"/>
                 <field name="x_workshop_id"/>
                 <field name="production_line_id"/>
                 <field name="production_id"/>
@@ -430,6 +435,7 @@
                     <group string="Manufacturing Order">
                         <field name="production_id" readonly="1" options="{'no_create': True}"/>
                         <field name="product_id"/>
+                        <field name="material_specification"/>
                         <field name="x_board_side" readonly="1"/>
                         <field name="product_qty"/>
                         <field name="x_side" readonly="x_board_side != 'double'"/>
