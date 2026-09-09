@@ -1,16 +1,26 @@
+import json
+
 from odoo import fields
 from odoo.exceptions import ValidationError
-from odoo.tests import TransactionCase, tagged
+from odoo.tests import HttpCase, TransactionCase, tagged
+
+from odoo.addons.sn_wsd_api.models.api_scan_pass import (
+    ApiBadRequest,
+    ApiForbidden,
+    ApiNotFound,
+    ApiUnauthorized,
+    ApiUnprocessable,
+)
 
 
-@tagged('post_install', '-at_install')
-class TestScanPass(TransactionCase):
-    """Device-API scan-pass orchestration on the unified foundation."""
+class ScanPassFixture:
+    """Shared scan-pass environment (service tests + HTTP wire tests)."""
 
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def _setup_fixture(cls):
         cls.company = cls.env.company
+        # M_DATA_AUTH resolves companies through company_registry
+        cls.company.company_registry = 'HQ'
         cls.workshop = cls.env['sn.mrp.workshop'].create({'name': 'API WS', 'code': 'APIWS'})
         cls.line = cls.env['sn.mrp.production.line'].create({
             'name': 'APIL', 'code': 'APIL', 'workshop_id': cls.workshop.id})
@@ -65,7 +75,21 @@ class TestScanPass(TransactionCase):
         payload.update(kw)
         return payload
 
+
+@tagged('post_install', '-at_install')
+class TestScanPass(ScanPassFixture, TransactionCase):
+    """Device-API scan-pass orchestration on the unified foundation."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
     def test_01_validation_gates(self):
+        with self.assertRaises(ValidationError):
+            self.service.scan_pass(self._payload(M_DATA_AUTH=''))
+        with self.assertRaises(ValidationError):
+            self.service.scan_pass(self._payload(M_DATA_AUTH='GHOST-ORG'))
         with self.assertRaises(ValidationError):
             self.service.scan_pass(self._payload(M_EMP='nobody'))
         with self.assertRaises(ValidationError):
@@ -149,7 +173,8 @@ class TestScanPass(TransactionCase):
         action = wizard.action_generate()
         self.assertEqual(len(action['domain'][0][2]), 3)
         # next-sn service
-        result = self.service.request_next_sn({'M_WORK_STATIONSN': 'APIWCIN'})
+        result = self.service.request_next_sn(
+            {'M_DATA_AUTH': 'HQ', 'M_WORK_STATIONSN': 'APIWCIN'})
         self.assertTrue(result['ok'])
 
     def test_08_panel_fanout(self):
@@ -288,6 +313,8 @@ class TestScanPass(TransactionCase):
             result['test_result_id'])
         self.assertEqual(test_result.defect_code_id, self.defect)
         self.assertTrue(test_result.is_ng)
+        # semantic mirror columns carry the verbatim upload
+        self.assertEqual(test_result.defect_code_raw, 'APID')
 
     def test_12_binding_is_current_lifecycle(self):
         """Rebinding demotes the old row; rebinding an earlier pair back
@@ -348,3 +375,581 @@ class TestScanPass(TransactionCase):
         action = station.action_open_source()
         self.assertEqual(action['res_model'], station.source_model)
         self.assertEqual(action['res_id'], station.source_id)
+
+    def test_14_company_resolution(self):
+        """M_DATA_AUTH maps to companies through company_registry; empty and
+        unknown organizations are rejected before any business side effect."""
+        self.assertEqual(self.service._resolve_company('HQ'), self.company)
+        other = self.env['res.company'].create({
+            'name': 'API Other Co', 'company_registry': 'ORG2'})
+        self.assertEqual(self.service._resolve_company('ORG2'), other)
+        # the resolved company scopes the whole call: identities are looked
+        # up / created inside it
+        result = self.service.scan_pass(self._payload(M_SN='SN-API-ORG'))
+        identity = self.env['sn.wsd.serial.identity'].search([
+            ('name', '=', 'SN-API-ORG')])
+        self.assertTrue(result['ok'])
+        self.assertEqual(identity.company_id, self.company)
+
+
+@tagged('post_install', '-at_install')
+class TestScanPassHttp(ScanPassFixture, HttpCase):
+    """Controller wire format: plain JSON POST, no authentication, uniform
+    response shell, old paths gone."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _post(self, path, body):
+        return self.url_open(
+            path, data=body, headers={'Content-Type': 'application/json'})
+
+    def test_20_wire(self):
+        # legacy path removed
+        res = self._post('/api/v1/scan-pass', '{}')
+        self.assertEqual(res.status_code, 404)
+        # non-JSON body -> uniform 400 shell
+        res = self._post('/api/v1/workorders/scan-pass', 'not-json')
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.json()['code'], 400)
+        # missing organization -> business 400, reached without credentials
+        # (error messages render in Chinese over HTTP)
+        res = self._post('/api/v1/workorders/scan-pass', json.dumps({}))
+        body = res.json()
+        self.assertEqual(body['code'], 400)
+        self.assertIn('组织机构为空', body['message'])
+        # happy path: no token header, plain JSON body
+        res = self._post('/api/v1/workorders/scan-pass', json.dumps(
+            self._payload(M_SN='SN-HTTP-01')))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['code'], 200)
+        self.assertTrue(body['data']['ok'])
+
+    def test_21_next_sn_wire(self):
+        res = self._post('/api/v1/next-sn', json.dumps(
+            {'M_DATA_AUTH': 'HQ', 'M_WORK_STATIONSN': 'APIWCIN'}))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['code'], 200)
+        self.assertTrue(body['data']['ok'])
+        self.assertTrue(body['data']['sn'])
+
+
+def _aoi_payload(**kw):
+    payload = {
+        'productSn': 'SN-AOI-001',
+        'machineName': 'APIWCIN',
+        'type': '接口',
+        'retestResult': '失数',
+        'stationResult': 'OK',
+        'stationInfo': 'OK:过站成功',
+        'testTime': '2026-06-10T17:13:08',
+        'createTime': '2026-06-10T17:13:08',
+        'fileName': 'LCAO1-3',
+        'operator': 'APIOP',
+        'defectDetails': [],
+    }
+    payload.update(kw)
+    return payload
+
+
+def _aoi_defect(confirmed='误报', code='LCAO1-3', name='反件', part='R101'):
+    return {
+        'partId': part,
+        'position': 'X=12.5,Y=34.2',
+        'defectCode': code,
+        'defectName': name,
+        'confirmedResult': confirmed,
+        'imagePath': '/aoi/images/x_R101.jpg',
+    }
+
+
+@tagged('post_install', '-at_install')
+class TestAoiResults(ScanPassFixture, TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def test_01_ok_pass_verbatim_details(self):
+        result = self.service.submit_aoi_result(_aoi_payload(
+            productSn='SN-AOI-OK',
+            defectDetails=[_aoi_defect(confirmed='误报')]))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.test_type, 'aoi')
+        self.assertEqual(test_result.result, 'ok')
+        self.assertEqual(test_result.note, 'OK:过站成功')
+        self.assertEqual(test_result.tester_channel, 'LCAO1-3')
+        self.assertEqual(test_result.workcenter_id, self.wc_in)
+        # verbatim defect line, no dictionary validation
+        line = test_result.aoi_defect_detail_ids
+        self.assertEqual(len(line), 1)
+        self.assertEqual(line.part_id, 'R101')
+        self.assertEqual(line.defect_code, 'LCAO1-3')
+        self.assertEqual(line.confirmed_result, '误报')
+        self.assertFalse(test_result.defect_code_id)
+
+    def test_02_ng_primary_defect_from_confirmed(self):
+        result = self.service.submit_aoi_result(_aoi_payload(
+            productSn='SN-AOI-NG', stationResult='NG',
+            defectDetails=[
+                _aoi_defect(confirmed='误报', part='C22'),
+                _aoi_defect(confirmed='确认不良', code='APID', part='R101'),
+                _aoi_defect(confirmed='确认不良', code='OTHER', part='D5'),
+            ]))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.result, 'ng')
+        self.assertEqual(test_result.defect_code_id, self.defect)
+        self.assertEqual(len(test_result.aoi_defect_detail_ids), 3)
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id', '=', test_result.serial_identity_id.id)])
+        self.assertEqual(history.result, 'ng')
+        self.assertEqual(history.defect_code_id, self.defect)
+
+    def test_03_ng_without_confirmed_rejected(self):
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.submit_aoi_result(_aoi_payload(
+                stationResult='NG', productSn='SN-AOI-NG2',
+                defectDetails=[_aoi_defect(confirmed='误报')]))
+        self.assertIn('confirmed defect', str(ctx.exception))
+
+    def test_04_ng_unknown_defect_code_rejected(self):
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.submit_aoi_result(_aoi_payload(
+                stationResult='NG', productSn='SN-AOI-NG3',
+                defectDetails=[_aoi_defect(confirmed='确认不良', code='NOPE')]))
+        self.assertIn('Defect code NOPE', str(ctx.exception))
+
+    def test_05_missing_required_fields(self):
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.submit_aoi_result(_aoi_payload(stationInfo=''))
+        self.assertEqual(str(ctx.exception),
+                         'Missing required field: stationInfo')
+        bad_detail = _aoi_defect(confirmed='确认不良')
+        bad_detail['defectCode'] = ''
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.submit_aoi_result(_aoi_payload(
+                stationResult='NG', productSn='SN-AOI-NG4',
+                defectDetails=[bad_detail]))
+        self.assertEqual(
+            str(ctx.exception),
+            'Missing required field: defectDetails[0].defectCode')
+
+    def test_06_result_must_be_ok_or_ng(self):
+        with self.assertRaises(ValidationError):
+            self.service.submit_aoi_result(_aoi_payload(
+                stationResult='HOLD', productSn='SN-AOI-H'))
+
+    def test_07_invalid_time_rejected(self):
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.submit_aoi_result(_aoi_payload(
+                testTime='2026-13-99', productSn='SN-AOI-T'))
+        self.assertIn('Invalid testTime', str(ctx.exception))
+
+    def test_08_unknown_machine_rejected(self):
+        with self.assertRaises(ValidationError):
+            self.service.submit_aoi_result(_aoi_payload(
+                machineName='NOWC', productSn='SN-AOI-M'))
+
+    def test_09_log_code_idempotent(self):
+        payload = _aoi_payload(productSn='SN-AOI-IDEM', logCode='LOG-AOI-1',
+                               defectDetails=[_aoi_defect()])
+        first = self.service.submit_aoi_result(dict(payload))
+        second = self.service.submit_aoi_result(dict(payload))
+        self.assertEqual(first['test_result_id'], second['test_result_id'])
+        results = self.env['sn.wsd.mes.test.result'].search([
+            ('external_event_id', '=', 'LOG-AOI-1')])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results.aoi_defect_detail_ids), 1)
+        # the resent upload must not pass the station a second time
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-AOI-IDEM')])
+        self.assertEqual(len(history), 1)
+
+    def test_10_panel_fanout(self):
+        self.route.x_process_type = 'smt'
+        Identity = self.env['sn.wsd.serial.identity']
+        for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+            Identity.get_or_create(sn, self.company, origin_type='laser')
+        self.env['sn.smt.pcb.panel'].create({
+            'production_id': self.production.id,
+            'product_no': 'DWG-API', 'quantity': 2,
+            'board_ids': [
+                (0, 0, {'board_no': 1, 'pro_sn': 'SN-AOI-P1'}),
+                (0, 0, {'board_no': 2, 'pro_sn': 'SN-AOI-P2'}),
+            ],
+            'state': 'confirmed',
+        })
+        result = self.service.submit_aoi_result(_aoi_payload(
+            productSn='SN-AOI-P1'))
+        self.assertTrue(result['ok'])
+        for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+            history = self.env['sn.wsd.serial.operation.history'].search([
+                ('serial_identity_id.name', '=', sn)])
+            self.assertEqual(history.result, 'ok', sn)
+
+
+@tagged('post_install', '-at_install')
+class TestAoiResultsHttp(ScanPassFixture, HttpCase):
+    """AOI controller wire format: 201 + success message, contract error
+    shell."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _post(self, body):
+        return self.url_open(
+            '/api/v1/aoi/results', data=body,
+            headers={'Content-Type': 'application/json'})
+
+    def test_20_wire(self):
+        res = self._post(json.dumps(_aoi_payload(productSn='SN-AOI-HTTP')))
+        body = res.json()
+        self.assertEqual(res.status_code, 201)
+        self.assertEqual(body['code'], 200)
+        self.assertEqual(body['message'], 'success')
+        self.assertEqual(body['data'], {})
+        # missing field -> contract error shell
+        res = self._post(json.dumps(_aoi_payload(stationInfo='')))
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.json()['message'],
+                         'Missing required field: stationInfo')
+        # NG without a confirmed defect -> graded business rejection
+        res = self._post(json.dumps(_aoi_payload(
+            productSn='SN-AOI-HTTP-NG', stationResult='NG',
+            defectDetails=[_aoi_defect(confirmed='误报')])))
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(res.json()['code'], 422)
+
+
+@tagged('post_install', '-at_install')
+class TestLaserPrint(ScanPassFixture, TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _laser(self, **kw):
+        payload = {
+            'M_DATA_AUTH': 'HQ',
+            'workOrderNo': self.production.name,
+            'quantity': 3,
+            'operator': 'APIOP',
+        }
+        payload.update(kw)
+        return payload
+
+    def test_01_batch_reservation(self):
+        result = self.service.submit_laser_print_request(self._laser())
+        self.assertTrue(result['ok'])
+        self.assertEqual(len(result['productSnList']), 3)
+        self.assertEqual(result['panelQty'], 0)
+        identities = self.env['sn.wsd.serial.identity'].search([
+            ('name', 'in', result['productSnList'])])
+        self.assertEqual(len(identities), 3)
+        self.assertEqual(
+            set(identities.mapped('origin_production_id').ids),
+            {self.production.id})
+        self.assertEqual(set(identities.mapped('origin_type')), {'laser'})
+
+    def test_02_auto_panel_with_short_tail(self):
+        result = self.service.submit_laser_print_request(
+            self._laser(quantity=10, panelQty=4))
+        serials = result['productSnList']
+        panels = self.env['sn.smt.pcb.panel'].search([
+            ('production_id', '=', self.production.id)])
+        self.assertEqual(len(panels), 3)  # 4 + 4 + short tail 2
+        quantities = panels.sorted('id').mapped('quantity')
+        self.assertEqual(quantities, [4, 4, 2])
+        self.assertEqual(
+            panels.sorted('id')[0].board_ids.sorted('board_no').mapped('pro_sn'),
+            serials[0:4])
+        self.assertEqual(
+            panels.sorted('id')[2].board_ids.sorted('board_no').mapped('pro_sn'),
+            serials[8:10])
+        self.assertEqual(set(panels.mapped('state')), {'confirmed'})
+        # the auto panels feed the scan-pass fan-out
+        self.route.x_process_type = 'smt'
+        fanout = self.service.scan_pass(self._payload(M_SN=serials[0]))
+        self.assertEqual(fanout['panel_qty'], 4)
+
+    def test_03_unknown_work_order(self):
+        with self.assertRaises(ApiNotFound) as ctx:
+            self.service.submit_laser_print_request(
+                self._laser(workOrderNo='NOPE-MO'))
+        self.assertIn('NOPE-MO', str(ctx.exception))
+
+    def test_04_quantity_guards(self):
+        for bad in (0, -1, 'abc', 10001):
+            with self.assertRaises(ApiUnprocessable):
+                self.service.submit_laser_print_request(
+                    self._laser(quantity=bad))
+        with self.assertRaises(ApiUnprocessable):
+            self.service.submit_laser_print_request(
+                self._laser(panelQty=-2))
+        with self.assertRaises(ApiBadRequest):
+            self.service.submit_laser_print_request(
+                self._laser(M_DATA_AUTH=''))
+        with self.assertRaises(ApiBadRequest):
+            self.service.submit_laser_print_request(
+                self._laser(workOrderNo=''))
+        with self.assertRaises(ApiNotFound):
+            self.service.submit_laser_print_request(
+                self._laser(operator='nobody'))
+
+    def test_05_never_repeats_across_sources(self):
+        first = self.order.generate_sn().name
+        result = self.service.submit_laser_print_request(self._laser())
+        again = self.order.generate_sn().name
+        all_sns = [first] + result['productSnList'] + [again]
+        self.assertEqual(len(all_sns), len(set(all_sns)))
+
+
+@tagged('post_install', '-at_install')
+class TestLaserPrintHttp(ScanPassFixture, HttpCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _post(self, body):
+        return self.url_open(
+            '/api/v1/laser/print-requests', data=body,
+            headers={'Content-Type': 'application/json'})
+
+    def test_20_wire(self):
+        res = self._post(json.dumps({
+            'M_DATA_AUTH': 'HQ',
+            'workOrderNo': self.production.name,
+            'quantity': 5,
+            'panelQty': 2,
+            'operator': 'APIOP',
+        }))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['code'], 200)
+        self.assertEqual(body['message'], 'OK')
+        self.assertEqual(len(body['data']['productSnList']), 5)
+        self.assertEqual(body['data']['quantity'], 5)
+        self.assertEqual(body['data']['panelQty'], 2)
+        # graded errors with Chinese messages
+        res = self._post(json.dumps({
+            'M_DATA_AUTH': 'HQ', 'workOrderNo': 'NOPE-MO',
+            'quantity': 5, 'operator': 'APIOP'}))
+        self.assertEqual(res.status_code, 404)
+        self.assertIn('制造订单', res.json()['message'])
+        res = self._post(json.dumps({
+            'M_DATA_AUTH': 'HQ', 'workOrderNo': self.production.name,
+            'quantity': 0, 'operator': 'APIOP'}))
+        self.assertEqual(res.status_code, 422)
+        self.assertIn('数量', res.json()['message'])
+        res = self._post(json.dumps({
+            'workOrderNo': self.production.name,
+            'quantity': 5, 'operator': 'APIOP'}))
+        self.assertEqual(res.status_code, 400)
+        self.assertIn('组织机构为空', res.json()['message'])
+
+
+@tagged('post_install', '-at_install')
+class TestAuthCheck(ScanPassFixture, TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+        cls.auth_user = cls.env['res.users'].create({
+            'name': 'API Auth User',
+            'login': 'apiauth',
+            'password': 'auth-pw-1',
+            'email': 'apiauth@example.com',
+        })
+        cls.auth_employee = cls.env['hr.employee'].create({
+            'name': 'API Auth Op', 'user_id': cls.auth_user.id,
+            'barcode': 'APIAUTH',
+        })
+
+    def _auth(self, **kw):
+        payload = {'M_DATA_AUTH': 'HQ'}
+        payload.update(kw)
+        return payload
+
+    def test_01_login_ok(self):
+        result = self.service.auth_check(
+            self._auth(userName='apiauth'), {'password': 'auth-pw-1'})
+        self.assertEqual(result['userName'], 'apiauth')
+        self.assertEqual(result['employeeName'], 'API Auth Op')
+
+    def test_02_probe(self):
+        self.assertEqual(self.service.auth_check(self._auth(), {}), {})
+
+    def test_03_wrong_password(self):
+        with self.assertRaises(ApiUnauthorized):
+            self.service.auth_check(
+                self._auth(userName='apiauth'), {'password': 'nope'})
+
+    def test_04_missing_fields(self):
+        with self.assertRaises(ApiBadRequest):
+            self.service.auth_check(self._auth(), {'password': 'x'})
+        with self.assertRaises(ApiBadRequest):
+            self.service.auth_check(self._auth(userName='apiauth'), {})
+        with self.assertRaises(ApiBadRequest):
+            self.service.auth_check({'userName': 'apiauth'}, {'password': 'x'})
+
+    def test_05_user_without_employee(self):
+        self.env['res.users'].create({
+            'name': 'No Emp User', 'login': 'apinoemp',
+            'password': 'auth-pw-2'})
+        with self.assertRaises(ApiNotFound):
+            self.service.auth_check(
+                self._auth(userName='apinoemp'), {'password': 'auth-pw-2'})
+
+    def test_06_user_not_in_company(self):
+        other = self.env['res.company'].create({'name': 'AUTH Other'})
+        outsider = self.env['res.users'].create({
+            'name': 'Outsider', 'login': 'apiout', 'password': 'auth-pw-3'})
+        outsider.write({
+            'company_ids': [(6, 0, [other.id])], 'company_id': other.id})
+        self.env['hr.employee'].create({
+            'name': 'Outsider Emp', 'user_id': outsider.id})
+        with self.assertRaises(ApiForbidden):
+            self.service.auth_check(
+                self._auth(userName='apiout'), {'password': 'auth-pw-3'})
+
+
+@tagged('post_install', '-at_install')
+class TestAuthCheckHttp(ScanPassFixture, HttpCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+        cls.auth_user = cls.env['res.users'].create({
+            'name': 'API Auth User',
+            'login': 'apiauth',
+            'password': 'auth-pw-1',
+            'email': 'apiauth@example.com',
+        })
+        cls.env['hr.employee'].create({
+            'name': 'API Auth Op', 'user_id': cls.auth_user.id})
+
+    def _post(self, body):
+        return self.url_open(
+            '/api/v1/auth/check', data=body,
+            headers={'Content-Type': 'application/json'})
+
+    def test_20_wire_and_redaction(self):
+        # probe
+        res = self._post(json.dumps({'M_DATA_AUTH': 'HQ'}))
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json()['data'], {})
+        # successful login
+        res = self._post(json.dumps(
+            {'M_DATA_AUTH': 'HQ', 'userName': 'apiauth',
+             'password': 'auth-pw-1'}))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['data']['employeeName'], 'API Auth Op')
+        # graded 401 with Chinese message
+        res = self._post(json.dumps(
+            {'M_DATA_AUTH': 'HQ', 'userName': 'apiauth',
+             'password': 'wrong'}))
+        self.assertEqual(res.status_code, 401)
+        self.assertIn('账号或密码', res.json()['message'])
+        # failure records persist despite the business rollback, and the
+        # stored password is the redacted copy
+        log = self.env['sn.wsd.api.request.log'].search(
+            [('endpoint', '=', '/api/v1/auth/check')], limit=1)
+        self.assertEqual(log.result_code, '401')
+        self.assertEqual(log.payload.get('password'), '***')
+
+
+@tagged('post_install', '-at_install')
+class TestDictSearch(ScanPassFixture, TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def test_01_mes_orders_by_work_order(self):
+        result = self.service.search_mes_orders(
+            {'M_DATA_AUTH': 'HQ', 'work_order': self.production.name})
+        self.assertIn(self.order.name, result)
+        result = self.service.search_mes_orders(
+            {'M_DATA_AUTH': 'HQ', 'work_order': 'NO-SUCH-MO'})
+        self.assertEqual(result, [])
+        with self.assertRaises(ApiBadRequest):
+            self.service.search_mes_orders({'M_DATA_AUTH': 'HQ'})
+        with self.assertRaises(ApiBadRequest):
+            self.service.search_mes_orders({'work_order': self.production.name})
+        with self.assertRaises(ApiNotFound):
+            self.service.search_mes_orders(
+                {'M_DATA_AUTH': 'GHOST', 'work_order': self.production.name})
+
+    def test_02_work_centers(self):
+        result = self.service.search_work_centers(
+            {'M_DATA_AUTH': 'HQ', 'work_station': 'APIWC'})
+        self.assertIn(['APIWCIN', 'API-WC-IN'], result)
+        result = self.service.search_work_centers({'M_DATA_AUTH': 'HQ'})
+        self.assertTrue(
+            any(pair[0] == 'APIWCIN' for pair in result))
+
+    def test_03_defect_codes(self):
+        result = self.service.search_defect_codes(
+            {'M_DATA_AUTH': 'HQ', 'err_name': 'APID'})
+        self.assertIn(['APID', 'API Defect'], result)
+        result = self.service.search_defect_codes({'M_DATA_AUTH': 'HQ'})
+        self.assertTrue(
+            any(pair[0] == 'APID' for pair in result))
+
+
+@tagged('post_install', '-at_install')
+class TestDictSearchHttp(ScanPassFixture, HttpCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _post(self, path, body):
+        return self.url_open(
+            path, data=body, headers={'Content-Type': 'application/json'})
+
+    def test_20_wire(self):
+        # MES orders: flat string array with device-contract message
+        res = self._post('/api/v1/manufacturing-orders/by-work-order',
+                         json.dumps({'M_DATA_AUTH': 'HQ',
+                                     'work_order': self.production.name}))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['message'], 'success')
+        self.assertIn(self.order.name, body['data'])
+        self.assertTrue(all(isinstance(item, str) for item in body['data']))
+        # work centers: 2D array, empty keyword = full list
+        res = self._post('/api/v1/work-centers/search',
+                         json.dumps({'M_DATA_AUTH': 'HQ'}))
+        body = res.json()
+        self.assertEqual(body['message'], 'success')
+        self.assertTrue(all(len(pair) == 2 for pair in body['data']))
+        # defect codes: 2D array
+        res = self._post('/api/v1/defect-codes/search',
+                         json.dumps({'M_DATA_AUTH': 'HQ', 'err_name': 'APID'}))
+        body = res.json()
+        self.assertIn(['APID', 'API Defect'], body['data'])
+        # missing work_order -> graded Chinese 400
+        res = self._post('/api/v1/manufacturing-orders/by-work-order',
+                         json.dumps({'M_DATA_AUTH': 'HQ'}))
+        self.assertEqual(res.status_code, 400)
+        self.assertIn('work_order', res.json()['message'])

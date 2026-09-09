@@ -26,15 +26,8 @@ PAYLOAD_TO_FIELD = {
     'M_BOX_SN': 'box_sn',
     'M_SECOND_SN': 'pallet_sn',
     'M_STR1': 'internal_code',
-    'M_STR2': 'm_str2',
-    'M_STR3': 'm_str3',
-    'M_STR4': 'm_str4',
-    'M_STR5': 'm_str5',
-    'M_STR6': 'm_str6',
-    'M_STR7': 'm_str7',
-    'M_STR8': 'm_str8',
-    'M_STR9': 'm_str9',
-    'M_STR10': 'm_str10',
+    'M_STR2': 'defect_code_raw',
+    'M_STR5': 'assembly_crc',
     'M_PACK_LEFT_SEAL': 'pack_left_seal',
     'M_PACK_LEFT_SEAL_RF': 'pack_left_seal_rf',
     'M_PACK_RIGHT_SEAL': 'pack_right_seal',
@@ -86,15 +79,12 @@ class MesTestResultInterfaceColumns(models.Model):
     internal_code = fields.Char(
         string='Nameplate Code', index=True,
         help='Verbatim uploaded form field M_STR1 (nameplate scanned with this pass).')
-    m_str2 = fields.Char(help='Verbatim uploaded form field M_STR2 (defect code).')
-    m_str3 = fields.Char(help='Verbatim uploaded form field M_STR3.')
-    m_str4 = fields.Char(help='Verbatim uploaded form field M_STR4.')
-    m_str5 = fields.Char(help='Verbatim uploaded form field M_STR5.')
-    m_str6 = fields.Char(help='Verbatim uploaded form field M_STR6.')
-    m_str7 = fields.Char(help='Verbatim uploaded form field M_STR7.')
-    m_str8 = fields.Char(help='Verbatim uploaded form field M_STR8.')
-    m_str9 = fields.Char(help='Verbatim uploaded form field M_STR9.')
-    m_str10 = fields.Char(help='Verbatim uploaded form field M_STR10.')
+    defect_code_raw = fields.Char(
+        string='Defect Code', index=True,
+        help='Verbatim uploaded form field M_STR2 (defect code).')
+    assembly_crc = fields.Char(
+        string='Assembly CRC', index=True,
+        help='Verbatim uploaded form field M_STR5 (assembly check code).')
     pack_left_seal = fields.Char(help='Verbatim uploaded form field M_PACK_LEFT_SEAL.')
     pack_left_seal_rf = fields.Char(help='Verbatim uploaded form field M_PACK_LEFT_SEAL_RF.')
     pack_right_seal = fields.Char(help='Verbatim uploaded form field M_PACK_RIGHT_SEAL.')

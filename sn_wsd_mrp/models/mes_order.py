@@ -2002,23 +2002,11 @@ class MesOrder(models.Model):
             order.picking_count = len(order.picking_ids)
 
     def _sn_sequence(self):
-        """SN numbering sequence of this order's product: drawing-number
-        prefix + serial. The prefix stays empty until drawing numbers are
-        configured (test phase)."""
+        """SN numbering sequence of this order's product (the product-level
+        shared sequence; the prefix stays empty until drawing numbers are
+        configured, test phase)."""
         self.ensure_one()
-        production = self.production_id
-        prefix = production.product_id.default_code or ''
-        code = 'sn.wsd.serial.identity.product.%s' % production.product_id.id
-        sequence = self.env['ir.sequence'].sudo().search([('code', '=', code)], limit=1)
-        if not sequence:
-            sequence = self.env['ir.sequence'].sudo().create({
-                'name': 'SN %s' % production.display_name,
-                'code': code,
-                'prefix': prefix,
-                'padding': 5,
-                'company_id': production.company_id.id,
-            })
-        return sequence
+        return self.production_id._sn_product_sequence()
 
     def generate_sn(self):
         """Reserve the next SN identity for this order (device calls the

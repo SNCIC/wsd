@@ -29,6 +29,12 @@ msgid "API path, e.g. /api/v1/scan-pass"
 msgstr "API 路径，如 /api/v1/scan-pass"
 
 #. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Account %s does not belong to this organization."
+msgstr "账号 %s 不属于该组织机构。"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__actual_value
 msgid "Actual Value"
 msgstr "实际值"
@@ -42,6 +48,11 @@ msgstr "老化"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aging_temp_c
 msgid "Aging Temp C"
 msgstr "老化温度 (°C)"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__assembly_crc
+msgid "Assembly CRC"
+msgstr "组装校验码(CRC)"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__basic_error
@@ -59,9 +70,15 @@ msgid "Calibration"
 msgstr "校准"
 
 #. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+msgid "Confirmed Defect"
+msgstr "确认不良"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__company_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__company_id
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__company_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -174,6 +191,7 @@ msgstr "最终测试"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "Group By"
 msgstr "分组"
 
@@ -203,6 +221,12 @@ msgid "Inspection"
 msgstr "检验单号"
 
 #. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Invalid account or password."
+msgstr "账号或密码错误。"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_uid
@@ -229,6 +253,7 @@ msgstr "下限"
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
 
@@ -269,9 +294,39 @@ msgid "Manufacturing Order"
 msgstr "制造订单"
 
 #. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Manufacturing order %s does not exist."
+msgstr "制造订单 %s 不存在。"
+
+#. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Measurements"
 msgstr "测量值"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: password"
+msgstr "缺少必填字段：password"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: userName"
+msgstr "缺少必填字段：userName"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: workOrderNo"
+msgstr "缺少必填字段：workOrderNo"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Missing required field: work_order"
+msgstr "缺少必填字段：work_order"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
@@ -288,6 +343,12 @@ msgstr "NG"
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Name"
 msgstr "名称"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "No SN sequence is configured."
+msgstr "未配置 SN 序列。"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -315,6 +376,18 @@ msgid "Operator Code"
 msgstr "操作员代码"
 
 #. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Organization %s does not exist."
+msgstr "组织机构 %s 不存在。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Organization is empty."
+msgstr "组织机构为空。"
+
+#. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Order / Station"
 msgstr "工单/工位"
@@ -328,6 +401,12 @@ msgstr "解析前的原始数据"
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__packaging
 msgid "Packaging"
 msgstr "包装"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Panel quantity must be a positive integer."
+msgstr "拼版数量必须为正整数。"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__payload
@@ -366,6 +445,12 @@ msgstr "编程"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__project_name
 msgid "Project Name"
 msgstr "项目名称"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Quantity must be a positive integer no greater than %s."
+msgstr "数量必须为不超过 %s 的正整数。"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
@@ -442,6 +527,8 @@ msgstr "返工过站"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__serial_identity_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "SN"
 msgstr "SN"
 
@@ -489,6 +576,7 @@ msgstr "SN不能为空。"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__sequence
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__sequence
 msgid "Sequence"
 msgstr "序号"
 
@@ -511,6 +599,7 @@ msgstr "测试项"
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__test_result
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_result_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_result_id
 msgid "Test Result"
 msgstr "测试结果"
 
@@ -524,6 +613,7 @@ msgstr "测试结果"
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_time
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_time
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_time
 msgid "Test Time"
 msgstr "测试时间"
 
@@ -583,6 +673,8 @@ msgstr "上限"
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__workcenter_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "Work Center"
 msgstr "工作中心"
 
@@ -668,6 +760,7 @@ msgstr "测试项明细"
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "Today"
 msgstr "今天"
 
@@ -1155,3 +1248,75 @@ msgstr "共计"
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "rows"
 msgstr "条"
+
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aoi
+msgid "AOI"
+msgstr "AOI检测"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_aoi_defect_detail
+msgid "AOI Defect Detail"
+msgstr "AOI 缺陷明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_detail_ids
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_aoi_defect_detail
+#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_aoi_defect_detail
+msgid "AOI Defect Details"
+msgstr "AOI 缺陷明细"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "AOI Defects"
+msgstr "AOI 缺陷"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
+msgid "Defect Code"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_name
+msgid "Defect Name"
+msgstr "缺陷名称"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__image_path
+msgid "Image Path"
+msgstr "图片路径"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Invalid %s: expected ISO 8601 datetime."
+msgstr "无效的 %s：应为 ISO 8601 日期时间。"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "NG result requires a confirmed defect detail."
+msgstr "NG 结果需要至少一条确认不良的缺陷明细。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__part_id
+msgid "Part ID"
+msgstr "位号"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__position
+msgid "Position"
+msgstr "坐标位置"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__confirmed_result
+msgid "Confirmed Result"
+msgstr "确认结果"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__payload
+msgid "Raw Detail"
+msgstr "原始明细"

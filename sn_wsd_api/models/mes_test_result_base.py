@@ -38,7 +38,7 @@ class MesTestResultBase(models.Model):
     line_code = fields.Char(index=True)
     workcenter_code = fields.Char(index=True)
     test_type = fields.Selection(
-        [('programming', 'Programming'), ('inspection', 'Inspection'), ('aging', 'Aging'), ('calibration', 'Calibration'), ('final_test', 'Final Test'), ('packaging', 'Packaging')],
+        [('programming', 'Programming'), ('inspection', 'Inspection'), ('aging', 'Aging'), ('calibration', 'Calibration'), ('aoi', 'AOI'), ('final_test', 'Final Test'), ('packaging', 'Packaging')],
         required=True, default='final_test', index=True,
     )
     test_time = fields.Datetime(required=True, default=fields.Datetime.now, index=True)
@@ -66,6 +66,8 @@ class MesTestResultBase(models.Model):
 
     detail_ids = fields.One2many(
         'sn.wsd.mes.test.result.detail', 'test_result_id', string='Test Items')
+    aoi_defect_detail_ids = fields.One2many(
+        'sn.wsd.aoi.defect.detail', 'test_result_id', string='AOI Defect Details')
     retry_sequence = fields.Integer(string='Retry Sequence', default=0, index=True)
     retry_limit = fields.Integer(string='Retry Limit', default=0)
     requires_repair = fields.Boolean(string='Requires Repair', default=False, index=True)

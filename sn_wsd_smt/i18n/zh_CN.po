@@ -586,12 +586,6 @@ msgid "DIRECTION"
 msgstr "进料方向"
 
 #. module: sn_wsd_smt
-#. odoo-python
-#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
-msgid "Deleted successfully."
-msgstr "删除成功。"
-
-#. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_config__description
 msgid "Description"
 msgstr "描述"
@@ -3171,8 +3165,14 @@ msgstr "请提供 productNo 或 proSn 进行查询。"
 #. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
-msgid "Panel %s does not exist."
-msgstr "拼版 %s 不存在。"
+msgid "Organization %s does not exist."
+msgstr "组织机构 %s 不存在。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_pcb_panel_api.py:0
+msgid "Organization is empty."
+msgstr "组织机构为空。"
 
 #. module: sn_wsd_smt
 #. odoo-python

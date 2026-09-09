@@ -768,3 +768,22 @@ class MrpProduction(models.Model):
             'domain': [('production_id', '=', self.id)],
             'context': {'default_production_id': self.id},
         }
+
+    def _sn_product_sequence(self):
+        """SN numbering sequence of this product: drawing-number prefix +
+        serial. Shared by the order-form batch button, the next-sn endpoint
+        and the laser print-requests endpoint, so numbers never repeat
+        across MES orders of the same product."""
+        self.ensure_one()
+        prefix = self.product_id.default_code or ''
+        code = 'sn.wsd.serial.identity.product.%s' % self.product_id.id
+        sequence = self.env['ir.sequence'].sudo().search([('code', '=', code)], limit=1)
+        if not sequence:
+            sequence = self.env['ir.sequence'].sudo().create({
+                'name': 'SN %s' % self.display_name,
+                'code': code,
+                'prefix': prefix,
+                'padding': 5,
+                'company_id': self.company_id.id,
+            })
+        return sequence

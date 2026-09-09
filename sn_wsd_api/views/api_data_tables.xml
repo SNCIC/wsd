@@ -39,15 +39,8 @@
                 <field name="table_position" optional="hide"/>
                 <field name="collaborator_code" optional="hide"/>
                 <field name="code_id" optional="hide"/>
-                <field name="m_str2" optional="hide"/>
-                <field name="m_str3" optional="hide"/>
-                <field name="m_str4" optional="hide"/>
-                <field name="m_str5" optional="hide"/>
-                <field name="m_str6" optional="hide"/>
-                <field name="m_str7" optional="hide"/>
-                <field name="m_str8" optional="hide"/>
-                <field name="m_str9" optional="hide"/>
-                <field name="m_str10" optional="hide"/>
+                <field name="defect_code_raw" optional="hide"/>
+                <field name="assembly_crc" optional="hide"/>
                 <field name="pack_left_seal" optional="hide"/>
                 <field name="pack_left_seal_rf" optional="hide"/>
                 <field name="pack_right_seal" optional="hide"/>
@@ -120,6 +113,19 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="AOI Defects" invisible="test_type != 'aoi'">
+                            <field name="aoi_defect_detail_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="part_id"/>
+                                    <field name="position" optional="hide"/>
+                                    <field name="defect_code"/>
+                                    <field name="defect_name"/>
+                                    <field name="confirmed_result"/>
+                                    <field name="image_path" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
                         <page string="Raw Payload">
                             <group>
                                 <field name="payload" readonly="1"/>
@@ -145,6 +151,9 @@
         <field name="arch" type="xml">
             <search>
                 <field name="serial_identity_id"/>
+                <field name="internal_code"/>
+                <field name="defect_code_raw"/>
+                <field name="assembly_crc"/>
                 <field name="mes_order_id"/>
                 <field name="production_id"/>
                 <field name="workcenter_id"/>
@@ -263,6 +272,62 @@
     <menuitem id="menu_sn_wsd_test_result_detail" name="Test Item Details"
               parent="sn_wsd_mrp.menu_sn_wsd_traceability"
               action="action_sn_wsd_test_result_detail" sequence="13"/>
+
+    <!-- ================================================================
+         AOI defect details: standalone list (verbatim device lines)
+         ================================================================ -->
+    <record id="view_sn_wsd_aoi_defect_detail_list" model="ir.ui.view">
+        <field name="name">sn.wsd.aoi.defect.detail.list.api</field>
+        <field name="model">sn.wsd.aoi.defect.detail</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="test_time" optional="hide"/>
+                <field name="serial_identity_id"/>
+                <field name="mes_order_id" optional="hide"/>
+                <field name="workcenter_id" optional="hide"/>
+                <field name="part_id"/>
+                <field name="position" optional="hide"/>
+                <field name="defect_code"/>
+                <field name="defect_name"/>
+                <field name="confirmed_result"/>
+                <field name="image_path" optional="hide"/>
+                <field name="test_result_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_aoi_defect_detail_search" model="ir.ui.view">
+        <field name="name">sn.wsd.aoi.defect.detail.search.api</field>
+        <field name="model">sn.wsd.aoi.defect.detail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="serial_identity_id"/>
+                <field name="defect_code"/>
+                <field name="defect_name"/>
+                <field name="part_id"/>
+                <field name="confirmed_result"/>
+                <filter string="Confirmed Defect" name="filter_confirmed"
+                        domain="[('confirmed_result', '=', '确认不良')]"/>
+                <filter string="Today" name="filter_today"
+                        domain="[('test_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)))]"/>
+                <separator string="Group By"/>
+                <filter string="SN" name="group_by_sn" context="{'group_by': 'serial_identity_id'}"/>
+                <filter string="Defect Code" name="group_by_defect" context="{'group_by': 'defect_code'}"/>
+                <filter string="Work Center" name="group_by_wc" context="{'group_by': 'workcenter_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_aoi_defect_detail" model="ir.actions.act_window">
+        <field name="name">AOI Defect Details</field>
+        <field name="res_model">sn.wsd.aoi.defect.detail</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="view_sn_wsd_aoi_defect_detail_search"/>
+    </record>
+
+    <menuitem id="menu_sn_wsd_aoi_defect_detail" name="AOI Defect Details"
+              parent="sn_wsd_mrp.menu_sn_wsd_traceability"
+              action="action_sn_wsd_aoi_defect_detail" sequence="13"/>
 
     <!-- compact detail list embedded in the bottom panel of the split view -->
     <record id="view_sn_wsd_test_result_detail_split_list" model="ir.ui.view">
