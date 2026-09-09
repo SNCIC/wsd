@@ -37,7 +37,7 @@
                 <attribute name="string">Drawing No.</attribute>
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="material_specification" optional="hide"/>
+                <field name="material_specification" optional="show"/>
                 <field name="abc_class" optional="hide"/>
                 <field name="rated_current" optional="hide"/>
                 <field name="is_eip_material" optional="hide"/>
@@ -55,7 +55,7 @@
                 <attribute name="string">Drawing No.</attribute>
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="material_specification" optional="hide" readonly="1"/>
+                <field name="material_specification" optional="show" readonly="1"/>
                 <field name="abc_class" optional="hide" readonly="1"/>
                 <field name="rated_current" optional="hide" readonly="1"/>
                 <field name="is_eip_material" optional="hide" readonly="1"/>

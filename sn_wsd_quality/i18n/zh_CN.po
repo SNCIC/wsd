@@ -1141,6 +1141,12 @@ msgid "Material Bindings"
 msgstr "物料绑定记录"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__material_specification
+msgid "Material Specification"
+msgstr "物料规格"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__measured_current_a
 msgid "Measured Current (A)"
 msgstr "实测电流 (A)"

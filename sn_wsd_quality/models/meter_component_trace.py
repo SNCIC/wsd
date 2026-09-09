@@ -114,6 +114,10 @@ class MeterComponentBinding(models.Model):
         check_company=True,
         index=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='component_product_id.material_specification',
+    )
     component_lot_id = fields.Many2one(
         'stock.lot',
         string='Component Lot/Serial',

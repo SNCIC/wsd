@@ -632,6 +632,7 @@ class QualityInspection(models.Model):
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     product_id = fields.Many2one('product.product', string='Product', check_company=True, index=True)
     product_tmpl_id = fields.Many2one(related='product_id.product_tmpl_id', string='Product Template', store=True, readonly=True)
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     picking_id = fields.Many2one('stock.picking', string='Transfer', check_company=True, index=True)
     move_line_id = fields.Many2one('stock.move.line', string='Operation Line', check_company=True, index=True)
     lot_id = fields.Many2one('stock.lot', string='Lot/Serial Number', check_company=True, index=True)

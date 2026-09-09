@@ -312,6 +312,7 @@ class SnWsdEsopDocument(models.Model):
             'docs': [{
                 'id': document.id,
                 'drawing': document.x_drawing_no,
+                'specification': document.product_specification or '',
                 'operation': document.operation_id.display_name or '',
                 'side': document.x_side,
                 'doc_type': document.doc_type,
@@ -341,6 +342,8 @@ class SnWsdEsopDocument(models.Model):
             card = cards.setdefault(drawing, {
                 'drawing': drawing,
                 'product_name': order.product_id.product_tmpl_id.name or '',
+                'specification':
+                    order.product_id.material_specification or '',
                 'workshops': [],
                 'unacked': False,
             })

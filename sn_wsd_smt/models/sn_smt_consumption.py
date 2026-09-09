@@ -150,10 +150,18 @@ class SnSmtMaterialConsumption(models.Model):
         'product.product', related='online_material_id.required_product_id', store=True, readonly=True,
     )
     required_item_code = fields.Char(related='online_material_id.required_item_code', store=True, readonly=True)
+    required_material_spec = fields.Char(
+        related='required_product_id.material_specification',
+        string='Required Material Specification',
+    )
     actual_product_id = fields.Many2one(
         'product.product', related='material_lot_id.product_id', store=True, readonly=True,
     )
     actual_item_code = fields.Char(related='actual_product_id.default_code', store=True, readonly=True)
+    actual_material_spec = fields.Char(
+        related='actual_product_id.material_specification',
+        string='Actual Material Specification',
+    )
     device_seq = fields.Integer(related='online_material_id.device_seq', store=True, readonly=True)
     table_no = fields.Char(related='online_material_id.table_no', store=True, readonly=True)
     loadpoint = fields.Char(related='online_material_id.loadpoint', store=True, readonly=True)

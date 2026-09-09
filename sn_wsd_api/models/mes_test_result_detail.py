@@ -83,6 +83,10 @@ class MesTestResultDetail(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     operator_code = fields.Char(
         string='Operator Code',
         related='test_result_id.operator_code',

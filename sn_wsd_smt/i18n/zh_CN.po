@@ -153,6 +153,11 @@ msgid "Actual Item Code"
 msgstr "实际料号"
 
 #. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__actual_material_spec
+msgid "Actual Material Specification"
+msgstr "实际物料规格"
+
+#. module: sn_wsd_smt
 #. odoo-python
 #: code:addons/sn_wsd_smt/models/sn_smt_consumption.py:0
 msgid ""
@@ -1947,6 +1952,11 @@ msgid "Required Item Code"
 msgstr "要求料号"
 
 #. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__required_material_spec
+msgid "Required Material Specification"
+msgstr "要求物料规格"
+
+#. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__activity_user_id
 msgid "Responsible User"
 msgstr "负责人"
@@ -2360,6 +2370,16 @@ msgstr "保养前点数"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_consumption__source_system
 msgid "Source System"
 msgstr "来源系统"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__actual_item_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__required_item_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__model_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_detail__item_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__model_spec
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__pcb_item_spec
+msgid "Specification"
+msgstr "物料规格"
 
 #. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_table_import_wizard_form

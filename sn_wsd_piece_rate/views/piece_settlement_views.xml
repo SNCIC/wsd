@@ -74,6 +74,7 @@
                                             ('route_operation_id', '=', route_operation_id),
                                             ('x_piece_settled', '=', False)]"/>
                             <field name="product_id" readonly="1"/>
+                            <field name="material_specification"/>
                             <field name="operation_id" invisible="1"/>
                             <field name="team_id" readonly="state != 'draft'"
                                    options="{'no_create': True}"/>

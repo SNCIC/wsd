@@ -39,6 +39,8 @@
                             <i class="fa fa-arrow-left me-1" role="img"/><t t-out="labels.back"/>
                         </button>
                         <strong t-out="state.viewing.drawing"/>
+                        <span t-if="state.viewing.specification" class="text-muted"
+                              t-out="state.viewing.specification"/>
                         <span class="text-muted" t-out="state.viewing.operation"/>
                         <span class="badge text-bg-secondary" t-out="sideLabel(state.viewing.side)"/>
                         <span class="badge text-bg-info" t-out="typeLabel(state.viewing.doc_type)"/>
@@ -91,6 +93,8 @@
                                 t-on-click="() => this.openCard(card)">
                             <div class="fw-bold text-truncate" t-out="card.drawing"/>
                             <div class="small text-muted text-truncate" t-out="card.product_name"/>
+                            <div t-if="card.specification" class="small text-muted text-truncate"
+                                 t-out="card.specification"/>
                             <div class="d-flex flex-wrap gap-1">
                                 <span t-foreach="card.workshops" t-as="ws" t-key="ws"
                                       class="badge text-bg-secondary" t-out="ws"/>

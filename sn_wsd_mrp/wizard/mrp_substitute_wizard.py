@@ -23,6 +23,10 @@ class MrpSubstituteWizard(models.TransientModel):
         required=True,
         domain="[('id', 'in', available_original_product_ids)]",
     )
+    original_material_specification = fields.Char(
+        string='Original Material Specification',
+        related='original_product_id.material_specification',
+    )
     available_original_product_ids = fields.Many2many(
         'product.product',
         compute='_compute_available_original_product_ids',
@@ -43,6 +47,10 @@ class MrpSubstituteWizard(models.TransientModel):
         string='Scanned Product',
         compute='_compute_scanned_product',
         store=False,
+    )
+    scanned_material_specification = fields.Char(
+        string='Scanned Material Specification',
+        related='scanned_product_id.material_specification',
     )
     substitute_qty = fields.Float(
         string='Substitute Qty',

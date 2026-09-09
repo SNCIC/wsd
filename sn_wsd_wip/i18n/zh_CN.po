@@ -139,6 +139,12 @@ msgid "Manufacturing WIP Snapshot"
 msgstr "制造在制品快照"
 
 #. module: sn_wsd_wip
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_mes_order_report__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__material_specification
+msgid "Material Specification"
+msgstr "物料规格"
+
+#. module: sn_wsd_wip
 #: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_production_overview__max_step_wip_qty
 msgid "Max Step WIP Qty"
 msgstr "步骤最大在制品数量"

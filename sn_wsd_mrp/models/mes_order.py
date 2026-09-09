@@ -34,6 +34,10 @@ class MesOrder(models.Model):
         'product.product', string='Product',
         related='production_id.product_id', store=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line', string='Production Line', required=True,
         check_company=True, tracking=True,

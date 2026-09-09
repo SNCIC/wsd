@@ -93,6 +93,7 @@ class SnWsdRepairOrder(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',
@@ -165,6 +166,10 @@ class SnWsdRepairOrder(models.Model):
         string='Replacement Product',
         check_company=True,
         index=True,
+    )
+    replacement_material_specification = fields.Char(
+        string='Replacement Material Specification',
+        related='replacement_product_id.material_specification',
     )
     board_sn = fields.Char(string='Board SN', index=True)
     defect_qty = fields.Float(string='Defect Quantity', digits='Product Unit', tracking=True)

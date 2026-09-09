@@ -811,6 +811,11 @@ msgid "Material"
 msgstr "物料"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__material_specification
+msgid "Material Specification"
+msgstr "物料规格"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__object_ref
 msgid ""
 "Material reel, component SN, nameplate mapping or box/pallet involved in the"
@@ -975,7 +980,7 @@ msgstr "料号"
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Spec"
-msgstr "规格"
+msgstr "物料规格"
 
 #. module: sn_wsd_api
 #. odoo-javascript

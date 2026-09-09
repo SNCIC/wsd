@@ -203,6 +203,7 @@
             <list default_order="test_time desc, id desc" decoration-danger="result == 'ng'">
                 <field name="serial_identity_id" string="SN"/>
                 <field name="product_id"/>
+                <field name="material_specification" optional="show"/>
                 <field name="mes_order_id"/>
                 <field name="route_operation_id"/>
                 <field name="workcenter_id"/>

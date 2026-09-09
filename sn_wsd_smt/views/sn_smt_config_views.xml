@@ -15,7 +15,9 @@
                 <field name="loadpoint"/>
                 <field name="chanel_sn" optional="hide"/>
                 <field name="required_item_code" optional="show"/>
+                <field name="required_item_spec" optional="show"/>
                 <field name="actual_item_code" optional="show"/>
+                <field name="actual_item_spec" optional="show"/>
                 <field name="material_lot_id"/>
                 <field name="old_material_lot_id" optional="show"/>
                 <field name="old_lot_qty" optional="hide"/>
@@ -72,7 +74,9 @@
                 <field name="mes_order_id"/>
                 <field name="route_operation_id" optional="show"/>
                 <field name="required_item_code"/>
+                <field name="required_material_spec"/>
                 <field name="actual_item_code" optional="show"/>
+                <field name="actual_material_spec" optional="show"/>
                 <field name="material_sn"/>
                 <field name="device_seq" optional="show"/>
                 <field name="table_no" optional="show"/>

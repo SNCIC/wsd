@@ -217,6 +217,11 @@ msgid "Actual Hours"
 msgstr "实际工时"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__actual_material_specification
+msgid "Actual Material Specification"
+msgstr "实际物料规格"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__actual_product_id
 msgid "Actual Product"
 msgstr "实际产品"
@@ -1244,6 +1249,12 @@ msgstr "应装编码"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__expected_product_id
 msgid "Expected Material"
 msgstr "应装物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__expected_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__expected_material_specification
+msgid "Expected Material Specification"
+msgstr "期望物料规格"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__expected_product_id
@@ -2455,8 +2466,13 @@ msgid "Material Ready"
 msgstr "物料就绪"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return_line__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__material_specification
 msgid "Material Specification"
 msgstr "物料规格"
 
@@ -2921,6 +2937,13 @@ msgstr "扫描过站的员工（API：M_EMP；车间终端：当前登录用户�
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_lot_id
 msgid "Original Lot"
 msgstr "原始批次"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__original_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_material_specification
+msgid "Original Material Specification"
+msgstr "原物料规格"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__original_product_id
@@ -3606,6 +3629,12 @@ msgid "Scanned Material Barcode"
 msgstr "扫描的物料条码"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_scan_wizard__scanned_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__scanned_material_specification
+msgid "Scanned Material Specification"
+msgstr "扫码物料规格"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__scanned_product_id
 msgid "Scanned Product"
 msgstr "扫描的产品"
@@ -4164,6 +4193,12 @@ msgstr "替代批次/序列号"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_line_substitute_form
 msgid "Substitute Material"
 msgstr "替代物料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_material_specification
+msgid "Substitute Material Specification"
+msgstr "替代物料规格"
 
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_mrp_substitute_usage

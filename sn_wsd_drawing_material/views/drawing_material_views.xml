@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="x_drawing_no"/>
+                <field name="product_specification" optional="show"/>
                 <field name="product_name" optional="show"/>
                 <field name="operation_id"/>
                 <field name="x_side"/>

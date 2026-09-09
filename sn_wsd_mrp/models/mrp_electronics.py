@@ -111,12 +111,20 @@ class MrpBomLineSubstitute(models.Model):
         store=True,
         readonly=True,
     )
+    original_material_specification = fields.Char(
+        string='Original Material Specification',
+        related='original_product_id.material_specification',
+    )
     substitute_product_id = fields.Many2one(
         'product.product',
         string='Substitute Product',
         required=True,
         check_company=True,
         domain="[('id', '!=', original_product_id)]",
+    )
+    substitute_material_specification = fields.Char(
+        string='Substitute Material Specification',
+        related='substitute_product_id.material_specification',
     )
     priority = fields.Integer(
         string='Priority',
@@ -529,6 +537,10 @@ class MrpExcessReturnLine(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     lot_id = fields.Many2one(
         'stock.lot',
         string='Lot',
@@ -638,6 +650,10 @@ class MrpSubstituteUsage(models.Model):
         readonly=True,
         check_company=True,
     )
+    original_material_specification = fields.Char(
+        string='Original Material Specification',
+        related='original_product_id.material_specification',
+    )
     original_lot_id = fields.Many2one(
         'stock.lot',
         string='Original Lot',
@@ -650,6 +666,10 @@ class MrpSubstituteUsage(models.Model):
         required=True,
         readonly=True,
         check_company=True,
+    )
+    substitute_material_specification = fields.Char(
+        string='Substitute Material Specification',
+        related='substitute_product_id.material_specification',
     )
     substitute_lot_id = fields.Many2one(
         'stock.lot',
@@ -756,6 +776,10 @@ class MrpFeederLine(models.Model):
         related='expected_product_id.default_code',
         readonly=True,
     )
+    expected_material_specification = fields.Char(
+        string='Expected Material Specification',
+        related='expected_product_id.material_specification',
+    )
     expected_qty = fields.Float(
         string='Expected Qty',
     )
@@ -776,6 +800,10 @@ class MrpFeederLine(models.Model):
         string='Actual Code',
         related='actual_product_id.default_code',
         readonly=True,
+    )
+    actual_material_specification = fields.Char(
+        string='Actual Material Specification',
+        related='actual_product_id.material_specification',
     )
     lot_id = fields.Many2one(
         'stock.lot',

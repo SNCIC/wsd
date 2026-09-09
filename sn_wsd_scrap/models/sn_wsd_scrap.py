@@ -101,6 +101,7 @@ class SnWsdScrapRecord(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     production_id = fields.Many2one(
         'mrp.production',
         string='Manufacturing Order',

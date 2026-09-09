@@ -10,11 +10,13 @@
                         <group>
                             <field name="feeder_line_id" readonly="1"/>
                             <field name="expected_product_id" readonly="1"/>
+                            <field name="expected_material_specification"/>
                             <field name="loaded_qty"/>
                         </group>
                         <group>
                             <field name="scanned_barcode"/>
                             <field name="scanned_product_id" readonly="1"/>
+                            <field name="scanned_material_specification"/>
                             <field name="scanned_lot"/>
                             <field name="match_status" readonly="1"/>
                         </group>
@@ -43,11 +45,13 @@
                             <field name="route_operation_id" readonly="1"/>
                             <field name="production_id" readonly="1"/>
                             <field name="original_product_id"/>
+                            <field name="original_material_specification"/>
                             <field name="bom_line_id" readonly="1"/>
                         </group>
                         <group>
                             <field name="scanned_barcode"/>
                             <field name="scanned_product_id" readonly="1"/>
+                            <field name="scanned_material_specification"/>
                             <field name="substitute_qty"/>
                             <field name="substitute_lot"/>
                         </group>
