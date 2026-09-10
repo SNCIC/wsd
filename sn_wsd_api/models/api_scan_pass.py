@@ -607,19 +607,12 @@ class SnWsdApiService(models.AbstractModel):
                 'Panel quantity must be a positive integer.'))
         self._resolve_employee(payload.get('operator'))
 
-        sequence = production._sn_product_sequence()
+        identity_model = self.env['sn.wsd.serial.identity']
         serial_numbers = []
         for _index in range(quantity):
-            serial_no = sequence.sudo().next_by_code(sequence.code)
-            if not serial_no:
-                raise ApiUnprocessable(_('No SN sequence is configured.'))
-            self.env['sn.wsd.serial.identity'].create({
-                'name': serial_no,
-                'company_id': self.env.company.id,
-                'origin_type': 'laser',
-                'origin_production_id': production.id,
-            })
-            serial_numbers.append(serial_no)
+            identity = identity_model.generate_for_production(
+                production, origin_type='laser')
+            serial_numbers.append(identity.name)
         if panel_qty > 0:
             for start in range(0, quantity, panel_qty):
                 chunk = serial_numbers[start:start + panel_qty]

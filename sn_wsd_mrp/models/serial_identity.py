@@ -82,3 +82,30 @@ class SerialIdentity(models.Model):
             },
         }
         return self.create(create_values)
+
+    @api.model
+    def generate_for_production(self, production, origin_type='manual'):
+        """Reserve the next SN for a production's product. The coding-rule
+        engine renders it when a rule targets this model (field segments
+        reach the drawing number through origin_production_id), otherwise
+        the legacy per-product sequence keeps the pre-migration behavior.
+        Device-supplied SNs (get_or_create) never pass here."""
+        self = self.with_company(production.company_id)
+        proxy = self.new({
+            'company_id': production.company_id.id,
+            'origin_production_id': production.id,
+        })
+        rule = self.env['sn.code.rule']._find_rule(proxy)
+        if rule:
+            serial_no = rule.render(proxy)
+        else:
+            sequence = production._sn_product_sequence()
+            serial_no = sequence.sudo().next_by_code(sequence.code)
+        if not serial_no:
+            raise ValidationError(_('No SN sequence is configured.'))
+        return self.create({
+            'name': serial_no,
+            'company_id': production.company_id.id,
+            'origin_type': origin_type,
+            'origin_production_id': production.id,
+        })
