@@ -11,6 +11,9 @@ class StockMove(models.Model):
     def action_auto_fill_small_rack_locations(self):
         return self._action_auto_fill_picklight_locations('small')
 
+    def action_reset_rack_locations(self):
+        return self.move_line_ids._action_reset_picklight_locations()
+
     def action_light_receipt_destination_locations(self):
         return self._action_light_receipt_destination_locations(True)
 
@@ -25,7 +28,7 @@ class StockMove(models.Model):
 
     def _action_light_receipt_destination_locations(self, light_on):
         self.ensure_one()
-        if self.picking_code != 'incoming' or self.state in ('done', 'cancel'):
+        if self.picking_code != 'incoming':
             raise UserError(_('Receipt picklight is only available for open receipt operations.'))
 
         lines = self.move_line_ids.filtered('location_dest_id')

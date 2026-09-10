@@ -1,0 +1,498 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_bom_import
+#
+# Translators:
+# SNCIC, 2026
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-08 06:15+0000\n"
+"PO-Revision-Date: 2026-09-08 06:15+0000\n"
+"Last-Translator: SNCIC, 2026\n"
+"Language-Team: Chinese (Simplified Han script)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s BOM candidate(s) found"
+msgstr "%s 个 BOM 候选"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s BOM(s) / %s line(s) will be created"
+msgstr "将创建 %s 个 BOM / %s 行"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s BOM(s) created with %s line(s)"
+msgstr "已创建 %s 个 BOM、共 %s 行"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s BOM(s) have master-data gaps"
+msgstr "%s 个 BOM 存在主数据缺口"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s already existing skipped"
+msgstr "%s 个已存在的 BOM 编码被跳过"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s data rows"
+msgstr "%s 行数据"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "%s disabled row(s) excluded"
+msgstr "已排除 %s 行禁用行"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model,name:sn_wsd_bom_import.model_sn_bom_import_log
+msgid "BOM Excel Import Log"
+msgstr "BOM Excel 导入日志"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model,name:sn_wsd_bom_import.model_sn_bom_import_wizard
+msgid "BOM Excel Import Wizard"
+msgstr "BOM Excel 导入向导"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/models/bom_import_log.py:0
+msgid "BOM Import %s"
+msgstr "BOM 导入 %s"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "BOM code"
+msgstr "BOM 编码"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "BOM code already exists"
+msgstr "BOM 编码已存在"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__bom_count
+msgid "BOMs Created"
+msgstr "新建 BOM"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Blocked"
+msgstr "受阻"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Blocked:"
+msgstr "受阻："
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Candidates"
+msgstr "候选清单"
+
+#. module: sn_wsd_bom_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Created %s BOM(s) with %s line(s); skipped %s existing BOM code(s)."
+msgstr "已创建 %s 个 BOM（%s 行）；跳过 %s 个已存在的 BOM 编码。"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Detail"
+msgstr "详情"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__file
+msgid "Excel Template"
+msgstr "Excel 模板"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__create_date
+msgid "Executed On"
+msgstr "执行时间"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__skipped_count
+msgid "Existing Skipped"
+msgstr "已跳过"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields.selection,name:sn_wsd_bom_import.selection__sn_bom_import_log__state__failed
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__file_name
+msgid "File Name"
+msgstr "文件名"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "File summary"
+msgstr "文件概要"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__id
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_bom_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Import"
+msgstr "导入"
+
+#. module: sn_wsd_bom_import
+#: model:ir.ui.menu,name:sn_wsd_bom_import.menu_sn_bom_import_open
+msgid "BOM Import"
+msgstr "BOM导入"
+
+#. module: sn_wsd_bom_import
+#: model:ir.actions.server,name:sn_wsd_bom_import.action_bom_import_open
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Import BOMs from Excel Template"
+msgstr "从 Excel 模板导入 BOM"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__log_id
+msgid "Import Log"
+msgstr "导入日志"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__result_html
+msgid "Import Result"
+msgstr "导入结果"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid ""
+"Import blocked: %s BOM(s) have master-data gaps (%s). Fix the file or the "
+"master data, then preview again."
+msgstr "导入被阻止：%s 个 BOM 存在主数据缺口（%s）。请修正文件或主数据后重新预览。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Import finished"
+msgstr "导入完成"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__write_uid
+msgid "Last Updated by"
+msgstr "上一更新人"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Lines"
+msgstr "行数"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__line_count
+msgid "Lines Created"
+msgstr "新建行"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Missing UoMs"
+msgstr "缺失单位"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Missing products"
+msgstr "缺失物料"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Missing workshops"
+msgstr "缺失车间"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Nothing can be imported until all gaps are cleared."
+msgstr "在所有缺口解决之前无法导入任何内容。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Nothing importable found in this file."
+msgstr "文件中未找到可导入的内容。"
+
+#. module: sn_wsd_bom_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Parse & Preview"
+msgstr "解析并预览"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Please select an Excel template file first."
+msgstr "请先选择 Excel 模板文件。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Ready:"
+msgstr "就绪："
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__name
+msgid "Reference"
+msgstr "参考号"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Resolve them (or fix the file) and preview again."
+msgstr "请解决缺口（或修正文件）后重新预览。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Rows"
+msgstr "起始行"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Sheet"
+msgstr "工作表"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Skip"
+msgstr "跳过"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__skip_existing
+msgid "Skip BOM codes that already exist"
+msgstr "跳过已存在的 BOM 编码"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Skipped existing"
+msgstr "已跳过"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__state
+msgid "State"
+msgstr "状态"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields.selection,name:sn_wsd_bom_import.selection__sn_bom_import_log__state__success
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__summary
+msgid "Summary"
+msgstr "摘要"
+
+#. module: sn_wsd_bom_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Template"
+msgstr "模板"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_log__file_name
+msgid "Template File"
+msgstr "模板文件"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid ""
+"There is nothing to import. Run Parse & Preview first and check the report."
+msgstr "没有可导入的内容。请先运行「解析并预览」并查看报告。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "UoM"
+msgstr "单位"
+
+#. module: sn_wsd_bom_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom_import.sn_bom_import_wizard_form
+msgid "Upload the ERP tree BOM template exported to xlsx."
+msgstr "上传从 ERP 导出的树形 BOM 模板（xlsx）。"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,field_description:sn_wsd_bom_import.field_sn_bom_import_wizard__report_html
+msgid "Validation Preview"
+msgstr "校验预览"
+
+#. module: sn_wsd_bom_import
+#: model:ir.model.fields,help:sn_wsd_bom_import.field_sn_bom_import_wizard__skip_existing
+msgid ""
+"When a BOM version code from the file already exists in the system it is "
+"reported and skipped instead of being re-created."
+msgstr "当文件中的 BOM 版本编码在系统中已存在时，将报告并跳过而不重建。"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "code"
+msgstr "编码"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "line product not found: %s (row %s)"
+msgstr "第 %s 行子项物料未找到：%s"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "line uom not found: %s (row %s)"
+msgstr "第 %s 行子项单位未找到：%s"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "line without product code (row %s)"
+msgstr "第 %s 行子项缺少物料编码"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "line without usage quantity (row %s)"
+msgstr "第 %s 行子项缺少用量"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "missing BOM version"
+msgstr "缺少 BOM 版本"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "missing product code"
+msgstr "缺少物料编码"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "missing workshop on row %s"
+msgstr "第 %s 行缺少车间"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "none"
+msgstr "无"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "product not found: %s"
+msgstr "未找到物料：%s"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "root row disabled"
+msgstr "根行已禁用"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "uom"
+msgstr "单位"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "uom not found: %s"
+msgstr "未找到单位：%s"
+
+#. module: sn_wsd_bom_import
+#. odoo-python
+#: code:addons/sn_wsd_bom_import/wizard/bom_import_wizard.py:0
+msgid "workshop not found: %s"
+msgstr "未找到车间：%s"

@@ -29,7 +29,7 @@ class StockPicking(models.Model):
 
         lots = self.move_line_ids.lot_id.filtered(
             lambda lot: lot.material_sn_base
-        )
+        ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
         if lots:
             action = self.env.ref(
                 'sn_wsd_stock.action_report_incoming_material_label_zpl'
@@ -118,7 +118,7 @@ class StockMove(models.Model):
         self.ensure_one()
         lots = self.move_line_ids.lot_id.filtered(
             lambda lot: lot.material_sn_base
-        )
+        ).sorted(key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id))
         if not lots:
             raise UserError(
                 _('Generate internal batches before printing material labels.')
@@ -261,11 +261,28 @@ class StockMoveLine(models.Model):
         string='Material Label Printed', copy=False, readonly=True,
     )
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Initialize the label quantity once when a detailed operation is created.
+
+        The value is intentionally not recomputed when the operation quantity is
+        edited later; users may choose a different quantity per label.
+        """
+        for vals in vals_list:
+            if 'quantity_per_label' not in vals and vals.get('quantity'):
+                vals['quantity_per_label'] = vals['quantity']
+        return super().create(vals_list)
+
     @api.onchange('quantity')
     def _onchange_quantity_per_label(self):
+        """Set the initial value for a new inline operation only.
+
+        Existing operations retain their manually configured value when
+        ``quantity`` is changed.
+        """
         for line in self:
-            if not line.quantity_per_label:
-                line.quantity_per_label = line.quantity_product_uom
+            if not line._origin and not line.quantity_per_label:
+                line.quantity_per_label = line.quantity
 
     def _sync_material_lot_quantity(self):
         for line in self.filtered(

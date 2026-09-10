@@ -17,7 +17,9 @@ class ReportIncomingMaterialLabelZpl(models.AbstractModel):
     _description = 'Incoming Material Label ZPL Report'
 
     def _get_report_values(self, docids, data=None):
-        lots = self.env['stock.lot'].browse(docids).exists()
+        lots = self.env['stock.lot'].browse(docids).exists().sorted(
+            key=lambda lot: (lot.material_sn_base or lot.name or '', lot.id)
+        )
         if not lots:
             raise UserError(_('No material lots were selected for label printing.'))
         for lot in lots:
