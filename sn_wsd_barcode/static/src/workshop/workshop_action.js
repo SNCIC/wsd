@@ -623,6 +623,9 @@ export class WorkshopOperationAction extends Component {
     async submitCommand(ev) {
         ev.preventDefault();
         const command = this.state.command.trim();
+        // 提交即清空：错误分支不再残留旧码，下一扫不用手动删
+        // （此前依赖各流程分支自行清理，报错路径会漏）
+        this.state.command = "";
         if (!command) {
             return;
         }
