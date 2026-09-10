@@ -28,7 +28,7 @@ class StockMove(models.Model):
 
     def _action_light_receipt_destination_locations(self, light_on):
         self.ensure_one()
-        if self.picking_code != 'incoming' or self.state in ('done', 'cancel'):
+        if self.picking_code != 'incoming':
             raise UserError(_('Receipt picklight is only available for open receipt operations.'))
 
         lines = self.move_line_ids.filtered('location_dest_id')
