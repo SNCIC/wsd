@@ -19,6 +19,8 @@ This module enables the barcode scanning feature for the warehouse management sy
         'views/stock_picking_type_views.xml',
         'views/stock_move_line_views.xml',
         'views/sn_wsd_barcode_views.xml',
+        'views/sn_smt_material_log_views.xml',
+        'views/sn_smt_online_material_views.xml',
         'views/workshop_functions_views.xml',
         'views/device_pda_views.xml',
         'views/res_config_settings_views.xml',

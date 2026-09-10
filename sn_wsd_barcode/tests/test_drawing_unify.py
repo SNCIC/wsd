@@ -219,7 +219,8 @@ class TestDrawingMaterialUnify(TransactionCase):
         self.assertFalse(self._consume(bare_order, bare_rop))
 
     # ------------------------------------------------------------------
-    # 制具/辅料过站计数（出站工序==清单工序才计、按板计、NG 不计）
+    # 制具/辅料过站计数（清单工序的过站扫码上计、按板计；
+    # 进出站口径=进就是出：扫码即计数，NG 出站不追加，重过再计）
     # ------------------------------------------------------------------
 
     def _pass_station(self, wc, identity, result='ok'):
@@ -253,7 +254,8 @@ class TestDrawingMaterialUnify(TransactionCase):
         self.smt_order.scan_enter(self.identity.name, self.wc_place)
         self.smt_order.leave_station(
             self.identity, 'ng', ng_defect=self.defect_code)
-        self.assertEqual(self.tooling.total_usage_count, 0)
-        # NG 免费重进：重过 OK 才计数
-        self._pass_station(self.wc_place, self.identity)
+        # 进出站口径（进就是出）：过站扫码即计数——板已过机，NG 出站不追加
         self.assertEqual(self.tooling.total_usage_count, 1)
+        # NG 免费重进：重过 OK 是又一次过站扫码，再计一次
+        self._pass_station(self.wc_place, self.identity)
+        self.assertEqual(self.tooling.total_usage_count, 2)
