@@ -1158,6 +1158,14 @@ export class WorkshopOperationAction extends Component {
     }
 
     cancelSmtOperation() {
+        // 取消=重做当前操作：重新选中当前子胶囊（等价于自动再点一遍
+        // 上料/备料/…），回到该操作流程起点等新扫；扫错了不必手动
+        // 重选模式。
+        if (this.state.equipmentDomain === "smt_material"
+                && this.state.equipmentAction) {
+            this.pickEquipmentAction(this.state.equipmentAction);
+            return;
+        }
         this.state.selectedOperation = false;
         this.resetSmtScan();
         this.state.command = "";
