@@ -12,9 +12,11 @@ def give_pick(env, order):
     """
     warehouse = order.production_id.picking_type_id.warehouse_id
     ptype = warehouse.picking_type_issue_id or warehouse.int_type_id
-    return env['stock.picking'].create({
+    # Odoo 19: create() only takes a list — a bare dict iterates as keys
+    # and crashes the code-rule hook (vals.get on a str).
+    return env['stock.picking'].create([{
         'picking_type_id': ptype.id,
         'location_id': ptype.default_location_src_id.id,
         'location_dest_id': ptype.default_location_dest_id.id,
         'x_mes_order_id': order.id,
-    })
+    }])

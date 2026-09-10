@@ -953,3 +953,81 @@ class TestDictSearchHttp(ScanPassFixture, HttpCase):
                          json.dumps({'M_DATA_AUTH': 'HQ'}))
         self.assertEqual(res.status_code, 400)
         self.assertIn('work_order', res.json()['message'])
+
+
+@tagged('post_install', '-at_install')
+class TestSnCoding(ScanPassFixture, TransactionCase):
+    """SN reservation through the coding-rule engine, with legacy
+    per-product sequence as the no-rule fallback."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _disable_identity_rules(self):
+        self.env['sn.code.rule'].search([
+            ('model_name', '=', 'sn.wsd.serial.identity')]).write(
+            {'active': False})
+
+    def _sn_rule(self):
+        return self.env['sn.code.rule'].create({
+            'name': 'TEST SN rule',
+            'model_id': self.env['ir.model']._get_id('sn.wsd.serial.identity'),
+            'target_field': 'name',
+            'separator': '',
+            'segment_ids': [
+                (0, 0, {
+                    'segment_type': 'field',
+                    'field_path':
+                        'origin_production_id.product_id.default_code',
+                    'empty_policy': 'blank',
+                }),
+                (0, 0, {
+                    'segment_type': 'seq',
+                    'padding': 5,
+                    'period': 'none',
+                    'seq_impl': 'engine',
+                    'group_field_paths':
+                        'origin_production_id.product_id.default_code',
+                }),
+            ],
+        })
+
+    def test_01_rule_rendering_three_entries(self):
+        self._disable_identity_rules()
+        self._sn_rule()
+        first = self.order.generate_sn()
+        second = self.env['sn.wsd.serial.identity'].generate_for_production(
+            self.production, origin_type='laser')
+        third = self.service.submit_laser_print_request({
+            'M_DATA_AUTH': 'HQ', 'workOrderNo': self.production.name,
+            'quantity': 1, 'operator': 'APIOP'})['productSnList'][0]
+        names = [first.name, second.name, third]
+        self.assertTrue(all(name.startswith('DWG-API') for name in names))
+        self.assertEqual(len(set(names)), 3)
+        tails = sorted(int(name[len('DWG-API'):]) for name in names)
+        self.assertEqual(tails, list(range(tails[0], tails[0] + 3)))
+
+    def test_02_fallback_legacy_sequence(self):
+        self._disable_identity_rules()
+        Identity = self.env['sn.wsd.serial.identity']
+        first = Identity.generate_for_production(
+            self.production, origin_type='manual')
+        second = Identity.generate_for_production(
+            self.production, origin_type='manual')
+        self.assertTrue(first.name.startswith('DWG-API'))
+        self.assertEqual(int(second.name[len('DWG-API'):]),
+                         int(first.name[len('DWG-API'):]) + 1)
+
+    def test_03_backfill_continuity(self):
+        self._disable_identity_rules()
+        Identity = self.env['sn.wsd.serial.identity']
+        Identity.create({
+            'name': 'DWG-API00123', 'company_id': self.company.id,
+            'origin_type': 'laser', 'origin_production_id': self.production.id})
+        rule = self._sn_rule()
+        self.env['sn.serial.identity.code.seed']._backfill_identity_counters(rule)
+        nxt = Identity.generate_for_production(
+            self.production, origin_type='laser')
+        self.assertEqual(nxt.name, 'DWG-API00124')

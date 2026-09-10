@@ -925,6 +925,11 @@ msgid "Action"
 msgstr "操作"
 
 #. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_serial_identity_code_seed
+msgid "Product SN Coding Rule Seeder"
+msgstr "产品SN编码规则播种器"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__user_id
 msgid "User"
 msgstr "操作人"
@@ -4877,6 +4882,9 @@ msgstr "工单报表"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_search
 msgid "Workshop"
 msgstr "车间"
 

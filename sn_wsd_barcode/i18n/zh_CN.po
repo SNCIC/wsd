@@ -4397,3 +4397,33 @@ msgstr "打印物料标签"
 #: code:addons/sn_wsd_barcode/static/src/components/main.js:0
 msgid "Print Labels"
 msgstr "打印标签"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_material_log__tooling_id
+msgid "Tooling SN"
+msgstr "制具SN"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,field_description:sn_wsd_barcode.field_sn_smt_material_log__consumable_info_id
+msgid "Consumable SN"
+msgstr "辅料SN"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields.selection,name:sn_wsd_barcode.selection__sn_smt_material_log__operation_type__tooling_load
+msgid "Tooling Load"
+msgstr "制具上线"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields.selection,name:sn_wsd_barcode.selection__sn_smt_material_log__operation_type__tooling_unload
+msgid "Tooling Unload"
+msgstr "制具下线"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields.selection,name:sn_wsd_barcode.selection__sn_smt_material_log__operation_type__consumable_load
+msgid "Consumable Load"
+msgstr "辅料上线"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields.selection,name:sn_wsd_barcode.selection__sn_smt_material_log__operation_type__consumable_unload
+msgid "Consumable Unload"
+msgstr "辅料下线"

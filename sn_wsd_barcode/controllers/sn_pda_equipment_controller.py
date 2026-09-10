@@ -55,7 +55,8 @@ class SnPdaEquipmentController(http.Controller):
     def tooling_call(self, action, **params):
         result = self._pda_call('sn.tooling.service', TOOLING_ACTIONS, action, params)
         # 上线/下线联动关键物料清单行：设备页签的 online/offline 与投料
-        # 屏扫码等效——同模板的清单行 is_load 跟随点亮/熄灭
+        # 屏扫码等效——同模板的清单行 is_load 跟随点亮/熄灭；并按上线/
+        # 下线口径记物料日志（没维护清单的单也记，只挂在线单上下文）
         if action in ('online', 'offline') and result.get('ok'):
             workcenter = self.env['mrp.workcenter'].browse(
                 int(params.get('workcenter_id') or 0)).exists()
@@ -66,10 +67,17 @@ class SnPdaEquipmentController(http.Controller):
             if order:
                 tooling = self.env['sn.tooling'].search(
                     [('sn', '=', (params.get('sn') or '').strip())], limit=1)
-                if tooling and tooling.template_id:
-                    self._sync_drawing_rows(
-                        order, 'tooling', tooling.template_id, tooling,
-                        loaded=(action == 'online'))
+                if tooling:
+                    rows = self.env['sn.smt.online.material']
+                    if tooling.template_id:
+                        rows = self._sync_drawing_rows(
+                            order, 'tooling', tooling.template_id, tooling,
+                            loaded=(action == 'online'))
+                    self.env['sn.smt.material.log']._log_equipment_action(
+                        order,
+                        'tooling_load' if action == 'online' else 'tooling_unload',
+                        tooling=tooling, online_material=rows[:1],
+                        workcenter=workcenter)
         return result
 
     @http.route('/sn_wsd_barcode/pda/consumable/call', type='jsonrpc', auth='user')
@@ -78,17 +86,16 @@ class SnPdaEquipmentController(http.Controller):
         # work center the operator is standing at; the scanner screen
         # always sends that work center along.
         order = self.env['sn.wsd.mes.order']
+        workcenter = self.env['mrp.workcenter'].browse(
+            int(params.get('workcenter_id') or 0)).exists()
         if action == 'load':
-            workcenter = self.env['mrp.workcenter'].browse(
-                int(params.get('workcenter_id') or 0)).exists()
             order = self._live_mes_order(workcenter)
             params['mes_order'] = order.id
         result = self._pda_call('sn.consumable.service', CONSUMABLE_ACTIONS, action, params)
-        # 上线/下线/用尽联动关键物料清单行（同制具口径）
+        # 上线/下线/用尽联动关键物料清单行（同制具口径）；并记物料日志：
+        # load/unload 各一条，exhaust 视作下线且 note=EXHAUST
         if action in ('load', 'unload', 'exhaust') and result.get('ok'):
             if not order:
-                workcenter = self.env['mrp.workcenter'].browse(
-                    int(params.get('workcenter_id') or 0)).exists()
                 try:
                     order = self._live_mes_order(workcenter)
                 except ValidationError:
@@ -96,17 +103,27 @@ class SnPdaEquipmentController(http.Controller):
             if order:
                 info = self.env['sn.consumable.info'].search(
                     [('sn', '=', (params.get('sn') or '').strip())], limit=1)
-                if info and info.template_id:
-                    self._sync_drawing_rows(
-                        order, 'consumable', info.template_id, info,
-                        loaded=(action == 'load'))
+                if info:
+                    rows = self.env['sn.smt.online.material']
+                    if info.template_id:
+                        rows = self._sync_drawing_rows(
+                            order, 'consumable', info.template_id, info,
+                            loaded=(action == 'load'))
+                    self.env['sn.smt.material.log']._log_equipment_action(
+                        order,
+                        'consumable_load' if action == 'load'
+                        else 'consumable_unload',
+                        consumable_info=info, online_material=rows[:1],
+                        workcenter=workcenter,
+                        note='EXHAUST' if action == 'exhaust' else False)
         return result
 
     def _sync_drawing_rows(self, order, material_type, template, individual, loaded):
         """Flip the order's critical-material rows of this template to match
         the individual's online state (equipment tab == loading screen).
         material_ref is a Reference field: compare against the record -- its
-        Python value is a browse record, never the 'model,id' string."""
+        Python value is a browse record, never the 'model,id' string.
+        Returns the flipped rows so callers can attach them to logs."""
         rows = order.x_smt_online_material_ids.filtered(
             lambda l: l.source == 'drawing_list'
             and l.drawing_material_type == material_type
@@ -117,6 +134,7 @@ class SnPdaEquipmentController(http.Controller):
         else:
             vals['consumable_info_id'] = individual.id if loaded else False
         rows.write(vals)
+        return rows
 
     def _live_mes_order(self, workcenter):
         """The online station-mode MES order running through this work center."""

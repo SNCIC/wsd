@@ -66,13 +66,15 @@ class MesOrderSmtOnline(models.Model):
 
     def enter_station(self, serial_identity, route_operation,
                       workcenter=False):
-        """过站扣减收敛点（到站口径，2026-08-31 用户规则）：关键物料
-        清单/料站表维护在哪个工序，校验和扣减就发生在板**到站**该工序
-        的扫码上（含投入站首扫）；出站与其他工序一律不校验、不扣减。
-        大屏（sn_station_scan）/ 设备 API（_pass_station）/ PDA 过站屏
-        的到站都汇到 enter_station。consume_for_serial 幂等（料站表按
-        SN+制令单、清单行按 SN+工序），重复到站安全；NG 不涉及——
-        到站只进站不出站。"""
+        """过站扣减收敛点（工序过站扫码口径，2026-08-31 定、2026-09-10
+        措辞澄清）：关键物料清单/料站表维护在哪个工序，校验和扣减就发生
+        在板过该工序的扫码上（含投入站首扫）；其他工序的扫码一律不校验、
+        不扣减。每工序一次扫码即完成进出站（进就是出）——本口径与
+        spec/词典所述"物料关联工序出站 OK"同指同一次扫码。大屏
+        （sn_station_scan）/ 设备 API（_pass_station）/ PDA 过站屏的
+        过站都汇到 enter_station。consume_for_serial 幂等（料站表按
+        SN+制令单、清单行按 SN+工序），重复过站安全；NG 不涉及——
+        本口径只进不出。"""
         res = super().enter_station(
             serial_identity, route_operation, workcenter=workcenter)
         try:

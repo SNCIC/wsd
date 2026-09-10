@@ -22,4 +22,5 @@
     'application': False,
     'author': 'SNCIC',
     'license': 'LGPL-3',
+    'post_init_hook': '_post_init_hook_bigint_ids',
 }

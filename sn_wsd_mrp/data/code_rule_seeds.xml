@@ -11,4 +11,10 @@
          model wins. -->
     <function model="sn.wsd.operation" name="_seed_operation_code_rule"
               eval="[]"/>
+
+    <!-- Seed the default product SN coding rule (sn-code-rule-migration):
+         drawing number + 5-digit serial, per-product counter backfilled
+         from existing identities. Idempotent: an existing rule wins. -->
+    <function model="sn.serial.identity.code.seed" name="_seed_serial_sn_rule"
+              eval="[]"/>
 </odoo>

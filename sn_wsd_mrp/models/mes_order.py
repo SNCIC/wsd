@@ -2012,16 +2012,8 @@ class MesOrder(models.Model):
         """Reserve the next SN identity for this order (device calls the
         next-sn endpoint; the order form button generates in batch)."""
         self.ensure_one()
-        serial_no = self._sn_sequence().sudo().next_by_code(
-            self._sn_sequence().code)
-        if not serial_no:
-            raise ValidationError(_('No SN sequence is configured.'))
-        return self.env['sn.wsd.serial.identity'].create({
-            'name': serial_no,
-            'company_id': self.company_id.id,
-            'origin_type': 'manual',
-            'origin_production_id': self.production_id.id,
-        })
+        return self.env['sn.wsd.serial.identity'].generate_for_production(
+            self.production_id, origin_type='manual')
 
     def action_generate_sns(self, quantity=1):
         self.ensure_one()

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 物料日志：设备页签上下线的制具/辅料个体（列头取字段标签，
+         紧随实际物料SN列） -->
+    <record id="view_sn_smt_material_log_list_equipment" model="ir.ui.view">
+        <field name="name">sn.smt.material.log.list.equipment</field>
+        <field name="model">sn.smt.material.log</field>
+        <field name="inherit_id" ref="sn_wsd_smt.view_sn_smt_material_log_list"/>
+        <field name="arch" type="xml">
+            <field name="material_lot_id" position="after">
+                <field name="tooling_id" optional="show"/>
+                <field name="consumable_info_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

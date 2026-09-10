@@ -8,6 +8,7 @@ quality → api → smt）。
 
 职责：
 - sn.smt.online.material 扩展：清单行/工序实例/制具/辅料引用 + 约束
+- sn.smt.material.log 扩展：制具/辅料上下线日志（设备页签动作）
 - mrp.production 扩展：制令单上线时按清单拆行
 - sn.smt.loading.service 扩展：投料扫码 / 状态视图 / 全部下料 /
   下线时制具/辅料联动
@@ -86,10 +87,62 @@ class SnSmtOnlineMaterialDrawing(models.Model):
 class SnSmtMaterialLogDrawing(models.Model):
     _inherit = 'sn.smt.material.log'
 
-    operation_type = fields.Selection(
-        selection_add=[('drawing_load', 'Drawing Material Load')],
-        ondelete={'drawing_load': 'cascade'},
+    tooling_id = fields.Many2one(
+        'sn.tooling',
+        string='Tooling SN',
+        index=True,
+        ondelete='restrict',
+        check_company=True,
     )
+    consumable_info_id = fields.Many2one(
+        'sn.consumable.info',
+        string='Consumable SN',
+        index=True,
+        ondelete='restrict',
+        check_company=True,
+    )
+    operation_type = fields.Selection(
+        selection_add=[
+            ('drawing_load', 'Drawing Material Load'),
+            ('tooling_load', 'Tooling Load'),
+            ('tooling_unload', 'Tooling Unload'),
+            ('consumable_load', 'Consumable Load'),
+            ('consumable_unload', 'Consumable Unload'),
+        ],
+        ondelete={
+            'drawing_load': 'cascade',
+            'tooling_load': 'cascade',
+            'tooling_unload': 'cascade',
+            'consumable_load': 'cascade',
+            'consumable_unload': 'cascade',
+        },
+    )
+
+    @api.model
+    def _log_equipment_action(self, mes_order, operation_type, tooling=False,
+                               consumable_info=False, online_material=False,
+                               workcenter=False, note=False):
+        """设备页签制具/辅料的上下线记物料日志。口径（2026-09-10 用户
+        确认）：只记上线/下线（回温/搅拌/保养等过程动作不记）；没维护
+        清单的制令单也记——日志挂动作时解析到的在线单；辅料用尽
+        (exhaust) 视作下线，note 写 'EXHAUST'。"""
+        return self.create({
+            'mes_order_id': mes_order.id,
+            'operation_type': operation_type,
+            'tooling_id': tooling.id if tooling else False,
+            'consumable_info_id': consumable_info.id if consumable_info else False,
+            'online_material_id': online_material.id if online_material else False,
+            'workcenter_id': workcenter.id if workcenter else False,
+            'required_item_code': (
+                online_material.required_item_code
+                or online_material.item_code) if online_material else False,
+            'qty_before': 0.0,
+            'qty_after': 0.0,
+            'operator_id': self.env.user.id,
+            'operated_at': fields.Datetime.now(),
+            'note': note,
+            'company_id': mes_order.company_id.id,
+        })
 
 
 class MesOrderDrawingSplit(models.Model):
@@ -126,6 +179,9 @@ class MesOrderDrawingSplit(models.Model):
             if not lst or not lst.line_ids:
                 continue
             for line in lst.line_ids:
+                # 主料料号与实际料号同源（清单行料号）：后台在线料表的
+                # "主料料号"列对制具/辅料行同样有值。
+                item_code = self._drawing_line_item_code(line)
                 created += online_model.create({
                     'source': 'drawing_list',
                     'mes_order_id': self.id,
@@ -133,7 +189,8 @@ class MesOrderDrawingSplit(models.Model):
                     'route_operation_id': route_op.id,
                     'model_code': drawing_no or self.product_id.name,
                     'process_face': lst.x_side,
-                    'item_code': self._drawing_line_item_code(line),
+                    'item_code': item_code,
+                    'required_item_code': item_code,
                     'workcenter_id': route_op.workcenter_id.id,
                     'production_line_id': self.production_line_id.id,
                     'company_id': self.company_id.id,

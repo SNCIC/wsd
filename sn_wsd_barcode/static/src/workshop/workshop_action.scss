@@ -377,6 +377,15 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
     }
 }
 
+// 报错/提示条容器：钉在滚动区顶部，内容再长结果始终可见
+.o_sn_wsd_pda_feedback_dock {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--body-bg);
+    padding: 2px 0;
+}
+
 .o_sn_wsd_pda_feedback {
     min-height: 64px;
     border-radius: 10px;

@@ -4,7 +4,7 @@ import { _t } from "@web/core/l10n/translation";
 import { rpc } from "@web/core/network/rpc";
 import { registry } from "@web/core/registry";
 import { useBus, useService } from "@web/core/utils/hooks";
-import { Component, onMounted, onWillUnmount, useRef, useState } from "@odoo/owl";
+import { Component, onMounted, onPatched, onWillUnmount, useExternalListener, useRef, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 // 设备作业屏（先看后扫）：开屏=今日待办看板（跨设备聚合，不扫码），
@@ -52,12 +52,25 @@ export class DevicePdaAction extends Component {
                 this.processBarcode(code);
             }
         });
+        // Scan-gun keep-focus: pull the cursor back into the command box
+        // whenever focus lands on a non-input element; modals (repair /
+        // location / task check items) own the screen while open.
+        useExternalListener(document, "focusin", (ev) =>
+            this.onDocumentFocusIn(ev)
+        );
         onMounted(() => {
             this.mobileService.enableReader();
             this._loadUserInfo();
             this.loadBoard();
             this.loadLocations();
             this.focusInput();
+        });
+        // Owl re-renders can silently swap the command input node, losing
+        // focus without any event -- re-assert after every patch.
+        onPatched(() => {
+            if (!this.state.showRepairModal && !this.state.showLocationModal) {
+                this.focusInput();
+            }
         });
         onWillUnmount(() => {
             this.mobileService.stopReader();
@@ -228,6 +241,44 @@ export class DevicePdaAction extends Component {
 
     async _deviceCall(action, params = {}) {
         return rpc("/sn_wsd_barcode/pda/device/call", {action, ...params});
+    }
+
+    _focusHeldByConsumer(el) {
+        return !!(
+            el &&
+            ((el.matches && el.matches("input, textarea, select")) ||
+                el.isContentEditable ||
+                (el.closest &&
+                    el.closest(".modal, .dropdown-menu, .o_notification_manager")))
+        );
+    }
+
+    onDocumentFocusIn(ev) {
+        if (!this.el || !this.el.isConnected) {
+            return;
+        }
+        if (this.state.showRepairModal || this.state.showLocationModal) {
+            return;
+        }
+        const input = this.inputRef.el;
+        if (!input || ev.target === input) {
+            return;
+        }
+        if (this._focusHeldByConsumer(ev.target)) {
+            return;
+        }
+        setTimeout(() => {
+            if (!this.el || !this.el.isConnected) {
+                return;
+            }
+            if (this.state.showRepairModal || this.state.showLocationModal) {
+                return;
+            }
+            const active = document.activeElement;
+            if (active !== this.inputRef.el && !this._focusHeldByConsumer(active)) {
+                this.focusInput();
+            }
+        }, 80);
     }
 
     focusInput() {

@@ -5,7 +5,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { useBus } from "@web/core/utils/hooks";
 import { rpc } from "@web/core/network/rpc";
-import { Component, onMounted, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onPatched, onWillUnmount, useExternalListener, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 // 投料（插件/装配，无料站表）：选产线 → 选工作中心，工位带出本产线在线
@@ -49,12 +49,25 @@ export class DrawingLoadAction extends Component {
                 this.onScan(barcode);
             }
         });
+        // Scan-gun keep-focus: pull the cursor back into the command box
+        // whenever focus lands on a non-input element; the selector modal
+        // and the unload-confirm dialog own the screen while open.
+        useExternalListener(document, "focusin", (ev) =>
+            this.onDocumentFocusIn(ev)
+        );
         onMounted(async () => {
             this.mobileService.enableReader();
             this._loadUserInfo();
             await this._loadSelectors();
             await this.loadContext();
             this.focusInput();
+        });
+        // Owl re-renders can silently swap the command input node, losing
+        // focus without any event -- re-assert after every patch.
+        onPatched(() => {
+            if (!this.state.selector && !this.state.confirmUnload) {
+                this.focusInput();
+            }
         });
         onWillUnmount(() => {
             this.mobileService.stopReader();
@@ -94,9 +107,54 @@ export class DrawingLoadAction extends Component {
         } catch (error) { /* non-critical */ }
     }
 
+    _commandInput() {
+        return (
+            (this.el && this.el.querySelector(".o_sn_wsd_drawing_command")) ||
+            document.querySelector(".o_sn_wsd_drawing_command")
+        );
+    }
+
+    _focusHeldByConsumer(el) {
+        return !!(
+            el &&
+            ((el.matches && el.matches("input, textarea, select")) ||
+                el.isContentEditable ||
+                (el.closest &&
+                    el.closest(".modal, .dropdown-menu, .o_notification_manager")))
+        );
+    }
+
+    onDocumentFocusIn(ev) {
+        if (!this.el || !this.el.isConnected) {
+            return;
+        }
+        if (this.state.selector || this.state.confirmUnload) {
+            return;
+        }
+        const input = this._commandInput();
+        if (!input || ev.target === input) {
+            return;
+        }
+        if (this._focusHeldByConsumer(ev.target)) {
+            return;
+        }
+        setTimeout(() => {
+            if (!this.el || !this.el.isConnected) {
+                return;
+            }
+            if (this.state.selector || this.state.confirmUnload) {
+                return;
+            }
+            const active = document.activeElement;
+            if (active !== input && !this._focusHeldByConsumer(active)) {
+                this.focusInput();
+            }
+        }, 80);
+    }
+
     focusInput() {
         setTimeout(() => {
-            const input = this.el?.querySelector(".o_sn_wsd_drawing_command");
+            const input = this._commandInput();
             if (input) {
                 input.focus();
             }
