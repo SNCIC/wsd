@@ -7,7 +7,7 @@ import {
     BarcodeVideoScanner,
     isBarcodeScannerSupported,
 } from "@web/core/barcode/barcode_video_scanner";
-import { Component, onMounted, onWillStart, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onPatched, onWillStart, onWillUnmount, useExternalListener, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 const SMT_OPS = new Set(["smt_offline_prepare", "smt_online_load", "smt_cart_load", "smt_unload", "smt_material_refill"]);
@@ -151,13 +151,74 @@ export class WorkshopOperationAction extends Component {
         });
 
         onWillStart(() => this.loadData());
+        // Scan-gun keep-focus: whenever focus lands on a non-input element
+        // (tab pills, action buttons, page background), pull the cursor back
+        // into the command box, unless a legit consumer owns it (selector
+        // modal, dropdown, notification). focusin also covers the
+        // "never focused since mount" case -- focusout alone would not fire.
+        useExternalListener(document, "focusin", (ev) =>
+            this.onDocumentFocusIn(ev)
+        );
         onMounted(() => {
             this.mobileService.enableReader();
             this.focusCommandInput();
         });
+        // Owl re-renders can silently swap the command input node (e.g. when
+        // loadData resolves), losing focus without any event -- re-assert the
+        // cursor after every patch unless the selector modal owns the screen.
+        onPatched(() => {
+            if (!this.state.selector) {
+                this.focusCommandInput();
+            }
+        });
         onWillUnmount(() => {
             this.mobileService.stopReader();
         });
+    }
+
+    _focusHeldByConsumer(el) {
+        return !!(
+            el &&
+            ((el.matches && el.matches("input, textarea, select")) ||
+                el.isContentEditable ||
+                (el.closest &&
+                    el.closest(".modal, .dropdown-menu, .o_notification_manager")))
+        );
+    }
+
+    _commandInput() {
+        // this.el is normally set on mount; fall back to the document for
+        // robustness (the action is fullscreen, the input is unique)
+        return (
+            (this.el && this.el.querySelector(".o_sn_wsd_workshop_command")) ||
+            document.querySelector(".o_sn_wsd_workshop_command")
+        );
+    }
+
+    onDocumentFocusIn(ev) {
+        if (!this.el || !this.el.isConnected) {
+            return;
+        }
+        // the line/work-center selector modal owns focus while open
+        if (this.state.selector) {
+            return;
+        }
+        const input = this._commandInput();
+        if (!input || ev.target === input) {
+            return;
+        }
+        if (this._focusHeldByConsumer(ev.target)) {
+            return;
+        }
+        setTimeout(() => {
+            if (!this.el || !this.el.isConnected || this.state.selector) {
+                return;
+            }
+            const active = document.activeElement;
+            if (active !== input && !this._focusHeldByConsumer(active)) {
+                this.focusCommandInput();
+            }
+        }, 80);
     }
 
     async loadData() {
@@ -496,7 +557,7 @@ export class WorkshopOperationAction extends Component {
 
     focusCommandInput() {
         setTimeout(() => {
-            const input = this.el?.querySelector(".o_sn_wsd_workshop_command");
+            const input = this._commandInput();
             if (input) {
                 input.focus();
                 input.setSelectionRange(input.value.length, input.value.length);

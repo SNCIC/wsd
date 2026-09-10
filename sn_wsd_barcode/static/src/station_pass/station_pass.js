@@ -5,7 +5,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { useBus } from "@web/core/utils/hooks";
 import { rpc } from "@web/core/network/rpc";
-import { Component, onMounted, onWillStart, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onPatched, onWillStart, onWillUnmount, useExternalListener, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 const MODES = [
@@ -53,10 +53,24 @@ export class StationPassAction extends Component {
             }
         });
         onWillStart(() => this.loadData(false));
+        // Scan-gun keep-focus: pull the cursor back into the command box
+        // whenever focus lands on a non-input element (mode pills, line /
+        // workcenter selectors, background); selector modal owns the screen
+        // while open. focusin also covers "never focused since mount".
+        useExternalListener(document, "focusin", (ev) =>
+            this.onDocumentFocusIn(ev)
+        );
         onMounted(() => {
             this.mobileService.enableReader();
             this._loadUserInfo();
             this.focusInput();
+        });
+        // Owl re-renders can silently swap the command input node, losing
+        // focus without any event -- re-assert after every patch.
+        onPatched(() => {
+            if (!this.state.selector) {
+                this.focusInput();
+            }
         });
         onWillUnmount(() => {
             this.mobileService.stopReader();
@@ -202,9 +216,54 @@ export class StationPassAction extends Component {
         } catch (error) { /* counts are cosmetic */ }
     }
 
+    _commandInput() {
+        return (
+            (this.el && this.el.querySelector(".o_sn_wsd_station_command")) ||
+            document.querySelector(".o_sn_wsd_station_command")
+        );
+    }
+
+    _focusHeldByConsumer(el) {
+        return !!(
+            el &&
+            ((el.matches && el.matches("input, textarea, select")) ||
+                el.isContentEditable ||
+                (el.closest &&
+                    el.closest(".modal, .dropdown-menu, .o_notification_manager")))
+        );
+    }
+
+    onDocumentFocusIn(ev) {
+        if (!this.el || !this.el.isConnected) {
+            return;
+        }
+        if (this.state.selector || this.state.scrapDialog || this.state.ngPending) {
+            return;
+        }
+        const input = this._commandInput();
+        if (!input || ev.target === input) {
+            return;
+        }
+        if (this._focusHeldByConsumer(ev.target)) {
+            return;
+        }
+        setTimeout(() => {
+            if (!this.el || !this.el.isConnected) {
+                return;
+            }
+            if (this.state.selector || this.state.scrapDialog || this.state.ngPending) {
+                return;
+            }
+            const active = document.activeElement;
+            if (active !== input && !this._focusHeldByConsumer(active)) {
+                this.focusInput();
+            }
+        }, 80);
+    }
+
     focusInput() {
         setTimeout(() => {
-            const input = this.el?.querySelector(".o_sn_wsd_station_command");
+            const input = this._commandInput();
             if (input) {
                 input.focus();
             }
