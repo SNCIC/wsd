@@ -472,8 +472,11 @@ class QualityInspectionScheme(models.Model):
         if source == 'mes_order':
             mes_order = self.env['sn.wsd.mes.order'].browse(values.get('mes_order_id')).exists()
             if mes_order:
+                # 批量口径=已完成过站行（pass-history-on-enter）：在制行
+                # （in_progress，空 out_date）不计，AQL 批量不因在制板抬高
                 identity_count = self.env['sn.wsd.serial.operation.history'].search_count(
-                    [('mes_order_id', '=', mes_order.id)])
+                    [('mes_order_id', '=', mes_order.id),
+                     ('result', '!=', 'in_progress')])
                 return identity_count or int(round(mes_order.planned_qty or 0.0))
             return 0
         if source == 'production':

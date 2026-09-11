@@ -8606,3 +8606,25 @@ msgstr "超领补料编码"
 #. module: sn_wsd_mrp
 msgid "Operation Code Coding"
 msgstr "工序编码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__in_progress
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
+msgid "WIP"
+msgstr "在制"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_dwell_hours
+msgid "Dwell (h)"
+msgstr "停留时长(小时)"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_wip_dwell_hours
+msgid "In-Progress Dwell (h)"
+msgstr "在制停留时长(小时)"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_station_wip
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_station_wip
+msgid "Station WIP"
+msgstr "工序在制"

@@ -256,7 +256,7 @@ class SnTooling(models.Model):
     )
     remaining_scrap_count = fields.Integer(
         string='Remaining Usages before Scrap',
-        compute='_compute_scrap_status',
+        compute='_compute_remaining_scrap_count',
         help='Lifetime usages left before the tooling must be scrapped.')
     issued_user_id = fields.Many2one('res.users', string='Issued By')
     issued_date = fields.Datetime(string='Issued Date')
@@ -365,6 +365,12 @@ class SnTooling(models.Model):
             elif limit and reminder and tooling.total_usage_count >= reminder:
                 status = 'due'
             tooling.scrap_status = status
+
+    # 与存储字段分属两个 compute：混合 store/非 store 触发注册表警告
+    @api.depends('total_usage_count', 'template_id.scrap_count_limit')
+    def _compute_remaining_scrap_count(self):
+        for tooling in self:
+            limit = tooling.template_id.scrap_count_limit
             tooling.remaining_scrap_count = (
                 max(0, limit - tooling.total_usage_count) if limit else 0)
 

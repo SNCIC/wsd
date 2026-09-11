@@ -169,6 +169,18 @@ class TestIpqcPatrol(TransactionCase):
             ('scheme_id', '=', self.scheme.id),
         ]))
 
+    def test_26_in_progress_rows_are_not_activity(self):
+        # pass-history-on-enter：进站未出站的在制行（空 out_date）不算
+        # 巡检活动，到期不开单
+        order = self._order(self.line_a)
+        wc = self._wc(self.line_a)
+        order.scan_enter('SN-IPQC-401', wc)
+        self.scheme._ipqc_patrol_tick()
+        self.assertFalse(self.env['sn.wsd.quality.inspection'].search([
+            ('inspection_type', '=', 'ipqc'),
+            ('scheme_id', '=', self.scheme.id),
+        ]))
+
     def test_22_open_inspection_not_duplicated(self):
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)

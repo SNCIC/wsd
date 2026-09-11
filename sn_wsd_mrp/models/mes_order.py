@@ -657,7 +657,9 @@ class MesOrder(models.Model):
 
     def enter_station(self, serial_identity, route_operation, workcenter=False):
         """Station mode: an SN enters an operation (its first station must be
-        a start operation; later stations follow OR-reachability)."""
+        a start operation; later stations follow OR-reachability). The WIP
+        row is written together with an in_progress history row -- the pass
+        ledger is visible from the scan itself (pass-history-on-enter)."""
         self.ensure_one()
         if self.x_manage_mode != 'station':
             raise ValidationError(_(
@@ -718,12 +720,13 @@ class MesOrder(models.Model):
                     sn=serial_identity.name, order=bound_order.name))
         # 过站次数上限：OK 与 NG 各占一次（测试工序复测口径）；截断点由
         # sn_wsd_repair 注入（最新已关维修单的关单时间，之前的行不计=清零
-        # 重满）。尾站（结束/产出工序）固定一次，优先于工序配置。
+        # 重满）。尾站（结束/产出工序）固定一次，优先于工序配置。在制行
+        # （in_progress）out_date 为空，不计次数也不参与截断比较。
         cutoff = self.env.context.get('sn_wsd_pass_cutoff')
         passes = walked.filtered(
             lambda h: h.route_operation_id == route_operation
             and h.result in ('ok', 'ng')
-            and (not cutoff or h.out_date > cutoff))
+            and (not cutoff or (h.out_date and h.out_date > cutoff)))
         cap = 1 if route_operation.x_allow_exit \
             else route_operation.operation_id.x_max_test_count
         if len(passes) >= cap:
@@ -749,16 +752,24 @@ class MesOrder(models.Model):
                     'predecessors %(preds)s is completed yet.',
                     op=route_operation.display_label, sn=serial_identity.name,
                     preds=', '.join(route_operation.blocked_by_ids.mapped('display_label')) or '-'))
-        Wip.sudo().create({
+        # 台账立行（pass-history-on-enter）：进站即写 in_progress 历史行，
+        # 与 WIP 行同事务同生灭；出站（下一站接板或本站判定）回填该行。
+        now = fields.Datetime.now()
+        enter_vals = {
             'serial_identity_id': serial_identity.id,
             'mes_order_id': self.id,
             'route_operation_id': route_operation.id,
             'workcenter_id': workcenter.id if workcenter else False,
-        })
+        }
+        Wip.sudo().create(dict(enter_vals, in_date=now))
+        self.env['sn.wsd.serial.operation.history'].sudo().create(
+            dict(enter_vals, result='in_progress', in_date=now))
 
     def leave_station(self, serial_identity, result, scrap_reason=False,
                       ng_defect=False, operator_code=False):
-        """Station mode: an SN leaves its current station.
+        """Station mode: an SN leaves its current station. The verdict is
+        backfilled onto the in_progress history row born at its entry scan
+        (no new row is created here).
 
         result: 'ok' counts as completed and unlocks the successors; 'ng'
         does not, but the SN may re-enter the operation until its retry
@@ -791,11 +802,24 @@ class MesOrder(models.Model):
             operator_code = (
                 employee.barcode
                 or (employee.user_id.login if employee.user_id else False))
-        self.env['sn.wsd.serial.operation.history'].sudo().create(
-            self._prepare_leave_history_vals(
-                serial_identity, route_operation, wip, result,
-                scrap_reason=scrap_reason, ng_defect=ng_defect,
-                operator_code=operator_code))
+        # 回填进站时立的 in_progress 行（pass-history-on-enter）：出站不是
+        # 新建行，而是给既有行落判定。正常流程 enter 必立行，找不到即数据
+        # 不一致——直接报错，不留自愈路径。
+        History = self.env['sn.wsd.serial.operation.history'].sudo()
+        pending = History.search([
+            ('serial_identity_id', '=', serial_identity.id),
+            ('mes_order_id', '=', self.id),
+            ('result', '=', 'in_progress'),
+        ], limit=1)
+        if not pending:
+            raise ValidationError(_(
+                'SN %(sn)s has no in-progress pass row on MES order '
+                '%(order)s; its station entry record is missing.',
+                sn=serial_identity.name, order=self.name))
+        pending.write(self._prepare_leave_history_vals(
+            serial_identity, route_operation, wip, result,
+            scrap_reason=scrap_reason, ng_defect=ng_defect,
+            operator_code=operator_code))
         wip.sudo().unlink()
         # 一扫内核共用出口：T 面单全部流完时自动完结（含 T 面倒冲）
         self._mes_maybe_auto_close()
@@ -804,17 +828,14 @@ class MesOrder(models.Model):
     def _prepare_leave_history_vals(self, serial_identity, route_operation,
                                     wip, result, scrap_reason=False,
                                     ng_defect=False, operator_code=False):
-        """Vals of the append-only history row written on leave. Extended by
-        sn_wsd_quality to stamp the NG defect code (the comodel lives there)."""
+        """Vals backfilled onto the in-progress history row when the SN
+        leaves the station (verdict, leave timestamp, operator). Extended
+        by sn_wsd_quality to stamp the NG defect code (the comodel lives
+        there)."""
         return {
-            'operator_code': operator_code or False,
-            'serial_identity_id': serial_identity.id,
-            'mes_order_id': self.id,
-            'route_operation_id': route_operation.id,
-            'workcenter_id': wip.workcenter_id.id,
             'result': result,
-            'in_date': wip.in_date,
             'out_date': fields.Datetime.now(),
+            'operator_code': operator_code or False,
         }
 
     def action_clear_station_pass(self, serial_identity):
