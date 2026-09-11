@@ -93,6 +93,7 @@ class TestDualSideClose(TransactionCase):
             'product_id': cls.product.id,
             'product_uom_id': cls.uom_unit.id,
             'product_qty': 1.0, 'type': 'normal',
+            'x_workshop_id': cls.workshop.id,
             'bom_line_ids': [
                 (0, 0, {'product_id': cls.cap.id, 'product_qty': 2.0,
                         'product_uom_id': cls.uom_unit.id, 'x_board_side': 'top'}),
@@ -198,6 +199,7 @@ class TestDualSideClose(TransactionCase):
     # 自动关结：最后一扫即完结并倒冲
     # ------------------------------------------------------------------
     def test_01_auto_close_backflushes_flows_and_bom(self):
+        # spec: mes-backflush/spec/批次组件无流水按 BOM 兜底倒扣/整机表路径不受影响
         order = self._gate_online(self._make_order(qty=2))
         self.assertTrue(order.x_is_dual_side_non_final)
         self._load_feeder(order)

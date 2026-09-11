@@ -149,6 +149,7 @@ class TestSmtSingleBook(TransactionCase):
         return move
 
     def test_backfill_retargets_lot_and_quantity(self):
+        # spec: mes-backflush/spec/批次组件无流水按 BOM 兜底倒扣/有流水组件行为不变
         move = self._prepare_raw_move()
         self._create_consumption(self.lot, self.online_a, 3.0, '010')
         self._create_consumption(self.lot, self.online_a, -1.0, '011')
@@ -163,6 +164,7 @@ class TestSmtSingleBook(TransactionCase):
         self.assertEqual(self.lot._smt_on_hand_qty(), 98.0)
 
     def test_backfill_creates_substitute_move(self):
+        # spec: mes-backflush/spec/批次组件无流水按 BOM 兜底倒扣/有流水组件行为不变
         self._prepare_raw_move()
         self._create_consumption(self.lot_sub, self.online_a, 5.0, '012')
         self.production._smt_backfill_raw_moves()
@@ -189,6 +191,7 @@ class TestSmtSingleBook(TransactionCase):
         self.assertEqual(self.lot._smt_on_hand_qty(), 98.0)
 
     def test_backfill_zeroes_duplicate_bom_lines(self):
+        # spec: mes-backflush/spec/批次组件无流水按 BOM 兜底倒扣/有流水组件行为不变
         first = self._prepare_raw_move()
         second = self.env['stock.move'].create(
             self.production._get_move_raw_values(self.product, 4.0, self.product.uom_id))
