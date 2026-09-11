@@ -219,6 +219,7 @@ class TestPassHistoryLedger(TransactionCase):
             'product_uom_id': self.uom_unit.id,
             'product_qty': 1.0,
             'type': 'normal',
+            'x_workshop_id': self.workshop.id,
             'bom_line_ids': [(0, 0, {
                 'product_id': component.id,
                 'product_qty': 2.0,

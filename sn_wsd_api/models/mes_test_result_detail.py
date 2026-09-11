@@ -69,9 +69,8 @@ class MesTestResultDetail(models.Model):
         readonly=True,
     )
     parent_result = fields.Selection(
-        [('ok', 'OK'), ('ng', 'NG'), ('hold', 'Hold')],
-        string='Overall Result',
         related='test_result_id.result',
+        string='Overall Result',
         store=True,
         readonly=True,
         index=True,
