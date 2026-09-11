@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
@@ -1139,7 +1139,10 @@ class MesOrder(models.Model):
 
         有消耗流水的组件按 卷×净值×本次完工比例 带批次扣减——扣的是
         上线扫描的那个物料SN（含 BOM 没有的替代料/关键物料）；被流水
-        产品替代的 BOM 行不再重复扣；其余组件维持 BOM×比例。
+        产品替代的 BOM 行不再重复扣；其余组件（含批次追踪料）按 BOM×
+        比例兜底倒扣，批次由系统按拣料策略分配（默认 FEFO）并打
+        "BOM fallback"标（backflush-tracked-bom-fallback），扣错批次的
+        差异由盘点兜底。
 
         ``flow_ratio``：流水缩放比例，默认 本次数量÷产出数量（完工入
         库口径）。T 面单完结（不入库）传 (过点板数−报废板数)÷过点板数
@@ -1189,6 +1192,48 @@ class MesOrder(models.Model):
                     lot=' [%s]' % lot.name if lot else '',
                     order=self.name, need=need, available=available))
 
+        def allocate_line_side_lots(product, need):
+            """BOM 兜底的线边批次分配（backflush-tracked-bom-fallback）：
+            批次按线边库位拣料策略排序（默认 FEFO：removal_date → lot id
+            稳定序；fifo/lifo 按到位时间），逐批凑足需扣量；散料返回单段
+            无批次。读取口径与 line_side_available 同源（quantity 直读、
+            不扣 reserved）——线边仓不参与预留，两处不同源会出现
+            "校验够、分配不够"。"""
+            if product.tracking == 'none':
+                return [(self.env['stock.lot'], need)]
+            quants = self.env['stock.quant'].search([
+                ('product_id', '=', product.id),
+                ('location_id', '=', line_side.id),
+                ('quantity', '>', 0),
+                ('lot_id', '!=', False),
+            ])
+            strategy = (line_side.removal_strategy_id.method
+                        if line_side.removal_strategy_id else 'fefo')
+
+            def _key(quant):
+                anchor = (quant.lot_id.removal_date if strategy == 'fefo'
+                          else quant.in_date) or datetime.max
+                return (anchor, quant.lot_id.id, quant.id)
+
+            ordered = quants.sorted(_key, reverse=strategy == 'lifo')
+            allocations, remaining = [], need
+            for quant in ordered:
+                if remaining <= 0.0001:
+                    break
+                take = min(quant.quantity, remaining)
+                allocations.append((quant.lot_id, take))
+                remaining -= take
+            if remaining > 0.0001:
+                # 正常不可达：ensure_available（产品维度）已在前放行，差额
+                # 只可能来自批次追踪产品却存在无批次正量 quant 的脏数据
+                raise ValidationError(_(
+                    'Line-side lots of %(product)s cannot cover the BOM '
+                    'fallback need %(need)s of MES order %(order)s '
+                    '(%(remaining)s unallocated).',
+                    product=product.display_name, need=need,
+                    order=self.name, remaining=remaining))
+            return allocations
+
         net_by_lot = self._mes_flow_net_by_lot()
         flow_product_ids = set()
         if net_by_lot:
@@ -1235,39 +1280,54 @@ class MesOrder(models.Model):
                 flow_product_ids.add(origin.id)
 
         bom_ratio = qty / bom.product_qty
-        # 按面别过滤：BOM 兜底散料只扣本面的行（单面单=single 行）
+        # 按面别过滤：BOM 兜底只扣本面的行（单面单=single 行）
         backflush_side_lines = bom.bom_line_ids
         if self.x_side:
             backflush_side_lines = backflush_side_lines.filtered(
                 lambda l: l.x_board_side == self.x_side)
+        fallback_marker = _('BOM fallback (no consumption flow)')
         for line in backflush_side_lines:
             if line.product_id.id in flow_product_ids:
                 continue
             consume_qty = line.product_qty * bom_ratio
             if consume_qty <= 0.0001:
                 continue
-            # BOM 兜底只服务无批次的散料（螺丝/标准件）。批次料必须走
-            # 上料/过站流水回填：出现在这里说明本单没有该料的消耗流水
-            # （没上料就完工），硬拦而不是盲扣
-            if line.product_id.tracking != 'none':
-                raise ValidationError(_(
-                    'Component %(product)s of MES order %(order)s is lot/'
-                    'serial tracked but has no consumption flows: complete '
-                    'loading and station passes first, or review the BOM.',
-                    product=line.product_id.display_name, order=self.name))
+            # BOM 兜底（backflush-tracked-bom-fallback）：无流水组件一律按
+            # BOM 行量 × 完工比例倒扣——不再对批次追踪组件硬拦（料站表
+            # 覆盖不全是常态）。批次料的批次由系统按拣料策略分配（默认
+            # FEFO），扣错批次的差异由盘点兜底；兜底 move 打标，移动流水
+            # 上与流水回填扣可区分（审计兜底比例）。
             ensure_available(line.product_id, consume_qty)
-            moves |= StockMove.create({
-                'description_picking_manual': move_label or _('MES completion %(order)s', order=self.name),
+            move_vals = {
+                'description_picking_manual': '%s - %s' % (
+                    move_label or _('MES completion %(order)s', order=self.name),
+                    fallback_marker),
                 'product_id': line.product_id.id,
                 'product_uom': line.product_uom_id.id,
                 'product_uom_qty': consume_qty,
-                'quantity': consume_qty,
                 'picked': True,
                 'location_id': line_side.id,
                 'location_dest_id': production_loc.id,
                 'company_id': self.company_id.id,
                 'origin': self.name,
-            })
+            }
+            if line.product_id.tracking == 'none':
+                # 散料：无批次单行（现状）
+                move_vals['quantity'] = consume_qty
+            else:
+                move_vals['move_line_ids'] = [(0, 0, {
+                    'product_id': line.product_id.id,
+                    'product_uom_id': line.product_id.uom_id.id,
+                    'quantity': take,
+                    'lot_id': lot.id,
+                    'lot_name': lot.name,
+                    'location_id': line_side.id,
+                    'location_dest_id': production_loc.id,
+                    'company_id': self.company_id.id,
+                    'picked': True,
+                }) for lot, take in allocate_line_side_lots(
+                    line.product_id, consume_qty)]
+            moves |= StockMove.create(move_vals)
         if moves:
             moves._action_done()
         return moves

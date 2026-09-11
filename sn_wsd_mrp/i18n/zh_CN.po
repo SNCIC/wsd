@@ -8273,11 +8273,8 @@ msgstr "完工收货行上的批次号；留空按制令单+日期自动生成�
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Component %(product)s of MES order %(order)s is lot/serial tracked but has "
-"no consumption flows: complete loading and station passes first, or review "
-"the BOM."
-msgstr "制令单 %(order)s 的组件 %(product)s 是批次追踪物料但没有消耗流水：请先完成上料与过站，或核对该 BOM。"
+msgid "BOM fallback (no consumption flow)"
+msgstr "BOM 兜底（无流水）"
 
 #. module: sn_wsd_mrp
 #. odoo-python
