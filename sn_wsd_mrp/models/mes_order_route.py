@@ -621,7 +621,7 @@ class SerialOperationHistory(models.Model):
              'out_date - in_date. Zero for in-progress and skipped rows '
              '(skipped legs never parked).')
     x_wip_dwell_hours = fields.Float(
-        string='In-Progress Dwell (h)', compute='_compute_x_dwell_hours',
+        string='In-Progress Dwell (h)', compute='_compute_x_wip_dwell_hours',
         help='Hours since the SN entered this operation, for in-progress '
              'rows only. Computed at read time and never stored -- it must '
              'keep moving with the clock.')
@@ -629,15 +629,21 @@ class SerialOperationHistory(models.Model):
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
 
-    @api.depends('result', 'in_date', 'out_date')
+    @api.depends('in_date', 'out_date')
     def _compute_x_dwell_hours(self):
-        now = fields.Datetime.now()
         for history in self:
             if history.in_date and history.out_date:
                 history.x_dwell_hours = (
                     history.out_date - history.in_date).total_seconds() / 3600.0
             else:
                 history.x_dwell_hours = 0.0
+
+    # 与存储字段分属两个 compute：混合 store/非 store 会触发 Odoo 注册表
+    # 的 inconsistent-store 警告并可能连带重算写库
+    @api.depends('result', 'in_date')
+    def _compute_x_wip_dwell_hours(self):
+        now = fields.Datetime.now()
+        for history in self:
             if history.result == 'in_progress' and history.in_date:
                 history.x_wip_dwell_hours = (
                     now - history.in_date).total_seconds() / 3600.0
