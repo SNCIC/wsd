@@ -195,6 +195,16 @@ export class WorkshopOperationAction extends Component {
         );
     }
 
+    _clearCommandBox() {
+        this.state.command = "";
+        const input = this._commandInput();
+        // PDA 扫码枪可能原生填值（不触发 t-model 的 input 事件），state
+        // 置空不会引发重渲染——必须同步原生清空 DOM 值
+        if (input && input.value) {
+            input.value = "";
+        }
+    }
+
     onDocumentFocusIn(ev) {
         if (!this.el || !this.el.isConnected) {
             return;
@@ -634,6 +644,9 @@ export class WorkshopOperationAction extends Component {
 
     async onBarcodeScanned(barcode) {
         const cleanBarcode = String(barcode || "").trim();
+        // 统一汇合点清空命令框：PDA 扫码枪可能原生填值（不经 t-model），
+        // state 清空之外同时原生清空 DOM 输入框，双保险
+        this._clearCommandBox();
         if (!cleanBarcode || this.state.selector) {
             return;
         }
