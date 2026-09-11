@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ==================================================================
-         SN pass-station history (追溯性菜单): append-only log written by
-         every station pass (OK / NG / scrap / skipped). Browsing only -
-         rows are created by scan_enter/leave_station, never by hand.
+         SN pass-station history (追溯性菜单): two-phase ledger born at the
+         station scan (in_progress) and backfilled on leave (OK / NG /
+         scrap / skipped). Browsing only - rows are created by the pass
+         kernel, never by hand.
          ================================================================== -->
     <record id="view_sn_wsd_serial_operation_history_list" model="ir.ui.view">
         <field name="name">sn.wsd.serial.operation.history.list</field>
@@ -16,10 +17,13 @@
                 <field name="route_operation_id"/>
                 <field name="workcenter_id" optional="show"/>
                 <field name="result" widget="badge"
+                       decoration-primary="result == 'in_progress'"
                        decoration-success="result == 'ok'"
                        decoration-warning="result == 'ng'"
                        decoration-danger="result == 'scrap'"
                        decoration-info="result == 'skipped'"/>
+                <field name="x_dwell_hours" optional="show"/>
+                <field name="x_wip_dwell_hours" optional="hide"/>
                 <field name="in_date" optional="hide"/>
                 <field name="operator_code"/>
                 <field name="company_id" groups="base.group_multi_company" optional="hide"/>
@@ -38,6 +42,8 @@
                 <field name="route_operation_id"/>
                 <field name="workcenter_id"/>
                 <field name="operator_code"/>
+                <filter name="f_in_progress" string="WIP"
+                        domain="[('result', '=', 'in_progress')]"/>
                 <filter name="f_ok" string="OK" domain="[('result', '=', 'ok')]"/>
                 <filter name="f_ng" string="NG" domain="[('result', '=', 'ng')]"/>
                 <filter name="f_scrap" string="Scrap" domain="[('result', '=', 'scrap')]"/>
@@ -65,4 +71,20 @@
     <menuitem id="menu_sn_wsd_serial_operation_history" name="SN Operation History"
               parent="menu_sn_wsd_traceability" action="action_sn_wsd_serial_operation_history"
               sequence="17"/>
+
+    <!-- 工序在制（pass-history-on-enter）：同台账预置"在制"过滤、按工序/单
+         分组——看某制令单某道工序当前停着哪些 SN 的直接入口。 -->
+    <record id="action_sn_wsd_station_wip" model="ir.actions.act_window">
+        <field name="name">Station WIP</field>
+        <field name="res_model">sn.wsd.serial.operation.history</field>
+        <field name="view_mode">list</field>
+        <field name="context">{
+            'search_default_f_in_progress': 1,
+            'group_by': ['route_operation_id', 'mes_order_id'],
+        }</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_station_wip" name="Station WIP"
+              parent="menu_sn_wsd_traceability" action="action_sn_wsd_station_wip"
+              sequence="16"/>
 </odoo>

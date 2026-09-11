@@ -115,3 +115,22 @@ class TestStationSource(PieceRateTestCommon):
         first.state = 'confirmed'
         with self.assertRaises(ValidationError):
             second._validate_source()
+
+    def test_pending_rows_are_not_anchors(self):
+        # spec: station-pass-history/spec/完成态语义对在制行不可见/产出与计件口径不变
+        """pass-history-on-enter：在制行（in_progress，未出站）不进首次 OK
+        锚点、不加未结算余额——没付的钱只认 OK 出站。"""
+        self._rate()
+        self._seed_passes(2)
+        pending = self._serial('PRS-SN-WIP')
+        self.env['sn.wsd.serial.operation.history'].create({
+            'serial_identity_id': pending.id,
+            'mes_order_id': self.station_order.id,
+            'route_operation_id': self._op_a_row(self.station_order).id,
+            'result': 'in_progress',
+            'in_date': datetime(2026, 9, 4, 9, 0, 0),
+        })
+        settlement = self._station_settlement()
+        self.assertAlmostEqual(settlement.unsettled_qty, 2.0)
+        settlement.action_compute_from_station()
+        self.assertNotIn(pending.id, settlement.serial_identity_ids.ids)

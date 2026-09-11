@@ -10,8 +10,11 @@ class SnWsdMesDashboardService(models.AbstractModel):
         today = fields.Date.context_today(self)
         now = fields.Datetime.context_timestamp(self, fields.Datetime.now())
         mes_orders = self.env['sn.wsd.mes.order'].search([], order='id desc', limit=8)
+        # 过站窗口只取已完成行（pass-history-on-enter）：在制行 out_date
+        # 为空且排序置顶，不排除会把固定窗口挤满、今日统计被稀释
         histories = self.env['sn.wsd.serial.operation.history'].search(
-            [], order='out_date desc, id desc', limit=48)
+            [('result', '!=', 'in_progress')],
+            order='out_date desc, id desc', limit=48)
         tests = self.env['sn.wsd.mes.test.result'].search([], order='test_time desc, id desc', limit=24)
 
         today_histories = histories.filtered(

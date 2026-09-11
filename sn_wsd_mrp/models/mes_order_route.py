@@ -573,11 +573,14 @@ class MesOrderRouteOperation(models.Model):
 
 
 class SerialOperationHistory(models.Model):
-    """Append-only record: SN passed this operation of this MES order.
+    """Two-phase record of an SN passing an operation of this MES order.
 
-    Every pass (OK or NG) writes one row and consumes one of the
-    operation's pass-limit attempts; multiple OK rows per (SN, operation)
-    are legitimate (test-station retests, rework revisits). The old
+    The row is born at the station scan (enter_station writes it together
+    with the WIP row) with result='in_progress' and an empty out_date;
+    leave_station backfills the verdict (result/out_date/operator_code).
+    Every completed pass (OK or NG) consumes one of the operation's
+    pass-limit attempts; multiple OK rows per (SN, operation) are
+    legitimate (test-station retests, rework revisits). The old
     "at most one ok row" partial index was dropped in migration
     19.0.10.0.0 — station-pass-count.
     """
@@ -600,19 +603,46 @@ class SerialOperationHistory(models.Model):
              'the WIP row on leave, kept for equipment-level traceability).',
     )
     result = fields.Selection(
-        [('ok', 'OK'), ('ng', 'NG'), ('scrap', 'Scrap'), ('skipped', 'Skipped')],
+        [('in_progress', 'WIP'), ('ok', 'OK'), ('ng', 'NG'),
+         ('scrap', 'Scrap'), ('skipped', 'Skipped')],
         required=True, index=True,
-    )
+        help='WIP (key in_progress) = the SN entered this operation and is '
+             'still parked there (the row waits for its leave backfill).')
     in_date = fields.Datetime()
-    out_date = fields.Datetime(default=fields.Datetime.now, index=True)
+    out_date = fields.Datetime(index=True)
     operator_code = fields.Char(
         index=True,
         help='Employee who scanned the pass (API: M_EMP; terminal: current '
              'user employee). Old rows written before the column have no '
              'source to backfill.')
+    x_dwell_hours = fields.Float(
+        string='Dwell (h)', compute='_compute_x_dwell_hours', store=True,
+        help='Hours the SN spent at this operation once it left: '
+             'out_date - in_date. Zero for in-progress and skipped rows '
+             '(skipped legs never parked).')
+    x_wip_dwell_hours = fields.Float(
+        string='In-Progress Dwell (h)', compute='_compute_x_dwell_hours',
+        help='Hours since the SN entered this operation, for in-progress '
+             'rows only. Computed at read time and never stored -- it must '
+             'keep moving with the clock.')
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
+
+    @api.depends('result', 'in_date', 'out_date')
+    def _compute_x_dwell_hours(self):
+        now = fields.Datetime.now()
+        for history in self:
+            if history.in_date and history.out_date:
+                history.x_dwell_hours = (
+                    history.out_date - history.in_date).total_seconds() / 3600.0
+            else:
+                history.x_dwell_hours = 0.0
+            if history.result == 'in_progress' and history.in_date:
+                history.x_wip_dwell_hours = (
+                    now - history.in_date).total_seconds() / 3600.0
+            else:
+                history.x_wip_dwell_hours = 0.0
 
 
 class SerialWip(models.Model):

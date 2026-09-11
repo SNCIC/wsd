@@ -98,11 +98,19 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             self.service.scan_pass(self._payload(M_TEST_RESULT='MAYBE'))
 
     def test_02_first_pass_feeds_and_leaves(self):
+        # spec: station-pass-history/spec/过站扫码即立历史行（在制立行）/设备 API 自动停放立行
         result = self.service.scan_pass(self._payload())
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-001')])
+            ('serial_identity_id.name', '=', 'SN-API-001'),
+            ('result', '!=', 'in_progress')])
         self.assertEqual(history.result, 'ok')
+        # pass-history-on-enter: an OK at a non-end operation auto-parks the
+        # board at the successor -- one in-progress ledger row shows up too
+        parked = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-001'),
+            ('result', '=', 'in_progress')])
+        self.assertEqual(len(parked), 1)
         self.assertEqual(result['panel_qty'], 1)
 
     def test_03_ng_only_scanned_board(self):
@@ -203,7 +211,8 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(result['panel_qty'], 4)
         for sn in ['SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4']:
             history = self.env['sn.wsd.serial.operation.history'].search([
-                ('serial_identity_id.name', '=', sn)])
+                ('serial_identity_id.name', '=', sn),
+                ('result', '!=', 'in_progress')])
             self.assertEqual(history.result, 'ok', sn)
         # NG only marks the scanned board
         for sn in ('SN-PB2-1', 'SN-PB2-2'):
@@ -221,9 +230,11 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             M_SN='SN-PB2-1', M_TEST_RESULT='NG', M_STR2='APID'))
         self.assertEqual(result['panel_qty'], 2)
         ng = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-PB2-1')])
+            ('serial_identity_id.name', '=', 'SN-PB2-1'),
+            ('result', '=', 'ng')])
         ok = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-PB2-2')])
+            ('serial_identity_id.name', '=', 'SN-PB2-2'),
+            ('result', '=', 'ok')])
         self.assertEqual(ng.result, 'ng')
         self.assertEqual(ok.result, 'ok')
 
@@ -363,7 +374,8 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         types = events.mapped('event_type')
         self.assertIn('station', types)
         self.assertIn('test', types)
-        station = events.filtered(lambda e: e.event_type == 'station')
+        station = events.filtered(
+            lambda e: e.event_type == 'station' and e.result != 'in_progress')
         self.assertEqual(station.operator, 'APIOP')
         self.assertEqual(station.order_no, self.order.name)
         self.assertTrue(station.operation)
@@ -375,6 +387,30 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         action = station.action_open_source()
         self.assertEqual(action['res_model'], station.source_model)
         self.assertEqual(action['res_id'], station.source_id)
+
+    def test_13b_trace_timeline_shows_wip_station(self):
+        # spec: station-pass-history/spec/相邻消费方口径/追溯时间线含当前站
+        """pass-history-on-enter: an in-progress (parked) pass row surfaces
+        in the trace timeline as a station event dated at its entry."""
+        History = self.env['sn.wsd.serial.operation.history']
+        serial = self.env['sn.wsd.serial.identity'].create({
+            'name': 'SN-TRACE-WIP', 'origin_type': 'manual',
+            'company_id': self.order.company_id.id,
+        })
+        row = History.create({
+            'serial_identity_id': serial.id,
+            'mes_order_id': self.order.id,
+            'route_operation_id': self.order.x_route_operation_ids[:1].id,
+            'result': 'in_progress',
+            'in_date': fields.Datetime.now(),
+        })
+        events = self.env['sn.wsd.trace.event'].search([
+            ('sn', '=', 'SN-TRACE-WIP'), ('event_type', '=', 'station')])
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events.result, 'in_progress')
+        self.assertEqual(events.event_time, row.in_date)
+        self.assertEqual(events.source_model,
+                         'sn.wsd.serial.operation.history')
 
     def test_14_company_resolution(self):
         """M_DATA_AUTH maps to companies through company_registry; empty and
@@ -569,10 +605,13 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
             ('external_event_id', '=', 'LOG-AOI-1')])
         self.assertEqual(len(results), 1)
         self.assertEqual(len(results.aoi_defect_detail_ids), 1)
-        # the resent upload must not pass the station a second time
+        # the resent upload must not pass the station a second time (the OK
+        # row stays single; the auto-park adds exactly one in-progress row)
         history = self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id.name', '=', 'SN-AOI-IDEM')])
-        self.assertEqual(len(history), 1)
+        self.assertEqual(
+            len(history.filtered(lambda r: r.result != 'in_progress')), 1)
+        self.assertEqual(len(history), 2)
 
     def test_10_panel_fanout(self):
         self.route.x_process_type = 'smt'
@@ -593,7 +632,8 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         self.assertTrue(result['ok'])
         for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
             history = self.env['sn.wsd.serial.operation.history'].search([
-                ('serial_identity_id.name', '=', sn)])
+                ('serial_identity_id.name', '=', sn),
+                ('result', '=', 'ok')])
             self.assertEqual(history.result, 'ok', sn)
 
 
