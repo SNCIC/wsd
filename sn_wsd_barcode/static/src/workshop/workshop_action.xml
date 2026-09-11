@@ -93,21 +93,19 @@
                     </div>
                 </div>
 
-                <!-- 报错/提示条钉在滚动区顶部：内容再长也不用上下滑找结果 -->
+                <!-- 报错/提示条钉在滚动区顶部：结果与流程摘要合并为一条
+                     （主行=结果/提示，副行=设备表/飞达站位摘要），省一整块高度 -->
                 <div class="o_sn_wsd_pda_feedback_dock">
                     <div t-if="state.result"
                          class="o_sn_wsd_pda_feedback"
                          t-attf-class="o_sn_wsd_pda_feedback is-{{state.resultType || 'info'}}">
                         <t t-out="state.result"/>
-                        <small t-if="state.rawValue" t-out="state.rawValue"/>
+                        <small t-if="isSmtOperation &amp;&amp; smtScanSummary" t-out="smtScanSummary"/>
+                        <small t-elif="state.rawValue" t-out="state.rawValue"/>
                     </div>
                     <div t-if="!state.result" class="o_sn_wsd_pda_feedback is-empty">
                         <t t-out="scanMessage"/>
-                    </div>
-
-                    <div t-if="isSmtOperation &amp;&amp; smtScanSummary"
-                         class="o_sn_wsd_pda_feedback is-info" style="font-size:15px;">
-                        <t t-out="smtScanSummary"/>
+                        <small t-if="isSmtOperation &amp;&amp; smtScanSummary" t-out="smtScanSummary"/>
                     </div>
                 </div>
 
@@ -116,7 +114,7 @@
                     <t t-foreach="smtOperationButtons" t-as="opBtn" t-key="opBtn.key">
                         <button type="button"
                                 class="o_sn_wsd_pda_tab"
-                                t-att-class="state.selectedOperation === opBtn.key ? 'is-active' : ''"
+                                t-att-class="state.selectedOperation === opBtn.key &amp;&amp; !state.equipmentAction ? 'is-active' : ''"
                                 t-on-click="() => this.runOperation(opBtn)">
                             <t t-out="opBtn.label"/>
                         </button>

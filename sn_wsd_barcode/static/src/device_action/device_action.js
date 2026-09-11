@@ -300,6 +300,12 @@ export class DevicePdaAction extends Component {
 
     async processBarcode(rawBarcode) {
         const code = (rawBarcode || "").trim();
+        // 统一汇合点清空命令框：PDA 扫码枪可能原生填值（不经 t-model），
+        // state 清空之外同时原生清空 DOM 输入框
+        this.state.command = "";
+        if (this.inputRef.el && this.inputRef.el.value) {
+            this.inputRef.el.value = "";
+        }
         if (!code || this.state.loading) {
             return;
         }

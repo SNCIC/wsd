@@ -278,6 +278,13 @@ export class StationPassAction extends Component {
 
     async onScan(barcode) {
         const code = String(barcode || "").trim();
+        // 统一汇合点清空命令框：PDA 扫码枪可能原生填值（不经 t-model），
+        // state 清空之外同时原生清空 DOM 输入框
+        this.state.command = "";
+        const input = this._commandInput();
+        if (input && input.value) {
+            input.value = "";
+        }
         if (!code || this.state.loading) {
             return;
         }
@@ -368,6 +375,8 @@ export class StationPassAction extends Component {
             ev.preventDefault();
         }
         const code = this.state.command.trim();
+        // 提交即清空：错误分支不再残留旧码，下一扫不用手动删
+        this.state.command = "";
         if (!code) {
             return;
         }

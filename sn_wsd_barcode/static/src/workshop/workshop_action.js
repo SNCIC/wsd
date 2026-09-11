@@ -195,6 +195,16 @@ export class WorkshopOperationAction extends Component {
         );
     }
 
+    _clearCommandBox() {
+        this.state.command = "";
+        const input = this._commandInput();
+        // PDA 扫码枪可能原生填值（不触发 t-model 的 input 事件），state
+        // 置空不会引发重渲染——必须同步原生清空 DOM 值
+        if (input && input.value) {
+            input.value = "";
+        }
+    }
+
     onDocumentFocusIn(ev) {
         if (!this.el || !this.el.isConnected) {
             return;
@@ -623,6 +633,9 @@ export class WorkshopOperationAction extends Component {
     async submitCommand(ev) {
         ev.preventDefault();
         const command = this.state.command.trim();
+        // 提交即清空：错误分支不再残留旧码，下一扫不用手动删
+        // （此前依赖各流程分支自行清理，报错路径会漏）
+        this.state.command = "";
         if (!command) {
             return;
         }
@@ -631,6 +644,9 @@ export class WorkshopOperationAction extends Component {
 
     async onBarcodeScanned(barcode) {
         const cleanBarcode = String(barcode || "").trim();
+        // 统一汇合点清空命令框：PDA 扫码枪可能原生填值（不经 t-model），
+        // state 清空之外同时原生清空 DOM 输入框，双保险
+        this._clearCommandBox();
         if (!cleanBarcode || this.state.selector) {
             return;
         }
@@ -1158,6 +1174,14 @@ export class WorkshopOperationAction extends Component {
     }
 
     cancelSmtOperation() {
+        // 取消=重做当前操作：重新选中当前子胶囊（等价于自动再点一遍
+        // 上料/备料/…），回到该操作流程起点等新扫；扫错了不必手动
+        // 重选模式。
+        if (this.state.equipmentDomain === "smt_material"
+                && this.state.equipmentAction) {
+            this.pickEquipmentAction(this.state.equipmentAction);
+            return;
+        }
         this.state.selectedOperation = false;
         this.resetSmtScan();
         this.state.command = "";
