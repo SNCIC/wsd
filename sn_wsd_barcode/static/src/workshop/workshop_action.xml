@@ -114,7 +114,7 @@
                     <t t-foreach="smtOperationButtons" t-as="opBtn" t-key="opBtn.key">
                         <button type="button"
                                 class="o_sn_wsd_pda_tab"
-                                t-att-class="state.selectedOperation === opBtn.key ? 'is-active' : ''"
+                                t-att-class="state.selectedOperation === opBtn.key &amp;&amp; !state.equipmentAction ? 'is-active' : ''"
                                 t-on-click="() => this.runOperation(opBtn)">
                             <t t-out="opBtn.label"/>
                         </button>
