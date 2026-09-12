@@ -76,6 +76,10 @@ export class X2ManyMultiAddField extends X2ManyField {
         const domain = usedIds.length
             ? [...baseDomain, ["id", "not in", usedIds]]
             : baseDomain;
+        // Picker marker: target views may hide non-essential columns on this
+        // dialog only (e.g. product list: variant values / sales price /
+        // cost), via column_invisible="context.get('sn_wsd_multi_add')".
+        context.sn_wsd_multi_add = true;
 
         this.addDialog(SelectCreateDialog, {
             title: _t("Add: %s", this.props.string),

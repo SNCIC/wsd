@@ -504,6 +504,7 @@
                                  'multi_add_domain': '[(&quot;id&quot;, &quot;in&quot;, bom_product_ids)]'}">
                     <list editable="bottom">
                         <field name="product_id"/>
+                        <field name="material_specification"/>
                         <field name="product_uom_id"/>
                         <field name="qty"/>
                     </list>

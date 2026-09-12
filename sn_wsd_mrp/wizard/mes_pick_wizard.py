@@ -113,6 +113,10 @@ class MesPickWizardLine(models.TransientModel):
         domain="[('id', 'in', parent.bom_product_ids)]",
         check_company=False,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     product_uom_id = fields.Many2one(related='product_id.uom_id')
     # 默认 1：挑料组件加行时会保存父向导（multi_add 语义），默认 0 会被
     # “数量必须为正”约束当场拦下，导致加行报错、弹窗卡住
