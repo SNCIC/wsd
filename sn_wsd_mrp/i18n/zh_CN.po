@@ -1333,6 +1333,14 @@ msgid "Feeder Scan"
 msgstr "飞达扫描"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Feeding SN %(sn)s would exceed the scheduled quantity of MES order "
+"%(order)s: %(fed)s SNs have already been fed in, the plan is %(planned)s."
+msgstr "投入 SN %(sn)s 将超出制令单 %(order)s 的排产数量：已投入 %(fed)s 台，排产 %(planned)s 台。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_result
 msgid "Final Result"
 msgstr "最终结果"

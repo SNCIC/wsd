@@ -741,6 +741,18 @@ class MesOrder(models.Model):
                 'be fed in from a start operation (%(op)s is not one).',
                 sn=serial_identity.name, order=self.name,
                 op=route_operation.display_label))
+        if not walked:
+            # 投入台数上限：按 SN 去重的累计投入（历史行口径，报废占额，
+            # 与报工配额同口径）不得超过排产数量。拦的只是"下一台新板"，
+            # 已投入板的复测/维修回流（walked 非空）不受影响。
+            fed_count = len(self.sn_history_ids.mapped('serial_identity_id'))
+            if fed_count + 1 > self.planned_qty + 0.0001:
+                raise ValidationError(_(
+                    'Feeding SN %(sn)s would exceed the scheduled quantity '
+                    'of MES order %(order)s: %(fed)s SNs have already been '
+                    'fed in, the plan is %(planned)s.',
+                    sn=serial_identity.name, order=self.name,
+                    fed=fed_count, planned=self.planned_qty))
         # 维修回流目标（关单授权的进站种子）跳过可达性；其余按
         # "前驱在截断点后有 OK" 推进（无维修时截断点为空=全部历史）。
         seed_ids = self.env.context.get('sn_wsd_repair_seed_ids', [])
