@@ -17,6 +17,7 @@
         'views/purchase_request_views.xml',
         'views/stock_move_views.xml',
         'views/mrp_bom_line_views.xml',
+        'views/inventory_views.xml',
     ],
     'installable': True,
     'application': False,
