@@ -62,11 +62,12 @@ class MesOrder(models.Model):
         tracking=True,
         help='Finished-unit quantity accumulated from done material pickings.',
     )
-    x_over_picked_qty = fields.Float(
-        string='Over-picked Quantity', compute='_compute_x_over_picked_qty',
+    x_over_pick_count = fields.Integer(
+        string='Over-pick Count', compute='_compute_x_over_picked_qty',
         store=True, tracking=True,
-        help='Finished-unit quantity accumulated from done over-pick '
-             'pickings (issued beyond the plan, with a reason).',
+        help='Number of done supplement (over-pick) pickings. Supplements '
+             'are line-based: each picking carries only the components and '
+             'quantities that were explicitly requested.',
     )
     produced_qty = fields.Float(
         string='Produced Quantity', compute='_compute_execution_qty', store=True,
@@ -351,13 +352,13 @@ class MesOrder(models.Model):
                 lambda p: p.state == 'done' and not p.x_is_over_pick)
             order.picked_qty = sum(done.mapped('x_mes_order_qty'))
 
-    @api.depends('picking_ids.x_mes_order_qty', 'picking_ids.state',
-                 'picking_ids.x_is_over_pick')
+    @api.depends('picking_ids.state', 'picking_ids.x_is_over_pick')
     def _compute_x_over_picked_qty(self):
+        # 补料（挑料）口径：明细账=WH/OP 单的行本身（料×数量），单头只数
+        # 补料单数；台数概念不适用于补料
         for order in self:
-            done_over = order.picking_ids.filtered(
-                lambda p: p.state == 'done' and p.x_is_over_pick)
-            order.x_over_picked_qty = sum(done_over.mapped('x_mes_order_qty'))
+            order.x_over_pick_count = len(order.picking_ids.filtered(
+                lambda p: p.state == 'done' and p.x_is_over_pick))
 
     # ------------------------------------------------------------------
     # reference = MO name + per-MO sequence, with a row lock to avoid races
@@ -1756,14 +1757,13 @@ class MesOrder(models.Model):
             'context': {'default_mes_order_id': self.id},
         }
 
-    def action_generate_picking(self, qty_this=None, over_reason=False):
+    def action_generate_picking(self, qty_this=None):
         """Generate one internal picking for ``qty_this`` finished units.
 
         ``qty_this`` is the batch quantity of this issue (架构设计 3.3); it
         defaults to whatever remains of the order quantity. The accumulated
-        ``picked_qty`` may never exceed the order quantity — unless
-        ``over_reason`` is given: then the picking is an over-pick (beyond
-        the plan, separate ledger, no caps).
+        ``picked_qty`` may never exceed the order quantity — supplements
+        (账外补料) go through ``action_generate_over_picking`` instead.
         """
         StockMove = self.env['stock.move']
         StockPicking = self.env['stock.picking']
@@ -1775,7 +1775,7 @@ class MesOrder(models.Model):
             if qty_this <= 0.0001:
                 raise UserError(_(
                     'Nothing left to pick on MES order %(order)s.', order=order.name))
-            if not over_reason and qty_this + order.picked_qty > order.planned_qty + 0.0001:
+            if qty_this + order.picked_qty > order.planned_qty + 0.0001:
                 raise UserError(_(
                     'Over-picking: %(qty)s units would exceed the %(planned)s units '
                     'of %(order)s (already picked: %(picked)s).',
@@ -1808,12 +1808,9 @@ class MesOrder(models.Model):
                 ))
             # dedicated operation types per warehouse: never guess from
             # code='internal' (Quality Control shares that code and used to
-            # get picked by accident). Over-picks carry their own WH/OP type
+            # get picked by accident). Supplements carry their own WH/OP type
             # so the warehouse can tell issues and supplements apart.
-            if over_reason:
-                picking_type = order._mes_over_pick_picking_type(warehouse)
-            else:
-                picking_type = warehouse.picking_type_issue_id
+            picking_type = warehouse.picking_type_issue_id
             if not picking_type:
                 seq = self.env['ir.sequence'].sudo().create({
                     'name': _('Material Issue') + ': ' + warehouse.name,
@@ -1847,7 +1844,7 @@ class MesOrder(models.Model):
                 already = order._mes_issued_qty(line.product_id, open_pickings)
                 remaining_total = line.product_qty * total_ratio - already
                 return min(batch_qty, remaining_total)
-            if not over_reason and all(
+            if all(
                 _issue_qty_for(line) <= 0.0001
                 for line in bom.bom_line_ids
                 if not line.x_advance_issue
@@ -1863,8 +1860,6 @@ class MesOrder(models.Model):
                 'company_id': order.company_id.id,
                 'x_mes_order_id': order.id,
                 'x_mes_order_qty': qty_this,
-                'x_is_over_pick': bool(over_reason),
-                'x_over_reason': over_reason or False,
             })
             # 按面别过滤 BOM 行：领料只领本面的行（单面单=single 行）
             side_lines = bom.bom_line_ids
@@ -1877,8 +1872,7 @@ class MesOrder(models.Model):
                 batch_qty = line.product_qty * batch_ratio
                 already = order._mes_issued_qty(line.product_id, open_pickings)
                 remaining_total = line.product_qty * total_ratio - already
-                # 超领走账外：不占 BOM 行总封顶，按超领台数整份展开
-                qty = batch_qty if over_reason else min(batch_qty, remaining_total)
+                qty = min(batch_qty, remaining_total)
                 if qty <= 0.0001:
                     continue  # nothing left to issue for this component
                 move_vals = {
@@ -1897,6 +1891,87 @@ class MesOrder(models.Model):
                 StockMove.create(move_vals)
             picking.action_confirm()
         return True
+
+    def action_generate_over_picking(self, line_vals, reason=False):
+        """账外补料（挑料口径，2026-09-12 定稿，取代按台数整份超领）：
+        只为显式指定的组件各发指定数量，生成一张 WH/OP 补料单。
+
+        - ``line_vals``：[{'product_id': id, 'qty': float}, ...]，只放要补
+          的料；BOM 外的料硬拦
+        - 原因必填（Text，落单据 x_over_reason）
+        - 台数概念不适用：单头 x_mes_order_qty 记 0；不计净领（picked_qty）、
+          不占排产额度、不扩产出配额
+        - 物理口径照常：补料的量计入 BOM 行累计（挤占账内领料额度）、
+          落线边可供倒冲
+        """
+        self.ensure_one()
+        reason = (reason or '').strip()
+        if not reason:
+            raise UserError(_('A supplement reason is required.'))
+        if not line_vals:
+            raise UserError(_('Select at least one component to supplement.'))
+        Product = self.env['product.product']
+        lines = [(Product.browse(int(vals['product_id'])), float(vals['qty']))
+                 for vals in line_vals]
+        if any(qty <= 0.0001 for _product, qty in lines):
+            raise UserError(_('Every supplement quantity must be positive.'))
+        order = self
+        if order.state not in ('released', 'picked', 'in_progress'):
+            raise UserError(_(
+                'Only active MES orders (released, picked or in progress) '
+                'can supplement material (current: %s).', order.state))
+        production = order.production_id
+        bom = production.bom_id
+        if not bom:
+            raise UserError(_(
+                'No BOM on the manufacturing order; cannot generate '
+                'the supplement.'))
+        side_products = bom.bom_line_ids.mapped('product_id')
+        if order.x_side:
+            side_products = bom.bom_line_ids.filtered(
+                lambda l: l.x_board_side == order.x_side).mapped('product_id')
+        for product, _qty in lines:
+            if product not in side_products:
+                raise UserError(_(
+                    'Component %(product)s is not part of the BoM of MES '
+                    'order %(order)s; supplements stay within its BoM.',
+                    product=product.display_name, order=order.name))
+        line_side = order.production_line_id.workshop_id.component_location_id
+        if not line_side:
+            raise UserError(_(
+                'Workshop %(workshop)s has no component (line-side) location '
+                'configured; set it before generating the supplement.',
+                workshop=order.production_line_id.workshop_id.display_name))
+        warehouse = production.picking_type_id.warehouse_id
+        src = warehouse.lot_stock_id if warehouse else False
+        if not warehouse or not src or src == line_side:
+            raise UserError(_(
+                'The warehouse stock location of MES order %(order)s is '
+                'missing or equals the line-side location.', order=order.name))
+        picking_type = order._mes_over_pick_picking_type(warehouse)
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': picking_type.id,
+            'origin': order.name,
+            'location_id': src.id,
+            'location_dest_id': line_side.id,
+            'company_id': order.company_id.id,
+            'x_mes_order_id': order.id,
+            'x_mes_order_qty': 0.0,
+            'x_is_over_pick': True,
+            'x_over_reason': reason,
+        })
+        for product, qty in lines:
+            self.env['stock.move'].create({
+                'product_id': product.id,
+                'product_uom': product.uom_id.id,
+                'product_uom_qty': qty,
+                'picking_id': picking.id,
+                'location_id': src.id,
+                'location_dest_id': line_side.id,
+                'company_id': order.company_id.id,
+            })
+        picking.action_confirm()
+        return picking
 
     def _mes_issued_qty(self, product, pickings):
         """BOM 行累计已发量（物理口径，open+done 单据均计）。退货单
