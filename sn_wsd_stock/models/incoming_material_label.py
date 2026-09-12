@@ -372,12 +372,18 @@ class StockLot(models.Model):
 
     @api.depends(
         'location_id.complete_name',
+        'source_picking_id.move_line_ids.location_dest_id.complete_name',
+        'source_picking_id.move_line_ids.lot_id',
         'source_move_line_id.location_dest_id.complete_name',
     )
     def _compute_material_label_location(self):
         for lot in self:
+            receipt_line = lot.source_picking_id.move_line_ids.filtered(
+                lambda line: line.lot_id == lot
+            )[:1]
             location_name = (
-                lot.source_move_line_id.location_dest_id.complete_name
+                receipt_line.location_dest_id.complete_name
+                or lot.source_move_line_id.location_dest_id.complete_name
                 or lot.location_id.complete_name
             )
             lot.material_label_location = (

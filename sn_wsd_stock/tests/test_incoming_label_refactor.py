@@ -37,8 +37,8 @@ class TestIncomingLabelRefactor(TransactionCase):
                          (709, 709, 203))
         self.assertEqual(template.sn_field, 'name')
         self.assertFalse(template.company_id)
-        # 11 shapes + 7 titles + 7 values + 1 QR + 1 bottom SN
-        self.assertEqual(len(template.element_ids), 27)
+        # 12 shapes + 7 titles + 7 values + 1 QR + 1 bottom SN
+        self.assertEqual(len(template.element_ids), 28)
         # every seeded field path resolves on the live registry (the
         # product_* elements are stock.lot bridge relateds over
         # sn_wsd_mrp's material_specification / core product fields)
@@ -68,6 +68,7 @@ class TestIncomingLabelRefactor(TransactionCase):
         self.assertIn('^FO508,20^GB3,216,3^FS', zpl)
         self.assertIn('^FO434,236^GB255,3,3^FS', zpl)
         self.assertIn('^FO434,236^GB3,216,3^FS', zpl)
+        self.assertIn('^FO146,452^GB3,108,3^FS', zpl)
         # QR code remains a server-side bitmap in the resized QR region,
         # not a native ^BQ command
         self.assertIn('^FO453,245^GFA', zpl)
@@ -131,6 +132,72 @@ class TestIncomingLabelRefactor(TransactionCase):
         self.assertEqual(zpl.count('^XZ'), 2)
         self.assertEqual(lots.mapped('label_print_count'), [1, 1])
 
+    def test_label_location_uses_lot_operation_destination(self):
+        parent_location = self.env['stock.location'].create({
+            'name': 'Rack Parent',
+            'usage': 'internal',
+        })
+        source_location = self.env['stock.location'].create({
+            'name': 'Supplier Dock',
+            'usage': 'supplier',
+        })
+        first_location = self.env['stock.location'].create({
+            'name': 'W5114B2077',
+            'location_id': parent_location.id,
+            'usage': 'internal',
+        })
+        second_location = self.env['stock.location'].create({
+            'name': 'W5114B2078',
+            'location_id': parent_location.id,
+            'usage': 'internal',
+        })
+        picking_type = self.env['stock.picking.type'].search([
+            ('code', '=', 'incoming'),
+        ], limit=1)
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': picking_type.id,
+            'location_id': source_location.id,
+            'location_dest_id': parent_location.id,
+        })
+        second_lot = self.env['stock.lot'].create({
+            'name': 'CAP-001$S01$B907$100$000002',
+            'product_id': self.product.id,
+            'company_id': self.env.company.id,
+            'supplier_batch_no': 'B907',
+            'supplier_name': 'ACME',
+            'initial_quantity': 50,
+            'source_picking_id': picking.id,
+        })
+        self.lot.write({
+            'company_id': self.env.company.id,
+            'source_picking_id': picking.id,
+        })
+        lines = self.env['stock.move.line'].create([
+            {
+                'picking_id': picking.id,
+                'product_id': self.product.id,
+                'product_uom_id': self.product.uom_id.id,
+                'quantity': 1,
+                'location_id': source_location.id,
+                'location_dest_id': first_location.id,
+                'lot_id': self.lot.id,
+            },
+            {
+                'picking_id': picking.id,
+                'product_id': self.product.id,
+                'product_uom_id': self.product.uom_id.id,
+                'quantity': 1,
+                'location_id': source_location.id,
+                'location_dest_id': second_location.id,
+                'lot_id': second_lot.id,
+            },
+        ])
+        self.lot.source_move_line_id = lines[0]
+        second_lot.source_move_line_id = lines[0]
+
+        self.assertEqual(self.lot.material_label_location, 'W5114B2077')
+        self.assertEqual(second_lot.material_label_location, 'W5114B2078')
+
     def test_no_lots_raises_user_error(self):
         report = self.env['report.sn_wsd_stock.report_incoming_material_label_zpl']
         with self.assertRaises(UserError):
@@ -146,4 +213,4 @@ class TestIncomingLabelRefactor(TransactionCase):
         zpl = report._get_report_values(self.lot.ids)['zpl']
         self.assertTrue(zpl.startswith('^XA'))
         self.assertIn('^FO20,20^GB669,669,3^FS', zpl)
-        self.assertIn('^FO453,308^GFA', zpl)
+        self.assertIn('^FO453,245^GFA', zpl)
