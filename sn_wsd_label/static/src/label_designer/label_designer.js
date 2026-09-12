@@ -53,7 +53,7 @@ export class LabelDesignerField extends Component {
             addText: _t("Add a text element"),
             addQrcode: _t("Add a QR code"),
             addBarcode: _t("Add a barcode"),
-            addLine: _t("Add a line"),
+            addLine: _t("Add a straight line"),
             addBox: _t("Add a box"),
             zoomOut: _t("Zoom out"),
             zoomIn: _t("Zoom in"),

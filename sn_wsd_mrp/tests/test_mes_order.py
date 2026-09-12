@@ -1145,9 +1145,10 @@ class TestMesOrder(TransactionCase):
         # BOM 份额 4 件，但线边只有 1 件 → 退 1 件
         self.assertAlmostEqual(ret.move_ids.product_uom_qty, 1.0)
 
-    # --- mes-picking-lifecycle R3: 超领（账外补料，单独台账，不扩产出） ---
+    # --- mes-picking-lifecycle R3: 补料（挑料，账外，单独台账，不扩产出） ---
     def test_80_over_pick_beyond_plan(self):
-        """领满后超领 1：超领台账累计、净领不动、单据带原因标记。"""
+        """领满后补料 2 件：只发所挑的料、WH/OP 单、原因落单、补料单数
+        累计、净领不动、台数不适用记 0。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         self._stock_component(mo)
@@ -1157,28 +1158,34 @@ class TestMesOrder(TransactionCase):
         p1.move_ids.picked = True
         p1.button_validate()
         self.assertAlmostEqual(order.picked_qty, 4.0)
-        self.assertAlmostEqual(order.x_over_picked_qty, 0.0)
+        self.assertEqual(order.x_over_pick_count, 0)
+        component = mo.bom_id.bom_line_ids.product_id
         wizard = self.env['sn.wsd.mes.pick.wizard'].create({
-            'mes_order_id': order.id, 'qty_this': 1,
-            'is_over_pick': True, 'over_reason': 'scrap make-up',
+            'mes_order_id': order.id, 'mode': 'supplement',
+            'over_reason': 'scrap make-up',
+            'supplement_line_ids': [(0, 0, {
+                'product_id': component.id, 'qty': 2})],
         })
         wizard.action_pick()
         p2 = (order.picking_ids - p1)
         self.assertTrue(p2.x_is_over_pick)
         self.assertEqual(p2.picking_type_id.sequence_code,
                          'sn.wsd.mes.picking.over',
-                         'over-picks carry their own WH/OP operation type')
-        self.assertTrue(p2.name.startswith('OP-') or '/OP/' in p2.name, f'unexpected over-pick name: {p2.name}')
+                         'supplements carry their own WH/OP operation type')
+        self.assertTrue(p2.name.startswith('OP-') or '/OP/' in p2.name, f'unexpected supplement name: {p2.name}')
         self.assertEqual(p2.x_over_reason, 'scrap make-up')
-        # BOM 2/台 → 超领 1 台发 2 件
+        # 挑料口径：单上只有所挑的一行、数量精确 2（不再按台数整份展开）
+        self.assertEqual(len(p2.move_ids), 1)
         self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
+        self.assertAlmostEqual(p2.x_mes_order_qty, 0.0)
         p2.move_ids.picked = True
         p2.button_validate()
-        self.assertAlmostEqual(order.x_over_picked_qty, 1.0)
+        self.assertEqual(order.x_over_pick_count, 1)
         self.assertAlmostEqual(order.picked_qty, 4.0,
-                               'over-picks must not enter the net ledger')
+                               'supplements must not enter the net ledger')
 
-    def test_81_over_pick_reason_required(self):
+    def test_81_over_pick_gates(self):
+        """补料门禁：原因必填、至少一行、数量必须为正、料必须在 BOM 内。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         self._stock_component(mo)
@@ -1187,38 +1194,69 @@ class TestMesOrder(TransactionCase):
         p1 = order.picking_ids
         p1.move_ids.picked = True
         p1.button_validate()
-        wizard = self.env['sn.wsd.mes.pick.wizard'].create({
-            'mes_order_id': order.id, 'qty_this': 1, 'is_over_pick': True,
-        })
+        component = mo.bom_id.bom_line_ids.product_id
+        stranger = self.env['product.product'].create({
+            'name': 'NOT-IN-BOM', 'uom_id': self.uom_unit.id})
+        Wizard = self.env['sn.wsd.mes.pick.wizard']
+        # 原因必填
         with self.assertRaises(ValidationError):
-            wizard.action_pick()
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': component.id, 'qty': 1})],
+            }).action_pick()
+        # 至少一行
+        with self.assertRaises(ValidationError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+            }).action_pick()
+        # 数量为正（行约束在建行即拦）
+        with self.assertRaises(ValidationError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': component.id, 'qty': 0})],
+            })
+        # BOM 外的料硬拦
+        with self.assertRaises(UserError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': stranger.id, 'qty': 1})],
+            }).action_pick()
 
     def test_82_over_pick_counts_into_already(self):
-        """超领量计入 BOM 行累计（物理口径，挤占账内额度）。"""
+        """补料量计入 BOM 行累计（物理口径，挤占账内额度）。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         self._stock_component(mo)
+        component = mo.bom_id.bom_line_ids.product_id
         order = self._make_order(mo, 4)
         order.action_generate_picking(qty_this=3)
         p1 = order.picking_ids
         p1.move_ids.picked = True
         p1.button_validate()
-        # 账内 3/4；超领 1 台 = 2 件 → already 8 = BOM×4 总封顶
-        order.action_generate_picking(qty_this=1, over_reason='make-up')
+        # 账内 3 台=6 件；补料 2 件 → already 8 = BOM×4 总封顶
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
         p2 = (order.picking_ids - p1)
         p2.move_ids.picked = True
         p2.button_validate()
-        # 续领最后 1 台：该组件额度被超领挤占 → 全部组件跳过 → 拒建空单
+        # 续领最后 1 台：该组件额度被补料挤占 → 全部组件跳过 → 拒建空单
         wizard = self.env['sn.wsd.mes.pick.wizard'].create(
             {'mes_order_id': order.id, 'qty_this': 1})
         with self.assertRaises(UserError):
             wizard.action_pick()
 
     def test_83_over_pick_does_not_extend_output_quota(self):
-        """超领不扩产出：报工配额仍按排产台数封顶。"""
+        """补料不扩产出：报工配额仍按排产台数封顶。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         self._stock_component(mo)
+        component = mo.bom_id.bom_line_ids.product_id
         order = self._make_order(mo, 4)
         order.x_manage_mode = 'report'
         order.action_generate_picking(qty_this=4)
@@ -1227,19 +1265,20 @@ class TestMesOrder(TransactionCase):
         p1 = order.picking_ids
         p1.move_ids.picked = True
         p1.button_validate()
-        order.action_generate_picking(qty_this=1, over_reason='make-up')
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
         p2 = (order.picking_ids - p1)
         p2.move_ids.picked = True
         p2.button_validate()
-        self.assertAlmostEqual(order.x_over_picked_qty, 1.0)
-        # 报满排产 4 台后，第 5 台仍被拦（超领不扩产出配额）
+        self.assertEqual(order.x_over_pick_count, 1)
+        # 报满排产 4 台后，第 5 台仍被拦（补料不扩产出配额）
         order.report_operation_qty(op_in_row, 4)
         with self.assertRaises(ValidationError):
             order.report_operation_qty(op_in_row, 1)
 
     def test_84_over_pick_lot_reels(self):
-        """批次料需求=BOM 份额（picking-bom-exact-demand）：预留自动挂批，
-        扫 SN 带量 hook 把行数量抬到该批次源库位当前余量（超领同口径）。"""
+        """批次料需求=所挑数量（补料同口径）：预留自动挂批，扫 SN 带量
+        hook 把行数量抬到该批次源库位当前余量。"""
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
@@ -1256,8 +1295,8 @@ class TestMesOrder(TransactionCase):
         Quant.create({'product_id': component.id, 'location_id': src.id,
                       'quantity': 5.0, 'lot_id': lot2.id})
         order = self._make_order(mo, 4)
-        # 账内领 1 台：需求=2 件（不再改写成卷余量），确认后原生预留挂
-        # lot1（FIFO），hook 把预留行数量带成 lot1 当前余量 7
+        # 账内领 1 台：需求=2 件，确认后原生预留挂 lot1（FIFO），
+        # hook 把预留行数量带成 lot1 当前余量 7
         order.action_generate_picking(qty_this=1)
         p1 = order.picking_ids
         self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
@@ -1265,8 +1304,9 @@ class TestMesOrder(TransactionCase):
         self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
         p1.move_ids.picked = True
         p1.button_validate()
-        # 超领 1 台：同样需求 2 件；lot1 已随 p1 整卷发到线边，预留挑 lot2
-        order.action_generate_picking(qty_this=1, over_reason='make-up')
+        # 补料 2 件：需求=所挑数量 2；lot1 已随 p1 整卷发到线边，预留挑 lot2
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
         p2 = (order.picking_ids - p1)
         self.assertTrue(p2.x_is_over_pick)
         self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
@@ -1341,20 +1381,21 @@ class TestMesOrder(TransactionCase):
         with self.assertRaises(UserError):
             order.action_generate_return(qty=1)
 
-    # --- mes-picking-lifecycle R4: 全链回归（超领 × 完工倒冲） ---
+    # --- mes-picking-lifecycle R4: 全链回归（补料 × 完工倒冲） ---
     def test_87_completion_after_over_pick_backflush(self):
-        """超领后完工：倒冲按流水/线边正常扣，超领的量就在线边可用。"""
+        """补料后完工：倒冲按流水/线边正常扣，补料的量就在线边可用。"""
         order = self._order_with_output()  # 在产、产出 1 台的在线单
         component, line_side = self._stock_line_side(order)
-        self._stock_component(order.production_id)  # 超领从仓库源头发货
-        order.action_generate_picking(qty_this=1, over_reason='make-up')
+        self._stock_component(order.production_id)  # 补料从仓库源头发货
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
         p_over = order.picking_ids.filtered(lambda p: p.x_is_over_pick)
         p_over.move_ids.picked = True
         p_over.button_validate()
-        self.assertAlmostEqual(order.x_over_picked_qty, 1.0)
+        self.assertEqual(order.x_over_pick_count, 1)
         order.action_complete(1.0, 'stock')
         self.assertEqual(order.state, 'done')
-        # 线边 100 + 超领 2 − 倒冲 2 = 100
+        # 线边 100 + 补料 2 − 倒冲 2 = 100
         quant = self.env['stock.quant'].search([
             ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
         self.assertEqual(quant.quantity, 100.0)
@@ -1453,6 +1494,9 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(parts[3], '1')
         # 批次属性与来源链
         self.assertEqual(line.lot_id.arrival_batch_no, 'HT2026-088')
+        # 供应商批次=批次段，行与 lot 双写（2026-09-12 修：标签/行列读它）
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
         self.assertEqual(line.lot_id.material_sn_base, line.lot_id.name)
         self.assertEqual(line.lot_id.source_picking_id, receipt)
         # 库存落线边且挂码
@@ -1473,6 +1517,8 @@ class TestMesOrder(TransactionCase):
         today = fields.Date.context_today(order).strftime('%Y%m%d')
         self.assertEqual(lot.name.split('$')[2], today)
         self.assertEqual(lot.arrival_batch_no, today)
+        self.assertEqual(lot.supplier_batch_no, today)
+        self.assertEqual(receipt.move_ids.move_line_ids.supplier_batch_no, today)
 
     def test_92_stock_completion_no_auto_lot_native_gate(self):
         """成品库路径：行不带码等标签向导；无码验证被原生缺批次约束拦截。"""
@@ -1519,6 +1565,9 @@ class TestMesOrder(TransactionCase):
         self.assertTrue(line.picked)
         self.assertEqual(len(line.lot_id), 1)
         self.assertEqual(line.lot_id.name.split('$')[2], 'HT2026-088')
+        # 标签按钮建行也写供应商批次（2026-09-12 修）
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
         # 补码后验证放行，库存挂码落成品库位
         receipt.button_validate()
         self.assertEqual(receipt.state, 'done')

@@ -90,7 +90,7 @@
                             <field name="date_plan" readonly="1"/>
                             <field name="planned_qty" readonly="1"/>
                             <field name="picked_qty" readonly="1"/>
-                            <field name="x_over_picked_qty" readonly="1"/>
+                            <field name="x_over_pick_count" readonly="1"/>
                         </group>
                     </group>
                     <group string="工艺路线">
@@ -402,6 +402,7 @@
                         <field name="mes_order_id"/>
                         <field name="output_qty"/>
                         <field name="done_qty"/>
+                        <field name="remaining_qty"/>
                         <field name="qty"/>
                     </group>
                     <group>
@@ -486,14 +487,28 @@
                         <field name="planned_qty"/>
                         <field name="picked_qty"/>
                         <field name="remaining_qty"/>
+                        <field name="mode" widget="radio"/>
+                        <field name="bom_product_ids" invisible="1"/>
                     </group>
                     <group>
-                        <field name="qty_this"/>
-                        <field name="is_over_pick"/>
-                        <field name="over_reason" invisible="not is_over_pick"
-                               placeholder="Why is material needed beyond the planned quantity?"/>
+                        <field name="qty_this" invisible="mode != 'normal'"/>
+                        <field name="over_reason" invisible="mode != 'supplement'"
+                               placeholder="Why is this material needed?"/>
                     </group>
                 </group>
+                <field name="supplement_line_ids" nolabel="1"
+                       invisible="mode != 'supplement'"
+                       widget="sn_wsd_x2many_multi_add"
+                       options="{'multi_add_model': 'product.product',
+                                 'multi_add_field': 'product_id',
+                                 'multi_add_domain': '[(&quot;id&quot;, &quot;in&quot;, bom_product_ids)]'}">
+                    <list editable="bottom">
+                        <field name="product_id"/>
+                        <field name="material_specification"/>
+                        <field name="product_uom_id"/>
+                        <field name="qty"/>
+                    </list>
+                </field>
                 <footer>
                     <button name="action_pick" type="object" string="Create Picking" class="btn-primary" data-hotkey="q"/>
                     <button string="Discard" special="cancel" data-hotkey="x" class="btn-secondary"/>
