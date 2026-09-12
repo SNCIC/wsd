@@ -1492,6 +1492,7 @@ class MesOrder(models.Model):
                 'location_dest_id': dest.id,
                 'company_id': self.company_id.id,
                 'picked': True,
+                **self._mes_finished_line_lot_vals(lot),
             })]
         elif mo.product_id.tracking != 'lot':
             move_vals.update({'quantity': qty, 'picked': True})
@@ -1513,6 +1514,11 @@ class MesOrder(models.Model):
         ``料号$公司码$批次段$数量$序号`` 生成 lot 并挂批次属性（批次段=
         MO 合同号空则当天日期，序数复用来料全局序列）。"""
         return self.env['stock.lot']
+
+    def _mes_finished_line_lot_vals(self, lot):
+        """成品收货行的批次扩展 vals hook：基础实现为空；sn_wsd_stock
+        扩展注入 supplier_batch_no（批次段，与来料收货行同口径）。"""
+        return {}
 
     def _mes_meter_lot(self, sn, product, picking):
         """台级物料SN hook（finished-goods-material-sn）：码=表 SN、数量
@@ -1593,6 +1599,7 @@ class MesOrder(models.Model):
                         'location_id': src.id,
                         'location_dest_id': dest.id,
                         'company_id': self.company_id.id,
+                        **self._mes_finished_line_lot_vals(lot),
                     })
                 continue
             meters = len(carton.x_meter_pack_record_ids)

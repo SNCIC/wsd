@@ -48,10 +48,17 @@ class MesOrderFinishedMaterialSn(models.Model):
             'product_id': product.id,
             'company_id': self.company_id.id,
             'arrival_batch_no': batch_no,
+            # 供应商批次=生产批次段（合同号/日期）：收货行"供应商批次"列与
+            # ZPL 物料标签读的都是这个字段（2026-09-12 修：此前只写
+            # arrival_batch_no，标签批次段空白）
+            'supplier_batch_no': batch_no,
             'material_sn_base': name,
             'initial_quantity': qty,
             'source_picking_id': picking.id,
         })
+
+    def _mes_finished_line_lot_vals(self, lot):
+        return {'supplier_batch_no': lot.supplier_batch_no}
 
 
 class StockPickingFinishedSn(models.Model):
@@ -94,6 +101,7 @@ class StockPickingFinishedSn(models.Model):
                 'location_dest_id': move.location_dest_id.id,
                 'company_id': self.company_id.id,
                 'picked': True,
+                **order._mes_finished_line_lot_vals(lot),
             })
             lots |= lot
         # 已完成单（线边补打）没有待处理移动——重打行上已有的码
@@ -121,6 +129,8 @@ class MesOrderMeterLotEnrich(models.Model):
             mo = self.production_id
             lot.write({
                 'arrival_batch_no': (mo.x_contract_no or '').strip()
+                or fields.Date.context_today(self).strftime('%Y%m%d'),
+                'supplier_batch_no': (mo.x_contract_no or '').strip()
                 or fields.Date.context_today(self).strftime('%Y%m%d'),
                 'material_sn_base': lot.name,
                 'initial_quantity': 1.0,

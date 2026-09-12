@@ -220,6 +220,10 @@ class TestStockPackagePallet(TransactionCase):
         # 台级 lot 的批次属性与回链
         self.assertEqual(lines.lot_id.source_picking_id, receipt)
         self.assertTrue(lines.lot_id.arrival_batch_no)
+        # 供应商批次=批次段（合同号/日期），行与 lot 双写（2026-09-12 修）
+        self.assertEqual(lines.supplier_batch_no,
+                         lines.lot_id.supplier_batch_no)
+        self.assertTrue(lines.supplier_batch_no)
 
         # 仓库验证 → 库存按 SN-lot 落地
         receipt.button_validate()

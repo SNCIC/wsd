@@ -1494,6 +1494,9 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(parts[3], '1')
         # 批次属性与来源链
         self.assertEqual(line.lot_id.arrival_batch_no, 'HT2026-088')
+        # 供应商批次=批次段，行与 lot 双写（2026-09-12 修：标签/行列读它）
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
         self.assertEqual(line.lot_id.material_sn_base, line.lot_id.name)
         self.assertEqual(line.lot_id.source_picking_id, receipt)
         # 库存落线边且挂码
@@ -1514,6 +1517,8 @@ class TestMesOrder(TransactionCase):
         today = fields.Date.context_today(order).strftime('%Y%m%d')
         self.assertEqual(lot.name.split('$')[2], today)
         self.assertEqual(lot.arrival_batch_no, today)
+        self.assertEqual(lot.supplier_batch_no, today)
+        self.assertEqual(receipt.move_ids.move_line_ids.supplier_batch_no, today)
 
     def test_92_stock_completion_no_auto_lot_native_gate(self):
         """成品库路径：行不带码等标签向导；无码验证被原生缺批次约束拦截。"""
@@ -1560,6 +1565,9 @@ class TestMesOrder(TransactionCase):
         self.assertTrue(line.picked)
         self.assertEqual(len(line.lot_id), 1)
         self.assertEqual(line.lot_id.name.split('$')[2], 'HT2026-088')
+        # 标签按钮建行也写供应商批次（2026-09-12 修）
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
         # 补码后验证放行，库存挂码落成品库位
         receipt.button_validate()
         self.assertEqual(receipt.state, 'done')
