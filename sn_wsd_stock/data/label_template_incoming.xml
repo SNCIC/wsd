@@ -131,6 +131,16 @@
             <field name="height">216</field>
             <field name="thickness">3</field>
         </record>
+        <record id="label_element_incoming_line_location_col" model="sn.label.element">
+            <field name="template_id" ref="label_template_incoming_material"/>
+            <field name="sequence">105</field>
+            <field name="element_type">line</field>
+            <field name="x">146</field>
+            <field name="y">452</field>
+            <field name="width">0</field>
+            <field name="height">108</field>
+            <field name="thickness">3</field>
+        </record>
 
         <!-- Column titles (former _() strings, font 34, single line) -->
         <record id="label_element_incoming_title_material_code" model="sn.label.element">

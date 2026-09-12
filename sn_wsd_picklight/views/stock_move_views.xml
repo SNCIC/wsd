@@ -40,6 +40,9 @@
                         groups="stock.group_stock_user"
                         invisible="picking_code != 'incoming'"/>
             </xpath>
+            <xpath expr="//button[@name='action_auto_fill_small_rack_locations']" position="after">
+                <xpath expr="//button[@name='action_print_material_labels']" position="move"/>
+            </xpath>
         </field>
     </record>
 </odoo>

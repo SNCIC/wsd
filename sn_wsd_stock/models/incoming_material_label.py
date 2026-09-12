@@ -365,9 +365,9 @@ class StockLot(models.Model):
     material_label_location = fields.Char(
         string='Material Label Location',
         compute='_compute_material_label_location',
-        help='Location printed on the material label. The current unique '
-             'on-hand location is preferred; the receipt destination is used '
-             'before stock is validated or when no unique quant location exists.',
+        help='Location printed on the material label. The receipt destination '
+             'is preferred because it is the storage location assigned to the '
+             'operation line; the current quant location is used as a fallback.',
     )
 
     @api.depends(
@@ -377,8 +377,8 @@ class StockLot(models.Model):
     def _compute_material_label_location(self):
         for lot in self:
             lot.material_label_location = (
-                lot.location_id.complete_name
-                or lot.source_move_line_id.location_dest_id.complete_name
+                lot.source_move_line_id.location_dest_id.complete_name
+                or lot.location_id.complete_name
                 or False
             )
 
