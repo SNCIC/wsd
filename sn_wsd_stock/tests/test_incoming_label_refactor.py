@@ -37,15 +37,15 @@ class TestIncomingLabelRefactor(TransactionCase):
                          (709, 709, 203))
         self.assertEqual(template.sn_field, 'name')
         self.assertFalse(template.company_id)
-        # 10 shapes + 6 titles + 6 values + 1 QR + 1 bottom SN
-        self.assertEqual(len(template.element_ids), 24)
+        # 11 shapes + 7 titles + 7 values + 1 QR + 1 bottom SN
+        self.assertEqual(len(template.element_ids), 27)
         # every seeded field path resolves on the live registry (the
         # product_* elements are stock.lot bridge relateds over
         # sn_wsd_mrp's material_specification / core product fields)
         reader = self.env['sn.label.reader']
         field_elements = template.element_ids.filtered(
             lambda element: element.content == 'field')
-        self.assertEqual(len(field_elements), 8)
+        self.assertEqual(len(field_elements), 9)
         for element in field_elements:
             self.assertTrue(
                 reader.validate_field_path('stock.lot', element.field_path))
@@ -58,18 +58,19 @@ class TestIncomingLabelRefactor(TransactionCase):
         self.assertIn('^LL709', zpl)
         # outer frame and grid lines translated 1:1 from the old template
         self.assertIn('^FO20,20^GB669,669,3^FS', zpl)
-        self.assertIn('^FO20,155^GB669,3,3^FS', zpl)
-        self.assertIn('^FO20,290^GB414,3,3^FS', zpl)
-        self.assertIn('^FO20,425^GB414,3,3^FS', zpl)
+        self.assertIn('^FO20,128^GB669,3,3^FS', zpl)
+        self.assertIn('^FO20,236^GB414,3,3^FS', zpl)
+        self.assertIn('^FO20,344^GB414,3,3^FS', zpl)
+        self.assertIn('^FO20,452^GB669,3,3^FS', zpl)
         self.assertIn('^FO20,560^GB669,3,3^FS', zpl)
-        self.assertIn('^FO146,20^GB3,540,3^FS', zpl)
-        self.assertIn('^FO434,20^GB3,540,3^FS', zpl)
-        self.assertIn('^FO508,20^GB3,270,3^FS', zpl)
-        self.assertIn('^FO434,290^GB255,3,3^FS', zpl)
-        self.assertIn('^FO434,290^GB3,270,3^FS', zpl)
-        # QR code stays a server-side bitmap at the former position,
+        self.assertIn('^FO146,20^GB3,432,3^FS', zpl)
+        self.assertIn('^FO434,20^GB3,432,3^FS', zpl)
+        self.assertIn('^FO508,20^GB3,216,3^FS', zpl)
+        self.assertIn('^FO434,236^GB255,3,3^FS', zpl)
+        self.assertIn('^FO434,236^GB3,216,3^FS', zpl)
+        # QR code remains a server-side bitmap in the resized QR region,
         # not a native ^BQ command
-        self.assertIn('^FO453,308^GFA', zpl)
+        self.assertIn('^FO453,245^GFA', zpl)
         self.assertNotIn('^BQ', zpl)
         # titles and field values
         self.assertIn('^FDMaterial Code^FS', zpl)
@@ -81,6 +82,7 @@ class TestIncomingLabelRefactor(TransactionCase):
         self.assertIn('^FD100.5^FS', zpl)
         self.assertIn('^FD0805 100nF^FS', zpl)
         self.assertIn('^FDACME^FS', zpl)
+        self.assertIn('^FDLocation^FS', zpl)
         self.assertIn(f'^FD{self.lot.name}^FS', zpl)
 
     def test_qweb_text_download_payload(self):
@@ -92,7 +94,7 @@ class TestIncomingLabelRefactor(TransactionCase):
         payload = rendered.decode('utf-8') if isinstance(rendered, bytes) else rendered
         self.assertIn('^XA', payload)
         self.assertIn('^FO20,20^GB669,669,3^FS', payload)
-        self.assertIn('^FO453,308^GFA', payload)
+        self.assertIn('^FO453,245^GFA', payload)
         self.assertEqual(self.lot.label_print_count, 1)
 
     def test_label_print_count_increments(self):

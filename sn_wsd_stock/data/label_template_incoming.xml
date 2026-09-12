@@ -5,7 +5,7 @@
     Every element is a 1:1 translation of the former hardcoded ZPL in
     report/incoming_material_label_templates.xml + .py:
       ^FO20,20^GB669,669,3          -> box 20,20 669x669 t3
-      ^FO20,155^GB669,3,3 etc.      -> horizontal/vertical lines t3
+      ^FO20,128^GB669,3,3 etc.      -> horizontal/vertical lines t3
       titles / values / QR / SN     -> text (fixed/field) + qrcode elements
     noupdate so designers can adjust the layout without upgrades
     overwriting their changes.
@@ -36,7 +36,7 @@
             <field name="sequence">20</field>
             <field name="element_type">line</field>
             <field name="x">20</field>
-            <field name="y">155</field>
+            <field name="y">128</field>
             <field name="width">669</field>
             <field name="height">0</field>
             <field name="thickness">3</field>
@@ -46,7 +46,7 @@
             <field name="sequence">30</field>
             <field name="element_type">line</field>
             <field name="x">20</field>
-            <field name="y">290</field>
+            <field name="y">236</field>
             <field name="width">414</field>
             <field name="height">0</field>
             <field name="thickness">3</field>
@@ -56,7 +56,7 @@
             <field name="sequence">40</field>
             <field name="element_type">line</field>
             <field name="x">20</field>
-            <field name="y">425</field>
+            <field name="y">344</field>
             <field name="width">414</field>
             <field name="height">0</field>
             <field name="thickness">3</field>
@@ -64,6 +64,16 @@
         <record id="label_element_incoming_line_row_4" model="sn.label.element">
             <field name="template_id" ref="label_template_incoming_material"/>
             <field name="sequence">50</field>
+            <field name="element_type">line</field>
+            <field name="x">20</field>
+            <field name="y">452</field>
+            <field name="width">669</field>
+            <field name="height">0</field>
+            <field name="thickness">3</field>
+        </record>
+        <record id="label_element_incoming_line_row_5" model="sn.label.element">
+            <field name="template_id" ref="label_template_incoming_material"/>
+            <field name="sequence">55</field>
             <field name="element_type">line</field>
             <field name="x">20</field>
             <field name="y">560</field>
@@ -78,7 +88,7 @@
             <field name="x">146</field>
             <field name="y">20</field>
             <field name="width">0</field>
-            <field name="height">540</field>
+            <field name="height">432</field>
             <field name="thickness">3</field>
         </record>
         <record id="label_element_incoming_line_col_2" model="sn.label.element">
@@ -88,7 +98,7 @@
             <field name="x">434</field>
             <field name="y">20</field>
             <field name="width">0</field>
-            <field name="height">540</field>
+            <field name="height">432</field>
             <field name="thickness">3</field>
         </record>
         <record id="label_element_incoming_line_col_3" model="sn.label.element">
@@ -98,7 +108,7 @@
             <field name="x">508</field>
             <field name="y">20</field>
             <field name="width">0</field>
-            <field name="height">270</field>
+            <field name="height">216</field>
             <field name="thickness">3</field>
         </record>
         <record id="label_element_incoming_line_qr_top" model="sn.label.element">
@@ -106,7 +116,7 @@
             <field name="sequence">90</field>
             <field name="element_type">line</field>
             <field name="x">434</field>
-            <field name="y">290</field>
+            <field name="y">236</field>
             <field name="width">255</field>
             <field name="height">0</field>
             <field name="thickness">3</field>
@@ -116,9 +126,9 @@
             <field name="sequence">100</field>
             <field name="element_type">line</field>
             <field name="x">434</field>
-            <field name="y">290</field>
+            <field name="y">236</field>
             <field name="width">0</field>
-            <field name="height">270</field>
+            <field name="height">216</field>
             <field name="thickness">3</field>
         </record>
 
@@ -132,7 +142,7 @@
             <field name="x">35</field>
             <field name="y">20</field>
             <field name="width">100</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
@@ -145,7 +155,7 @@
             <field name="x">445</field>
             <field name="y">20</field>
             <field name="width">55</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
@@ -156,9 +166,9 @@
             <field name="content">fixed</field>
             <field name="fixed_text">Material Name</field>
             <field name="x">35</field>
-            <field name="y">155</field>
+            <field name="y">128</field>
             <field name="width">100</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
@@ -169,9 +179,9 @@
             <field name="content">fixed</field>
             <field name="fixed_text">Quantity Label</field>
             <field name="x">445</field>
-            <field name="y">155</field>
+            <field name="y">128</field>
             <field name="width">55</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
@@ -182,9 +192,9 @@
             <field name="content">fixed</field>
             <field name="fixed_text">Specification</field>
             <field name="x">35</field>
-            <field name="y">290</field>
+            <field name="y">236</field>
             <field name="width">100</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
@@ -195,14 +205,14 @@
             <field name="content">fixed</field>
             <field name="fixed_text">Supplier Label</field>
             <field name="x">35</field>
-            <field name="y">425</field>
+            <field name="y">344</field>
             <field name="width">100</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">34</field>
             <field name="max_lines">1</field>
         </record>
 
-        <!-- Field values (two lines, cell height 135), canonical
+        <!-- Field values (two lines, cell height 108), canonical
              dotted paths through product_id. -->
         <record id="label_element_incoming_value_material_code" model="sn.label.element">
             <field name="template_id" ref="label_template_incoming_material"/>
@@ -213,7 +223,7 @@
             <field name="x">157</field>
             <field name="y">20</field>
             <field name="width">270</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">38</field>
             <field name="max_lines">2</field>
         </record>
@@ -226,7 +236,7 @@
             <field name="x">515</field>
             <field name="y">20</field>
             <field name="width">166</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">32</field>
             <field name="max_lines">2</field>
         </record>
@@ -237,9 +247,9 @@
             <field name="content">field</field>
             <field name="field_path">product_id.name</field>
             <field name="x">157</field>
-            <field name="y">155</field>
+            <field name="y">128</field>
             <field name="width">270</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">32</field>
             <field name="max_lines">2</field>
         </record>
@@ -250,9 +260,9 @@
             <field name="content">field</field>
             <field name="field_path">initial_quantity</field>
             <field name="x">515</field>
-            <field name="y">155</field>
+            <field name="y">128</field>
             <field name="width">166</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">36</field>
             <field name="max_lines">2</field>
         </record>
@@ -263,9 +273,9 @@
             <field name="content">field</field>
             <field name="field_path">product_id.material_specification</field>
             <field name="x">157</field>
-            <field name="y">290</field>
+            <field name="y">236</field>
             <field name="width">270</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">30</field>
             <field name="max_lines">2</field>
         </record>
@@ -276,14 +286,42 @@
             <field name="content">field</field>
             <field name="field_path">supplier_name</field>
             <field name="x">157</field>
-            <field name="y">425</field>
+            <field name="y">344</field>
             <field name="width">270</field>
-            <field name="height">135</field>
+            <field name="height">108</field>
             <field name="font_size">30</field>
             <field name="max_lines">2</field>
         </record>
 
-        <!-- Material SN QR code: former ^FO453,308 + 255x270 bitmap region -->
+        <!-- Full-width location row; the bottom Material SN row keeps its original height. -->
+        <record id="label_element_incoming_title_location" model="sn.label.element">
+            <field name="template_id" ref="label_template_incoming_material"/>
+            <field name="sequence">225</field>
+            <field name="element_type">text</field>
+            <field name="content">fixed</field>
+            <field name="fixed_text">Location</field>
+            <field name="x">35</field>
+            <field name="y">452</field>
+            <field name="width">100</field>
+            <field name="height">108</field>
+            <field name="font_size">34</field>
+            <field name="max_lines">1</field>
+        </record>
+        <record id="label_element_incoming_value_location" model="sn.label.element">
+            <field name="template_id" ref="label_template_incoming_material"/>
+            <field name="sequence">226</field>
+            <field name="element_type">text</field>
+            <field name="content">field</field>
+            <field name="field_path">material_label_location</field>
+            <field name="x">157</field>
+            <field name="y">452</field>
+            <field name="width">532</field>
+            <field name="height">108</field>
+            <field name="font_size">28</field>
+            <field name="max_lines">2</field>
+        </record>
+
+        <!-- Material SN QR code, resized to fit the compressed third/fourth rows. -->
         <record id="label_element_incoming_qr_sn" model="sn.label.element">
             <field name="template_id" ref="label_template_incoming_material"/>
             <field name="sequence">230</field>
@@ -291,9 +329,9 @@
             <field name="content">field</field>
             <field name="field_path">name</field>
             <field name="x">453</field>
-            <field name="y">308</field>
-            <field name="width">255</field>
-            <field name="height">270</field>
+            <field name="y">245</field>
+            <field name="width">205</field>
+            <field name="height">205</field>
             <field name="rendering">bitmap</field>
         </record>
 

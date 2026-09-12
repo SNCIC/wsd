@@ -362,6 +362,25 @@ class StockLot(models.Model):
     label_print_count = fields.Integer(
         string='Label Print Count', default=0, copy=False, readonly=True,
     )
+    material_label_location = fields.Char(
+        string='Material Label Location',
+        compute='_compute_material_label_location',
+        help='Location printed on the material label. The current unique '
+             'on-hand location is preferred; the receipt destination is used '
+             'before stock is validated or when no unique quant location exists.',
+    )
+
+    @api.depends(
+        'location_id.complete_name',
+        'source_move_line_id.location_dest_id.complete_name',
+    )
+    def _compute_material_label_location(self):
+        for lot in self:
+            lot.material_label_location = (
+                lot.location_id.complete_name
+                or lot.source_move_line_id.location_dest_id.complete_name
+                or False
+            )
 
 
 class StockQuant(models.Model):
