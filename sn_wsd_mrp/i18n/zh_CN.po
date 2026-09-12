@@ -2983,6 +2983,13 @@ msgid "Output Qty"
 msgstr "产出数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__remaining_qty
+msgid ""
+"Output quantity minus done quantity: how many units still need to be "
+"received to close the order."
+msgstr "产出数量减已完工数量：关单前还需完工入库的台数。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workcenter_type
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_search_inherit_sn_wsd
 msgid "Ownership Type"
@@ -3422,6 +3429,11 @@ msgstr "发布时间"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_feeder_line__remaining_qty
 msgid "Remaining Qty"
+msgstr "剩余数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__remaining_qty
+msgid "Remaining Quantity"
 msgstr "剩余数量"
 
 #. module: sn_wsd_mrp
