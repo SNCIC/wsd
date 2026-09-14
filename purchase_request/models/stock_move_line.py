@@ -130,10 +130,16 @@ class StockMoveLine(models.Model):
     def _action_done(self):
         res = super()._action_done()
         self.allocate()
-        self.mapped(
+        # Allocation records can point to purchase request lines that are not
+        # readable by the user validating the receipt (the purchase request
+        # record rules intentionally restrict visibility by requester,
+        # follower, or approver).  The stock operation still needs to update
+        # the linked request quantities and state, so perform this internal
+        # synchronisation in a superuser environment instead of leaking the
+        # purchase request read through the stock validation transaction.
+        purchase_request_lines = self.sudo().mapped(
             "move_id.purchase_request_allocation_ids.purchase_request_line_id"
-        )._compute_qty()
-        self.mapped(
-            "move_id.purchase_request_allocation_ids.purchase_request_line_id.request_id"
-        )._auto_set_done()
+        )
+        purchase_request_lines._compute_qty()
+        purchase_request_lines.mapped("request_id")._auto_set_done()
         return res

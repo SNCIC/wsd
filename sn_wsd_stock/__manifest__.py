@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Stock',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.4.0',
     'summary': 'Incoming material labels and internal lot generation',
     'category': 'Supply Chain/Inventory',
     'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp', 'sn_wsd_label'],
