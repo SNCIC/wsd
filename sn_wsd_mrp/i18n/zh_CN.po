@@ -4308,9 +4308,21 @@ msgid "Picked Quantity"
 msgstr "已领数量"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
+msgid "Picking %(name)s created for %(qty)s unit(s) of %(order)s."
+msgstr "领料单 %(name)s 已生成（%(order)s × %(qty)s 台）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__picking_count
 msgid "Picking Count"
 msgstr "领料单数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
+msgid "Picking Created"
+msgstr "领料单已生成"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__date_plan
@@ -6019,6 +6031,12 @@ msgstr "补料"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__supplement_line_ids
 msgid "Supplement Lines"
 msgstr "补料明细"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
+msgid "Supplement picking %(name)s created for %(count)s component line(s)."
+msgstr "补料单 %(name)s 已生成（%(count)s 个组件行）。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__supplement_qty

@@ -1775,6 +1775,7 @@ class MesOrder(models.Model):
         StockMove = self.env['stock.move']
         StockPicking = self.env['stock.picking']
         PickingType = self.env['stock.picking.type']
+        pickings = self.env['stock.picking']
         for order in self.filtered(
                 lambda o: o.state in ('released', 'picked', 'in_progress')):
             if qty_this is None:
@@ -1897,7 +1898,8 @@ class MesOrder(models.Model):
                 # 该批次源库位当前余量——实发>需求允许，验证按行数量过账
                 StockMove.create(move_vals)
             picking.action_confirm()
-        return True
+            pickings |= picking
+        return pickings
 
     def action_generate_over_picking(self, line_vals, reason=False):
         """账外补料（挑料口径，2026-09-12 定稿，取代按台数整份超领）：

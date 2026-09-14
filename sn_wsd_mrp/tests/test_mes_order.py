@@ -970,7 +970,11 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(order.state, 'in_progress')
         wizard = self.env['sn.wsd.mes.pick.wizard'].create(
             {'mes_order_id': order.id, 'qty_this': 2})
-        wizard.action_pick()
+        action = wizard.action_pick()
+        # 成功提示（display_notification + 自动关向导）
+        self.assertEqual(action['tag'], 'display_notification')
+        self.assertEqual(action['params']['type'], 'success')
+        self.assertIn(order.name, action['params']['message'])
         p2 = (order.picking_ids - p1)
         self.assertAlmostEqual(p2.x_mes_order_qty, 2.0)
         p2.move_ids.picked = True
