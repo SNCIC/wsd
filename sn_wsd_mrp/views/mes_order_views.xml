@@ -450,7 +450,11 @@
                     <group string="Scheduling">
                         <field name="x_side_scheduled_qty" readonly="1"/>
                         <field name="x_side_remaining_qty" readonly="1"/>
-                        <field name="production_line_id" options="{'no_create': True}"/>
+                        <!-- 产线只出 MO 车间下的（车间不匹配在提交时也会硬拦，
+                             下拉先收敛免得选错） -->
+                        <field name="production_workshop_id" invisible="1"/>
+                        <field name="production_line_id" options="{'no_create': True}"
+                               domain="[('active', '=', True), ('workshop_id', '=', production_workshop_id)]"/>
                         <field name="date_plan"/>
                         <field name="qty"/>
                     </group>

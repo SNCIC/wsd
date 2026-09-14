@@ -2949,6 +2949,12 @@ msgstr "制令单 %(order)s 还没有领料作业类型，请先领料再退料�
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+msgid "MES order %(order)s scheduled for %(qty)s unit(s) on %(line)s."
+msgstr "制令单 %(order)s 已排产 %(qty)s 台（产线：%(line)s）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/stock_package.py:0
 msgid "MES order %s must be in progress to receive products."
 msgstr "制令单 %s 必须处于生产中才能收货。"
@@ -5279,6 +5285,12 @@ msgstr "已排数量"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_schedule_wizard_form
 msgid "Scheduling"
 msgstr "排产信息"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+msgid "Scheduling Complete"
+msgstr "排产完成"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workcenter_form_inherit_sn_wsd
