@@ -71,6 +71,10 @@ class MesScheduleWizard(models.TransientModel):
         'sn.mrp.production.line', string='Production Line', required=True,
         domain=[('active', '=', True)],
     )
+    # 产线下拉的筛选锚点（视图 domain 引用）：MO 车间
+    production_workshop_id = fields.Many2one(
+        related='production_id.x_workshop_id',
+    )
     date_plan = fields.Date(
         string='Plan Date', required=True, default=fields.Date.context_today,
     )
@@ -218,11 +222,25 @@ class MesScheduleWizard(models.TransientModel):
                 mo=production.display_name, qty=self.qty))
         # 3) create: seq + name come from the per-MO counter, the route
         #    snapshot is resolved from (drawing, side) inside create()
-        MesOrder.create({
+        order = MesOrder.create({
             'production_id': production.id,
             'production_line_id': self.production_line_id.id,
             'date_plan': self.date_plan,
             'planned_qty': self.qty,
             'x_side': self.x_side,
         })
-        return {'type': 'ir.actions.act_window_close'}
+        # 右上角成功提示（与设备/钉钉向导同款），随后关闭向导
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'type': 'success',
+                'title': _('Scheduling Complete'),
+                'message': _(
+                    'MES order %(order)s scheduled for %(qty)s unit(s) on '
+                    '%(line)s.',
+                    order=order.name, qty=self.qty,
+                    line=self.production_line_id.display_name),
+                'next': {'type': 'ir.actions.act_window_close'},
+            },
+        }

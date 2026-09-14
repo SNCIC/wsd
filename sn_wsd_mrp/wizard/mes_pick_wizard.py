@@ -82,11 +82,14 @@ class MesPickWizard(models.TransientModel):
             if not self.supplement_line_ids:
                 raise ValidationError(
                     _('Select at least one component to supplement.'))
-            order.action_generate_over_picking(
+            picking = order.action_generate_over_picking(
                 [{'product_id': line.product_id.id, 'qty': line.qty}
                  for line in self.supplement_line_ids],
                 self.over_reason)
-            return {'type': 'ir.actions.act_window_close'}
+            return self._notify_picking_created(_(
+                'Supplement picking %(name)s created for %(count)s '
+                'component line(s).',
+                name=picking.name, count=len(self.supplement_line_ids)))
         if self.qty_this <= 0 or self.qty_this != int(self.qty_this):
             raise ValidationError(
                 _('The picked quantity must be a positive whole number of units.'))
@@ -97,8 +100,23 @@ class MesPickWizard(models.TransientModel):
             raise ValidationError(_(
                 'Over-picking: only %(remaining)s unit(s) remain on %(order)s.',
                 remaining=order.planned_qty - order.picked_qty, order=order.name))
-        order.action_generate_picking(qty_this=self.qty_this)
-        return {'type': 'ir.actions.act_window_close'}
+        picking = order.action_generate_picking(qty_this=self.qty_this)
+        return self._notify_picking_created(_(
+            'Picking %(name)s created for %(qty)s unit(s) of %(order)s.',
+            name=picking.name, qty=self.qty_this, order=order.name))
+
+    def _notify_picking_created(self, message):
+        """右上角成功提示（与排产/设备向导同款），随后关闭向导。"""
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'type': 'success',
+                'title': _('Picking Created'),
+                'message': message,
+                'next': {'type': 'ir.actions.act_window_close'},
+            },
+        }
 
 
 class MesPickWizardLine(models.TransientModel):

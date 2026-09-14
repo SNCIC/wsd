@@ -220,6 +220,10 @@ class SnLabelElement(models.Model):
     sequence = fields.Integer(default=10)
     element_type = fields.Selection(
         ELEMENT_TYPE_SELECTION, required=True, default='text')
+    rotation = fields.Selection(
+        [('0', '0°'), ('90', '90°'), ('180', '180°'), ('270', '270°')],
+        default='0', string='Rotation',
+        help='Text rotation for this element (box/line/QR ignore rotation).')
     content = fields.Selection(
         CONTENT_SELECTION, required=True, default='fixed')
     fixed_text = fields.Char(translate=True)
@@ -281,6 +285,7 @@ class SnLabelElement(models.Model):
         self.ensure_one()
         values = {
             'type': self.element_type,
+            'rotation': self.rotation or '0',
             'x': self.x,
             'y': self.y,
             'width': self.width,
