@@ -572,12 +572,6 @@ msgstr "请先选择标签模板。"
 #. module: sn_wsd_label
 #. odoo-javascript
 #: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
-msgid "Record found: %s"
-msgstr "找到记录：%s"
-
-#. module: sn_wsd_label
-#. odoo-javascript
-#: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
 msgid "No record found for SN %s."
 msgstr "未找到 SN 为 %s 的记录。"
 
@@ -590,8 +584,8 @@ msgstr "请先扫描或输入 SN 定位记录。"
 #. module: sn_wsd_label
 #. odoo-javascript
 #: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
-msgid "Print commands sent to the PrintServer app."
-msgstr "打印指令已发送到 PrintServer 应用。"
+msgid "Printing..."
+msgstr "正在打印中"
 
 #. module: sn_wsd_label
 #. odoo-javascript
@@ -875,3 +869,28 @@ msgstr "收回出界元素"
 #: code:addons/sn_wsd_label/static/src/label_print_screen/label_print_screen.js:0
 msgid "Select a template…"
 msgstr "请选择标签模板…"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__rotation
+msgid "Rotation"
+msgstr "旋转角度"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rotation__0
+msgid "0°"
+msgstr "0°"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rotation__90
+msgid "90°"
+msgstr "90°"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rotation__180
+msgid "180°"
+msgstr "180°"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields.selection,name:sn_wsd_label.selection__sn_label_element__rotation__270
+msgid "270°"
+msgstr "270°"

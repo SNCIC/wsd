@@ -50,7 +50,9 @@ class SnLabelRenderer(models.AbstractModel):
     - non-ASCII text (Chinese): always a server-side NotoSansSC bitmap
       (^GFA / BITMAP base64 PNG / preview paste) so all three outputs share
       the very same raster
-    - pure-ASCII text: native printer font (^A0 / TEXT font 7)
+    - pure-ASCII text: native printer font (^A0 / TEXT font 7), except
+      rotated text which rasterizes like Chinese (native rotated-font
+      anchors are firmware-specific)
     """
 
     _name = 'sn.label.renderer'
@@ -116,8 +118,6 @@ class SnLabelRenderer(models.AbstractModel):
                 line,
                 font=font,
                 fill=0,
-                stroke_width=1,
-                stroke_fill=0,
             )
         return image
 
@@ -216,7 +216,8 @@ class SnLabelRenderer(models.AbstractModel):
                     'w': element['width'], 'h': element['height'],
                     'font_size': element.get('font_size') or 30,
                     'max_lines': element.get('max_lines') or 1,
-                    'align': element.get('align') or 'left'}
+                    'align': element.get('align') or 'left',
+                    'rotation': element.get('rotation') or '0'}
         if etype == 'qrcode':
             return {'op': 'qr', 'value': value, 'x': element['x'], 'y': element['y'],
                     'size': min(element['width'], element['height']),
@@ -255,6 +256,10 @@ class SnLabelRenderer(models.AbstractModel):
         line_height = max(1, max(box[3] - box[1] for box in boxes))
         widths = [font.getlength(line) for line in lines]
         return lines, widths, line_height
+
+    @staticmethod
+    def _rotate_text_image(image, rotation):
+        return image.rotate(int(rotation), expand=True)
 
     # ------------------------------------------------------------------
     # ZPL dialect
@@ -302,7 +307,8 @@ class SnLabelRenderer(models.AbstractModel):
         return f"^FO{x},{y}^BQN,2,{unit}^FDMA,{op['value']}^FS"
 
     def _zpl_text(self, op):
-        if op['value'].isascii():
+        rotation = op.get('rotation', '0')
+        if rotation == '0' and op['value'].isascii():
             lines, widths, line_height = self._ascii_lines(op)
             total_height = line_height * len(lines)
             y = op['y'] + max(0, (op['h'] - total_height) // 2)
@@ -317,7 +323,14 @@ class SnLabelRenderer(models.AbstractModel):
                     f"^A0N,{op['font_size']},{int(op['font_size'] * 0.95)}"
                     f"^FD{line}^FS")
             return ''.join(commands)
+        # Rotated text always rasterizes server-side: native rotated font
+        # anchors (^A0R/^A0B) vary between printer firmwares, while the
+        # bitmap channel shares one raster across all dialects.
         image = self._render_text_image(op['value'], op['font_size'], op['w'], op['max_lines'])
+        if image is None:
+            return ''
+        if rotation != '0':
+            image = self._rotate_text_image(image, rotation)
         x, y = self._text_placement(op, image)
         return f"^FO{x},{y}{self._image_gfa(image)}"
 
@@ -367,7 +380,8 @@ class SnLabelRenderer(models.AbstractModel):
                  'y': op['y'], 'n': 2, 'u': unit, 'value': op['value']}]
 
     def _cpcl_text(self, op):
-        if op['value'].isascii():
+        rotation = op.get('rotation', '0')
+        if rotation == '0' and op['value'].isascii():
             size = max(1, min(10, round(op['font_size'] / CPCL_ASCII_BASE_HEIGHT)))
             lines, _widths, line_height = self._ascii_lines(op)
             total_height = line_height * len(lines)
@@ -375,7 +389,13 @@ class SnLabelRenderer(models.AbstractModel):
             return [{'tag': 'TEXT', 'font': CPCL_ASCII_FONT, 'bold': size,
                      'x': op['x'], 'y': y + index * line_height, 'value': line}
                     for index, line in enumerate(lines)]
+        # Same rotated-text rule as ZPL: rasterize server-side, skip the
+        # firmware TEXT90/TEXT270 native fonts (anchor semantics vary).
         image = self._render_text_image(op['value'], op['font_size'], op['w'], op['max_lines'])
+        if image is None:
+            return []
+        if rotation != '0':
+            image = self._rotate_text_image(image, rotation)
         x, y = self._text_placement(op, image)
         return [{'tag': 'BITMAP', 'x': x, 'y': y, 'width': image.width,
                  'threshold': 127, 'value': self._image_base64_png(image)}]
@@ -414,6 +434,9 @@ class SnLabelRenderer(models.AbstractModel):
                 raster = self._render_text_image(
                     op['value'], op['font_size'], op['w'], op['max_lines'])
                 if raster:
+                    rotation = op.get('rotation') or '0'
+                    if rotation != '0':
+                        raster = self._rotate_text_image(raster, rotation)
                     x, y = self._text_placement(op, raster)
                     image.paste(raster, (x, y))
         return image

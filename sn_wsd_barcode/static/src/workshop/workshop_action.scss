@@ -261,6 +261,12 @@
     }
 }
 
+/* Small screens: the tile grid can exceed the viewport, so the screen
+   itself must scroll (the action area clips overflow). */
+.o_sn_wsd_workshop_functions {
+    overflow-y: auto;
+}
+
 /* ============================================================
    PDA 终端三区设计系统（pda-ui-refresh）：
    上下文带 / 反馈区 / 动作坞。仅样式层，交互逻辑不变。

@@ -144,7 +144,9 @@ export class LabelPrintScreen extends Component {
             );
             if (records.length) {
                 this.state.record = records[0];
-                this.setMessage(_t("Record found: %s", records[0].display_name), "success");
+                // the record chip below is the success feedback; only
+                // failures need the top message bar
+                this.setMessage("", "info");
             } else {
                 this.state.record = null;
                 this.setMessage(_t("No record found for SN %s.", sn), "warning");
@@ -187,10 +189,8 @@ export class LabelPrintScreen extends Component {
             });
             const payload = btoa(unescape(encodeURIComponent(JSON.stringify(result.commands))));
             window.location.href = "printserver:cpcl?content=" + payload;
-            this.notification.add(
-                _t("Print commands sent to the PrintServer app."), { type: "success" });
-            this.setMessage(
-                _t("Print commands sent to the PrintServer app."), "success");
+            this.notification.add(_t("Printing..."), { type: "info" });
+            this.setMessage(_t("Printing..."), "info");
         } catch (error) {
             const message = this.errorMessage(error) || _t("Print failed.");
             this.notification.add(message, { type: "danger" });
