@@ -26,6 +26,23 @@
         </field>
     </record>
 
+    <!-- 完工收货单：表单头部"打印物料标签"（成品库待验证一键挂码 /
+         已完成补打，finished-goods-material-sn 定稿口径）。挂在表单上
+     而非 move 行内——view_picking_form 的内嵌 move 列表不带
+         import_lots 挂载点，行内按钮在收货表单上不渲染。 -->
+    <record id="view_picking_form_finished_labels" model="ir.ui.view">
+        <field name="name">stock.picking.form.finished.labels</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_material_label_wizard" type="object"
+                        string="Print Material Labels" class="btn-secondary"
+                        invisible="not is_mes_receipt or state == 'cancel' or not can_print_material_labels"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_stock_move_line_operation_tree_material_labels" model="ir.ui.view">
         <field name="name">stock.move.line.operations.material.labels</field>
         <field name="model">stock.move.line</field>

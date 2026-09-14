@@ -54,6 +54,17 @@
             <xpath expr="//field[@name='default_code']" position="attributes">
                 <attribute name="string">Drawing No.</attribute>
             </xpath>
+            <!-- 挑料弹窗（multi_add）只留业务列：变体值/销售价格/成本按
+                 context 旗标隐藏，产品主列表不受影响 -->
+            <xpath expr="//field[@name='product_template_variant_value_ids']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lst_price']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
+            </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="material_specification" optional="show" readonly="1"/>
                 <field name="abc_class" optional="hide" readonly="1"/>

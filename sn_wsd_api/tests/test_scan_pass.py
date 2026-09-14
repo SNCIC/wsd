@@ -185,58 +185,60 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             {'M_DATA_AUTH': 'HQ', 'M_WORK_STATIONSN': 'APIWCIN'})
         self.assertTrue(result['ok'])
 
-    def test_08_panel_fanout(self):
-        # SMT panel inside the order: 4 boards
-        self.route.x_process_type = 'smt'
-        # real flow: SNs are printed first (identity exists), then panel-associated
-        Identity = self.env['sn.wsd.serial.identity']
-        for sn in ('SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4'):
-            Identity.get_or_create(sn, self.company, origin_type='laser')
-        panel = self.env['sn.smt.pcb.panel'].create({
-            'production_id': self.production.id,
-            'product_no': 'DWG-API', 'quantity': 4,
-            'board_ids': [
-                (0, 0, {'board_no': 1, 'pro_sn': 'SN-PANEL-1'}),
-                (0, 0, {'board_no': 2, 'pro_sn': 'SN-PANEL-2'}),
-                (0, 0, {'board_no': 3, 'pro_sn': 'SN-PANEL-3'}),
-                (0, 0, {'board_no': 4, 'pro_sn': 'SN-PANEL-4'}),
-            ],
-            'state': 'confirmed',
-        })
-        self.assertTrue(self.order._is_smt_route_order(),
-                        msg='route type=%s, private route=%s' % (
-                            self.order.x_mes_route_id.route_id.x_process_type,
-                            self.order.x_mes_route_id.route_id.name))
-        result = self.service.scan_pass(self._payload(M_SN='SN-PANEL-2'))
-        self.assertEqual(result['panel_qty'], 4)
-        for sn in ['SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4']:
-            history = self.env['sn.wsd.serial.operation.history'].search([
-                ('serial_identity_id.name', '=', sn),
-                ('result', '!=', 'in_progress')])
-            self.assertEqual(history.result, 'ok', sn)
-        # NG only marks the scanned board
-        for sn in ('SN-PB2-1', 'SN-PB2-2'):
-            Identity.get_or_create(sn, self.company, origin_type='laser')
-        panel2 = self.env['sn.smt.pcb.panel'].create({
-            'production_id': self.production.id,
-            'product_no': 'DWG-API', 'quantity': 2,
-            'board_ids': [
-                (0, 0, {'board_no': 1, 'pro_sn': 'SN-PB2-1'}),
-                (0, 0, {'board_no': 2, 'pro_sn': 'SN-PB2-2'}),
-            ],
-            'state': 'confirmed',
-        })
-        result = self.service.scan_pass(self._payload(
-            M_SN='SN-PB2-1', M_TEST_RESULT='NG', M_STR2='APID'))
-        self.assertEqual(result['panel_qty'], 2)
-        ng = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-PB2-1'),
-            ('result', '=', 'ng')])
-        ok = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-PB2-2'),
-            ('result', '=', 'ok')])
-        self.assertEqual(ng.result, 'ng')
-        self.assertEqual(ok.result, 'ok')
+    # 拼版扇出停用（2026-09-12，与 api_scan_pass._pass_station_with_panel
+    # 同步注释）：恢复扇出时取消本用例注释。
+    # def test_08_panel_fanout(self):
+    #     # SMT panel inside the order: 4 boards
+    #     self.route.x_process_type = 'smt'
+    #     # real flow: SNs are printed first (identity exists), then panel-associated
+    #     Identity = self.env['sn.wsd.serial.identity']
+    #     for sn in ('SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4'):
+    #         Identity.get_or_create(sn, self.company, origin_type='laser')
+    #     panel = self.env['sn.smt.pcb.panel'].create({
+    #         'production_id': self.production.id,
+    #         'product_no': 'DWG-API', 'quantity': 4,
+    #         'board_ids': [
+    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-PANEL-1'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-PANEL-2'}),
+    #             (0, 0, {'board_no': 3, 'pro_sn': 'SN-PANEL-3'}),
+    #             (0, 0, {'board_no': 4, 'pro_sn': 'SN-PANEL-4'}),
+    #         ],
+    #         'state': 'confirmed',
+    #     })
+    #     self.assertTrue(self.order._is_smt_route_order(),
+    #                     msg='route type=%s, private route=%s' % (
+    #                         self.order.x_mes_route_id.route_id.x_process_type,
+    #                         self.order.x_mes_route_id.route_id.name))
+    #     result = self.service.scan_pass(self._payload(M_SN='SN-PANEL-2'))
+    #     self.assertEqual(result['panel_qty'], 4)
+    #     for sn in ['SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4']:
+    #         history = self.env['sn.wsd.serial.operation.history'].search([
+    #             ('serial_identity_id.name', '=', sn),
+    #             ('result', '!=', 'in_progress')])
+    #         self.assertEqual(history.result, 'ok', sn)
+    #     # NG only marks the scanned board
+    #     for sn in ('SN-PB2-1', 'SN-PB2-2'):
+    #         Identity.get_or_create(sn, self.company, origin_type='laser')
+    #     panel2 = self.env['sn.smt.pcb.panel'].create({
+    #         'production_id': self.production.id,
+    #         'product_no': 'DWG-API', 'quantity': 2,
+    #         'board_ids': [
+    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-PB2-1'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-PB2-2'}),
+    #         ],
+    #         'state': 'confirmed',
+    #     })
+    #     result = self.service.scan_pass(self._payload(
+    #         M_SN='SN-PB2-1', M_TEST_RESULT='NG', M_STR2='APID'))
+    #     self.assertEqual(result['panel_qty'], 2)
+    #     ng = self.env['sn.wsd.serial.operation.history'].search([
+    #         ('serial_identity_id.name', '=', 'SN-PB2-1'),
+    #         ('result', '=', 'ng')])
+    #     ok = self.env['sn.wsd.serial.operation.history'].search([
+    #         ('serial_identity_id.name', '=', 'SN-PB2-2'),
+    #         ('result', '=', 'ok')])
+    #     self.assertEqual(ng.result, 'ng')
+    #     self.assertEqual(ok.result, 'ok')
 
     def test_09_packing_guards(self):
         self.service.scan_pass(self._payload(M_SN='SN-API-PK'))
@@ -613,28 +615,29 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
             len(history.filtered(lambda r: r.result != 'in_progress')), 1)
         self.assertEqual(len(history), 2)
 
-    def test_10_panel_fanout(self):
-        self.route.x_process_type = 'smt'
-        Identity = self.env['sn.wsd.serial.identity']
-        for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
-            Identity.get_or_create(sn, self.company, origin_type='laser')
-        self.env['sn.smt.pcb.panel'].create({
-            'production_id': self.production.id,
-            'product_no': 'DWG-API', 'quantity': 2,
-            'board_ids': [
-                (0, 0, {'board_no': 1, 'pro_sn': 'SN-AOI-P1'}),
-                (0, 0, {'board_no': 2, 'pro_sn': 'SN-AOI-P2'}),
-            ],
-            'state': 'confirmed',
-        })
-        result = self.service.submit_aoi_result(_aoi_payload(
-            productSn='SN-AOI-P1'))
-        self.assertTrue(result['ok'])
-        for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
-            history = self.env['sn.wsd.serial.operation.history'].search([
-                ('serial_identity_id.name', '=', sn),
-                ('result', '=', 'ok')])
-            self.assertEqual(history.result, 'ok', sn)
+    # 拼版扇出停用（2026-09-12，AOI 同口径）：恢复扇出时取消本用例注释。
+    # def test_10_panel_fanout(self):
+    #     self.route.x_process_type = 'smt'
+    #     Identity = self.env['sn.wsd.serial.identity']
+    #     for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+    #         Identity.get_or_create(sn, self.company, origin_type='laser')
+    #     self.env['sn.smt.pcb.panel'].create({
+    #         'production_id': self.production.id,
+    #         'product_no': 'DWG-API', 'quantity': 2,
+    #         'board_ids': [
+    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-AOI-P1'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-AOI-P2'}),
+    #         ],
+    #         'state': 'confirmed',
+    #     })
+    #     result = self.service.submit_aoi_result(_aoi_payload(
+    #         productSn='SN-AOI-P1'))
+    #     self.assertTrue(result['ok'])
+    #     for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+    #         history = self.env['sn.wsd.serial.operation.history'].search([
+    #             ('serial_identity_id.name', '=', sn),
+    #             ('result', '=', 'ok')])
+    #         self.assertEqual(history.result, 'ok', sn)
 
 
 @tagged('post_install', '-at_install')
@@ -719,10 +722,11 @@ class TestLaserPrint(ScanPassFixture, TransactionCase):
             panels.sorted('id')[2].board_ids.sorted('board_no').mapped('pro_sn'),
             serials[8:10])
         self.assertEqual(set(panels.mapped('state')), {'confirmed'})
-        # the auto panels feed the scan-pass fan-out
-        self.route.x_process_type = 'smt'
-        fanout = self.service.scan_pass(self._payload(M_SN=serials[0]))
-        self.assertEqual(fanout['panel_qty'], 4)
+        # 拼版扇出停用（2026-09-12）：自动组拼版（panelQty 组装）保留可测，
+        # "自动拼版喂给过站扇出"的断言随扇出一起注释
+        # self.route.x_process_type = 'smt'
+        # fanout = self.service.scan_pass(self._payload(M_SN=serials[0]))
+        # self.assertEqual(fanout['panel_qty'], 4)
 
     def test_03_unknown_work_order(self):
         with self.assertRaises(ApiNotFound) as ctx:

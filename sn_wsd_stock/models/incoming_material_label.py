@@ -10,6 +10,18 @@ class StockPicking(models.Model):
         string='Can Print Material Labels',
         compute='_compute_can_print_material_labels',
     )
+    # 表单按钮可见性用（modifier 不支持 picking_type_id.sequence_code
+    # 点路径，收敛为布尔）
+    is_mes_receipt = fields.Boolean(
+        string='Is MES Completion Receipt',
+        compute='_compute_is_mes_receipt',
+    )
+
+    def _compute_is_mes_receipt(self):
+        for picking in self:
+            picking.is_mes_receipt = (
+                picking.picking_type_id.sequence_code
+                == 'sn.wsd.mes.picking.receipt')
 
     def _compute_can_print_material_labels(self):
         for picking in self:

@@ -71,14 +71,14 @@ class TestPassHistoryLedger(TransactionCase):
     # fixtures
     # ------------------------------------------------------------------
 
-    def _make_order_online(self, product=False):
+    def _make_order_online(self, product=False, qty=4):
         if not product:
             product = self.env['product.product'].create({
                 'name': 'P-PHL', 'uom_id': self.uom_unit.id,
                 'default_code': 'DWG-PHL', 'x_board_side': 'single',
             })
         mo = self.env['mrp.production'].create({
-            'product_id': product.id, 'product_qty': 10,
+            'product_id': product.id, 'product_qty': max(10, qty),
             'bom_id': product.bom_ids[:1].id if product.bom_ids else False,
             'company_id': self.company.id,
         })
@@ -86,7 +86,7 @@ class TestPassHistoryLedger(TransactionCase):
             'production_id': mo.id,
             'production_line_id': self.line.id,
             'date_plan': fields.Date.today(),
-            'planned_qty': 4,
+            'planned_qty': qty,
         })
         from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
         give_pick(self.env, order)
@@ -434,7 +434,8 @@ class TestPassHistoryLedger(TransactionCase):
         """spec: station-pass-history/spec/相邻消费方口径/大屏分析报表窗口不被在制挤占"""
         service = self.env['sn.wsd.mes.dashboard.service']
         before = service.get_big_screen_data()['summary']['today_output_total']
-        order = self._make_order_online()
+        # 51 块板（1 完成 + 50 在制）超出默认排产，夹具放量避免撞投入上限
+        order = self._make_order_online(qty=60)
         wcs = self._wcs()
         serial = order.scan_enter('SN-PHL-036', wcs['a'])
         order.leave_station(serial, 'ok')

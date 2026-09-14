@@ -17,6 +17,11 @@ class MesDoneWizard(models.TransientModel):
     done_qty = fields.Float(
         string='已完工数量', related='mes_order_id.x_done_qty', readonly=True,
     )
+    remaining_qty = fields.Float(
+        string='Remaining Quantity', compute='_compute_remaining_qty',
+        help='Output quantity minus done quantity: how many units still '
+             'need to be received to close the order.',
+    )
     qty = fields.Float(string='本次完工数量', required=True)
     destination = fields.Selection(
         [('stock', '成品库（待仓库验证）'),
@@ -36,6 +41,11 @@ class MesDoneWizard(models.TransientModel):
     def _order_warehouse(self):
         self.ensure_one()
         return self.mes_order_id.production_id.picking_type_id.warehouse_id
+
+    @api.depends('output_qty', 'done_qty')
+    def _compute_remaining_qty(self):
+        for wizard in self:
+            wizard.remaining_qty = wizard.output_qty - wizard.done_qty
 
     @api.depends('mes_order_id')
     def _compute_available_workshops(self):

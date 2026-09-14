@@ -88,24 +88,28 @@ class SnWsdApiService(models.AbstractModel):
             raise ApiNotFound(_('Defect code %s does not exist.', raw))
         return defect
 
-    def _pass_station_with_panel(self, identity, workcenter, result, defect,
-                                 employee):
-        """Station-pass the scanned SN, fanning out to its panel members on
-        SMT orders (the scanned board carries the reported result, the
-        others pass OK)."""
-        probe_wip = self.env['sn.wsd.serial.wip'].search(
-            [('serial_identity_id', '=', identity.id)], limit=1)
-        probe_order = probe_wip.mes_order_id or self._find_live_order(workcenter)
-        members = self._panel_members(identity, probe_order)
-        # station pass for every member (first member = the scanned board)
-        finished = False
-        mes_order = probe_order
-        for member in (identity | (members - identity)):
-            member_result = result if member == identity else RESULT_PASS
-            member_defect = defect if member == identity else False
-            finished, mes_order = self._pass_station(
-                member, workcenter, member_result, member_defect, employee)
-        return finished, mes_order, members
+    # 拼版扇出停用（2026-09-12 用户确认可能用不到，只停过站扇出）：
+    # 扫一板只过一板，不再自动带出同拼版成员。laser 的 panelQty 自动
+    # 组拼版与 /api/v1/panels 管理接口保留，恢复扇出时取消下面两个方法
+    # 的注释并还原 scan_pass / submit_aoi_result 里的单板调用即可。
+    # def _pass_station_with_panel(self, identity, workcenter, result, defect,
+    #                              employee):
+    #     """Station-pass the scanned SN, fanning out to its panel members on
+    #     SMT orders (the scanned board carries the reported result, the
+    #     others pass OK)."""
+    #     probe_wip = self.env['sn.wsd.serial.wip'].search(
+    #         [('serial_identity_id', '=', identity.id)], limit=1)
+    #     probe_order = probe_wip.mes_order_id or self._find_live_order(workcenter)
+    #     members = self._panel_members(identity, probe_order)
+    #     # station pass for every member (first member = the scanned board)
+    #     finished = False
+    #     mes_order = probe_order
+    #     for member in (identity | (members - identity)):
+    #         member_result = result if member == identity else RESULT_PASS
+    #         member_defect = defect if member == identity else False
+    #         finished, mes_order = self._pass_station(
+    #             member, workcenter, member_result, member_defect, employee)
+    #     return finished, mes_order, members
 
     @api.model
     def _parse_iso_datetime(self, value, field_name):
@@ -168,25 +172,27 @@ class SnWsdApiService(models.AbstractModel):
             raise ApiUnprocessable(_('SN %s is inactive.', sn_name))
         return identity or self.env['sn.wsd.serial.identity']
 
-    def _panel_members(self, identity, mes_order):
-        """SMT orders only: identities of the panel boards of the scanned
-        SN inside this MES order (the scanned board included)."""
-        if not mes_order._is_smt_route_order():
-            return identity
-        board = self.env['sn.smt.pcb.board'].search([
-            ('pro_sn', '=', identity.name),
-            ('panel_id.production_id', '=', mes_order.production_id.id),
-            ('panel_id.state', '!=', 'done'),
-        ], limit=1)
-        if not board:
-            return identity
-        # SNs are printed (laser) and panel-associated with the MES order
-        # BEFORE station passing: all member identities already exist
-        members = self.env['sn.wsd.serial.identity'].search([
-            ('name', 'in', board.panel_id.board_ids.mapped('pro_sn')),
-            ('company_id', '=', identity.company_id.id),
-        ])
-        return members or identity
+    # 拼版扇出停用（2026-09-12）：与 _pass_station_with_panel 一起注释，
+    # 恢复时同取注释。
+    # def _panel_members(self, identity, mes_order):
+    #     """SMT orders only: identities of the panel boards of the scanned
+    #     SN inside this MES order (the scanned board included)."""
+    #     if not mes_order._is_smt_route_order():
+    #         return identity
+    #     board = self.env['sn.smt.pcb.board'].search([
+    #         ('pro_sn', '=', identity.name),
+    #         ('panel_id.production_id', '=', mes_order.production_id.id),
+    #         ('panel_id.state', '!=', 'done'),
+    #     ], limit=1)
+    #     if not board:
+    #         return identity
+    #     # SNs are printed (laser) and panel-associated with the MES order
+    #     # BEFORE station passing: all member identities already exist
+    #     members = self.env['sn.wsd.serial.identity'].search([
+    #         ('name', 'in', board.panel_id.board_ids.mapped('pro_sn')),
+    #         ('company_id', '=', identity.company_id.id),
+    #     ])
+    #     return members or identity
 
     def _find_live_order(self, workcenter):
         """The live (online) MES order running through this work center."""
@@ -396,10 +402,8 @@ class SnWsdApiService(models.AbstractModel):
         defect = False
         if result == RESULT_FAIL:
             defect = self._match_defect_code(payload.get('M_STR2') or 'TEST1')
-        # panel fan-out: SMT orders resolve the whole panel from the scanned
-        # board; the scanned board carries the reported result, the others
-        # pass OK
-        finished, mes_order, members = self._pass_station_with_panel(
+        # 拼版扇出停用（2026-09-12）：单板过站，见上方方法注释
+        finished, mes_order = self._pass_station(
             identity, workcenter, result, defect, employee)
         route_operation = self._route_operation(mes_order, workcenter)
         # test result for the scanned board only (station pass already
@@ -423,22 +427,21 @@ class SnWsdApiService(models.AbstractModel):
         # request log); key-material usage counting happens in the station
         # kernel (leave_station) for every board that passes.
         # SMT online material deduction, one board at a time (idempotent
-        # per SN+order)
+        # per SN+order)——拼版扇出停用后只扣本板
         if mes_order._is_smt_route_order():
-            consumption = self.env['sn.smt.material.consumption']
-            for member in members:
-                consumption.consume_for_serial(
-                    route_operation, identity=member,
-                    operator_code=payload.get('M_EMP'),
-                    external_event_id=payload.get('external_event_id'),
-                    source_system=payload.get('source_system'),
-                )
+            self.env['sn.smt.material.consumption'].consume_for_serial(
+                route_operation, identity=identity,
+                operator_code=payload.get('M_EMP'),
+                external_event_id=payload.get('external_event_id'),
+                source_system=payload.get('source_system'),
+            )
         self._handle_packing(
             identity, mes_order, route_operation, workcenter, payload, result)
         return {
             'ok': True,
             'sn': identity.name,
-            'panel_qty': len(members),
+            # 扇出停用：契约字段保留，恒为单板 1（旧设备报文不变）
+            'panel_qty': 1,
             'finished': finished,
             'test_result_id': result_info.get('test_result_id'),
         }
@@ -513,7 +516,8 @@ class SnWsdApiService(models.AbstractModel):
         if existing:
             return {'ok': True, 'test_result_id': existing.id}
 
-        finished, mes_order, members = self._pass_station_with_panel(
+        # 拼版扇出停用（2026-09-12）：单板过站，见 _pass_station_with_panel 注释
+        finished, mes_order = self._pass_station(
             identity, workcenter, result, defect, employee)
         route_operation = self._route_operation(mes_order, workcenter)
         result_info = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
@@ -548,15 +552,14 @@ class SnWsdApiService(models.AbstractModel):
                 'payload': detail,
             } for index, detail in enumerate(details, start=1)])
         # SMT online-material deduction on the same kernel terms as scan-pass
+        # ——拼版扇出停用后只扣本板
         if mes_order._is_smt_route_order():
-            consumption = self.env['sn.smt.material.consumption']
-            for member in members:
-                consumption.consume_for_serial(
-                    route_operation, identity=member,
-                    operator_code=payload.get('operator'),
-                    external_event_id=external_event_id,
-                    source_system='AOI',
-                )
+            self.env['sn.smt.material.consumption'].consume_for_serial(
+                route_operation, identity=identity,
+                operator_code=payload.get('operator'),
+                external_event_id=external_event_id,
+                source_system='AOI',
+            )
         return {'ok': True, 'test_result_id': result_info.get('test_result_id')}
 
     # ------------------------------------------------------------------

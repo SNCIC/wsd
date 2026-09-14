@@ -236,6 +236,7 @@ class TestStationServices(TransactionCase):
             'product_tmpl_id':
                 self.order.production_id.product_tmpl_id.id,
             'product_qty': 1.0,
+            'x_workshop_id': self.workshop.id,
             'bom_line_ids': [(0, 0, {
                 'product_id': component.id, 'product_qty': 2.0,
             })],
