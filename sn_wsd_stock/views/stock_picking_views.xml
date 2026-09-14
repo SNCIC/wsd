@@ -79,12 +79,12 @@
                 <field name="tracking" column_invisible="1"/>
                 <field name="internal_lot_name" column_invisible="1"/>
                 <field name="supplier_batch_no"
-                       column_invisible="tracking != 'lot'"
+                       invisible="tracking != 'lot'"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
             <xpath expr="//field[@name='quantity']" position="after">
                 <field name="quantity_per_label"
-                       column_invisible="tracking != 'lot'"
+                       invisible="tracking != 'lot'"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
         </field>
