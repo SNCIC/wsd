@@ -74,6 +74,9 @@
                 <attribute name="default_order">internal_lot_name asc, id asc</attribute>
             </xpath>
             <xpath expr="//field[@name='lot_name']" position="before">
+                <!-- The detailed operations list does not expose tracking by default,
+                     but the custom columns use it in their column visibility rules. -->
+                <field name="tracking" column_invisible="1"/>
                 <field name="internal_lot_name" column_invisible="1"/>
                 <field name="supplier_batch_no"
                        column_invisible="tracking != 'lot'"
