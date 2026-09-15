@@ -3476,3 +3476,81 @@ msgstr "质量检验编码"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_coding_prefix
 msgid "Coding Prefix"
 msgstr "编码前缀"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__nominal_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__nominal_value
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__nominal_value
+msgid "Nominal Value"
+msgstr "标称值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__sample_record_mode
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__sample_record_mode
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__sample_record_mode
+msgid "Sample Recording"
+msgstr "样本记录方式"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__sample_record_mode__none
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__sample_record_mode__none
+msgid "No Sample Values"
+msgstr "不生成样本值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__sample_record_mode__per_lot
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__sample_record_mode__per_lot
+msgid "One Value per Lot"
+msgstr "每批一条记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__sample_record_mode__per_sample
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__sample_record_mode__per_sample
+msgid "One Value per Sample"
+msgstr "每个样本一条记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__sample_value_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Sample Values"
+msgstr "样本检测值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__measured_at
+msgid "Measured At"
+msgstr "检测时间"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__error_value
+msgid "Error Value"
+msgstr "误差值"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "A sample value can only be recorded once for an inspection item."
+msgstr "同一检验项目在同一质检单中只能记录一次样本值。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Complete all configured sample value rows before finishing the inspection."
+msgstr "完成质检前，请先填写所有配置的样本值记录。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Lot quantity ranges must not overlap for the same standard and inspection level."
+msgstr "同一抽样标准和检验水平下的批量区间不能重叠。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "The selected AQL value is not configured in the sampling standard."
+msgstr "所选 AQL 值未在抽样标准中配置。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item__sample_record_mode
+msgid "Controls whether this item gets one lot value, one value per sample, or no separate value rows."
+msgstr "控制此检验项生成一条整批记录、每个样本一条记录，还是不生成单独的样本值记录。"

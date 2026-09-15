@@ -3,6 +3,7 @@
     'version': '19.0.4.0.2',
     'summary': 'Quality management for WSD meter manufacturing',
     'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
+    'post_init_hook': 'post_init_hook',
     'data': [
         'data/ir_sequence.xml',
         'data/code_rule_seeds.xml',

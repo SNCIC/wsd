@@ -19,6 +19,7 @@ export class WorkshopFunctionsMenu extends Component {
         this.state = useState({
             functions: [],
             ready: false,
+            error: false,
         });
         onMounted(() => this._load());
     }
@@ -28,9 +29,13 @@ export class WorkshopFunctionsMenu extends Component {
             const data = await rpc("/sn_wsd_barcode/get_workshop_functions");
             this.state.functions = data.functions || [];
         } catch (error) {
-            this.notification.add(error.message || _t("Failed to load functions."), {
-                type: "danger",
-            });
+            // error.message only carries the generic "Odoo Server Error"
+            // envelope text; the real cause is in error.data.message.
+            this.notification.add(
+                error.data?.message || error.message || _t("Failed to load functions."),
+                { type: "danger" }
+            );
+            this.state.error = true;
         } finally {
             this.state.ready = true;
         }

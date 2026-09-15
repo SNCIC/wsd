@@ -30,6 +30,7 @@
                 <field name="required"/>
                 <field name="lower_limit" optional="hide"/>
                 <field name="upper_limit" optional="hide"/>
+                <field name="sample_record_mode"/>
                 <field name="expected_value"/>
                 <field name="unit"/>
                 <field name="active"/>
@@ -56,6 +57,8 @@
                         <group>
                             <field name="lower_limit" invisible="item_type != 'numeric'"/>
                             <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                            <field name="nominal_value" invisible="item_type != 'numeric'"/>
+                            <field name="sample_record_mode"/>
                             <field name="expected_value"/>
                             <field name="selection_values" invisible="item_type != 'selection'"/>
                             <field name="unit"/>
@@ -137,6 +140,8 @@
                                     <field name="required"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="nominal_value" invisible="item_type != 'numeric'"/>
+                                    <field name="sample_record_mode"/>
                                     <field name="expected_value"/>
                                     <field name="selection_values" invisible="item_type != 'selection'"/>
                                     <field name="unit"/>
@@ -245,6 +250,8 @@
                                     <field name="required"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="nominal_value" invisible="item_type != 'numeric'"/>
+                                    <field name="sample_record_mode"/>
                                     <field name="expected_value"/>
                                     <field name="selection_values" invisible="item_type != 'selection'"/>
                                     <field name="unit"/>
@@ -367,6 +374,7 @@
                                     <field name="required"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                    <field name="nominal_value" invisible="item_type != 'numeric'"/>
                                     <field name="measured_value" invisible="item_type != 'numeric'"/>
                                     <field name="text_value" invisible="item_type == 'numeric'"/>
                                     <field name="manual_result" invisible="item_type == 'numeric'"/>
@@ -529,6 +537,22 @@
                                     <field name="defect_qty"/>
                                     <field name="position"/>
                                     <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="sample_values" string="Sample Values" invisible="not sample_value_ids">
+                            <field name="sample_value_ids">
+                                <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                    <field name="sequence" readonly="1"/>
+                                    <field name="sample_id" readonly="1"/>
+                                    <field name="line_id" readonly="1"/>
+                                    <field name="measured_value"/>
+                                    <field name="text_value"/>
+                                    <field name="measured_at" readonly="1"/>
+                                    <field name="result" readonly="1"/>
+                                    <field name="error_value" readonly="1"/>
+                                    <field name="defect_code_id" invisible="result != 'fail'"/>
+                                    <field name="note"/>
                                 </list>
                             </field>
                         </page>

@@ -41,6 +41,7 @@ SAMPLE_SELECTION_METHOD_SELECTION = [
 
 DEFAULT_AQL_VALUES = [0.01, 0.015, 0.025, 0.04, 0.065, 0.1, 0.15, 0.25, 0.4, 0.65, 1.0, 1.5, 2.5, 4.0, 6.5, 10.0]
 DEFAULT_SAMPLE_SIZE_CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R']
+MAX_DETAILED_SAMPLE_ROWS = 500
 
 
 class QualitySamplingStandard(models.Model):
@@ -326,12 +327,24 @@ class QualitySamplingLotRange(models.Model):
     @api.constrains('lot_qty_min', 'lot_qty_max', 'sample_size_code')
     def _check_lot_range(self):
         for record in self:
+            if type(record.id).__name__ == 'NewId':
+                continue
             if record.lot_qty_min <= 0:
                 raise ValidationError(_('The start quantity must be greater than zero.'))
             if record.lot_qty_max < record.lot_qty_min:
                 raise ValidationError(_('The end quantity must be greater than or equal to the start quantity.'))
             if not (record.sample_size_code or '').strip():
                 raise ValidationError(_('The sample size code is required.'))
+            origin_id = record._origin.id if record._origin else 0
+            overlaps = self.search([
+                ('id', '!=', origin_id),
+                ('standard_id', '=', record.standard_id.id),
+                ('inspection_level', '=', record.inspection_level),
+                ('lot_qty_min', '<=', record.lot_qty_max),
+                ('lot_qty_max', '>=', record.lot_qty_min),
+            ], limit=1)
+            if overlaps:
+                raise ValidationError(_('Lot quantity ranges must not overlap for the same standard and inspection level.'))
 
 
 class QualitySamplingPlan(models.Model):
@@ -453,6 +466,12 @@ class QualityInspectionScheme(models.Model):
                     raise ValidationError(_('A lot quantity source is required for AQL sampling.'))
                 if float_compare(scheme.aql_value, 0.0, precision_digits=6) < 0:
                     raise ValidationError(_('AQL must be greater than or equal to zero.'))
+                if not self.env['sn.wsd.quality.sampling.plan'].search_count([
+                    ('standard_id', '=', scheme.sampling_standard_id.id),
+                    ('switching_mode', '=', scheme.switching_mode),
+                    ('aql_value', '=', scheme.aql_value),
+                ]):
+                    raise ValidationError(_('The selected AQL value is not configured in the sampling standard.'))
 
     def _get_lot_qty_from_values(self, values):
         self.ensure_one()
@@ -617,6 +636,11 @@ class QualityInspection(models.Model):
         'inspection_id',
         string='Samples',
     )
+    sample_value_ids = fields.One2many(
+        'sn.wsd.quality.inspection.sample.value',
+        'inspection_id',
+        string='Sample Values',
+    )
     sample_checked_qty = fields.Integer(string='Checked Samples', compute='_compute_sample_counts', store=True)
     sample_defect_qty = fields.Integer(string='Defect Samples', compute='_compute_sample_counts', store=True)
 
@@ -747,6 +771,13 @@ class QualityInspection(models.Model):
         self.ensure_one()
         if self.sample_size <= 0:
             return []
+        if self.line_ids.filtered(lambda line: line.sample_record_mode == 'per_sample') and self.sample_size <= MAX_DETAILED_SAMPLE_ROWS:
+            return [Command.create({
+                'sequence': sequence,
+                'company_id': self.company_id.id,
+                'lot_id': self.lot_id.id,
+                'qty': 1,
+            }) for sequence in range(1, self.sample_size + 1)]
         return [Command.create({
             'sequence': 1,
             'company_id': self.company_id.id,
@@ -754,18 +785,45 @@ class QualityInspection(models.Model):
             'qty': self.sample_size,
         })]
 
+    def _sample_value_commands(self):
+        self.ensure_one()
+        value_model = self.env['sn.wsd.quality.inspection.sample.value']
+        commands = []
+        sample_lines = self.line_ids.filtered(lambda line: line.sample_record_mode in ('per_sample', 'per_lot'))
+        for line in sample_lines:
+            if line.sample_record_mode == 'per_lot':
+                commands.append(Command.create({
+                    'inspection_id': self.id,
+                    'line_id': line.id,
+                    'sequence': 1,
+                }))
+                continue
+            for sample in self.sample_ids:
+                commands.append(Command.create({
+                    'inspection_id': self.id,
+                    'sample_id': sample.id,
+                    'line_id': line.id,
+                    'sequence': sample.sequence,
+                }))
+        return commands
+
     def _ensure_sample_units(self):
         for inspection in self.filtered(lambda record: not record.sample_ids and record.sample_size > 0):
             if inspection.sample_selection_method == 'manual':
                 continue
-            serials = inspection._select_systematic_serials(
-                inspection._get_candidate_sample_serials(),
-                inspection.sample_size,
-            )
-            if serials:
-                inspection.write({'sample_ids': inspection._sample_commands_from_serials(serials)})
-            elif inspection.inspection_type in ('iqc', 'oqc'):
+            if inspection.sampling_method == 'full' and inspection.sample_size > MAX_DETAILED_SAMPLE_ROWS:
                 inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
+            else:
+                serials = inspection._select_systematic_serials(
+                    inspection._get_candidate_sample_serials(),
+                    inspection.sample_size,
+                )
+                if serials:
+                    inspection.write({'sample_ids': inspection._sample_commands_from_serials(serials)})
+                elif inspection.inspection_type in ('iqc', 'oqc'):
+                    inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
+            if not inspection.sample_value_ids:
+                inspection.write({'sample_value_ids': inspection._sample_value_commands()})
 
     def action_done(self):
         for inspection in self:
@@ -778,6 +836,11 @@ class QualityInspection(models.Model):
                 raise UserError(_('Defect code is required on every OQC defect line.'))
             if inspection.inspection_type in ('iqc', 'oqc') and inspection.sample_ids.filtered(lambda sample: sample.result == 'fail' and not sample.defect_code_id):
                 raise UserError(_('Defect code is required on every failed sample.'))
+            pending_values = inspection.sample_value_ids.filtered(
+                lambda value: value.result == 'pending' and value.line_id.required
+            )
+            if pending_values:
+                raise UserError(_('Complete all configured sample value rows before finishing the inspection.'))
         self.write({
             'state': 'done',
             'finish_time': fields.Datetime.now(),
@@ -906,3 +969,43 @@ class QualityInspectionSample(models.Model):
             for record in related_records:
                 if record and record.company_id and record.company_id != sample.company_id:
                     raise ValidationError(_('Sample related records must belong to the same company.'))
+
+
+class QualityInspectionSampleValue(models.Model):
+    _name = 'sn.wsd.quality.inspection.sample.value'
+    _description = 'WSD Quality Inspection Sample Value'
+    _order = 'inspection_id, line_id, sequence, id'
+    _check_company_auto = True
+
+    inspection_id = fields.Many2one('sn.wsd.quality.inspection', required=True, ondelete='cascade', check_company=True, index=True)
+    sample_id = fields.Many2one('sn.wsd.quality.inspection.sample', string='Sample', ondelete='cascade', check_company=True, index=True)
+    line_id = fields.Many2one('sn.wsd.quality.inspection.line', string='Inspection Item', required=True, ondelete='cascade', check_company=True, index=True)
+    company_id = fields.Many2one('res.company', related='inspection_id.company_id', store=True, readonly=True)
+    sequence = fields.Integer(default=10)
+    measured_value = fields.Float(string='Measured Value')
+    text_value = fields.Char(string='Text Value')
+    measured_at = fields.Datetime(string='Measured At')
+    result = fields.Selection([('pending', 'Pending'), ('pass', 'Pass'), ('fail', 'Fail')], default='pending', required=True, index=True)
+    error_value = fields.Float(string='Error Value', compute='_compute_value_result', store=True)
+    defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True)
+    note = fields.Char(string='Notes')
+
+    _value_line_uniq = models.Constraint(
+        'unique(inspection_id, sample_id, line_id)',
+        'A sample value can only be recorded once for an inspection item.',
+    )
+
+    @api.depends('measured_value', 'text_value', 'line_id.nominal_value', 'line_id.lower_limit', 'line_id.upper_limit', 'line_id.item_type')
+    def _compute_value_result(self):
+        for value in self:
+            value.error_value = value.measured_value - value.line_id.nominal_value
+            if value.line_id.item_type == 'numeric':
+                if value.measured_value < value.line_id.lower_limit or value.measured_value > value.line_id.upper_limit:
+                    value.result = 'fail'
+                else:
+                    value.result = 'pass'
+
+    @api.onchange('measured_value', 'text_value')
+    def _onchange_measured_value(self):
+        for value in self:
+            value.measured_at = fields.Datetime.now()

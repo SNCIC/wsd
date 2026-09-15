@@ -670,9 +670,11 @@ class StockBarcodeController(http.Controller):
         ], order='sequence, id')
         user = request.env.user
         if not user.has_group('base.group_system'):
+            # Odoo 19 renamed res.users.groups_id to group_ids / all_group_ids.
+            # Use the implied groups, like ir.ui.menu._visible_menu_ids does.
             menus = menus.filtered(
                 lambda menu: not menu.group_ids
-                or bool(menu.group_ids & user.group_ids))
+                or bool(menu.group_ids & user.all_group_ids))
         return {
             'functions': [{
                 'menu_id': menu.id,
