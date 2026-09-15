@@ -108,6 +108,38 @@ export class StationPassAction extends Component {
         return _t("In progress");
     }
 
+    get passedLabel() {
+        return _t("Passed");
+    }
+
+    get toComeLabel() {
+        return _t("To come");
+    }
+
+    get totalLabel() {
+        return _t("Total");
+    }
+
+    // 四格进度（按单）：已过 = 本工序过站 OK 台数（去重）；在制 = 当前
+    // 停在本站；未到 = 排产 − 到站（到站=进过本工序的去重 SN 数，含在制
+    // /NG 待复测/报废）；总数 = 排产。已过 + 在制 + 未到 ≤ 总数（差额
+    // = 报废与 NG 复测中）
+    get progressOrders() {
+        return this.state.orders.map((o) => {
+            const op = o.op || {};
+            const planned = o.planned_qty || 0;
+            const entered = op.entered_qty || 0;
+            return {
+                id: o.id,
+                name: o.name,
+                okQty: op.ok_qty || 0,
+                wipQty: op.wip_qty || 0,
+                toComeQty: Math.max(planned - entered, 0),
+                totalQty: planned,
+            };
+        });
+    }
+
     get ordersLabel() {
         return _t("Orders");
     }

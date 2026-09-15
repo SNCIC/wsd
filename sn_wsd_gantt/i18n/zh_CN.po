@@ -16,14 +16,66 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Gantt child can only be field or template, got %s"
+msgstr "甘特子节点只能是 field 或 template，实际为 %s"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Gantt view can contain only one templates tag"
+msgstr "甘特视图只能包含一个 templates 标签"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Material Availability"
+msgstr "物料可用性"
+
+#. module: sn_wsd_gantt
+msgid "MES Order Schedule"
+msgstr "制令单排程"
+
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Operation Type"
+msgstr "操作类型"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Responsible"
+msgstr "负责人"
+
+#. module: sn_wsd_gantt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
 msgid "Search Manufacturing Schedule"
 msgstr "搜索制造排程"
 
 #. module: sn_wsd_gantt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Manufacturing Order"
-msgstr "制造订单"
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Status"
+msgstr "状态"
 
 #. module: sn_wsd_gantt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
@@ -34,42 +86,3 @@ msgstr "工作中心"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
 msgid "Workshop"
 msgstr "车间"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Production Line"
-msgstr "产线"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Product"
-msgstr "产品"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Responsible"
-msgstr "负责人"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Status"
-msgstr "状态"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Material Availability"
-msgstr "物料可用性"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Operation Type"
-msgstr "操作类型"
-
-#. module: sn_wsd_gantt
-#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
-msgid "Start Date"
-msgstr "开始日期"
-
-#. module: sn_wsd_gantt
-msgid "MES Order Schedule"
-msgstr "制令单排程"

@@ -15,15 +15,104 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sn_wsd_consumable
-#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_root
-msgid "Consumables"
-msgstr "生产辅料"
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s disabled."
+msgstr "%s 已停用。"
 
 #. module: sn_wsd_consumable
-#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_template
-#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_template
-msgid "Consumable Templates"
-msgstr "辅料建档"
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s enabled."
+msgstr "%s 已解禁。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s exhausted."
+msgstr "%s 已耗尽。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s loaded for %s."
+msgstr "%s 已上线（%s）。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s scrapped."
+msgstr "%s 已报废。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "%s unloaded."
+msgstr "%s 已下线。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
+msgid "Action"
+msgstr "动作"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Basic Information"
+msgstr "基本信息"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_load_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_scrap_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__company_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__company_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__company_id
+msgid "Company"
+msgstr "组织机构"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_load_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_scrap_wizard_form
+msgid "Confirm"
+msgstr "确定"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__conformal_coating
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__conformal_coating
+msgid "Conformal Coating"
+msgstr "三防漆"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Consumable %s issued."
+msgstr "辅料 %s 已领用。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Consumable %s returned."
+msgstr "辅料 %s 已归还。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__code
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_id
+msgid "Consumable Code"
+msgstr "辅料料号"
 
 #. module: sn_wsd_consumable
 #: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_info
@@ -33,6 +122,16 @@ msgstr "辅料建档"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
 msgid "Consumable Info"
 msgstr "辅料信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__name
+msgid "Consumable Name"
+msgstr "辅料名称"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_service
+msgid "Consumable PDA Service"
+msgstr "辅料PDA服务"
 
 #. module: sn_wsd_consumable
 #: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_record
@@ -48,122 +147,23 @@ msgid "Consumable Records"
 msgstr "辅料记录"
 
 #. module: sn_wsd_consumable
-#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_service
-msgid "Consumable PDA Service"
-msgstr "辅料PDA服务"
-
-#. module: sn_wsd_consumable
-#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_load_wizard
-#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_load_wizard
-msgid "Load Consumable"
-msgstr "辅料上线"
-
-#. module: sn_wsd_consumable
-#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_scrap_wizard
-#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_scrap_wizard
-msgid "Scrap Consumable"
-msgstr "辅料报废"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__code
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_id
-msgid "Consumable Code"
-msgstr "辅料料号"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__name
-msgid "Consumable Name"
-msgstr "辅料名称"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__spec
-msgid "Consumable Spec"
-msgstr "辅料规格"
-
-#. module: sn_wsd_consumable
-#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_type
-#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_type
-msgid "Consumable Types"
-msgstr "辅料类型"
-
-#. module: sn_wsd_consumable
-#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_type
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__type_id
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__type_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
-msgid "Consumable Type"
-msgstr "辅料类型"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__name
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
-msgid "Type Name"
-msgstr "类型名称"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable type name must be unique per company."
-msgstr "辅料类型名称在同一公司内必须唯一。"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_min
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_min
-msgid "Thaw Duration Min (min)"
-msgstr "回温时长下限(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_max
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_max
-msgid "Thaw Duration Max (min)"
-msgstr "回温时长上限(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_count_limit
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_count_limit
-msgid "Thaw Count Limit"
-msgstr "回温次数上限"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_control
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__stir_control
-msgid "Stir Control"
-msgstr "搅拌管控"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_duration_min
-msgid "Stir Duration Min (min)"
-msgstr "搅拌时长下限(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_duration_max
-msgid "Stir Duration Max (min)"
-msgstr "搅拌时长上限(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__shelf_life_days
-msgid "Shelf Life (days)"
-msgstr "保质期(天)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__expiry_remind_days
-msgid "Expiry Remind (days)"
-msgstr "过期提醒天数"
-
-#. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__sn
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__info_id
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_load_wizard__info_id
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_scrap_wizard__info_id
 msgid "Consumable SN"
 msgstr "辅料SN"
+
+
+#. module: sn_wsd_consumable
+msgid "Consumable SN Coding"
+msgstr "辅料 SN 编码"
+
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__spec
+msgid "Consumable Spec"
+msgstr "辅料规格"
 
 #. module: sn_wsd_consumable
 #: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_template
@@ -174,195 +174,45 @@ msgid "Consumable Template"
 msgstr "辅料建档"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__aux_state
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Status"
-msgstr "状态"
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_template
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_template
+msgid "Consumable Templates"
+msgstr "辅料建档"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__production_date
-msgid "Production Date"
-msgstr "生产日期"
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_type
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__type_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
+msgid "Consumable Type"
+msgstr "辅料类型"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__expiry_date
-msgid "Expiry Date"
-msgstr "效期"
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_type
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_type
+msgid "Consumable Types"
+msgstr "辅料类型"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__expiry_state
-msgid "Expiry State"
-msgstr "效期状态"
+#: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_root
+msgid "Consumables"
+msgstr "生产辅料"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__supplier_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Supplier"
-msgstr "供应商"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
+msgid "Control Rules"
+msgstr "管控规则"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__purchase_ref
-msgid "Purchase Order"
-msgstr "采购单"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__weight_g
-msgid "Weight (g)"
-msgstr "重量(g)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__location_id
-msgid "Location"
-msgstr "库位"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_count
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__thaw_count
-msgid "Thaw Count"
-msgstr "回温次数"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_start
-msgid "Last Thaw Start"
-msgstr "回温开始时间"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_end
-msgid "Last Thaw End"
-msgstr "回温结束时间"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_minutes
-msgid "Thaw Minutes (last)"
-msgstr "回温时长(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_start
-msgid "Last Stir Start"
-msgstr "搅拌开始时间"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_end
-msgid "Last Stir End"
-msgstr "搅拌结束时间"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_minutes
-msgid "Stir Minutes (last)"
-msgstr "搅拌时长(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__record_ids
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__disable
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "History"
-msgstr "履历"
+msgid "Disable"
+msgstr "停用"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__action
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
-msgid "Action"
-msgstr "动作"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__mes_order_id
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_load_wizard__mes_order_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
-msgid "MES Order"
-msgstr "制令单号"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__duration_minutes
-msgid "Duration (min)"
-msgstr "时长(min)"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__scrap_reason
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_scrap_wizard__reason
-msgid "Scrap Reason"
-msgstr "报废原因"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__occurred_at
-msgid "Occurred At"
-msgstr "发生时间"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__user_id
-msgid "User"
-msgstr "用户"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__company_id
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__company_id
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__company_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
-#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__company_id
-msgid "Company"
-msgstr "组织机构"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_paste
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_paste
-msgid "Solder Paste"
-msgstr "锡膏"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__red_glue
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__red_glue
-msgid "Red Glue"
-msgstr "红胶"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_wire
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_wire
-msgid "Solder Wire"
-msgstr "锡丝"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_bar
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_bar
-msgid "Solder Bar"
-msgstr "锡条"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__flux
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__flux
-msgid "Flux"
-msgstr "助焊剂"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__conformal_coating
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__conformal_coating
-msgid "Conformal Coating"
-msgstr "三防漆"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__normal
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "In Stock"
-msgstr "在库"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__thawing
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Thawing"
-msgstr "回温中"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__ready
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Ready"
-msgstr "待上线"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__in_use
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "In Use"
-msgstr "上线中"
+msgid "Disable this consumable?"
+msgstr "确认停用该辅料？"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__disabled
@@ -370,68 +220,15 @@ msgid "Disabled"
 msgstr "停用"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__exhausted
-msgid "Exhausted"
-msgstr "耗尽"
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__duration_minutes
+msgid "Duration (min)"
+msgstr "时长(min)"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__scrapped
-msgid "Scrapped"
-msgstr "报废"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__ok
-msgid "Valid"
-msgstr "正常"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__remind
-msgid "Expiring Soon"
-msgstr "即将到期"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__expired
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Expired"
-msgstr "已过期"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__thaw_start
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__enable
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Thaw Start"
-msgstr "回温开始"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__thaw_end
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Thaw End"
-msgstr "回温结束"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__stir_start
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Stir Start"
-msgstr "搅拌开始"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__stir_end
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Stir End"
-msgstr "搅拌结束"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__load
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
-msgid "Load"
-msgstr "上线"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__unload
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
-msgid "Unload"
-msgstr "下线"
+msgid "Enable"
+msgstr "解禁"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__exhaust
@@ -441,44 +238,61 @@ msgid "Exhaust"
 msgstr "耗尽"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
-msgid "Scrap"
-msgstr "报废"
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__exhausted
+msgid "Exhausted"
+msgstr "耗尽"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__disable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Disable"
-msgstr "停用"
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__expired
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Expired"
+msgstr "已过期"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__enable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Enable"
-msgstr "解禁"
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__remind
+msgid "Expiring Soon"
+msgstr "即将到期"
 
 #. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Basic Information"
-msgstr "基本信息"
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__expiry_date
+msgid "Expiry Date"
+msgstr "效期"
 
 #. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_form
-msgid "Control Rules"
-msgstr "管控规则"
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__expiry_remind_days
+msgid "Expiry Remind (days)"
+msgstr "过期提醒天数"
 
 #. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Registration"
-msgstr "登记信息"
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__expiry_state
+msgid "Expiry State"
+msgstr "效期状态"
 
 #. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__flux
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__flux
+msgid "Flux"
+msgstr "助焊剂"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__record_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Thaw / Stir"
-msgstr "回温 / 搅拌"
+msgid "History"
+msgstr "履历"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__normal
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "In Stock"
+msgstr "在库"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__in_use
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "In Use"
+msgstr "上线中"
 
 #. module: sn_wsd_consumable
 #. module: sn_wsd_consumable
@@ -487,281 +301,21 @@ msgid "Info Count"
 msgstr "辅料数量"
 
 #. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_template_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_search
-msgid "Archived"
-msgstr "已归档"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Terminal"
-msgstr "终态"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_load_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_scrap_wizard_form
-msgid "Confirm"
-msgstr "确定"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_load_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_scrap_wizard_form
-msgid "Cancel"
-msgstr "取消"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Thawing counts one thaw cycle. Continue?"
-msgstr "回温将计一次回温次数，确认？"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Mark this consumable as exhausted?"
-msgstr "确认标记该辅料为耗尽？"
-
-#. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Disable this consumable?"
-msgstr "确认停用该辅料？"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_code_unique
-msgid "The consumable code must be unique per company."
-msgstr "辅料料号必须在公司内唯一。"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_sn_unique
-msgid "The consumable SN must be unique per company."
-msgstr "辅料SN必须在公司内唯一。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Thaw duration min cannot be greater than thaw duration max."
-msgstr "回温时长下限不能大于上限。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Stir duration min cannot be greater than stir duration max."
-msgstr "搅拌时长下限不能大于上限。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s is already in a terminal state."
-msgstr "辅料 %s 已处于终态。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s expired on %s. Scrap it."
-msgstr "辅料 %s 已于 %s 过期，请报废。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s must be stirred after the current thaw before loading."
-msgstr "辅料 %s 上线前须在本次回温后完成搅拌。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Only an in-stock consumable can start thawing."
-msgstr "只有在库辅料才能开始回温。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s reached the thaw count limit (%s). Scrap it."
-msgstr "辅料 %s 已达回温次数上限（%s），请报废。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s is not thawing."
-msgstr "辅料 %s 不在回温中。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The thaw duration of %s is only %s min, at least %s min is required. Keep waiting."
-msgstr "辅料 %s 回温时长仅 %s 分钟，至少需 %s 分钟，请继续等待。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The thaw duration of %s is %s min and exceeded the limit of %s min. Scrap it."
-msgstr "辅料 %s 回温时长 %s 分钟已超上限 %s 分钟，请报废。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Stir control is not enabled for %s."
-msgstr "建档 %s 未启用搅拌管控。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s must finish thawing before stirring."
-msgstr "辅料 %s 须先完成回温才能搅拌。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s is not stirring."
-msgstr "辅料 %s 不在搅拌中。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The stir duration of %s is only %s min, at least %s min is required. Keep stirring."
-msgstr "辅料 %s 搅拌时长仅 %s 分钟，至少需 %s 分钟，请继续搅拌。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The stir duration of %s is %s min and exceeded the limit of %s min. Scrap it."
-msgstr "辅料 %s 搅拌时长 %s 分钟已超上限 %s 分钟，请报废。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s is not ready to load."
-msgstr "辅料 %s 未处于待上线状态。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "The consumable %s is not in use."
-msgstr "辅料 %s 未上线。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Only a disabled consumable can be enabled."
-msgstr "只有停用的辅料才能解禁。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "The consumable SN %s does not exist."
-msgstr "辅料 SN %s 不存在。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "The MES order is required."
-msgstr "必须指定制令单。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "The MES order %s does not exist."
-msgstr "制令单 %s 不存在。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Thawing started for %s."
-msgstr "%s 已开始回温。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Thawing finished for %s."
-msgstr "%s 回温完成。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Stirring started for %s."
-msgstr "%s 已开始搅拌。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Stirring finished for %s."
-msgstr "%s 搅拌完成。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s loaded for %s."
-msgstr "%s 已上线（%s）。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s unloaded."
-msgstr "%s 已下线。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s exhausted."
-msgstr "%s 已耗尽。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s scrapped."
-msgstr "%s 已报废。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s disabled."
-msgstr "%s 已停用。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "%s enabled."
-msgstr "%s 已解禁。"
-
-#. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__issued
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
-msgid "Issued"
-msgstr "领用中"
-
-#. module: sn_wsd_consumable
 #: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__issue
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
 msgid "Issue"
 msgstr "领用"
 
 #. module: sn_wsd_consumable
-#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__return
 #: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Return"
-msgstr "归还"
+msgid "Issue Info"
+msgstr "领用信息"
 
 #. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Only an in-stock consumable can be issued."
-msgstr "仅在库状态的辅料可以领用。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
-msgid "Only an issued consumable can be returned."
-msgstr "仅领用中的辅料可以归还。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Consumable %s issued."
-msgstr "辅料 %s 已领用。"
-
-#. module: sn_wsd_consumable
-#. odoo-python
-#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
-msgid "Consumable %s returned."
-msgstr "辅料 %s 已归还。"
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__issued
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Issued"
+msgstr "领用中"
 
 #. module: sn_wsd_consumable
 #: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__issued_user_id
@@ -774,11 +328,476 @@ msgid "Issued Date"
 msgstr "领用时间"
 
 #. module: sn_wsd_consumable
-#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
-msgid "Issue Info"
-msgstr "领用信息"
-
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_end
+msgid "Last Stir End"
+msgstr "搅拌结束时间"
 
 #. module: sn_wsd_consumable
-msgid "Consumable SN Coding"
-msgstr "辅料 SN 编码"
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_start
+msgid "Last Stir Start"
+msgstr "搅拌开始时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_end
+msgid "Last Thaw End"
+msgstr "回温结束时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_start
+msgid "Last Thaw Start"
+msgstr "回温开始时间"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__load
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
+msgid "Load"
+msgstr "上线"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_load_wizard
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_load_wizard
+msgid "Load Consumable"
+msgstr "辅料上线"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__location_id
+msgid "Location"
+msgstr "库位"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Mark this consumable as exhausted?"
+msgstr "确认标记该辅料为耗尽？"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_load_wizard__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
+msgid "MES Order"
+msgstr "制令单号"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__occurred_at
+msgid "Occurred At"
+msgstr "发生时间"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only a disabled consumable can be enabled."
+msgstr "只有停用的辅料才能解禁。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an in-stock consumable can be issued."
+msgstr "仅在库状态的辅料可以领用。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an in-stock consumable can start thawing."
+msgstr "只有在库辅料才能开始回温。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an in-use consumable can register usage (%s)."
+msgstr "只有使用中的辅料才能登记用量（%s）。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an issued consumable can be returned."
+msgstr "仅领用中的辅料可以归还。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Only an issued consumable can start thawing."
+msgstr "只有已发放的辅料才能开始解冻。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__production_date
+msgid "Production Date"
+msgstr "生产日期"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__purchase_ref
+msgid "Purchase Order"
+msgstr "采购单"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__ready
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Ready"
+msgstr "待上线"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__red_glue
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__red_glue
+msgid "Red Glue"
+msgstr "红胶"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Registration"
+msgstr "登记信息"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__return
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Return"
+msgstr "归还"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_consumable
+#: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_scrap_wizard
+#: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_scrap_wizard
+msgid "Scrap Consumable"
+msgstr "辅料报废"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__scrap_reason
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_scrap_wizard__reason
+msgid "Scrap Reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__scrapped
+msgid "Scrapped"
+msgstr "报废"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__shelf_life_days
+msgid "Shelf Life (days)"
+msgstr "保质期(天)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_bar
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_bar
+msgid "Solder Bar"
+msgstr "锡条"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_paste
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_paste
+msgid "Solder Paste"
+msgstr "锡膏"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_template__consumable_type__solder_wire
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__consumable_type__solder_wire
+msgid "Solder Wire"
+msgstr "锡丝"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__aux_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_control
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__stir_control
+msgid "Stir Control"
+msgstr "搅拌管控"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Stir control is not enabled for %s."
+msgstr "建档 %s 未启用搅拌管控。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_duration_max
+msgid "Stir Duration Max (min)"
+msgstr "搅拌时长上限(min)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__stir_duration_min
+msgid "Stir Duration Min (min)"
+msgstr "搅拌时长下限(min)"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Stir duration min cannot be greater than stir duration max."
+msgstr "搅拌时长下限不能大于上限。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__stir_end
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Stir End"
+msgstr "搅拌结束"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__stir_minutes
+msgid "Stir Minutes (last)"
+msgstr "搅拌时长(min)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__stir_start
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Stir Start"
+msgstr "搅拌开始"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Stirring finished for %s."
+msgstr "%s 搅拌完成。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Stirring started for %s."
+msgstr "%s 已开始搅拌。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__supplier_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Terminal"
+msgstr "终态"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Thaw / Stir"
+msgstr "回温 / 搅拌"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_count
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__thaw_count
+msgid "Thaw Count"
+msgstr "回温次数"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_count_limit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_count_limit
+msgid "Thaw Count Limit"
+msgstr "回温次数上限"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_max
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_max
+msgid "Thaw Duration Max (min)"
+msgstr "回温时长上限(min)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_template__thaw_duration_min
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_form
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__thaw_duration_min
+msgid "Thaw Duration Min (min)"
+msgstr "回温时长下限(min)"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "Thaw duration min cannot be greater than thaw duration max."
+msgstr "回温时长下限不能大于上限。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__thaw_end
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Thaw End"
+msgstr "回温结束"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__thaw_minutes
+msgid "Thaw Minutes (last)"
+msgstr "回温时长(min)"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__thaw_start
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Thaw Start"
+msgstr "回温开始"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__aux_state__thawing
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_search
+msgid "Thawing"
+msgstr "回温中"
+
+#. module: sn_wsd_consumable
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+msgid "Thawing counts one thaw cycle. Continue?"
+msgstr "回温将计一次回温次数，确认？"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Thawing finished for %s."
+msgstr "%s 回温完成。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "Thawing started for %s."
+msgstr "%s 已开始回温。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s expired on %s. Scrap it."
+msgstr "辅料 %s 已于 %s 过期，请报废。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s is already in a terminal state."
+msgstr "辅料 %s 已处于终态。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s is not in use."
+msgstr "辅料 %s 未上线。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s is not ready to load."
+msgstr "辅料 %s 未处于待上线状态。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s is not stirring."
+msgstr "辅料 %s 不在搅拌中。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s is not thawing."
+msgstr "辅料 %s 不在回温中。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s must be stirred after the current thaw before loading."
+msgstr "辅料 %s 上线前须在本次回温后完成搅拌。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s must finish thawing before stirring."
+msgstr "辅料 %s 须先完成回温才能搅拌。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable %s reached the thaw count limit (%s). Scrap it."
+msgstr "辅料 %s 已达回温次数上限（%s），请报废。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_code_unique
+msgid "The consumable code must be unique per company."
+msgstr "辅料料号必须在公司内唯一。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "The consumable SN %s does not exist."
+msgstr "辅料 SN %s 不存在。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.constraint,message:sn_wsd_consumable.constraint_sn_consumable_sn_unique
+msgid "The consumable SN must be unique per company."
+msgstr "辅料SN必须在公司内唯一。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The consumable type name must be unique per company."
+msgstr "辅料类型名称在同一公司内必须唯一。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "The MES order %s does not exist."
+msgstr "制令单 %s 不存在。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable_service.py:0
+msgid "The MES order is required."
+msgstr "必须指定制令单。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The stir duration of %s is %s min and exceeded the limit of %s min. Scrap it."
+msgstr "辅料 %s 搅拌时长 %s 分钟已超上限 %s 分钟，请报废。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The stir duration of %s is only %s min, at least %s min is required. Keep stirring."
+msgstr "辅料 %s 搅拌时长仅 %s 分钟，至少需 %s 分钟，请继续搅拌。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The thaw duration of %s is %s min and exceeded the limit of %s min. Scrap it."
+msgstr "辅料 %s 回温时长 %s 分钟已超上限 %s 分钟，请报废。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The thaw duration of %s is only %s min, at least %s min is required. Keep waiting."
+msgstr "辅料 %s 回温时长仅 %s 分钟，至少需 %s 分钟，请继续等待。"
+
+#. module: sn_wsd_consumable
+#. odoo-python
+#: code:addons/sn_wsd_consumable/models/sn_consumable.py:0
+msgid "The usage quantity must be a positive integer."
+msgstr "用量必须是正整数。"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_type__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_type_list
+msgid "Type Name"
+msgstr "类型名称"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_record__action__unload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_info_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_consumable.view_sn_consumable_record_search
+msgid "Unload"
+msgstr "下线"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_record__user_id
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields.selection,name:sn_wsd_consumable.selection__sn_consumable_info__expiry_state__ok
+msgid "Valid"
+msgstr "正常"
+
+#. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__weight_g
+msgid "Weight (g)"
+msgstr "重量(g)"

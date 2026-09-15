@@ -46,20 +46,30 @@
 
             <!-- ❷ 反馈区：上下文进度 + 大色块 + 粘滞模式胶囊 -->
             <main class="flex-grow-1 overflow-auto">
+                <!-- 四格进度：已过 | 在制 | 未到 | 总数（按单分行；
+                     已过+在制+未到 = 总数，报废板计入已到不进已过 -->
                 <div t-if="state.selectedWorkcenterId" class="o_sn_wsd_pda_progress">
-                    <div class="o_sn_wsd_pda_order">
-                        <t t-out="state.orders.length"/>
-                        <small class="ms-1" t-out="ordersLabel"/>
-                        <t t-if="state.orders.length === 1">
-                            · <t t-out="state.orders[0].name"/>
-                        </t>
-                    </div>
-                    <div class="o_sn_wsd_pda_progress_nums">
-                        <div class="o_sn_wsd_pda_num">
-                            <strong t-out="state.wipTotal"/>
-                            <span t-out="inProgressLabel"/>
+                    <t t-foreach="progressOrders" t-as="row" t-key="row.id">
+                        <div class="o_sn_wsd_pda_order" t-out="row.name"/>
+                        <div class="o_sn_wsd_pda_progress_nums">
+                            <div class="o_sn_wsd_pda_num is-passed">
+                                <strong t-out="row.okQty"/>
+                                <span t-out="passedLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-wip">
+                                <strong t-out="row.wipQty"/>
+                                <span t-out="inProgressLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="row.toComeQty"/>
+                                <span t-out="toComeLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="row.totalQty"/>
+                                <span t-out="totalLabel"/>
+                            </div>
                         </div>
-                    </div>
+                    </t>
                 </div>
 
                 <!-- 报错/提示条钉在滚动区顶部：内容再长也不用上下滑找结果 -->
