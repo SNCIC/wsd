@@ -93,6 +93,7 @@ class MesOrderStationServices(models.Model):
                     'id': op.id,
                     'label': op.display_label,
                     'wip_qty': op.x_wip_qty,
+                    'entered_qty': op.x_entered_qty,
                     'ok_qty': op.x_ok_qty,
                     'ng_qty': op.x_ng_qty,
                     'scrap_qty': op.x_scrap_qty,

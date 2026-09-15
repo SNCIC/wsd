@@ -373,6 +373,9 @@ $o-pda-bar-btn: rgba(255, 255, 255, 0.14);
             }
             &.is-loaded strong { color: #16a34a; }
             &.is-unloaded strong { color: #dc2626; }
+            // 过站屏四格进度：已过绿、在制琥珀、未到/总数灰
+            &.is-passed strong { color: #16a34a; }
+            &.is-wip strong { color: #d97706; }
         }
     }
     .o_sn_wsd_pda_order {

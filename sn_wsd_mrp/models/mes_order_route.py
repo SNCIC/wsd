@@ -445,6 +445,12 @@ class MesOrderRouteOperation(models.Model):
         string='In Progress', compute='_compute_pass_statistics', store=True,
         help='SNs currently at this operation.',
     )
+    x_entered_qty = fields.Integer(
+        string='Entered', compute='_compute_pass_statistics', store=True,
+        help='Distinct SNs that ever entered this operation (any result, '
+             'including in progress): the arrived quantity for '
+             'remaining = planned - entered.',
+    )
     x_ok_qty = fields.Integer(
         string='Passed', compute='_compute_pass_statistics', store=True,
         help='SNs that left this operation with result OK.',
@@ -506,6 +512,10 @@ class MesOrderRouteOperation(models.Model):
             op.x_reported_qty = ok_qty + ng_qty + scrap_qty
             op.x_wip_qty = len(op.serial_wip_ids)
             histories = op.serial_history_ids
+            # 到站台数（去重）：进过本工序就算——含在制、NG 待复测、报废，
+            # 复测/维修回流不重复计
+            op.x_entered_qty = len(set(histories.mapped(
+                'serial_identity_id').ids))
             # 台数按 SN 去重：一块板复测多行只算一台（测了几次查历史行）
             op.x_ok_qty = len(set(
                 histories.filtered(lambda h: h.result == 'ok')
