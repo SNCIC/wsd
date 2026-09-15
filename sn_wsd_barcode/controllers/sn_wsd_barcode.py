@@ -672,7 +672,7 @@ class StockBarcodeController(http.Controller):
         if not user.has_group('base.group_system'):
             menus = menus.filtered(
                 lambda menu: not menu.group_ids
-                or bool(menu.group_ids & user.groups_id))
+                or bool(menu.group_ids & user.group_ids))
         return {
             'functions': [{
                 'menu_id': menu.id,
