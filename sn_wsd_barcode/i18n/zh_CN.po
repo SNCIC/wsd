@@ -34,6 +34,15 @@ msgstr "/秒"
 
 #. module: sn_wsd_barcode
 #: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.scrap_product_selector
+msgid ""
+"<i class=\"fa fa-fw fa-lg fa-long-arrow-right me-3\" title=\"Scrap "
+"Location\"/>"
+msgstr ""
+"<i class=\"fa fa-fw fa-lg fa-long-arrow-right me-3\" title=\"Scrap "
+"Location\"/>"
+
+#. module: sn_wsd_barcode
+#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.scrap_product_selector
 msgid "<i class=\"fa fa-fw fa-lg fa-barcode me-3\" title=\"Serial/Lot Number\"/>"
 msgstr "<i class=\"fa fa-fw fa-lg fa-barcode me-3\" title=\"Serial/Lot Number\"/>"
 
@@ -98,6 +107,14 @@ msgstr "全球贸易货品编号（GTIN）只能包含数字"
 #: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__restrict_scan_product
 msgid "A line's product must be scanned before the line can be edited"
 msgstr "资料行的产品必须先经过扫描，才可编辑该行"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
+msgid ""
+"A product tracked by serial numbers can't have multiple quantities for the "
+"same serial number."
+msgstr "由序列号追踪的产品，不能有多个产品共用 序列号。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -180,6 +197,39 @@ msgid "Allow full picking validation"
 msgstr "允许完整拣货验证"
 
 #. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__barcode_validation_full
+msgid ""
+"Allow validating a picking even if nothing has been scanned yet, i.e. do an "
+"immediate transfer"
+msgstr "即使尚未扫描，也允许验证拣货，即立即进行传输"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"An error occured during parsing of element_string: AI code %(ai_code)s is "
+"missing for scheme %(scheme_name)s"
+msgstr "解析 element_string 时发生错误：方案缺漏 AI 代码 %(ai_code)s。方案：%(scheme_name)s"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"An error occured with field '%(field_name)s': the corresponding AI "
+"'%(ai_code)s' was not found in the element_string"
+msgstr "字段“%(field_name)s”发生错误：在元素字符串中未找到对应的 AI“%(ai_code)s”"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"An error occured: value of company_prefix_length (%(company_prefix_length)s)"
+" must be between 6 and 12 inclusive."
+msgstr ""
+"发生错误：公司字首长度值 company_prefix_length（%(company_prefix_length)s）必须介乎 6 至 12 "
+"之间（包括该两个数值）。"
+
+#. module: sn_wsd_barcode
 #. odoo-python
 #: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
 msgid "An error occurred with field '%(field_name)s': %(error_message)s"
@@ -188,8 +238,24 @@ msgstr "字段 “%(field_name)s” 发生错误：%(error_message)s"
 #. module: sn_wsd_barcode
 #. odoo-python
 #: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"An error occurred with field 'partition': no partition value can be found "
+"for the given company_prefix_length"
+msgstr "字段 “partition” 发生错误：所提供的 company_prefix_length 找不到分区值"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
 msgid "An error occurred with method '%(method_name)s': %(error_message)s"
 msgstr "方法 “%(method_name)s” 发生错误：%(error_message)s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
+msgid ""
+"An unexisting package type was scanned. This part of the barcode can't be "
+"processed."
+msgstr "扫描了 不存在的包裹类型。条形码的这一部分不能被处理。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -300,6 +366,13 @@ msgid "Barcodes are not available."
 msgstr "条码不可用。"
 
 #. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"Binary value %(word)s cannot be represented with %(word_size_write)s bits"
+msgstr "二进制值 %(word)s 无法以 %(word_size_write)s 位元表示"
+
+#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/pallet_binding/pallet_binding.js:0
 msgid "Bind"
@@ -381,6 +454,15 @@ msgstr "料车格式：DEV=机台.台|CART=料车SN"
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Cart loading saved successfully."
 msgstr "料车上台完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"Cart loading: %(loaded)d station(s) loaded, %(skipped)d skipped (slots: "
+"%(slots)s -- no matching online position or already loaded)."
+msgstr "料车上台：已上台 %(loaded)d 站，跳过 %(skipped)d 站（料位: %(slots)s —— 无匹配在线料位或已上料）。"
+
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -855,6 +937,27 @@ msgid "Display Name"
 msgstr "显示名称"
 
 #. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__show_reserved_sns
+msgid ""
+"Display reserved lots/serial numbers. When not active, the picker can pick "
+"lots/serials as they want."
+msgstr "显示保留批次/序列号。未生效时，拣选者可随意拣选批次/序列号。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
+msgid ""
+"Do you want to permanently remove this message ? It won't appear anymore, so"
+" make sure you don't need the barcodes sheet or you have a copy."
+msgstr "您想永久删除这条信息吗？它不会再出现了，所以请确保您不需要条形码表，或者您有一份副本。"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__restrict_put_in_pack
+msgid ""
+"Does the picker have to put the scanned products in a package? If yes, when?"
+msgstr "拣货员是否必须将扫描的产品放入包装中？如果是，何时进行？"
+
+#. module: sn_wsd_barcode
 #: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__restrict_scan_dest_location
 msgid "Does the picker have to scan the destination? If yes, when?"
 msgstr "拣货员必须扫描目的地吗？如果需要，何时扫描？"
@@ -987,6 +1090,30 @@ msgstr "输入目标制造订单号"
 
 #. module: sn_wsd_barcode
 #. odoo-python
+#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
+msgid ""
+"Error: The product barcode is not a valid Global Trade Item Number, we can't"
+" generate an Electronic Product Code for it."
+msgstr "错误：产品条形码不是有效的全球贸易项目编号，我们无法为其生成电子产品代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
+msgid ""
+"Error: We can't generate an Electronic Product Code for a product without a "
+"barcode."
+msgstr "错误：我们无法为没有条形码的产品生成电子产品代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
+msgid ""
+"Error: We can't generate an Electronic Product Code for a tracked product "
+"without a tracking number."
+msgstr "错误：我们无法为没有追踪编号的追踪产品生成电子产品代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
 msgid "Exception %s reported for %s (%s)."
 msgstr "已提报异常 %s（SN %s，%s）。"
@@ -1067,6 +1194,14 @@ msgstr "料站下料"
 #. module: sn_wsd_barcode
 #. odoo-python
 #: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"Field '%(field_name)s' is a reserved field, you can't manually update its "
+"value with this method"
+msgstr "字段 '%(field_name)s' 是保留字段，您不能使用此方法手动更新其值"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
 msgid "Field '%(field_name)s' not found"
 msgstr "找不到字段%(field_name)s"
 
@@ -1086,6 +1221,14 @@ msgstr "以下是已创建的欠单："
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid "Following backorders were created:"
 msgstr "以下是已创建的欠单："
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/components/extra_product_dialog.js:0
+msgid ""
+"Following scanned products are not reserved for this transfer. Are you sure "
+"you want to add them?"
+msgstr "以下扫描的产品未被预留给此调拨。您确定要添加它们吗？"
 
 #. module: sn_wsd_barcode
 #: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__barcode_allow_extra_product
@@ -1192,6 +1335,21 @@ msgstr "华为产品过站"
 #: model:ir.model.fields,field_description:sn_wsd_barcode.field_uom_uom__id
 msgid "ID"
 msgstr "ID"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/stock_picking_type.py:0
+msgid ""
+"If the source location must be scanned, then the destination location must "
+"either be scanned after each product or not scanned at all."
+msgstr "如果必须扫描来源地，则须在各产品之后扫描目标地点，或者完全不扫描。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/components/backorder_dialog.xml:0
+msgid ""
+"If you validate now, the remaining products will be added to a backorder."
+msgstr "如果您现在验证，剩余产品将被添加到欠单中。"
 
 #. module: sn_wsd_barcode
 #: model:ir.model.fields,field_description:sn_wsd_barcode.field_stock_move_line__image_1920
@@ -1741,6 +1899,21 @@ msgstr "没有 %(picking_type)s为 %(barcode_type)s设置"
 
 #. module: sn_wsd_barcode
 #. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid ""
+"No active route operation was found for the current online manufacturing "
+"order."
+msgstr "当前在线制造订单没有生效工序。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid ""
+"No active work order was found for the current online manufacturing order."
+msgstr "当前在线制造订单没有找到活动工单。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
 msgid "No Barcode"
 msgstr "无条形码"
@@ -1756,6 +1929,13 @@ msgstr "当前制令单无关键物料管控。"
 #: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
 msgid "No defect code matches %s."
 msgstr "没有匹配 %s 的缺陷代码。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+msgid ""
+"No internal operation type. Please configure one in warehouse settings."
+msgstr "没有内部操作类型。 请在仓库设置中配置 。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
@@ -1777,9 +1957,25 @@ msgstr "未找到所选工作中心对应的在线制造订单。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"No online manufacturing order was found for the selected workshop and "
+"production line."
+msgstr "未找到所选车间和生产线对应的在线制造订单。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_pda_equipment_controller.py:0
 msgid "No online MES order runs through work center %s."
 msgstr "没有在线制令单经过工位 %s。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"No online MES order was found for the selected workshop and production line."
+msgstr "所选车间产线没有在线制令单。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -1991,6 +2187,16 @@ msgstr "旧物料: "
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "Online loading saved successfully."
 msgstr "上料完成。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/js/stock_barcode_sml_form.js:0
+msgid ""
+"Oops! It seems that this product is not located in %(location)s.\n"
+"Do you confirm you picked from there?"
+msgstr ""
+"糟糕！似乎该产品不在%(location)s。\n"
+"您确认是从那里取货的吗？"
 
 #. module: sn_wsd_barcode
 #. odoo-python
@@ -2220,6 +2426,14 @@ msgid "Partial Move Count"
 msgstr "部分移动计数"
 
 #. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
+msgid ""
+"Partition table %(table_name)s not found, available tables are : "
+"%(table_list)s)"
+msgstr "未找到分区表%(table_name)s，可用的表有：%(table_list)s）"
+
+#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/device_action/device_action.js:0
 msgid "PASS"
@@ -2366,6 +2580,14 @@ msgstr "打印包裹"
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid "Print Picking Operations"
 msgstr "打印拣货作业"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
+msgid ""
+"Print the %(sheet_s)sdemo data sheet%(sheet_e)s to test, or "
+"%(ops_s)sbarcodes%(ops_e)s for operations."
+msgstr "打印%(sheet_s)s演示数据表%(sheet_e)s进行测试，或打印%(ops_s)s条码%(ops_e)s用于操作。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -2683,6 +2905,81 @@ msgstr "工序实例"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s or a %(bold_s)s product%(bold_e)s to "
+"filter your records"
+msgstr "扫描%(bold_s)s调拨单%(bold_e)s或%(bold_s)s产品%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
+"%(bold_s)s lot%(bold_e)s, a %(bold_s)s packaging%(bold_e)s, or a %(bold_s)s "
+"package%(bold_e)s to filter your records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s、%(bold_s)s包装%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
+"%(bold_s)s lot%(bold_e)s, or a %(bold_s)s package%(bold_e)s to filter your "
+"records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
+"%(bold_s)s lot%(bold_e)s, or a %(bold_s)s packaging%(bold_e)s to filter your"
+" records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s或%(bold_s)s包装%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
+"%(bold_s)s packaging%(bold_e)s, or a %(bold_s)s package%(bold_e)s to filter "
+"your records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s包装%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
+"%(bold_s)s lot%(bold_e)s to filter your records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s批次%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
+"%(bold_s)s package%(bold_e)s to filter your records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
+msgid ""
+"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
+"%(bold_s)s packaging%(bold_e)s to filter your records"
+msgstr ""
+"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s包装%(bold_e)s以筛选记录"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 msgid "Scan a %(bold_s)slocation%(bold_e)s to initiate a transfer"
 msgstr "扫描%(bold_s)s库位%(bold_e)s以发起调拨"
@@ -2698,6 +2995,22 @@ msgstr "扫描%(bold_s)s包裹%(bold_e)s以查找调拨"
 #: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
 msgid "Scan a %(bold_s)spicking%(bold_e)s to open it"
 msgstr "扫描%(bold_s)s拣货单%(bold_e)s以打开"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
+msgid ""
+"Scan a %(bold_s)sproduct%(bold_e)s or its %(bold_s)spackaging%(bold_e)s to "
+"locate it"
+msgstr "扫描%(bold_s)s产品%(bold_e)s或其%(bold_s)s包装%(bold_e)s以定位"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
+msgid ""
+"Scan a %(bold_s)stracking number%(bold_e)s or a %(bold_s)spackage%(bold_e)s "
+"to find a transfer"
+msgstr "扫描%(bold_s)s追踪号%(bold_e)s或%(bold_s)s包裹%(bold_e)s以查找调拨"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -2866,6 +3179,13 @@ msgstr "扫描 产品，然后扫描目的位置"
 #: code:addons/sn_wsd_barcode/models/stock_picking.py:0
 msgid "Scan a product to filter the transfers."
 msgstr "扫描产品以筛选调拨。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/models/stock_picking.py:0
+msgid ""
+"Scan a product, a lot, a packaging, or a package to filter the transfers."
+msgstr "扫描产品、批次、包装或包裹以筛选调拨。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
@@ -3339,6 +3659,13 @@ msgid "SMT material table rows require device, table and loadpoint."
 msgstr "料站表来源的行必须有机台、表号和料站。"
 
 #. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"SMT offline preparation completed: %(device)s %(loadpoint)s %(material)s"
+msgstr "下料准备完成：%(device)s %(loadpoint)s %(material)s"
+
+#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "SMT Operations"
@@ -3529,6 +3856,20 @@ msgid "Task Execution"
 msgstr "任务执行"
 
 #. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__is_barcode_picking_type
+msgid ""
+"Technical field indicating if type should be used in barcode app and used to"
+" control visibility in the related UI."
+msgstr "技术字段，表示是否应在条形码应用程序中使用该类型，并用于控制是否在相关用户界面中显示。"
+
+#. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__show_barcode_validation
+msgid ""
+"Technical field used to compute whether the \"Final Validation\" group "
+"should be displayed, to support combined groups/invisible complexity."
+msgstr "技术字段，用于计算是否显示 “最终验证” 组别，以支持组合群组/不可见的复杂性。"
+
+#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Test"
@@ -3590,6 +3931,12 @@ msgstr "物料 %s 不在本制令单的关键物料清单内。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
+#: code:addons/sn_wsd_barcode/models/sn_smt_drawing_loading.py:0
+msgid "The material is already loaded online."
+msgstr "该物料已在线上加载。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
 msgid "The MES order %s is closed."
 msgstr "制令单 %s 已关闭。"
@@ -3626,9 +3973,31 @@ msgstr "扫描的位置不属于此操作的位置"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid ""
+"The scanned serial number %(lotName)s is already awaiting confirmation."
+msgstr "扫描的序列号 %(lotName)s 已在等待确认。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
 msgid "The scanned serial number %s is already used."
 msgstr "扫描到的序号%s已被使用。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"The selected production line does not match the current online manufacturing"
+" order."
+msgstr "所选生产线与当前在线制造订单不匹配。"
+
+#. module: sn_wsd_barcode
+#. odoo-python
+#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
+msgid ""
+"The selected production line does not match the current online MES order."
+msgstr "所选产线与当前在线制令单不符。"
 
 #. module: sn_wsd_barcode
 #. odoo-python
@@ -3675,6 +4044,14 @@ msgstr "该箱已绑定当前托盘。"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid ""
+"This package contains extra products and extra products are not allowed on "
+"this operation."
+msgstr "此包裹包含额外产品，而此操作不允许额外产品。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_quant_model.js:0
 msgid "This package is already scanned."
 msgstr "这个包裹已扫描过。"
@@ -3698,6 +4075,15 @@ msgid "This product doesn't exist."
 msgstr "该产品不存在。"
 
 #. module: sn_wsd_barcode
+#: model:ir.model.fields,help:sn_wsd_barcode.field_res_config_settings__barcode_separator_regex
+#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.res_config_settings_view_form
+msgid ""
+"This regex is used in the Barcode application to separate individual "
+"barcodes when an aggregate barcode (i.e. single barcode consisting of "
+"multiple barcode encodings) is scanned."
+msgstr "此 regex 表达式在条形码应用程序中，用于在扫描聚合条形码时（即由多组条形码编码组成的单一条形码），分隔开各个条码。"
+
+#. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
 msgid "This serial number is already used."
@@ -3708,6 +4094,13 @@ msgstr "该序列号已被使用。"
 #: code:addons/sn_wsd_barcode/static/src/production_menu/production_menu.js:0
 msgid "Through-hole operations"
 msgstr "插件作业"
+
+#. module: sn_wsd_barcode
+#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.res_config_settings_view_form
+msgid ""
+"Time before processing a batch. Used to group communication to the server "
+"and improve global performance at the cost of reactivity."
+msgstr "处理批次前的时间。用于对服务器的通信进行分组，以提高整体性能，但会牺牲反应速度。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3998,366 +4391,6 @@ msgstr "是"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid "You are supposed to scan %s or another source location"
-msgstr "您应该扫描 %s 或者其他的源位置"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid "You can't apply a package type. First, scan product or select a line"
-msgstr "你不能应用包裹类型。首先，扫描产品或选择 行"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid "You can't register scrap at this state of the operation"
-msgstr "在此运行状态下，无法登记报废"
-
-#. module: sn_wsd_barcode
-#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.view_backorder_confirmation
-msgid "You have processed less products than the initial demand:"
-msgstr "您处理的产品少于初始需求:"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid "You must scan a package or put in pack"
-msgstr "你必须扫描包裹或放入包裹"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid "You must scan a product"
-msgstr "必须扫描 产品"
-
-#. module: sn_wsd_barcode
-#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.scrap_product_selector
-msgid ""
-"<i class=\"fa fa-fw fa-lg fa-long-arrow-right me-3\" title=\"Scrap "
-"Location\"/>"
-msgstr ""
-"<i class=\"fa fa-fw fa-lg fa-long-arrow-right me-3\" title=\"Scrap "
-"Location\"/>"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
-msgid ""
-"A product tracked by serial numbers can't have multiple quantities for the "
-"same serial number."
-msgstr "由序列号追踪的产品，不能有多个产品共用 序列号。"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__barcode_validation_full
-msgid ""
-"Allow validating a picking even if nothing has been scanned yet, i.e. do an "
-"immediate transfer"
-msgstr "即使尚未扫描，也允许验证拣货，即立即进行传输"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"An error occured during parsing of element_string: AI code %(ai_code)s is "
-"missing for scheme %(scheme_name)s"
-msgstr "解析 element_string 时发生错误：方案缺漏 AI 代码 %(ai_code)s。方案：%(scheme_name)s"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"An error occured with field '%(field_name)s': the corresponding AI "
-"'%(ai_code)s' was not found in the element_string"
-msgstr "字段“%(field_name)s”发生错误：在元素字符串中未找到对应的 AI“%(ai_code)s”"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"An error occured: value of company_prefix_length (%(company_prefix_length)s)"
-" must be between 6 and 12 inclusive."
-msgstr ""
-"发生错误：公司字首长度值 company_prefix_length（%(company_prefix_length)s）必须介乎 6 至 12 "
-"之间（包括该两个数值）。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"An error occurred with field 'partition': no partition value can be found "
-"for the given company_prefix_length"
-msgstr "字段 “partition” 发生错误：所提供的 company_prefix_length 找不到分区值"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_model.js:0
-msgid ""
-"An unexisting package type was scanned. This part of the barcode can't be "
-"processed."
-msgstr "扫描了 不存在的包裹类型。条形码的这一部分不能被处理。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"Binary value %(word)s cannot be represented with %(word_size_write)s bits"
-msgstr "二进制值 %(word)s 无法以 %(word_size_write)s 位元表示"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__show_reserved_sns
-msgid ""
-"Display reserved lots/serial numbers. When not active, the picker can pick "
-"lots/serials as they want."
-msgstr "显示保留批次/序列号。未生效时，拣选者可随意拣选批次/序列号。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
-msgid ""
-"Do you want to permanently remove this message ? It won't appear anymore, so"
-" make sure you don't need the barcodes sheet or you have a copy."
-msgstr "您想永久删除这条信息吗？它不会再出现了，所以请确保您不需要条形码表，或者您有一份副本。"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__restrict_put_in_pack
-msgid ""
-"Does the picker have to put the scanned products in a package? If yes, when?"
-msgstr "拣货员是否必须将扫描的产品放入包装中？如果是，何时进行？"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
-msgid ""
-"Error: The product barcode is not a valid Global Trade Item Number, we can't"
-" generate an Electronic Product Code for it."
-msgstr "错误：产品条形码不是有效的全球贸易项目编号，我们无法为其生成电子产品代码。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
-msgid ""
-"Error: We can't generate an Electronic Product Code for a product without a "
-"barcode."
-msgstr "错误：我们无法为没有条形码的产品生成电子产品代码。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/stock_move_line.py:0
-msgid ""
-"Error: We can't generate an Electronic Product Code for a tracked product "
-"without a tracking number."
-msgstr "错误：我们无法为没有追踪编号的追踪产品生成电子产品代码。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"Field '%(field_name)s' is a reserved field, you can't manually update its "
-"value with this method"
-msgstr "字段 '%(field_name)s' 是保留字段，您不能使用此方法手动更新其值"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/components/extra_product_dialog.js:0
-msgid ""
-"Following scanned products are not reserved for this transfer. Are you sure "
-"you want to add them?"
-msgstr "以下扫描的产品未被预留给此调拨。您确定要添加它们吗？"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/stock_picking_type.py:0
-msgid ""
-"If the source location must be scanned, then the destination location must "
-"either be scanned after each product or not scanned at all."
-msgstr "如果必须扫描来源地，则须在各产品之后扫描目标地点，或者完全不扫描。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/components/backorder_dialog.xml:0
-msgid ""
-"If you validate now, the remaining products will be added to a backorder."
-msgstr "如果您现在验证，剩余产品将被添加到欠单中。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
-msgid ""
-"No internal operation type. Please configure one in warehouse settings."
-msgstr "没有内部操作类型。 请在仓库设置中配置 。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/js/stock_barcode_sml_form.js:0
-msgid ""
-"Oops! It seems that this product is not located in %(location)s.\n"
-"Do you confirm you picked from there?"
-msgstr ""
-"糟糕！似乎该产品不在%(location)s。\n"
-"您确认是从那里取货的吗？"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/epc_encoder.py:0
-msgid ""
-"Partition table %(table_name)s not found, available tables are : "
-"%(table_list)s)"
-msgstr "未找到分区表%(table_name)s，可用的表有：%(table_list)s）"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
-msgid ""
-"Print the %(sheet_s)sdemo data sheet%(sheet_e)s to test, or "
-"%(ops_s)sbarcodes%(ops_e)s for operations."
-msgstr "打印%(sheet_s)s演示数据表%(sheet_e)s进行测试，或打印%(ops_s)s条码%(ops_e)s用于操作。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s or a %(bold_s)s product%(bold_e)s to "
-"filter your records"
-msgstr "扫描%(bold_s)s调拨单%(bold_e)s或%(bold_s)s产品%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
-"%(bold_s)s lot%(bold_e)s, a %(bold_s)s packaging%(bold_e)s, or a %(bold_s)s "
-"package%(bold_e)s to filter your records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s、%(bold_s)s包装%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
-"%(bold_s)s lot%(bold_e)s, or a %(bold_s)s package%(bold_e)s to filter your "
-"records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
-"%(bold_s)s lot%(bold_e)s, or a %(bold_s)s packaging%(bold_e)s to filter your"
-" records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s批次%(bold_e)s或%(bold_s)s包装%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, a "
-"%(bold_s)s packaging%(bold_e)s, or a %(bold_s)s package%(bold_e)s to filter "
-"your records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s、%(bold_s)s包装%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
-"%(bold_s)s lot%(bold_e)s to filter your records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s批次%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
-"%(bold_s)s package%(bold_e)s to filter your records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s包裹%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/kanban/stock_barcode_kanban_renderer.js:0
-msgid ""
-"Scan a %(bold_s)s transfer%(bold_e)s, a %(bold_s)s product%(bold_e)s, or a "
-"%(bold_s)s packaging%(bold_e)s to filter your records"
-msgstr ""
-"扫描%(bold_s)s调拨单%(bold_e)s、%(bold_s)s产品%(bold_e)s或%(bold_s)s包装%(bold_e)s以筛选记录"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
-msgid ""
-"Scan a %(bold_s)sproduct%(bold_e)s or its %(bold_s)spackaging%(bold_e)s to "
-"locate it"
-msgstr "扫描%(bold_s)s产品%(bold_e)s或其%(bold_s)s包装%(bold_e)s以定位"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/main_menu/main_menu.js:0
-msgid ""
-"Scan a %(bold_s)stracking number%(bold_e)s or a %(bold_s)spackage%(bold_e)s "
-"to find a transfer"
-msgstr "扫描%(bold_s)s追踪号%(bold_e)s或%(bold_s)s包裹%(bold_e)s以查找调拨"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/models/stock_picking.py:0
-msgid ""
-"Scan a product, a lot, a packaging, or a package to filter the transfers."
-msgstr "扫描产品、批次、包装或包裹以筛选调拨。"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__is_barcode_picking_type
-msgid ""
-"Technical field indicating if type should be used in barcode app and used to"
-" control visibility in the related UI."
-msgstr "技术字段，表示是否应在条形码应用程序中使用该类型，并用于控制是否在相关用户界面中显示。"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_stock_picking_type__show_barcode_validation
-msgid ""
-"Technical field used to compute whether the \"Final Validation\" group "
-"should be displayed, to support combined groups/invisible complexity."
-msgstr "技术字段，用于计算是否显示 “最终验证” 组别，以支持组合群组/不可见的复杂性。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid ""
-"The scanned serial number %(lotName)s is already awaiting confirmation."
-msgstr "扫描的序列号 %(lotName)s 已在等待确认。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
-msgid ""
-"This package contains extra products and extra products are not allowed on "
-"this operation."
-msgstr "此包裹包含额外产品，而此操作不允许额外产品。"
-
-#. module: sn_wsd_barcode
-#: model:ir.model.fields,help:sn_wsd_barcode.field_res_config_settings__barcode_separator_regex
-#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.res_config_settings_view_form
-msgid ""
-"This regex is used in the Barcode application to separate individual "
-"barcodes when an aggregate barcode (i.e. single barcode consisting of "
-"multiple barcode encodings) is scanned."
-msgstr "此 regex 表达式在条形码应用程序中，用于在扫描聚合条形码时（即由多组条形码编码组成的单一条形码），分隔开各个条码。"
-
-#. module: sn_wsd_barcode
-#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.res_config_settings_view_form
-msgid ""
-"Time before processing a batch. Used to group communication to the server "
-"and improve global performance at the cost of reactivity."
-msgstr "处理批次前的时间。用于对服务器的通信进行分组，以提高整体性能，但会牺牲反应速度。"
-
-#. module: sn_wsd_barcode
-#. odoo-javascript
-#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid ""
 "You are about to take the product %(productName)s from the location %(locationName)s but this product isn't reserved in this location.\n"
 "Scan the current location to confirm that."
@@ -4376,68 +4409,42 @@ msgstr "你要扫描 或多个产品或 拣货单可获得的包裹"
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid "You are supposed to scan %s or another source location"
+msgstr "您应该扫描 %s 或者其他的源位置"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid "You can't apply a package type. First, scan product or select a line"
+msgstr "你不能应用包裹类型。首先，扫描产品或选择 行"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid "You can't register scrap at this state of the operation"
+msgstr "在此运行状态下，无法登记报废"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid ""
 "You have already scanned %s items of this package. Do you want to scan the "
 "whole package?"
 msgstr "这个包您已经扫描了 %s 项。您要扫描整个包裹吗?"
 
 #. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"No online manufacturing order was found for the selected workshop and "
-"production line."
-msgstr "未找到所选车间和生产线对应的在线制造订单。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
-msgid ""
-"No active work order was found for the current online manufacturing order."
-msgstr "当前在线制造订单没有找到活动工单。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"The selected production line does not match the current online manufacturing"
-" order."
-msgstr "所选生产线与当前在线制造订单不匹配。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
-msgid ""
-"No active route operation was found for the current online manufacturing "
-"order."
-msgstr "当前在线制造订单没有生效工序。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"No online MES order was found for the selected workshop and production line."
-msgstr "所选车间产线没有在线制令单。"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"SMT offline preparation completed: %(device)s %(loadpoint)s %(material)s"
-msgstr "下料准备完成：%(device)s %(loadpoint)s %(material)s"
-
-#. module: sn_wsd_barcode
-#. odoo-python
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"The selected production line does not match the current online MES order."
-msgstr "所选产线与当前在线制令单不符。"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_barcode.view_backorder_confirmation
+msgid "You have processed less products than the initial demand:"
+msgstr "您处理的产品少于初始需求:"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
-#: code:addons/sn_wsd_barcode/controllers/sn_smt_pda_controller.py:0
-msgid ""
-"Cart loading: %(loaded)d station(s) loaded, %(skipped)d skipped (slots: "
-"%(slots)s -- no matching online position or already loaded)."
-msgstr "料车上台：已上台 %(loaded)d 站，跳过 %(skipped)d 站（料位: %(slots)s —— 无匹配在线料位或已上料）。"
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid "You must scan a package or put in pack"
+msgstr "你必须扫描包裹或放入包裹"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
+msgid "You must scan a product"
+msgstr "必须扫描 产品"

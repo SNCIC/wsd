@@ -18,82 +18,61 @@ msgstr ""
 
 #. module: sn_wsd_exception
 #. odoo-python
+#: code:addons/sn_wsd_exception/wizard/exception_cancel_wizard.py:0
+msgid "A cancellation note is required."
+msgstr "取消必须填写备注。"
+
+#. module: sn_wsd_exception
+#. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "New"
-msgstr "新建"
+#: code:addons/sn_wsd_exception/wizard/exception_reject_wizard.py:0
+msgid "A rejection note is required."
+msgstr "驳回必须填写留言。"
 
 #. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket
-msgid "SN WSD Exception Ticket"
-msgstr "MES 异常单"
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "A valid suspension reason is required."
+msgstr "需要有效的挂起原因。"
 
 #. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_category
-msgid "SN WSD Exception Category"
-msgstr "MES 异常分类"
-
-#. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_team
-msgid "SN WSD Exception Responsible Team"
-msgstr "MES 异常责任组"
-
-#. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_reason
-msgid "SN WSD Exception Reason"
-msgstr "MES 异常原因"
-
-#. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket_pause
-msgid "SN WSD Exception Ticket Suspension"
-msgstr "MES 异常挂起记录"
-
-#. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket_escalation
-msgid "SN WSD Exception Ticket Escalation Log"
-msgstr "MES 异常升级记录"
-
-#. module: sn_wsd_exception
-#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_service
-msgid "SN WSD Exception Terminal Service"
-msgstr "MES 异常终端服务"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__name
-msgid "Exception Reference"
-msgstr "异常单号"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__state
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Status"
-msgstr "状态"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__pending
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__active
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__active
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__active
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Pending"
-msgstr "待处理"
+msgid "Active"
+msgstr "有效"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__processing
-msgid "Processing"
-msgstr "处理中"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__suspended
-msgid "Suspended"
-msgstr "挂起中"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__pending_confirm
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "To Confirm"
-msgstr "待确认"
+msgid "Archived"
+msgstr "已归档"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__done
-msgid "Closed"
-msgstr "已关闭"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Auto-Escalation"
+msgstr "自动升级"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
+msgid "Cancel Exception"
+msgstr "取消异常"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
+msgid "Cancel Ticket"
+msgstr "取消异常单"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_cancel_wizard__note
+msgid "Cancellation Note"
+msgstr "取消备注"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__cancelled
@@ -101,237 +80,28 @@ msgid "Cancelled"
 msgstr "已取消"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__category_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__name
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__category
-#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_equipment
-msgid "Equipment"
-msgstr "设备"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_material
-msgid "Material"
-msgstr "物料"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_quality
-msgid "Quality"
-msgstr "品质"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_other
-msgid "Other"
-msgstr "其他"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_equipment
-msgid "Equipment Team"
-msgstr "设备组"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_material
-msgid "Material Team"
-msgstr "物料组"
-
-#. module: sn_wsd_exception
-#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_quality
-msgid "Quality Team"
-msgstr "品质组"
-
-#. module: sn_wsd_exception
 #. odoo-javascript
 #: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
 #: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__subcategory_id
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__subcategory
-msgid "Subcategory"
-msgstr "小类"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__level
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_level
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__level
-msgid "Level"
-msgstr "等级"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_level
-msgid "Default Level"
-msgstr "默认等级"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__normal
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__normal
-#: code:addons/sn_wsd_exception/models/exception_category.py:0
-msgid "Normal"
-msgstr "一般"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__urgent
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__urgent
-#: code:addons/sn_wsd_exception/models/exception_category.py:0
-msgid "Urgent"
-msgstr "紧急"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__critical
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__critical
-#: code:addons/sn_wsd_exception/models/exception_category.py:0
-msgid "Critical"
-msgstr "特急"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__description
-msgid "Exception Description"
-msgstr "异常描述"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__attachment_ids
-msgid "Site Photos"
-msgstr "现场照片"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__production_line_id
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__line
-msgid "Production Line"
-msgstr "产线"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__workshop_id
-msgid "Workshop"
-msgstr "车间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "MES Order"
-msgstr "制令单"
+msgid "Category"
+msgstr "大类"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__team_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__name
-msgid "Responsible Team"
-msgstr "责任组"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Claim"
+msgstr "认领"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_team_id
-msgid "Default Responsible Team"
-msgstr "默认责任组"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Classification"
+msgstr "分类信息"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__responsible_user_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Responsible"
-msgstr "责任人"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reported_by_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Reported By"
-msgstr "上报人"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__confirm_user_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Confirmed By"
-msgstr "确认人"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__repeat_of_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Repeat Of"
-msgstr "上次异常"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__is_repeat
-msgid "Is Repeat"
-msgstr "是否重复"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reason_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__name
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception Reason"
-msgstr "异常原因"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__temp_action
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Temporary Action"
-msgstr "临时措施"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__root_cause
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Root Cause"
-msgstr "根本原因"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__corrective_action
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Corrective Action"
-msgstr "纠正措施"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__downtime_minutes
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Downtime (minutes)"
-msgstr "停线时长(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__impact_qty
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Impact Quantity"
-msgstr "影响数量"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__scrap_qty
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Scrap Quantity"
-msgstr "报废数量"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__rework_qty
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Rework Quantity"
-msgstr "返修数量"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reported_at
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Reported At"
-msgstr "上报时间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__respond_at
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Responded At"
-msgstr "响应时间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reroute_at
-msgid "Rerouted At"
-msgstr "重路由时间"
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__done
+msgid "Closed"
+msgstr "已关闭"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__closed_at
@@ -340,181 +110,39 @@ msgid "Closed At"
 msgstr "关闭时间"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__pause_line_ids
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Closed exception tickets cannot be cancelled."
+msgstr "已关闭的异常单不能取消。"
+
+#. module: sn_wsd_exception
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Suspensions"
-msgstr "挂起记录"
+msgid "Closure"
+msgstr "关闭信息"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__escalation_log_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Escalation Log"
-msgstr "升级记录"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__escalation_count
-msgid "Escalation Count"
-msgstr "升级次数"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__suspended_minutes
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Suspended (minutes)"
-msgstr "挂起时长(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__response_minutes
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Response (minutes)"
-msgstr "响应时长(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__mttr_minutes
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "MTTR (minutes)"
-msgstr "MTTR(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__is_overdue
-msgid "Overdue"
-msgstr "超时"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__ticket_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__ticket_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_cancel_wizard__ticket_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_suspend_wizard__ticket_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reject_wizard__ticket_id
-msgid "Exception Ticket"
-msgstr "异常单"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__started_at
-msgid "Started At"
-msgstr "开始时间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__ended_at
-msgid "Ended At"
-msgstr "结束时间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__reason
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_suspend_wizard__reason
-msgid "Suspension Reason"
-msgstr "挂起原因"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Closure Confirmation"
+msgstr "关闭审核"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__spare_part
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__spare_part
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Waiting Spare Part"
-msgstr "等备件"
+msgid "Closure confirmed by %(user)s."
+msgstr "关闭由 %(user)s 确认。"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__material
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__material
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Waiting Material"
-msgstr "等物料"
+msgid "Closure rejected by %(user)s: %(note)s"
+msgstr "关闭被 %(user)s 驳回:%(note)s"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__decision
-#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__decision
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Waiting Decision"
-msgstr "等决策"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__duration_minutes
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Duration (minutes)"
-msgstr "时长(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__escalated_at
-msgid "Escalated At"
-msgstr "升级时间"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__stage
-msgid "Escalation Stage"
-msgstr "升级层级"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__user_id
-msgid "Notified User"
-msgstr "通知对象"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__parent_id
-msgid "Parent Category"
-msgstr "上级分类"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__child_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_form
-msgid "Subcategories"
-msgstr "下级分类"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__complete_name
-msgid "Complete Name"
-msgstr "完整名称"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__member_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_form
-msgid "Members"
-msgstr "成员"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__leader_id
-msgid "Team Leader"
-msgstr "组长"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__ticket_count
-msgid "Ticket Count"
-msgstr "单据数"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_cancel_wizard__note
-msgid "Cancellation Note"
-msgstr "取消备注"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reject_wizard__note
-msgid "Rejection Note"
-msgstr "驳回留言"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__dimension
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Dimension"
-msgstr "统计维度"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__date_from
-msgid "From"
-msgstr "从"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__date_to
-msgid "To"
-msgstr "到"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__code
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__code
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__code
+msgid "Code"
+msgstr "编码"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__company_id
@@ -525,26 +153,92 @@ msgid "Company"
 msgstr "公司"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__code
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__code
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__code
-msgid "Code"
-msgstr "编码"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__complete_name
+msgid "Complete Name"
+msgstr "完整名称"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__sequence
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__sequence
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__sequence
-msgid "Sequence"
-msgstr "序列"
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_config
+msgid "Configuration"
+msgstr "配置"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__active
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__active
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__active
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Active"
-msgstr "有效"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Confirm Closure"
+msgstr "确认关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__confirm_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Confirmed By"
+msgstr "确认人"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Context"
+msgstr "上下文"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__corrective_action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Corrective Action"
+msgstr "纠正措施"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Count"
+msgstr "次数"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__critical
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__critical
+#: code:addons/sn_wsd_exception/models/exception_category.py:0
+msgid "Critical"
+msgstr "特急"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Critical Requires Confirmation"
+msgstr "特急需审核关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_critical_need_confirm
+msgid "Critical: Closure Confirmation"
+msgstr "特急:关闭需审核"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_critical_minutes
+msgid "Critical: Resolution Limit (minutes)"
+msgstr "特急:处置时限(分钟)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_critical_minutes
+msgid "Critical: Response Limit (minutes)"
+msgstr "特急:响应时限(分钟)"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Cumulative (%)"
+msgstr "累计(%)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_level
+msgid "Default Level"
+msgstr "默认等级"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_team_id
+msgid "Default Responsible Team"
+msgstr "默认责任组"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__description
@@ -556,168 +250,18 @@ msgid "Description"
 msgstr "描述"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_company__exception_supervisor_user_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_supervisor_user_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Escalation Supervisor"
-msgstr "升级主管"
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__dimension
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Dimension"
+msgstr "统计维度"
 
 #. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_company__exception_manager_user_id
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_manager_user_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Escalation Manager"
-msgstr "升级厂长"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_escalation_enabled
-msgid "Enable Exception Auto-Escalation"
-msgstr "启用异常自动升级"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_normal_minutes
-msgid "Normal: Response Limit (minutes)"
-msgstr "一般:响应时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_urgent_minutes
-msgid "Urgent: Response Limit (minutes)"
-msgstr "紧急:响应时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_critical_minutes
-msgid "Critical: Response Limit (minutes)"
-msgstr "特急:响应时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_normal_minutes
-msgid "Normal: Resolution Limit (minutes)"
-msgstr "一般:处置时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_urgent_minutes
-msgid "Urgent: Resolution Limit (minutes)"
-msgstr "紧急:处置时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_critical_minutes
-msgid "Critical: Resolution Limit (minutes)"
-msgstr "特急:处置时限(分钟)"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_normal_need_confirm
-msgid "Normal: Closure Confirmation"
-msgstr "一般:关闭需审核"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_urgent_need_confirm
-msgid "Urgent: Closure Confirmation"
-msgstr "紧急:关闭需审核"
-
-#. module: sn_wsd_exception
-#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_critical_need_confirm
-msgid "Critical: Closure Confirmation"
-msgstr "特急:关闭需审核"
-
-#. module: sn_wsd_exception
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_root
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Exception Management"
-msgstr "异常管理"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_ticket
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_ticket
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_list
-msgid "Exception Tickets"
-msgstr "异常单"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_ticket_board
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_board
-msgid "Exception Board"
-msgstr "异常看板"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_pareto_wizard
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_pareto
-msgid "Pareto Report"
-msgstr "柏拉图报表"
-
-#. module: sn_wsd_exception
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_config
-msgid "Configuration"
-msgstr "配置"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_category
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_category
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_list
-msgid "Exception Categories"
-msgstr "异常分类"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_team
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_team
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_form
-msgid "Responsible Teams"
-msgstr "责任组"
-
-#. module: sn_wsd_exception
-#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_reason
-#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_reason
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_list
-msgid "Exception Reasons"
-msgstr "异常原因"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Claim"
-msgstr "认领"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_suspend_wizard_form
-msgid "Suspend"
-msgstr "挂起"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Resume"
-msgstr "恢复"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Submit for Closure"
-msgstr "提交关闭"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Confirm Closure"
-msgstr "确认关闭"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Reject Closure"
-msgstr "驳回关闭"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Cancel"
-msgstr "取消"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
-msgid "Cancel Ticket"
-msgstr "取消异常单"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_pareto_wizard_form
-msgid "Print"
-msgstr "打印"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Dimension:"
+msgstr "维度:"
 
 #. module: sn_wsd_exception
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
@@ -728,85 +272,24 @@ msgid "Discard"
 msgstr "放弃"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Repeat Candidates"
-msgstr "重复候选"
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Distribution"
+msgstr "分布"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Classification"
-msgstr "分类信息"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Context"
-msgstr "上下文"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Report"
-msgstr "上报"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__downtime_minutes
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Handling"
-msgstr "处理"
+msgid "Downtime (minutes)"
+msgstr "停线时长(分钟)"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Closure"
-msgstr "关闭信息"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
-msgid "Losses and Timings"
-msgstr "损失与计时"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_list
-msgid "Total Downtime"
-msgstr "停线合计"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_kanban
-msgid "Repeat"
-msgstr "重复"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Open"
-msgstr "未关闭"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "My Tickets"
-msgstr "我的异常单"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Archived"
-msgstr "已归档"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Group By"
-msgstr "分组"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
-msgid "Reported Month"
-msgstr "上报月份"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_pivot
-msgid "Exception Analysis"
-msgstr "异常分析"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_graph
-msgid "Exception Pareto (screen)"
-msgstr "异常柏拉图(屏幕)"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__duration_minutes
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Duration (minutes)"
+msgstr "时长(分钟)"
 
 #. module: sn_wsd_exception
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_form
@@ -824,34 +307,32 @@ msgid "e.g. Feeder maintenance overdue"
 msgstr "例如:飞达保养到期"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
-msgid "Cancel Exception"
-msgstr "取消异常"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_escalation_enabled
+msgid "Enable Exception Auto-Escalation"
+msgstr "启用异常自动升级"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_suspend_wizard_form
-msgid "Suspend Exception"
-msgstr "挂起异常"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__ended_at
+msgid "Ended At"
+msgstr "结束时间"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
-msgid "Reject Exception Closure"
-msgstr "驳回异常关闭"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__category_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__name
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__category
+#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_equipment
+msgid "Equipment"
+msgstr "设备"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_pareto_wizard_form
-msgid "Exception Pareto"
-msgstr "异常柏拉图"
+#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_equipment
+msgid "Equipment Team"
+msgstr "设备组"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
-msgid "Why is this ticket cancelled (e.g. false alarm)?"
-msgstr "为什么要取消这张异常单(例如:误报)?"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
-msgid "Why is the closure rejected (e.g. root cause not convincing)?"
-msgstr "为什么要驳回关闭(例如:根本原因不可信)?"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__escalated_at
+msgid "Escalated At"
+msgstr "升级时间"
 
 #. module: sn_wsd_exception
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
@@ -859,58 +340,302 @@ msgid "Escalation"
 msgstr "升级"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Level Limits (minutes)"
-msgstr "等级时限(分钟)"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__escalation_count
+msgid "Escalation Count"
+msgstr "升级次数"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Closure Confirmation"
-msgstr "关闭审核"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__escalation_log_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Escalation Log"
+msgstr "升级记录"
 
 #. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_company__exception_manager_user_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_manager_user_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Auto-Escalation"
-msgstr "自动升级"
+msgid "Escalation Manager"
+msgstr "升级厂长"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Normal Requires Confirmation"
-msgstr "一般需审核关闭"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__stage
+msgid "Escalation Stage"
+msgstr "升级层级"
 
 #. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_company__exception_supervisor_user_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_supervisor_user_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Urgent Requires Confirmation"
-msgstr "紧急需审核关闭"
+msgid "Escalation Supervisor"
+msgstr "升级主管"
 
 #. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s claimed."
+msgstr "异常 %(name)s 已认领。"
+
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s closed."
+msgstr "异常 %(name)s 已关闭。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s rejected; back to processing."
+msgstr "异常 %(name)s 已驳回，退回处理中。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception %(name)s reported."
+msgstr "异常 %(name)s 已上报。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_pivot
+msgid "Exception Analysis"
+msgstr "异常分析"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_ticket_board
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_board
+msgid "Exception Board"
+msgstr "异常看板"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception cancelled by %(user)s. Note: %(note)s"
+msgstr "异常由 %(user)s 取消。备注:%(note)s"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_category
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_category
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_list
+msgid "Exception Categories"
+msgstr "异常分类"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception category not found (a root category is required)."
+msgstr "异常分类不存在(需要选择大类)。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception claimed by %(user)s."
+msgstr "异常由 %(user)s 认领。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception closed by %(user)s."
+msgstr "异常由 %(user)s 关闭。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__description
+msgid "Exception Description"
+msgstr "异常描述"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception escalated to stage %(stage)s (%(user)s)."
+msgstr "异常已升级到第 %(stage)s 级(%(user)s)。"
+
+#. module: sn_wsd_exception
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_root
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
-msgid "Critical Requires Confirmation"
-msgstr "特急需审核关闭"
+msgid "Exception Management"
+msgstr "异常管理"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception on line %(line)s is overdue and has been escalated. Please follow up."
+msgstr "产线 %(line)s 的异常已超时并升级,请跟进。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_pareto_wizard_form
+msgid "Exception Pareto"
+msgstr "异常柏拉图"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_graph
+msgid "Exception Pareto (screen)"
+msgstr "异常柏拉图(屏幕)"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reason_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception Reason"
+msgstr "异常原因"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_reason
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_reason
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_list
+msgid "Exception Reasons"
+msgstr "异常原因"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__name
+msgid "Exception Reference"
+msgstr "异常单号"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception resumed."
+msgstr "异常已恢复处理。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception routed to team %(team)s."
+msgstr "异常已路由到责任组:%(team)s。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception submitted for closure confirmation."
+msgstr "异常已提交关闭确认。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Exception suspended (%(reason)s)."
+msgstr "异常已挂起(%(reason)s)。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__ticket_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__ticket_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_cancel_wizard__ticket_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_suspend_wizard__ticket_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reject_wizard__ticket_id
+msgid "Exception Ticket"
+msgstr "异常单"
+
+
+#. module: sn_wsd_exception
+msgid "Exception Ticket Coding"
+msgstr "异常单编码"
+
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Exception ticket not found."
+msgstr "异常单不存在。"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_ticket
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_ticket
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_list
+msgid "Exception Tickets"
+msgstr "异常单"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__date_from
+msgid "From"
+msgstr "从"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "Group By"
+msgstr "分组"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Handled By"
+msgstr "处理人"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Handling"
+msgstr "处理"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__impact_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Impact Quantity"
+msgstr "影响数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__is_repeat
+msgid "Is Repeat"
+msgstr "是否重复"
 
 #. module: sn_wsd_exception
 #. odoo-javascript
 #: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
 #: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Category"
-msgstr "大类"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__level
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_level
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__level
+msgid "Level"
+msgstr "等级"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Level Limits (minutes)"
+msgstr "等级时限(分钟)"
 
 #. module: sn_wsd_exception
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Team"
-msgstr "责任组"
+msgid "Losses"
+msgstr "损失"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Suspension"
-msgstr "挂起"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Losses and Timings"
+msgstr "损失与计时"
 
 #. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Reason"
-msgstr "原因"
+#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_material
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_exception
+#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_material
+msgid "Material Team"
+msgstr "物料组"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__member_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_form
+msgid "Members"
+msgstr "成员"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "MES exception %(name)s awaits closure confirmation"
+msgstr "MES 异常 %(name)s 等待关闭确认"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "MES exception %(name)s escalated (stage %(stage)s)"
+msgstr "MES 异常 %(name)s 已升级(第 %(stage)s 级)"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "MES exception %(name)s: %(category)s"
+msgstr "MES 异常单 %(name)s：%(category)s"
 
 #. module: sn_wsd_exception
 #: model:ir.actions.report,name:sn_wsd_exception.action_report_exception_ticket
@@ -928,114 +653,102 @@ msgid "MES Exception Pareto Report"
 msgstr "MES 异常柏拉图报表"
 
 #. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Timeline"
-msgstr "时间轴"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Losses"
-msgstr "损失"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Workshop / Line"
-msgstr "车间 / 产线"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
-msgid "Handled By"
-msgstr "处理人"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Rank"
-msgstr "排名"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Count"
-msgstr "次数"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Share (%)"
-msgstr "占比(%)"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Cumulative (%)"
-msgstr "累计(%)"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Distribution"
-msgstr "分布"
-
-#. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Total"
-msgstr "合计"
-
-#. module: sn_wsd_exception
-#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
-msgid "Dimension:"
-msgstr "维度:"
+msgid "MES Order"
+msgstr "制令单"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
 #: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Only pending exception tickets can be claimed."
-msgstr "只有待处理的异常单可以认领。"
+msgid "MES order not found."
+msgstr "制令单不存在。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__mttr_minutes
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "MTTR (minutes)"
+msgstr "MTTR(分钟)"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "My Tickets"
+msgstr "我的异常单"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Only in-progress exception tickets can be suspended."
-msgstr "只有处理中的异常单可以挂起。"
+msgid "New"
+msgstr "新建"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "A valid suspension reason is required."
-msgstr "需要有效的挂起原因。"
+msgid "New MES exception %(name)s: %(category)s"
+msgstr "新 MES 异常 %(name)s:%(category)s"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Only suspended exception tickets can be resumed."
-msgstr "只有挂起中的异常单可以恢复。"
+msgid "New MES exception on line %(line)s (level %(level)s): %(description)s"
+msgstr "产线 %(line)s 新异常(等级 %(level)s):%(description)s"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+msgid "No exception in this range."
+msgstr "该区间内没有异常。"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Only in-progress or suspended exception tickets can be submitted for closure."
-msgstr "只有处理中或挂起中的异常单可以提交关闭。"
+msgid "no target configured"
+msgstr "未配置升级对象"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "The following fields are required before closure: %(fields)s"
-msgstr "关闭前必须填写以下字段:%(fields)s"
+msgid "no team configured"
+msgstr "未配置责任组"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__normal
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__normal
+#: code:addons/sn_wsd_exception/models/exception_category.py:0
+msgid "Normal"
+msgstr "一般"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Normal Requires Confirmation"
+msgstr "一般需审核关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_normal_need_confirm
+msgid "Normal: Closure Confirmation"
+msgstr "一般:关闭需审核"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_normal_minutes
+msgid "Normal: Resolution Limit (minutes)"
+msgstr "一般:处置时限(分钟)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_normal_minutes
+msgid "Normal: Response Limit (minutes)"
+msgstr "一般:响应时限(分钟)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_escalation__user_id
+msgid "Notified User"
+msgstr "通知对象"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Only cancelled exception tickets can be deleted."
+msgstr "只有已取消的异常单可以删除。"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1052,27 +765,374 @@ msgstr "只有待确认的异常单可以驳回。"
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-#: code:addons/sn_wsd_exception/wizard/exception_reject_wizard.py:0
-msgid "A rejection note is required."
-msgstr "驳回必须填写留言。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/wizard/exception_cancel_wizard.py:0
-msgid "A cancellation note is required."
-msgstr "取消必须填写备注。"
+msgid "Only in-progress exception tickets can be suspended."
+msgstr "只有处理中的异常单可以挂起。"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Closed exception tickets cannot be cancelled."
-msgstr "已关闭的异常单不能取消。"
+msgid "Only in-progress or suspended exception tickets can be submitted for closure."
+msgstr "只有处理中或挂起中的异常单可以提交关闭。"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "The downtime cannot be negative."
-msgstr "停线时长不能为负数。"
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Only pending exception tickets can be claimed."
+msgstr "只有待处理的异常单可以认领。"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Only suspended exception tickets can be resumed."
+msgstr "只有挂起中的异常单可以恢复。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "Open"
+msgstr "未关闭"
+
+#. module: sn_wsd_exception
+#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_other
+msgid "Other"
+msgstr "其他"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__is_overdue
+msgid "Overdue"
+msgstr "超时"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__parent_id
+msgid "Parent Category"
+msgstr "上级分类"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_pareto_wizard
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_pareto
+msgid "Pareto Report"
+msgstr "柏拉图报表"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "Pending"
+msgstr "待处理"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Please review the root cause and losses before confirming the closure."
+msgstr "确认关闭前请检查根本原因与损失登记。"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_pareto_wizard_form
+msgid "Print"
+msgstr "打印"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__processing
+msgid "Processing"
+msgstr "处理中"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__production_line_id
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__line
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: code:addons/sn_wsd_exception/models/exception_service.py:0
+msgid "Production line not found."
+msgstr "产线不存在。"
+
+#. module: sn_wsd_exception
+#: model:sn.wsd.exception.category,name:sn_wsd_exception.exception_category_quality
+msgid "Quality"
+msgstr "品质"
+
+#. module: sn_wsd_exception
+#: model:sn.wsd.exception.team,name:sn_wsd_exception.exception_team_quality
+msgid "Quality Team"
+msgstr "品质组"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Rank"
+msgstr "排名"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Reject Closure"
+msgstr "驳回关闭"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
+msgid "Reject Exception Closure"
+msgstr "驳回异常关闭"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reject_wizard__note
+msgid "Rejection Note"
+msgstr "驳回留言"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_kanban
+msgid "Repeat"
+msgstr "重复"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Repeat Candidates"
+msgstr "重复候选"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__repeat_of_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Repeat Of"
+msgstr "上次异常"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Report"
+msgstr "上报"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reported_at
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Reported At"
+msgstr "上报时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reported_by_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Reported By"
+msgstr "上报人"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "Reported Month"
+msgstr "上报月份"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__reroute_at
+msgid "Rerouted At"
+msgstr "重路由时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__respond_at
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Responded At"
+msgstr "响应时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__response_minutes
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Response (minutes)"
+msgstr "响应时长(分钟)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__responsible_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Responsible"
+msgstr "责任人"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__team_id
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__name
+msgid "Responsible Team"
+msgstr "责任组"
+
+#. module: sn_wsd_exception
+#: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_team
+#: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_team
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_form
+msgid "Responsible Teams"
+msgstr "责任组"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Resume"
+msgstr "恢复"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__rework_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Rework Quantity"
+msgstr "返修数量"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__root_cause
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Root Cause"
+msgstr "根本原因"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__scrap_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Scrap Quantity"
+msgstr "报废数量"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__sequence
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__sequence
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Share (%)"
+msgstr "占比(%)"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__attachment_ids
+msgid "Site Photos"
+msgstr "现场照片"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_category
+msgid "SN WSD Exception Category"
+msgstr "MES 异常分类"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_reason
+msgid "SN WSD Exception Reason"
+msgstr "MES 异常原因"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_team
+msgid "SN WSD Exception Responsible Team"
+msgstr "MES 异常责任组"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_service
+msgid "SN WSD Exception Terminal Service"
+msgstr "MES 异常终端服务"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket
+msgid "SN WSD Exception Ticket"
+msgstr "MES 异常单"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket_escalation
+msgid "SN WSD Exception Ticket Escalation Log"
+msgstr "MES 异常升级记录"
+
+#. module: sn_wsd_exception
+#: model:ir.model,name:sn_wsd_exception.model_sn_wsd_exception_ticket_pause
+msgid "SN WSD Exception Ticket Suspension"
+msgstr "MES 异常挂起记录"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__started_at
+msgid "Started At"
+msgstr "开始时间"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__child_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_form
+msgid "Subcategories"
+msgstr "下级分类"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: code:addons/sn_wsd_exception/models/report_exception_pareto.py:0
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__subcategory_id
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_pareto_wizard__dimension__subcategory
+msgid "Subcategory"
+msgstr "小类"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Submit for Closure"
+msgstr "提交关闭"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_suspend_wizard_form
+msgid "Suspend"
+msgstr "挂起"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_suspend_wizard_form
+msgid "Suspend Exception"
+msgstr "挂起异常"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__suspended
+msgid "Suspended"
+msgstr "挂起中"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__suspended_minutes
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Suspended (minutes)"
+msgstr "挂起时长(分钟)"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Suspension"
+msgstr "挂起"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket_pause__reason
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_suspend_wizard__reason
+msgid "Suspension Reason"
+msgstr "挂起原因"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__pause_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_form
+msgid "Suspensions"
+msgstr "挂起记录"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Team"
+msgstr "责任组"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__leader_id
+msgid "Team Leader"
+msgstr "组长"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__temp_action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Temporary Action"
+msgstr "临时措施"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1083,20 +1143,14 @@ msgstr "停线时长(%(downtime)s 分钟)不能超过上报到关闭的时间跨
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "The subcategory must belong to the selected category."
-msgstr "小类必须属于所选大类。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Only cancelled exception tickets can be deleted."
-msgstr "只有已取消的异常单可以删除。"
+msgid "The downtime cannot be negative."
+msgstr "停线时长不能为负数。"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_category.py:0
-msgid "The exception category tree is limited to two levels (category / subcategory)."
-msgstr "异常分类树最多两级(大类/小类)。"
+msgid "The exception category code must be unique per company."
+msgstr "异常分类编码在公司内必须唯一。"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1107,14 +1161,8 @@ msgstr "同一上级分类下的异常分类名称不能重复。"
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_category.py:0
-msgid "The exception category code must be unique per company."
-msgstr "异常分类编码在公司内必须唯一。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_team.py:0
-msgid "The responsible team name must be unique per company."
-msgstr "责任组名称在公司内必须唯一。"
+msgid "The exception category tree is limited to two levels (category / subcategory)."
+msgstr "异常分类树最多两级(大类/小类)。"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1124,27 +1172,9 @@ msgstr "异常原因名称在公司内必须唯一。"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket_pause.py:0
-msgid "The suspension end cannot be earlier than its start."
-msgstr "挂起结束时间不能早于开始时间。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Production line not found."
-msgstr "产线不存在。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception category not found (a root category is required)."
-msgstr "异常分类不存在(需要选择大类)。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "MES order not found."
-msgstr "制令单不存在。"
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "The following fields are required before closure: %(fields)s"
+msgstr "关闭前必须填写以下字段:%(fields)s"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1154,135 +1184,86 @@ msgstr "关联的上次异常必须是已关闭状态。"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception ticket not found."
-msgstr "异常单不存在。"
+#: code:addons/sn_wsd_exception/models/exception_team.py:0
+msgid "The responsible team name must be unique per company."
+msgstr "责任组名称在公司内必须唯一。"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception routed to team %(team)s."
-msgstr "异常已路由到责任组:%(team)s。"
+msgid "The subcategory must belong to the selected category."
+msgstr "小类必须属于所选大类。"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "no team configured"
-msgstr "未配置责任组"
+#: code:addons/sn_wsd_exception/models/exception_ticket_pause.py:0
+msgid "The suspension end cannot be earlier than its start."
+msgstr "挂起结束时间不能早于开始时间。"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__ticket_count
+msgid "Ticket Count"
+msgstr "单据数"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Timeline"
+msgstr "时间轴"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_pareto_wizard__date_to
+msgid "To"
+msgstr "到"
+
+#. module: sn_wsd_exception
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__state__pending_confirm
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+msgid "To Confirm"
+msgstr "待确认"
+
+#. module: sn_wsd_exception
+#. odoo-javascript
+#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.pareto_page
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_pareto
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_list
+msgid "Total Downtime"
+msgstr "停线合计"
 
 #. module: sn_wsd_exception
 #. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "New MES exception %(name)s: %(category)s"
-msgstr "新 MES 异常 %(name)s:%(category)s"
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket__level__urgent
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_category__default_level__urgent
+#: code:addons/sn_wsd_exception/models/exception_category.py:0
+msgid "Urgent"
+msgstr "紧急"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "New MES exception on line %(line)s (level %(level)s): %(description)s"
-msgstr "产线 %(line)s 新异常(等级 %(level)s):%(description)s"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.res_config_settings_view_form
+msgid "Urgent Requires Confirmation"
+msgstr "紧急需审核关闭"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception claimed by %(user)s."
-msgstr "异常由 %(user)s 认领。"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_level_urgent_need_confirm
+msgid "Urgent: Closure Confirmation"
+msgstr "紧急:关闭需审核"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception suspended (%(reason)s)."
-msgstr "异常已挂起(%(reason)s)。"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_resolve_urgent_minutes
+msgid "Urgent: Resolution Limit (minutes)"
+msgstr "紧急:处置时限(分钟)"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception resumed."
-msgstr "异常已恢复处理。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception submitted for closure confirmation."
-msgstr "异常已提交关闭确认。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "MES exception %(name)s awaits closure confirmation"
-msgstr "MES 异常 %(name)s 等待关闭确认"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Please review the root cause and losses before confirming the closure."
-msgstr "确认关闭前请检查根本原因与损失登记。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception closed by %(user)s."
-msgstr "异常由 %(user)s 关闭。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Closure confirmed by %(user)s."
-msgstr "关闭由 %(user)s 确认。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Closure rejected by %(user)s: %(note)s"
-msgstr "关闭被 %(user)s 驳回:%(note)s"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception cancelled by %(user)s. Note: %(note)s"
-msgstr "异常由 %(user)s 取消。备注:%(note)s"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "MES exception %(name)s escalated (stage %(stage)s)"
-msgstr "MES 异常 %(name)s 已升级(第 %(stage)s 级)"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception on line %(line)s is overdue and has been escalated. Please follow up."
-msgstr "产线 %(line)s 的异常已超时并升级,请跟进。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "Exception escalated to stage %(stage)s (%(user)s)."
-msgstr "异常已升级到第 %(stage)s 级(%(user)s)。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
-msgid "no target configured"
-msgstr "未配置升级对象"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception %(name)s reported."
-msgstr "异常 %(name)s 已上报。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception %(name)s claimed."
-msgstr "异常 %(name)s 已认领。"
-
-#. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Work center not found."
-msgstr "工位不存在。"
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_res_config_settings__exception_respond_urgent_minutes
+msgid "Urgent: Response Limit (minutes)"
+msgstr "紧急:响应时限(分钟)"
 
 #. module: sn_wsd_exception
 #. odoo-python
@@ -1294,25 +1275,51 @@ msgid "View"
 msgstr "查看"
 
 #. module: sn_wsd_exception
-#. odoo-javascript
-#: code:addons/sn_wsd_exception/static/src/js/pareto_dashboard.js:0
-msgid "No exception in this range."
-msgstr "该区间内没有异常。"
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__decision
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__decision
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Waiting Decision"
+msgstr "等决策"
 
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__material
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__material
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Waiting Material"
+msgstr "等物料"
+
+#. module: sn_wsd_exception
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_ticket_pause__reason__spare_part
+#: model:ir.model.fields.selection,name:sn_wsd_exception.selection__sn_wsd_exception_suspend_wizard__reason__spare_part
+#: code:addons/sn_wsd_exception/models/exception_ticket.py:0
+msgid "Waiting Spare Part"
+msgstr "等备件"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reject_wizard_form
+msgid "Why is the closure rejected (e.g. root cause not convincing)?"
+msgstr "为什么要驳回关闭(例如:根本原因不可信)?"
+
+#. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_cancel_wizard_form
+msgid "Why is this ticket cancelled (e.g. false alarm)?"
+msgstr "为什么要取消这张异常单(例如:误报)?"
 
 #. module: sn_wsd_exception
 #. odoo-python
 #: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception %(name)s closed."
-msgstr "异常 %(name)s 已关闭。"
+msgid "Work center not found."
+msgstr "工位不存在。"
 
 #. module: sn_wsd_exception
-#. odoo-python
-#: code:addons/sn_wsd_exception/models/exception_service.py:0
-msgid "Exception %(name)s rejected; back to processing."
-msgstr "异常 %(name)s 已驳回，退回处理中。"
-
+#: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_ticket__workshop_id
+msgid "Workshop"
+msgstr "车间"
 
 #. module: sn_wsd_exception
-msgid "Exception Ticket Coding"
-msgstr "异常单编码"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.report_exception_ticket_document
+msgid "Workshop / Line"
+msgstr "车间 / 产线"

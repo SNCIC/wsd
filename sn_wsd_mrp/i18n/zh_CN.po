@@ -23,6 +23,34 @@ msgstr "（自动）"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"%(label)s \"%(op)s\" is not part of the route flow graph. Only operations on"
+" the flow chart can be selected."
+msgstr "%(label)s「%(op)s」不在本路线流程图中，只能选择流程图里的工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"%(sub)s cannot replace %(org)s. Configure the substitute on the BoM line "
+"first."
+msgstr "%(sub)s 不能替代 %(org)s。请先在物料清单行上配置替代料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/meter_workorder_scan_wizard.py:0
+msgid ""
+"%s\n"
+"\n"
+"Error Code: %s"
+msgstr ""
+"%s\n"
+"\n"
+"错误代码：%s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_team.py:0
 msgid "%s (Copy)"
 msgstr "%s (副本)"
@@ -60,6 +88,29 @@ msgstr "已取消的路线为只读，请先重置为草稿。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A component location must be configured for workshop '%s' before confirming "
+"a two-step or three-step manufacturing order."
+msgstr "确认两步/三步制造订单前，必须为车间 '%s' 配置组件库位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_drawing_drawing_side_route_uniq
+msgid ""
+"A drawing number can only be bound to one process route per workshop and "
+"production side."
+msgstr "一个图号在同一车间每个生产面只能绑定一条工艺路线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A finished product location must be configured for workshop '%s' before "
+"confirming a three-step manufacturing order."
+msgstr "确认三步制造订单前，必须为车间 '%s' 配置成品库位。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
 msgid "A manufacturing batch is required to generate internal serials."
 msgstr "生成厂内序列号需要制造批次。"
 
@@ -90,6 +141,12 @@ msgstr "已发布的路线为只读，请新建版本。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_drawing_route_drawing_uniq
 msgid "A route cannot bind the same drawing number twice."
 msgstr "一条工艺路线不能重复绑定同一个图号。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_internal_serial_serial_no_production_uniq
+msgid ""
+"A serial number can only have one production stage per manufacturing order."
+msgstr "一个序列号在每个制造订单中只能有一个生产阶段。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -135,6 +192,14 @@ msgid "A workshop level work center cannot be bound to a production line."
 msgstr "车间级工作中心不能绑定到生产线。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"A workshop must be selected before confirming the multi-step manufacturing "
+"order '%s'."
+msgstr "确认多步制造订单 '%s' 前必须先选择车间。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__abc_class
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__abc_class
 msgid "ABC Class"
@@ -149,6 +214,21 @@ msgstr "累计报工NG数量（报工模式）。"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_reported_ok_qty
 msgid "Accumulated OK reported quantity (report mode)."
 msgstr "累计报工OK数量（报工模式）。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__done_qty
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_done_qty
+msgid ""
+"Accumulated quantity received through completion receipts. The order turns "
+"Done once this reaches the output quantity."
+msgstr "经完工入库累计接收的数量；达到产出数量后工单转为完成。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_reported_qty
+msgid ""
+"Accumulated reported quantity (report mode): OK + NG + scrap, the invested "
+"amount."
+msgstr "累计报工数量（报工模式）：OK + NG + 报废，即投入量。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_reported_scrap_qty
@@ -387,6 +467,14 @@ msgstr "所有 BOM 行均为提前发料，本 MES 订单无需领料。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"All components of MES order %(order)s are already covered by issued "
+"reels; nothing to pick."
+msgstr "制令单 %(order)s 的全部组件已被已发放的料卷覆盖，无可领料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/wizard/mrp_team_member_wizard.py:0
 msgid "All employees must belong to the team company."
 msgstr "所有员工必须属于团队所在公司。"
@@ -410,6 +498,12 @@ msgid "Allow Serial Creation"
 msgstr "允许创建序列号"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_entry
+msgid ""
+"Allow serials without a previous route event to enter this BoM operation."
+msgstr "允许没有前序路线事件的序列号进入此物料清单工序。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_entry
 msgid "Allow serials without a previous route event to enter this operation."
 msgstr "允许没有前序路线事件的序列号进入此工序。"
@@ -419,6 +513,38 @@ msgstr "允许没有前序路线事件的序列号进入此工序。"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_skip_with_override
 msgid "Allow Skip With Override"
 msgstr "允许强制跳过"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_serial_creation
+msgid ""
+"Allow the API to create a production-stage serial at this BoM operation."
+msgstr "允许 API 在该 BOM 工序创建生产阶段序列号。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_serial_creation
+msgid ""
+"Allow the API to create a production-stage serial at this entry operation."
+msgstr "允许 API 在该入口工序创建生产阶段序列号。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_serial_creation
+msgid ""
+"Allow the API to create a production-stage serial at this MES order "
+"operation."
+msgstr "允许 API 在该制令单工序创建生产阶段序列号。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_skip_with_override
+msgid ""
+"Allow this BoM operation to be reached with an explicit route override."
+msgstr "允许通过显式路线强制覆盖到达此物料清单工序。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_skip_with_override
+msgid ""
+"Allow this MES order operation to be reached with an explicit route "
+"override."
+msgstr "允许通过显式路线放行到达该制令单工序。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_skip_with_override
@@ -618,6 +744,13 @@ msgid "Bind"
 msgstr "绑定"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_process_route_drawing
+msgid ""
+"Bind a common process route to one or more drawing numbers (物料编号/图号). Work "
+"orders resolve their route by drawing number through these bindings."
+msgstr "将公共工艺路线绑定到一个或多个图号（物料编号/图号）；工单按图号经此绑定解析路线。"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_form
 msgid "Binding"
 msgstr "绑定"
@@ -652,6 +785,21 @@ msgstr "后置工序"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__x_board_side
 msgid "Board Side"
 msgstr "面别"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_side
+msgid ""
+"Board side this order produces. Over-scheduling is checked per side: Top and"
+" Bottom may each cover the full MO quantity. Single-sided products are fixed"
+" to Single."
+msgstr "该制令单生产的板面。超排按面别独立校验：顶面 (T)、底面 (B) 各自最多可排满 MO 数量。单面板固定为单面。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_production_side
+msgid ""
+"Board side this route produces. Scheduling a MES order resolves the live "
+"route by drawing number AND side."
+msgstr "该路线生产的板面。制令单排产按（图号 + 面别）解析生效工艺路线。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__x_board_side
@@ -1021,6 +1169,23 @@ msgstr "组件"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Component %(product)s is not part of the BoM of MES order %(order)s; "
+"supplements stay within its BoM."
+msgstr "组件 %(product)s 不在制令单 %(order)s 的 BOM 内，补料仅限 BOM 组件。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Component %(product)s of MES order %(order)s is lot/serial tracked but "
+"has no consumption flows: load the material and pass the stations first, "
+"or review the BOM."
+msgstr "制令单 %(order)s 的组件 %(product)s 启用批次/序列追踪但没有消耗流水：请先上料过站，或检查 BOM。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
 msgid "Component Bindings"
 msgstr "组件绑定"
@@ -1109,6 +1274,29 @@ msgstr "合同号"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__cost_mode
 msgid "Cost Based On"
 msgstr "成本计算依据"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_route.py:0
+msgid ""
+"Counter operation \"%(op)s\" is not part of the route flow graph of route "
+"%(route)s."
+msgstr "计数工序\"%(op)s\"不在工艺路线 %(route)s 的流程图中。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_route.py:0
+msgid ""
+"Counter operation %(op)s is no longer part of the route; clear or move it "
+"before saving."
+msgstr "计数工序 %(op)s 已不在工艺路线中，请先调整或清除该配置再保存。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_process_type
+msgid ""
+"Craft family of this route: SMT lines split the material table and deduct "
+"points on pass; DIP and complete-machine lines do not."
+msgstr "该路线的工艺族：SMT 线过站时拆料站表并扣点；DIP 与整机线不做。"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
@@ -1241,6 +1429,14 @@ msgid "Current Consumed"
 msgstr "当前消耗"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__version
+msgid ""
+"Current flow version. Bumps only when the flow graph changes on a confirmed "
+"route; editing other fields never bumps it. 0 means the route has never been"
+" confirmed."
+msgstr "当前流程版本。仅在已确认路线的流程图变化时递增；编辑其他字段不会递增。0 表示该路线从未确认过。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_internal_serial_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
 msgid "Current Internal Serials"
@@ -1305,6 +1501,13 @@ msgid "Customer Project"
 msgstr "客户项目"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_partner_id
+msgid ""
+"Customer resolved from the source sales order of the manufacturing order "
+"(empty for stock orders)."
+msgstr "从制造订单的源销售订单带出的客户（备货单为空）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__is_customized
 msgid "Customized"
 msgstr "已定制"
@@ -1357,6 +1560,13 @@ msgstr "日期"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__datetime
 msgid "Datetime"
 msgstr "日期时间"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_date_plan_end
+msgid ""
+"Day after the plan date; used as the stop bound of the Gantt pill (each MES "
+"order occupies its whole planned day)."
+msgstr "计划日期次日；作为甘特条的结束边界（每个制令单占满整个计划日）。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation_data_definition__value_type__float
@@ -1518,6 +1728,14 @@ msgid "Draft"
 msgstr "草稿"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__state
+msgid ""
+"Draft: being edited (flow changes are pending). Confirmed: current version "
+"is live; saving a changed flow graph moves it back to Draft until confirmed "
+"or cancelled."
+msgstr "草稿：编辑中（流程变更待定）。已确认：当前版本生效；保存修改过的流程图会回到草稿，直到确认或取消。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_drawing_count
 msgid "Drawing Count"
 msgstr "图号数量"
@@ -1580,6 +1798,13 @@ msgstr "每道工序在制令单路线中最多出现一次。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_route_section_stat_route_section_uniq
 msgid "Each statistics section can only be configured once per route."
 msgstr "每个统计段别在一条路线中只能配置一次。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__blocked_by_ids
+msgid ""
+"Edges of the flow graph: this operation is reachable once ANY predecessor is"
+" completed (parallel branches are OR-joined)."
+msgstr "流程图的边：任一前置工序完成即可到达该工序（并行分支为或连接）。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_effective_date
@@ -1850,6 +2075,14 @@ msgid "Feeder Scan"
 msgstr "飞达扫描"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Feeding SN %(sn)s would exceed the scheduled quantity of MES order "
+"%(order)s: %(fed)s SNs have already been fed in, the plan is %(planned)s."
+msgstr "投入 SN %(sn)s 将超出制令单 %(order)s 的排产数量：已投入 %(fed)s 台，排产 %(planned)s 台。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_result
 msgid "Final Result"
 msgstr "最终结果"
@@ -1914,6 +2147,13 @@ msgid "Finished-unit quantity accumulated from done material pickings."
 msgstr "已完成领料单累计的成品台数。"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__x_mes_order_qty
+msgid ""
+"Finished-unit quantity this picking covers; used to accumulate the MES order"
+" picked quantity."
+msgstr "本领料单对应的成品台数，用于累计制令单的已领数量。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__firmware
 msgid "Firmware"
 msgstr "固件"
@@ -1944,6 +2184,14 @@ msgstr "流程"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_version__route_flow_json
 msgid "Flow Graph JSON"
 msgstr "流程图 JSON"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__route_flow_json
+msgid ""
+"Flow graph {nodes, edges} edited by the route flow editor. This is the "
+"source of truth for the common route template; operations are materialised "
+"into work-order routes at generation time."
+msgstr "由路线流程编辑器维护的流程图 {nodes, edges}。这是公共路线模板的唯一事实来源；生成时才物化为工单路线。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_flow_operation_ids
@@ -1998,6 +2246,13 @@ msgid "Force Close"
 msgstr "强制关闭"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
+msgid ""
+"Force close this manufacturing order? Released MES orders will be revoked, "
+"remaining quantities voided (no backorder) and the order closed."
+msgstr "强制关闭这张制造订单？已下达的制令单将被撤销，剩余数量直接作废（不生成欠单），订单将被关闭。"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_generate_sn_wizard_form
 msgid "Generate"
 msgstr "生成"
@@ -2028,6 +2283,22 @@ msgstr "生成SN"
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_generate_sn_wizard
 msgid "Generate SNs for a MES Order"
 msgstr "为制令单生成SN向导"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Generated %(count)s internal serials for the manufacturing batch. Serial "
+"range: %(first)s to %(last)s."
+msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围：%(first)s 至 %(last)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Generated %(count)s internal serials to fill the manufacturing batch "
+"capacity. Serial range: %(first)s to %(last)s."
+msgstr "已生成 %(count)s 个厂内序列号以补足制造批次容量。序列号范围：%(first)s 至 %(last)s。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -2212,6 +2483,15 @@ msgid "Identified Material Name"
 msgstr "识别的物料名称"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_use_daily_plan
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__x_use_daily_plan
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_template__x_use_daily_plan
+msgid ""
+"If checked, manufacturing orders for this product are split into daily MES "
+"orders instead of backorders."
+msgstr "勾选后，该产品的制造订单拆分为按日制令单，而不是生成欠单。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__message_needaction
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__message_needaction
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__message_needaction
@@ -2333,6 +2613,27 @@ msgstr "整数"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_mrp_workshop__component_location_id
 msgid "Internal location where components are delivered before manufacturing."
 msgstr "制造前配送组件的车间内部库位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_mrp_workshop__finished_product_location_id
+msgid ""
+"Internal location where finished products are stored before being "
+"transferred to stock."
+msgstr "成品正式入库前暂存的车间内部库位。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_receipt_id
+msgid ""
+"Internal operation type used by MES-order completion receipts; created on "
+"first use."
+msgstr "制令单完工入库使用的内部操作类型；首次使用时创建。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_issue_id
+msgid ""
+"Internal operation type used by MES-order material requisitions; created on "
+"first use."
+msgstr "制令单领料使用的内部操作类型；首次使用时创建。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_internal_serial
@@ -2513,6 +2814,13 @@ msgid "Leave result must be 'ok', 'ng' or 'scrap'."
 msgstr "出站结果必须为 ok、ng 或 scrap。"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__x_requires_feeder_verification
+msgid ""
+"Legacy non-SMT feeder verification flag. SMT feeder verification is driven "
+"by SMT material tables."
+msgstr "当组件必须通过飞达或物料架流程进行核验时启用此项。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__line_count
 msgid "Line Count"
 msgstr "明细行数"
@@ -2522,6 +2830,30 @@ msgstr "明细行数"
 #: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
 msgid "Line Type"
 msgstr "线体属性"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Line-side lots of %(product)s cannot cover the BOM fallback need "
+"%(need)s of MES order %(order)s (%(remaining)s unallocated)."
+msgstr "%(product)s 的线边批次无法覆盖制令单 %(order)s 的 BOM 兜底需求 %(need)s（未分配 %(remaining)s）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Line-side stock of %(product)s%(lot)s is insufficient to complete MES order "
+"%(order)s: need %(need)s, available %(available)s. Issue the material first "
+"(领料) or validate the upstream receipt (半成品入库)."
+msgstr "线边库存不足：制令单 %(order)s 完工需要 %(product)s%(lot)s %(need)s，可用 %(available)s。请先领料，或先验证上游半成品入库收货。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__workshop_id
+msgid ""
+"Line-side workshop for the receipt destination. Only workshops of the order "
+"warehouse are offered."
+msgstr "入库目标的车间线边仓；只提供工单仓库下的车间。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__line_ids
@@ -2538,6 +2870,13 @@ msgstr "关联物料清单"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__bom_count
 msgid "Linked BoM Count"
 msgstr "关联BOM数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side_route_id
+msgid ""
+"Live (confirmed + active) process route that will be snapshotted into the "
+"MES order for the selected side."
+msgstr "将快照进制令单的所选面别生效（已确认 + 启用）工艺路线。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__load_time
@@ -2571,6 +2910,13 @@ msgid "Lot Name"
 msgstr "批次名称"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__lot_name
+msgid ""
+"Lot number stamped on the completion receipt lines. Leave empty to auto-"
+"generate one per MES order and day."
+msgstr "完工收货行上的批次号；留空按制令单+日期自动生成。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_stock_lot
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch_line__lot_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__lot_id
@@ -2586,6 +2932,13 @@ msgstr "机器"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_binding__binding_type__machine
 msgid "Machine Binding"
 msgstr "整机绑定"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__binding_type
+msgid ""
+"Machine binding: a product SN was assembled into this machine SN. Nameplate "
+"mapping: scanning the nameplate SN resolves to this machine SN."
+msgstr "整机绑定：产品SN已装配进该整机SN。铭牌映射：扫铭牌SN解析到该整机SN。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__main_pcb_sn
@@ -2613,6 +2966,20 @@ msgstr "手工"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__time_cycle_manual
 msgid "Manual Duration"
 msgstr "手动时长"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__source
+msgid ""
+"Manual entries come from the UI; API entries are uploaded by the future "
+"device API."
+msgstr "手工条目来自界面；API条目由设备API上传。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_entry
+msgid ""
+"Manual flag, same semantics as the common route editor: SNs are fed into the"
+" order from operations flagged here."
+msgstr "手工标记，语义同公共路线编辑器：SN 从此处标记的工序投入工单。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -2667,6 +3034,22 @@ msgstr "制造订单"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
 msgid "Manufacturing Order"
 msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid ""
+"Manufacturing order %(mo)s has no BOM; cannot generate replenishment "
+"suggestions."
+msgstr "制造订单 %(mo)s 没有 BOM，无法生成补货建议。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"Manufacturing order %(production)s must have a whole-number quantity before "
+"internal serials can be generated."
+msgstr "生成厂内序列号前，制造订单 %(production)s 的数量必须为整数。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__production_count
@@ -2731,6 +3114,14 @@ msgstr "匹配"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Material has already been issued for MES order(s) %(orders)s (%(pickings)s);"
+" cancellation is forbidden."
+msgstr "制令单 %(orders)s（%(pickings)s）已发料，禁止取消。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Material Issue"
 msgstr "领料单"
 
@@ -2743,6 +3134,18 @@ msgstr "领料单编码"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_warehouse__picking_type_issue_id
 msgid "Material Issue Operation"
 msgstr "领料作业"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
+msgid ""
+"Material mismatch.\n"
+"Expected: %(expected)s\n"
+"Scanned: %(actual)s"
+msgstr ""
+"物料不匹配。\n"
+"应为：%(expected)s\n"
+"扫描：%(actual)s"
 
 #. module: sn_wsd_mrp
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
@@ -2914,6 +3317,22 @@ msgstr "制令单 %(name)s 已上线。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is already online; its management mode can no longer be "
+"changed."
+msgstr "制令单 %(name)s 已上线，管理模式不能再修改。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is already released; cancel it and reschedule instead of "
+"editing it."
+msgstr "MES 订单 %(name)s 已下达；请取消后重新排程，不要直接编辑。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "MES order %(name)s is cancelled and cannot go online."
 msgstr "制令单 %(name)s 已取消，不能上线。"
 
@@ -2932,6 +3351,30 @@ msgstr "制令单 %(name)s 已关闭，工艺路线不可再编辑。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is in production; the common route can no longer be "
+"synced into it."
+msgstr "制令单 %(name)s 已在生产中，不能再同步通用工艺路线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is managed by operation reporting; SN station tracking is"
+" not available."
+msgstr "制令单 %(name)s 采用报工管理，不能使用 SN 过站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is managed by SN station tracking; operation reporting is"
+" not available."
+msgstr "制令单 %(name)s 采用过站管理，不能使用工序报工。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "MES order %(name)s is not a dual-sided non-final (T-side) order; use Complete Receipt instead."
 msgstr "制令单 %(name)s 不是双面板的 T 面（非终面）单，不能完结（不入库）；请走完工入库。"
 
@@ -2940,6 +3383,29 @@ msgstr "制令单 %(name)s 不是双面板的 T 面（非终面）单，不能�
 #: code:sn_wsd_mrp/models/mes_order.py:0
 msgid "MES order %(name)s is not online."
 msgstr "制令单 %(name)s 未上线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s is offline: new SNs cannot be fed in. Boards already in "
+"progress keep flowing until they leave the end operation."
+msgstr "制令单 %(name)s 已下线：无法投入新 SN。已投入的板会继续流转至结束工序产出。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(name)s must be in progress to complete products."
+msgstr "制令单 %(name)s 必须在生产中才能完工入库。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"MES order %(order)s has consumption flows but no output quantity; cannot "
+"scale the backflush to %(qty)s units."
+msgstr "制令单 %(order)s 有消耗流水但没有产出数量，无法按 %(qty)s 台折算倒冲。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -2952,6 +3418,14 @@ msgstr "制令单 %(order)s 还没有领料作业类型，请先领料再退料�
 #: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
 msgid "MES order %(order)s scheduled for %(qty)s unit(s) on %(line)s."
 msgstr "制令单 %(order)s 已排产 %(qty)s 台（产线：%(line)s）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid ""
+"MES order %(order)s: receiving %(new)d would exceed the output target "
+"(%(done)d / %(target)d)."
+msgstr "制令单 %(order)s：收货 %(new)d 将超出产出目标（%(done)d / %(target)d）。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -3260,6 +3734,13 @@ msgid "Meter Serial Archive"
 msgstr "电表序列号档案"
 
 #. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Meter serial archives can only be generated for final assembly manufacturing"
+" orders."
+msgstr "仅总装制造订单可生成电表序列号档案。"
+
+#. module: sn_wsd_mrp
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_serial
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_meter_serial_ids
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_meter_serial
@@ -3287,6 +3768,13 @@ msgstr "迁移"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__min_value
 msgid "Min Value"
 msgstr "最小值"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__produced_qty
+msgid ""
+"Mirror of the output quantity, kept as the aggregation source of the "
+"manufacturing order MES figures."
+msgstr "产出数量的镜像，作为制造订单 MES 数字的汇总源。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__is_input
@@ -3509,6 +3997,14 @@ msgstr "制造订单没有 BOM，无法生成补料单。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"No BoM substitute rule exists for the selected original product on this "
+"manufacturing order."
+msgstr "此制造订单中所选原始产品不存在物料清单替代规则。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "No component of MES order %(order)s is left on the line side to return."
 msgstr "制令单 %(order)s 的线边已没有可退的组件。"
@@ -3518,6 +4014,13 @@ msgstr "制令单 %(order)s 的线边已没有可退的组件。"
 #: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
 msgid "No excess material is available for return."
 msgstr "没有可退回的超额物料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid ""
+"No excess move lines could be derived from the consumed material lines."
+msgstr "无法从已消耗物料明细中推导出超额库存移动明细。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -3553,6 +4056,14 @@ msgstr "未识别到物料。请检查条码。"
 #: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_orders
 msgid "No MES orders yet"
 msgstr "暂无制令单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_route.py:0
+msgid ""
+"No released process route is bound to drawing number \"%(drawing)s\". Bind "
+"the route first."
+msgstr "图号\"%(drawing)s\"未绑定已生效的工艺路线，请先绑定。"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_daily_plan
@@ -3656,6 +4167,14 @@ msgid "Number of Actions"
 msgstr "行动数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_over_pick_count
+msgid ""
+"Number of done supplement (over-pick) pickings. Supplements are "
+"line-based: each picking carries only the components and quantities that "
+"were explicitly requested."
+msgstr "已验证补料单的数量。补料按明细行挑料：每张补料单只包含显式选择的组件和数量。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__message_has_error_counter
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__message_has_error_counter
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__message_has_error_counter
@@ -3753,9 +4272,40 @@ msgstr "上线状态"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
+msgid ""
+"Only active MES orders (released, picked or in progress) can pick material "
+"(current: %s)."
+msgstr "只有活跃状态（已下达/已领料/在产）的制令单才能领料（当前状态：%s）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Only active MES orders (released, picked or in progress) can supplement "
+"material (current: %s)."
+msgstr "只有活跃状态（已下达/已领料/生产中）的制令单可以补料（当前：%s）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Only manufacturing managers can clear station passes."
 msgstr "仅制造管理员可以清除过站。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Only one manufacturing order can be online for the same workshop and "
+"production line. Current online order: %s"
+msgstr "同一个车间和产线只能有一个制造订单上线。当前上线订单：%s"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Only one manufacturing order can be online for the same workshop. Current "
+"online order: %s"
+msgstr "同一车间同时只能有一张制造订单上线。当前上线订单：%s"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -3794,9 +4344,41 @@ msgstr "工序"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"Operation \"%(op)s\" is not part of the route flow graph. Only operations on"
+" the flow chart can be selected."
+msgstr "工序「%(op)s」不在本路线流程图中，只能选择流程图里的工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Operation %(op)s (work center %(wc)s) is not part of the process route of "
+"MES order %(order)s."
+msgstr "工序 %(op)s（工作中心 %(wc)s）不在制令单 %(order)s 的工艺路线中。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Operation %(op)s cannot be reported yet: none of its predecessors is fully "
+"reported."
+msgstr "工序 %(op)s 暂不能报工：其前置工序尚无任一报满。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Operation %(op)s does not belong to the route of MES order %(order)s."
 msgstr "工序 %(op)s 不属于制令单 %(order)s 的工艺路线。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Operation %(op)s is not reachable for SN %(sn)s: none of its predecessors "
+"%(preds)s is completed yet."
+msgstr "SN %(sn)s 不可进入工序 %(op)s：其前置工序（%(preds)s）尚无任一完成。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -3893,6 +4475,13 @@ msgid "Operations that can be executed at this work center."
 msgstr "可在此工作中心执行的工序。"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_flow_operation_ids
+msgid ""
+"Operations used by the flow graph. Statistics settings may only reference "
+"these operations."
+msgstr "流程图中的工序，统计设置只能引用这些工序。"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order_route.py:0
 msgid "Operations with execution records cannot be removed: %s"
@@ -3984,6 +4573,13 @@ msgid "Output Qty"
 msgstr "产出数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__remaining_qty
+msgid ""
+"Output quantity minus done quantity: how many units still need to be "
+"received to close the order."
+msgstr "产出数量减已完工数量：关单前还需完工入库的台数。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__is_over_pick
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_is_over_pick
 msgid "Over-pick"
@@ -4011,6 +4607,14 @@ msgstr "超领台数"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Over-picking: %(qty)s units would exceed the %(planned)s units of %(order)s "
+"(already picked: %(picked)s)."
+msgstr "超领：%(qty)s 件将超出制令单 %(order)s 的 %(planned)s 件（已领：%(picked)s 件）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
 msgid "Over-picking: only %(remaining)s unit(s) remain on %(order)s."
 msgstr "超领：制令单 %(order)s 仅剩 %(remaining)s 件可领。"
@@ -4031,8 +4635,34 @@ msgstr "超退：制令单 %(order)s 的净领数量只有 %(net)s 台。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+msgid ""
+"Over-scheduling: only %(remaining)s unit(s) remain for the %(side)s side of "
+"%(mo)s; %(qty)s was entered. Please adjust."
+msgstr "排产数量超出可排量！%(mo)s 的 %(side)s面剩余可排 %(remaining)s，本次输入 %(qty)s。请调整。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
 msgid "Over-scheduling: only %(remaining)s unit(s) remain on %(mo)s."
 msgstr "超排：制造订单 %(mo)s 仅剩 %(remaining)s 件可排。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Over-scheduling: the total %(side)s-side scheduled quantity of %(mo)s "
+"(%(total)s) would exceed its quantity (%(mo_qty)s). Remaining schedulable on"
+" this side: %(remaining)s."
+msgstr ""
+"超排：%(mo)s 的 %(side)s面已排总量（%(total)s）将超出其数量（%(mo_qty)s）。该面剩余可排：%(remaining)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Over-scheduling: the total scheduled quantity of %(mo)s (%(total)s) would "
+"exceed its quantity (%(mo_qty)s). Remaining schedulable: %(remaining)s."
+msgstr "排程超量：%(mo)s 的排产总量（%(total)s）将超出其数量（%(mo_qty)s）。剩余可排产：%(remaining)s。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_workcenter_type
@@ -4059,6 +4689,19 @@ msgstr "包装制令单工序"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
 msgid "Pack Operation"
 msgstr "包装工序"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Pack record %(record)s has no meter SN; cannot build its material SN lot."
+msgstr "包装记录 %(record)s 没有仪表SN，无法生成对应的物料SN批次。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "Pack record %s has no MES order; cannot receive."
+msgstr "包装记录 %s 没有关联制令单，无法收货。"
 
 #. module: sn_wsd_mrp
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_meter_pack_record
@@ -4285,6 +4928,13 @@ msgstr "必须填写实物序列号。"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_pick_wizard_form
 msgid "Pick Material"
 msgstr "领料"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_drawing__product_id
+msgid ""
+"Pick the product by its drawing number; the drawing key is filled from the"
+" product internal reference."
+msgstr "按图号选择产品；图号键自动取自产品内部参考号。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order__state__picked
@@ -4523,6 +5173,32 @@ msgid "Product"
 msgstr "产品"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+#: code:addons/sn_wsd_mrp/models/mes_route.py:0
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Product %(product)s has a drawing number but no board side type declared. "
+"Declare it on the product before scheduling."
+msgstr "产品 %(product)s 有图号但未声明板面类型，请先在产品上维护板面类型后再排产。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Product %(product)s is a double-sided board; its MES orders must run on the "
+"Top (T) or Bottom (B) side."
+msgstr "产品 %(product)s 是双面板，其制令单面别必须为顶面 (T) 或底面 (B)。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Product %(product)s is a single-sided board; its MES orders must stay on the"
+" Single side."
+msgstr "产品 %(product)s 是单面板，其制令单面别必须为单面。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__product_id
 msgid "Product (by Drawing No.)"
 msgstr "产品（按图号选）"
@@ -4589,6 +5265,15 @@ msgstr "生产日期"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
 msgid "Production Line"
 msgstr "产线"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+msgid ""
+"Production line %(line)s belongs to workshop %(line_ws)s, but manufacturing "
+"order %(mo)s runs in workshop %(mo_ws)s. Pick a line of the MO workshop."
+msgstr ""
+"产线 %(line)s 属于车间 %(line_ws)s，而制造订单 %(mo)s 的车间是 %(mo_ws)s。请选择 MO 所属车间的产线。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -4680,6 +5365,14 @@ msgid "Products that can be replaced by this item."
 msgstr "可被此物料替代的产品。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/product.py:0
+msgid ""
+"Products with a drawing number must declare their board side type (single or"
+" double)."
+msgstr "带图号的产品必须声明板面类型（单面/双面）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_program_version
 msgid "Program Version"
 msgstr "程序版本"
@@ -4769,6 +5462,13 @@ msgid "Quantity"
 msgstr "数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side_scheduled_qty
+msgid ""
+"Quantity already scheduled on the selected side of this MO (non-cancelled "
+"MES orders only)."
+msgstr "该 MO 在所选面别上已排的数量（不含已撤销的制令单）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side_remaining_qty
 msgid "Quantity still schedulable on the selected side."
 msgstr "所选面别剩余可排的数量。"
@@ -4815,6 +5515,12 @@ msgid "Reason"
 msgstr "原因"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/stock_package.py:0
+msgid "receipt: %s"
+msgstr "收货：%s"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
 msgid "Record Substitute Usage"
 msgstr "记录替代使用"
@@ -4852,6 +5558,12 @@ msgstr "发布"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
 msgid "Release Information"
 msgstr "发布信息"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid ""
+"Release this route? Previous released revision will be marked obsolete."
+msgstr "是否发布此路线？之前发布的版本将被标记为已作废。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__released
@@ -4965,6 +5677,16 @@ msgid "Report Day"
 msgstr "报工日期"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Report exceeds the plan remainder: this batch of %(batch)s would exceed the "
+"remaining %(remaining)s of %(planned)s (NG does not consume quota; scrap and"
+" OK do)."
+msgstr ""
+"报工超出计划余量：本次 %(batch)s 将超过 %(planned)s 中剩余的 %(remaining)s（不良不占额度，合格与报废占用）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_operation_report__reported_at
 msgid "Reported At"
 msgstr "报工时间"
@@ -5027,6 +5749,13 @@ msgstr "重置为草稿"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__activity_user_id
 msgid "Responsible User"
 msgstr "负责人"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_version_form
+msgid ""
+"Restore the route flow to this version? The restored flow is saved as a NEW "
+"version (rollback is always reversible)."
+msgstr "将工艺流程还原到此版本？还原后的流程将保存为新版本（回滚始终可逆）。"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_version_form
@@ -5109,6 +5838,13 @@ msgstr "返工"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_meter_qty_rework
 msgid "Rework Qty"
 msgstr "返工数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty_ng
+msgid ""
+"Reworkable defects of this batch. Pure statistic: it does not consume the "
+"plan quota; reworked boards are re-reported as OK."
+msgstr "本批次可返修不良。纯统计：不消耗计划额度；返修板重新按OK报工。"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
@@ -5340,6 +6076,13 @@ msgid "Scrapped"
 msgstr "已报废"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_scrap_qty
+msgid ""
+"Scrapped amount: SNs that left with result Scrap (station mode) or "
+"accumulated scrap reports (report mode)."
+msgstr "报废量：以报废结果离站的SN（过站模式）或累计报废报工（报工模式）。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__seal_no
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__seal_no
 msgid "Seal No"
@@ -5367,6 +6110,14 @@ msgstr "请选择报废原因。"
 #: code:addons/sn_wsd_mrp/wizard/mes_done_wizard.py:0
 msgid "Select a workshop for a line-side completion."
 msgstr "入线边仓完工请选择车间。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Select a workshop with a configured line-side location for a line-side "
+"completion."
+msgstr "入线边仓完工请选择已配置线边库位的车间。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -5405,6 +6156,15 @@ msgstr "序号"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__serial_id
 msgid "Serial"
 msgstr "序列"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Serial capacity exceeded for manufacturing order %(production)s. Planned: "
+"%(planned)s, active: %(active)s, scrapped: %(scrapped)s."
+msgstr ""
+"制造订单 %(production)s 已超出序列号容量。计划：%(planned)s，在用：%(active)s，报废：%(scrapped)s。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__serial_history_ids
@@ -5556,6 +6316,20 @@ msgid "Set Inactive"
 msgstr "设为未启用"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route__is_customized
+msgid ""
+"Set on the first local edit: the order stops following the common route "
+"automatically until a manual sync accepts it back."
+msgstr "首次本地编辑时置位：工单停止自动跟随公共路线，直到手工同步接回。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"Set the workshop and production line before putting the manufacturing order "
+"online."
+msgstr "在将制造订单上线之前，请先设置车间和生产线。"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_production.py:0
 msgid "Set the workshop before putting the manufacturing order online."
@@ -5605,6 +6379,20 @@ msgid "Side Scheduled Quantity"
 msgstr "该面已排数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side
+msgid ""
+"Side to schedule. Over-scheduling is checked per side: Top and Bottom may "
+"each cover the full MO quantity."
+msgstr "要排产的面别。超排按面别独立校验：顶面 (T)、底面 (B) 各自最多可排满 MO 数量。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_missing_sides
+msgid ""
+"Sides required by the product board side type with no matching live route "
+"for this MO (车间 + 图号 + 面别)."
+msgstr "产品板面类型要求、但该 MO 按（车间 + 图号 + 面别）匹配不到生效路线的面别。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_production_side__single
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order__x_side__single
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_schedule_wizard__x_side__single
@@ -5633,6 +6421,14 @@ msgstr "单面"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_route_single_ok
 msgid "Single Side Route"
 msgstr "单面工艺路线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_template__x_board_side
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__x_board_side
+msgid ""
+"Single: one single-side process route. Double: one Top (T) and one Bottom "
+"(B) process route, scheduled independently per side."
+msgstr "单面：需一条单面工艺路线。双面：顶面 (T)、底面 (B) 各一条，按面别独立排产。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_serial_operation_history__result__skipped
@@ -5683,8 +6479,24 @@ msgstr "SN"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s already left MES order %(order)s through end operation %(op)s; it "
+"cannot be fed into this order again."
+msgstr "SN %(sn)s 已经由结束工序 %(op)s 离开制令单 %(order)s，不能再投入本制令单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "SN %(sn)s already passed operation %(op)s."
 msgstr "SN %(sn)s 已通过工序 %(op)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s has no in-progress pass row on MES order %(order)s; its "
+"station entry record is missing."
+msgstr "SN %(sn)s 在制令单 %(order)s 上没有进行中的过站行，缺少进站记录。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -5695,8 +6507,56 @@ msgstr "SN %(sn)s 在制令单 %(order)s 上没有过站记录。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s has not entered MES order %(order)s yet; it must be fed in from a "
+"start operation (%(op)s is not one)."
+msgstr "SN %(sn)s 尚未投入制令单 %(order)s，必须从开始工序投入（%(op)s 不是开始工序）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s is in progress at operation %(op)s of order %(order)s; it must "
+"leave that station first."
+msgstr "SN %(sn)s 正在制令单 %(order)s 的工序 %(op)s 在制，需先出站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "SN %(sn)s is not in progress on MES order %(order)s."
 msgstr "SN %(sn)s 在制令单 %(order)s 上没有在制工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s is still bound to MES order %(order)s; it must leave that order "
+"through its end operation before being fed into another one."
+msgstr "SN %(sn)s 仍绑定制令单 %(order)s，须在其结束工序产出后才能投入其他制令单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s is unknown; SNs register themselves when they enter a start "
+"operation."
+msgstr "SN %(sn)s 不存在；SN 会在进入开始工序时自动建档。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s reached the pass limit (%(limit)s) of operation %(op)s; send it "
+"to repair."
+msgstr "SN %(sn)s 已达工序 %(op)s 的过站次数上限（%(limit)s 次），请送维修。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"SN %(sn)s was scrapped at operation %(op)s of MES order %(order)s; it cannot"
+" be fed into this order again."
+msgstr "SN %(sn)s 已在制令单 %(order)s 的工序 %(op)s 报废，不能再投入本制令单。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__sn_history_ids
@@ -5731,6 +6591,21 @@ msgid "SNs currently at this operation."
 msgstr "当前在该工序的SN。"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_input_qty
+msgid ""
+"SNs fed into this order at the daily input operation (counted on entry); "
+"reported quantity in report mode."
+msgstr "在日投入工序投入本单的SN（投入时计数）；报工模式为报工数量。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__output_qty
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_output_qty
+msgid ""
+"SNs that left the daily output operation with result OK; reported quantity "
+"in report mode."
+msgstr "以OK结果离开日产出的SN；报工模式为报工数量。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_ng_qty
 msgid "SNs that left this operation with result NG."
 msgstr "以NG结果离开该工序的SN。"
@@ -5739,6 +6614,13 @@ msgstr "以NG结果离开该工序的SN。"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_ok_qty
 msgid "SNs that left this operation with result OK."
 msgstr "以OK结果离开该工序的SN。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_workorder_input_qty
+msgid ""
+"SNs that passed the work-order input operation; reported quantity in report "
+"mode."
+msgstr "通过工单投入工序的SN；报工模式为报工数量。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__source
@@ -5880,6 +6762,19 @@ msgstr "工位类型"
 msgid "Station WIP"
 msgstr "工序在制"
 
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_manage_mode
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_route__manage_mode
+msgid ""
+"Station: SNs enter/leave each operation one by one.\n"
+"Report: operations are reported by quantity, no SN tracking.\n"
+"Locked once the order goes online."
+msgstr ""
+"过站：SN 逐个进出每道工序。\n"
+"报工：按数量报工，不跟踪 SN。\n"
+"订单上线后锁定。"
+
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_route_section_stat__end_operation_id
 msgid "Statistics for this section end at this operation."
@@ -5905,6 +6800,23 @@ msgid "Status"
 msgstr "状态"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_state
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：到期日已过\n"
+"今日：活动日期为今天\n"
+"已计划：未来的活动。基于活动的状态：\n"
+"已逾期：截止日期已过\n"
+"今天：活动日期为今天\n"
+"已计划：未来的活动。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_stock_move
 msgid "Stock Move"
 msgstr "库存移动"
@@ -5913,6 +6825,14 @@ msgstr "库存移动"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_excess_return__move_ids
 msgid "Stock Moves"
 msgstr "库存移动"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"Submit or release the engineering process route before generating a "
+"production route."
+msgstr "生成制造工艺路线前，必须先提交或发布对应的设计工艺路线。"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_bom_form_substitute
@@ -6123,10 +7043,93 @@ msgstr "文本"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
+"must be active."
+msgstr "车间 '%(workshop)s' 的%(location_label)s库位 '%(location)s' 必须启用。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
+"must belong to the manufacturing order company."
+msgstr "车间 '%(workshop)s' 的%(location_label)s库位 '%(location)s' 必须属于制造订单公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The %(location_label)s location of workshop '%(workshop)s' must be located "
+"under the %(parent_label)s location '%(parent_location)s'."
+msgstr ""
+"车间 '%(workshop)s' 的%(location_label)s库位必须位于%(parent_label)s库位 "
+"'%(parent_location)s' 之下。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_route.py:0
+#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
+msgid ""
+"The %(side)s-side process route of product %(drawing)s is not maintained. "
+"Use the [Maintain Route] button to complete it before scheduling."
+msgstr "产品 %(drawing)s 的 %(side)s面工艺路线未维护，无法排产。请点击[去维护工艺路线]补维护后再排产。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The aging start operation must come before the aging end operation in the "
+"flow."
+msgstr "老化开始工序必须在流程中位于老化结束工序之前。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
+msgid ""
+"The bound SN: the product SN for a machine binding, the nameplate SN for a "
+"nameplate mapping."
+msgstr "被绑定的SN：整机绑定为产品SN，铭牌映射为铭牌SN。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The coding rule is not configured. Please create an ir.sequence with code %s"
+" in Settings > Technical > Sequences."
+msgstr "编码规则未配置。请在 设置 > 技术 > 序列 中创建编码为 %s 的 ir.sequence。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 #: code:addons/sn_wsd_mrp/wizard/mes_done_wizard.py:0
 msgid "The completion quantity must be positive."
 msgstr "完工数量必须大于 0。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
+msgid ""
+"The component lot/serial must belong to the selected component product."
+msgstr "组件批次/序列号必须属于所选组件产品。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The daily input operation and the daily output operation cannot be the same."
+msgstr "制令单投入工序与制令单产出工序不能为同一道工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The daily input, daily output and work order input operations are required "
+"once the route has a flow graph."
+msgstr "工艺路线保存流程图后，必须配置制令单投入工序、制令单产出工序和工单投入工序。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_operation_data_definition_definition_code_uniq
@@ -6145,9 +7148,33 @@ msgid "The effective date must be earlier than the expiration date."
 msgstr "生效日期必须早于失效日期。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid ""
+"The effective end date must be greater than or equal to the effective start "
+"date."
+msgstr "生效结束日期必须大于或等于生效开始日期。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_team_member_sn_mrp_team_member_unique
 msgid "The employee is already a member of this team."
 msgstr "该员工已经是该团队的成员。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The first operation of every manufacturing order must allow serial creation."
+" Check the following manufacturing orders: %(productions)s."
+msgstr "每张制造订单的第一道工序都必须允许创建序列号。请检查以下制造订单：%(productions)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The internal serial generation quantity cannot exceed the remaining quantity"
+" %(remaining)s."
+msgstr "内部序列号生成数量不能超过剩余数量 %(remaining)s。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6163,13 +7190,66 @@ msgstr "另一SN绑定到的整机SN。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch already has all required active internal serials."
+msgstr "制造批次已经具有全部所需的有效厂内序列号。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
 msgid "The manufacturing batch has no active manufacturing orders."
 msgstr "制造批次没有未取消的制造订单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing batch must belong to the same company as the internal "
+"serial."
+msgstr "制造批次必须与厂内序列号属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch must belong to the same company as the manufacturing"
+" order."
+msgstr "制造批次必须与制造订单属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch planned quantity must be a whole number before "
+"internal serials can be generated."
+msgstr "生成厂内序列号前，制造批次计划数量必须为整数。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing batch product must match the internal serial product."
+msgstr "制造批次产品必须与厂内序列号产品一致。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
+msgid ""
+"The manufacturing batch product must match the manufacturing order product."
+msgstr "制造批次产品必须与制造订单产品一致。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_manufacturing_batch_batch_name_company_uniq
 msgid "The manufacturing batch reference must be unique per company."
 msgstr "每个公司的制造批次编号必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing order must belong to the internal serial manufacturing "
+"batch."
+msgstr "制造订单必须属于厂内序列号对应的制造批次。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6179,9 +7259,56 @@ msgstr "制造订单必须属于该制造批次。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
+msgid ""
+"The manufacturing order must belong to the same company as the internal "
+"serial."
+msgstr "制造订单必须与厂内序列号属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The manufacturing order of %(order)s has no warehouse; cannot create the "
+"completion receipt."
+msgstr "%(order)s 的制造订单没有仓库，无法生成完工入库单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The manufacturing order of %(order)s has no warehouse; cannot generate the "
+"requisition."
+msgstr "%(order)s 的制造订单没有仓库，无法生成领料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "The manufacturing order of %(order)s has no warehouse; cannot generate the return."
 msgstr "制令单 %(order)s 的制造订单没有仓库，无法生成退料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The manufacturing order of MES order %(order)s has no BoM; products cannot "
+"be completed without one."
+msgstr "制令单 %(order)s 的制造订单没有 BOM，不能完工入库。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The manufacturing order of MES order %(order)s has no BoM; scrap cannot be "
+"reported without one."
+msgstr "制令单 %(order)s 的制造订单没有 BOM，无法报报废。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The manufacturing order production line does not match these work order work"
+" centers: %s"
+msgstr "制造订单生产线与这些工单工作中心不匹配：%s"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6223,6 +7350,22 @@ msgid "The operation must belong to the same company as the process route."
 msgstr "工序必须与工艺路线属于同一家公司。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid ""
+"The operation type of %(mo)s has no warehouse; cannot generate replenishment"
+" suggestions."
+msgstr "制造订单 %(mo)s 的作业类型没有仓库，无法生成补货建议。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The ownership type is required when maintaining workshop or production line "
+"scope."
+msgstr "维护车间或生产线范围时，必须指定归属类型。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_team_member_sn_mrp_team_member_ratio_check
 msgid "The performance ratio must be between 0 and 100."
 msgstr "绩效比例必须在 0 到 100 之间。"
@@ -6253,6 +7396,13 @@ msgstr "计划数量必须大于 0。"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The previous work center cannot be the same as the current work center."
+msgstr "前序工作中心不能与当前工作中心相同。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
 msgid "The previous work center must belong to the same company."
 msgstr "前序工作中心必须属于同一家公司。"
 
@@ -6260,6 +7410,14 @@ msgstr "前序工作中心必须属于同一家公司。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_production_process_doc_type_code_uniq
 msgid "The process document type code must be unique per company."
 msgstr "工艺文件类型编码按公司唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_route.py:0
+msgid ""
+"The process route bound to drawing number \"%(drawing)s\" has no flow graph "
+"yet. Draw the flow before creating MES orders."
+msgstr "图号\"%(drawing)s\"绑定的工艺路线还没有流程图，请先绘制流程图再创建制令单。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_route_code_version_company_uniq
@@ -6279,6 +7437,13 @@ msgstr "物料清单上必须指定工艺路线。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The process route must belong to the same company as the bill of material."
+msgstr "工艺路线必须与物料清单属于同一家公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/meter_verification.py:0
 msgid "The product variant must belong to the selected product template."
 msgstr "产品变体必须属于所选产品模板。"
@@ -6287,6 +7452,20 @@ msgstr "产品变体必须属于所选产品模板。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_production_line_sn_mrp_production_line_company__31639eab
 msgid "The production line code must be unique per company."
 msgstr "每个公司的生产线编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
+msgid ""
+"The production line is required for a production line level work center."
+msgstr "生产线级别的工作中心必须指定生产线。"
+
+#. module: sn_wsd_mrp
+#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
+msgid ""
+"The production line must belong to the same company as the manufacturing "
+"order."
+msgstr "生产线必须与制造订单属于同一家公司。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6300,6 +7479,14 @@ msgstr "生产线必须属于所选车间。"
 #: code:addons/sn_wsd_mrp/models/internal_serial.py:0
 msgid "The production stage SN must match the physical serial identity."
 msgstr "生产阶段序列号必须与物理序列号身份一致。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The projected operation must belong to the process route selected on the "
+"bill of material."
+msgstr "规划的工序必须属于物料清单（BOM）上选择的工艺路线。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6317,6 +7504,12 @@ msgstr "退还数量必须是正整数（台）。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_serial_binding_binding_uniq
 msgid "The same SN pair can only be bound once per binding type."
 msgstr "同一对SN按绑定类型只能绑定一次。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_mrp_bom_line_substitute_unique_bom_line_substitute
+msgid ""
+"The same substitute product can only be configured once for a BoM line."
+msgstr "同一个替代产品在一个物料清单行中只能配置一次。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6368,6 +7561,30 @@ msgstr "来源托盘状态为 %s，不允许移托。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The start operation and the end operation of a statistics section cannot be "
+"the same."
+msgstr "统计区间的开始工序与结束工序不能为同一道工序。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid ""
+"The start operation of a statistics section must come before the end "
+"operation in the flow."
+msgstr "统计区间的开始工序必须在流程中位于结束工序之前。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
+msgid ""
+"The substitute product is not present on the manufacturing order. Update the"
+" production BoM and regenerate the order before recording usage."
+msgstr "制造订单上不存在该替代产品。请更新生产 BOM 并重新生成订单后再记录使用。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
 msgid "The substitute product must be different from the original product."
 msgstr "替代产品必须不同于原始产品。"
@@ -6382,6 +7599,14 @@ msgstr "每个公司的团队编码必须唯一。"
 #: code:addons/sn_wsd_mrp/models/mrp_team.py:0
 msgid "The total performance ratio of team members must be 100%."
 msgstr "团队成员的总绩效比例必须为 100%。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The warehouse stock location of MES order %(order)s is missing or equals "
+"the line-side location."
+msgstr "制令单 %(order)s 的仓库库位缺失或与线边库位相同。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_product_template_check_warranty_period_days
@@ -6404,6 +7629,15 @@ msgstr "工作中心必须关联到所选工序。"
 #: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
 msgid "The work center must belong to the same company as the process route."
 msgstr "工作中心必须与工艺路线属于同一公司。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The work center of a start operation must sit on the production line of the "
+"MES order: %(wc)s is on %(wc_line)s, order %(order)s runs on %(order_line)s."
+msgstr ""
+"开始工序的工作中心必须与制令单同线体：%(wc)s 在 %(wc_line)s 上，而制令单 %(order)s 在 %(order_line)s 上。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -6442,6 +7676,22 @@ msgstr "必须选择车间。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The workshop line-side location must differ from the manufacturing order "
+"component source location."
+msgstr "车间线边库位不能与制造订单的组件来源库位相同。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"The workshop line-side location must differ from the warehouse stock "
+"location."
+msgstr "车间线边库位不能与仓库默认库位相同。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
 msgid "The workshop must belong to the same company as the process route."
 msgstr "车间必须与工艺路线属于同一家公司。"
@@ -6455,14 +7705,59 @@ msgstr "理论时间"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
+msgid ""
+"There are %(count)s verified feeder positions missing actual material or "
+"loaded quantity."
+msgstr "有 %(count)s 个已核验的飞达位置缺少实际物料或上料数量。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
 msgid "There are still %(count)s feeder positions pending verification."
 msgstr "仍有 %(count)s 个飞达位置待核验。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return_line__picked_qty
+msgid ""
+"This is the quantity of product that is planned to be moved.Lowering this "
+"quantity does not generate a backorder.Changing this quantity on assigned "
+"moves affects the product reservation, and should be done with care."
+msgstr "这是计划移动的产品数量。降低此数量不会生成欠单。在已分配的库存移动上更改此数量会影响产品预留，应谨慎操作。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
+msgid ""
+"This serial cannot enter the current station according to the configured "
+"route."
+msgstr "根据配置的工艺路线，该序列号无法进入当前工位。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
 msgid "This serial has already been processed on the current station."
 msgstr "该序列号已在当前工位处理过。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_route_check
+msgid ""
+"This workbench lists open manufacturing orders whose product board\n"
+"            side, workshop and drawing number cannot match a live process route.\n"
+"            Use the per-row button to create the missing route prefilled with\n"
+"            the workshop, drawing number and side."
+msgstr ""
+"该工作台列出产品面别、车间与图号无法匹配生效工艺路线的在开制造订单。\n"
+"            用每行按钮创建缺失的路线，并预填车间、图号与面别。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_route_check
+msgid ""
+"This workbench lists open manufacturing orders whose product board side, "
+"workshop and drawing number cannot match a live process route. Use the per-"
+"row button to create the missing route prefilled with the workshop, drawing "
+"number and side."
+msgstr ""
+"此工作台列出“产品板面 + 车间 + 图号”无法匹配生效工艺路线的在制制造订单。点击行内按钮，按预填的车间 + 图号 + 面别创建缺失的工艺路线。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__three_phase
@@ -6616,6 +7911,41 @@ msgid "Transfer"
 msgstr "调拨"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_single_ok
+msgid ""
+"True when a live (confirmed + active) process route matches this MO for the "
+"single side (车间 + 图号; side-less routes count as single)."
+msgstr "该 MO 按（车间 + 图号）能匹配到单面生效（已确认 + 启用）工艺路线时为真（未设面别的路线视同单面）。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_bottom_ok
+msgid ""
+"True when a live process route matches this MO for the Bottom (B) side (车间 +"
+" 图号 + 面别)."
+msgstr "该 MO 按（车间 + 图号 + 面别）能匹配到底面 (B) 生效工艺路线时为真。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_top_ok
+msgid ""
+"True when a live process route matches this MO for the Top (T) side (车间 + 图号"
+" + 面别)."
+msgstr "该 MO 按（车间 + 图号 + 面别）能匹配到顶面 (T) 生效工艺路线时为真。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_missing
+msgid ""
+"True when at least one required side of this MO has no matching live process"
+" route."
+msgstr "该 MO 至少一个所需面别匹配不到生效工艺路线时为真。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_route_operation__is_input
+msgid ""
+"True when the operation has no predecessor: SNs enter the order from one of "
+"these."
+msgstr "当工序没有前置工序时为真：SN 从这些工序进入订单。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__type_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 msgid "Type"
@@ -6659,6 +7989,13 @@ msgstr "下料时间"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_mes_schedule_state__unplanned
 msgid "Unplanned"
 msgstr "未排产"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty_scrap
+msgid ""
+"Unrecoverable loss of this batch. Consumes the plan quota and generates a "
+"native scrap order per component."
+msgstr "本批次不可恢复损失。消耗计划额度并按组件生成原生报废单。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_unscheduled_qty
@@ -6748,6 +8085,14 @@ msgid "Verification Result"
 msgstr "核验结果"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
+msgid ""
+"Verification scheme %(code)s already has an effective version %(version)s in"
+" the overlapping date range."
+msgstr "验证方案 %(code)s 在重叠日期范围内已有一个生效版本 %(version)s。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_feeder_line__state__verified
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__verified
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__verified
@@ -6826,6 +8171,19 @@ msgid "Website Messages"
 msgstr "网站消息"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__can_return_excess
+msgid ""
+"Whether finished raw moves contain excess material that can be returned."
+msgstr "已完成的原材料移动中是否包含可退回的超额物料。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__over_reason
+msgid ""
+"Why is material needed (consumption make-up, shortage, ...)? Stored on the "
+"supplement picking."
+msgstr "为什么需要此物料（损耗补账、缺料等）？记录在补料单上。"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_pick_wizard_form
 msgid "Why is this material needed?"
 msgstr "为什么需要这笔料？"
@@ -6860,6 +8218,14 @@ msgstr "工作中心"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Work center %(wc)s belongs to workshop %(wc_shop)s, but MES order %(order)s "
+"runs in workshop %(order_shop)s."
+msgstr "工作中心 %(wc)s 属于车间 %(wc_shop)s，而制令单 %(order)s 在车间 %(order_shop)s 生产。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Work center %(wc)s is disabled."
 msgstr "工作中心 %(wc)s 已停用。"
 
@@ -6878,6 +8244,13 @@ msgstr "工作中心代码"
 #: model:ir.model,name:sn_wsd_mrp.model_mrp_routing_workcenter
 msgid "Work Center Usage"
 msgstr "工作中心使用情况"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__workcenter_id
+msgid ""
+"Work center where the SN entered this operation (copied from the WIP row on "
+"leave, kept for equipment-level traceability)."
+msgstr "SN 进入该工序的工作中心（出站时从在制行复制，用于设备级追溯）。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_wip__workcenter_id
@@ -6947,8 +8320,55 @@ msgstr "车间"
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Workshop %(workshop)s has no component (line-side) location configured; set "
+"it before generating the requisition."
+msgstr "车间 %(workshop)s 未配置组件（线边）库位；生成请购单前请先设置。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Workshop %(workshop)s has no component (line-side) location configured; set it before generating the return."
 msgstr "车间 %(workshop)s 未配置线边库位，请先配置再生成退料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Workshop %(workshop)s has no component (line-side) location configured; "
+"set it before generating the supplement."
+msgstr "车间 %(workshop)s 未配置线边库位，请先配置再生成补料单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Workshop %(ws)s does not belong to the warehouse of MES order %(order)s."
+msgstr "车间 %(ws)s 不属于制令单 %(order)s 的仓库。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Workshop %(ws)s has no line-side location configured; cannot backflush "
+"components of order %(order)s."
+msgstr "车间 %(ws)s 未配置线边库位，无法倒冲制令单 %(order)s 的物料。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
+"Workshop %(ws)s has no line-side location configured; cannot scrap "
+"components of order %(order)s."
+msgstr "车间 %(ws)s 未配置线边库位，无法报废制令单 %(order)s 的物料。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom__x_workshop_id
+msgid ""
+"Workshop executing this BOM. Manufacturing orders inherit it (stored, "
+"editable) and resolve their process routes per workshop + drawing number + "
+"board side."
+msgstr "执行该物料清单的车间。制造订单继承此车间（存储、可改），并按（车间 + 图号 + 面别）解析工艺路线。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_type__workshop
@@ -7143,1365 +8563,6 @@ msgstr "良率"
 #: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
 msgid "You cannot deactivate a work center with work orders in progress."
 msgstr "您不能停用有正在进行中工单的工作中心。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"%(label)s \"%(op)s\" is not part of the route flow graph. Only operations on"
-" the flow chart can be selected."
-msgstr "%(label)s「%(op)s」不在本路线流程图中，只能选择流程图里的工序。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
-msgid ""
-"%(sub)s cannot replace %(org)s. Configure the substitute on the BoM line "
-"first."
-msgstr "%(sub)s 不能替代 %(org)s。请先在物料清单行上配置替代料。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/meter_workorder_scan_wizard.py:0
-msgid ""
-"%s\n"
-"\n"
-"Error Code: %s"
-msgstr ""
-"%s\n"
-"\n"
-"错误代码：%s"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"A component location must be configured for workshop '%s' before confirming "
-"a two-step or three-step manufacturing order."
-msgstr "确认两步/三步制造订单前，必须为车间 '%s' 配置组件库位。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_drawing_drawing_side_route_uniq
-msgid ""
-"A drawing number can only be bound to one process route per workshop and "
-"production side."
-msgstr "一个图号在同一车间每个生产面只能绑定一条工艺路线。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"A finished product location must be configured for workshop '%s' before "
-"confirming a three-step manufacturing order."
-msgstr "确认三步制造订单前，必须为车间 '%s' 配置成品库位。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_internal_serial_serial_no_production_uniq
-msgid ""
-"A serial number can only have one production stage per manufacturing order."
-msgstr "一个序列号在每个制造订单中只能有一个生产阶段。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"A workshop must be selected before confirming the multi-step manufacturing "
-"order '%s'."
-msgstr "确认多步制造订单 '%s' 前必须先选择车间。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__done_qty
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_done_qty
-msgid ""
-"Accumulated quantity received through completion receipts. The order turns "
-"Done once this reaches the output quantity."
-msgstr "经完工入库累计接收的数量；达到产出数量后工单转为完成。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_reported_qty
-msgid ""
-"Accumulated reported quantity (report mode): OK + NG + scrap, the invested "
-"amount."
-msgstr "累计报工数量（报工模式）：OK + NG + 报废，即投入量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_entry
-msgid ""
-"Allow serials without a previous route event to enter this BoM operation."
-msgstr "允许没有前序路线事件的序列号进入此物料清单工序。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_serial_creation
-msgid ""
-"Allow the API to create a production-stage serial at this BoM operation."
-msgstr "允许 API 在该 BOM 工序创建生产阶段序列号。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_allow_serial_creation
-msgid ""
-"Allow the API to create a production-stage serial at this entry operation."
-msgstr "允许 API 在该入口工序创建生产阶段序列号。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_serial_creation
-msgid ""
-"Allow the API to create a production-stage serial at this MES order "
-"operation."
-msgstr "允许 API 在该制令单工序创建生产阶段序列号。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_routing_workcenter__x_allow_skip_with_override
-msgid ""
-"Allow this BoM operation to be reached with an explicit route override."
-msgstr "允许通过显式路线强制覆盖到达此物料清单工序。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_skip_with_override
-msgid ""
-"Allow this MES order operation to be reached with an explicit route "
-"override."
-msgstr "允许通过显式路线放行到达该制令单工序。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_process_route_drawing
-msgid ""
-"Bind a common process route to one or more drawing numbers (物料编号/图号). Work "
-"orders resolve their route by drawing number through these bindings."
-msgstr "将公共工艺路线绑定到一个或多个图号（物料编号/图号）；工单按图号经此绑定解析路线。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_side
-msgid ""
-"Board side this order produces. Over-scheduling is checked per side: Top and"
-" Bottom may each cover the full MO quantity. Single-sided products are fixed"
-" to Single."
-msgstr "该制令单生产的板面。超排按面别独立校验：顶面 (T)、底面 (B) 各自最多可排满 MO 数量。单面板固定为单面。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_production_side
-msgid ""
-"Board side this route produces. Scheduling a MES order resolves the live "
-"route by drawing number AND side."
-msgstr "该路线生产的板面。制令单排产按（图号 + 面别）解析生效工艺路线。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Component %(product)s is not part of the BoM of MES order %(order)s; "
-"supplements stay within its BoM."
-msgstr "组件 %(product)s 不在制令单 %(order)s 的 BOM 内，补料仅限 BOM 组件。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order_route.py:0
-msgid ""
-"Counter operation %(op)s is no longer part of the route; clear or move it "
-"before saving."
-msgstr "计数工序 %(op)s 已不在工艺路线中，请先调整或清除该配置再保存。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_route.py:0
-msgid ""
-"Counter operation \"%(op)s\" is not part of the route flow graph of route "
-"%(route)s."
-msgstr "计数工序\"%(op)s\"不在工艺路线 %(route)s 的流程图中。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_process_type
-msgid ""
-"Craft family of this route: SMT lines split the material table and deduct "
-"points on pass; DIP and complete-machine lines do not."
-msgstr "该路线的工艺族：SMT 线过站时拆料站表并扣点；DIP 与整机线不做。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__version
-msgid ""
-"Current flow version. Bumps only when the flow graph changes on a confirmed "
-"route; editing other fields never bumps it. 0 means the route has never been"
-" confirmed."
-msgstr "当前流程版本。仅在已确认路线的流程图变化时递增；编辑其他字段不会递增。0 表示该路线从未确认过。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_partner_id
-msgid ""
-"Customer resolved from the source sales order of the manufacturing order "
-"(empty for stock orders)."
-msgstr "从制造订单的源销售订单带出的客户（备货单为空）。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_date_plan_end
-msgid ""
-"Day after the plan date; used as the stop bound of the Gantt pill (each MES "
-"order occupies its whole planned day)."
-msgstr "计划日期次日；作为甘特条的结束边界（每个制令单占满整个计划日）。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__state
-msgid ""
-"Draft: being edited (flow changes are pending). Confirmed: current version "
-"is live; saving a changed flow graph moves it back to Draft until confirmed "
-"or cancelled."
-msgstr "草稿：编辑中（流程变更待定）。已确认：当前版本生效；保存修改过的流程图会回到草稿，直到确认或取消。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__blocked_by_ids
-msgid ""
-"Edges of the flow graph: this operation is reachable once ANY predecessor is"
-" completed (parallel branches are OR-joined)."
-msgstr "流程图的边：任一前置工序完成即可到达该工序（并行分支为或连接）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Feeding SN %(sn)s would exceed the scheduled quantity of MES order "
-"%(order)s: %(fed)s SNs have already been fed in, the plan is %(planned)s."
-msgstr "投入 SN %(sn)s 将超出制令单 %(order)s 的排产数量：已投入 %(fed)s 台，排产 %(planned)s 台。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__x_mes_order_qty
-msgid ""
-"Finished-unit quantity this picking covers; used to accumulate the MES order"
-" picked quantity."
-msgstr "本领料单对应的成品台数，用于累计制令单的已领数量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__route_flow_json
-msgid ""
-"Flow graph {nodes, edges} edited by the route flow editor. This is the "
-"source of truth for the common route template; operations are materialised "
-"into work-order routes at generation time."
-msgstr "由路线流程编辑器维护的流程图 {nodes, edges}。这是公共路线模板的唯一事实来源；生成时才物化为工单路线。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_sn_wsd_mrp
-msgid ""
-"Force close this manufacturing order? Released MES orders will be revoked, "
-"remaining quantities voided (no backorder) and the order closed."
-msgstr "强制关闭这张制造订单？已下达的制令单将被撤销，剩余数量直接作废（不生成欠单），订单将被关闭。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"Generated %(count)s internal serials for the manufacturing batch. Serial "
-"range: %(first)s to %(last)s."
-msgstr "已为制造批次生成 %(count)s 个厂内序列号。序列号范围：%(first)s 至 %(last)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"Generated %(count)s internal serials to fill the manufacturing batch "
-"capacity. Serial range: %(first)s to %(last)s."
-msgstr "已生成 %(count)s 个厂内序列号以补足制造批次容量。序列号范围：%(first)s 至 %(last)s。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_use_daily_plan
-#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__x_use_daily_plan
-#: model:ir.model.fields,help:sn_wsd_mrp.field_product_template__x_use_daily_plan
-msgid ""
-"If checked, manufacturing orders for this product are split into daily MES "
-"orders instead of backorders."
-msgstr "勾选后，该产品的制造订单拆分为按日制令单，而不是生成欠单。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_mrp_workshop__finished_product_location_id
-msgid ""
-"Internal location where finished products are stored before being "
-"transferred to stock."
-msgstr "成品正式入库前暂存的车间内部库位。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_receipt_id
-msgid ""
-"Internal operation type used by MES-order completion receipts; created on "
-"first use."
-msgstr "制令单完工入库使用的内部操作类型；首次使用时创建。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_issue_id
-msgid ""
-"Internal operation type used by MES-order material requisitions; created on "
-"first use."
-msgstr "制令单领料使用的内部操作类型；首次使用时创建。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__x_requires_feeder_verification
-msgid ""
-"Legacy non-SMT feeder verification flag. SMT feeder verification is driven "
-"by SMT material tables."
-msgstr "当组件必须通过飞达或物料架流程进行核验时启用此项。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Line-side stock of %(product)s%(lot)s is insufficient to complete MES order "
-"%(order)s: need %(need)s, available %(available)s. Issue the material first "
-"(领料) or validate the upstream receipt (半成品入库)."
-msgstr "线边库存不足：制令单 %(order)s 完工需要 %(product)s%(lot)s %(need)s，可用 %(available)s。请先领料，或先验证上游半成品入库收货。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__workshop_id
-msgid ""
-"Line-side workshop for the receipt destination. Only workshops of the order "
-"warehouse are offered."
-msgstr "入库目标的车间线边仓；只提供工单仓库下的车间。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side_route_id
-msgid ""
-"Live (confirmed + active) process route that will be snapshotted into the "
-"MES order for the selected side."
-msgstr "将快照进制令单的所选面别生效（已确认 + 启用）工艺路线。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__lot_name
-msgid ""
-"Lot number stamped on the completion receipt lines. Leave empty to auto-"
-"generate one per MES order and day."
-msgstr "完工收货行上的批次号；留空按制令单+日期自动生成。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__binding_type
-msgid ""
-"Machine binding: a product SN was assembled into this machine SN. Nameplate "
-"mapping: scanning the nameplate SN resolves to this machine SN."
-msgstr "整机绑定：产品SN已装配进该整机SN。铭牌映射：扫铭牌SN解析到该整机SN。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__source
-msgid ""
-"Manual entries come from the UI; API entries are uploaded by the future "
-"device API."
-msgstr "手工条目来自界面；API条目由设备API上传。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_entry
-msgid ""
-"Manual flag, same semantics as the common route editor: SNs are fed into the"
-" order from operations flagged here."
-msgstr "手工标记，语义同公共路线编辑器：SN 从此处标记的工序投入工单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
-msgid ""
-"Manufacturing order %(mo)s has no BOM; cannot generate replenishment "
-"suggestions."
-msgstr "制造订单 %(mo)s 没有 BOM，无法生成补货建议。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"Manufacturing order %(production)s must have a whole-number quantity before "
-"internal serials can be generated."
-msgstr "生成厂内序列号前，制造订单 %(production)s 的数量必须为整数。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Material has already been issued for MES order(s) %(orders)s (%(pickings)s);"
-" cancellation is forbidden."
-msgstr "制令单 %(orders)s（%(pickings)s）已发料，禁止取消。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mrp_feeder_scan_wizard.py:0
-msgid ""
-"Material mismatch.\n"
-"Expected: %(expected)s\n"
-"Scanned: %(actual)s"
-msgstr ""
-"物料不匹配。\n"
-"应为：%(expected)s\n"
-"扫描：%(actual)s"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is already online; its management mode can no longer be "
-"changed."
-msgstr "制令单 %(name)s 已上线，管理模式不能再修改。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is already released; cancel it and reschedule instead of "
-"editing it."
-msgstr "MES 订单 %(name)s 已下达；请取消后重新排程，不要直接编辑。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is in production; the common route can no longer be "
-"synced into it."
-msgstr "制令单 %(name)s 已在生产中，不能再同步通用工艺路线。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is managed by operation reporting; SN station tracking is"
-" not available."
-msgstr "制令单 %(name)s 采用报工管理，不能使用 SN 过站。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is managed by SN station tracking; operation reporting is"
-" not available."
-msgstr "制令单 %(name)s 采用过站管理，不能使用工序报工。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s is offline: new SNs cannot be fed in. Boards already in "
-"progress keep flowing until they leave the end operation."
-msgstr "制令单 %(name)s 已下线：无法投入新 SN。已投入的板会继续流转至结束工序产出。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"MES order %(name)s must be in progress to complete products."
-msgstr "制令单 %(name)s 必须在生产中才能完工入库。"
-
-#. module: sn_wsd_mrp
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"Meter serial archives can only be generated for final assembly manufacturing"
-" orders."
-msgstr "仅总装制造订单可生成电表序列号档案。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__produced_qty
-msgid ""
-"Mirror of the output quantity, kept as the aggregation source of the "
-"manufacturing order MES figures."
-msgstr "产出数量的镜像，作为制造订单 MES 数字的汇总源。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
-msgid ""
-"No BoM substitute rule exists for the selected original product on this "
-"manufacturing order."
-msgstr "此制造订单中所选原始产品不存在物料清单替代规则。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
-msgid ""
-"No excess move lines could be derived from the consumed material lines."
-msgstr "无法从已消耗物料明细中推导出超额库存移动明细。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_route.py:0
-msgid ""
-"No released process route is bound to drawing number \"%(drawing)s\". Bind "
-"the route first."
-msgstr "图号\"%(drawing)s\"未绑定已生效的工艺路线，请先绑定。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_over_pick_count
-msgid ""
-"Number of done supplement (over-pick) pickings. Supplements are "
-"line-based: each picking carries only the components and quantities that "
-"were explicitly requested."
-msgstr "已验证补料单的数量。补料按明细行挑料：每张补料单只包含显式选择的组件和数量。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mes_pick_wizard.py:0
-msgid ""
-"Only active MES orders (released, picked or in progress) can pick material "
-"(current: %s)."
-msgstr "只有活跃状态（已下达/已领料/在产）的制令单才能领料（当前状态：%s）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Only active MES orders (released, picked or in progress) can supplement "
-"material (current: %s)."
-msgstr "只有活跃状态（已下达/已领料/生产中）的制令单可以补料（当前：%s）。"
-
-#. module: sn_wsd_mrp
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"Only one manufacturing order can be online for the same workshop and "
-"production line. Current online order: %s"
-msgstr "同一个车间和产线只能有一个制造订单上线。当前上线订单：%s"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"Only one manufacturing order can be online for the same workshop. Current "
-"online order: %s"
-msgstr "同一车间同时只能有一张制造订单上线。当前上线订单：%s"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Operation %(op)s (work center %(wc)s) is not part of the process route of "
-"MES order %(order)s."
-msgstr "工序 %(op)s（工作中心 %(wc)s）不在制令单 %(order)s 的工艺路线中。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Operation %(op)s cannot be reported yet: none of its predecessors is fully "
-"reported."
-msgstr "工序 %(op)s 暂不能报工：其前置工序尚无任一报满。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Operation %(op)s is not reachable for SN %(sn)s: none of its predecessors "
-"%(preds)s is completed yet."
-msgstr "SN %(sn)s 不可进入工序 %(op)s：其前置工序（%(preds)s）尚无任一完成。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"Operation \"%(op)s\" is not part of the route flow graph. Only operations on"
-" the flow chart can be selected."
-msgstr "工序「%(op)s」不在本路线流程图中，只能选择流程图里的工序。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__x_flow_operation_ids
-msgid ""
-"Operations used by the flow graph. Statistics settings may only reference "
-"these operations."
-msgstr "流程图中的工序，统计设置只能引用这些工序。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__remaining_qty
-msgid ""
-"Output quantity minus done quantity: how many units still need to be "
-"received to close the order."
-msgstr "产出数量减已完工数量：关单前还需完工入库的台数。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Over-picking: %(qty)s units would exceed the %(planned)s units of %(order)s "
-"(already picked: %(picked)s)."
-msgstr "超领：%(qty)s 件将超出制令单 %(order)s 的 %(planned)s 件（已领：%(picked)s 件）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
-msgid ""
-"Over-scheduling: only %(remaining)s unit(s) remain for the %(side)s side of "
-"%(mo)s; %(qty)s was entered. Please adjust."
-msgstr "排产数量超出可排量！%(mo)s 的 %(side)s面剩余可排 %(remaining)s，本次输入 %(qty)s。请调整。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Over-scheduling: the total %(side)s-side scheduled quantity of %(mo)s "
-"(%(total)s) would exceed its quantity (%(mo_qty)s). Remaining schedulable on"
-" this side: %(remaining)s."
-msgstr ""
-"超排：%(mo)s 的 %(side)s面已排总量（%(total)s）将超出其数量（%(mo_qty)s）。该面剩余可排：%(remaining)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Over-scheduling: the total scheduled quantity of %(mo)s (%(total)s) would "
-"exceed its quantity (%(mo_qty)s). Remaining schedulable: %(remaining)s."
-msgstr "排程超量：%(mo)s 的排产总量（%(total)s）将超出其数量（%(mo_qty)s）。剩余可排产：%(remaining)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Pack record %(record)s has no meter SN; cannot build its material SN lot."
-msgstr "包装记录 %(record)s 没有仪表SN，无法生成对应的物料SN批次。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route_drawing__product_id
-msgid ""
-"Pick the product by its drawing number; the drawing key is filled from the"
-" product internal reference."
-msgstr "按图号选择产品；图号键自动取自产品内部参考号。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
-#: code:addons/sn_wsd_mrp/models/mes_route.py:0
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Product %(product)s has a drawing number but no board side type declared. "
-"Declare it on the product before scheduling."
-msgstr "产品 %(product)s 有图号但未声明板面类型，请先在产品上维护板面类型后再排产。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Product %(product)s is a double-sided board; its MES orders must run on the "
-"Top (T) or Bottom (B) side."
-msgstr "产品 %(product)s 是双面板，其制令单面别必须为顶面 (T) 或底面 (B)。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Product %(product)s is a single-sided board; its MES orders must stay on the"
-" Single side."
-msgstr "产品 %(product)s 是单面板，其制令单面别必须为单面。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
-msgid ""
-"Production line %(line)s belongs to workshop %(line_ws)s, but manufacturing "
-"order %(mo)s runs in workshop %(mo_ws)s. Pick a line of the MO workshop."
-msgstr ""
-"产线 %(line)s 属于车间 %(line_ws)s，而制造订单 %(mo)s 的车间是 %(mo_ws)s。请选择 MO 所属车间的产线。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/product.py:0
-msgid ""
-"Products with a drawing number must declare their board side type (single or"
-" double)."
-msgstr "带图号的产品必须声明板面类型（单面/双面）。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side_scheduled_qty
-msgid ""
-"Quantity already scheduled on the selected side of this MO (non-cancelled "
-"MES orders only)."
-msgstr "该 MO 在所选面别上已排的数量（不含已撤销的制令单）。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
-msgid ""
-"Release this route? Previous released revision will be marked obsolete."
-msgstr "是否发布此路线？之前发布的版本将被标记为已作废。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Report exceeds the plan remainder: this batch of %(batch)s would exceed the "
-"remaining %(remaining)s of %(planned)s (NG does not consume quota; scrap and"
-" OK do)."
-msgstr ""
-"报工超出计划余量：本次 %(batch)s 将超过 %(planned)s 中剩余的 %(remaining)s（不良不占额度，合格与报废占用）。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_version_form
-msgid ""
-"Restore the route flow to this version? The restored flow is saved as a NEW "
-"version (rollback is always reversible)."
-msgstr "将工艺流程还原到此版本？还原后的流程将保存为新版本（回滚始终可逆）。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty_ng
-msgid ""
-"Reworkable defects of this batch. Pure statistic: it does not consume the "
-"plan quota; reworked boards are re-reported as OK."
-msgstr "本批次可返修不良。纯统计：不消耗计划额度；返修板重新按OK报工。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_scrap_qty
-msgid ""
-"Scrapped amount: SNs that left with result Scrap (station mode) or "
-"accumulated scrap reports (report mode)."
-msgstr "报废量：以报废结果离站的SN（过站模式）或累计报废报工（报工模式）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Select a workshop with a configured line-side location for a line-side "
-"completion."
-msgstr "入线边仓完工请选择已配置线边库位的车间。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"Serial capacity exceeded for manufacturing order %(production)s. Planned: "
-"%(planned)s, active: %(active)s, scrapped: %(scrapped)s."
-msgstr ""
-"制造订单 %(production)s 已超出序列号容量。计划：%(planned)s，在用：%(active)s，报废：%(scrapped)s。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route__is_customized
-msgid ""
-"Set on the first local edit: the order stops following the common route "
-"automatically until a manual sync accepts it back."
-msgstr "首次本地编辑时置位：工单停止自动跟随公共路线，直到手工同步接回。"
-
-#. module: sn_wsd_mrp
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"Set the workshop and production line before putting the manufacturing order "
-"online."
-msgstr "在将制造订单上线之前，请先设置车间和生产线。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_side
-msgid ""
-"Side to schedule. Over-scheduling is checked per side: Top and Bottom may "
-"each cover the full MO quantity."
-msgstr "要排产的面别。超排按面别独立校验：顶面 (T)、底面 (B) 各自最多可排满 MO 数量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_missing_sides
-msgid ""
-"Sides required by the product board side type with no matching live route "
-"for this MO (车间 + 图号 + 面别)."
-msgstr "产品板面类型要求、但该 MO 按（车间 + 图号 + 面别）匹配不到生效路线的面别。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_product_template__x_board_side
-#: model:ir.model.fields,help:sn_wsd_mrp.field_product_product__x_board_side
-msgid ""
-"Single: one single-side process route. Double: one Top (T) and one Bottom "
-"(B) process route, scheduled independently per side."
-msgstr "单面：需一条单面工艺路线。双面：顶面 (T)、底面 (B) 各一条，按面别独立排产。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s already left MES order %(order)s through end operation %(op)s; it "
-"cannot be fed into this order again."
-msgstr "SN %(sn)s 已经由结束工序 %(op)s 离开制令单 %(order)s，不能再投入本制令单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s has not entered MES order %(order)s yet; it must be fed in from a "
-"start operation (%(op)s is not one)."
-msgstr "SN %(sn)s 尚未投入制令单 %(order)s，必须从开始工序投入（%(op)s 不是开始工序）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s is in progress at operation %(op)s of order %(order)s; it must "
-"leave that station first."
-msgstr "SN %(sn)s 正在制令单 %(order)s 的工序 %(op)s 在制，需先出站。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s is still bound to MES order %(order)s; it must leave that order "
-"through its end operation before being fed into another one."
-msgstr "SN %(sn)s 仍绑定制令单 %(order)s，须在其结束工序产出后才能投入其他制令单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s is unknown; SNs register themselves when they enter a start "
-"operation."
-msgstr "SN %(sn)s 不存在；SN 会在进入开始工序时自动建档。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s reached the pass limit (%(limit)s) of operation %(op)s; send it "
-"to repair."
-msgstr "SN %(sn)s 已达工序 %(op)s 的过站次数上限（%(limit)s 次），请送维修。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"SN %(sn)s was scrapped at operation %(op)s of MES order %(order)s; it cannot"
-" be fed into this order again."
-msgstr "SN %(sn)s 已在制令单 %(order)s 的工序 %(op)s 报废，不能再投入本制令单。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_input_qty
-msgid ""
-"SNs fed into this order at the daily input operation (counted on entry); "
-"reported quantity in report mode."
-msgstr "在日投入工序投入本单的SN（投入时计数）；报工模式为报工数量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__output_qty
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_output_qty
-msgid ""
-"SNs that left the daily output operation with result OK; reported quantity "
-"in report mode."
-msgstr "以OK结果离开日产出的SN；报工模式为报工数量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_workorder_input_qty
-msgid ""
-"SNs that passed the work-order input operation; reported quantity in report "
-"mode."
-msgstr "通过工单投入工序的SN；报工模式为报工数量。"
-
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_manage_mode
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_route__manage_mode
-msgid ""
-"Station: SNs enter/leave each operation one by one.\n"
-"Report: operations are reported by quantity, no SN tracking.\n"
-"Locked once the order goes online."
-msgstr ""
-"过站：SN 逐个进出每道工序。\n"
-"报工：按数量报工，不跟踪 SN。\n"
-"订单上线后锁定。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return__activity_state
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_route__activity_state
-msgid ""
-"Status based on activities\n"
-"Overdue: Due date is already passed\n"
-"Today: Activity date is today\n"
-"Planned: Future activities."
-msgstr ""
-"基于活动的状态\n"
-"逾期：到期日已过\n"
-"今日：活动日期为今天\n"
-"已计划：未来的活动。基于活动的状态：\n"
-"已逾期：截止日期已过\n"
-"今天：活动日期为今天\n"
-"已计划：未来的活动。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"Submit or release the engineering process route before generating a "
-"production route."
-msgstr "生成制造工艺路线前，必须先提交或发布对应的设计工艺路线。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
-"must be active."
-msgstr "车间 '%(workshop)s' 的%(location_label)s库位 '%(location)s' 必须启用。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"The %(location_label)s location '%(location)s' of workshop '%(workshop)s' "
-"must belong to the manufacturing order company."
-msgstr "车间 '%(workshop)s' 的%(location_label)s库位 '%(location)s' 必须属于制造订单公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"The %(location_label)s location of workshop '%(workshop)s' must be located "
-"under the %(parent_label)s location '%(parent_location)s'."
-msgstr ""
-"车间 '%(workshop)s' 的%(location_label)s库位必须位于%(parent_label)s库位 "
-"'%(parent_location)s' 之下。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_route.py:0
-#: code:addons/sn_wsd_mrp/wizard/mes_schedule_wizard.py:0
-msgid ""
-"The %(side)s-side process route of product %(drawing)s is not maintained. "
-"Use the [Maintain Route] button to complete it before scheduling."
-msgstr "产品 %(drawing)s 的 %(side)s面工艺路线未维护，无法排产。请点击[去维护工艺路线]补维护后再排产。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The aging start operation must come before the aging end operation in the "
-"flow."
-msgstr "老化开始工序必须在流程中位于老化结束工序之前。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
-msgid ""
-"The bound SN: the product SN for a machine binding, the nameplate SN for a "
-"nameplate mapping."
-msgstr "被绑定的SN：整机绑定为产品SN，铭牌映射为铭牌SN。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-#: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
-#: code:addons/sn_wsd_mrp/models/mrp_team.py:0
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid ""
-"The coding rule is not configured. Please create an ir.sequence with code %s"
-" in Settings > Technical > Sequences."
-msgstr "编码规则未配置。请在 设置 > 技术 > 序列 中创建编码为 %s 的 ir.sequence。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_component_trace.py:0
-msgid ""
-"The component lot/serial must belong to the selected component product."
-msgstr "组件批次/序列号必须属于所选组件产品。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The daily input operation and the daily output operation cannot be the same."
-msgstr "制令单投入工序与制令单产出工序不能为同一道工序。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The daily input, daily output and work order input operations are required "
-"once the route has a flow graph."
-msgstr "工艺路线保存流程图后，必须配置制令单投入工序、制令单产出工序和工单投入工序。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
-msgid ""
-"The effective end date must be greater than or equal to the effective start "
-"date."
-msgstr "生效结束日期必须大于或等于生效开始日期。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The first operation of every manufacturing order must allow serial creation."
-" Check the following manufacturing orders: %(productions)s."
-msgstr "每张制造订单的第一道工序都必须允许创建序列号。请检查以下制造订单：%(productions)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The internal serial generation quantity cannot exceed the remaining quantity"
-" %(remaining)s."
-msgstr "内部序列号生成数量不能超过剩余数量 %(remaining)s。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The manufacturing batch already has all required active internal serials."
-msgstr "制造批次已经具有全部所需的有效厂内序列号。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
-msgid ""
-"The manufacturing batch must belong to the same company as the internal "
-"serial."
-msgstr "制造批次必须与厂内序列号属于同一家公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The manufacturing batch must belong to the same company as the manufacturing"
-" order."
-msgstr "制造批次必须与制造订单属于同一家公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The manufacturing batch planned quantity must be a whole number before "
-"internal serials can be generated."
-msgstr "生成厂内序列号前，制造批次计划数量必须为整数。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
-msgid ""
-"The manufacturing batch product must match the internal serial product."
-msgstr "制造批次产品必须与厂内序列号产品一致。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/manufacturing_batch.py:0
-msgid ""
-"The manufacturing batch product must match the manufacturing order product."
-msgstr "制造批次产品必须与制造订单产品一致。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
-msgid ""
-"The manufacturing order must belong to the internal serial manufacturing "
-"batch."
-msgstr "制造订单必须属于厂内序列号对应的制造批次。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/internal_serial.py:0
-msgid ""
-"The manufacturing order must belong to the same company as the internal "
-"serial."
-msgstr "制造订单必须与厂内序列号属于同一家公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The manufacturing order of %(order)s has no warehouse; cannot create the "
-"completion receipt."
-msgstr "%(order)s 的制造订单没有仓库，无法生成完工入库单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The manufacturing order of %(order)s has no warehouse; cannot generate the "
-"requisition."
-msgstr "%(order)s 的制造订单没有仓库，无法生成领料单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The manufacturing order of MES order %(order)s has no BoM; products cannot "
-"be completed without one."
-msgstr "制令单 %(order)s 的制造订单没有 BOM，不能完工入库。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The manufacturing order of MES order %(order)s has no BoM; scrap cannot be "
-"reported without one."
-msgstr "制令单 %(order)s 的制造订单没有 BOM，无法报报废。"
-
-#. module: sn_wsd_mrp
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"The manufacturing order production line does not match these work order work"
-" centers: %s"
-msgstr "制造订单生产线与这些工单工作中心不匹配：%s"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
-msgid ""
-"The operation type of %(mo)s has no warehouse; cannot generate replenishment"
-" suggestions."
-msgstr "制造订单 %(mo)s 的作业类型没有仓库，无法生成补货建议。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid ""
-"The ownership type is required when maintaining workshop or production line "
-"scope."
-msgstr "维护车间或生产线范围时，必须指定归属类型。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid ""
-"The previous work center cannot be the same as the current work center."
-msgstr "前序工作中心不能与当前工作中心相同。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_route.py:0
-msgid ""
-"The process route bound to drawing number \"%(drawing)s\" has no flow graph "
-"yet. Draw the flow before creating MES orders."
-msgstr "图号\"%(drawing)s\"绑定的工艺路线还没有流程图，请先绘制流程图再创建制令单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The process route must belong to the same company as the bill of material."
-msgstr "工艺路线必须与物料清单属于同一家公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_workcenter.py:0
-msgid ""
-"The production line is required for a production line level work center."
-msgstr "生产线级别的工作中心必须指定生产线。"
-
-#. module: sn_wsd_mrp
-#: code:addons/sn_wsd_mrp/models/mrp_production.py:0
-msgid ""
-"The production line must belong to the same company as the manufacturing "
-"order."
-msgstr "生产线必须与制造订单属于同一家公司。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The projected operation must belong to the process route selected on the "
-"bill of material."
-msgstr "规划的工序必须属于物料清单（BOM）上选择的工艺路线。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_mrp_bom_line_substitute_unique_bom_line_substitute
-msgid ""
-"The same substitute product can only be configured once for a BoM line."
-msgstr "同一个替代产品在一个物料清单行中只能配置一次。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The start operation and the end operation of a statistics section cannot be "
-"the same."
-msgstr "统计区间的开始工序与结束工序不能为同一道工序。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
-msgid ""
-"The start operation of a statistics section must come before the end "
-"operation in the flow."
-msgstr "统计区间的开始工序必须在流程中位于结束工序之前。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/wizard/mrp_substitute_wizard.py:0
-msgid ""
-"The substitute product is not present on the manufacturing order. Update the"
-" production BoM and regenerate the order before recording usage."
-msgstr "制造订单上不存在该替代产品。请更新生产 BOM 并重新生成订单后再记录使用。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The warehouse stock location of MES order %(order)s is missing or equals "
-"the line-side location."
-msgstr "制令单 %(order)s 的仓库库位缺失或与线边库位相同。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The work center of a start operation must sit on the production line of the "
-"MES order: %(wc)s is on %(wc_line)s, order %(order)s runs on %(order_line)s."
-msgstr ""
-"开始工序的工作中心必须与制令单同线体：%(wc)s 在 %(wc_line)s 上，而制令单 %(order)s 在 %(order_line)s 上。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The workshop line-side location must differ from the manufacturing order "
-"component source location."
-msgstr "车间线边库位不能与制造订单的组件来源库位相同。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"The workshop line-side location must differ from the warehouse stock "
-"location."
-msgstr "车间线边库位不能与仓库默认库位相同。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mrp_electronics.py:0
-msgid ""
-"There are %(count)s verified feeder positions missing actual material or "
-"loaded quantity."
-msgstr "有 %(count)s 个已核验的飞达位置缺少实际物料或上料数量。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_excess_return_line__picked_qty
-msgid ""
-"This is the quantity of product that is planned to be moved.Lowering this "
-"quantity does not generate a backorder.Changing this quantity on assigned "
-"moves affects the product reservation, and should be done with care."
-msgstr "这是计划移动的产品数量。降低此数量不会生成欠单。在已分配的库存移动上更改此数量会影响产品预留，应谨慎操作。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_api_mixin.py:0
-msgid ""
-"This serial cannot enter the current station according to the configured "
-"route."
-msgstr "根据配置的工艺路线，该序列号无法进入当前工位。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_route_check
-msgid ""
-"This workbench lists open manufacturing orders whose product board side, "
-"workshop and drawing number cannot match a live process route. Use the per-"
-"row button to create the missing route prefilled with the workshop, drawing "
-"number and side."
-msgstr ""
-"此工作台列出“产品板面 + 车间 + 图号”无法匹配生效工艺路线的在制制造订单。点击行内按钮，按预填的车间 + 图号 + 面别创建缺失的工艺路线。"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_mes_route_check
-msgid ""
-"This workbench lists open manufacturing orders whose product board\n"
-"            side, workshop and drawing number cannot match a live process route.\n"
-"            Use the per-row button to create the missing route prefilled with\n"
-"            the workshop, drawing number and side."
-msgstr ""
-"该工作台列出产品面别、车间与图号无法匹配生效工艺路线的在开制造订单。\n"
-"            用每行按钮创建缺失的路线，并预填车间、图号与面别。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_single_ok
-msgid ""
-"True when a live (confirmed + active) process route matches this MO for the "
-"single side (车间 + 图号; side-less routes count as single)."
-msgstr "该 MO 按（车间 + 图号）能匹配到单面生效（已确认 + 启用）工艺路线时为真（未设面别的路线视同单面）。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_bottom_ok
-msgid ""
-"True when a live process route matches this MO for the Bottom (B) side (车间 +"
-" 图号 + 面别)."
-msgstr "该 MO 按（车间 + 图号 + 面别）能匹配到底面 (B) 生效工艺路线时为真。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_top_ok
-msgid ""
-"True when a live process route matches this MO for the Top (T) side (车间 + 图号"
-" + 面别)."
-msgstr "该 MO 按（车间 + 图号 + 面别）能匹配到顶面 (T) 生效工艺路线时为真。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_route_missing
-msgid ""
-"True when at least one required side of this MO has no matching live process"
-" route."
-msgstr "该 MO 至少一个所需面别匹配不到生效工艺路线时为真。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_route_operation__is_input
-msgid ""
-"True when the operation has no predecessor: SNs enter the order from one of "
-"these."
-msgstr "当工序没有前置工序时为真：SN 从这些工序进入订单。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty_scrap
-msgid ""
-"Unrecoverable loss of this batch. Consumes the plan quota and generates a "
-"native scrap order per component."
-msgstr "本批次不可恢复损失。消耗计划额度并按组件生成原生报废单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/meter_verification.py:0
-msgid ""
-"Verification scheme %(code)s already has an effective version %(version)s in"
-" the overlapping date range."
-msgstr "验证方案 %(code)s 在重叠日期范围内已有一个生效版本 %(version)s。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__can_return_excess
-msgid ""
-"Whether finished raw moves contain excess material that can be returned."
-msgstr "已完成的原材料移动中是否包含可退回的超额物料。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__over_reason
-msgid ""
-"Why is material needed (consumption make-up, shortage, ...)? Stored on the "
-"supplement picking."
-msgstr "为什么需要此物料（损耗补账、缺料等）？记录在补料单上。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Work center %(wc)s belongs to workshop %(wc_shop)s, but MES order %(order)s "
-"runs in workshop %(order_shop)s."
-msgstr "工作中心 %(wc)s 属于车间 %(wc_shop)s，而制令单 %(order)s 在车间 %(order_shop)s 生产。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__workcenter_id
-msgid ""
-"Work center where the SN entered this operation (copied from the WIP row on "
-"leave, kept for equipment-level traceability)."
-msgstr "SN 进入该工序的工作中心（出站时从在制行复制，用于设备级追溯）。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Workshop %(workshop)s has no component (line-side) location configured; set "
-"it before generating the requisition."
-msgstr "车间 %(workshop)s 未配置组件（线边）库位；生成请购单前请先设置。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Workshop %(workshop)s has no component (line-side) location configured; "
-"set it before generating the supplement."
-msgstr "车间 %(workshop)s 未配置线边库位，请先配置再生成补料单。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Workshop %(ws)s does not belong to the warehouse of MES order %(order)s."
-msgstr "车间 %(ws)s 不属于制令单 %(order)s 的仓库。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Workshop %(ws)s has no line-side location configured; cannot backflush "
-"components of order %(order)s."
-msgstr "车间 %(ws)s 未配置线边库位，无法倒冲制令单 %(order)s 的物料。"
-
-#. module: sn_wsd_mrp
-#. odoo-python
-#: code:addons/sn_wsd_mrp/models/mes_order.py:0
-msgid ""
-"Workshop %(ws)s has no line-side location configured; cannot scrap "
-"components of order %(order)s."
-msgstr "车间 %(ws)s 未配置线边库位，无法报废制令单 %(order)s 的物料。"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom__x_workshop_id
-msgid ""
-"Workshop executing this BOM. Manufacturing orders inherit it (stored, "
-"editable) and resolve their process routes per workshop + drawing number + "
-"board side."
-msgstr "执行该物料清单的车间。制造订单继承此车间（存储、可改），并按（车间 + 图号 + 面别）解析工艺路线。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
