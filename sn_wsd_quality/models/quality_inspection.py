@@ -8,6 +8,12 @@ from odoo.tools.float_utils import float_compare
 
 _logger = logging.getLogger(__name__)
 
+SAMPLE_RECORD_MODE_SELECTION = [
+    ('none', 'No Sample Values'),
+    ('per_lot', 'One Value per Lot'),
+    ('per_sample', 'One Value per Sample'),
+]
+
 
 class QualityInspectionScheme(models.Model):
     _name = 'sn.wsd.quality.inspection.scheme'
@@ -346,9 +352,16 @@ class QualityInspectionSchemeLine(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+    )
     instruction = fields.Text(string='Instruction')
 
     _plan_item_code_uniq = models.Constraint(
@@ -399,9 +412,11 @@ class QualityInspectionSchemeLine(models.Model):
             'required': item.required,
             'lower_limit': item.lower_limit,
             'upper_limit': item.upper_limit,
+            'nominal_value': item.nominal_value,
             'expected_value': item.expected_value,
             'selection_values': item.selection_values,
             'unit': item.unit,
+            'sample_record_mode': item.sample_record_mode,
             'instruction': item.instruction,
         }
 
@@ -448,9 +463,17 @@ class QualityInspectionItem(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+        help='Controls whether this item gets one lot value, one value per sample, or no separate value rows.',
+    )
     instruction = fields.Text(string='Instruction')
     note = fields.Text(string='Notes')
 
@@ -458,6 +481,13 @@ class QualityInspectionItem(models.Model):
         'unique(company_id, code)',
         'The inspection item code must be unique per company.',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'sample_record_mode' not in vals:
+                vals['sample_record_mode'] = 'per_sample' if vals.get('item_type') == 'numeric' else 'none'
+        return super().create(vals_list)
 
     @api.constrains('item_type', 'lower_limit', 'upper_limit')
     def _check_numeric_limits(self):
@@ -537,9 +567,13 @@ class QualityInspectionItemGroupLine(models.Model):
     required = fields.Boolean(related='item_id.required', string='Required', store=True, readonly=True)
     lower_limit = fields.Float(related='item_id.lower_limit', string='Lower Limit', store=True, readonly=True)
     upper_limit = fields.Float(related='item_id.upper_limit', string='Upper Limit', store=True, readonly=True)
+    nominal_value = fields.Float(related='item_id.nominal_value', string='Nominal Value', store=True, readonly=True)
     expected_value = fields.Char(related='item_id.expected_value', string='Expected Value', store=True, readonly=True)
     selection_values = fields.Char(related='item_id.selection_values', string='Allowed Values', store=True, readonly=True)
     unit = fields.Char(related='item_id.unit', string='Unit', store=True, readonly=True)
+    sample_record_mode = fields.Selection(
+        related='item_id.sample_record_mode', string='Sample Recording', store=True, readonly=True,
+    )
 
     _group_item_uniq = models.Constraint(
         'unique(group_id, item_id)',
@@ -968,9 +1002,11 @@ class QualityInspection(models.Model):
                 'required': line.required,
                 'lower_limit': line.lower_limit,
                 'upper_limit': line.upper_limit,
+                'nominal_value': line.nominal_value,
                 'expected_value': line.expected_value,
                 'selection_values': line.selection_values,
                 'unit': line.unit,
+                'sample_record_mode': line.sample_record_mode,
                 'instruction': line.instruction,
             })
             for line in scheme.line_ids
@@ -1245,9 +1281,16 @@ class QualityInspectionLine(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+    )
     instruction = fields.Text(string='Instruction')
     is_checked = fields.Boolean(string='Checked')
     measured_value = fields.Float(string='Measured Value')

@@ -12,7 +12,7 @@
                 </div>
             </header>
             <main class="flex-grow-1 d-flex flex-column justify-content-sm-center pb-4">
-                <div t-if="state.ready &amp;&amp; !state.functions.length"
+                <div t-if="state.ready &amp;&amp; !state.error &amp;&amp; !state.functions.length"
                      class="text-center text-muted p-4" t-out="emptyLabel"/>
                 <div class="o_sn_wsd_grid2 d-grid gap-3 px-3">
                     <button t-foreach="state.functions" t-as="fn" t-key="fn.menu_id"
