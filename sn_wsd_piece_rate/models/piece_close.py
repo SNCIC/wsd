@@ -40,6 +40,10 @@ class SnWsdPieceCloseLog(models.Model):
 
     @api.model
     def _period_of(self, date):
+        # RPC 写入路径（create/write 的 vals）里日期是字符串原文，与
+        # ORM 读出的 date 对象共用本工具——统一归一化，防 strftime 崩
+        if date and isinstance(date, str):
+            date = fields.Date.to_date(date)
         return date.strftime('%Y-%m') if date else None
 
     @api.model
