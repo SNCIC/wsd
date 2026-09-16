@@ -1019,12 +1019,23 @@ class MesOrder(models.Model):
             if net_qty > 0.0001:
                 lots_by_product.setdefault(lot.product_id.id, []).append((lot, net_qty))
         covered = set(lots_by_product)
+        # 被替代主料 → 实际在机替代料的流水（报废落在替代料卷上）；
+        # 覆盖判定走替代料规则（全局或命中本单）
+        substitute_flows = {}
         if covered:
-            # BoM lines substituted by a scanned flow product are covered too
-            for origin in self.env['product.product'].search([
-                ('substitute_ids', 'in', list(covered)),
-            ]):
-                covered.add(origin.id)
+            flowed = self.env['product.product'].browse(covered)
+            rules = self.env['sn.wsd.substitute.rule'].search([
+                ('company_id', '=', self.company_id.id),
+                ('substitute_product_id', 'in', flowed.ids),
+                '|', ('scope', '=', 'all'), ('mes_order_ids', 'in', self.id),
+            ])
+            for rule in rules:
+                substitute_flows.setdefault(
+                    rule.original_product_id.id,
+                    (rule.substitute_product_id,
+                     lots_by_product[rule.substitute_product_id.id]),
+                )
+                covered.add(rule.original_product_id.id)
 
         per_board = qty_scrap / bom.product_qty
         # 按面别过滤：报废同一张 BOM 但只扣本面的行（单面单=single 行）
@@ -1037,14 +1048,20 @@ class MesOrder(models.Model):
             if need <= 0.0001:
                 continue
             if line.product_id.id in covered:
-                total_net = sum(
-                    net for _, net in lots_by_product[line.product_id.id])
-                for lot, net_qty in lots_by_product[line.product_id.id]:
+                if line.product_id.id in lots_by_product:
+                    scrap_product, lot_qtys = (
+                        line.product_id, lots_by_product[line.product_id.id])
+                else:
+                    # 被替代行：本单实际未耗（用的是替代料），报废落在
+                    # 在机替代料的卷上，不重复报废主料
+                    scrap_product, lot_qtys = substitute_flows[line.product_id.id]
+                total_net = sum(net for _, net in lot_qtys)
+                for lot, net_qty in lot_qtys:
                     scrap_qty = need * net_qty / total_net
                     if scrap_qty <= 0.0001:
                         continue
                     Scrap.sudo().create(
-                        scrap_vals(line.product_id, lot, scrap_qty)
+                        scrap_vals(scrap_product, lot, scrap_qty)
                     ).do_scrap()
                 continue
             if line.product_id.tracking != 'none':
@@ -1286,11 +1303,13 @@ class MesOrder(models.Model):
                         'picked': True,
                     })],
                 })
-            # 被流水产品替代的 BOM 产品不再按 BOM 扣（已被替代上线）
-            for origin in self.env['product.product'].search([
-                ('substitute_ids', 'in', list(flow_product_ids)),
-            ]):
-                flow_product_ids.add(origin.id)
+            # 被流水产品替代的 BOM 产品不再按 BOM 扣（已被替代上线）——
+            # 覆盖判定走替代料规则（全局或命中本单）
+            if flow_product_ids:
+                flowed = self.env['product.product'].browse(flow_product_ids)
+                origins = self.env['sn.wsd.substitute.rule']._get_origin_products(
+                    self.company_id, flowed, mes_order=self)
+                flow_product_ids |= set(origins.ids)
 
         bom_ratio = qty / bom.product_qty
         # 按面别过滤：BOM 兜底只扣本面的行（单面单=single 行）

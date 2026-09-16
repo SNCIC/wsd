@@ -100,13 +100,14 @@ class MrpProductionExtend(models.Model):
             used_moves = self.env['stock.move']
             net_products = set(by_product.keys())
             # 替代料上线的原 BOM 行同样清零：流水产品可替代的目标产品，
-            # 本单实际未耗（被替代），不得再按 BOM 倒冲重复扣料
-            for net_product in list(net_products):
-                for origin in self.env['product.product'].search([
-                    ('substitute_ids', 'in', net_product.ids),
-                ]):
-                    if origin not in net_products:
-                        net_products.add(origin)
+            # 本单实际未耗（被替代），不得再按 BOM 倒冲重复扣料——
+            # 覆盖判定走替代料规则（全局或命中本单；无 MES 单上下文仅全局）
+            if net_products:
+                flowed = self.env['product.product'].concat(*net_products)
+                net_products |= set(self.env['sn.wsd.substitute.rule']._get_origin_products(
+                    production.company_id, flowed,
+                    mes_order=production.x_mes_order_id,
+                ).ids)
             for product, lot_qtys in by_product.items():
                 total = sum(qty for _lot, qty in lot_qtys)
                 move = (open_moves - used_moves).filtered(
