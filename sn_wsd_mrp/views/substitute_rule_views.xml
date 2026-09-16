@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_substitute_rule_list" model="ir.ui.view">
+        <field name="name">sn.wsd.substitute.rule.list</field>
+        <field name="model">sn.wsd.substitute.rule</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="company_id" column_invisible="True"/>
+                <field name="original_product_id"/>
+                <field name="original_material_specification" optional="show"/>
+                <field name="substitute_product_id"/>
+                <field name="substitute_material_specification" optional="show"/>
+                <field name="scope"/>
+                <field name="mes_order_count" optional="show"/>
+                <field name="note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_substitute_rule_form" model="ir.ui.view">
+        <field name="name">sn.wsd.substitute.rule.form</field>
+        <field name="model">sn.wsd.substitute.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="original_product_id"/>
+                            <field name="original_material_specification"/>
+                            <field name="substitute_product_id"
+                                   domain="[('id', '!=', original_product_id)]"/>
+                            <field name="substitute_material_specification"/>
+                        </group>
+                        <group>
+                            <field name="scope" widget="radio"/>
+                            <field name="mes_order_ids" widget="many2many_tags"
+                                   invisible="scope != 'orders'"
+                                   context="{'default_company_id': company_id}"/>
+                            <field name="mes_order_count" invisible="1"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_substitute_rule_search" model="ir.ui.view">
+        <field name="name">sn.wsd.substitute.rule.search</field>
+        <field name="model">sn.wsd.substitute.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="original_product_id"/>
+                <field name="substitute_product_id"/>
+                <filter string="All Orders" name="scope_all"
+                        domain="[('scope', '=', 'all')]"/>
+                <filter string="Specific Orders" name="scope_orders"
+                        domain="[('scope', '=', 'orders')]"/>
+                <group>
+                    <filter string="Original Product" name="group_original"
+                            context="{'group_by': 'original_product_id'}"/>
+                    <filter string="Substitute Product" name="group_substitute"
+                            context="{'group_by': 'substitute_product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_substitute_rule" model="ir.actions.act_window">
+        <field name="name">Substitute Rules</field>
+        <field name="res_model">sn.wsd.substitute.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a substitute rule
+            </p>
+            <p>
+                Define which material may replace another one when loading SMT
+                stations. Rules apply to all orders by default, or only to the
+                selected ones.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_substitute_rule"
+              name="Substitute Rules"
+              parent="stock.menu_stock_inventory_control"
+              action="action_sn_wsd_substitute_rule"
+              groups="mrp.group_mrp_user"
+              sequence="10"/>
+</odoo>
