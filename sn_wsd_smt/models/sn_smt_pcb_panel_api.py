@@ -26,7 +26,7 @@ class SnSmtPcbPanelApi(models.AbstractModel):
             [('company_registry', '=', code)], limit=1)
         if not company:
             return None, {
-                'code': 404,
+                'code': 422,
                 'message': _('Organization %s does not exist.', code)}
         return company, None
 
@@ -66,7 +66,7 @@ class SnSmtPcbPanelApi(models.AbstractModel):
                 ('company_id', '=', self.env.company.id),
             ], limit=1)
             if not serial:
-                return {'code': 404, 'message': _(
+                return {'code': 422, 'message': _(
                     'Record #%(index)s: product SN [%(sn)s] does not exist.',
                     index=index, sn=pro_sn)}
 
