@@ -181,3 +181,10 @@ class TestSubstituteLoading(TransactionCase):
         row = self._online_row(self.other_order)
         self.assertEqual(row.is_load, 'Y')
         self.assertEqual(row.loaded_material_lot_id, self.lot_a1)
+
+    def test_product_level_relation_not_honored(self):
+        """R4：仅产品级 substitute_ids（无规则）不再放行。"""
+        self.product_a.substitute_ids = [(6, 0, [self.product_a1.id])]
+        with self.assertRaises(ValidationError):
+            self.service.load_material(
+                self.mes_order, self.workcenter, '1.T1', '25', 'SUB-LOT-A1')

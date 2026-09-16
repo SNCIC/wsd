@@ -223,6 +223,8 @@ class MrpProduction(models.Model):
         return self.bom_id._find_bom_line_by_product(product) if self.bom_id else self.env['mrp.bom.line']
 
     def _is_allowed_substitute_product(self, original_product, candidate_product):
+        """BOM 行级替代判定（产品级 substitute_ids 已退役，替代料统一走
+        sn.wsd.substitute.rule——上料放行链另含规则分支）。"""
         self.ensure_one()
         if not original_product or not candidate_product:
             return False
@@ -232,7 +234,7 @@ class MrpProduction(models.Model):
             bom_line = self._find_bom_line_by_product(original_product)
             if bom_line and candidate_product in bom_line.substitute_line_ids.substitute_product_id:
                 return True
-        return candidate_product in original_product.substitute_ids or original_product in candidate_product.substitute_for_ids
+        return False
 
     def _find_matching_raw_moves(self, material_product):
         self.ensure_one()

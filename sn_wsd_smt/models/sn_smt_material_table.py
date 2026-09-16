@@ -586,7 +586,8 @@ class SnSmtOperationMixin(models.AbstractModel):
         production = mes_order.production_id
         if production:
             return production._is_allowed_substitute_product(required_product, candidate_product)
-        return candidate_product in required_product.substitute_ids or required_product in candidate_product.substitute_for_ids
+        # 产品级 substitute_ids 已退役：替代放行只认规则与 BOM 行级
+        return False
 
     @api.model
     def _allowed_requirement_label(self, mes_order, required_product):

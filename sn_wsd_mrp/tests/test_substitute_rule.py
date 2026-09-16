@@ -142,3 +142,17 @@ class TestSubstituteRule(TransactionCase):
         with self.assertRaises(AccessError):
             self.env['sn.wsd.substitute.rule'].with_user(self.mrp_user).create(
                 dict(self.rule_vals, substitute_product_id=self.product_b.id))
+
+    def test_migrate_product_substitute_rules(self):
+        """R4：产品级关系迁移为全局规则，幂等且双向数据生成两条。"""
+        self.product_a.write({'substitute_ids': [(6, 0, [self.product_a1.id])]})
+        self.product_b.write({'substitute_ids': [(6, 0, [self.product_a.id])]})
+        rules = self.env['sn.wsd.substitute.rule']._migrate_product_substitute_rules()
+        self.assertEqual(
+            set((r.original_product_id, r.substitute_product_id) for r in rules),
+            {(self.product_a, self.product_a1), (self.product_b, self.product_a)},
+        )
+        self.assertTrue(all(r.scope == 'all' for r in rules))
+        # 幂等：重跑不再生成
+        self.assertFalse(
+            self.env['sn.wsd.substitute.rule']._migrate_product_substitute_rules())

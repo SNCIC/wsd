@@ -236,3 +236,20 @@ class TestSubstituteBackflush(TransactionCase):
         self.assertFalse(a_move.filtered('picked'),
                          'substituted BOM move must not be consumed')
         self.assertAlmostEqual(sum(a1_move.mapped('quantity')), 6.0)
+
+    def test_product_level_relation_not_covered(self):
+        """R4：仅产品级 substitute_ids（无规则）不参与覆盖——A 无流水
+        仍按 BOM 兜底。"""
+        comp_a = self._component('SBF-L-A')
+        comp_a1 = self._component('SBF-L-A1')
+        self._lot(comp_a, 'SBF-LOT-LA')
+        lot_a1 = self._lot(comp_a1, 'SBF-LOT-LA1')
+        order, mo, rop, online = self._order([(comp_a, 3.0)])
+        comp_a.substitute_ids = [(6, 0, [comp_a1.id])]
+        self._flow(order, rop, online, lot_a1, 6.0)
+        order.x_output_qty = 10.0
+        moves = order._mes_backflush(10.0)
+        fallback = moves.filtered(
+            lambda m: m.product_id == comp_a
+            and 'BOM fallback' in (m.description_picking_manual or ''))
+        self.assertAlmostEqual(sum(fallback.mapped('product_uom_qty')), 3.0)
