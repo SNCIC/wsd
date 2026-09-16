@@ -144,3 +144,16 @@ class TestLockClose(PieceRateTestCommon):
         wizard = self.env['sn.wsd.piece.close.wizard'].create({'period': '2026-13'})
         with self.assertRaises(ValidationError):
             wizard.action_close()
+
+    def test_rpc_string_date_month_gate(self):
+        """RPC 写入路径的日期是字符串原文（'按过站计算'按钮实踩）：
+        月关账判定不得 AttributeError；关账月仍正常拦截。"""
+        # 开放月：字符串日期建单不崩
+        settlement = self._draft(date=self.AUG)
+        self.assertEqual(settlement.date.strftime('%Y-%m'), '2026-08')
+        # 关账月：字符串日期建单被月关账拦截（回归点：此前 strftime 崩）
+        wizard = self.env['sn.wsd.piece.close.wizard'].create({
+            'period': '2026-08', 'acknowledge_drafts': True})
+        wizard.action_close()
+        with self.assertRaises(UserError):
+            self._draft(qty=50.0, date=self.AUG)
