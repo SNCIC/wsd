@@ -3664,6 +3664,11 @@ msgstr "WSD 质量：生成 IPQC 检验"
 
 #. module: sn_wsd_quality
 #: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "No effective IQC inspection scheme was found for this product."
+msgstr "未找到此产品的有效来料检验(IQC)方案。"
+
+#. module: sn_wsd_quality
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
 msgid "No effective OQC inspection scheme was found for this work order."
 msgstr "未找到此工单的有效出厂检验(OQC)方案。"
 
