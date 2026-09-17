@@ -1037,14 +1037,17 @@ class MesOrder(models.Model):
                 )
                 covered.add(rule.original_product_id.id)
 
-        per_board = qty_scrap / bom.product_qty
-        # 按面别过滤：报废同一张 BOM 但只扣本面的行（单面单=single 行）
-        scrap_side_lines = bom.bom_line_ids
+        # 份额源 = MO 组件（与领料/倒冲同源）；量按整张 MO 展开 × 报废比例
+        mo_qty = self.production_id.product_qty or 0.0
+        per_board = (qty_scrap / mo_qty) if mo_qty else 0.0
+        scrap_side_moves = self.production_id.move_raw_ids.filtered(
+            lambda m: m.state != 'cancel')
         if self.x_side:
-            scrap_side_lines = scrap_side_lines.filtered(
-                lambda l: l.x_board_side == self.x_side)
-        for line in scrap_side_lines:
-            need = line.product_qty * per_board
+            scrap_side_moves = scrap_side_moves.filtered(
+                lambda m: not m.bom_line_id
+                or m.bom_line_id.x_board_side == self.x_side)
+        for line in scrap_side_moves:
+            need = line.product_uom_qty * per_board
             if need <= 0.0001:
                 continue
             if line.product_id.id in covered:
@@ -1281,6 +1284,8 @@ class MesOrder(models.Model):
                     continue
                 ensure_available(lot.product_id, consume_qty, lot=lot)
                 flow_product_ids.add(lot.product_id.id)
+                # 挂回 MO 组件：消耗数量/批次在 MO 组件行可见；BOM 内料带
+                # bom_line 聚到原行，BOM 外替代料自成新行（替代消耗可追溯）
                 moves |= StockMove.create({
                     'description_picking_manual': move_label or _('MES completion %(order)s', order=self.name),
                     'product_id': lot.product_id.id,
@@ -1291,6 +1296,8 @@ class MesOrder(models.Model):
                     'location_dest_id': production_loc.id,
                     'company_id': self.company_id.id,
                     'origin': self.name,
+                    'raw_material_production_id': self.production_id.id,
+                    'bom_line_id': bom._find_bom_line_by_product(lot.product_id).id,
                     'move_line_ids': [(0, 0, {
                         'product_id': lot.product_id.id,
                         'product_uom_id': lot.product_id.uom_id.id,
@@ -1311,17 +1318,21 @@ class MesOrder(models.Model):
                     self.company_id, flowed, mes_order=self)
                 flow_product_ids |= set(origins.ids)
 
-        bom_ratio = qty / bom.product_qty
-        # 按面别过滤：BOM 兜底只扣本面的行（单面单=single 行）
-        backflush_side_lines = bom.bom_line_ids
+        # 兜底需求源 = MO 组件（move_raw_ids）：用户在 MO 上增删组件直接
+        # 反映到完工倒扣（与领料同源）；量按整张 MO 展开 × 完工比例
+        mo_qty = self.production_id.product_qty or 0.0
+        mo_ratio = (qty / mo_qty) if mo_qty else 0.0
+        backflush_moves = self.production_id.move_raw_ids.filtered(
+            lambda m: m.state != 'cancel')
         if self.x_side:
-            backflush_side_lines = backflush_side_lines.filtered(
-                lambda l: l.x_board_side == self.x_side)
+            backflush_moves = backflush_moves.filtered(
+                lambda m: not m.bom_line_id
+                or m.bom_line_id.x_board_side == self.x_side)
         fallback_marker = _('BOM fallback (no consumption flow)')
-        for line in backflush_side_lines:
+        for line in backflush_moves:
             if line.product_id.id in flow_product_ids:
                 continue
-            consume_qty = line.product_qty * bom_ratio
+            consume_qty = line.product_uom_qty * mo_ratio
             if consume_qty <= 0.0001:
                 continue
             # BOM 兜底（backflush-tracked-bom-fallback）：无流水组件一律按
@@ -1335,13 +1346,16 @@ class MesOrder(models.Model):
                     move_label or _('MES completion %(order)s', order=self.name),
                     fallback_marker),
                 'product_id': line.product_id.id,
-                'product_uom': line.product_uom_id.id,
+                'product_uom': line.product_uom.id,
                 'product_uom_qty': consume_qty,
                 'picked': True,
                 'location_id': line_side.id,
                 'location_dest_id': production_loc.id,
                 'company_id': self.company_id.id,
                 'origin': self.name,
+                # 挂回 MO 组件（已消耗数量/批次可见），带源 bom_line 聚行
+                'raw_material_production_id': self.production_id.id,
+                'bom_line_id': line.bom_line_id.id,
             }
             if line.product_id.tracking == 'none':
                 # 散料：无批次单行（现状）
@@ -1514,7 +1528,19 @@ class MesOrder(models.Model):
                 **self._mes_finished_line_lot_vals(lot),
             })]
         elif mo.product_id.tracking != 'lot':
-            move_vals.update({'quantity': qty, 'picked': True})
+            # 散装成品：显式 picked move line 给足处理数量——只写 move 层
+            # quantity 会在确认后因无行被重置，收货单因生产位无成品库存
+            # 被可用性拦死（"缺少产品"）。picked 行与批次成品路径同口径，
+            # 验证不过可用性（生产位允许负库存，倒冲组件已落该位对冲）
+            move_vals['move_line_ids'] = [(0, 0, {
+                'product_id': mo.product_id.id,
+                'product_uom_id': mo.product_uom_id.id,
+                'quantity': qty,
+                'location_id': src.id,
+                'location_dest_id': dest.id,
+                'company_id': self.company_id.id,
+                'picked': True,
+            })]
         # tracking='lot' 且成品库路径：仅需求量（不带数量/行）——验证依赖
         # 系统默认约束（无处理数量拦截），标签向导挂码行后方可过账
         self.env['stock.move'].create(move_vals)
@@ -1857,24 +1883,32 @@ class MesOrder(models.Model):
                     'default_location_dest_id': line_side.id,
                 })
                 warehouse.picking_type_issue_id = picking_type.id
-            # this batch's share of the BOM, in BOM-line UoM, capped by what
-            # is still open on the whole order (open + done pickings count,
-            # so the accumulated issue can never exceed the order scope)
-            batch_ratio = (qty_this / bom.product_qty) if bom.product_qty else 0.0
-            total_ratio = (order.planned_qty / bom.product_qty) if bom.product_qty else 0.0
+            # 需求源 = MO 组件（move_raw_ids）：用户在 MO 上增删组件直接
+            # 反映到领料（加替代料行=替代料领料出口、删组件=不再领）；
+            # move 的量按整张 MO 展开成台数份额。预发行标志经 bom_line。
+            mo_moves = order.production_id.move_raw_ids.filtered(
+                lambda m: m.state != 'cancel')
+            if order.x_side:
+                mo_moves = mo_moves.filtered(
+                    lambda m: not m.bom_line_id
+                    or m.bom_line_id.x_board_side == order.x_side)
+            mo_moves = mo_moves.filtered(
+                lambda m: not m.bom_line_id or not m.bom_line_id.x_advance_issue)
+            mo_qty = order.production_id.product_qty or 0.0
+            batch_ratio = (qty_this / mo_qty) if mo_qty else 0.0
+            total_ratio = (order.planned_qty / mo_qty) if mo_qty else 0.0
             open_pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel')
-            # 覆盖即止预检：领满份额后（already ≥ BOM 行份额，批次料物理上
+            # 覆盖即止预检：领满份额后（already ≥ 组件份额，批次料物理上
             # 也常被整卷带走），后续领料的组件全部被 already 封顶跳过——
             # 此时不建空领料单
-            def _issue_qty_for(line):
-                batch_qty = line.product_qty * batch_ratio
-                already = order._mes_issued_qty(line.product_id, open_pickings)
-                remaining_total = line.product_qty * total_ratio - already
+            def _issue_qty_for(move):
+                batch_qty = move.product_uom_qty * batch_ratio
+                already = order._mes_issued_qty(move.product_id, open_pickings)
+                remaining_total = move.product_uom_qty * total_ratio - already
                 return min(batch_qty, remaining_total)
             if all(
-                _issue_qty_for(line) <= 0.0001
-                for line in bom.bom_line_ids
-                if not line.x_advance_issue
+                _issue_qty_for(move) <= 0.0001
+                for move in mo_moves
             ):
                 raise UserError(_(
                     'All components of MES order %(order)s are already covered '
@@ -1888,23 +1922,16 @@ class MesOrder(models.Model):
                 'x_mes_order_id': order.id,
                 'x_mes_order_qty': qty_this,
             })
-            # 按面别过滤 BOM 行：领料只领本面的行（单面单=single 行）
-            side_lines = bom.bom_line_ids
-            if order.x_side:
-                side_lines = side_lines.filtered(
-                    lambda l: l.x_board_side == order.x_side)
-            for line in side_lines:
-                if line.x_advance_issue:
-                    continue  # pre-issued to the line side, never on MES pickings
-                batch_qty = line.product_qty * batch_ratio
-                already = order._mes_issued_qty(line.product_id, open_pickings)
-                remaining_total = line.product_qty * total_ratio - already
+            for move in mo_moves:
+                batch_qty = move.product_uom_qty * batch_ratio
+                already = order._mes_issued_qty(move.product_id, open_pickings)
+                remaining_total = move.product_uom_qty * total_ratio - already
                 qty = min(batch_qty, remaining_total)
                 if qty <= 0.0001:
                     continue  # nothing left to issue for this component
                 move_vals = {
-                    'product_id': line.product_id.id,
-                    'product_uom': line.product_uom_id.id,
+                    'product_id': move.product_id.id,
+                    'product_uom': move.product_uom.id,
                     'product_uom_qty': qty,
                     'picking_id': picking.id,
                     'location_id': src.id,
@@ -1954,10 +1981,15 @@ class MesOrder(models.Model):
             raise UserError(_(
                 'No BOM on the manufacturing order; cannot generate '
                 'the supplement.'))
-        side_products = bom.bom_line_ids.mapped('product_id')
+        # 补料范围 = MO 组件（与领料同源）：MO 上加的行（如替代料）可补
+        side_products = production.move_raw_ids.filtered(
+            lambda m: m.state != 'cancel').mapped('product_id')
         if order.x_side:
-            side_products = bom.bom_line_ids.filtered(
-                lambda l: l.x_board_side == order.x_side).mapped('product_id')
+            side_products = production.move_raw_ids.filtered(
+                lambda m: m.state != 'cancel'
+                and (not m.bom_line_id
+                     or m.bom_line_id.x_board_side == order.x_side)
+            ).mapped('product_id')
         for product, _qty in lines:
             if product not in side_products:
                 raise UserError(_(
@@ -2064,7 +2096,12 @@ class MesOrder(models.Model):
                     'cannot generate the return.', order=order.name))
             dest = warehouse.lot_stock_id
             picking_type = order._mes_return_picking_type(warehouse)
-            batch_ratio = (qty / bom.product_qty) if bom.product_qty else 0.0
+            # 退料源 = MO 组件（与领料同源）：MO 增删组件同步反映
+            mo_qty = production.product_qty or 0.0
+            batch_ratio = (qty / mo_qty) if mo_qty else 0.0
+            return_moves = production.move_raw_ids.filtered(
+                lambda m: m.state != 'cancel'
+                and (not m.bom_line_id or not m.bom_line_id.x_advance_issue))
             picking = StockPicking.create({
                 'picking_type_id': picking_type.id,
                 'origin': order.name,
@@ -2075,15 +2112,13 @@ class MesOrder(models.Model):
                 'x_mes_order_qty': -qty,
             })
             created_any = False
-            for line in bom.bom_line_ids:
-                if line.x_advance_issue:
-                    continue  # pre-issued lines never flow through MES pickings
-                qty_line = line.product_qty * batch_ratio
+            for line in return_moves:
+                qty_line = line.product_uom_qty * batch_ratio
                 if qty_line <= 0.0001:
                     continue
                 move_vals = {
                     'product_id': line.product_id.id,
-                    'product_uom': line.product_uom_id.id,
+                    'product_uom': line.product_uom.id,
                     'product_uom_qty': qty_line,
                     'picking_id': picking.id,
                     'location_id': line_side.id,
@@ -2093,7 +2128,7 @@ class MesOrder(models.Model):
                 if line.product_id.tracking == 'lot':
                     # 整卷退：线边在库批次按 FEFO 覆盖份额即止，一卷一行；
                     # 线边无该批次（已消耗）则该行不退
-                    need_base = line.product_uom_id._compute_quantity(
+                    need_base = line.product_uom._compute_quantity(
                         qty_line, line.product_id.uom_id)
                     reels = order._mes_issue_reel_lines(
                         line.product_id, line_side, need_base)
@@ -2101,7 +2136,7 @@ class MesOrder(models.Model):
                         continue
                     move_vals['product_uom_qty'] = line.product_id.uom_id._compute_quantity(
                         sum(reel_qty for _lot, reel_qty in reels),
-                        line.product_uom_id)
+                        line.product_uom)
                     move_vals['move_line_ids'] = [(0, 0, {
                         'picking_id': picking.id,
                         'product_id': line.product_id.id,
@@ -2122,7 +2157,7 @@ class MesOrder(models.Model):
                     )
                     available_base = (groups[0][0] or 0.0) if groups else 0.0
                     available = line.product_id.uom_id._compute_quantity(
-                        available_base, line.product_uom_id)
+                        available_base, line.product_uom)
                     qty_line = min(qty_line, available)
                     if qty_line <= 0.0001:
                         continue

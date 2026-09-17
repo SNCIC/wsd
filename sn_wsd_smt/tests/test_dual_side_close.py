@@ -211,9 +211,11 @@ class TestDualSideClose(TransactionCase):
         self.assertAlmostEqual(order.x_done_qty, 2.0)
         self.assertAlmostEqual(self._line_qty(self.cap, self.lot_cap), 96.0)
         self.assertAlmostEqual(self._line_qty(self.screw), 92.0)
-        moves = self.env['stock.move'].search([
-            ('origin', '=', order.name), ('state', '=', 'done'),
-            ('product_id', 'in', (self.cap | self.screw).ids)])
+        # 消耗 move 挂回 MO 组件（raw_material_production_id，origin 被
+        # 原生改写为 MO 名）——按组件行统计已消耗
+        moves = order.production_id.move_raw_ids.filtered(
+            lambda m: m.state == 'done'
+            and m.product_id in (self.cap | self.screw))
         self.assertEqual(len(moves), 2)
 
     def test_02_scrap_share_not_double_deducted(self):
