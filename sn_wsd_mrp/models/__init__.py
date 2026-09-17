@@ -21,3 +21,4 @@ from . import product
 from . import mrp_electronics
 from . import stock_move_line
 from . import serial_identity_code_seed
+from . import substitute_rule

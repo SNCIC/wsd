@@ -792,7 +792,7 @@ class TestLaserPrintHttp(ScanPassFixture, HttpCase):
         res = self._post(json.dumps({
             'M_DATA_AUTH': 'HQ', 'workOrderNo': 'NOPE-MO',
             'quantity': 5, 'operator': 'APIOP'}))
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 422)
         self.assertIn('制造订单', res.json()['message'])
         res = self._post(json.dumps({
             'M_DATA_AUTH': 'HQ', 'workOrderNo': self.production.name,

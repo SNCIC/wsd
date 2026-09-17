@@ -1117,6 +1117,7 @@ msgstr "通信测试"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_identity__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -3473,6 +3474,7 @@ msgstr "制令单台数"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_orders
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_orders
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_orders
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__mes_order_ids
 msgid "MES Orders"
 msgstr "制令单"
 
@@ -4115,6 +4117,7 @@ msgstr "未上线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__note
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__note
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__note
 msgid "Note"
 msgstr "备注"
 
@@ -4540,6 +4543,7 @@ msgstr "原始批次"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__original_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__original_material_specification
 msgid "Original Material Specification"
 msgstr "原物料规格"
 
@@ -4548,6 +4552,8 @@ msgstr "原物料规格"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_product_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_product_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__original_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
 msgid "Original Product"
 msgstr "原始产品"
 
@@ -6870,6 +6876,7 @@ msgstr "替代物料"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__substitute_material_specification
 msgid "Substitute Material Specification"
 msgstr "替代物料规格"
 
@@ -6895,6 +6902,8 @@ msgstr "替代物料"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_product_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_product_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__substitute_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
 msgid "Substitute Product"
 msgstr "替代产品"
 
@@ -6921,11 +6930,6 @@ msgstr "替代规则数量"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
 msgid "Substitute Usage"
 msgstr "替代使用记录"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_form_substitute
-msgid "Substitutes"
-msgstr "替代料"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__successor_ids
@@ -8859,3 +8863,72 @@ msgstr "计数工序"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_done_wizard__destination__lineside
 msgid "车间线边仓（直接验证）"
 msgstr "车间线边仓（直接验证）"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__scope
+msgid "Scope"
+msgstr "生效范围"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__mes_order_count
+msgid "Orders"
+msgstr "订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_substitute_rule__scope__all
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
+msgid "All Orders"
+msgstr "全部订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_substitute_rule__scope__orders
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
+msgid "Specific Orders"
+msgstr "指定订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_substitute_rule
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_substitute_rule
+msgid "Substitute Rules"
+msgstr "替代料规则"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_substitute_rule
+msgid "Substitute Material Rule"
+msgstr "替代料规则"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_substitute_rule_scope_pair_uniq
+msgid "A substitute rule already exists for the same product pair and scope."
+msgstr "同一料号对在同一生效范围下已存在替代料规则。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid "A product cannot substitute for itself."
+msgstr "产品不能替代自身。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid "Select at least one MES order for a rule scoped to specific orders."
+msgstr "生效范围为指定订单时，必须至少选择一张制令单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid ""
+"MES order %(order)s belongs to a different company than the substitute rule."
+msgstr "制令单 %(order)s 与替代料规则不属于同一公司。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_substitute_rule
+msgid "Create a substitute rule"
+msgstr "创建替代料规则"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_substitute_rule
+msgid ""
+"Define which material may replace another one when loading SMT stations. "
+"Rules apply to all orders by default, or only to the selected ones."
+msgstr "定义 SMT 上料时哪种物料可以替换另一种物料。规则默认对全部订单生效，也可仅对所选订单生效。"

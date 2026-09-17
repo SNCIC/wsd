@@ -20,7 +20,8 @@ class ApiForbidden(ValidationError):
 
 
 class ApiNotFound(ValidationError):
-    """Referenced record does not exist -> HTTP 404."""
+    """Referenced record does not exist -> graded 422 with the other
+    business rejections so it can never be mistaken for an unrouted 404."""
 
 
 class ApiUnprocessable(ValidationError):

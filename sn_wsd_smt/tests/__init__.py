@@ -4,3 +4,5 @@ from . import test_smt_single_book
 from . import test_material_operation_deduction
 from . import test_dual_side_close
 from . import test_panel_api
+from . import test_substitute_loading
+from . import test_substitute_backflush

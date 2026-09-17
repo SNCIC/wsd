@@ -368,6 +368,11 @@ class SnSmtLoadingService(models.AbstractModel):
         old_lot = online_material.loaded_material_lot_id
         old_feeder = online_material.loaded_feeder_id
         old_remaining = online_material.remaining_qty
+        # 先解析并校验新料，再动旧料：PDA 捕获 UserError 后请求照常提交，
+        # 先卸后校验会把旧卷意外下线（扫错一次新盘=旧卷被卸）。
+        feeder = self._resolve_feeder(mes_order, online_material, new_feeder_sn)
+        material_lot = self._resolve_material_lot(mes_order, new_material_sn)
+        self._check_material_common_rules(mes_order, online_material, material_lot)
         online_material.replace_count += 1
         online_material.write({
             'is_load': 'N',
@@ -375,8 +380,6 @@ class SnSmtLoadingService(models.AbstractModel):
             'loaded_feeder_id': False,
         })
         self._release_feeder_if_unused(old_feeder)
-        feeder = self._resolve_feeder(mes_order, online_material, new_feeder_sn)
-        material_lot = self._resolve_material_lot(mes_order, new_material_sn)
         # 续料/换料自动判定：新卷料号与料站要求一致 → 续料；替代料 → 换料。
         if (material_lot.product_id.default_code or '') == (online_material.item_code or ''):
             change_type = 'continue'

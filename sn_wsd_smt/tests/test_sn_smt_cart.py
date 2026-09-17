@@ -20,7 +20,11 @@ class TestSnSmtCart(TransactionCase):
             'name': 'Cart Test Material Substitute',
             'default_code': 'CART-TST-SUB',
         })
-        cls.product_a.substitute_ids = [Command.link(cls.product_sub.id)]
+        # 替代放行统一走替代料规则（substitute-rule R4 产品级退役）
+        cls.env['sn.wsd.substitute.rule'].create({
+            'original_product_id': cls.product_a.id,
+            'substitute_product_id': cls.product_sub.id,
+        })
         cls.product_b = cls.env['product.product'].create({
             'name': 'Cart Test Material B',
             'default_code': 'CART-TST-B',

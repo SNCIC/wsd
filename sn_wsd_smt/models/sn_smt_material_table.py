@@ -579,10 +579,24 @@ class SnSmtOperationMixin(models.AbstractModel):
             return False
         if candidate_product == required_product:
             return True
+        # 替代料规则（全局或命中本单）——独立维护的放行依据
+        if candidate_product in self.env['sn.wsd.substitute.rule']._get_substitute_products(
+                mes_order, required_product):
+            return True
         production = mes_order.production_id
         if production:
             return production._is_allowed_substitute_product(required_product, candidate_product)
-        return candidate_product in required_product.substitute_ids or required_product in candidate_product.substitute_for_ids
+        # 产品级 substitute_ids 已退役：替代放行只认规则与 BOM 行级
+        return False
+
+    @api.model
+    def _allowed_requirement_label(self, mes_order, required_product):
+        """拒绝提示的"要求"展示：主料号 + 命中规则的替代料号清单。"""
+        codes = [required_product.default_code]
+        substitutes = self.env['sn.wsd.substitute.rule']._get_substitute_products(
+            mes_order, required_product)
+        codes += [code for code in substitutes.mapped('default_code') if code]
+        return ', '.join(dict.fromkeys(filter(None, codes)))
 
     @api.model
     def _check_material_expiration(self, lot):
@@ -599,7 +613,9 @@ class SnSmtOperationMixin(models.AbstractModel):
 
     @api.model
     def _check_material_common_rules(self, mes_order, online_material, material_lot):
-        """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。"""
+        """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。
+
+        拒绝提示列出要求料号及命中规则的可用替代料号清单。"""
         if not material_lot:
             raise ValidationError(_('The material SN could not be resolved to a stock lot.'))
         product_model = self.env['product.product']
@@ -609,7 +625,7 @@ class SnSmtOperationMixin(models.AbstractModel):
         if required_product and not self._is_allowed_material_product(mes_order, required_product, material_lot.product_id):
             raise ValidationError(_(
                 'The material does not match the current SMT loadpoint requirement (%(required)s).',
-                required=online_material.item_code,
+                required=self._allowed_requirement_label(mes_order, required_product),
             ))
         if not required_product and self._normalize_product_code(material_lot.product_id) != online_material.item_code:
             raise ValidationError(_(
