@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 库存 → 报表（stock.menu_warehouse_report 本身限库存管理员可见） -->
+    <menuitem id="menu_sn_wsd_stock_balance_report" name="收发汇总表"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_stock_balance_wizard"
+              sequence="10"/>
+</odoo>

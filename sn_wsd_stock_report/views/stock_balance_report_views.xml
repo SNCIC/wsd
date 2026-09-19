@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_stock_balance_report_list" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.balance.report.list</field>
+        <field name="model">sn.wsd.stock.balance.report</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="default_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="uom_id" optional="show"/>
+                <field name="qty_initial" sum="期初合计"/>
+                <field name="qty_in" sum="收入合计"/>
+                <field name="qty_out" sum="发出合计"/>
+                <field name="qty_balance" sum="结存合计"/>
+                <field name="warehouse_id" optional="hide"/>
+                <field name="product_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_stock_balance_report_search" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.balance.report.search</field>
+        <field name="model">sn.wsd.stock.balance.report</field>
+        <field name="arch" type="xml">
+            <search string="收发汇总表">
+                <field name="default_code" string="物料编码" filter_domain="[('default_code', 'ilike', self)]"/>
+                <field name="product_name" string="物料名称" filter_domain="[('product_name', 'ilike', self)]"/>
+                <field name="material_specification" string="规格型号" filter_domain="[('material_specification', 'ilike', self)]"/>
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <separator/>
+                <filter name="filter_has_balance" string="仅有结存" domain="[('qty_balance', '!=', 0)]"/>
+                <filter name="filter_has_movement" string="期间有收发" domain="['|', ('qty_in', '!=', 0), ('qty_out', '!=', 0)]"/>
+                <separator/>
+                <group>
+                    <filter name="group_warehouse" string="仓库" context="{'group_by': 'warehouse_id'}"/>
+                    <filter name="group_product" string="物料" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_stock_balance_report" model="ir.actions.act_window">
+        <field name="name">收发汇总表</field>
+        <field name="res_model">sn.wsd.stock.balance.report</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_wsd_stock_balance_report_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">所选区间内没有库存收发流水</p>
+            <p>报表按「物料 × 仓库」汇总库存区（WH/库存）在指定区间内的期初、收入、发出与结存数量。</p>
+        </field>
+    </record>
+</odoo>
