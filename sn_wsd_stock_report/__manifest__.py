@@ -1,9 +1,9 @@
 {
     'name': 'SN WSD Stock Report',
-    'version': '19.0.1.1.0',
-    'summary': 'Stock in/out balance report by product',
+    'version': '19.0.1.2.0',
+    'summary': 'Stock in/out balance report by product and quant valuation aggregation',
     'category': 'Inventory/Inventory',
-    'depends': ['stock', 'sn_wsd_material'],
+    'depends': ['stock', 'stock_account', 'sn_wsd_material'],
     'data': [
         'security/ir.model.access.csv',
         'views/stock_balance_report_views.xml',
