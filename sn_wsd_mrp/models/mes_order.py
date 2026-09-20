@@ -1046,6 +1046,9 @@ class MesOrder(models.Model):
             scrap_side_moves = scrap_side_moves.filtered(
                 lambda m: not m.bom_line_id
                 or m.bom_line_id.x_board_side == self.x_side)
+        # 在制占用账本（line-side-mo-reservation）无需在此显式减留：
+        # 报废过账把量取走后，原生 _free_reservation 会把越线自由量的
+        # 预留自动下折，MO 预留随报废自减
         for line in scrap_side_moves:
             need = line.product_uom_qty * per_board
             if need <= 0.0001:
@@ -1144,6 +1147,111 @@ class MesOrder(models.Model):
             mo.write({'state': 'done'})
 
     # ------------------------------------------------------------------
+    # line-side MO-level reservation (line-side-mo-reservation): 在制有主、
+    # 完工无主。领料/补料单验证后把 MO 组件剩余需求从线边做原生预留（记名
+    # 到 MO 级组件 move）；倒冲/报废/退料按扣减量维护预留账；MO 完工
+    # _on_done cancel 组件 move 时原生自动解留，剩卷免费回流共享池。
+    # ------------------------------------------------------------------
+
+    def _mes_line_side_location(self):
+        """本制令单消费的车间线边库位。"""
+        self.ensure_one()
+        return self.production_line_id.workshop_id.component_location_id
+
+    def _mes_mo_line_side_move_lines(self):
+        """本单 MO 组件 move 在线边（未过账）的预留行——MO 级在制占用的账本。"""
+        self.ensure_one()
+        line_side = self._mes_line_side_location()
+        if not line_side:
+            return self.env['stock.move.line']
+        return self.production_id.move_raw_ids.move_line_ids.filtered(
+            lambda ml: ml.location_id == line_side
+            and ml.state != 'done' and not ml.picked)
+
+    def _mes_assign_mo_line_side(self):
+        """领料/补料单验证后调用：把 MO 组件的剩余需求从线边（child_of）
+        做原生预留。只在 child_of 线边找量——主库自由量永不锁给 MO；
+        跨 MO 抢料被 quant reserved_quantity 挡住，同 MO 兄弟制令单共享
+        同一份 MO 级预留。幂等：已预留部分（move.quantity）先行扣除。
+
+        MES 流程的 MO 组件 move 全程是 draft 需求壳（_on_done 直接
+        cancel/写 done，不走原生 confirm）——draft 一并纳入；预留成功
+        后 _recompute_state 按原生语义转 assigned/partially_available。
+
+        首次纳入时把 move 源库位收敛到线边（幂等；生产形态下
+        _apply_workshop_manufacturing_locations 本就把 MO 源设为线边）：
+        之后一切原生联动（_trigger_assign 等）只会在 child_of 线边找
+        量，主库自由量在任何路径下都不会锁给 MO。"""
+        for order in self:
+            production = order.production_id
+            line_side = order._mes_line_side_location()
+            if not line_side or not production \
+                    or production.state in ('done', 'cancel'):
+                continue
+            moves = production.move_raw_ids.filtered(
+                lambda m: m.state in (
+                    'draft', 'confirmed', 'waiting', 'partially_available'))
+            unscoped = moves.filtered(
+                lambda m: not m.location_id._child_of(line_side))
+            if unscoped:
+                unscoped.write({'location_id': line_side.id})
+            for move in moves:
+                missing_uom = move.product_uom_qty - move.quantity
+                if move.product_uom.round(missing_uom) <= 0:
+                    continue
+                # need 换算产品基本单位（与原生 _action_assign 同口径）
+                need = move.product_uom._compute_quantity(
+                    missing_uom, move.product_id.uom_id)
+                if move.product_id.uom_id.round(need) <= 0:
+                    continue
+                move._update_reserved_quantity(need, line_side, strict=False)
+            if moves:
+                moves._recompute_state()
+
+    def _mes_release_line_side_reservation(self, product, lot, quantity):
+        """倒冲/报废/退料后调用：按扣减量释放 MO 在线边对 product/lot
+        的预留（quantity 为产品基本单位），保持 reserved ≤ quantity、
+        自由量不为负。先释放大批行，零量行删除保持账面干净。"""
+        self.ensure_one()
+        if quantity <= 0.0001:
+            return
+        remaining = quantity
+        candidates = self._mes_mo_line_side_move_lines().filtered(
+            lambda ml: ml.product_id == product
+            and (ml.lot_id == lot if lot else not ml.lot_id))
+        for ml in candidates.sorted(lambda l: l.quantity_product_uom, reverse=True):
+            if remaining <= 0.0001:
+                break
+            take = min(ml.quantity_product_uom, remaining)
+            left = ml.quantity_product_uom - take
+            if left <= 0.0001:
+                ml.unlink()
+            else:
+                ml.quantity = ml.product_uom_id._compute_quantity(
+                    left, ml.product_uom_id)
+            remaining -= take
+
+    def _mes_own_line_side_reserved(self, product, lot=False):
+        """本 MO 在线边对 product[/lot] 的预留量（产品基本单位）——完工
+        硬校验「自由量 + 本单预留」口径的本单部分。不指定 lot 时统计
+        该产品的全部预留行（含批次料各批次）。"""
+        self.ensure_one()
+        lines = self._mes_mo_line_side_move_lines().filtered(
+            lambda ml: ml.product_id == product
+            and (not lot or ml.lot_id == lot))
+        return sum(lines.mapped('quantity_product_uom'))
+
+    def _mes_own_line_side_reserved_by_lot(self, product):
+        """同上，按批次聚合（无批次聚合到键 0）——BOM 兜底分配用。"""
+        self.ensure_one()
+        result = {}
+        for ml in self._mes_mo_line_side_move_lines().filtered(
+                lambda ml: ml.product_id == product):
+            key = ml.lot_id.id or 0
+            result[key] = result.get(key, 0.0) + ml.quantity_product_uom
+        return result
+
+    # ------------------------------------------------------------------
     # completion (完工入库): backflush + receipt + state/MO closure
     # ------------------------------------------------------------------
     def _mes_production_location(self):
@@ -1199,6 +1307,11 @@ class MesOrder(models.Model):
         moves = StockMove
 
         def line_side_available(product, lot=False):
+            # 在制占用口径（line-side-mo-reservation）：可用 = 自由量 +
+            # 本 MO 预留（自己占的料自己能扣），其他 MO 的预留不算。
+            # 读取口径与 allocate_line_side_lots 同源（直读 quant 按
+            # reserved 折自由量 + 同一"本单预留"来源），两处不同源会
+            # 出现"校验够、分配不够"。
             domain = [
                 ('product_id', '=', product.id),
                 ('location_id', '=', line_side.id),
@@ -1207,8 +1320,12 @@ class MesOrder(models.Model):
             if lot:
                 domain.append(('lot_id', '=', lot.id))
             groups = self.env['stock.quant']._read_group(
-                domain, groupby=[], aggregates=['quantity:sum'])
-            return (groups[0][0] or 0.0) if groups else 0.0
+                domain, groupby=[], aggregates=['quantity:sum', 'reserved_quantity:sum'])
+            free = 0.0
+            if groups:
+                quantity, reserved = groups[0]
+                free = (quantity or 0.0) - (reserved or 0.0)
+            return free + self._mes_own_line_side_reserved(product, lot)
 
         def ensure_available(product, need, lot=False):
             """线边可用性硬校验（docstring 承诺的 fails hard）：任何组件
@@ -1229,11 +1346,13 @@ class MesOrder(models.Model):
             """BOM 兜底的线边批次分配（backflush-tracked-bom-fallback）：
             批次按线边库位拣料策略排序（默认 FEFO：removal_date → lot id
             稳定序；fifo/lifo 按到位时间），逐批凑足需扣量；散料返回单段
-            无批次。读取口径与 line_side_available 同源（quantity 直读、
-            不扣 reserved）——线边仓不参与预留，两处不同源会出现
+            无批次。读取口径与 line_side_available 同源（在制占用：
+            可分配 = quant 自由量 + 本 MO 在该批次的预留——自己占的卷
+            自己能兜底扣，其他 MO 占的卷跳过），两处不同源会出现
             "校验够、分配不够"。"""
             if product.tracking == 'none':
                 return [(self.env['stock.lot'], need)]
+            own_by_lot = self._mes_own_line_side_reserved_by_lot(product)
             quants = self.env['stock.quant'].search([
                 ('product_id', '=', product.id),
                 ('location_id', '=', line_side.id),
@@ -1253,7 +1372,10 @@ class MesOrder(models.Model):
             for quant in ordered:
                 if remaining <= 0.0001:
                     break
-                take = min(quant.quantity, remaining)
+                own = own_by_lot.get(quant.lot_id.id or 0, 0.0)
+                take = min(quant.quantity - quant.reserved_quantity + own, remaining)
+                if take <= 0.0001:
+                    continue
                 allocations.append((quant.lot_id, take))
                 remaining -= take
             if remaining > 0.0001:
@@ -1361,6 +1483,8 @@ class MesOrder(models.Model):
                 # 散料：无批次单行（现状）
                 move_vals['quantity'] = consume_qty
             else:
+                lot_allocations = allocate_line_side_lots(
+                    line.product_id, consume_qty)
                 move_vals['move_line_ids'] = [(0, 0, {
                     'product_id': line.product_id.id,
                     'product_uom_id': line.product_id.uom_id.id,
@@ -1371,11 +1495,13 @@ class MesOrder(models.Model):
                     'location_dest_id': production_loc.id,
                     'company_id': self.company_id.id,
                     'picked': True,
-                }) for lot, take in allocate_line_side_lots(
-                    line.product_id, consume_qty)]
+                }) for lot, take in lot_allocations]
             moves |= StockMove.create(move_vals)
         if moves:
             moves._action_done()
+        # 在制占用账本（line-side-mo-reservation）无需在此显式减留：
+        # 消耗过账把量取走后，原生 _free_reservation 会把越线自由量的
+        # 预留自动下折（reserved ≤ quantity 恒成立），MO 预留随消耗自减
         return moves
 
 
@@ -2134,6 +2260,13 @@ class MesOrder(models.Model):
                         line.product_id, line_side, need_base)
                     if not reels:
                         continue
+                    # 退料解留（line-side-mo-reservation）：退回量先从 MO
+                    # 线边预留释放，退料单自身的 move line 随即占用该量
+                    # （直接建行即占用）；解留在建行之前，避免把 quant
+                    # 预留顶过 quantity
+                    for ret_lot, reel_qty in reels:
+                        order._mes_release_line_side_reservation(
+                            line.product_id, ret_lot, reel_qty)
                     move_vals['product_uom_qty'] = line.product_id.uom_id._compute_quantity(
                         sum(reel_qty for _lot, reel_qty in reels),
                         line.product_uom)
@@ -2161,6 +2294,12 @@ class MesOrder(models.Model):
                     qty_line = min(qty_line, available)
                     if qty_line <= 0.0001:
                         continue
+                    # 散料同理：先解留再建 move，confirm 时的原生预留
+                    # 只在解留后的自由量上找料
+                    order._mes_release_line_side_reservation(
+                        line.product_id, self.env['stock.lot'],
+                        line.product_uom._compute_quantity(
+                            qty_line, line.product_id.uom_id))
                     move_vals['product_uom_qty'] = qty_line
                 StockMove.create(move_vals)
                 created_any = True
@@ -2206,7 +2345,17 @@ class MesOrder(models.Model):
                     by_lot[line.lot_id] -= line.quantity
         lines = []
         covered = 0.0
-        for lot in sorted(by_lot, key=lambda l: (l.removal_date or '9999-12-31', l.id)):
+        # 在制占用（line-side-mo-reservation）：优先退本单 MO 占用的卷，
+        # 再按 FEFO 退自由卷——退回量与解留量同批对上
+        own_lots = {
+            lot.id for lot in self._mes_mo_line_side_move_lines().filtered(
+                lambda ml: ml.product_id == product and ml.lot_id)}
+
+        def _own_first(lot):
+            return 0 if lot.id in own_lots else 1
+
+        for lot in sorted(by_lot, key=lambda l: (
+                _own_first(l), l.removal_date or '9999-12-31', l.id)):
             available = by_lot[lot]
             if available <= 0:
                 continue
@@ -2259,6 +2408,26 @@ class MesOrder(models.Model):
             'domain': [('id', 'in', identities.ids)],
         }
 
+class StockMoveMesOrderShell(models.Model):
+    """MES 制令单的 MO 组件需求壳（line-side-mo-reservation）。
+
+    原生 `_action_assign` 按移出策略在 ``child_of move.location_id`` 全院
+    FIFO 找料，`_trigger_assign` 等联动会在任意仓库过账后触发它——后到
+    单据刚送达线边的料会被先到的 MO 抢先占走。MES 需求壳的唯一建留者
+    是 ``sn.wsd.mes.order._mes_assign_mo_line_side``（领料/补料验证后、
+    按送达顺序记名到 MO），这里对原生 assign 整体跳过。
+    """
+    _inherit = 'stock.move'
+
+    def _action_assign(self, force_qty=False):
+        shells = self.filtered(lambda m: (
+            not m.picking_id
+            and m.raw_material_production_id.x_mes_order_ids
+            and m.state not in ('done', 'cancel')))
+        super(StockMoveMesOrderShell, self - shells)._action_assign(
+            force_qty=force_qty)
+
+
 class StockPickingMesOrder(models.Model):
     """Link a material picking back to its MES order (F5).
 
@@ -2300,6 +2469,21 @@ class StockPickingMesOrder(models.Model):
         # single-point released -> picked transition; _update_pick_state
         # itself skips orders that are no longer released (cancelled etc.)
         self.mapped('x_mes_order_id')._update_pick_state()
+        # 线边 MO 级预留（line-side-mo-reservation）：领料（WH/MI）与补料
+        # （WH/OP）验证后，落线边的料即记名到所属 MO（在制有主）。作业
+        # 类型只认仓库专设的领料/补料类型（绝不能按 code='internal'
+        # 盲搜——质量控制类型同为 internal）。幂等：多次验证按剩余需求
+        # 补占；退料（WH/MR）类型不在此列，其解留在生成时处理。
+        for picking in self.filtered(lambda p: p.state == 'done'):
+            order = picking.x_mes_order_id
+            warehouse = picking.picking_type_id.warehouse_id
+            if not order or not warehouse:
+                continue
+            if picking.picking_type_id not in (
+                    warehouse.picking_type_issue_id
+                    | warehouse.picking_type_over_pick_id):
+                continue
+            order._mes_assign_mo_line_side()
         return res
 
 
