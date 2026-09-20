@@ -370,6 +370,12 @@ class SnSmtOnlineMaterial(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    # 卷终确认（reel-end-confirm）：在机卷的卷终状态（跟随 lot）
+    loaded_reel_end = fields.Boolean(
+        string='Loaded Reel End',
+        related='loaded_material_lot_id.x_reel_end',
+        readonly=True,
+    )
 
     # 一个料站同一时刻只能有一盘料在线（同一制令单下唯一位置行）。
     _sn_smt_online_material_unique = models.Constraint(
@@ -381,6 +387,22 @@ class SnSmtOnlineMaterial(models.Model):
     def _compute_loaded_product_id(self):
         for record in self:
             record.loaded_product_id = record.loaded_material_lot_id.product_id
+
+    def action_confirm_reel_end(self):
+        """在线料表的卷终确认入口（reel-end-confirm）：操作员确认该料站
+        在机卷已用尽——标记卷终+归属本单并下线该料站（与 PDA 下料带
+        确认同语义，走同一服务层，写同一份物料日志）。"""
+        for line in self:
+            if line.is_load != 'Y' or not line.loaded_material_lot_id:
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of %(order)s has no loaded material '
+                    'to confirm as used up.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
+            self.env['sn.smt.loading.service'].unload(
+                line.mes_order_id, scope='material',
+                material_sn=line.loaded_material_lot_id.name, reel_end=True)
+        return True
 
     @api.depends('model_code')
     def _compute_model_spec(self):
