@@ -13,6 +13,10 @@
                     <field name="supplier_name" readonly="1"/>
                     <field name="initial_quantity" readonly="1"/>
                     <field name="x_smt_available_qty" readonly="1"/>
+                    <!-- 卷终确认（reel-end-confirm）：换料/下料时人工确认
+                         已用尽；完工倒冲一次扣到归零，损耗归属所记单 -->
+                    <field name="x_reel_end" readonly="1"/>
+                    <field name="x_reel_end_order_id" readonly="1"/>
                 </group>
                 <group string="Lot Product Usage">
                     <field name="smt_consumption_count" readonly="1"/>
