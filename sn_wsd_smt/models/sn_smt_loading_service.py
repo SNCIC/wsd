@@ -356,10 +356,16 @@ class SnSmtLoadingService(models.AbstractModel):
 
     @api.model
     def change_material(self, mes_order, workcenter, device_table, loadpoint,
-                        new_material_sn, new_feeder_sn=False, change_type=False):
+                        new_material_sn, new_feeder_sn=False, change_type=False,
+                        reel_end=False):
         """换料/续料：同料站旧卷下线（余量保留在卷上），新卷上线并记前物料。
         操作类型自动判定——新卷料号 = 料站要求 → 续料；替代料 → 换料。
-        change_type 参数仅为接口兼容保留，传入值不参与判定。"""
+        change_type 参数仅为接口兼容保留，传入值不参与判定。
+
+        reel_end（卷终确认，reel-end-confirm）：新料校验通过后、卸旧卷
+        之前，操作员确认旧卷已用尽——旧卷标记卷终并归属本单，完工倒冲
+        一次扣到归零（流水+卷终损耗）。拒绝路径零状态变更（原子性保持）；
+        确认与替代方向无关，所有换卷统一。"""
         device_seq, table_no = self._parse_device_table(device_table)
         online_material = self._find_position(
             mes_order, device_seq, table_no, loadpoint, require_unloaded=False)
@@ -373,6 +379,12 @@ class SnSmtLoadingService(models.AbstractModel):
         feeder = self._resolve_feeder(mes_order, online_material, new_feeder_sn)
         material_lot = self._resolve_material_lot(mes_order, new_material_sn)
         self._check_material_common_rules(mes_order, online_material, material_lot)
+        # 卷终确认落点：新料全部校验通过之后、旧卷下线之前
+        if reel_end and old_lot:
+            old_lot.write({
+                'x_reel_end': True,
+                'x_reel_end_order_id': mes_order.id,
+            })
         online_material.replace_count += 1
         online_material.write({
             'is_load': 'N',
@@ -399,8 +411,10 @@ class SnSmtLoadingService(models.AbstractModel):
 
     @api.model
     def unload(self, mes_order, scope='station', device_table=False, loadpoint=False,
-               material_sn=False, cart=False):
-        """下料：scope = station（按料站）/ material（按物料SN）/ cart（按料车）/ order（整单）。"""
+               material_sn=False, cart=False, reel_end=False):
+        """下料：scope = station（按料站）/ material（按物料SN）/ cart（按料车）/ order（整单）。
+
+        reel_end（卷终确认）：下线卷确认已用尽——标记卷终并归属本单。"""
         lines = mes_order.x_smt_online_material_ids.filtered(lambda line: line.is_load == 'Y')
         if scope == 'station':
             device_seq, table_no = self._parse_device_table(device_table)
@@ -418,6 +432,11 @@ class SnSmtLoadingService(models.AbstractModel):
         if not lines:
             raise UserError(_('No loaded SMT material position matches the unload request.'))
         for line in lines:
+            if reel_end and line.loaded_material_lot_id:
+                line.loaded_material_lot_id.write({
+                    'x_reel_end': True,
+                    'x_reel_end_order_id': mes_order.id,
+                })
             self._release_position(mes_order, line, operation_type='unload', note=scope.upper())
         return {'unloaded_qty': len(lines)}
 

@@ -640,6 +640,12 @@ class SnSmtOperationMixin(models.AbstractModel):
         self._check_material_expiration(material_lot)
         if material_lot._smt_on_hand_qty() <= 0:
             raise ValidationError(_('The current material quantity is zero.'))
+        # 卷终确认（reel-end-confirm）：已确认用尽的卷禁止再上料——
+        # 防幽灵卷复活（账面已被归零，实物已尽）
+        if material_lot.x_reel_end:
+            raise ValidationError(_(
+                'Reel %(lot)s has been confirmed used up (reel end) and '
+                'cannot be loaded again.', lot=material_lot.name))
 
 
 class SnSmtTableImportMixin(models.AbstractModel):

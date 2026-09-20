@@ -293,6 +293,7 @@ class SnSmtPdaController(http.Controller):
         new_material_sn_input,
         new_feeder_sn_input=False,
         change_type='continue',
+        reel_end=False,
     ):
         deny = self._pda_group_check()
         if deny:
@@ -315,6 +316,7 @@ class SnSmtPdaController(http.Controller):
             mes_order, workcenter, device_table_input, loadpoint_input,
             new_material_sn_input, new_feeder_sn=new_feeder_sn_input,
             change_type=change_type or 'continue',
+            reel_end=bool(reel_end),
         )
         return {
             'ok': True,
@@ -333,6 +335,7 @@ class SnSmtPdaController(http.Controller):
         loadpoint_input=False,
         cart_input=False,
         material_sn_input=False,
+        reel_end=False,
     ):
         deny = self._pda_group_check()
         if deny:
@@ -352,6 +355,7 @@ class SnSmtPdaController(http.Controller):
             loadpoint=loadpoint_input or False,
             material_sn=material_sn_input or False,
             cart=cart,
+            reel_end=bool(reel_end),
         )
         return {
             'ok': True,

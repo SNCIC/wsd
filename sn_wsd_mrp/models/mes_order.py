@@ -197,6 +197,38 @@ class MesOrder(models.Model):
         help='Customer resolved from the source sales order of the '
              'manufacturing order (empty for stock orders).',
     )
+    # --- 进度带 / 追溯 / 配对单（表单一眼区） ------------------------------
+    x_progress_rate = fields.Float(
+        string='进度', compute='_compute_progress_band',
+        help='完成比例（0-100）：单面/最终面按 完工入库÷排产，双面板 T 面'
+             '（无入库收货）按 产出÷排产。',
+    )
+    x_shortage_qty = fields.Float(
+        string='欠数', compute='_compute_progress_band',
+        help='排产数量 − 完成数量（完成口径同进度：最终面看入库，T 面看产出）。',
+    )
+    x_yield_total = fields.Float(
+        string='良率', compute='_compute_progress_band',
+        help='工序数量合计口径：完成 ÷ (完成+不良+报废)。',
+    )
+    x_sn_count = fields.Integer(
+        string='投入 SN 数', compute='_compute_sn_counts',
+        help='本制令单已投板的 SN 台数（过站历史 + 当前在制去重）。',
+    )
+    x_sn_wip_count = fields.Integer(
+        string='在制 SN 数', compute='_compute_sn_counts',
+        help='当前停在本制令单某道工序的 SN 台数。',
+    )
+    x_paired_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='配对制令单',
+        compute='_compute_x_paired_order_id',
+        help='同一制造订单对侧面的制令单（双面板产品）：本面完工的板子'
+             '流向该单继续生产。',
+    )
+    x_picking_net_qty = fields.Float(
+        string='单据净台数', compute='_compute_picking_net_qty',
+        help='关联单据台数合计（已取消单据不计入）。',
+    )
 
     @api.depends('production_id')
     def _compute_x_partner(self):
@@ -213,6 +245,62 @@ class MesOrder(models.Model):
                     [('name', '=', mo.origin)], limit=1)
                 partner = so.partner_id
             order.x_partner_id = partner
+
+    @api.depends(
+        'planned_qty', 'x_done_qty', 'produced_qty', 'x_is_dual_side_non_final',
+        'x_manage_mode',
+        'x_route_operation_ids.x_ok_qty', 'x_route_operation_ids.x_ng_qty',
+        'x_route_operation_ids.x_scrap_qty',
+        'x_route_operation_ids.x_reported_ok_qty',
+        'x_route_operation_ids.x_reported_ng_qty',
+        'x_route_operation_ids.x_reported_scrap_qty',
+    )
+    def _compute_progress_band(self):
+        for order in self:
+            done = (order.produced_qty if order.x_is_dual_side_non_final
+                    else order.x_done_qty)
+            order.x_shortage_qty = order.planned_qty - done
+            order.x_progress_rate = (
+                done / order.planned_qty * 100.0 if order.planned_qty else 0.0)
+            ops = order.x_route_operation_ids
+            if order.x_manage_mode == 'report':
+                ok = sum(ops.mapped('x_reported_ok_qty'))
+                total = (ok + sum(ops.mapped('x_reported_ng_qty'))
+                         + sum(ops.mapped('x_reported_scrap_qty')))
+            else:
+                ok = sum(ops.mapped('x_ok_qty'))
+                total = (ok + sum(ops.mapped('x_ng_qty'))
+                         + sum(ops.mapped('x_scrap_qty')))
+            order.x_yield_total = ok / total if total else 0.0
+
+    @api.depends('sn_history_ids.serial_identity_id',
+                 'sn_wip_ids.serial_identity_id')
+    def _compute_sn_counts(self):
+        for order in self:
+            fed = set(order.sn_history_ids.mapped('serial_identity_id').ids)
+            fed |= set(order.sn_wip_ids.mapped('serial_identity_id').ids)
+            order.x_sn_count = len(fed)
+            order.x_sn_wip_count = len(order.sn_wip_ids)
+
+    @api.depends('production_id', 'x_side', 'state')
+    def _compute_x_paired_order_id(self):
+        for order in self:
+            order.x_paired_order_id = False
+            if order.x_side in ('top', 'bottom') and order.production_id:
+                other = 'bottom' if order.x_side == 'top' else 'top'
+                order.x_paired_order_id = self.search([
+                    ('production_id', '=', order.production_id.id),
+                    ('x_side', '=', other),
+                    ('state', '!=', 'cancelled'),
+                ], limit=1)
+
+    @api.depends('picking_ids.x_mes_order_qty', 'picking_ids.state')
+    def _compute_picking_net_qty(self):
+        for order in self:
+            order.x_picking_net_qty = sum(
+                order.picking_ids
+                .filtered(lambda p: p.state != 'cancel')
+                .mapped('x_mes_order_qty'))
 
     x_route_operation_ids = fields.One2many(
         'sn.wsd.mes.order.route.operation', 'mes_order_id',
@@ -1273,6 +1361,14 @@ class MesOrder(models.Model):
         self.ensure_one()
         return {}
 
+    def _mes_reel_end_plan(self, lot, flow_qty):
+        """卷终归零钩子（reel-end-confirm）：基座恒等返回（无卷终语义，
+        消耗=流水量、无损耗、硬校验照常）。sn_wsd_smt 覆写——卷已确认
+        用尽时返回 {'total': 线边账面余量, 'loss': 账面−流水差额,
+        'active': True}，倒冲一次扣到归零并跳过可用性硬校验。"""
+        self.ensure_one()
+        return {'total': flow_qty, 'loss': 0.0, 'active': False}
+
     def _mes_backflush(self, qty, flow_ratio=False, move_label=None):
         """Consume materials x qty from the line side (no document,
         manufacturing-consumption style). Fails hard on line-side
@@ -1400,38 +1496,76 @@ class MesOrder(models.Model):
                         'quantity; cannot scale the backflush to %(qty)s units.',
                         order=self.name, qty=qty))
                 flow_ratio = qty / output_qty
+            reel_loss_marker = _('Reel end loss')
             for lot, net_qty in net_by_lot.items():
                 consume_qty = net_qty * flow_ratio
-                if consume_qty <= 0.0001:
+                # 卷终归零钩子（reel-end-confirm）：默认恒等返回；sn_wsd_smt
+                # 覆写——卷已确认用尽时一次扣到线边账面余量（流水部分 +
+                # 卷终损耗差额），且可用性硬校验不适用（人为确认已尽，
+                # 允许吃到他单在同卷的预留，原生下折连坐清零）
+                plan = self._mes_reel_end_plan(lot, consume_qty)
+                total_qty, loss_qty = plan['total'], plan['loss']
+                if total_qty <= 0.0001:
                     continue
-                ensure_available(lot.product_id, consume_qty, lot=lot)
+                if not plan['active']:
+                    ensure_available(lot.product_id, consume_qty, lot=lot)
                 flow_product_ids.add(lot.product_id.id)
                 # 挂回 MO 组件：消耗数量/批次在 MO 组件行可见；BOM 内料带
                 # bom_line 聚到原行，BOM 外替代料自成新行（替代消耗可追溯）
-                moves |= StockMove.create({
-                    'description_picking_manual': move_label or _('MES completion %(order)s', order=self.name),
-                    'product_id': lot.product_id.id,
-                    'product_uom': lot.product_id.uom_id.id,
-                    'product_uom_qty': consume_qty,
-                    'picked': True,
-                    'location_id': line_side.id,
-                    'location_dest_id': production_loc.id,
-                    'company_id': self.company_id.id,
-                    'origin': self.name,
-                    'raw_material_production_id': self.production_id.id,
-                    'bom_line_id': bom._find_bom_line_by_product(lot.product_id).id,
-                    'move_line_ids': [(0, 0, {
+                flow_qty = total_qty - loss_qty
+                base_label = move_label or _('MES completion %(order)s', order=self.name)
+                if flow_qty > 0.0001:
+                    moves |= StockMove.create({
+                        'description_picking_manual': base_label,
                         'product_id': lot.product_id.id,
-                        'product_uom_id': lot.product_id.uom_id.id,
-                        'quantity': consume_qty,
-                        'lot_id': lot.id,
-                        'lot_name': lot.name,
+                        'product_uom': lot.product_id.uom_id.id,
+                        'product_uom_qty': flow_qty,
+                        'picked': True,
                         'location_id': line_side.id,
                         'location_dest_id': production_loc.id,
                         'company_id': self.company_id.id,
+                        'origin': self.name,
+                        'raw_material_production_id': self.production_id.id,
+                        'bom_line_id': bom._find_bom_line_by_product(lot.product_id).id,
+                        'move_line_ids': [(0, 0, {
+                            'product_id': lot.product_id.id,
+                            'product_uom_id': lot.product_id.uom_id.id,
+                            'quantity': flow_qty,
+                            'lot_id': lot.id,
+                            'lot_name': lot.name,
+                            'location_id': line_side.id,
+                            'location_dest_id': production_loc.id,
+                            'company_id': self.company_id.id,
+                            'picked': True,
+                        })],
+                    })
+                if loss_qty > 0.0001:
+                    # 卷终损耗（差额=账面−流水）：记本单消耗、打标可统计
+                    moves |= StockMove.create({
+                        'description_picking_manual': '%s - %s' % (
+                            base_label, reel_loss_marker),
+                        'product_id': lot.product_id.id,
+                        'product_uom': lot.product_id.uom_id.id,
+                        'product_uom_qty': loss_qty,
                         'picked': True,
-                    })],
-                })
+                        'location_id': line_side.id,
+                        'location_dest_id': production_loc.id,
+                        'company_id': self.company_id.id,
+                        'origin': self.name,
+                        'raw_material_production_id': self.production_id.id,
+                        'bom_line_id': bom._find_bom_line_by_product(lot.product_id).id,
+                        'move_line_ids': [(0, 0, {
+                            'product_id': lot.product_id.id,
+                            'product_uom_id': lot.product_id.uom_id.id,
+                            'quantity': loss_qty,
+                            'lot_id': lot.id,
+                            'lot_name': lot.name,
+                            'location_id': line_side.id,
+                            'location_dest_id': production_loc.id,
+                            'company_id': self.company_id.id,
+                            'picked': True,
+                        })],
+                    })
             # 被流水产品替代的 BOM 产品不再按 BOM 扣（已被替代上线）——
             # 覆盖判定走替代料规则（全局或命中本单）
             if flow_product_ids:
@@ -2374,6 +2508,26 @@ class MesOrder(models.Model):
             'view_mode': 'list,form',
             'domain': [('x_mes_order_id', '=', self.id)],
             'context': {'default_x_mes_order_id': self.id},
+        }
+
+    def action_open_paired_order(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sn.wsd.mes.order',
+            'res_id': self.x_paired_order_id.id,
+            'view_mode': 'form',
+        }
+
+    def action_open_sn_ledger(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('SN Operation History'),
+            'res_model': 'sn.wsd.serial.operation.history',
+            'view_mode': 'list',
+            'domain': [('mes_order_id', '=', self.id)],
+            'context': {'search_default_g_serial': 1},
         }
 
     @api.depends('picking_ids')

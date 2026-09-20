@@ -6,3 +6,4 @@ from . import test_dual_side_close
 from . import test_panel_api
 from . import test_substitute_loading
 from . import test_substitute_backflush
+from . import test_reel_end
