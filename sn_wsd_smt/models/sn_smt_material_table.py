@@ -404,6 +404,57 @@ class SnSmtOnlineMaterial(models.Model):
                 material_sn=line.loaded_material_lot_id.name, reel_end=True)
         return True
 
+    def copy(self, default=False):
+        # 复制允许，但不能落在相同站位（同单同料站唯一）：目标设备/表/
+        # 料站与原行一致时明确报错；带新站位的复制（default 传参）可用。
+        # chanel_sn 为空时 SQL 唯一约束不比对 NULL，站位唯一性由
+        # _check_unique_position 补齐。上料状态不随复制。
+        default = dict(default or {})
+        for record in self:
+            target = (
+                default.get('device_seq', record.device_seq),
+                default.get('table_no', record.table_no),
+                default.get('loadpoint', record.loadpoint),
+            )
+            if target == (record.device_seq, record.table_no, record.loadpoint):
+                raise ValidationError(_(
+                    'Cannot duplicate loadpoint %(pos)s of %(order)s onto '
+                    'itself: a loadpoint can only exist once per MES order. '
+                    'Copy to a different loadpoint instead.',
+                    pos='%s.%s/%s' % target,
+                    order=record.mes_order_id.name))
+        default.setdefault('is_load', 'N')
+        default.setdefault('is_qc_test', 'N')
+        return super().copy(default)
+
+    @api.constrains(
+        'company_id', 'mes_order_id', 'device_seq', 'table_no',
+        'loadpoint', 'chanel_sn')
+    def _check_unique_position(self):
+        # SQL 唯一约束对 NULL chanel_sn 不比对（同站可钻空子），这里补齐：
+        # 同公司同单同站位（设备+表+料站+通道，通道空视为空）只允许一行。
+        for line in self:
+            if not line.device_seq or not line.table_no or not line.loadpoint:
+                continue
+            domain = [
+                ('company_id', '=', line.company_id.id),
+                ('mes_order_id', '=', line.mes_order_id.id),
+                ('device_seq', '=', line.device_seq),
+                ('table_no', '=', line.table_no),
+                ('loadpoint', '=', line.loadpoint),
+                ('id', '!=', line.id),
+            ]
+            if line.chanel_sn:
+                domain.append(('chanel_sn', '=', line.chanel_sn))
+            else:
+                domain.append(('chanel_sn', 'in', [False, '']))
+            if self.search_count(domain, limit=1):
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of MES order %(order)s already has a '
+                    'row; a loadpoint can only exist once per order.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
+
     @api.depends('model_code')
     def _compute_model_spec(self):
         # 规格按图号批量反查产品档案（行上只存编码快照，无产品 m2o）。
