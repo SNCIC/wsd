@@ -98,6 +98,7 @@ export class WorkshopOperationAction extends Component {
             total: 0,
             userName: "",
             smtStep: 0,
+            smtReelEndPending: false,
             smtDeviceTable: "",
             smtLoadpoint: "",
             smtMaterialSn: "",
@@ -395,6 +396,14 @@ export class WorkshopOperationAction extends Component {
         return this.scanMessage;
     }
 
+    get reelEndYesLabel() {
+        return _t("Old reel used up");
+    }
+
+    get reelEndNoLabel() {
+        return _t("Still has material");
+    }
+
     get originalValueLabel() {
         return _t("Last Scan");
     }
@@ -602,6 +611,7 @@ export class WorkshopOperationAction extends Component {
 
     resetSmtScan() {
         this.state.smtStep = 0;
+        this.state.smtReelEndPending = false;
         this.state.smtDeviceTable = "";
         this.state.smtLoadpoint = "";
         this.state.smtMaterialSn = "";
@@ -813,6 +823,10 @@ export class WorkshopOperationAction extends Component {
         if (this.state.smtLoading) {
             return;
         }
+        if (this.state.smtReelEndPending) {
+            this.setResult(_t("Confirm the old reel first (used up / still has material)."), "warning");
+            return;
+        }
         const op = this.state.selectedOperation;
         const barcode = rawBarcode.trim();
 
@@ -835,7 +849,11 @@ export class WorkshopOperationAction extends Component {
             } else if (op === "smt_unload") {
                 this.state.smtMaterialSn = fields.MAT || "";
             }
-            await this._submitSmtOperation(op);
+            const combinedReelEnd = fields.REEL_END;
+            await this._submitSmtOperation(
+                op,
+                combinedReelEnd === undefined ? undefined : combinedReelEnd === "1"
+            );
             return;
         }
 
@@ -1046,17 +1064,39 @@ export class WorkshopOperationAction extends Component {
             }
             this.state.smtMaterialSn = barcode;
             this.state.rawValue = barcode;
-            await this._submitSmtOperation("smt_material_refill");
+            this.state.smtReelEndPending = true;
+            this.state.command = "";
+            this.setResult(
+                _t("Confirm the old reel %s: used up, or still has material?", this.state.smtOldMaterialSn),
+                "info");
         }
+    }
+
+    /**
+     * 卷终确认（reel-end-confirm）：续料/下料提交前操作员判定旧卷是否已尽。
+     * hasEnded=true → 旧卷标记卷终（完工倒冲一次扣到归零，损耗归本单）；
+     * false → 现状不动（旧卷余量留线边，预留继续挂）。
+     */
+    async confirmReelEnd(hasEnded) {
+        if (!this.state.smtReelEndPending) {
+            return;
+        }
+        const op = this.state.selectedOperation;
+        this.state.smtReelEndPending = false;
+        await this._submitSmtOperation(op, hasEnded);
     }
 
     async _handleUnloadStep(barcode) {
         this.state.smtMaterialSn = barcode;
         this.state.rawValue = barcode;
-        await this._submitSmtOperation("smt_unload");
+        this.state.smtReelEndPending = true;
+        this.state.command = "";
+        this.setResult(
+            _t("Confirm the reel %s: used up, or still has material?", barcode),
+            "info");
     }
 
-    _buildSmtBarcode(operation) {
+    _buildSmtBarcode(operation, opts) {
         if (operation === "smt_offline_prepare") {
             const parts = [`DEV=${this.state.smtDeviceTable}`, `LP=${this.state.smtLoadpoint}`];
             if (this.state.smtMaterialSn) {
@@ -1078,25 +1118,33 @@ export class WorkshopOperationAction extends Component {
             return parts.join("|");
         }
         if (operation === "smt_material_refill") {
-            return `OLD_MAT=${this.state.smtOldMaterialSn}|NEW_MAT=${this.state.smtMaterialSn}`;
+            const parts = [`OLD_MAT=${this.state.smtOldMaterialSn}`, `NEW_MAT=${this.state.smtMaterialSn}`];
+            if (opts?.reelEnd !== undefined) {
+                parts.push(`REEL_END=${opts.reelEnd ? 1 : 0}`);
+            }
+            return parts.join("|");
         }
         if (operation === "smt_cart_load") {
             return `DEV=${this.state.smtDeviceTable}|CART=${this.state.smtFeederSn}`;
         }
         if (operation === "smt_unload") {
-            return `MAT=${this.state.smtMaterialSn}`;
+            const parts = [`MAT=${this.state.smtMaterialSn}`];
+            if (opts?.reelEnd !== undefined) {
+                parts.push(`REEL_END=${opts.reelEnd ? 1 : 0}`);
+            }
+            return parts.join("|");
         }
         return "";
     }
 
-    async _submitSmtOperation(operation) {
+    async _submitSmtOperation(operation, reelEndOpts) {
         if (!this.state.selectedStationId) {
             this.setResult(_t("Select a work center first."), "warning");
             return;
         }
         this.state.smtLoading = true;
         try {
-            const barcode = this._buildSmtBarcode(operation);
+            const barcode = this._buildSmtBarcode(operation, {reelEnd: reelEndOpts});
             const operationMap = {
                 smt_offline_prepare: "offline_prepare",
                 smt_online_load: "feeder_unload",

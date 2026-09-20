@@ -504,7 +504,9 @@ class SnSmtPdaController(http.Controller):
                         'message': _('Unload format: MAT=xxx'),
                         'barcode': barcode,
                     }
-                service.unload(mes_order, scope='material', material_sn=material_sn_input)
+                service.unload(
+                    mes_order, scope='material', material_sn=material_sn_input,
+                    reel_end=extract('REEL_END') == '1')
                 return {
                     'ok': True,
                     'message': _('SMT unload completed: %(material)s') % {
@@ -550,6 +552,7 @@ class SnSmtPdaController(http.Controller):
                     f'{position.device_seq}.{position.table_no}',
                     position.loadpoint, new_material_sn,
                     change_type='change',
+                    reel_end=extract('REEL_END') == '1',
                 )
                 return {
                     'ok': True,
