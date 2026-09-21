@@ -12,7 +12,7 @@
         <field name="name">sn.wsd.mes.order.list</field>
         <field name="model">sn.wsd.mes.order</field>
         <field name="arch" type="xml">
-            <list create="false" edit="false" delete="false">
+            <list create="false" edit="false" delete="false" default_order="date_plan desc, id desc">
                 <field name="name"/>
                 <field name="date_plan"/>
                 <field name="production_line_id"/>
@@ -26,6 +26,9 @@
                 <field name="picked_qty" sum="Total Picked"/>
                 <field name="x_input_qty" sum="Total Input"/>
                 <field name="produced_qty" sum="Total Produced"/>
+                <field name="x_done_qty" sum="Total Done" optional="hide"/>
+                <field name="x_progress_rate" string="进度" widget="progressbar" optional="hide"/>
+                <field name="x_online_date" optional="hide"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'released'"
                        decoration-warning="state == 'picked'"
@@ -46,12 +49,18 @@
                             string="Generate SNs" class="btn-secondary"
                             context="{'default_mes_order_id': id}"
                             invisible="state in ('cancelled', 'done')"/>
+                    <!-- 单一主 CTA：released=领料 / picked=上线 / in_progress=完工(或 T 面 Close)；
+                         其余状态同一动作降级为 secondary 双实例切换。 -->
                     <button name="action_open_pick_wizard" type="object" string="Pick Material"
-                            class="btn-primary" invisible="state not in ('released', 'picked', 'in_progress')"/>
+                            class="btn-primary" invisible="state != 'released'"/>
+                    <button name="action_open_pick_wizard" type="object" string="Pick Material"
+                            class="btn-secondary" invisible="state not in ('picked', 'in_progress')"/>
                     <button name="action_open_return_wizard" type="object" string="Return Material"
                             class="btn-secondary" invisible="state == 'cancelled' or picked_qty &lt;= 0"/>
                     <button name="action_online" type="object" string="Go Online"
-                            class="btn-primary" invisible="x_online_date or state == 'cancelled'"/>
+                            class="btn-primary" invisible="state != 'picked' or x_online_date"/>
+                    <button name="action_online" type="object" string="Go Online"
+                            class="btn-secondary" invisible="x_online_date or state in ('cancelled', 'picked')"/>
                     <button name="action_sync_route" type="object" string="Sync Route"
                             invisible="x_online_date or state == 'cancelled'"/>
                     <button name="action_cancel" type="object" string="Cancel (Revoke)" class="btn-secondary"
@@ -71,45 +80,93 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <button name="action_open_pickings" type="object" class="oe_stat_button" icon="fa-exchange">
+                            <field name="picking_count" widget="statinfo" string="单据"/>
+                        </button>
+                        <button name="action_open_sn_ledger" type="object" class="oe_stat_button" icon="fa-barcode">
+                            <field name="x_sn_count" widget="statinfo" string="SN 台账"/>
+                        </button>
+                        <button name="action_open_paired_order" type="object" class="oe_stat_button" icon="fa-link"
+                                invisible="not x_paired_order_id">
+                            <field name="x_paired_order_id" widget="statinfo" string="配对单"/>
+                        </button>
+                        <button name="action_open_batch_pass_logs" type="object" class="oe_stat_button" icon="fa-forward"
+                                groups="mrp.group_mrp_manager"
+                                invisible="x_manage_mode != 'station'">
+                            <field name="x_batch_pass_count" widget="statinfo" string="Batch Passes"/>
+                        </button>
                     </div>
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
+
+                    <!-- 进度带：一眼看懂完成情况（数字均为现成字段+compute） -->
+                    <div class="d-flex flex-wrap align-items-center gap-4 p-3 mb-3 border rounded bg-light" name="progress_band">
+                        <div class="text-center">
+                            <div class="text-muted small">排产</div>
+                            <div class="fs-4 fw-bold"><field name="planned_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">已领</div>
+                            <div class="fs-4"><field name="picked_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">投入</div>
+                            <div class="fs-4"><field name="x_input_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">产出</div>
+                            <div class="fs-4"><field name="produced_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">入库</div>
+                            <div class="fs-4"><field name="x_done_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">欠数</div>
+                            <div class="fs-4 fw-bold text-danger"><field name="x_shortage_qty" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">补料</div>
+                            <div class="fs-4"><field name="x_over_pick_count" nolabel="1"/></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">良率</div>
+                            <div class="fs-4"><field name="x_yield_total" widget="percentage" nolabel="1"/></div>
+                        </div>
+                    </div>
+
                     <group>
-                        <group string="Order">
+                        <group string="计划">
                             <field name="production_id" readonly="1"/>
                             <field name="product_id" readonly="1"/>
                             <field name="material_specification"/>
                             <field name="production_line_id" readonly="1"/>
-                        </group>
-                        <group string="Schedule">
+                            <field name="x_workshop_id"/>
                             <field name="x_side" readonly="1" widget="badge"
                                    decoration-info="x_side in ('top', 'bottom')"
                                    decoration-success="x_side == 'single'"/>
                             <field name="date_plan" readonly="1"/>
-                            <field name="planned_qty" readonly="1"/>
-                            <field name="picked_qty" readonly="1"/>
-                            <field name="x_over_pick_count" readonly="1"/>
+                            <field name="x_date_plan_end"/>
+                            <field name="x_partner_id"/>
+                        </group>
+                        <group string="执行">
+                            <field name="x_online_date" readonly="1"/>
+                            <field name="x_done_date" readonly="1"/>
+                            <field name="x_workorder_input_qty" readonly="1"/>
                         </group>
                     </group>
                     <group string="工艺路线">
-                        <group>
+                        <group string="路线">
                             <field name="x_manage_mode" readonly="x_online_date"/>
-                            <field name="x_online_date" readonly="1"/>
                             <field name="x_mes_route_id" readonly="1" widget="many2one" options="{'no_open': True}"/>
-                            <field name="x_input_qty" readonly="1"/>
-                            <field name="x_output_qty" readonly="1"/>
-                            <field name="x_workorder_input_qty" readonly="1"/>
-                            <field name="x_done_qty" readonly="1"/>
                             <field name="state" invisible="1"/>
                         </group>
-                        <group string="计数工序">
+                        <group string="工序映射">
                             <field name="x_daily_input_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
                             <field name="x_daily_output_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
                             <field name="x_material_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
-                        </group>
-                        <group>
                             <field name="x_workorder_input_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
                             <field name="x_aging_start_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
                             <field name="x_aging_end_operation_id" domain="[('mes_route_id', '=', x_mes_route_id)]" readonly="state in ('cancelled', 'done')"/>
@@ -119,60 +176,88 @@
                         <widget name="mes_order_route_editor" nolabel="1"/>
                     </div>
                     <notebook>
-                        <page string="Material Pickings" name="pickings">
+                        <page string="关联单据" name="pickings">
+                            <div class="mb-2">
+                                <span class="text-muted">净台数（已取消单据不计入）：</span>
+                                <field name="x_picking_net_qty" nolabel="1" class="fw-bold d-inline"/>
+                            </div>
                             <field name="picking_ids" nolabel="1" readonly="1">
                                 <list create="false" edit="false" delete="false"
+                                      decoration-muted="state == 'cancel'"
                                       decoration-warning="x_mes_order_qty &lt; 0">
                                     <field name="name"/>
                                     <field name="picking_type_id" optional="show"/>
                                     <field name="scheduled_date" optional="show"/>
-                                    <field name="x_mes_order_qty" string="Units" sum="Total Units"/>
+                                    <field name="x_mes_order_qty" string="台数"/>
                                     <field name="origin" optional="hide"/>
                                     <field name="state" widget="badge"/>
                                 </list>
                             </field>
                         </page>
+                        <page string="工序数量" name="operation_qty">
+                            <field name="x_route_operation_ids" nolabel="1" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="x_allow_entry" column_invisible="1"/>
+                                    <field name="x_allow_exit" column_invisible="1"/>
+                                    <button name="action_open_batch_pass_wizard" type="object" icon="fa-forward"
+                                            groups="mrp.group_mrp_manager" string="Batch Pass"
+                                            invisible="x_allow_entry or x_allow_exit"
+                                            column_invisible="parent.x_manage_mode != 'station'"/>
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="display_label" string="工序"/>
+                                    <field name="x_wip_qty" string="在制" sum="合计"
+                                           column_invisible="parent.x_manage_mode == 'report'"/>
+                                    <field name="x_ok_qty" string="完成数" sum="合计"
+                                           column_invisible="parent.x_manage_mode == 'report'"/>
+                                    <field name="x_ng_qty" string="不良数" sum="合计"
+                                           decoration-warning="x_ng_qty &gt; 0"
+                                           column_invisible="parent.x_manage_mode == 'report'"/>
+                                    <field name="x_scrap_qty" string="报废数" sum="合计"
+                                           decoration-danger="x_scrap_qty &gt; 0"
+                                           column_invisible="parent.x_manage_mode == 'report'"/>
+                                    <field name="x_yield_rate" string="良率" widget="percentage"
+                                           column_invisible="parent.x_manage_mode == 'report'"/>
+                                    <field name="x_reported_ok_qty" string="合格" sum="合计"
+                                           column_invisible="parent.x_manage_mode != 'report'"/>
+                                    <field name="x_reported_ng_qty" string="不良" sum="合计"
+                                           decoration-warning="x_reported_ng_qty &gt; 0"
+                                           column_invisible="parent.x_manage_mode != 'report'"/>
+                                    <field name="x_reported_scrap_qty" string="报废" sum="合计"
+                                           decoration-danger="x_reported_scrap_qty &gt; 0"
+                                           column_invisible="parent.x_manage_mode != 'report'"/>
+                                    <field name="x_reported_qty" string="累计报工" sum="合计"
+                                           decoration-success="x_reported_ok_qty + x_reported_scrap_qty &gt;= parent.planned_qty"
+                                           column_invisible="parent.x_manage_mode != 'report'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="SN 台账" name="sn_ledger">
+                            <div class="d-flex gap-4 align-items-center mb-2">
+                                <span>投入 SN：<field name="x_sn_count" nolabel="1" class="fw-bold d-inline"/></span>
+                                <span>在制 SN：<field name="x_sn_wip_count" nolabel="1" class="fw-bold d-inline"/></span>
+                                <span class="text-muted small">过站管理模式按 SN 追踪每台板当前位置；报工模式无 SN 明细</span>
+                            </div>
+                            <field name="sn_wip_ids" nolabel="1" readonly="1">
+                                <list create="false" edit="false" delete="false">
+                                    <field name="in_date" string="到达时间" widget="datetime"/>
+                                    <field name="serial_identity_id" string="SN"/>
+                                    <field name="route_operation_id" string="当前工序"/>
+                                    <field name="workcenter_id" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="上下线日志" name="online_log">
+                            <field name="x_online_log_ids" nolabel="1" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="action" widget="badge"
+                                           decoration-success="action == 'online'"
+                                           decoration-warning="action == 'offline'"/>
+                                    <field name="user_id"/>
+                                    <field name="date" widget="datetime"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
-                    <separator string="工序数量"/>
-                    <field name="x_route_operation_ids" nolabel="1" readonly="1">
-                        <list create="0" edit="0" delete="0">
-                            <field name="sequence" column_invisible="1"/>
-                            <field name="display_label" string="工序"/>
-                            <field name="x_wip_qty" string="在制" sum="合计"
-                                   column_invisible="parent.x_manage_mode == 'report'"/>
-                            <field name="x_ok_qty" string="完成数" sum="合计"
-                                   column_invisible="parent.x_manage_mode == 'report'"/>
-                            <field name="x_ng_qty" string="不良数" sum="合计"
-                                   decoration-warning="x_ng_qty &gt; 0"
-                                   column_invisible="parent.x_manage_mode == 'report'"/>
-                            <field name="x_scrap_qty" string="报废数" sum="合计"
-                                   decoration-danger="x_scrap_qty &gt; 0"
-                                   column_invisible="parent.x_manage_mode == 'report'"/>
-                            <field name="x_yield_rate" string="良率" widget="percentage"
-                                   column_invisible="parent.x_manage_mode == 'report'"/>
-                            <field name="x_reported_ok_qty" string="合格" sum="合计"
-                                   column_invisible="parent.x_manage_mode != 'report'"/>
-                            <field name="x_reported_ng_qty" string="不良" sum="合计"
-                                   decoration-warning="x_reported_ng_qty &gt; 0"
-                                   column_invisible="parent.x_manage_mode != 'report'"/>
-                            <field name="x_reported_scrap_qty" string="报废" sum="合计"
-                                   decoration-danger="x_reported_scrap_qty &gt; 0"
-                                   column_invisible="parent.x_manage_mode != 'report'"/>
-                            <field name="x_reported_qty" string="累计报工" sum="合计"
-                                   decoration-success="x_reported_ok_qty + x_reported_scrap_qty &gt;= parent.planned_qty"
-                                   column_invisible="parent.x_manage_mode != 'report'"/>
-                        </list>
-                    </field>
-                    <separator string="上下线日志"/>
-                    <field name="x_online_log_ids" nolabel="1" readonly="1">
-                        <list create="0" edit="0" delete="0">
-                            <field name="action" widget="badge"
-                                   decoration-success="action == 'online'"
-                                   decoration-warning="action == 'offline'"/>
-                            <field name="user_id"/>
-                            <field name="date" widget="datetime"/>
-                        </list>
-                    </field>
                 </sheet>
                 <chatter/>
                 <div class="oe_chatter">
@@ -193,6 +278,8 @@
                 <field name="product_id"/>
                 <field name="x_side"/>
                 <filter name="f_released" string="Released" domain="[('state', '=', 'released')]"/>
+                <filter name="f_in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="f_undone" string="Not Done" domain="[('state', 'not in', ('done', 'cancelled'))]"/>
                 <filter name="f_today" string="Today" domain="[('date_plan', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 <separator/>
                 <filter name="f_top" string="Top (T)" domain="[('x_side', '=', 'top')]"/>

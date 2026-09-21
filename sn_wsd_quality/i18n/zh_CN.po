@@ -4547,3 +4547,11 @@ msgstr "所选 AQL 值未在抽样标准中配置。"
 #: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item__sample_record_mode
 msgid "Controls whether this item gets one lot value, one value per sample, or no separate value rows."
 msgstr "控制此检验项生成一条整批记录、每个样本一条记录，还是不生成单独的样本值记录。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/mes_order_batch_pass.py:0
+msgid ""
+"Operation %(op)s is covered by first-article inspection scheme "
+"%(scheme)s: batch pass would skip the first article. It is not allowed."
+msgstr "工序 %(op)s 命中首件检验方案 %(scheme)s：批量过站会跳过首件，不允许。"

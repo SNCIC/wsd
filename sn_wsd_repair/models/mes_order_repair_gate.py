@@ -91,3 +91,19 @@ class MesOrderRepairGate(models.Model):
             ('state', '=', 'done'),
             ('result', '=', 'ok'),
         ], order='repair_time desc, id desc', limit=1)
+
+    def _batch_pass_block_reason(self, serial_identity, route_operation):
+        """Quality freeze also blocks the batch-pass precheck: an SN with
+        an open repair order or quality issue shows up as auto-excluded
+        in the dialog instead of failing the whole batch mid-execution
+        (the leave/enter gates stay the final authority either way)."""
+        reason = super()._batch_pass_block_reason(
+            serial_identity, route_operation)
+        if reason:
+            return reason
+        freeze_source = self._sn_quality_freeze_source(serial_identity)
+        if freeze_source:
+            return _('frozen by %(kind)s %(ref)s (%(state)s)',
+                     kind=freeze_source['kind'], ref=freeze_source['ref'],
+                     state=freeze_source['state'])
+        return False

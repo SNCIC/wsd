@@ -3,8 +3,9 @@
     <!-- ==================================================================
          SN pass-station history (追溯性菜单): two-phase ledger born at the
          station scan (in_progress) and backfilled on leave (OK / NG /
-         scrap / skipped). Browsing only - rows are created by the pass
-         kernel, never by hand.
+         scrap). Browsing only - rows are created by the pass kernel,
+         never by hand. Rows written by a batch pass carry the reason
+         badge (行政过站) instead of pretending to be physical scans.
          ================================================================== -->
     <record id="view_sn_wsd_serial_operation_history_list" model="ir.ui.view">
         <field name="name">sn.wsd.serial.operation.history.list</field>
@@ -20,8 +21,11 @@
                        decoration-primary="result == 'in_progress'"
                        decoration-success="result == 'ok'"
                        decoration-warning="result == 'ng'"
-                       decoration-danger="result == 'scrap'"
-                       decoration-info="result == 'skipped'"/>
+                       decoration-danger="result == 'scrap'"/>
+                <field name="x_batch_pass_log_id" column_invisible="1"/>
+                <field name="x_batch_pass_reason" widget="badge"
+                       decoration-info="x_batch_pass_reason" optional="show"
+                       invisible="not x_batch_pass_log_id"/>
                 <field name="x_dwell_hours" optional="show"/>
                 <field name="x_wip_dwell_hours" optional="hide"/>
                 <field name="in_date" optional="hide"/>

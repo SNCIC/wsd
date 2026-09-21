@@ -63,6 +63,7 @@ const UI_LABELS = {
     ngQtyLabel: _t("NG Qty"),
     scrapBtn: _t("Scrap"),
     modeClear: _t("Clear Pass"),
+    modeBatchPass: _t("Batch Pass"),
     modeNg: _t("NG mode"),
     modeOk: _t("OK pass-through"),
     modeScrap: _t("Scrap mode"),
@@ -298,6 +299,25 @@ export class SnWsdShopFloor extends Component {
         }
     }
 
+    openBatchPass() {
+        const order = this.selectedStationOrder;
+        if (!order || !order.op?.id) {
+            return;
+        }
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "sn.wsd.batch.pass.wizard",
+            view_mode: "form",
+            target: "new",
+            name: this.labels.modeBatchPass,
+            context: {
+                default_mes_order_id: order.id,
+                default_route_operation_id: order.op.id,
+                default_workcenter_id: this.state.station.workcenterId,
+            },
+        });
+    }
+
     applyStationData(data) {
         const station = this.state.station;
         const employees = data.employees || {};
@@ -309,6 +329,7 @@ export class SnWsdShopFloor extends Component {
         station.orders = data.orders;
         station.wip = data.wip;
         station.scrapReasons = data.scrap_reasons || [];
+        station.canBatchPass = !!data.can_batch_pass;
         station.wipTotal = data.wip_total || data.wip.length;
         station.workcenterId = data.workcenter?.id || null;
         if (!station.orders.some((o) => o.id === station.selectedOrderId)) {

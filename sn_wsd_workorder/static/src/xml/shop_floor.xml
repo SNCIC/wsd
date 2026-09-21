@@ -81,6 +81,11 @@
                                         t-on-click="() => this.setStationMode('clear')">
                                     <i class="fa fa-eraser me-1" role="img"/><t t-out="labels.modeClear"/>
                                 </button>
+                                <button t-if="state.station.canBatchPass and selectedStationOrder and selectedStationOrder.manage_mode === 'station'"
+                                        class="btn btn-outline-primary"
+                                        t-on-click="() => this.openBatchPass()">
+                                    <i class="fa fa-forward me-1" role="img"/><t t-out="labels.modeBatchPass"/>
+                                </button>
                             </div>
                         </div>
                     </div>

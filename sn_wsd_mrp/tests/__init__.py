@@ -9,3 +9,4 @@ from . import test_report_offline
 from . import pick_gate
 from . import test_substitute_rule
 from . import test_line_side_mo_reservation
+from . import test_batch_pass

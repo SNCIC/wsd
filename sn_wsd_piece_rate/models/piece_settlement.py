@@ -384,16 +384,20 @@ class SnWsdPieceSettlement(models.Model):
 
     def _station_anchor_map(self):
         """SN id -> first OK out_date at this (order, operation): the anchor
-        for one-pay-per-SN and FIFO capture."""
+        for one-pay-per-SN and FIFO capture. Batch-pass (administrative)
+        OK rows never anchor a payment -- the boards were not physically
+        processed at this operation."""
         self.ensure_one()
         self.env['sn.wsd.serial.operation.history'].flush_model(
-            ['mes_order_id', 'route_operation_id', 'result', 'out_date'])
+            ['mes_order_id', 'route_operation_id', 'result', 'out_date',
+             'x_batch_pass_log_id'])
         self.env.cr.execute("""
             SELECT serial_identity_id, MIN(out_date)
             FROM sn_wsd_serial_operation_history
             WHERE mes_order_id = %s
               AND route_operation_id = %s
               AND result = 'ok'
+              AND x_batch_pass_log_id IS NULL
             GROUP BY serial_identity_id
         """, (self.mes_order_id.id, self.route_operation_id.id))
         return dict(self.env.cr.fetchall())

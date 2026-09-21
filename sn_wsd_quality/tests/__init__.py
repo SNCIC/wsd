@@ -6,3 +6,4 @@ from . import test_ipqc_patrol
 from . import test_matrix_regression
 from . import test_oqc_entry
 from . import test_sampling_stats
+from . import test_batch_pass_fai

@@ -10,6 +10,8 @@ from . import mrp_production_mes
 from . import mes_order
 from . import mes_order_route
 from . import clear_pass_log
+from . import batch_pass_log
+from . import mes_order_batch_pass
 from . import scrap_reason
 from . import stock_move
 from . import stock_lot
