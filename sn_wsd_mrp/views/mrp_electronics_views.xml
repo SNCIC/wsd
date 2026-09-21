@@ -103,21 +103,6 @@
         </field>
     </record>
 
-    <!-- Product Substitute -->
-    <record id="view_product_product_form_substitute" model="ir.ui.view">
-        <field name="name">product.product.form.substitute</field>
-        <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_normal_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='inventory']" position="inside">
-                <group string="Substitutes">
-                    <field name="substitute_ids" widget="many2many_tags"/>
-                    <field name="substitute_for_ids" widget="many2many_tags" readonly="1"/>
-                </group>
-            </xpath>
-        </field>
-    </record>
-
     <!-- Excess Return -->
     <record id="view_mrp_production_form_excess_return" model="ir.ui.view">
         <field name="name">mrp.production.form.sn_wsd_mrp</field>

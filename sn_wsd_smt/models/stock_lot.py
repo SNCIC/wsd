@@ -16,6 +16,21 @@ class StockLot(models.Model):
     smt_consumption_count = fields.Integer(
         string='SMT Product Usage Count', compute='_compute_smt_consumption_count',
     )
+    # 卷终确认（reel-end-confirm）：换料/下料时人工确认该卷已用尽。标记
+    # 挂在卷（lot）上——料站行换料后复用并指向新卷，只有卷是稳定的载体。
+    # 不落库存快照：损耗额=线边账面−流水净值，是推导值，入账在完工倒冲。
+    x_reel_end = fields.Boolean(
+        string='Reel End Confirmed', copy=False, index=True,
+        help='Human-confirmed at reel swap: this reel is physically used up. '
+             'The next completion backflush zeroes its line-side book '
+             'quantity (flow part + reel-end loss).',
+    )
+    x_reel_end_order_id = fields.Many2one(
+        'sn.wsd.mes.order', string='Reel End MES Order', copy=False,
+        index='btree_not_null', check_company=True,
+        help='MES order online when the reel end was confirmed; the '
+             'reel-end loss is attributed to this order.',
+    )
 
     @api.depends('quant_ids.quantity', 'quant_ids.location_id.usage')
     def _compute_x_smt_available_qty(self):

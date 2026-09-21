@@ -19,7 +19,9 @@ class SnWsdDeviceApi(http.Controller):
     """Device-facing endpoints: plain JSON POST, no authentication. The
     company scope comes from the payload (M_DATA_AUTH, or the work center
     for AOI). Error messages render in Chinese; the status code grades the
-    failure (400 payload / 404 missing / 422 business rule / 500 system)."""
+    failure (400 payload / 401-403 auth / 422 business incl. missing
+    reference / 500 system). 404 is never returned by the business layer:
+    it always means the route itself is missing."""
 
     def _logged_call(self, endpoint, service_method, payload,
                      success_message='OK'):
@@ -75,8 +77,10 @@ class SnWsdDeviceApi(http.Controller):
             request.env.cr.rollback()
             return fail(403, str(error))
         except ApiNotFound as error:
+            # graded with the other business rejections: a 404 would read
+            # as an unrouted request
             request.env.cr.rollback()
-            return fail(404, str(error))
+            return fail(422, str(error))
         except ValidationError as error:
             # ApiUnprocessable and ungraded business rejections
             request.env.cr.rollback()

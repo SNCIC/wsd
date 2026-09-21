@@ -51,3 +51,9 @@ access_sn_wsd_meter_pack_barcode_user,sn.wsd.meter.pack.barcode user,model_sn_ws
 access_sn_wsd_generate_sn_wizard_user,sn.wsd.generate.sn.wizard user,model_sn_wsd_generate_sn_wizard,mrp.group_mrp_user,1,1,1,0
 access_sn_wsd_mes_return_wizard_user,sn.wsd.mes.return.wizard user,model_sn_wsd_mes_return_wizard,mrp.group_mrp_user,1,1,1,0
 access_sn_wsd_mes_pick_wizard_line_user,sn.wsd.mes.pick.wizard.line user,model_sn_wsd_mes_pick_wizard_line,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_substitute_rule_user,sn.wsd.substitute.rule user,model_sn_wsd_substitute_rule,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_substitute_rule_manager,sn.wsd.substitute.rule manager,model_sn_wsd_substitute_rule,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_batch_pass_log_user,sn.wsd.batch.pass.log user,model_sn_wsd_batch_pass_log,base.group_user,1,0,0,0
+access_sn_wsd_batch_pass_log_manager,sn.wsd.batch.pass.log manager,model_sn_wsd_batch_pass_log,mrp.group_mrp_manager,1,0,1,0
+access_sn_wsd_batch_pass_wizard_manager,sn.wsd.batch.pass.wizard manager,model_sn_wsd_batch_pass_wizard,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_batch_pass_wizard_line_manager,sn.wsd.batch.pass.wizard.line manager,model_sn_wsd_batch_pass_wizard_line,mrp.group_mrp_manager,1,1,1,1

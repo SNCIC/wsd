@@ -929,6 +929,7 @@ msgstr "可退回余料"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_add_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -1117,6 +1118,7 @@ msgstr "通信测试"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_identity__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -1210,6 +1212,7 @@ msgstr "基于最近批次计算"
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_excess_return_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 msgid "Confirm"
 msgstr "确认"
 
@@ -2334,6 +2337,7 @@ msgstr "上线"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
 msgid "Group By"
 msgstr "分组"
 
@@ -3125,7 +3129,6 @@ msgstr "制令单 %(orders)s（%(pickings)s）已发料，禁止取消。"
 msgid "Material Issue"
 msgstr "领料单"
 
-
 #. module: sn_wsd_mrp
 msgid "Material Issue Coding"
 msgstr "领料单编码"
@@ -3272,6 +3275,8 @@ msgstr "制令单"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__x_mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
 
@@ -3473,6 +3478,7 @@ msgstr "制令单台数"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_orders
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_orders
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_orders
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__mes_order_ids
 msgid "MES Orders"
 msgstr "制令单"
 
@@ -4115,6 +4121,9 @@ msgstr "未上线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__note
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__note
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__note
 msgid "Note"
 msgstr "备注"
 
@@ -4339,6 +4348,9 @@ msgstr "打开工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__operation_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_operation_report_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__current_operation_id
 msgid "Operation"
 msgstr "工序"
 
@@ -4540,6 +4552,7 @@ msgstr "原始批次"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__original_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__original_material_specification
 msgid "Original Material Specification"
 msgstr "原物料规格"
 
@@ -4548,6 +4561,8 @@ msgstr "原物料规格"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__original_product_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_wizard__original_product_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__original_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
 msgid "Original Product"
 msgstr "原始产品"
 
@@ -4559,6 +4574,8 @@ msgstr "原始数量"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_product_type__other
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__other
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_log__reason__other
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_wizard__reason__other
 msgid "Other"
 msgstr "其他"
 
@@ -4838,6 +4855,7 @@ msgstr "部分完成"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_result__pass
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__final_verification_result__pass
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__hipot_result__pass
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 msgid "Pass"
 msgstr "合格"
 
@@ -5511,6 +5529,10 @@ msgstr "只读的按工序计数器，镜像自流程画布。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_carton_pallet_binding_log__reason
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__reason
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__reason
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_batch_pass_reason
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
 msgid "Reason"
 msgstr "原因"
 
@@ -6297,6 +6319,8 @@ msgstr "序列号在制"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_aging_batch_form
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__serial_identity_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
 msgid "Serials"
 msgstr "序列号列表"
 
@@ -6468,6 +6492,8 @@ msgid "SMT Feeder Setup Record"
 msgstr "SMT 飞达上料记录"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__serial_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__serial_identity_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__serial_identity_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__serial_identity_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_list
@@ -6762,7 +6788,6 @@ msgstr "工位类型"
 msgid "Station WIP"
 msgstr "工序在制"
 
-
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_manage_mode
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_route__manage_mode
@@ -6870,6 +6895,7 @@ msgstr "替代物料"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_material_specification
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_material_specification
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__substitute_material_specification
 msgid "Substitute Material Specification"
 msgstr "替代物料规格"
 
@@ -6895,6 +6921,8 @@ msgstr "替代物料"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line_substitute__substitute_product_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__substitute_product_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__substitute_product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
 msgid "Substitute Product"
 msgstr "替代产品"
 
@@ -6921,11 +6949,6 @@ msgstr "替代规则数量"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_usage_search
 msgid "Substitute Usage"
 msgstr "替代使用记录"
-
-#. module: sn_wsd_mrp
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_form_substitute
-msgid "Substitutes"
-msgstr "替代料"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__successor_ids
@@ -8859,3 +8882,313 @@ msgstr "计数工序"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_done_wizard__destination__lineside
 msgid "车间线边仓（直接验证）"
 msgstr "车间线边仓（直接验证）"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__scope
+msgid "Scope"
+msgstr "生效范围"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__mes_order_count
+msgid "Orders"
+msgstr "订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_substitute_rule__scope__all
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
+msgid "All Orders"
+msgstr "全部订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_substitute_rule__scope__orders
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_substitute_rule_search
+msgid "Specific Orders"
+msgstr "指定订单"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_substitute_rule
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_substitute_rule
+msgid "Substitute Rules"
+msgstr "替代料规则"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_substitute_rule
+msgid "Substitute Material Rule"
+msgstr "替代料规则"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_substitute_rule_scope_pair_uniq
+msgid "A substitute rule already exists for the same product pair and scope."
+msgstr "同一料号对在同一生效范围下已存在替代料规则。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid "A product cannot substitute for itself."
+msgstr "产品不能替代自身。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid "Select at least one MES order for a rule scoped to specific orders."
+msgstr "生效范围为指定订单时，必须至少选择一张制令单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/substitute_rule.py:0
+msgid ""
+"MES order %(order)s belongs to a different company than the substitute rule."
+msgstr "制令单 %(order)s 与替代料规则不属于同一公司。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_substitute_rule
+msgid "Create a substitute rule"
+msgstr "创建替代料规则"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.actions.act_window,help:sn_wsd_mrp.action_sn_wsd_substitute_rule
+msgid ""
+"Define which material may replace another one when loading SMT stations. "
+"Rules apply to all orders by default, or only to the selected ones."
+msgstr "定义 SMT 上料时哪种物料可以替换另一种物料。规则默认对全部订单生效，也可仅对所选订单生效。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Reel end loss"
+msgstr "卷终损耗"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__serial_count
+msgid "Serial Count"
+msgstr "SN 台数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__history_ids
+msgid "Pass Rows"
+msgstr "过站行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__history_count
+msgid "Pass Row Count"
+msgstr "过站行数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_batch_pass_log_id
+msgid "Batch Pass Log"
+msgstr "批量过站日志"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_log__reason__equipment_failure
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_wizard__reason__equipment_failure
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
+msgid "Equipment Failure"
+msgstr "设备故障"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_log__reason__outsourcing
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_wizard__reason__outsourcing
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
+msgid "Outsourcing"
+msgstr "外协"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_log__reason__process_waiver
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_batch_pass_wizard__reason__process_waiver
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
+msgid "Temporary Process Waiver"
+msgstr "工艺临时豁免"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Batch station pass is only available for station-mode MES orders."
+msgstr "批量过站仅适用于过站模式的制令单。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Operation %(op)s does not belong to MES order %(order)s."
+msgstr "工序 %(op)s 不属于制令单 %(order)s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid ""
+"Operation %(op)s is a feeding (start) operation: batch pass would forge "
+"input counts. It is not allowed."
+msgstr "工序 %(op)s 是投入工序：批量过站会伪造投入台数，不允许。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid ""
+"Operation %(op)s is the end operation: batch pass would forge output "
+"quantity and trigger the auto-close. It is not allowed."
+msgstr "工序 %(op)s 是产出/尾站工序：批量过站会伪造产出并触发自动关结，不允许。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid ""
+"Operation %(op)s is the material operation: batch pass would forge SMT "
+"consumption records and skew the backflush. It is not allowed."
+msgstr "工序 %(op)s 是物料关联工序：批量过站会虚构 SMT 扣点流水、歪曲倒冲，不允许。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Only manufacturing managers can batch-pass stations."
+msgstr "只有制造管理员可以执行批量过站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Pick a batch pass reason."
+msgstr "请选择批量过站原因。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Select at least one SN."
+msgstr "请至少选择一个 SN。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "not in progress on this order"
+msgstr "不在本单在制"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "parked at or past the target operation"
+msgstr "已停在目标工序或其下游"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "pass limit reached (%(limit)s) at %(op)s"
+msgstr "工序 %(op)s 过站次数已用尽（上限 %(limit)s）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "SN %(sn)s is parked at %(parked)s, which is not upstream of %(op)s."
+msgstr "SN %(sn)s 停靠在 %(parked)s，不在 %(op)s 的上游。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/batch_pass_log.py:0
+msgid "Batch station pass logs are append-only."
+msgstr "批量过站日志只增不改不删。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/batch_pass_wizard.py:0
+msgid ""
+"%(count)s SNs passed %(op)s on %(order)s; the boards are parked at the "
+"next station."
+msgstr "%(count)s 台 SN 已过 %(op)s（%(order)s），板已停靠下一站。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/batch_pass_wizard.py:0
+msgid "frozen by %(kind)s %(ref)s (%(state)s)"
+msgstr "被%(kind)s %(ref)s冻结（%(state)s）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "Batch Station Pass"
+msgstr "批量过站"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "In-Progress SNs"
+msgstr "在制 SN"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "Excluded:"
+msgstr "已排除："
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__current_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "Parked At"
+msgstr "停靠工序"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__park_hours
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "Parked (h)"
+msgstr "停留（小时）"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__block_reason
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "Excluded Because"
+msgstr "排除原因"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
+msgid "Batch Station Passes"
+msgstr "批量过站记录"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+msgid "SNs"
+msgstr "台数"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+msgid "Marked Rows"
+msgstr "标记行"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+msgid "By"
+msgstr "操作人"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
+msgid "Marked Pass Rows"
+msgstr "已标记过站行"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "e.g. coater pump failure, ECN reference..."
+msgstr "如：涂覆泵故障、ECN 单号……"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_operation_history_list
+msgid "Batch Pass"
+msgstr "批量过站"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
+msgid "Batch Passes"
+msgstr "批量过站"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__selected
+msgid "Pass Through"
+msgstr "放行"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
+msgid "Operator"
+msgstr "操作人"

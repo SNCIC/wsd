@@ -3219,3 +3219,78 @@ msgstr "料枪通道SN必填。"
 #: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_cart_line__mes_order_id
 msgid "The order the line is prepared for. May be empty during offline preparation before the order goes online; it is matched to the online material table when the cart is mounted (load_cart)."
 msgstr "该行所备料的制令单。制令单上线前的离线备料阶段可为空；安装料车（load_cart）时与在线料表匹配。"
+
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_reel_end
+msgid "Reel End Confirmed"
+msgstr "卷终确认（已用尽）"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_stock_lot__x_reel_end
+msgid ""
+"Human-confirmed at reel swap: this reel is physically used up. The next "
+"completion backflush zeroes its line-side book quantity (flow part + "
+"reel-end loss)."
+msgstr "换料/下料时人工确认该卷已用尽。下次完工倒冲把该卷线边账面余量一次扣到归零（流水部分 + 卷终损耗）。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_stock_lot__x_reel_end_order_id
+msgid "Reel End MES Order"
+msgstr "卷终损耗归属制令单"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_stock_lot__x_reel_end_order_id
+msgid ""
+"MES order online when the reel end was confirmed; the reel-end loss is "
+"attributed to this order."
+msgstr "确认卷终时在线的制令单；卷终损耗归该单入账。"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__loaded_reel_end
+msgid "Loaded Reel End"
+msgstr "在机卷卷终"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Loadpoint %(pos)s of %(order)s has no loaded material to confirm as used "
+"up."
+msgstr "制令单 %(order)s 的料站 %(pos)s 没有在机物料，无法确认卷终。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Cannot duplicate loadpoint %(pos)s of %(order)s onto itself: a loadpoint "
+"can only exist once per MES order. Copy to a different loadpoint instead."
+msgstr "不能把制令单 %(order)s 的料站 %(pos)s 原样复制：同一制令单同一料站只能存在一行，请复制到不同料站。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Loadpoint %(pos)s of MES order %(order)s already has a row; a loadpoint "
+"can only exist once per order."
+msgstr "制令单 %(order)s 的料站 %(pos)s 已存在记录；同一料站每单只能一行。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Reel %(lot)s has been confirmed used up (reel end) and cannot be loaded "
+"again."
+msgstr "卷 %(lot)s 已确认用尽（卷终），不能再上料。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_list
+msgid "Confirm Reel End"
+msgstr "确认卷终"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_list
+msgid ""
+"Confirm this reel is used up? Its remaining book quantity will be zeroed "
+"at the next completion backflush (reel-end loss attributed to this order)."
+msgstr "确认该卷已用尽？其剩余账面量将在下次完工倒冲归零（卷终损耗归本单）。"

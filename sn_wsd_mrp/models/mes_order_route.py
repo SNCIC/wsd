@@ -614,10 +614,20 @@ class SerialOperationHistory(models.Model):
     )
     result = fields.Selection(
         [('in_progress', 'WIP'), ('ok', 'OK'), ('ng', 'NG'),
-         ('scrap', 'Scrap'), ('skipped', 'Skipped')],
+         ('scrap', 'Scrap')],
         required=True, index=True,
         help='WIP (key in_progress) = the SN entered this operation and is '
              'still parked there (the row waits for its leave backfill).')
+    x_batch_pass_log_id = fields.Many2one(
+        'sn.wsd.batch.pass.log', string='Batch Pass Log',
+        index=True, ondelete='set null', copy=False,
+        help='Set when this OK row was written by a batch station pass '
+             '(administrative pass) instead of a physical scan; the log '
+             'header carries the operator, reason and SN list.',
+    )
+    x_batch_pass_reason = fields.Selection(
+        related='x_batch_pass_log_id.reason', string='Batch Pass Reason',
+    )
     in_date = fields.Datetime()
     out_date = fields.Datetime(index=True)
     operator_code = fields.Char(
@@ -628,8 +638,7 @@ class SerialOperationHistory(models.Model):
     x_dwell_hours = fields.Float(
         string='Dwell (h)', compute='_compute_x_dwell_hours', store=True,
         help='Hours the SN spent at this operation once it left: '
-             'out_date - in_date. Zero for in-progress and skipped rows '
-             '(skipped legs never parked).')
+             'out_date - in_date. Zero for in-progress rows.')
     x_wip_dwell_hours = fields.Float(
         string='In-Progress Dwell (h)', compute='_compute_x_wip_dwell_hours',
         help='Hours since the SN entered this operation, for in-progress '

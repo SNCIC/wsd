@@ -129,6 +129,11 @@
                 <field name="required_product_spec"/>
                 <field name="loaded_material_lot_id" optional="show"/>
                 <field name="loaded_feeder_id" optional="show"/>
+                <field name="loaded_reel_end" optional="show"/>
+                <button name="action_confirm_reel_end" type="object"
+                        string="Confirm Reel End" icon="fa-circle-o"
+                        invisible="is_load != 'Y'"
+                        confirm="Confirm this reel is used up? Its remaining book quantity will be zeroed at the next completion backflush (reel-end loss attributed to this order)."/>
                 <field name="cart_id" optional="show"/>
                 <field name="point_qty"/>
                 <field name="loaded_qty" optional="show"/>

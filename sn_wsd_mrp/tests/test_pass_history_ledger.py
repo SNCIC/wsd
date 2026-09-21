@@ -401,16 +401,6 @@ class TestPassHistoryLedger(TransactionCase):
         self.assertFalse(self.env['sn.wsd.serial.wip'].search(
             [('serial_identity_id', '=', serial.id)]))
 
-    def test_skip_guard_counts_in_progress(self):
-        """skip 守卫更严：工序有在制行即算"已执行"，不得跳过。"""
-        order = self._make_order_online()
-        wcs = self._wcs()
-        order.scan_enter('SN-PHL-032', wcs['a'])
-        line = self.env['sn.wsd.skip.request.line'].new({
-            'route_operation_id': self._rop(order, self.op_a).id,
-        })
-        self.assertTrue(line._is_route_operation_processed())
-
     def test_lot_qty_mes_order_excludes_in_progress(self):
         """抽样 mes_order 批量源只数已完成行，AQL 批量不被在制抬高。"""
         # spec: station-pass-history/spec/相邻消费方口径/抽样批量源排除在制

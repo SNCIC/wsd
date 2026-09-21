@@ -99,6 +99,30 @@ class MesOrderSmtOnline(models.Model):
         )
         return {lot: total for lot, total in groups if (total or 0.0) > 0}
 
+    def _mes_reel_end_plan(self, lot, flow_qty):
+        """覆写卷终归零钩子（reel-end-confirm）：已确认用尽的卷在第一次
+        完工倒冲一次扣到 0——total=线边账面余量（流水部分封顶其中）、
+        loss=差额（账面−流水，倒冲打「卷终损耗」标）、active=True（跳过
+        可用性硬校验：人为确认已尽，允许吃到他单在同卷的预留，原生
+        _free_reservation 下折连坐清零）。账面已 0 时 total=0（该卷
+        不再参与任何倒冲）。"""
+        self.ensure_one()
+        if not lot.x_reel_end:
+            return super()._mes_reel_end_plan(lot, flow_qty)
+        line_side = self._mes_line_side_location()
+        groups = self.env['stock.quant']._read_group([
+            ('product_id', '=', lot.product_id.id),
+            ('lot_id', '=', lot.id),
+            ('location_id', '=', line_side.id),
+        ], groupby=[], aggregates=['quantity:sum'])
+        book = (groups[0][0] or 0.0) if groups else 0.0
+        flow_part = min(flow_qty, book)
+        return {
+            'total': book,
+            'loss': max(book - flow_part, 0.0),
+            'active': True,
+        }
+
     def _check_can_generate_smt_online_materials(self):
         self.ensure_one()
         protected_lines = self.x_smt_online_material_ids.filtered(

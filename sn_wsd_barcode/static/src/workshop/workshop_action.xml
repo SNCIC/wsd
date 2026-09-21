@@ -60,6 +60,19 @@
                         <i class="fa fa-times"/>
                     </button>
                 </form>
+                <!-- 卷终确认（reel-end-confirm）：续料/下料提交前，操作员判定旧卷是否已尽 -->
+                <div t-if="state.smtReelEndPending" class="d-flex gap-2 p-2">
+                    <button type="button" class="btn btn-danger flex-fill"
+                            t-on-click="() => this.confirmReelEnd(true)">
+                        <i class="fa fa-circle-o me-1"/>
+                        <t t-out="reelEndYesLabel"/>
+                    </button>
+                    <button type="button" class="btn btn-success flex-fill"
+                            t-on-click="() => this.confirmReelEnd(false)">
+                        <i class="fa fa-circle me-1"/>
+                        <t t-out="reelEndNoLabel"/>
+                    </button>
+                </div>
             </div>
 
             <!-- ❷ 反馈区：进度 + 大色块 + 域动作 -->

@@ -51,7 +51,7 @@ class TestPanelApiService(PanelApiFixture, TransactionCase):
         self.assertEqual(result['code'], 400)
         self.assertIn('Organization', result['message'])
         result = self.service.api_panel_add(self._add_payload('PNL-SVC-1', 'PNL-SVC-2') | {'M_DATA_AUTH': 'GHOST-ORG'})
-        self.assertEqual(result['code'], 404)
+        self.assertEqual(result['code'], 422)
         self.assertIn('Organization', result['message'])
         result = self.service.api_panel_query({'proSn': 'PNL-SVC-1'})
         self.assertEqual(result['code'], 400)

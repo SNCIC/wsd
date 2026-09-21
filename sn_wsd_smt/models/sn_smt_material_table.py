@@ -370,6 +370,12 @@ class SnSmtOnlineMaterial(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    # 卷终确认（reel-end-confirm）：在机卷的卷终状态（跟随 lot）
+    loaded_reel_end = fields.Boolean(
+        string='Loaded Reel End',
+        related='loaded_material_lot_id.x_reel_end',
+        readonly=True,
+    )
 
     # 一个料站同一时刻只能有一盘料在线（同一制令单下唯一位置行）。
     _sn_smt_online_material_unique = models.Constraint(
@@ -381,6 +387,73 @@ class SnSmtOnlineMaterial(models.Model):
     def _compute_loaded_product_id(self):
         for record in self:
             record.loaded_product_id = record.loaded_material_lot_id.product_id
+
+    def action_confirm_reel_end(self):
+        """在线料表的卷终确认入口（reel-end-confirm）：操作员确认该料站
+        在机卷已用尽——标记卷终+归属本单并下线该料站（与 PDA 下料带
+        确认同语义，走同一服务层，写同一份物料日志）。"""
+        for line in self:
+            if line.is_load != 'Y' or not line.loaded_material_lot_id:
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of %(order)s has no loaded material '
+                    'to confirm as used up.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
+            self.env['sn.smt.loading.service'].unload(
+                line.mes_order_id, scope='material',
+                material_sn=line.loaded_material_lot_id.name, reel_end=True)
+        return True
+
+    def copy(self, default=False):
+        # 复制允许，但不能落在相同站位（同单同料站唯一）：目标设备/表/
+        # 料站与原行一致时明确报错；带新站位的复制（default 传参）可用。
+        # chanel_sn 为空时 SQL 唯一约束不比对 NULL，站位唯一性由
+        # _check_unique_position 补齐。上料状态不随复制。
+        default = dict(default or {})
+        for record in self:
+            target = (
+                default.get('device_seq', record.device_seq),
+                default.get('table_no', record.table_no),
+                default.get('loadpoint', record.loadpoint),
+            )
+            if target == (record.device_seq, record.table_no, record.loadpoint):
+                raise ValidationError(_(
+                    'Cannot duplicate loadpoint %(pos)s of %(order)s onto '
+                    'itself: a loadpoint can only exist once per MES order. '
+                    'Copy to a different loadpoint instead.',
+                    pos='%s.%s/%s' % target,
+                    order=record.mes_order_id.name))
+        default.setdefault('is_load', 'N')
+        default.setdefault('is_qc_test', 'N')
+        return super().copy(default)
+
+    @api.constrains(
+        'company_id', 'mes_order_id', 'device_seq', 'table_no',
+        'loadpoint', 'chanel_sn')
+    def _check_unique_position(self):
+        # SQL 唯一约束对 NULL chanel_sn 不比对（同站可钻空子），这里补齐：
+        # 同公司同单同站位（设备+表+料站+通道，通道空视为空）只允许一行。
+        for line in self:
+            if not line.device_seq or not line.table_no or not line.loadpoint:
+                continue
+            domain = [
+                ('company_id', '=', line.company_id.id),
+                ('mes_order_id', '=', line.mes_order_id.id),
+                ('device_seq', '=', line.device_seq),
+                ('table_no', '=', line.table_no),
+                ('loadpoint', '=', line.loadpoint),
+                ('id', '!=', line.id),
+            ]
+            if line.chanel_sn:
+                domain.append(('chanel_sn', '=', line.chanel_sn))
+            else:
+                domain.append(('chanel_sn', 'in', [False, '']))
+            if self.search_count(domain, limit=1):
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of MES order %(order)s already has a '
+                    'row; a loadpoint can only exist once per order.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
 
     @api.depends('model_code')
     def _compute_model_spec(self):
@@ -579,10 +652,24 @@ class SnSmtOperationMixin(models.AbstractModel):
             return False
         if candidate_product == required_product:
             return True
+        # 替代料规则（全局或命中本单）——独立维护的放行依据
+        if candidate_product in self.env['sn.wsd.substitute.rule']._get_substitute_products(
+                mes_order, required_product):
+            return True
         production = mes_order.production_id
         if production:
             return production._is_allowed_substitute_product(required_product, candidate_product)
-        return candidate_product in required_product.substitute_ids or required_product in candidate_product.substitute_for_ids
+        # 产品级 substitute_ids 已退役：替代放行只认规则与 BOM 行级
+        return False
+
+    @api.model
+    def _allowed_requirement_label(self, mes_order, required_product):
+        """拒绝提示的"要求"展示：主料号 + 命中规则的替代料号清单。"""
+        codes = [required_product.default_code]
+        substitutes = self.env['sn.wsd.substitute.rule']._get_substitute_products(
+            mes_order, required_product)
+        codes += [code for code in substitutes.mapped('default_code') if code]
+        return ', '.join(dict.fromkeys(filter(None, codes)))
 
     @api.model
     def _check_material_expiration(self, lot):
@@ -599,7 +686,9 @@ class SnSmtOperationMixin(models.AbstractModel):
 
     @api.model
     def _check_material_common_rules(self, mes_order, online_material, material_lot):
-        """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。"""
+        """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。
+
+        拒绝提示列出要求料号及命中规则的可用替代料号清单。"""
         if not material_lot:
             raise ValidationError(_('The material SN could not be resolved to a stock lot.'))
         product_model = self.env['product.product']
@@ -609,7 +698,7 @@ class SnSmtOperationMixin(models.AbstractModel):
         if required_product and not self._is_allowed_material_product(mes_order, required_product, material_lot.product_id):
             raise ValidationError(_(
                 'The material does not match the current SMT loadpoint requirement (%(required)s).',
-                required=online_material.item_code,
+                required=self._allowed_requirement_label(mes_order, required_product),
             ))
         if not required_product and self._normalize_product_code(material_lot.product_id) != online_material.item_code:
             raise ValidationError(_(
@@ -624,6 +713,12 @@ class SnSmtOperationMixin(models.AbstractModel):
         self._check_material_expiration(material_lot)
         if material_lot._smt_on_hand_qty() <= 0:
             raise ValidationError(_('The current material quantity is zero.'))
+        # 卷终确认（reel-end-confirm）：已确认用尽的卷禁止再上料——
+        # 防幽灵卷复活（账面已被归零，实物已尽）
+        if material_lot.x_reel_end:
+            raise ValidationError(_(
+                'Reel %(lot)s has been confirmed used up (reel end) and '
+                'cannot be loaded again.', lot=material_lot.name))
 
 
 class SnSmtTableImportMixin(models.AbstractModel):

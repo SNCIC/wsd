@@ -301,7 +301,10 @@ class MrpProduction(models.Model):
 
     def _build_wip_snapshot_line_values(self, route_operations):
         self.ensure_one()
-        travel_model = self.env['sn.wsd.mes.sn.travel']
+        # sn.wsd.mes.sn.travel was removed with the SN unification: when the
+        # model is gone the snapshot falls back to the qty data source
+        # instead of crashing the refresh.
+        travel_model = self.env.get('sn.wsd.mes.sn.travel')
         issue_model = self.env['sn.wsd.quality.issue']
         values_list = []
         previous_pass_qty = 0.0
@@ -311,7 +314,8 @@ class MrpProduction(models.Model):
         for index, route_operation in enumerate(ordered_route_operations):
             step = route_operation
             travel_domain = [('route_operation_id', '=', route_operation.id)]
-            travel_count = travel_model.search_count(travel_domain)
+            travel_count = (
+                travel_model.search_count(travel_domain) if travel_model else 0)
             if travel_count:
                 data_source = 'sn'
                 start_qty = travel_model.search_count(travel_domain + [('event_type', '=', 'start')])

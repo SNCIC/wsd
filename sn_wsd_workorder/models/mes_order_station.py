@@ -35,6 +35,10 @@ class MesOrderStationServices(models.Model):
             'name': workcenter.display_name,
             'operation': workcenter.x_operation_id.display_name or '',
         }
+        # batch station pass entry visibility: managers only (the
+        # service double-checks the group server-side)
+        payload['can_batch_pass'] = self.env.user.has_group(
+            'mrp.group_mrp_manager')
         payload['orders'] = []
         payload['wip'] = []
         payload['scrap_reasons'] = [{

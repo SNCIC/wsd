@@ -12,7 +12,7 @@
             <div class="o_route_flow_toolbar">
                 <button t-if="isFullscreenAction" class="btn btn-secondary btn-sm" t-on-click="onClickBack">返回</button>
                 <button class="btn btn-secondary btn-sm" t-on-click="onFitScreen">适应屏幕</button>
-                <span class="o_route_flow_hint">流程图改动随页面"保存"生效：流程结构变化自动升版，仅调整位置或改其他字段不升版</span>
+                <span class="o_route_flow_hint">画布：拖拽平移 · Ctrl+滚轮缩放 · 流程图改动随页面"保存"生效：流程结构变化自动升版，仅调整位置或改其他字段不升版</span>
             </div>
             <div class="o_route_flow_shell">
                 <!-- Left: operation palette -->
@@ -72,15 +72,18 @@
     </t>
 
     <t t-name="sn_wsd_route_graph.MesOrderRouteEditor">
-        <div class="o_mes_route_root">
+        <!-- single root (OWL requirement): expanded canvas vs collapsed summary -->
+        <div class="o_mes_route_wrap">
+        <div class="o_mes_route_root" t-if="!state.summaryMode">
             <div class="o_mes_route_toolbar">
                 <button t-if="state.editable" class="btn btn-primary btn-sm" t-on-click="onClickSave"
                         t-att-disabled="state.saving or !state.dirty">保存</button>
+                <button t-if="!state.editable" class="btn btn-secondary btn-sm" t-on-click="onCollapseSummary">收起</button>
                 <button class="btn btn-secondary btn-sm" t-on-click="onFitScreen">适应屏幕</button>
                 <span class="o_mes_route_hint" t-if="state.editable">
-                    编辑只作用于本制令单的工艺（保存后不再自动跟随公共路线）；带 🔒 的工序已有执行记录，不可修改
+                    画布：拖拽平移 · Ctrl+滚轮缩放 · 编辑只作用于本制令单的工艺（保存后不再自动跟随公共路线）；带 🔒 的工序已有执行记录，不可修改
                 </span>
-                <span class="o_mes_route_hint" t-if="!state.editable">制令单已关闭，工艺只读</span>
+                <span class="o_mes_route_hint" t-if="!state.editable">制令单已关闭，工艺只读 · 画布：拖拽平移 · Ctrl+滚轮缩放</span>
             </div>
             <div class="o_mes_route_shell">
                 <div class="o_mes_route_palette" t-if="state.editable">
@@ -129,6 +132,14 @@
                 </div>
             </div>
         </div>
+        <!-- 已关闭单据的工艺摘要行：点击展开完整画布 -->
+        <div t-if="state.summaryMode" class="o_mes_route_summary" t-on-click="onExpandSummary">
+            <span class="o_mes_route_summary_chain" t-esc="state.routeSummary"/>
+            <span class="text-muted">·</span>
+            <span class="text-muted" t-esc="state.summaryQty"/>
+            <button type="button" class="btn btn-secondary btn-sm ms-auto">展开画布</button>
+        </div>
+        </div>
     </t>
 
     <t t-name="sn_wsd_route_graph.RouteFlowViewer">
@@ -164,7 +175,7 @@
                             t-att-value="opt.key" t-att-selected="opt.key === state.selB ? 'selected' : undefined"
                             t-esc="opt.label"/>
                 </select>
-                <span class="ms-auto text-muted small">左右画布均可缩放/拖动 · 只读</span>
+                <span class="ms-auto text-muted small">左右画布均可拖动平移、Ctrl+滚轮缩放 · 只读</span>
             </div>
             <div class="o_route_compare_panes">
                 <div class="o_route_compare_pane">
