@@ -396,7 +396,7 @@ export class RouteFlowEditor extends Component {
                 container: this.containerRef.el,
                 grid: true,
                 panning: { enabled: true },
-                mousewheel: { enabled: true, minScale: 0.5, maxScale: 3 },
+                mousewheel: { enabled: true, modifiers: ["ctrl"], minScale: 0.5, maxScale: 3 },
                 connecting: {
                     connector: { name: "normal" },
                     connectionPoint: "anchor",

@@ -57,6 +57,11 @@ export class MesOrderRouteEditor extends Component {
             editable: false,
             saving: false,
             dirty: false,
+            // closed orders (done/cancelled) start as a one-line summary;
+            // the X6 canvas is built lazily when the user expands it
+            summaryMode: false,
+            routeSummary: "",
+            summaryQty: "",
         });
         this._loading = false;
         this._injectStyles();
@@ -88,6 +93,9 @@ export class MesOrderRouteEditor extends Component {
         style.id = "o-mes-order-route-css";
         style.textContent = [
             ".o_mes_route_root { border: 1px solid #dfe3e8; background: #fff; }",
+            ".o_mes_route_summary { display: flex; align-items: center; gap: 8px; border: 1px solid #dfe3e8; background: #fff; padding: 10px 12px; cursor: pointer; }",
+            ".o_mes_route_summary:hover { background: #f5f7fa; }",
+            ".o_mes_route_summary .o_mes_route_summary_chain { font-size: 13px; color: #141414; }",
             ".o_mes_route_toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid #dfe3e8; background: #fff; }",
             ".o_mes_route_hint { margin-left: auto; font-size: 12px; color: #8c8c8c; }",
             ".o_mes_route_shell { position: relative; display: flex; height: 520px; }",
@@ -155,6 +163,19 @@ export class MesOrderRouteEditor extends Component {
             this.state.usedOpIds = canvas.graph.nodes.map(n => n.operation_id).filter(Boolean);
             this.state.paletteVersion++;
 
+            this._canvas = canvas;
+            // Closed orders collapse to the summary line; expanding builds
+            // the canvas on demand (see onExpandSummary). _userExpanded
+            // keeps an explicitly expanded canvas open across rebuilds.
+            if (!canvas.editable && canvas.graph.nodes.length && !this._userExpanded) {
+                this._loading = false;
+                this.state.dirty = false;
+                this.state.summaryMode = true;
+                this._buildSummary();
+                return;
+            }
+            this.state.summaryMode = false;
+
             const X6 = window.X6;
             if (!mesEdgeRegistered) {
                 try {
@@ -186,7 +207,7 @@ export class MesOrderRouteEditor extends Component {
                 container: this.containerRef.el,
                 grid: true,
                 panning: { enabled: true },
-                mousewheel: { enabled: true, minScale: 0.5, maxScale: 3 },
+                mousewheel: { enabled: true, modifiers: ["ctrl"], minScale: 0.5, maxScale: 3 },
                 connecting: {
                     connector: { name: "normal" },
                     connectionPoint: "anchor",
@@ -382,6 +403,40 @@ export class MesOrderRouteEditor extends Component {
     _fitView() {
         if (!this.graph) return;
         try { this.graph.zoomToFit({ padding: 24, maxScale: 1 }); } catch (e) { /* empty */ }
+    }
+
+    _buildSummary() {
+        const canvas = this._canvas;
+        if (!canvas) return;
+        const icons = { done: "✓", wip: "●", ng: "✖" };
+        const nodes = [...canvas.graph.nodes].sort(
+            (a, b) => (a.sequence || 0) - (b.sequence || 0));
+        this.state.routeSummary = nodes.map(n => {
+            const st = String(this.states[n.uid] || "").split(":")[0];
+            const icon = icons[st] || (st ? "⚠" : "○");
+            return `${icon} ${n.step_code || n.name || ""}`;
+        }).join(" → ");
+        const data = (this.props.record && this.props.record.data) || {};
+        const tSide = !!data.x_is_dual_side_non_final;
+        const done = tSide ? data.produced_qty : data.x_done_qty;
+        this.state.summaryQty = `${tSide ? "产出" : "入库"} ${done ?? 0} / ${data.planned_qty ?? 0}`;
+    }
+
+    onExpandSummary() {
+        this._userExpanded = true;
+        this.state.summaryMode = false;
+        // let OWL mount the shell (and its container div) before X6 inits
+        setTimeout(() => this._build(), 50);
+    }
+
+    onCollapseSummary() {
+        this._userExpanded = false;
+        if (this.graph) {
+            try { this.graph.dispose(); } catch (e) { /* UMD may ignore */ }
+            this.graph = null;
+        }
+        this.state.summaryMode = true;
+        this._buildSummary();
     }
 
     onFitScreen() { this._fitView(); }
