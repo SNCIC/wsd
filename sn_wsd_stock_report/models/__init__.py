@@ -1,4 +1,5 @@
 from . import stock_balance_range
+from . import stock_balance_detail
 from . import stock_balance_report
 from . import stock_balance_wizard
 from . import stock_quant

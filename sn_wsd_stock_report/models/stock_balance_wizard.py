@@ -41,4 +41,10 @@ class SnWsdStockBalanceWizard(models.TransientModel):
         action['name'] = self.env._(
             '收发汇总表（%s ~ %s）', self.date_from, self.date_to,
         )
+        # 把区间随 action 带到列表上（再随行点击一路传到下钻明细），
+        # 这样即使区间参数后来被别人改掉，明细仍按用户看到的这份区间出数。
+        action['context'] = {
+            'sn_wsd_balance_date_from': str(self.date_from),
+            'sn_wsd_balance_date_to': str(self.date_to),
+        }
         return action

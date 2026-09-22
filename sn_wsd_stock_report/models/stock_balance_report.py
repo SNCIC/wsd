@@ -19,6 +19,9 @@ class SnWsdStockBalanceReport(models.Model):
     * 查询区间由 ``sn.wsd.stock.balance.range`` 的唯一一行决定，由向导写入；
       期初 = 区间开始日之前的累计净流入，结存 = 区间结束日（含当日）之前的累计净流入。
       因为库存区总量是守恒量，期末结存即累计净流入，所以无需期初快照表。
+
+    本视图不自己拼流水，而是从 ``sn.wsd.stock.balance.detail``（下钻明细）聚合，
+    保证点击某行看到的明细与列表里的数字完全对得上。
     """
 
     _name = 'sn.wsd.stock.balance.report'
@@ -49,6 +52,8 @@ class SnWsdStockBalanceReport(models.Model):
     def init(self):
         # 参数表与本视图在同一批初始化中，先后顺序无法保证，这里显式确保它已建表
         self.env['sn.wsd.stock.balance.range']._auto_init()
+        # 汇总的流水口径全部来自明细视图，必须先建好它
+        self.env['sn.wsd.stock.balance.detail'].init()
         drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute(f"""
             CREATE OR REPLACE VIEW {self._table} AS (
@@ -67,76 +72,34 @@ class SnWsdStockBalanceReport(models.Model):
                                (now() AT TIME ZONE '{BUSINESS_TIMEZONE}')::date
                            ) AS date_to
                 ),
-                warehouse_root AS (
-                    -- 仓库库存区的根库位（WH/库存），不写死 id，换库/加仓都适用
-                    SELECT warehouse.id AS warehouse_id,
-                           location.parent_path AS root_path
-                    FROM stock_warehouse warehouse
-                    JOIN stock_location location ON location.id = warehouse.lot_stock_id
-                ),
-                scope AS (
-                    -- 库存区内的全部库位；同一库位只归属一个仓库，避免流水被展开成多行
-                    SELECT pair.location_id, min(pair.warehouse_id) AS warehouse_id
-                    FROM (
-                        SELECT root.warehouse_id, child.id AS location_id
-                        FROM warehouse_root root
-                        JOIN stock_location child
-                          ON child.parent_path LIKE root.root_path || '%'
-                    ) pair
-                    GROUP BY pair.location_id
-                ),
-                flow AS (
-                    -- 只看跨越库存区边界、且两端不同仓库的已完成流水
-                    SELECT line.product_id,
-                           line.quantity,
-                           (line.date AT TIME ZONE 'UTC' AT TIME ZONE '{BUSINESS_TIMEZONE}') AS local_date,
-                           source.warehouse_id AS source_warehouse_id,
-                           destination.warehouse_id AS destination_warehouse_id
-                    FROM stock_move_line line
-                    LEFT JOIN scope source ON source.location_id = line.location_id
-                    LEFT JOIN scope destination ON destination.location_id = line.location_dest_id
-                    WHERE line.state = 'done'
-                      AND (source.warehouse_id IS NOT NULL OR destination.warehouse_id IS NOT NULL)
-                      AND source.warehouse_id IS DISTINCT FROM destination.warehouse_id
-                ),
-                leg AS (
-                    -- 一笔流水在目标仓库构成收入，在来源仓库构成发出
-                    SELECT flow.product_id,
-                           flow.destination_warehouse_id AS warehouse_id,
-                           flow.local_date,
-                           flow.quantity AS qty_in,
-                           0::numeric AS qty_out
-                    FROM flow
-                    WHERE flow.destination_warehouse_id IS NOT NULL
-
-                    UNION ALL
-
-                    SELECT flow.product_id,
-                           flow.source_warehouse_id,
-                           flow.local_date,
-                           0::numeric,
-                           flow.quantity
-                    FROM flow
-                    WHERE flow.source_warehouse_id IS NOT NULL
-                ),
                 summary AS (
-                    SELECT leg.product_id,
-                           leg.warehouse_id,
-                           sum(CASE WHEN leg.local_date < param.date_from::timestamp
-                                    THEN leg.qty_in - leg.qty_out ELSE 0 END) AS qty_initial,
-                           sum(CASE WHEN leg.local_date >= param.date_from::timestamp
-                                     AND leg.local_date < param.date_to::timestamp + interval '1 day'
-                                    THEN leg.qty_in ELSE 0 END) AS qty_in,
-                           sum(CASE WHEN leg.local_date >= param.date_from::timestamp
-                                     AND leg.local_date < param.date_to::timestamp + interval '1 day'
-                                    THEN leg.qty_out ELSE 0 END) AS qty_out
-                    FROM leg
+                    -- 按明细的方向归集：期内收入 / 期内发出 / 期初（区间开始日之前的净流入）
+                    SELECT detail.product_id,
+                           detail.warehouse_id,
+                           sum(CASE WHEN detail.date < param.date_from
+                                    THEN CASE detail.direction
+                                             WHEN 'in' THEN detail.quantity
+                                             ELSE -detail.quantity
+                                         END
+                                    ELSE 0 END) AS qty_initial,
+                           sum(CASE WHEN detail.date >= param.date_from
+                                     AND detail.date <= param.date_to
+                                     AND detail.direction = 'in'
+                                    THEN detail.quantity ELSE 0 END) AS qty_in,
+                           sum(CASE WHEN detail.date >= param.date_from
+                                     AND detail.date <= param.date_to
+                                     AND detail.direction = 'out'
+                                    THEN detail.quantity ELSE 0 END) AS qty_out
+                    FROM sn_wsd_stock_balance_detail detail
                     CROSS JOIN param
-                    GROUP BY leg.product_id, leg.warehouse_id, param.date_from, param.date_to
+                    GROUP BY detail.product_id, detail.warehouse_id, param.date_from, param.date_to
                 )
-                SELECT row_number() OVER (
-                           ORDER BY product.default_code, summary.warehouse_id
-                       ) AS id,
+                SELECT
+                       -- 行 id 直接用「物料 × 仓库」编出来，不用 row_number()：
+                       -- 报表行集合会随区间内物料进出（新物料入库、结存归零）而变化，
+                       -- 行号一漂移，用户点开的就是另一颗物料的明细。仓库数 < 1000、
+                       -- 物料 id < 2147483（超出会整数溢出报错，不会静默串行）即可。
+                       summary.product_id * 1000 + summary.warehouse_id AS id,
                        summary.warehouse_id,
                        summary.product_id,
                        product.default_code,
@@ -157,3 +120,40 @@ class SnWsdStockBalanceReport(models.Model):
                 ORDER BY product.default_code, summary.warehouse_id
             )
         """)
+
+    def _report_period(self):
+        """报表区间：优先取生成报表时写进 action context 的那一份。
+
+        列表是 SQL 视图的实时快照，而参数表是全局共享的（别人期间换一个区间就会改），
+        所以下钻要用生成时的那份区间，才对得上用户眼前看到的数字；取不到再回落到参数表。
+        """
+        self.ensure_one()
+        date_from = self.env.context.get('sn_wsd_balance_date_from')
+        date_to = self.env.context.get('sn_wsd_balance_date_to')
+        if date_from and date_to:
+            return fields.Date.to_date(date_from), fields.Date.to_date(date_to)
+        date_range = self.env['sn.wsd.stock.balance.range']._current(self.env)
+        return date_range.date_from, date_range.date_to
+
+    def action_open_details(self):
+        """下钻：打开本行（物料 × 仓库）在报表区间内的收发流水明细。"""
+        self.ensure_one()
+        date_from, date_to = self._report_period()
+        action = self.env['ir.actions.act_window']._for_xml_id(
+            'sn_wsd_stock_report.action_sn_wsd_stock_balance_detail'
+        )
+        domain = [
+            ('product_id', '=', self.product_id.id),
+            ('date', '>=', date_from),
+            ('date', '<=', date_to),
+        ]
+        if self.warehouse_id:
+            domain.append(('warehouse_id', '=', self.warehouse_id.id))
+        action.update({
+            'name': self.env._(
+                '收发明细：%s（%s ~ %s）',
+                self.product_id.display_name, date_from, date_to,
+            ),
+            'domain': domain,
+        })
+        return action

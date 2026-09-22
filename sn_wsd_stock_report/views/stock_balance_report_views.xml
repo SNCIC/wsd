@@ -4,7 +4,9 @@
         <field name="name">sn.wsd.stock.balance.report.list</field>
         <field name="model">sn.wsd.stock.balance.report</field>
         <field name="arch" type="xml">
-            <list create="false" edit="false" delete="false">
+            <!-- action/type：点行即下钻到该行（物料 × 仓库）的收发流水明细 -->
+            <list create="false" edit="false" delete="false"
+                  action="action_open_details" type="object">
                 <field name="default_code"/>
                 <field name="product_name"/>
                 <field name="material_specification"/>
@@ -49,6 +51,7 @@
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">所选区间内没有库存收发流水</p>
             <p>报表按「物料 × 仓库」汇总库存区（WH/库存）在指定区间内的期初、收入、发出与结存数量。</p>
+            <p>点击任意一行可下钻查看该物料在该仓库的收发明细。</p>
         </field>
     </record>
 </odoo>
