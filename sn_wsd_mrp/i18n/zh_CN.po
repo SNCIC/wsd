@@ -1826,6 +1826,14 @@ msgid "EIP Material"
 msgstr "EIP 物料"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_category__x_is_reel_material
+msgid ""
+"Electronic reel materials: products under this category (children included)"
+" are issued and returned as whole reels (the current lot balance at the "
+"source location) instead of the exact demand quantity."
+msgstr "电子料盘物料：该类别（含子类别）下的物料在领料与退料时按整盘（源库位该批次当前余量）出入，而非按实际需求量。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team_member__employee_id
 msgid "Employee"
 msgstr "员工"
@@ -5546,6 +5554,11 @@ msgstr "收货：%s"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_substitute_wizard_form
 msgid "Record Substitute Usage"
 msgstr "记录替代使用"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_category__x_is_reel_material
+msgid "Reel Material"
+msgstr "料盘物料"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_substitute_usage__name

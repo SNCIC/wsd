@@ -72,9 +72,13 @@ class TestLineSideMoReservation(TransactionCase):
         cls.component = cls.env['product.product'].create({
             'name': 'COMP-LSR', 'uom_id': cls.uom_unit.id, 'is_storable': True,
         })
+        cls.reel_category = cls.env['product.category'].create({
+            'name': 'REEL-LSR', 'x_is_reel_material': True,
+        })
         cls.lot_component = cls.env['product.product'].create({
             'name': 'COMP-LOT-LSR', 'uom_id': cls.uom_unit.id,
             'is_storable': True, 'tracking': 'lot',
+            'categ_id': cls.reel_category.id,
         })
 
     def _make_mo(self, qty=10, component=None):

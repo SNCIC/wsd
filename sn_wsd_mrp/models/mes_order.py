@@ -2198,10 +2198,13 @@ class MesOrder(models.Model):
                     'location_dest_id': line_side.id,
                     'company_id': order.company_id.id,
                 }
-                # 批次料需求精确展开（picking-bom-exact-demand）：需求=BOM
-                # 份额，不预挑/不预填批次行；action_confirm 后原生预留按移出
-                # 策略自动挂批，扫 SN 带量 hook（含预留建行）把行数量抬到
-                # 该批次源库位当前余量——实发>需求允许，验证按行数量过账
+                # Exact BOM demand (picking-bom-exact-demand): demand equals
+                # the BOM share, no lot pre-picked. After action_confirm the
+                # native reservation attaches lots by removal strategy; the
+                # scan hook then raises reel material lines to the current
+                # lot balance at the source location (over-issue is allowed,
+                # the validation posts the line quantity). Non-reel
+                # materials keep the reserved demand quantity.
                 StockMove.create(move_vals)
             picking.action_confirm()
             pickings |= picking
@@ -2318,9 +2321,12 @@ class MesOrder(models.Model):
 
     def action_generate_return(self, qty=None):
         """生成一张反向领料单：按 ``qty`` 台的 BOM 份额把组件从线边退回
-        仓库主库位。单据 ``x_mes_order_qty`` 记负数（净额账本约定），
-        批次料按线边在库批次整卷退（FEFO，一卷一行），散料数量上限为
-        线边实际持有量。"""
+        仓库主库位。单据 ``x_mes_order_qty`` 记负数（净额账本约定）。
+
+        Reel materials (product category flagged as reel material) return as
+        whole reels by FEFO, one reel per line. Every other material,
+        including lot-tracked materials that are not reel materials, returns
+        its actual quantity capped by what the line side holds."""
         StockMove = self.env['stock.move']
         StockPicking = self.env['stock.picking']
         StockQuant = self.env['stock.quant']
@@ -2385,9 +2391,11 @@ class MesOrder(models.Model):
                     'location_dest_id': dest.id,
                     'company_id': order.company_id.id,
                 }
-                if line.product_id.tracking == 'lot':
-                    # 整卷退：线边在库批次按 FEFO 覆盖份额即止，一卷一行；
-                    # 线边无该批次（已消耗）则该行不退
+                if line.product_id.tracking == 'lot' \
+                        and line.product_id._is_reel_material():
+                    # Whole-reel return, reel materials only: line-side lots
+                    # are taken FEFO until the share is covered, one reel per
+                    # line; a lot already consumed returns nothing.
                     need_base = line.product_uom._compute_quantity(
                         qty_line, line.product_id.uom_id)
                     reels = order._mes_issue_reel_lines(
@@ -2416,7 +2424,10 @@ class MesOrder(models.Model):
                         'company_id': order.company_id.id,
                     }) for lot, reel_qty in reels]
                 else:
-                    # 散料按线边实际持有量封顶（倒冲扣过的退不回来）
+                    # Everything else (loose material and lot-tracked
+                    # materials that are not reel materials) returns its
+                    # actual quantity, capped by what the line side holds
+                    # (what backflush already consumed cannot come back).
                     groups = StockQuant._read_group(
                         [('product_id', '=', line.product_id.id),
                          ('location_id', '=', line_side.id)],

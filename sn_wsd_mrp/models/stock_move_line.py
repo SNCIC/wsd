@@ -10,11 +10,15 @@ MES_PICKING_SEQUENCE_CODES = (
 
 class StockMoveLineIssueReel(models.Model):
     """领料调拨上的扫 SN 带量：给行挂/换物料SN时，数量自动取该卷在
-    调拨源库位的当前余量（批次料剪不开，出入库口径=整卷余量）。
+    调拨源库位的当前余量（料盘料剪不开，出入库口径=整卷余量）。
 
     作用域限定在 MES 领料三兄弟作业类型（领料/退料/超领，源库位随
     方向自然对调）；完工收货建新批次、倒冲等其他调拨不受影响；
-    幂等（余量未变不重写）。"""
+    幂等（余量未变不重写）。
+
+    整卷口径只针对电子料盘类物料（产品类别打 x_is_reel_material 旗标，
+    含子类别）：其他批次物料保留原生预留挂上的需求数量，按实际数量
+    出料。"""
     _inherit = 'stock.move.line'
 
     def _issue_reel_sync_qty(self):
@@ -24,6 +28,8 @@ class StockMoveLineIssueReel(models.Model):
                     or picking.picking_type_id.sequence_code not in MES_PICKING_SEQUENCE_CODES:
                 continue
             if line.product_id.tracking != 'lot' or not line.lot_id:
+                continue
+            if not line.product_id._is_reel_material():
                 continue
             groups = self.env['stock.quant']._read_group(
                 [

@@ -4,6 +4,27 @@ from odoo.exceptions import ValidationError
 from .constants import BOARD_SIDE_SELECTION
 
 
+class ProductCategory(models.Model):
+    _inherit = 'product.category'
+
+    x_is_reel_material = fields.Boolean(
+        string='Reel Material',
+        help='Electronic reel materials: products under this category '
+             '(children included) are issued and returned as whole reels '
+             '(the current lot balance at the source location) instead of '
+             'the exact demand quantity.',
+    )
+
+    @api.model
+    def _reel_material_category_ids(self):
+        """Ids of every category flagged as a reel material category, the
+        flagged categories and their descendants included."""
+        marked = self.search([('x_is_reel_material', '=', True)])
+        if not marked:
+            return set()
+        return set(self.search([('id', 'child_of', marked.ids)]).ids)
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
@@ -118,6 +139,16 @@ class ProductProduct(models.Model):
         related='product_tmpl_id.x_use_daily_plan',
         store=True,
     )
+
+    def _is_reel_material(self):
+        """True for electronic reel materials: the product belongs to a
+        category (or one of its descendants) flagged as a reel material
+        category. Only these move whole reels on material issues and
+        returns; every other material moves the exact demand quantity."""
+        self.ensure_one()
+        reel_category_ids = self.env[
+            'product.category']._reel_material_category_ids()
+        return bool(reel_category_ids) and self.categ_id.id in reel_category_ids
 
     @api.model_create_multi
     def create(self, vals_list):

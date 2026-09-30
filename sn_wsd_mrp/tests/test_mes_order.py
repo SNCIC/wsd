@@ -71,6 +71,11 @@ class TestMesOrder(TransactionCase):
         route_ops[0].x_allow_entry = True
         route_ops[1].x_allow_exit = True
         route_ops[1].blocked_by_route_operation_ids = [(6, 0, route_ops[0].ids)]
+        # Reel materials are distinguished by product category: components
+        # that must move whole reels have to sit in this category.
+        cls.reel_category = cls.env['product.category'].create({
+            'name': 'REEL-TEST', 'x_is_reel_material': True,
+        })
 
     def _make_mo(self, qty=10000):
         product = self.env['product.product'].create({
@@ -1287,6 +1292,7 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
         component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
         src = mo.picking_type_id.warehouse_id.lot_stock_id
         Lot = self.env['stock.lot']
         Quant = self.env['stock.quant']
@@ -1326,6 +1332,7 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
         component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
         src = mo.picking_type_id.warehouse_id.lot_stock_id
         Lot = self.env['stock.lot']
         Quant = self.env['stock.quant']
@@ -1364,6 +1371,7 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=10)
         component = mo.bom_id.bom_line_ids.product_id
         component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
         src = mo.picking_type_id.warehouse_id.lot_stock_id
         lot = self.env['stock.lot'].create({
             'product_id': component.id, 'name': 'LOT-MU-3',
@@ -1426,6 +1434,7 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=1)
         component = mo.bom_id.bom_line_ids.product_id
         component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
         src = mo.picking_type_id.warehouse_id.lot_stock_id
         lot = self.env['stock.lot'].create({
             'product_id': component.id, 'name': 'LOT-EX-1',
@@ -1456,6 +1465,39 @@ class TestMesOrder(TransactionCase):
         # 份额已覆盖（already 2 ≥ 份额 2）→ 再领拦截、不建空单
         with self.assertRaises(UserError):
             order.action_generate_picking(qty_this=1)
+
+    def test_96_non_reel_lot_issues_exact_demand(self):
+        """Lot-tracked material outside a reel category issues its exact
+        demand: the hook leaves the native reservation quantity untouched
+        instead of raising it to the whole lot balance."""
+        line_side = self._set_line_side()
+        mo = self._make_bom_mo(qty=1)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        self.assertFalse(component._is_reel_material(),
+                         'default category must not be a reel category')
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        lot = self.env['stock.lot'].create({
+            'product_id': component.id, 'name': 'LOT-NR-1',
+            'company_id': self.company.id})
+        self.env['stock.quant'].create({
+            'product_id': component.id, 'location_id': src.id,
+            'quantity': 7.0, 'lot_id': lot.id})
+        order = self._make_order(mo, 1)
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
+        line = p1.move_ids.move_line_ids
+        self.assertEqual(line.lot_id, lot)
+        # Actual quantity = demand 2, not the whole lot balance 7
+        self.assertAlmostEqual(line.quantity, 2.0)
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(p1.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id),
+            ('location_id', '=', line_side.id)])
+        self.assertAlmostEqual(quant.quantity, 2.0)
 
     # --- finished-goods-material-sn: 手动完工一批一码 ---
     def _order_with_lot_output(self, contract_no=False):
