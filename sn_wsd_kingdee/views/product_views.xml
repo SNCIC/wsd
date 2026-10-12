@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_form_view_kingdee" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Kingdee" name="kingdee">
+                        <group>
+                            <group string="Material">
+                                <field name="kingdee_number"
+                                       placeholder="Defaults to the internal reference"/>
+                                <field name="kingdee_name"/>
+                                <field name="kingdee_material_group"/>
+                            </group>
+                            <group string="Synchronization">
+                                <field name="kingdee_sync_state"/>
+                                <field name="kingdee_master_id"/>
+                                <field name="kingdee_last_sync_at"/>
+                            </group>
+                        </group>
+                        <div class="mt16">
+                            <button name="action_kingdee_save"
+                                    type="object"
+                                    string="Save to Kingdee"
+                                    class="btn-primary"/>
+                            <button name="action_kingdee_submit"
+                                    type="object"
+                                    string="Submit"
+                                    class="btn-secondary"/>
+                            <button name="action_kingdee_audit"
+                                    type="object"
+                                    string="Audit"
+                                    class="btn-secondary"/>
+                            <button name="action_kingdee_unaudit"
+                                    type="object"
+                                    string="Un-audit"
+                                    class="btn-secondary"/>
+                            <button name="action_kingdee_pull"
+                                    type="object"
+                                    string="Refresh from Kingdee"
+                                    class="btn-secondary"/>
+                        </div>
+                        <field name="kingdee_sync_message" readonly="1" class="mt16"/>
+                        <field name="kingdee_log_ids" readonly="1">
+                            <list create="false" delete="false" default_order="id desc">
+                                <field name="create_date"/>
+                                <field name="api_name"/>
+                                <field name="direction"/>
+                                <field name="state"
+                                       decoration-danger="state == 'error'"
+                                       decoration-success="state == 'success'"/>
+                                <field name="duration_ms"/>
+                                <field name="error_message" optional="show"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

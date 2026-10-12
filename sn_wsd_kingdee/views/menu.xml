@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_sn_wsd_kingdee_root"
+                  name="Kingdee"
+                  sequence="210"
+                  web_icon="sn_wsd_kingdee,static/description/icon.png"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_sync_log"
+                  name="Sync Logs"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_sync_log"
+                  sequence="10"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_settings"
+                  name="Configuration"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="base.res_config_setting_act_window"
+                  sequence="20"
+                  groups="base.group_system"/>
+    </data>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_kingdee" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Kingdee" string="Kingdee" name="sn_wsd_kingdee" groups="base.group_system">
+                        <block title="Kingdee Cloud Galaxy Connection" name="sn_wsd_kingdee_connection">
+                            <setting id="sn_wsd_kingdee_server_setting"
+                                     string="WebAPI Endpoint"
+                                     help="Base URL of the Kingdee environment, it must end with /k3cloud/.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="kingdee_server_url" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_server_url"
+                                               placeholder="https://your-server/k3cloud/"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_acct_id" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_acct_id" placeholder="Data center identifier"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_user_name" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_user_name" placeholder="User granted for WebAPI"/>
+                                    </div>
+                                </div>
+                            </setting>
+
+                            <setting id="sn_wsd_kingdee_credentials_setting"
+                                     string="Third Party Login Authorization"
+                                     help="Application credentials created in the Kingdee 'third party system login authorization' screen.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="kingdee_app_id" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_app_id" placeholder="123456_xxxxxxxx"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_app_secret" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_app_secret" password="True"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_org_num" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_org_num"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_lcid" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_lcid"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_connect_timeout" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_connect_timeout"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_request_timeout" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_request_timeout"/>
+                                    </div>
+                                </div>
+                            </setting>
+
+                            <setting id="sn_wsd_kingdee_test_setting"
+                                     string="Connection Test"
+                                     help="Query the data centers declared for the account above.">
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <button type="object"
+                                                name="action_kingdee_test_connection"
+                                                string="Test Connection"
+                                                class="btn-primary"
+                                                icon="oi-arrow-right"/>
+                                        <button type="object"
+                                                name="action_kingdee_clear_cache"
+                                                string="Clear Cached Sessions"
+                                                class="btn-secondary ms-2"/>
+                                    </div>
+                                    <div class="text-muted mt8">
+                                        The test uses the values currently displayed, saving is not required.
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="Material Defaults" name="sn_wsd_kingdee_material">
+                            <setting id="sn_wsd_kingdee_material_org_setting"
+                                     string="Default Organizations"
+                                     help="Organization numbers applied when a product is saved as a Kingdee material.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="kingdee_create_org_number" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_create_org_number" placeholder="100"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_use_org_number" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_use_org_number" placeholder="100"/>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting id="sn_wsd_kingdee_cron_setting"
+                                     string="Scheduled Material Refresh"
+                                     help="Enable the scheduled action before activating 'Kingdee: refresh linked materials' in the scheduled actions.">
+                                <field name="kingdee_enabled"/>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

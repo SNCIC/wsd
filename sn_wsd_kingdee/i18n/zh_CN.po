@@ -1,0 +1,746 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_kingdee
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 04:55+0000\n"
+"PO-Revision-Date: 2026-10-12 04:55+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "%(label)s: %(count)s record(s) processed."
+msgstr "%(label)s：已处理 %(count)s 条记录。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"%(label)s: %(done)s succeeded, %(failed)s failed.\n"
+"%(details)s"
+msgstr ""
+"%(label)s：成功 %(done)s 条，失败 %(failed)s 条。\n"
+"%(details)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "%(name)s: %(message)s"
+msgstr "%(name)s：%(message)s"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "123456_xxxxxxxx"
+msgstr ""
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__api_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "API"
+msgstr ""
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_acct_id
+msgid "Account ID"
+msgstr "账套 ID"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_lcid
+msgid "Account locale, 2052 for Simplified Chinese."
+msgstr "账套语系，简体中文为 2052。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_enabled
+msgid ""
+"Allow the scheduled action to refresh the materials already linked to "
+"Kingdee."
+msgstr "允许计划任务刷新已对接金蝶的物料。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_app_id
+msgid "App ID"
+msgstr "应用 ID"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_app_secret
+msgid "App Secret"
+msgstr "应用密钥"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"Application credentials created in the Kingdee 'third party system login "
+"authorization' screen."
+msgstr "在金蝶“第三方系统登录授权”中创建的应用凭据。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Audit"
+msgstr "审核"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__audited
+msgid "Audited"
+msgstr "已审核"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Base URL of the Kingdee environment, it must end with /k3cloud/."
+msgstr "金蝶环境的服务地址，必须以 /k3cloud/ 结尾。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
+msgid "Cached Kingdee sessions cleared."
+msgstr "已清除金蝶会话缓存。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Clear Cached Sessions"
+msgstr "清除会话缓存"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_res_config_settings
+msgid "Config Settings"
+msgstr "配置"
+
+#. module: sn_wsd_kingdee
+#: model:ir.ui.menu,name:sn_wsd_kingdee.menu_sn_wsd_kingdee_settings
+msgid "Configuration"
+msgstr "配置"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"Configure the default Kingdee organization in Settings (Kingdee > Material "
+"Defaults) before synchronizing materials."
+msgstr "同步物料前，请先在“设置 → 金蝶 → 物料默认值”中配置默认组织。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Connection Test"
+msgstr "连接测试"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_connect_timeout
+msgid "Connection Timeout (s)"
+msgstr "连接超时（秒）"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
+msgid "Connection succeeded."
+msgstr "连接成功。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
+msgid "Connection succeeded. %s data center(s) returned."
+msgstr "连接成功，返回 %s 个数据中心。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_create_org_number
+msgid "Create Organization"
+msgstr "创建组织"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Data center identifier"
+msgstr "数据中心标识"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_acct_id
+msgid ""
+"Data center identifier (AcctID) of the third party login authorization."
+msgstr "第三方系统登录授权的数据中心标识（AcctID）。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Default Organizations"
+msgstr "默认组织"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Defaults to the internal reference"
+msgstr "留空则取内部参考"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__direction
+msgid "Direction"
+msgstr "方向"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_client__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__duration_ms
+msgid "Duration (ms)"
+msgstr "耗时（毫秒）"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"Enable the scheduled action before activating 'Kingdee: refresh linked "
+"materials' in the scheduled actions."
+msgstr "启用后，还需在计划任务中激活“金蝶：刷新已对接物料”。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__error_message
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__state__error
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
+msgid "Error"
+msgstr "错误"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Errors"
+msgstr "错误"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__form_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Form ID"
+msgstr "单据标识"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_client__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__id
+msgid "ID"
+msgstr ""
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
+#: model:ir.ui.menu,name:sn_wsd_kingdee.menu_sn_wsd_kingdee_root
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Kingdee"
+msgstr "金蝶"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee %(api)s failed: %(error)s"
+msgstr "金蝶 %(api)s 调用失败：%(error)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee %(api)s failed: %(message)s"
+msgstr "金蝶 %(api)s 执行失败：%(message)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee %(api)s request failed: %(error)s"
+msgstr "金蝶 %(api)s 请求异常：%(error)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee %(api)s returned a non JSON response: %(body)s"
+msgstr "金蝶 %(api)s 返回的不是合法 JSON：%(body)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee %(api)s returned an empty response."
+msgstr "金蝶 %(api)s 返回了空响应。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"Kingdee %(api)s returned an unexpected %(kind)s instead of a JSON string."
+msgstr "金蝶 %(api)s 返回了意外的 %(kind)s，而不是 JSON 字符串。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Kingdee %s"
+msgstr "金蝶 %s"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Kingdee Cloud Galaxy Connection"
+msgstr "金蝶云星空连接"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_sn_wsd_kingdee_client
+msgid "Kingdee Cloud Galaxy WebAPI Client"
+msgstr "金蝶云星空 WebAPI 客户端"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_server_url
+msgid "Kingdee K/3 Cloud base URL, it must end with /k3cloud/."
+msgstr "金蝶云星空服务地址，必须以 /k3cloud/ 结尾。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_last_sync_at
+msgid "Kingdee Last Sync"
+msgstr "金蝶最后同步"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_log_ids
+msgid "Kingdee Logs"
+msgstr "金蝶日志"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_master_id
+msgid "Kingdee Master ID"
+msgstr "金蝶内码"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_material_group
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_material_group
+msgid "Kingdee Material Group"
+msgstr "金蝶物料分组"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_sync_message
+msgid "Kingdee Message"
+msgstr "金蝶消息"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_name
+msgid "Kingdee Name"
+msgstr "金蝶名称"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_number
+msgid "Kingdee Number"
+msgstr "金蝶编码"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_sync_state
+msgid "Kingdee Status"
+msgstr "金蝶状态"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_sn_wsd_kingdee_sync_log
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Kingdee Sync Log"
+msgstr "金蝶同步日志"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.act_window,name:sn_wsd_kingdee.action_kingdee_sync_log
+msgid "Kingdee Sync Logs"
+msgstr "金蝶同步日志"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__form_id
+msgid "Kingdee business object identifier, e.g. BD_MATERIAL."
+msgstr "金蝶业务对象标识，例如 BD_MATERIAL。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Kingdee integration is not configured yet. Missing: %s"
+msgstr "金蝶对接尚未配置，缺少：%s"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__direction__in
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Kingdee to Odoo"
+msgstr "金蝶 → Odoo"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_user_name
+msgid "Kingdee user granted for the WebAPI calls."
+msgstr "用于调用 WebAPI 的金蝶用户。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_material_audit
+msgid "Kingdee: Audit Materials"
+msgstr "金蝶：审核物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_material_pull
+msgid "Kingdee: Refresh Materials"
+msgstr "金蝶：刷新物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_material_save
+msgid "Kingdee: Save Materials"
+msgstr "金蝶：保存物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.ir_cron_kingdee_pull_materials_ir_actions_server
+msgid "Kingdee: refresh linked materials"
+msgstr "金蝶：刷新已对接物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_lcid
+msgid "Locale ID"
+msgstr "账套语系"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Material Defaults"
+msgstr "物料默认值"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Material audited in Kingdee."
+msgstr "已在金蝶审核物料。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_name
+msgid "Material name (FName) as returned by Kingdee."
+msgstr "金蝶返回的物料名称（FName）。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_number
+msgid ""
+"Material number (FNumber) in Kingdee. The internal reference is used when "
+"empty."
+msgstr "金蝶物料编码（FNumber）。留空时使用产品内部参考。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Material refreshed from Kingdee."
+msgstr "已从金蝶刷新物料。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Material saved to Kingdee."
+msgstr "已保存物料到金蝶。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Material submitted in Kingdee."
+msgstr "已在金蝶提交物料。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Material un-audited in Kingdee."
+msgstr "已在金蝶反审核物料。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__not_synced
+msgid "Not Synchronized"
+msgstr "未同步"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__direction__out
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Odoo to Kingdee"
+msgstr "Odoo → 金蝶"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_list
+msgid "Open"
+msgstr "打开"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
+msgid "Open Related Record"
+msgstr "打开关联记录"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_material_group
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_material_group
+msgid ""
+"Optional material group number (FMaterialGroup) applied when saving to "
+"Kingdee."
+msgstr "保存到金蝶时使用的物料分组编码（FMaterialGroup），可选。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_org_num
+msgid "Organization Number"
+msgstr "组织编码"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_create_org_number
+msgid ""
+"Organization number (FCreateOrgId) used when a material is created in "
+"Kingdee."
+msgstr "在金蝶创建物料时使用的创建组织编码（FCreateOrgId）。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_use_org_number
+msgid ""
+"Organization number (FUserOrgId) of the material. Defaults to the create "
+"organization."
+msgstr "物料的使用组织编码（FUserOrgId），留空则取创建组织。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_org_num
+msgid "Organization number, only relevant when multi-organization is enabled."
+msgstr "组织编码，仅在启用多组织时有效。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"Organization numbers applied when a product is saved as a Kingdee material."
+msgstr "产品保存为金蝶物料时使用的组织编码。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_product_template
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"Product %s has neither an internal reference nor a Kingdee number, it cannot"
+" be identified in Kingdee."
+msgstr "产品 %s 既没有内部参考也没有金蝶编码，无法在金蝶中标识。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Query the data centers declared for the account above."
+msgstr "查询上述账套已授权的数据中心。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Refresh from Kingdee"
+msgstr "从金蝶刷新"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__res_model
+msgid "Related Model"
+msgstr "关联模型"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__res_id
+msgid "Related Record"
+msgstr "关联记录"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__res_name
+msgid "Related Record Name"
+msgstr "关联记录名称"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__request_payload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
+msgid "Request"
+msgstr "请求"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_request_timeout
+msgid "Request Timeout (s)"
+msgstr "读取超时（秒）"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__response_payload
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
+msgid "Response"
+msgstr "响应"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Save to Kingdee"
+msgstr "保存到金蝶"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__saved
+msgid "Saved"
+msgstr "已保存"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_enabled
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Scheduled Material Refresh"
+msgstr "定时刷新物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_server_url
+msgid "Server URL"
+msgstr "服务地址"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_app_secret
+msgid ""
+"Stored unencrypted in the system parameters, keep it restricted to "
+"administrators."
+msgstr "以明文保存在系统参数中，请仅授权管理员访问。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Submit"
+msgstr "提交"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__submitted
+msgid "Submitted"
+msgstr "已提交"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__state__success
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_kingdee
+#: model:ir.ui.menu,name:sn_wsd_kingdee.menu_sn_wsd_kingdee_sync_log
+msgid "Sync Logs"
+msgstr "同步日志"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Synchronization"
+msgstr "同步"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Test Connection"
+msgstr "测试连接"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"The Kingdee SDK refused the configuration, please review the credentials in "
+"Settings and check the server log."
+msgstr "金蝶 SDK 拒绝了该配置，请检查设置中的凭据并查看服务日志。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"The Kingdee WebAPI SDK is not installed on this server (%(error)s).\n"
+"Install the provided wheel and restart Odoo:\n"
+"%(hint)s"
+msgstr ""
+"本服务器未安装金蝶 WebAPI SDK（%(error)s）。\n"
+"请安装提供的 wheel 包后重启 Odoo：\n"
+"%(hint)s"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_product_template_kingdee_number_unique
+msgid "The Kingdee number must be unique across products."
+msgstr "金蝶编码在产品之间必须唯一。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "The product has no material number to identify it in Kingdee."
+msgstr "该产品没有可用于金蝶标识的物料编码。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "The test uses the values currently displayed, saving is not required."
+msgstr "测试使用当前界面上显示的参数，无需先保存。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Third Party Login Authorization"
+msgstr "第三方系统登录授权"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+msgid "Un-audit"
+msgstr "反审核"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "Unknown error"
+msgstr "未知错误"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_use_org_number
+msgid "Use Organization"
+msgstr "使用组织"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__user_id
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_user_name
+msgid "User Name"
+msgstr "用户名"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "User granted for WebAPI"
+msgstr "用于 WebAPI 的金蝶用户"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "WebAPI Endpoint"
+msgstr "WebAPI 地址"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "https://your-server/k3cloud/"
+msgstr ""
