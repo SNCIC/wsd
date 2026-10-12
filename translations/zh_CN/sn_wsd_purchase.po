@@ -42,3 +42,35 @@ msgstr "已完成数量"
 #: model:ir.model.constraint,message:sn_wsd_purchase.constraint_purchase_request_line_check_approved_qty
 msgid "The approved quantity must be between zero and the requested quantity."
 msgstr "批准数量必须介于零和申请数量之间。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
+msgid "Received Quantity"
+msgstr "收货数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quality Control Quantity"
+msgstr "质检数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quantity that has completed the quality control step of the reception."
+msgstr "已完成来料质检环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Stocked Quantity"
+msgstr "入库数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Quantity that has completed the storage step of the reception."
+msgstr "已完成来料上架入库环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
+msgid "Receipt Details"
+msgstr "入库明细"

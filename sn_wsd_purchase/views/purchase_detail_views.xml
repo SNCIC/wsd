@@ -19,6 +19,8 @@
                 <field name="approved_qty" readonly="request_state not in ['draft', 'to_approve']"/>
                 <field name="purchased_qty"/>
                 <field name="received_qty"/>
+                <field name="qc_qty"/>
+                <field name="stocked_qty"/>
                 <field name="product_uom_id" groups="uom.group_uom"/>
                 <field name="tax_included_unit_price" widget="monetary"/>
                 <field name="tax_included_amount" widget="monetary"/>
@@ -56,6 +58,8 @@
                         <field name="approved_qty" readonly="request_state not in ['draft', 'to_approve']"/>
                         <field name="purchased_qty"/>
                         <field name="received_qty"/>
+                        <field name="qc_qty"/>
+                        <field name="stocked_qty"/>
                     </group>
                     <group string="Purchasing">
                         <field name="purchase_order_ids" widget="many2many_tags"/>
@@ -113,4 +117,63 @@
               parent="purchase.menu_procurement_management"
               action="action_sn_purchase_detail"
               sequence="7"/>
+
+    <!-- Purchase Request Details (Purchase > Purchase Request Lines): the
+         request lines report shares the list and the search of the purchase
+         details report above, so both menus show the same columns. -->
+    <record id="purchase_request.purchase_request_line_form_action_tree" model="ir.actions.act_window.view">
+        <field name="view_id" ref="view_sn_purchase_detail_list"/>
+    </record>
+
+    <record id="purchase_request.purchase_request_line_form_action" model="ir.actions.act_window">
+        <field name="search_view_id" ref="view_sn_purchase_detail_search"/>
+    </record>
+
+    <!-- Receipt Details (Inventory > Reporting): the purchase details report
+         without the price columns, for the warehouse. The columns are written
+         out instead of inheriting them: Odoo applies every view inheriting a
+         view to that view too, so removing the price columns in a child view
+         would remove them from the purchase details report as well. -->
+    <record id="view_sn_purchase_receipt_detail_list" model="ir.ui.view">
+        <field name="name">purchase.request.line.receipt.detail.list</field>
+        <field name="model">purchase.request.line</field>
+        <field name="arch" type="xml">
+            <list string="Receipt Details" create="false" delete="false">
+                <field name="request_id"/>
+                <field name="create_user_id"/>
+                <field name="request_state" widget="badge"
+                       decoration-success="request_state in ('approved', 'in_progress', 'done')"
+                       decoration-warning="request_state == 'to_approve'"
+                       decoration-danger="request_state == 'rejected'"/>
+                <field name="date_required"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="requested_qty"/>
+                <field name="approved_qty" readonly="request_state not in ['draft', 'to_approve']"/>
+                <field name="purchased_qty"/>
+                <field name="received_qty"/>
+                <field name="qc_qty"/>
+                <field name="stocked_qty"/>
+                <field name="product_uom_id" groups="uom.group_uom"/>
+                <field name="purchase_order_ids" widget="many2many_tags"/>
+                <field name="expected_arrival_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_purchase_receipt_detail" model="ir.actions.act_window">
+        <field name="name">Receipt Details</field>
+        <field name="res_model">purchase.request.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_purchase_receipt_detail_list"/>
+        <field name="search_view_id" ref="view_sn_purchase_detail_search"/>
+    </record>
+
+    <menuitem id="menu_sn_purchase_receipt_detail"
+              name="Receipt Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_purchase_receipt_detail"
+              sequence="20"/>
 </odoo>

@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -80,6 +82,18 @@ class PurchaseRequestLine(models.Model):
         compute='_compute_receipt_status',
         store=True,
         readonly=True,
+    )
+    qc_qty = fields.Float(
+        string='Quality Control Quantity',
+        digits='Product Unit of Measure',
+        compute='_compute_reception_step_quantities',
+        help='Quantity that has completed the quality control step of the reception.',
+    )
+    stocked_qty = fields.Float(
+        string='Stocked Quantity',
+        digits='Product Unit of Measure',
+        compute='_compute_reception_step_quantities',
+        help='Quantity that has completed the storage step of the reception.',
     )
 
     _check_approved_qty = models.Constraint(
@@ -190,6 +204,95 @@ class PurchaseRequestLine(models.Model):
                 line.receipt_status = 'fully_received'
             else:
                 line.receipt_status = 'partially_received'
+
+    @api.depends('purchase_lines', 'qty_done', 'product_uom_id')
+    def _compute_reception_step_quantities(self):
+        quantities = self._get_reception_step_quantities()
+        for line in self:
+            line_quantities = quantities.get(line.id, {})
+            line.qc_qty = line_quantities.get('qc', 0.0)
+            line.stocked_qty = line_quantities.get('storage', 0.0)
+
+    def _get_reception_step(self, move):
+        """Return the reception step a move of this line belongs to.
+
+        ``'qc'`` and ``'storage'`` are the two steps that follow the receipt of
+        a three steps reception; both are created by push rules, so the
+        operation types tell them apart. Those operation types only exist once
+        the warehouse reception is set to three steps, which is the same
+        condition the other modules of this project use to decide whether the
+        receipt already reaches the stock by itself.
+        """
+        self.ensure_one()
+        picking_type = move.picking_type_id
+        warehouse = picking_type.warehouse_id
+        if not warehouse:
+            return False
+        qc_type = warehouse.qc_type_id
+        if qc_type.active and picking_type == qc_type:
+            return 'qc'
+        store_type = warehouse.store_type_id
+        if store_type.active:
+            return 'storage' if picking_type == store_type else False
+        return 'storage' if picking_type.code == 'incoming' else False
+
+    def _get_reception_step_quantities(self):
+        """Quantity of the quality control and the storage steps, per line.
+
+        A three steps reception chains the moves with push rules
+        (vendors -> input -> quality -> stock). Only the receipt move carries
+        the purchase line, and the push rules clear it on the copies they
+        create, so the downstream moves are walked down from the receipt move
+        and attributed back to the request line through that origin move.
+
+        Each quantity is capped by the quantity this line has allocated on the
+        receipt move, so the three steps of the reception compare with each
+        other (and with the received quantity) instead of reporting a
+        downstream step higher than the receipt it comes from.
+
+        Returns a dict of ``{line id: {'qc': quantity, 'storage': quantity}}``.
+        """
+        lines = self
+        receipt_moves = self.env['stock.move'].search([
+            ('purchase_line_id', 'in', lines.purchase_lines.ids),
+        ])
+        if not receipt_moves:
+            return {}
+        origin_moves = {move.id: move for move in receipt_moves}
+        chain = receipt_moves
+        frontier = receipt_moves
+        while frontier:
+            frontier = self.env['stock.move'].search([
+                ('move_orig_ids', 'in', frontier.ids),
+                ('id', 'not in', chain.ids),
+            ])
+            for move in frontier:
+                parent = (move.move_orig_ids & chain)[:1]
+                origin_moves[move.id] = origin_moves.get(parent.id, move)
+            chain |= frontier
+        allocations = defaultdict(float)
+        for allocation in receipt_moves.purchase_request_allocation_ids:
+            if allocation.purchase_request_line_id in lines:
+                key = (allocation.stock_move_id.id,
+                       allocation.purchase_request_line_id.id)
+                allocations[key] += allocation.allocated_product_qty
+        quantities = defaultdict(lambda: defaultdict(float))
+        for move in chain:
+            if move.state != 'done' or move.quantity <= 0.0:
+                continue
+            origin_move = origin_moves.get(move.id, move)
+            for line in origin_move.purchase_line_id.purchase_request_lines & lines:
+                step = line._get_reception_step(move)
+                if not step:
+                    continue
+                uom = line.product_uom_id or move.product_uom
+                quantity = move.product_uom._compute_quantity(
+                    move.quantity, uom, rounding_method='HALF-UP')
+                cap = allocations.get((origin_move.id, line.id))
+                if cap is not None:
+                    quantity = min(quantity, cap)
+                quantities[line.id][step] += quantity
+        return quantities
 
     def write(self, vals):
         if 'product_qty' in vals and 'approved_qty' not in vals:

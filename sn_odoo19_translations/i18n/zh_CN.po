@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 02:20+0000\n"
-"PO-Revision-Date: 2026-10-12 02:20+0000\n"
+"POT-Creation-Date: 2026-10-12 06:51+0000\n"
+"PO-Revision-Date: 2026-10-12 06:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -8148,6 +8148,11 @@ msgstr "质量"
 msgid "Quality Coding Rule Seeder"
 msgstr "质量编码规则种子数据"
 
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quality Control Quantity"
+msgstr "质检数量"
+
 #. module: sn_wsd_quality
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
 #. module: sn_wsd_scrap
@@ -8199,6 +8204,16 @@ msgstr "数量"
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__received_qty
 msgid "Quantity completed"
 msgstr "已完成数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quantity that has completed the quality control step of the reception."
+msgstr "已完成来料质检环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Quantity that has completed the storage step of the reception."
+msgstr "已完成来料上架入库环节的数量。"
 
 #. module: stock_no_negative
 #: model:ir.model,name:stock_no_negative.model_stock_quant
@@ -8316,6 +8331,13 @@ msgstr "抛出错误"
 msgid "Ratings"
 msgstr "点评"
 
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
+msgid "Receipt Details"
+msgstr "入库明细"
+
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_carton_pallet_binding_log__event_type__receive
@@ -8333,6 +8355,11 @@ msgstr "已收"
 #: code:addons/hr_gamification/models/gamification.py:0
 msgid "Received Badge"
 msgstr "获得徽章"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
+msgid "Received Quantity"
+msgstr "收货数量"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_history_ids
@@ -10152,6 +10179,11 @@ msgid ""
 "Stock in/out balance report (with drill-down detail) and quant valuation "
 "aggregation"
 msgstr "收发存余额报表（支持下钻明细）与库存计价汇总"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Stocked Quantity"
+msgstr "入库数量"
 
 #. module: sn_wsd_gantt
 #. odoo-javascript
