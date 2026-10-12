@@ -12,16 +12,17 @@
                 <attribute name="invisible">True</attribute>
             </xpath>
             <xpath expr="//widget[@name='import_lots']" position="after">
+                <field name="x_can_generate_material_labels" invisible="1"/>
                 <button name="action_generate_material_labels"
                         string="Generate Internal Batches"
                         type="object"
                         class="btn btn-link"
-                        invisible="picking_code != 'incoming' or has_tracking != 'lot' or state in ['done', 'cancel']"/>
+                        invisible="not x_can_generate_material_labels"/>
                 <button name="action_print_material_labels"
                         string="Print Material Labels"
                         type="object"
                         class="btn btn-link"
-                        invisible="picking_code != 'incoming' or has_tracking != 'lot' or state in ['done', 'cancel']"/>
+                        invisible="not x_can_generate_material_labels"/>
             </xpath>
         </field>
     </record>

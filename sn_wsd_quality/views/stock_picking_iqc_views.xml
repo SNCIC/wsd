@@ -10,7 +10,7 @@
                         type="object"
                         string="Quality Inspection"
                         class="oe_highlight"
-                        invisible="picking_type_code != 'incoming' or return_id or state in ('done', 'cancel')"
+                        invisible="not x_is_iqc_control_picking or state in ('done', 'cancel')"
                         groups="stock.group_stock_user"/>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
@@ -31,6 +31,7 @@
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <field name="x_iqc_inspection_count" invisible="1"/>
+                <field name="x_is_iqc_control_picking" invisible="1"/>
             </xpath>
         </field>
     </record>

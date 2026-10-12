@@ -41,9 +41,9 @@ class StockMoveLine(models.Model):
 
     def _action_reset_picklight_locations(self):
         if not self:
-            raise UserError(_('Select at least one receipt operation line.'))
-        if any(line.picking_code != 'incoming' for line in self):
-            raise UserError(_('Automatic rack allocation is only available for receipt operations.'))
+            raise UserError(_('Select at least one storage operation line.'))
+        if any(not line.move_id._is_picklight_putaway_picking() for line in self):
+            raise UserError(_('Automatic rack allocation is only available for storage operations.'))
         if any(line.state in ('done', 'cancel') for line in self):
             raise UserError(_('Completed or cancelled operation lines cannot be allocated.'))
         auto_lines = self.filtered(lambda line: line.picklight_allocation_state == 'auto')
@@ -62,16 +62,18 @@ class StockMoveLine(models.Model):
 
     def _action_auto_fill_picklight_locations(self, shelf_type):
         if not self:
-            raise UserError(_('Select at least one receipt operation line.'))
-        if any(line.picking_code != 'incoming' for line in self):
-            raise UserError(_('Automatic rack allocation is only available for receipt operations.'))
+            raise UserError(_('Select at least one storage operation line.'))
+        if any(not line.move_id._is_picklight_putaway_picking() for line in self):
+            raise UserError(_('Automatic rack allocation is only available for storage operations.'))
         if any(line.state in ('done', 'cancel') for line in self):
             raise UserError(_('Completed or cancelled operation lines cannot be allocated.'))
 
         pickings = self.picking_id
         if len(pickings) != 1:
-            raise UserError(_('Select operation lines from one receipt only.'))
+            raise UserError(_('Select operation lines from one storage transfer only.'))
         picking = pickings
+        warehouse = picking.picking_type_id.warehouse_id
+        stock_root = warehouse.lot_stock_id if warehouse else picking.location_dest_id
         existing_picklight_locations = self.env['sn.wsd.picklight.location'].search([
             ('company_id', '=', picking.company_id.id),
             ('active', '=', True),
@@ -92,7 +94,7 @@ class StockMoveLine(models.Model):
             ('shelf_id.shelf_type', '=', shelf_type),
             ('stock_location_id.active', '=', True),
             ('stock_location_id.usage', '=', 'internal'),
-            ('stock_location_id', 'child_of', picking.location_dest_id.id),
+            ('stock_location_id', 'child_of', stock_root.id),
         ], order=(
             'shelf_allocation_sequence, shelf_id, position_group, '
             'position_layer_number, position_number, code, id'

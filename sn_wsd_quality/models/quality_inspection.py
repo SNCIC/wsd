@@ -1189,10 +1189,14 @@ class QualityInspection(models.Model):
     def create_iqc_for_move_line(self, move_line):
         if not move_line or not move_line.picking_id:
             return self.browse()
+        # On a quality-control transfer the goods are still in the input
+        # location: the operation line usually carries no done quantity yet,
+        # so fall back on the move demand to size the inspection lot.
         return self.create_iqc_for_picking_product(
             move_line.picking_id,
             move_line.product_id,
-            move_line=move_line,
+            move=move_line.move_id,
+            move_line=move_line if move_line.quantity_product_uom > 0 else False,
         )
 
     @api.model
@@ -1682,7 +1686,6 @@ class StockMoveLine(models.Model):
             and line.picking_id._is_iqc_control_picking()
             and line.product_id
             and line.product_id.is_storable
-            and line.quantity_product_uom > 0
         ):
             inspections |= inspections.create_iqc_for_move_line(move_line)
         return inspections
@@ -1704,15 +1707,17 @@ class StockMove(models.Model):
                 move.move_line_ids.x_quality_inspection_ids
             )
 
-    def _get_iqc_target_move_lines(self):
-        self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.quantity_product_uom > 0
-        )
-
     def action_create_iqc_inspection(self):
         self.ensure_one()
-        inspection = self._get_iqc_target_move_lines()._auto_create_iqc_inspections()
+        picking = self.picking_id
+        if not picking._is_iqc_control_picking():
+            return False
+        inspection = self.env['sn.wsd.quality.inspection'].create_iqc_for_picking_product(
+            picking,
+            self.product_id,
+            move=self,
+            move_line=self.move_line_ids[:1],
+        )
         return inspection.action_open_form() if inspection else False
 
 
@@ -1729,6 +1734,19 @@ class StockPicking(models.Model):
         string='IQC Inspection Count',
         compute='_compute_x_iqc_inspection_count',
     )
+    x_is_iqc_control_picking = fields.Boolean(
+        string='IQC Controlled Operation',
+        compute='_compute_x_is_iqc_control_picking',
+        help='Technical flag used by the views: the operation whose validation '
+             'is gated by the incoming quality control. With a three-step '
+             'reception it is the Quality Control transfer, otherwise the '
+             'receipt itself.',
+    )
+
+    @api.depends('picking_type_id', 'return_id')
+    def _compute_x_is_iqc_control_picking(self):
+        for picking in self:
+            picking.x_is_iqc_control_picking = picking._is_iqc_control_picking()
 
     def _compute_x_iqc_inspection_count(self):
         for picking in self:
@@ -1738,29 +1756,42 @@ class StockPicking(models.Model):
                 )
             )
 
+    def _get_iqc_control_picking_type(self):
+        """Operation type whose validation is gated by the incoming quality control.
+
+        With a three-step reception (vendors -> input -> quality -> stock) the
+        inspection gates the dedicated Quality Control transfer (input ->
+        quality). One/two-step receptions keep gating the receipt itself. The
+        quality-control operation type only exists once it is active, which is
+        when the warehouse reception steps are set to three steps.
+        """
+        self.ensure_one()
+        picking_type = self.picking_type_id
+        if not picking_type:
+            return self.env['stock.picking.type']
+        warehouse = (
+            picking_type.warehouse_id
+            or picking_type.default_location_dest_id.warehouse_id
+            or picking_type.default_location_src_id.warehouse_id
+        )
+        qc_type = warehouse.qc_type_id if warehouse else False
+        if qc_type and qc_type.active:
+            return qc_type
+        return picking_type if picking_type.code == 'incoming' else self.env['stock.picking.type']
+
     def _is_iqc_control_picking(self):
         self.ensure_one()
-        return bool(
-            self.picking_type_code == 'incoming'
-            and not self.return_id
-        )
+        if self.return_id or not self.picking_type_id:
+            return False
+        return self.picking_type_id == self._get_iqc_control_picking_type()
 
-    def _get_iqc_required_move_lines(self):
-        self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.product_id
-            and line.product_id.is_storable
-            and line.quantity_product_uom > 0
-        )
-
-    def _get_iqc_required_moves_without_lines(self):
+    def _get_iqc_required_moves(self):
         self.ensure_one()
         return self.move_ids.filtered(
             lambda move: move.state not in ('cancel', 'done')
             and move.product_id
             and move.product_id.is_storable
             and move.product_uom_qty > 0
-            and not move.move_line_ids
         )
 
     def _create_iqc_inspections(self):
@@ -1768,18 +1799,13 @@ class StockPicking(models.Model):
         inspections = inspection_model
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
             product_sources = {}
-            for move_line in picking._get_iqc_required_move_lines():
-                product_sources.setdefault(move_line.product_id, {
+            for move in picking._get_iqc_required_moves():
+                sources = product_sources.setdefault(move.product_id, {
                     'move_lines': self.env['stock.move.line'],
                     'moves': self.env['stock.move'],
                 })
-                product_sources[move_line.product_id]['move_lines'] |= move_line
-            for move in picking._get_iqc_required_moves_without_lines():
-                product_sources.setdefault(move.product_id, {
-                    'move_lines': self.env['stock.move.line'],
-                    'moves': self.env['stock.move'],
-                })
-                product_sources[move.product_id]['moves'] |= move
+                sources['moves'] |= move
+                sources['move_lines'] |= move.move_line_ids
 
             for product, sources in product_sources.items():
                 move_lines = sources['move_lines']
@@ -1801,9 +1827,10 @@ class StockPicking(models.Model):
                     inspections |= existing
                     continue
 
-                if move_lines:
-                    lot_qty = sum(move_lines.mapped('quantity_product_uom'))
-                else:
+                # The quality-control transfer may not be picked yet: fall back
+                # on the moves' demand when no done quantity is available.
+                lot_qty = sum(move_lines.mapped('quantity_product_uom'))
+                if not lot_qty:
                     lot_qty = sum(
                         move.product_uom._compute_quantity(
                             move.product_uom_qty,
@@ -1835,15 +1862,31 @@ class StockPicking(models.Model):
         return result
 
     def action_assign(self):
-        return super().action_assign()
+        result = super().action_assign()
+        self._create_iqc_inspections()
+        return result
+
+    def _action_done(self):
+        result = super()._action_done()
+        self._create_downstream_iqc_inspections()
+        return result
+
+    def _create_downstream_iqc_inspections(self):
+        """Create IQC inspections on the operations a receipt just pushed.
+
+        A three-step reception pushes the goods to the quality-control
+        transfer when the receipt is validated; creating its inspections right
+        away makes them available as soon as the goods reach the quality area.
+        """
+        downstream_pickings = self.env['stock.picking']
+        for move in self.move_ids:
+            downstream_pickings |= move.move_dest_ids.picking_id
+        downstream_pickings._create_iqc_inspections()
 
     def _check_iqc_before_validate(self):
         inspection_model = self.env['sn.wsd.quality.inspection']
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            incoming_products = (
-                picking._get_iqc_required_move_lines().mapped('product_id')
-                | picking._get_iqc_required_moves_without_lines().mapped('product_id')
-            )
+            incoming_products = picking._get_iqc_required_moves().mapped('product_id')
             required_products = incoming_products.filtered(
                 lambda product: inspection_model._find_scheme('iqc', product=product)
             )

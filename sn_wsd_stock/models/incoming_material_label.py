@@ -52,9 +52,25 @@ class StockPicking(models.Model):
             _('Generate internal batches from the move details before printing material labels.')
         )
 
+    def _is_final_receipt_picking(self):
+        """Operation that stores the received goods in the final stock location.
+
+        Tracked material must carry an internal batch before it reaches stock:
+        with a three-step reception the storage transfer (quality -> stock)
+        enforces it, otherwise the receipt does. Material labels may however be
+        generated earlier, on the receipt itself.
+        """
+        self.ensure_one()
+        picking_type = self.picking_type_id
+        warehouse = picking_type.warehouse_id
+        store_type = warehouse.store_type_id if warehouse else False
+        if store_type and store_type.active:
+            return picking_type == store_type
+        return picking_type.code == 'incoming'
+
     def button_validate(self):
         for picking in self:
-            if picking.picking_type_code != 'incoming':
+            if not picking._is_final_receipt_picking():
                 continue
             unlabelled_lines = picking.move_line_ids.filtered(
                 lambda line: (
@@ -79,17 +95,70 @@ class StockPicking(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
-    def action_generate_material_labels(self):
+    x_can_generate_material_labels = fields.Boolean(
+        string='Can Generate Material Labels',
+        compute='_compute_x_can_generate_material_labels',
+    )
+
+    @api.depends('picking_id.picking_type_id', 'picking_id.state',
+                 'product_id.tracking', 'state')
+    def _compute_x_can_generate_material_labels(self):
+        for move in self:
+            move.x_can_generate_material_labels = move._is_material_label_picking()
+
+    def _is_material_label_picking(self):
+        """Whether material labels may be generated from this move.
+
+        Labels can be generated on the receipt (goods in input) or on the
+        operation storing the goods in stock (two/three-step reception).
+        """
         self.ensure_one()
+        picking = self.picking_id
         if (
-            self.picking_code != 'incoming'
+            not picking
             or self.state in ('done', 'cancel')
             or self.product_id.tracking != 'lot'
         ):
-            raise UserError(
-                _('Material labels can only be generated for active incoming lot moves.')
+            return False
+        return (
+            picking.picking_type_code == 'incoming'
+            or picking._is_final_receipt_picking()
+        )
+
+    def _get_material_supplier_picking(self):
+        """Receipt carrying the supplier reference for this move.
+
+        A three-step storage transfer has no supplier of its own, so the
+        reference is looked up through the upstream moves.
+        """
+        self.ensure_one()
+        picking = self.picking_id
+        if picking.picking_type_code == 'incoming' or picking.partner_id.ref:
+            return picking
+        visited = self.env['stock.move']
+        pending = self
+        while pending:
+            origins = pending.move_orig_ids - visited
+            if not origins:
+                break
+            visited |= origins
+            incoming = origins.filtered(
+                lambda move: move.picking_id.picking_type_code == 'incoming'
+                and move.picking_id.partner_id.ref
             )
-        if not self.picking_id.partner_id.ref:
+            if incoming:
+                return incoming.picking_id[:1]
+            pending = origins
+        return picking
+
+    def action_generate_material_labels(self):
+        self.ensure_one()
+        if not self._is_material_label_picking():
+            raise UserError(
+                _('Material labels can only be generated for active receipt or storage lot moves.')
+            )
+        supplier_picking = self._get_material_supplier_picking()
+        if not supplier_picking.partner_id.ref:
             raise ValidationError(
                 _('A supplier reference code is required to generate material labels.')
             )
@@ -142,6 +211,7 @@ class StockMove(models.Model):
 
     def _generate_material_lots_from_move_line(self, move_line):
         self.ensure_one()
+        supplier_picking = self._get_material_supplier_picking()
         batch_no = (move_line.supplier_batch_no or '').strip()
         if '$' in batch_no:
             raise ValidationError(_('The supplier batch cannot contain the $ character.'))
@@ -169,8 +239,8 @@ class StockMove(models.Model):
                 'company_id': self.company_id.id,
                 'arrival_batch_no': fields.Date.context_today(self).strftime('%Y%m%d'),
                 'material_sn_base': lot_name,
-                'supplier_code': self.picking_id.partner_id.ref,
-                'supplier_name': self.picking_id.partner_id.name,
+                'supplier_code': supplier_picking.partner_id.ref,
+                'supplier_name': supplier_picking.partner_id.name,
                 'supplier_batch_no': batch_no,
                 'initial_quantity': quantity,
                 'source_picking_id': self.picking_id.id,
@@ -209,7 +279,7 @@ class StockMove(models.Model):
 
     def _get_material_sn(self, batch_no, quantity, sequence):
         product_code = (self.product_id.default_code or '').strip()
-        supplier_code = (self.picking_id.partner_id.ref or '').strip()
+        supplier_code = (self._get_material_supplier_picking().partner_id.ref or '').strip()
         if not product_code:
             raise ValidationError(_(
                 'Product %(product)s must have an internal reference.',
@@ -390,6 +460,9 @@ class StockLot(models.Model):
     )
     def _compute_material_label_location(self):
         for lot in self:
+            # The location of the operation line the label was generated from is
+            # preferred: on a receipt it is the input destination, on a storage
+            # transfer it is the final rack.
             receipt_line = lot.source_picking_id.move_line_ids.filtered(
                 lambda line: line.lot_id == lot
             )[:1]

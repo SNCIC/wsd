@@ -530,17 +530,24 @@ class StockBarcodeController(http.Controller):
             ("company_id", "=", self._get_allowed_company_ids()[0])
         ], limit=1)
         if corresponding_location:
-            internal_picking_type = request.env['stock.picking.type'].search([('code', '=', 'internal')])
             warehouse = corresponding_location.warehouse_id
-            if warehouse:
-                internal_picking_type = internal_picking_type.filtered(lambda r: r.warehouse_id == warehouse)
+            # Three-step reception creates dedicated internal operation types for
+            # the quality-control and storage steps. A scanned location must open
+            # a plain internal transfer, never one of those.
+            internal_picking_type = warehouse.int_type_id if warehouse else False
+            if not internal_picking_type:
+                domain = [('code', '=', 'internal')]
+                if warehouse:
+                    domain.append(('warehouse_id', '=', warehouse.id))
+                internal_picking_type = request.env['stock.picking.type'].search(
+                    domain, limit=1)
             dest_loc = corresponding_location
             while dest_loc.location_id and dest_loc.location_id.usage == 'internal':
                 dest_loc = dest_loc.location_id
             if internal_picking_type:
                 # Create and confirm an internal picking
                 picking = request.env['stock.picking'].create({
-                    'picking_type_id': internal_picking_type[0].id,
+                    'picking_type_id': internal_picking_type.id,
                     'user_id': False,
                     'location_id': corresponding_location.id,
                     'location_dest_id': dest_loc.id,

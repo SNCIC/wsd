@@ -45,7 +45,13 @@
     </record>
 
     <data noupdate="1">
-        <!-- Incoming receipts use the warehouse stock location directly. -->
+        <!-- Three-step reception: the receipt lands in the Input location, then
+             a Quality Control transfer (Input -> Quality Control) and a Storage
+             transfer (Quality Control -> Stock) complete the putaway. The scan
+             settings of the quality-control and storage operation types are
+             applied by stock.warehouse._get_picking_type_update_values, since
+             those types follow the warehouse reception steps (and are inactive
+             until the three-step reception is enabled). -->
         <function model="stock.picking.type" name="write">
             <value model="stock.picking.type" search="[('code', '=', 'incoming')]"/>
             <value eval="{

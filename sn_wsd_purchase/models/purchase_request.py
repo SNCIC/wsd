@@ -176,6 +176,13 @@ class PurchaseRequestLine(models.Model):
         'qty_done',
     )
     def _compute_receipt_status(self):
+        """Receipt status follows the quantity received on the receipt.
+
+        Odoo updates that quantity when the receipt operation is validated. On a
+        three-step reception this means the goods have reached the input
+        location; inspection and putaway are tracked by the quality-control and
+        storage steps.
+        """
         for line in self:
             if not line.purchased_qty or not line.qty_done:
                 line.receipt_status = 'not_received'

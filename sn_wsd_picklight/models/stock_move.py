@@ -1,9 +1,39 @@
-from odoo import _, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
+
+    x_is_picklight_putaway = fields.Boolean(
+        string='Picklight Putaway',
+        compute='_compute_x_is_picklight_putaway',
+        help='Technical flag used by the views: the operation brings goods to '
+             'their final stock location, i.e. where rack allocation applies.',
+    )
+
+    @api.depends('picking_id.picking_type_id', 'picking_id.state')
+    def _compute_x_is_picklight_putaway(self):
+        for move in self:
+            move.x_is_picklight_putaway = move._is_picklight_putaway_picking()
+
+    def _is_picklight_putaway_picking(self):
+        """Whether the move belongs to the operation that stores goods in stock.
+
+        With a three-step reception the rack allocation happens on the storage
+        transfer (quality -> stock); one/two-step receptions store the goods
+        directly on the receipt.
+        """
+        self.ensure_one()
+        picking = self.picking_id
+        if not picking or picking.state in ('done', 'cancel'):
+            return False
+        picking_type = picking.picking_type_id
+        warehouse = picking_type.warehouse_id
+        store_type = warehouse.store_type_id if warehouse else False
+        if store_type and store_type.active:
+            return picking_type == store_type
+        return picking_type.code == 'incoming'
 
     def action_auto_fill_large_rack_locations(self):
         return self._action_auto_fill_picklight_locations('large')
@@ -22,14 +52,14 @@ class StockMove(models.Model):
 
     def _action_auto_fill_picklight_locations(self, shelf_type):
         self.ensure_one()
-        if self.picking_code != 'incoming':
-            raise UserError(_('Automatic rack allocation is only available for receipt operations.'))
+        if not self._is_picklight_putaway_picking():
+            raise UserError(_('Automatic rack allocation is only available for storage operations.'))
         return self.move_line_ids._action_auto_fill_picklight_locations(shelf_type)
 
     def _action_light_receipt_destination_locations(self, light_on):
         self.ensure_one()
-        if self.picking_code != 'incoming':
-            raise UserError(_('Receipt picklight is only available for open receipt operations.'))
+        if not self._is_picklight_putaway_picking():
+            raise UserError(_('Picklight is only available for open storage operations.'))
 
         lines = self.move_line_ids.filtered('location_dest_id')
         locations = self.env['sn.wsd.picklight.location'].search([

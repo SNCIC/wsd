@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD MSD',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'MSD material control for electric meter manufacturing',
     'depends': ['stock', 'mrp', 'sn_wsd_mrp', 'sn_wsd_smt'],
     'data': [
