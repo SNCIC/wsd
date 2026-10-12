@@ -1,0 +1,492 @@
+# Odoo zh_CN translation worklist -- sn_wsd_device
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Computed Records"
+msgstr "已计算记录"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Downtime (h)"
+msgstr "停机时长（小时）"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "Model"
+msgstr "模型"
+
+#. module: sn_wsd_device
+#. odoo-javascript
+#: code:addons/sn_wsd_device/static/src/oee/oee_report/oee_report_action.js:0
+msgid "OEE Report"
+msgstr "OEE 报表"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_task__is_latest
+msgid ""
+"Automatically set on submit: the latest completed task of this equipment for"
+" this certification kind."
+msgstr "提交时自动设置：该设备在此认证类型下最近完成的任务。"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_line_import_wizard
+msgid "Calibration Line Import"
+msgstr "校准线导入"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_line_import_wizard_line
+msgid "Calibration Line Import Preview Row"
+msgstr "校准线导入预览行"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge_step__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_code_rule_seed_device
+msgid "Device Coding Rule Seeder"
+msgstr "设备编码规则种子数据"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_device_service
+msgid "Device PDA Service"
+msgstr "设备 PDA 服务"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge_step__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_code_rule_seed_device__display_name
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_device_service__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__favorited_by_me
+msgid "Favorited By Me"
+msgstr "我收藏的"
+
+#. module: sn_wsd_device
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__file
+msgid "File"
+msgstr "文件"
+
+#. module: sn_wsd_device
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__file_name
+msgid "File Name"
+msgstr "文件名"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_maint_config__trigger_time
+msgid ""
+"Format HH:MM. Once this time is reached, the shared scheduled action "
+"generates the day's maintenance tasks for every due plan. Applies to all "
+"maintenance plans. Idempotency is per equipment: a device already maintained"
+" today, or one that already has today's task, is not duplicated."
+msgstr ""
+"格式为 "
+"HH:MM。到达该时间后，共享的计划动作会为每个到期的计划生成当天的保养任务。适用于所有保养计划。幂等性按设备判断：今天已保养的设备，或已有当天任务的设备不会重复生成。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_check_config__trigger_time
+msgid ""
+"Format HH:MM. Once this time is reached, the shared scheduled action "
+"generates the day's spot check tasks for every due plan. Applies to all "
+"plans. Saving runs the generation once immediately when the time has already"
+" passed today. Idempotency is per equipment: a device already checked today,"
+" or one that already has today's task, is not duplicated."
+msgstr ""
+"格式为 "
+"HH:MM。到达该时间后，共享的计划动作会为每个到期的计划生成当天的点检任务。适用于所有计划。若当天该时间已过，保存时会立即执行一次生成。幂等性按设备判断：今天已点检的设备，或已有当天任务的设备不会重复生成。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_config__trigger_time
+msgid ""
+"Format HH:MM. Once this time is reached, the shared scheduled action scans "
+"the calibration plans and generates the due tasks. Idempotency is per "
+"equipment: a device already calibrated today, or one that already has "
+"today's task, is not duplicated."
+msgstr ""
+"格式为 HH:MM。到达该时间后，共享的计划动作会扫描校准计划并生成到期任务。幂等性按设备判断：今天已校准的设备，或已有当天任务的设备不会重复生成。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_task__is_certified
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__is_certified
+msgid ""
+"If set, submitting the task requires a certificate file, number and validity"
+" date."
+msgstr "设置后，提交任务需要证书文件、编号和有效期。"
+
+#. module: sn_wsd_device
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge_step__knowledge_id
+msgid "Knowledge"
+msgstr "知识库"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge_step__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_downtime__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_batch_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_order__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_reflow_zone__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_create_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_accept_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_repair_record_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_wave_zone__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_oee_import_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge_step__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_equipment_document__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_template__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_item__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_maint_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_task_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_generation_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_knowledge__liked_by_me
+msgid "Liked By Me"
+msgstr "我点赞的"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\privacy_lookup\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_check_task__line_count
+msgid "Line Count"
+msgstr "行数"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__cycle_count
+msgid ""
+"Number of cycle units between two calibrations. E.g. Quarterly x 2 = every "
+"180 days."
+msgstr "两次校准之间的周期单位数。例如按季 x 2 = 每 180 天一次。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_doc_sync_wizard__sync_mode
+msgid ""
+"Overwrite: delete every document of the target equipment, then copy all documents of the source equipment.\n"
+"Skip Existing: documents already on the target with the same name are kept; the missing ones are copied."
+msgstr ""
+"覆盖：删除目标设备的全部文档，然后复制源设备的全部文档。\n"
+"跳过已存在：目标上同名的文档保留，仅复制缺失的文档。"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\analytic\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_location__parent_path
+msgid "Parent Path"
+msgstr "母级路径"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard__preview_line_ids
+msgid "Preview Lines"
+msgstr "预览行"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__advance_days
+msgid "The task is generated this many days before the due date."
+msgstr "任务在到期日前这么多天生成。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_reflow_record__collect_time
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_wave_record__collect_time
+msgid "Timestamp reported by the device (stored as UTC)."
+msgstr "设备上报的时间戳（按 UTC 存储）。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_cal_plan__initial_cal_date
+msgid ""
+"Used as the last calibration date when the equipment ledger has no "
+"calibration date of this kind yet."
+msgstr "当设备台账尚无此类校准日期时，用作上次校准日期。"
+
+#. module: sn_wsd_device
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_maint_plan__custom_cycle_days
+#: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_check_plan__custom_cycle_days
+msgid ""
+"Used when the cycle type is Custom: the plan is due every N days starting "
+"from the start date."
+msgstr "周期类型为自定义时使用：计划自开始日期起每 N 天到期一次。"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_device.field_sn_wsd_device_cal_line_import_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_import_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Defaults to the uploaded file name"
+msgstr "默认使用上传的文件名"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Download"
+msgstr "下载"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+msgid "Download Guide"
+msgstr "下载指南"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_search
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
+msgid "Equipment name"
+msgstr "设备名称"
+
+#. module: sn_wsd_device
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_doc_type_form
+msgid "Internal notes..."
+msgstr "内部备注..."
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\barcodes_gs1_nomenclature\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_device_location_list
+msgid "Location"
+msgstr "位置"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "Select an equipment type..."
+msgstr "选择设备类型..."
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\web_tour\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_knowledge_form
+msgid "Tip"
+msgstr "提示"
+
+#. module: sn_wsd_device
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
+msgid "Total"
+msgstr "总计"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "e.g. Lubrication system check"
+msgstr "例如 润滑系统检查"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_template_form
+msgid "e.g. Temperature check"
+msgstr "例如 温度检查"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "<i class=\"fa fa-download\"/> Download Template"
+msgstr "<i class=\"fa fa-download\"/> 下载模板"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
+msgid "<i class=\"fa fa-upload\"/> Import Lines"
+msgstr "<i class=\"fa fa-upload\"/> 导入行"

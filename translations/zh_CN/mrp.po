@@ -1,0 +1,380 @@
+# Odoo zh_CN translation worklist -- mrp
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/stock_rule.py:0
+msgid "+ %s day(s)"
+msgstr "+ %s 天"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/stock_rule.py:0
+#: code:addons/mrp/models/stock_rule.py:0
+msgid "No BoM Found"
+msgstr "未找到物料清单"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/wizard/mrp_production_serial_numbers.py:0
+#: code:addons/mrp/wizard/mrp_production_serial_numbers.py:0
+msgid "No valid serial numbers provided."
+msgstr "未提供有效的序列号。"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/stock_rule.py:0
+#: code:addons/mrp/models/stock_rule.py:0
+msgid "Production End Date"
+msgstr "生产结束日期"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/stock_rule.py:0
+#: code:addons/mrp/models/stock_rule.py:0
+msgid "Production Start Date"
+msgstr "生产开始日期"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid "Serial number(s) for product %(product_name)s already produced"
+msgstr "产品 %(product_name)s 的序列号已生产"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_bom.py:0 code:addons/mrp/models/mrp_bom.py:0
+msgid "The batch size must be positive!"
+msgstr "批量大小必须为正数！"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/wizard/mrp_production_serial_numbers.py:0
+#: code:addons/mrp/wizard/mrp_production_serial_numbers.py:0
+msgid "There is no serial numbers to apply."
+msgstr "没有可应用的序列号。"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid "You cannot cancel a manufacturing order that is already done."
+msgstr "无法取消已完成的制造订单。"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_workorder.py:0
+#: code:addons/mrp/models/mrp_workorder.py:0
+msgid "You cannot change the workcenter of a work order that is done."
+msgstr "无法更改已完成工序单的工作中心。"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid "You cannot delete a manufacturing order that is already done."
+msgstr "无法删除已完成的制造订单。"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid "You cannot set more than 1 lot"
+msgstr "不能设置超过 1 个批次"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid "You cannot set more than 1 lot per product"
+msgstr "每个产品不能设置超过 1 个批次"
+
+#. module: mrp
+#. odoo-python
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_production.py:0
+msgid ""
+"You need to generate Lot/Serial Number(s) to mark as done some productions"
+msgstr "您需要生成批次/序列号才能把部分生产标记为完成"
+
+#. module: mrp
+#: model:ir.model.fields.selection,name:mrp.selection__mrp_routing_workcenter__cost_mode__actual
+msgid "Actual time"
+msgstr "实际时间"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_mrp_bom__batch_size
+msgid ""
+"All automatically generated manufacturing orders for this product will be of"
+" this size."
+msgstr "该产品自动生成的所有制造订单都将是此数量。"
+
+#. module: mrp
+#: model:ir.model,name:mrp.model_mrp_production_serials
+msgid "Assign serial numbers to production order"
+msgstr "为生产订单分配序列号"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_stock_warehouse_orderpoint__bom_id_placeholder
+msgid "Bom Id Placeholder"
+msgstr "物料清单 ID 占位"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production_group__child_ids
+msgid "Child Manufacturing Orders"
+msgstr "子制造订单"
+
+#. module: mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mrp.selection__mrp_routing_workcenter__time_mode__auto
+msgid "Computed"
+msgstr "已计算"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_routing_workcenter__cost_mode
+msgid "Cost based on"
+msgstr "成本依据"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production__serial_numbers_count
+msgid "Count of serial numbers"
+msgstr "序列号数量"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_mrp_bom__days_to_prepare_mo
+msgid ""
+"Create and confirm Manufacturing Orders this many days in advance, to have "
+"enough time to replenish components or manufacture semi-finished products."
+msgstr "提前这么多天创建并确认制造订单，以便有足够时间补充组件或制造半成品。"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_routing_workcenter__time_cycle
+msgid "Cycles"
+msgstr "周期"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_mrp_routing_workcenter__cost_mode
+msgid ""
+"Determines the way Odoo calculates the cost of the operation:\n"
+"- Based on Actual time: the cost will be calculated based on tracked time and real employee costs.\n"
+"- Based on Estimated time: the cost will be calculated based on estimated time and costs."
+msgstr ""
+"决定 Odoo 计算工序成本的方式：\n"
+"- 基于实际时间：成本将依据实际记录的时间和实际员工成本计算。\n"
+"- 基于预估时间：成本将依据预估时间和成本计算。"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_stock_warehouse_orderpoint__effective_bom_id
+msgid "Effective Bill of Materials"
+msgstr "生效的物料清单"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_stock_warehouse_orderpoint__effective_bom_id
+msgid ""
+"Either the Bill of Materials set directly or the one computed to be used by "
+"this replenishment"
+msgstr "直接设置的物料清单，或本次补货计算使用的物料清单"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_bom__operation_count
+msgid "Operations Count"
+msgstr "工序数量"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production_group__parent_ids
+msgid "Parent Manufacturing Orders"
+msgstr "父制造订单"
+
+#. module: mrp
+#: model:ir.model,name:mrp.model_mrp_production_group
+#: model:ir.model.fields,field_description:mrp.field_mrp_production__production_group_id
+#: model:ir.model.fields,field_description:mrp.field_stock_picking__production_group_id
+msgid "Production Group"
+msgstr "生产组"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_stock_replenishment_info__show_bom_tab
+msgid "Show Bom Tab"
+msgstr "显示物料清单页签"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_bom__show_copy_operations_button
+msgid "Show Copy Operations Button"
+msgstr "显示复制工序按钮"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production__show_generate_bom
+msgid "Show Generate BOM"
+msgstr "显示生成物料清单"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_bom__show_set_bom_button
+msgid "Show Set Bom Button"
+msgstr "显示设置物料清单按钮"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_mrp_bom__show_copy_operations_button
+msgid ""
+"Technical field used to control the visibility of the 'Copy Existing "
+"Operations' button."
+msgstr "用于控制“复制现有工序”按钮可见性的技术字段。"
+
+#. module: mrp
+#: model:ir.model.fields.selection,name:mrp.selection__mrp_routing_workcenter__cost_mode__estimated
+msgid "Theorical time"
+msgstr "理论时间"
+
+#. module: mrp
+#: model:ir.model.fields,help:mrp.field_mrp_routing_workcenter__time_cycle_manual
+msgid ""
+"Time in minutes:- In fixed mode, time used- In computed mode, supposed first"
+" time when there aren't any work orders yet"
+msgstr "时间（分钟）：- 固定模式下为所用时间- 计算模式下为尚无工序单时的预计首次用时"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_stock_move__production_group_id
+msgid "Used for Productions"
+msgstr "用于生产"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "Clears the selected lot/serial number"
+msgstr "清除所选的批次/序列号"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid ""
+"Compute the days required to resupply all components from BoM, by either "
+"buying or manufacturing the components and/or subassemblies."
+msgstr "计算通过采购或制造组件和/或半成品来补充物料清单中全部组件所需的天数。"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "Creates a new lot number"
+msgstr "创建新批次号"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "Creates a new serial number"
+msgstr "创建新序列号"
+
+#. module: mrp
+#: model_terms:ir.actions.act_window,help:mrp.mrp_routing_action
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid ""
+"Each operation can have multiple steps (scan products, view instructions) or"
+" even quality checks."
+msgstr "每道工序都可以有多个步骤（扫描产品、查看说明），甚至质量检查。"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "Generate Lot"
+msgstr "生成批次"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "Generate Serial"
+msgstr "生成序列号"
+
+#. module: mrp
+#: model_terms:ir.actions.act_window,help:mrp.mrp_routing_action
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid "No Operations Yet !"
+msgstr "暂无工序！"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_routing_workcenter_form_view
+msgid "Operation..."
+msgstr "工序..."
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.view_mrp_production_serials_form
+msgid "Prepare MO"
+msgstr "准备制造订单"
+
+#. module: mrp
+#: model_terms:ir.actions.act_window,help:mrp.mrp_routing_action
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid ""
+"Run your Shop Floor with work orders for each operation defined on your bill"
+" of material."
+msgstr "为物料清单中定义的每道工序生成工序单，以运行您的车间。"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_replenishment_tree_view
+msgid "Set as Bill of Materials"
+msgstr "设为物料清单"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid ""
+"<span class=\"o_annotation o_annotation_1 o_annotation_end position-absolute\">Time Clock</span>\n"
+"                                        <span class=\"o_annotation o_annotation_2 o_annotation_end position-absolute\">Quality Control</span>\n"
+"                                        <span class=\"o_annotation o_annotation_3 o_annotation_start position-absolute\">Feedback Loop</span>\n"
+"                                        <span class=\"o_annotation o_annotation_4 o_annotation_start position-absolute\">Register Materials</span>\n"
+"                                        <span class=\"o_annotation o_annotation_5 o_annotation_start position-absolute\">Select Operator</span>"
+msgstr ""
+"<span class=\"o_annotation o_annotation_1 o_annotation_end position-absolute\">打卡</span>\n"
+"                                        <span class=\"o_annotation o_annotation_2 o_annotation_end position-absolute\">质量控制</span>\n"
+"                                        <span class=\"o_annotation o_annotation_3 o_annotation_start position-absolute\">反馈回路</span>\n"
+"                                        <span class=\"o_annotation o_annotation_4 o_annotation_start position-absolute\">登记物料</span>\n"
+"                                        <span class=\"o_annotation o_annotation_5 o_annotation_start position-absolute\">选择操作员</span>"
+
+#. module: mrp
+#: model_terms:ir.actions.act_window,help:mrp.mrp_routing_action
+msgid ""
+"<span class=\"o_annotation o_annotation_1 o_annotation_end position-absolute\">Time Clock</span>\n"
+"                    <span class=\"o_annotation o_annotation_2 o_annotation_end position-absolute\">Quality Control</span>\n"
+"                    <span class=\"o_annotation o_annotation_3 o_annotation_start position-absolute\">Feedback Loop</span>\n"
+"                    <span class=\"o_annotation o_annotation_4 o_annotation_start position-absolute\">Register Materials</span>\n"
+"                    <span class=\"o_annotation o_annotation_5 o_annotation_start position-absolute\">Select Operator</span>"
+msgstr ""
+"<span class=\"o_annotation o_annotation_1 o_annotation_end position-absolute\">打卡</span>\n"
+"                    <span class=\"o_annotation o_annotation_2 o_annotation_end position-absolute\">质量控制</span>\n"
+"                    <span class=\"o_annotation o_annotation_3 o_annotation_start position-absolute\">反馈回路</span>\n"
+"                    <span class=\"o_annotation o_annotation_4 o_annotation_start position-absolute\">登记物料</span>\n"
+"                    <span class=\"o_annotation o_annotation_5 o_annotation_start position-absolute\">选择操作员</span>"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid "<span class=\"o_stat_text\">Add Operation</span>"
+msgstr "<span class=\"o_stat_text\">添加工序</span>"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_bom_form_view
+msgid "<span class=\"o_stat_text\">Copy Existing Operations</span>"
+msgstr "<span class=\"o_stat_text\">复制现有工序</span>"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "<span class=\"o_stat_text\">Serial Numbers</span>"
+msgstr "<span class=\"o_stat_text\">序列号</span>"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_routing_workcenter_form_view
+msgid ""
+"<span invisible=\"time_mode == 'auto' and workorder_count != 0\">minutes</span>\n"
+"                                    <span invisible=\"time_mode == 'manual'\"> / last </span>"
+msgstr ""
+"<span invisible=\"time_mode == 'auto' and workorder_count != 0\">分钟</span>\n"
+"                                    <span invisible=\"time_mode == 'manual'\"> / 上次 </span>"
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+msgid "<span name=\"to_produce\" class=\"fw-bold text-nowrap\">To Produce</span>"
+msgstr "<span name=\"to_produce\" class=\"fw-bold text-nowrap\">待生产</span>"

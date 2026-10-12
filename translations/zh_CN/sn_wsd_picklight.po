@@ -1,0 +1,362 @@
+# Odoo zh_CN translation worklist -- sn_wsd_picklight
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move.py:0
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Automatic rack allocation is only available for storage operations."
+msgstr "自动货架分配仅适用于入库作业。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Completed or cancelled operation lines cannot be allocated."
+msgstr "已完成或已取消的作业行不能分配。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "No active picklight locations are configured for this rack type."
+msgstr "此货架类型未配置可用的电子标签库位。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move.py:0
+msgid "No picklight location is mapped to this receipt destination location."
+msgstr "该收货目标库位未映射电子标签库位。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid ""
+"Not enough free picklight locations. %(required)s are required, but only "
+"%(available)s are available."
+msgstr "空闲的电子标签库位不足。需要 %(required)s 个，但仅有 %(available)s 个可用。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move.py:0
+msgid "Picklight is only available for open storage operations."
+msgstr "电子标签仅适用于未完成的入库作业。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Select at least one storage operation line."
+msgstr "请至少选择一条入库作业行。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Select operation lines from one storage transfer only."
+msgstr "请仅选择同一入库调拨的作业行。"
+
+#. module: sn_wsd_picklight
+#. odoo-python
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "The selected operation lines already have picklight locations."
+msgstr "所选作业行已有电子标签库位。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_picklight.constraint_sn_wsd_picklight_location_unique_shelf_code
+msgid "A location code must be unique per shelf."
+msgstr "同一货架内的库位编码必须唯一。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_picklight.constraint_sn_wsd_picklight_config_unique_company_name
+msgid "A picklight configuration name must be unique per company."
+msgstr "同一公司内的按灯配置名称必须唯一。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_picklight.constraint_sn_wsd_picklight_shelf_unique_company_code
+msgid "A shelf code must be unique per company."
+msgstr "同一公司内的货架编码必须唯一。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__shelf_allocation_sequence
+msgid "Allocation Sequence"
+msgstr "分配顺序"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_picklight.field_stock_picking__picklight_enabled
+msgid "Allow outbound transfers to use picklight."
+msgstr "允许出库调拨使用按灯拣选。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_picklight.constraint_sn_wsd_picklight_location_unique_stock_location
+msgid "An Odoo stock location can only map to one active picklight location."
+msgstr "一个 Odoo 库存库位只能映射到一个启用的按灯库位。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_sensor_reading__reading_type__battery
+msgid "Battery"
+msgstr "电量"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_command__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_event__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_sensor_reading__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__create_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__create_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_command__create_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_event__create_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_sensor_reading__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__display_name
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__display_name
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_command__display_name
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_event__display_name
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_sensor_reading__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_picklight
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__state__failed
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__get_battery
+msgid "Get Battery"
+msgstr "获取电量"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__get_location_state
+msgid "Get Location State"
+msgstr "获取库位状态"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__get_ths
+msgid "Get Temperature and Humidity"
+msgstr "获取温湿度"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_shelf__shelf_type__large
+msgid "Large Rack"
+msgstr "大料架"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_command__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_event__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_sensor_reading__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__write_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__write_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_command__write_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_event__write_date
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_sensor_reading__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__light_ibs
+msgid "Light IBS"
+msgstr "点亮 IBS"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__post_info
+msgid "Light Locations"
+msgstr "点亮库位"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__light_shelf
+msgid "Light Shelves"
+msgstr "点亮货架"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_event__event_type__pressed
+msgid "PTL Pressed"
+msgstr "按下 PTL"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_command
+msgid "Picklight Command"
+msgstr "电子标签指令"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_stock_picking__picklight_command_count
+msgid "Picklight Command Count"
+msgstr "电子标签指令数"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_stock_picking__picklight_command_ids
+msgid "Picklight Commands"
+msgstr "按灯命令"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_event
+msgid "Picklight Device Event"
+msgstr "电子标签设备事件"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_stock_picking__picklight_enabled
+msgid "Picklight Enabled"
+msgstr "已启用电子标签"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_location
+msgid "Picklight Location"
+msgstr "电子标签库位"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_stock_move__x_is_picklight_putaway
+msgid "Picklight Putaway"
+msgstr "电子标签上架"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_sensor_reading
+msgid "Picklight Sensor Reading"
+msgstr "电子标签传感器读数"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_config
+msgid "Picklight Service Configuration"
+msgstr "电子标签拣货服务配置"
+
+#. module: sn_wsd_picklight
+#: model:ir.model,name:sn_wsd_picklight.model_sn_wsd_picklight_shelf
+msgid "Picklight Shelf"
+msgstr "电子标签货架"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_location__position_number
+msgid "Position Number"
+msgstr "位置编号"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__rack_number
+msgid "Rack Number"
+msgstr "货架编号"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,field_description:sn_wsd_picklight.field_sn_wsd_picklight_shelf__rack_prefix
+msgid "Rack Prefix"
+msgstr "货架前缀"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_event__event_type__scan_changed
+msgid "Scan Changed"
+msgstr "扫码变更"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_event__event_type__self_checking
+msgid "Self Checking"
+msgstr "自检"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__state__sent
+msgid "Sent"
+msgstr "已发送"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_command__command_type__checking
+msgid "Service Check"
+msgstr "服务检查"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_shelf__shelf_type__small
+msgid "Small Rack"
+msgstr "小料架"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_event__event_type__status_changed
+msgid "Status Changed"
+msgstr "状态变更"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields,help:sn_wsd_picklight.field_stock_move__x_is_picklight_putaway
+msgid ""
+"Technical flag used by the views: the operation brings goods to their final "
+"stock location, i.e. where rack allocation applies."
+msgstr "视图使用的技术标记：该作业把货物送到最终库存位置，即货架分配适用的位置。"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_sensor_reading__reading_type__temperature_humidity
+msgid "Temperature and Humidity"
+msgstr "温度和湿度"
+
+#. module: sn_wsd_picklight
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_picking_form_picklight
+msgid "Picklight"
+msgstr "按灯拣选"
+
+#. module: sn_wsd_picklight
+#: model_terms:ir.ui.view,arch_db:sn_wsd_picklight.view_stock_move_operations_picklight
+msgid "This will reset all automatically assigned rack locations. Continue?"
+msgstr "这将重置所有自动分配的货架库位。是否继续？"

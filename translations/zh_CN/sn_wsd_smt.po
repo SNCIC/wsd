@@ -1,0 +1,72 @@
+# Odoo zh_CN translation worklist -- sn_wsd_smt
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid ""
+"%(count)s material positions were unloaded; remaining points stay on the "
+"reels."
+msgstr "已下料 %(count)s 个物料位；其余点位仍留在料盘上。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/mrp_production.py:0
+msgid "Batch Unload"
+msgstr "批量下料"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"TABLE_NO must store the table name only (e.g. T1), not the whole "
+"DEVICE.TABLE barcode (e.g. 1.T1); the device sequence belongs in DEVICE_SEQ."
+msgstr ""
+"TABLE_NO 只能存表名（例如 T1），不能存整个 DEVICE.TABLE 条码（例如 1.T1）；设备序号应放在 DEVICE_SEQ。"
+
+#. module: sn_wsd_smt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_online_material__loaded_reel_end
+msgid ""
+"Human-confirmed at reel swap: this reel is physically used up. The next "
+"completion backflush zeroes its line-side book quantity (flow part + reel-"
+"end loss)."
+msgstr "换料/下料时人工确认该卷已用尽。下次完工倒冲把该卷线边账面余量一次扣到归零（流水部分 + 卷终损耗）。"
+
+#. module: sn_wsd_smt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_wsd_serial_identity__smt_consumption_count
+msgid "SMT Consumption Count"
+msgstr "扣点数量"
+
+#. module: sn_wsd_smt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_wsd_mes_order__x_smt_loaded_material_count
+msgid "SMT Loaded Material Count"
+msgstr "在线物料数"
+
+#. module: sn_wsd_smt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_wsd_serial_identity__smt_consumption_ids
+msgid "SMT Material Consumption"
+msgstr "SMT 扣点流水"
+
+#. module: sn_wsd_smt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__source__smt_table
+msgid "SMT Material Table"
+msgstr "SMT 料站表"

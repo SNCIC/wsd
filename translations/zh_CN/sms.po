@@ -1,0 +1,41 @@
+# Odoo zh_CN translation worklist -- sms
+# From the instance audit: these terms are still served in English. Fill in or confirm every msgstr, then merge with i18n_apply.py.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_db_audit.py (odoo-zh-i18n)\n"
+
+#. module: sms
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sms.field_sms_template__lang
+msgid ""
+"Optional translation language (ISO code) to select when sending out an "
+"email. If not set, the main partner's language will be used. This should "
+"usually be a placeholder expression that provides the appropriate language, "
+"e.g. {{ object.partner_id.lang }}."
+msgstr ""
+"发送邮件时可选的翻译语言（ISO代码）。未设置时默认采用主联系人语言。推荐使用动态占位符如 {{ object.partner_id.lang }} "
+"自动匹配语言。"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_sms_composer__use_exclusion_list
+msgid ""
+"Prevent sending messages to blacklisted contacts. Disable only when "
+"absolutely necessary."
+msgstr "阻止向黑名单联系人发送消息。仅在绝对必要时禁用。"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_composer__use_exclusion_list
+msgid "Use Exclusion List"
+msgstr "使用排除列表"

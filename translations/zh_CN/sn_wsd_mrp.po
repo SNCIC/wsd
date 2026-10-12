@@ -1,0 +1,785 @@
+# Odoo zh_CN translation worklist -- sn_wsd_mrp
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order_batch_pass.py:0
+msgid "Batch Station Passes"
+msgstr "批量过站记录"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid "Board Side Type"
+msgstr "板面类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Over-pick"
+msgstr "物料超拣"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "Material Return"
+msgstr "物料退料"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "SN Operation History"
+msgstr "SN 工序履历"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__aging
+msgid "Aging"
+msgstr "老化"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_serial_creation
+msgid "Allow Serial Creation"
+msgstr "允许创建序列号"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_allow_skip_with_override
+msgid "Allow Skip With Override"
+msgstr "允许强制跳过"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__assembly
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_production_stage__assembly
+msgid "Assembly"
+msgstr "装配"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_mrp_production_line__x_line_type__auto
+msgid "Automated Line"
+msgstr "自动化线"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_batch_pass_count
+msgid "Batch Pass Count"
+msgstr "过站次数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_batch_pass_log
+msgid "Batch Station Pass Log"
+msgstr "批量过站日志"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_batch_pass_wizard
+msgid "Batch Station Pass Wizard"
+msgstr "批量过站向导"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_batch_pass_wizard_line
+msgid "Batch Station Pass Wizard Line"
+msgstr "批量过站向导行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__bom_product_ids
+msgid "Bom Product"
+msgstr "物料清单产品"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__calibration
+msgid "Calibration"
+msgstr "校准"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__code
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard__bom_product_ids
+msgid ""
+"Components offered for supplements: the BoM lines of this order's side."
+msgstr "可补料选用的组件：本工单所属板面的物料清单行。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_meter_pack_record__nameplate_sn
+msgid "Current nameplate bound to this SN (latest current binding)."
+msgstr "当前绑定到该 SN 的铭牌（最新的有效绑定）。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__dip
+msgid "DIP"
+msgstr "插件"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__product_uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr "所有库存作业的默认单位。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__operation_label
+msgid "Display Label"
+msgstr "显示标签"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_serial_identity_code_seed__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_entered_qty
+msgid ""
+"Distinct SNs that ever entered this operation (any result, including in "
+"progress): the arrived quantity for remaining = planned - entered."
+msgstr "曾经进入本工序的不同 SN 数（任何结果，含进行中）：剩余数按 计划数 - 已进入数 计算。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__eligible_count
+msgid "Eligible"
+msgstr "可过站"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_entered_qty
+msgid "Entered"
+msgstr "已进入"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__excluded_count
+msgid "Excluded"
+msgstr "已排除"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__excluded_summary
+msgid "Excluded Summary"
+msgstr "排除汇总"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__x_smt_is_feeder_control
+msgid "Feeder Control"
+msgstr "管控Feeder"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__final_test
+msgid "Final Test"
+msgstr "最终测试"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
+msgid "Finished-unit quantity accumulated from done material pickings."
+msgstr "已完成领料单累计的成品台数。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_mes_online_confirm
+msgid "Go Online Replace Confirmation"
+msgstr "在线上料替换确认"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_wip_dwell_hours
+msgid ""
+"Hours since the SN entered this operation, for in-progress rows only. "
+"Computed at read time and never stored -- it must keep moving with the "
+"clock."
+msgstr "SN 进入本工序后经过的小时数，仅用于进行中的行。读取时计算且不存储——它必须随钟表持续变化。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_dwell_hours
+msgid ""
+"Hours the SN spent at this operation once it left: out_date - in_date. Zero "
+"for in-progress rows."
+msgstr "SN 离开本工序时在此停留的小时数：出站时间 - 进站时间。进行中的行该值为零。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__inspection
+msgid "Inspection"
+msgstr "检验单号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_return_id
+msgid ""
+"Internal operation type used by MES-order material returns; created on first"
+" use."
+msgstr "MES 工单退料使用的内部作业类型；首次使用时创建。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_over_pick_id
+msgid ""
+"Internal operation type used by MES-order over-picks (beyond the plan); "
+"created on first use."
+msgstr "MES 工单超拣（超出计划）使用的内部作业类型；首次使用时创建。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_done_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_production_line__x_line_type
+msgid "Line Type"
+msgstr "线体属性"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__order_name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__order_name
+msgid "MES Order No."
+msgstr "制令单号"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_picking_count
+msgid "MES Transfers Count"
+msgstr "MES 库存调拨数"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__manage_mode
+msgid "Management Mode"
+msgstr "管理模式"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_mrp_production_line__x_line_type__manual
+msgid "Manual Line"
+msgstr "人工线"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__mes_order_id
+msgid "Mes Order"
+msgstr "制令单"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__message
+msgid "Message"
+msgstr "信息"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_identity__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_binding__note
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_batch_pass_count
+msgid "Number of batch station passes recorded on this order."
+msgstr "本工单记录的批量过站次数。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_mes_picking_count
+msgid ""
+"Number of stock documents (issues, returns, completion receipts) carried by "
+"this MO's MES orders."
+msgstr "本制造单的 MES 工单所产生的库存单据数（发料、退料、完工入库）。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_online_confirm__occupying_ids
+msgid "Occupying Orders"
+msgstr "占用工单"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_station_type
+msgid "Operation Type"
+msgstr "作业类型"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_carton_pallet_binding_log__operator_code
+msgid "Operator Code"
+msgstr "操作员代码"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\sale\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__packaging
+msgid "Packaging"
+msgstr "包装"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__serial_name
+msgid "Physical SN"
+msgstr "物理SN"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_route_section_stat__route_id
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\analytic\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__production_id
+msgid "Production"
+msgstr "生产"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__programming
+msgid "Programming"
+msgstr "编程"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_generate_sn_wizard__quantity
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_carton_pallet_binding_log__event_type__receive
+msgid "Receive"
+msgstr "收款"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__stock_package__x_wsd_pack_state__received
+msgid "Received"
+msgstr "已收"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_ng_qty
+msgid "Rejected"
+msgstr "拒绝"
+
+#. module: sn_wsd_mrp
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__repair
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__route_operation_code
+msgid "Route Operation Code"
+msgstr "工序代码"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_scrap_reason__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__line_ids
+msgid "Serials"
+msgstr "序列号列表"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__x_batch_pass_log_id
+msgid ""
+"Set when this OK row was written by a batch station pass (administrative "
+"pass) instead of a physical scan; the log header carries the operator, "
+"reason and SN list."
+msgstr "该 OK 行由批量过站（管理过站）而非实际扫描写入时设置；日志表头记录操作人、原因和 SN 清单。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__x_board_side
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_board_side
+msgid ""
+"Single: one single-side process route. Double: one Top (T) and one Bottom "
+"(B) process route, scheduled independently per side. Defaults to Single; "
+"switch to Double for double-sided boards."
+msgstr "单面：一条单面工艺路线。双面：一条正面（T）和一条反面（B）工艺路线，按板面独立排产。默认为单面；双面板请改为双面。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_history_count
+msgid "Station-pass history rows deleted by this clear."
+msgstr "本次清除删除的过站履历行数。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route__manage_mode
+msgid ""
+"Station: SNs enter/leave each operation one by one.\n"
+"Report: operations are reported by quantity, no SN tracking.\n"
+"Locked once the order goes online."
+msgstr ""
+"过站：SN 逐个进出每道工序。\n"
+"报工：按数量报工，不跟踪 SN。\n"
+"订单上线后锁定。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：超出到期日期\n"
+"今天：活动日期是今天\n"
+"计划：未来活动。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__workcenter_id
+msgid "Terminal entry context only (which screen opened the dialog)."
+msgstr "仅用于终端入口上下文（哪个界面打开了该对话框）。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__x_is_over_pick
+msgid "This picking issues material beyond the planned quantity."
+msgstr "该调拨发出的物料超出计划数量。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_operation__x_max_test_count
+msgid ""
+"Total station passes (OK and NG alike) allowed per SN at this operation; "
+"end/output operations are always capped at 1."
+msgstr "每个 SN 在本工序允许的总过站次数（OK 与 NG 一并计算）；末道/产出工序始终限制为 1 次。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_binding__is_current
+msgid ""
+"True on the latest binding of each (SN, type); demoted automatically when a "
+"newer binding of the same SN and type is created, so current mappings "
+"resolve in one search."
+msgstr "每个（SN、类型）的最新绑定为真；同一 SN 与类型出现更新的绑定时自动降级，使当前映射一次搜索即可解析。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_clear_pass_log__cleared_wip
+msgid "True when an in-progress (WIP) row was deleted too."
+msgstr "同时删除了进行中（在制品）的行时为真。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order__x_is_dual_side_non_final
+msgid ""
+"True when this order is a T-side (non-final) order of a dual-sided product: "
+"it closes without stock receipt (the paired B-side order does the final "
+"completion). Controls the \"Close\" vs \"Complete\" button visibility."
+msgstr "当本工单为双面板产品的正面（非最终）工单时为真：它关闭时不入库（由配对的背面工单做最终完工）。用于控制显示“关闭”还是“完工”按钮。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__x_use_daily_plan
+msgid "Use Daily Plan"
+msgstr "启用日计划"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_serial_operation_history__result
+msgid ""
+"WIP (key in_progress) = the SN entered this operation and is still parked "
+"there (the row waits for its leave backfill)."
+msgstr "在制品（in_progress 键）= 该 SN 已进入本工序且仍停留在此（该行等待回填出站信息）。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__x_board_side
+msgid ""
+"Which side of the board this component goes on. New lines default to the "
+"board type: single-board products default to Single, double-board products "
+"to Top (T). Pickings, backflush and scrap filter BOM lines by the MES order "
+"side."
+msgstr "该组件装在板面的哪一面。新行默认取板面类型：单面板默认单面，双面板默认正面（T）。调拨、倒冲和报废按 MES 工单板面筛选物料清单行。"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__wizard_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__workcenter_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__workcenter_id
+msgid "Work Center"
+msgstr "工作中心"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_identity_form
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_generate_sn_wizard_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_drawing_material\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Drawing No."
+msgstr "图号"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_online_confirm_form
+msgid "Go Online"
+msgstr "上线"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+msgid "Group By"
+msgstr "分组方式"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\gamification\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_wip_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_clear_pass_log__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_picking_form_mes_order
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
+msgid "Not Done"
+msgstr "未完成"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route__operation_ids
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workcenter__x_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_search
+msgid "Operation"
+msgstr "作业"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
+msgid "Process Section"
+msgstr "工段"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_pack_detail_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_online_search
+msgid "Production Line"
+msgstr "生产线"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_drawing_material\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
+msgid "Production Side"
+msgstr "生产面"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
+msgid "Total"
+msgstr "总计"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_list
+msgid "Total Done"
+msgstr "累计完成"
+
+#. module: sn_wsd_mrp
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__production_workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+msgid "<strong>Excluded:</strong>"
+msgstr "<strong>已排除：</strong>"

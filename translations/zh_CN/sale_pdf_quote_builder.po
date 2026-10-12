@@ -1,0 +1,42 @@
+# Odoo zh_CN translation worklist -- sale_pdf_quote_builder
+# From the instance audit: these terms are still served in English. Fill in or confirm every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_db_audit.py (odoo-zh-i18n)\n"
+
+#. module: sale_pdf_quote_builder
+#: model:ir.model.fields,field_description:sale_pdf_quote_builder.field_quotation_document__has_thumbnail
+msgid "Has Thumbnail"
+msgstr "有缩略图"
+
+#. module: sale_pdf_quote_builder
+#: model:ir.model.fields,help:sale_pdf_quote_builder.field_quotation_document__add_by_default
+msgid ""
+"If checked, this header or footer will be added by default on new quotes."
+msgstr "勾选后，新建报价单时将默认添加此页眉或页脚。"
+
+#. module: sale_pdf_quote_builder
+#: model:ir.model.fields,field_description:sale_pdf_quote_builder.field_quotation_document__thumbnail
+msgid "Thumbnail"
+msgstr "缩略图"
+
+#. module: sale_pdf_quote_builder
+#: model_terms:ir.ui.view,arch_db:sale_pdf_quote_builder.sale_order_template_form
+msgid "Quote Builder Demo Video"
+msgstr "报价单生成器演示视频"
+
+#. module: sale_pdf_quote_builder
+#: model_terms:ir.ui.view,arch_db:sale_pdf_quote_builder.quotation_document_form
+msgid "Visible to all"
+msgstr "对所有人可见"

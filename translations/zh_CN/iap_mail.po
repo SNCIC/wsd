@@ -1,0 +1,93 @@
+# Odoo zh_CN translation worklist -- iap_mail
+# From the instance audit: these terms are still served in English. Fill in or confirm every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_db_audit.py (odoo-zh-i18n)\n"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-address-card text-primary mt-1\"/>\n"
+"                    <b>Address</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-address-card text-primary mt-1\"/>\n"
+"                    <b>地址</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-building mt-1 text-primary\"/>\n"
+"                    <b>Type</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-building mt-1 text-primary\"/>\n"
+"                    <b>类型</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-envelope text-primary\" style=\"margin-top: 3px;\"/>\n"
+"                    <b>Email</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-envelope text-primary\" style=\"margin-top: 3px;\"/>\n"
+"                    <b>电子邮件</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-folder mt-1 text-primary\"/>\n"
+"                    <b>Tax ID</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-folder mt-1 text-primary\"/>\n"
+"                    <b>税号</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-globe mt-1 text-primary\"/>\n"
+"                    <b>Website</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-globe mt-1 text-primary\"/>\n"
+"                    <b>网站</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-industry text-primary\"/>\n"
+"                    <b>Industries</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-industry text-primary\"/>\n"
+"                    <b>行业</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-money mt-1 text-primary\"/>\n"
+"                    <b>Estimated revenue</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-money mt-1 text-primary\"/>\n"
+"                    <b>预估收入</b>"
+
+#. module: iap_mail
+#: model_terms:ir.ui.view,arch_db:iap_mail.enrich_company_by_dnb
+msgid ""
+"<i class=\"fa fa-fw me-2 fa-phone mt-1 text-primary\"/>\n"
+"                    <b>Phone</b>"
+msgstr ""
+"<i class=\"fa fa-fw me-2 fa-phone mt-1 text-primary\"/>\n"
+"                    <b>电话</b>"

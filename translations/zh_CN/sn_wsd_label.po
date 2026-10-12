@@ -1,0 +1,326 @@
+# Odoo zh_CN translation worklist -- sn_wsd_label
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_label
+#. odoo-javascript
+#: code:addons/sn_wsd_label/static/src/label_designer/label_designer.xml:0
+msgid "Del :"
+msgstr "删除："
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_needaction
+msgid "Action Needed"
+msgstr "待处理"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常标示"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__create_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__create_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_label
+#: model:res.groups,comment:sn_wsd_label.group_designer
+msgid "Design and maintain label templates."
+msgstr "设计并维护标签模板。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_reader__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_renderer__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_pda_service__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome图标，例如：fa-tasks"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选此项，则需要查看新消息。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选此项， 某些消息将出现发送错误。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_element
+msgid "Label Element"
+msgstr "标签元素"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_reader
+msgid "Label Field Reader"
+msgstr "标签字段读取器"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_pda_service
+msgid "Label PDA Print Service"
+msgstr "标签 PDA 打印服务"
+
+#. module: sn_wsd_label
+#: model:ir.model,name:sn_wsd_label.model_sn_label_renderer
+msgid "Label Rendering Engine"
+msgstr "标签渲染引擎"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_label\i18n\zh_CN.po
+#. odoo-python
+#: model:ir.model,name:sn_wsd_label.model_sn_label_template
+#: code:addons/sn_wsd_label/models/label_template.py:0
+msgid "Label Template"
+msgstr "标签模板"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__write_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__write_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_print_wizard__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__template_model_name
+msgid "Model"
+msgstr "模型"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_element__template_model_name
+msgid "Model of the parent template, feeding the field path picker."
+msgstr "父模板的模型，用于字段路径选择器。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止日期"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息的数量"
+
+#. module: sn_wsd_label
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__domain
+msgid "Optional filter restricting which records the template applies to."
+msgstr "可选过滤器，限定模板适用的记录范围。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_template__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：超出到期日期\n"
+"今天：活动日期是今天\n"
+"计划：未来活动。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_label\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_label.constraint_sn_label_template_sn_label_template_name_unique
+msgid "The label template name must be unique per company."
+msgstr "每个公司的标签模板名称必须唯一。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_label.field_sn_label_template__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_wizard_form
+msgid "Preview"
+msgstr "预览"
+
+#. module: sn_wsd_label
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_label.field_sn_label_element__template_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_label.view_sn_label_print_log_search
+msgid "Template"
+msgstr "模板"

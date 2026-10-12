@@ -1,0 +1,472 @@
+# Odoo zh_CN translation worklist -- sn_wsd_gantt
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_model.js:0
+msgid "%(hour)sh%(minute)s"
+msgstr "%(hour)s时%(minute)s分"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "%s cannot be scheduled in the past"
+msgstr "%s 不能排在过去的日期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_model.js:0
+msgid "%sh"
+msgstr "%s小时"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.js:0
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Activate dense mode"
+msgstr "启用紧凑模式"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.js:0
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Activate sparse mode"
+msgstr "启用稀疏模式"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_scale_selector.xml:0
+msgid "Apply"
+msgstr "应用"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
+msgid "Bye-bye, record!"
+msgstr "记录已删除！"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Collapse rows"
+msgstr "折叠行"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
+msgid "Create"
+msgstr "创建"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Day"
+msgstr "日"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
+msgid "Delete"
+msgstr "删除"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Edit"
+msgstr "编辑"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Ending date cannot be before the starting date"
+msgstr "结束日期不能早于开始日期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Expand rows"
+msgstr "展开行"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Failed to undo reschedule"
+msgstr "撤销改期失败"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Focus Today"
+msgstr "定位于今天"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Gantt View"
+msgstr "甘特视图"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Gantt must have a 'date_start' attribute"
+msgstr "甘特视图必须有 'date_start' 属性"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Gantt must have a 'date_stop' attribute"
+msgstr "甘特视图必须有 'date_stop' 属性"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid ""
+"Gantt must have a 'dependency_inverted_field' attribute once the "
+"'dependency_field' is specified"
+msgstr "指定 'dependency_field' 后，甘特视图必须有 'dependency_inverted_field' 属性"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_scale_selector.js:0
+msgid "Gantt start date"
+msgstr "甘特开始日期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_scale_selector.js:0
+msgid "Gantt stop date"
+msgstr "甘特结束日期"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "Impossible to schedule in the past."
+msgstr "无法排到过去的日期。"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "Insufficient fields for Gantt View!"
+msgstr "甘特视图字段不足！"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid ""
+"Invalid attributes (%(invalid_attributes)s) in gantt view. Attributes must "
+"be in (%(valid_attributes)s)"
+msgstr "甘特视图中存在无效属性（%(invalid_attributes)s）。属性必须在（%(valid_attributes)s）之内"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Invalid default_range '%s' in gantt"
+msgstr "甘特视图中 default_range '%s' 无效"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Invalid default_scale '%s' in gantt"
+msgstr "甘特视图中 default_scale '%s' 无效"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/ir_ui_view.py:0
+msgid "Invalid display_mode '%s' in gantt"
+msgstr "甘特视图中 display_mode '%s' 无效"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "Invalid reschedule method %s"
+msgstr "无效的改期方法 %s"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Month"
+msgstr "月"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.xml:0
+msgid "New"
+msgstr "新建"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
+msgid "No, keep it"
+msgstr "不，保留"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
+msgid "Open"
+msgstr "打开"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+#: code:addons/sn_wsd_gantt/static/src/gantt_multi_selection_buttons.xml:0
+msgid "Plan"
+msgstr "计划"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Quarter"
+msgstr "季度"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Record could not be removed"
+msgstr "记录无法删除"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Record duplicated"
+msgstr "记录已复制"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Record removed"
+msgstr "记录已删除"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Record reschedule undone"
+msgstr "已撤销改期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Record rescheduled"
+msgstr "记录已改期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Start"
+msgstr "开始"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Starting date cannot be after the ending date"
+msgstr "开始日期不能晚于结束日期"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Stop"
+msgstr "结束"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "Tasks rescheduled"
+msgstr "任务已改期"
+
+#. module: sn_wsd_gantt
+#. odoo-python
+#: code:addons/sn_wsd_gantt/models/models.py:0
+msgid "The dependencies are not valid, there is a cycle."
+msgstr "依赖关系无效，存在循环。"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer_controls.xml:0
+msgid "Toolbar menu"
+msgstr "工具栏菜单"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "Total"
+msgstr "总计"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_model.js:0
+msgid "Undefined %s"
+msgstr "未定义 %s"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
+msgid "View"
+msgstr "查看"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Week"
+msgstr "周"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Week %(week)s, %(startDate)s - %(endDate)s"
+msgstr "第 %(week)s 周，%(startDate)s - %(endDate)s"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "Year"
+msgstr "年"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "hours"
+msgstr "小时"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "minutes"
+msgstr "分钟"
+
+#. module: sn_wsd_gantt
+#. odoo-javascript
+#: code:addons/sn_wsd_gantt/static/src/gantt_arch_parser.js:0
+msgid "months"
+msgstr "月"
+
+#. module: sn_wsd_gantt
+#: model:ir.model.fields.selection,name:sn_wsd_gantt.selection__ir_ui_view__type__gantt
+#: model:ir.model.fields.selection,name:sn_wsd_gantt.selection__ir_actions_act_window_view__view_mode__gantt
+msgid "Gantt"
+msgstr "甘特图"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Component"
+msgstr "组件"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Components Available"
+msgstr "有组件可用"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\auth_signup\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Delayed Productions"
+msgstr "已延误生产"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "End Date"
+msgstr "结束日期"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\gamification\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Late"
+msgstr "延迟"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Late Availability"
+msgstr "迟到的可用性"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_gantt\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.sn_wsd_mes_order_gantt_view
+msgid "MES Order Schedule"
+msgstr "制令单排程"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "MO Pending"
+msgstr "制造订单等待中"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "MO Ready"
+msgstr "MO 准备就绪"
+
+#. module: sn_wsd_gantt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_view
+msgid "Manufacturing Schedule"
+msgstr "制造计划"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "My MOs"
+msgstr "我的制造订单"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "Planned"
+msgstr "已安排"
+
+#. module: sn_wsd_gantt
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "To Close"
+msgstr "待关闭"
+
+#. module: sn_wsd_gantt
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
+msgid "To Do"
+msgstr "待办"

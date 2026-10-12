@@ -1,0 +1,173 @@
+# Odoo zh_CN translation worklist -- om_account_followup
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 02:00+0000\n"
+"PO-Revision-Date: 2026-10-12 02:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/followup.py:0
+msgid ""
+"Your description is invalid, use the right legend or %% if you want to use "
+"the percent character."
+msgstr "您的说明无效，请使用正确的图例；若要使用百分号，请用 %%。"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Email not sent because of email address of partner not filled in"
+msgstr "未发送电子邮件，因为业务伙伴的电子邮件地址未填写"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Invoice Date"
+msgstr "发票日期"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Description"
+msgstr "描述"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Reference"
+msgstr "参考"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Due Date"
+msgstr "到期日期"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Amount"
+msgstr "金额"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Lit."
+msgstr "等级"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Amount due"
+msgstr "应付金额"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid ""
+"You became responsible to do the next action for the payment follow-up of"
+msgstr "您已成为以下付款跟进的下一步动作负责人："
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid ""
+"The partner does not have any accounting entries to print in the overdue "
+"report for the current company."
+msgstr "该业务伙伴在当前公司没有可打印到逾期报表中的会计分录。"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "Printed overdue payments report"
+msgstr "已打印逾期付款报表"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/models/partner.py:0
+msgid "There is no followup plan defined for the current company."
+msgstr "当前公司未定义跟进计划。"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/report/followup_print.py:0
+msgid ""
+"The followup plan defined for the current company does not have any followup"
+" action."
+msgstr "当前公司定义的跟进计划没有任何跟进动作。"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid "Invoices Reminder"
+msgstr "发票提醒"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid "Anybody"
+msgstr "任何人"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid "Follow-up letter of "
+msgstr "跟进函： "
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " will be sent"
+msgstr " 将被发送"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " email(s) sent"
+msgstr " 封电子邮件已发送"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " email(s) should have been sent, but "
+msgstr " 封电子邮件本应已发送，但 "
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " had unknown email address(es)"
+msgstr " 的电子邮件地址未知"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " letter(s) in report"
+msgstr " 封函件在报表中"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid " manual action(s) assigned:"
+msgstr " 项手动动作已分配："
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid "%s partners have no credits and as such the action is cleared"
+msgstr "%s 个业务伙伴没有欠款，因此该动作已清除"
+
+#. module: om_account_followup
+#. odoo-python
+#: code:addons/om_account_followup/wizard/followup_print.py:0
+msgid "Send Letters and Emails: Actions Summary"
+msgstr "发送函件和电子邮件：动作摘要"

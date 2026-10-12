@@ -1,0 +1,1117 @@
+# Odoo zh_CN translation worklist -- sn_wsd_quality
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+msgid "IQC Inspections"
+msgstr "IQC 检验"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "No effective inspection scheme was found."
+msgstr "未找到生效的检验方案。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/sampling.py:0
+msgid "Select a sampling standard before saving."
+msgstr "保存前请先选择抽样标准。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_sample_value_value_line_uniq
+msgid "A sample value can only be recorded once for an inspection item."
+msgstr "同一检验项目在同一质检单中只能记录一次样本值。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__accept_qty
+msgid "Accept Qty"
+msgstr "接收数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_needaction
+msgid "Action Needed"
+msgstr "待处理"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__active_component_binding_count
+msgid "Active Component Binding Count"
+msgstr "激活的元器件绑定数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__active_component_binding_ids
+msgid "Active Component Bindings"
+msgstr "激活的元器件绑定"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__active_freeze_id
+msgid "Active Freeze"
+msgstr "有效冻结"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_ids
+msgid "Activities"
+msgstr "活动"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_exception_decoration
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常标示"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_state
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_state
+msgid "Activity State"
+msgstr "活动状态"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_type_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__selection_values
+msgid "Allowed Values"
+msgstr "允许值"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_quality_hold_state__blocked
+msgid "Blocked"
+msgstr "受阻"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_current_sn
+msgid ""
+"Board currently shown in the inspection tab (switched by scanning or picking"
+" a product from the history tab)."
+msgstr "检验页签当前显示的板（通过扫描或从历史页签选取产品切换）。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__component_binding_count
+msgid "Component Binding Count"
+msgstr "元器件绑定数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__component_binding_ids
+msgid "Component Binding History"
+msgstr "元器件绑定历史"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__sample_record_mode
+msgid ""
+"Controls whether this item gets one lot value, one value per sample, or no "
+"separate value rows."
+msgstr "控制此检验项生成一条整批记录、每个样本一条记录，还是不生成单独的样本值记录。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__freeze_reason
+msgid "Current Freeze Reason"
+msgstr "当前冻结原因"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__freeze_time
+msgid "Current Freeze Time"
+msgstr "当前冻结时间"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__defect_code_id
+msgid "Defect Code"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__defect_code_id
+msgid "Defect code of the failing check on this board."
+msgstr "本板该项不合格的缺陷代码。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_code_rule_seed_quality__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__evidence_serial_identity_id
+msgid "Evidence SN"
+msgstr "凭证表号/序列号"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__expected_value
+msgid "Expected Value"
+msgstr "预期值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_base
+msgid "FAI Reported Base"
+msgstr "FAI 已报基数"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__x_fqc_status
+msgid "FQC Status"
+msgstr "FQC状态"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample__result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__manual_result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__result__fail
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample_value__result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_quality
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_fqc_status__failed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_oqc_status__failed
+msgid "Failed"
+msgstr "失败"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_fai_inspection_ids
+msgid "First Article Inspections"
+msgstr "首件检验单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_qty
+msgid ""
+"First-article units accumulated on the first-article operation since this "
+"round opened. Truth source: OK quantities of the operation reports of this "
+"MES order (report mode has no serial identities)."
+msgstr "本轮开启以来在首件工序累计的首件数量。数据来源：本 MES 工单各工序报工的 OK 数量（报工模式没有序列号标识）。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_type_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome图标，例如：fa-tasks"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__freeze_count
+msgid "Freeze Count"
+msgstr "冻结次数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__route_operation_id
+msgid "Freeze Route Operation"
+msgstr "冻结路线工序"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__x_freeze_state
+msgid "Freeze State"
+msgstr "冻结状态"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_freeze_state__frozen
+msgid "Frozen"
+msgstr "已冻结"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_level__g1
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_level__g1
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_lot_range__inspection_level__g1
+msgid "General I"
+msgstr "一般 I"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_level__g2
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_level__g2
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_lot_range__inspection_level__g2
+msgid "General II"
+msgstr "一般 II"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__inspection_level__g3
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__inspection_level__g3
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_lot_range__inspection_level__g3
+msgid "General III"
+msgstr "一般 III"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__has_message
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_picking__x_is_iqc_control_picking
+msgid "IQC Controlled Operation"
+msgstr "IQC 管控作业"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_picking__x_iqc_inspection_count
+msgid "IQC Inspection Count"
+msgstr "IQC 检验次数"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_exception_icon
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_exception_icon
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_needaction
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选此项，则需要查看新消息。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选此项， 某些消息将出现发送错误。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__inspection_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__inspection_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__inspection_id
+msgid "Inspection"
+msgstr "检验单号"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__line_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__item_id
+msgid "Inspection Item"
+msgstr "检验项"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__item_code
+msgid "Item Code"
+msgstr "料号"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__name
+msgid "Item Name"
+msgstr "项目名称"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_component_binding__component_type__leadseal
+msgid "Lead Seal"
+msgstr "铅封"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__lower_limit
+msgid "Lower Limit"
+msgstr "下限"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__mes_order
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__mes_order
+msgid "MES Order Quantity"
+msgstr "MES 工单数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__manual
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__sample_selection_method__manual
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__manual
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__sample_selection_method__manual
+msgid "Manual"
+msgstr "手动"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__production
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__production
+msgid "Manufacturing Order Quantity"
+msgstr "制造单数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__measured_value
+msgid "Measured Value"
+msgstr "实际检测值"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__my_activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动截止时间"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__manual_result__na
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__result__na
+msgid "N/A"
+msgstr "不适用"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_date_deadline
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动截止日期"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_summary
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_type_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__sample_record_mode__none
+msgid "No Sample Values"
+msgstr "不生成样本值"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__nominal_value
+msgid "Nominal Value"
+msgstr "标称值"
+
+#. module: sn_wsd_quality
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__switching_mode__normal
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__switching_mode__normal
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_plan__switching_mode__normal
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_freeze_state__normal
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息的数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_base
+msgid ""
+"OK quantity already reported on the first-article operation when this round "
+"opened; current round = total - base. Snapshot instead of timestamps: "
+"datetime columns are second-precise and rounds can open within the same "
+"second."
+msgstr ""
+"本轮开启时首件工序已上报的 OK 数量；本轮数量 = 总数 - 基数。此处用快照而非时间戳：日期时间列只精确到秒，而多轮可能在同一秒内开启。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__x_oqc_status
+msgid "OQC Status"
+msgstr "OQC 状态"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__sample_record_mode__per_lot
+msgid "One Value per Lot"
+msgstr "每批一条记录"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__sample_record_mode__per_sample
+msgid "One Value per Sample"
+msgstr "每个样本一条记录"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__open_quality_issue_count
+msgid "Open Quality Issue Count"
+msgstr "未结质量缺陷计数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__move_line
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__move_line
+msgid "Operation Line Quantity"
+msgstr "工序行数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__operation_id
+msgid ""
+"Operation scope of the scheme. FAI: the first-article station samples must "
+"leave with an OK result; IPQC: the patrolled operation; OQC: the trigger-"
+"point operation. Not used by IQC (incoming material has no route)."
+msgstr "方案的工序范围。FAI：首件工位样本必须以 OK 结果流出；IPQC：巡检工序；OQC：触发点工序。IQC 不使用（来料没有工艺路线）。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_patrol_operation_id
+msgid "Operation the patrol scheme watches (from the scheme)."
+msgstr "巡检方案监控的工序（取自方案）。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample__result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__manual_result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__result__pass
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample_value__result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_fqc_status__passed
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_oqc_status__passed
+msgid "Passed"
+msgstr "已过"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\payment\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample__result__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_fqc_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_oqc_status__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__manual_result__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_cell__result__pending
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample_value__result__pending
+msgid "Pending"
+msgstr "待定"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_ng_qty
+msgid "Picked products found defective this first-article round."
+msgstr "本轮首件检验中发现不良的已拣选产品。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_ok_qty
+msgid "Picked products that passed this first-article round."
+msgstr "本轮首件检验合格的已拣选产品。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_history_ids
+msgid ""
+"Previous patrol inspections of the same production line and operation, "
+"newest first."
+msgstr "同一产线与工序的历史巡检记录，最新的在前。"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_code_rule_seed_quality
+msgid "Quality Coding Rule Seeder"
+msgstr "质量编码规则种子数据"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_quality_hold_state__hold
+msgid "Quality Hold"
+msgstr "质量挂起/锁仓"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__x_quality_hold_state
+msgid "Quality Hold State"
+msgstr "质量挂起状态"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_picking__x_quality_inspection_ids
+msgid "Quality Inspections"
+msgstr "质量检验"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__quality_issue_count
+msgid "Quality Issue Count"
+msgstr "质量缺陷计数"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__quality_issue_ids
+msgid "Quality Issues"
+msgstr "质量问题"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_ipqc_history_ids
+msgid "Recent Inspections"
+msgstr "近期检验"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__switching_mode__reduced
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__switching_mode__reduced
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_plan__switching_mode__reduced
+msgid "Reduced"
+msgstr "放宽"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__reject_qty
+msgid "Reject Qty"
+msgstr "拒绝数量/不合格数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_quality_hold_state__released
+msgid "Released"
+msgstr "已下达"
+
+#. module: sn_wsd_quality
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__required
+msgid "Required"
+msgstr "必填"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_user_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_user_id
+msgid "Responsible User"
+msgstr "责任用户"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__result
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__result
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__cell_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__cell_ids
+msgid "Result Cells"
+msgstr "结果单元格"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_freeze_wizard__mode__route_operation
+msgid "Route Operation Batch Freeze"
+msgstr "按路线工序批量冻结"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__sample_id
+msgid "Sample"
+msgstr "样本"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__sample_record_mode
+msgid "Sample Recording"
+msgstr "样本记录方式"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__sample_size
+msgid "Sample Size"
+msgstr "抽样数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_removed_serial_ids
+msgid ""
+"Samples dropped from this round after an NG/scrap leave at the first-article"
+" operation. Reworked boards never re-enter the sample list (first articles "
+"must be untouched boards); the quota they released is refilled by fresh "
+"feeds only."
+msgstr "在首件工序以 NG/报废流出后从本轮剔除的样本。返修过的板不会重新进入样本清单（首件必须是未动过的板）；其释放的配额只由新投入的板补充。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_arrived_serial_ids
+msgid ""
+"Samples that already left the first-article operation with an OK result and "
+"wait for the inspector."
+msgstr "已以 OK 结果流出首件工序、等待检验员的样本。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__standard_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_plan__standard_id
+msgid "Sampling Standard"
+msgstr "抽样标准"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_scan
+msgid ""
+"Scan a board SN: station mode switches the inspected board, report mode "
+"records a defective board."
+msgstr "扫描板 SN：工位模式切换被检验的板，报工模式记录一块不良板。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_quality_hold_state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__sequence
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_serial_ids
+msgid ""
+"Serial numbers registered as first-article samples for this round (fed in at"
+" the start operation while quota is open)."
+msgstr "登记为本轮首件样本的序列号（在起始工序配额开放时投入）。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_sample__result__skipped
+msgid "Skipped"
+msgstr "跳站"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_state
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"基于活动的状态\n"
+"逾期：超出到期日期\n"
+"今天：活动日期是今天\n"
+"计划：未来活动。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_stock_picking__x_is_iqc_control_picking
+msgid ""
+"Technical flag used by the views: the operation whose validation is gated by"
+" the incoming quality control. With a three-step reception it is the Quality"
+" Control transfer, otherwise the receipt itself."
+msgstr "视图使用的技术标记：其验证被来料质量控制拦截的作业。三步收货时为质量控制调拨，否则为收货单本身。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__text_value
+msgid "Text Value"
+msgstr "文本值"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_quality.constraint_sn_wsd_quality_inspection_scheme_line_plan_item_code_uniq
+msgid "The inspection item code must be unique within one scheme."
+msgstr "同一个方案内的检验项目编码必须是唯一的。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__switching_mode__tightened
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__switching_mode__tightened
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_sampling_plan__switching_mode__tightened
+msgid "Tightened"
+msgstr "加严"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__picking_product
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__picking_product
+msgid "Transfer Product Quantity"
+msgstr "调拨产品数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__activity_exception_decoration
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录中异常活动的类型。"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__unit
+msgid "Unit"
+msgstr "单元"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__upper_limit
+msgid "Upper Limit"
+msgstr "上限"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_coding_prefix
+msgid ""
+"Uppercase inspection type (FAI/IQC/IPQC/OQC) rendered as the document-number"
+" prefix by the coding rule engine."
+msgstr "由编码规则引擎渲染为单据号前缀的大写检验类型（FAI/IQC/IPQC/OQC）。"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_cell
+msgid "WSD Quality Inspection Result Cell"
+msgstr "WSD 质检结果单元格"
+
+#. module: sn_wsd_quality
+#: model:ir.model,name:sn_wsd_quality.model_sn_wsd_quality_inspection_sample_value
+msgid "WSD Quality Inspection Sample Value"
+msgstr "WSD 质检样本值"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_fqc_status__waived
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_serial_identity__x_oqc_status__waived
+msgid "Waived"
+msgstr "免检"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme__lot_qty_source__workorder_output
+#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__lot_qty_source__workorder_output
+msgid "Work Order Output Quantity"
+msgstr "工序单产出数量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__active
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_group_search
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Component Bindings"
+msgstr "组件绑定"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Freeze"
+msgstr "冻结"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_identity__freeze_record_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Freeze Records"
+msgstr "冻结记录"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_group_form
+msgid "Inspection Items"
+msgstr "检验项"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Instruction"
+msgstr "作业指导/说明"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__item_type
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__item_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_search
+msgid "Item Type"
+msgstr "项目类型"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Mark FQC Failed"
+msgstr "标记FQC不合格"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Mark FQC Passed"
+msgstr "标记FQC合格"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Mark OQC Failed"
+msgstr "标记OQC不合格"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Mark OQC Passed"
+msgstr "标记OQC合格"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_standard__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__note
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_item_group_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_sampling_standard_form
+msgid "Notes"
+msgstr "通知"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Open Freeze Records"
+msgstr "打开冻结记录"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Open Full Binding History"
+msgstr "打开完整绑定历史"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Open Quality Issues"
+msgstr "未结质量缺陷"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "Patrol remarks..."
+msgstr "巡检备注..."
+
+#. module: sn_wsd_quality
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+msgid "Quality"
+msgstr "质量"
+
+#. module: sn_wsd_quality
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__route_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+msgid "Route Operation"
+msgstr "工序实例"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
+msgid "optional"
+msgstr "可选"

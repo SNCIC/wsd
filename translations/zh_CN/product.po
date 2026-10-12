@@ -1,0 +1,67 @@
+# Odoo zh_CN translation worklist -- product
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: product
+#. odoo-python
+#: code:addons/product/models/product_product.py:0
+#: code:addons/product/models/product_product.py:0
+msgid "Duplicate values in attribute values are not allowed: %s"
+msgstr "属性值中不允许出现重复值：%s"
+
+#. module: product
+#. odoo-python
+#: code:addons/product/models/product_product.py:0
+#: code:addons/product/models/product_product.py:0
+msgid ""
+"It is not possible to import different values for the same attribute: %s"
+msgstr "同一属性不能导入不同的值：%s"
+
+#. module: product
+#. odoo-python
+#: code:addons/product/models/product_product.py:0
+#: code:addons/product/models/product_product.py:0
+msgid ""
+"The exitings product has different attribute value. \"%(imported_values)s\" "
+"is not equivalent to \"%(existing_values)s\" for \"%(external_id)s\", "
+"\"%(id)s\""
+msgstr ""
+"现有产品的属性值不同。“%(external_id)s”（“%(id)s”）的 “%(imported_values)s” 与 "
+"“%(existing_values)s” 不一致"
+
+#. module: product
+#. odoo-python
+#: code:addons/product/models/product_product.py:0
+#: code:addons/product/models/product_product.py:0
+msgid ""
+"Unable to import products with attribute value without attribute name "
+"(defined as: attribute:value): %s"
+msgstr "无法导入属性值缺少属性名的产品（格式为 attribute:value）：%s"
+
+#. module: product
+#. odoo-python
+#: code:addons/product/models/product_product.py:0
+#: code:addons/product/models/product_product.py:0
+msgid ""
+"Unable to import products with attribute values but without name of product "
+"set"
+msgstr "无法导入带有属性值但未设置产品名称的产品"
+
+#. module: product
+#: model:ir.model.fields,field_description:product.field_product_product__import_attribute_values
+#: model:ir.model.fields,field_description:product.field_product_template__import_attribute_values
+msgid "Product Values"
+msgstr "产品值"

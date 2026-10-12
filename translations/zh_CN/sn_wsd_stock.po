@@ -1,0 +1,70 @@
+# Odoo zh_CN translation worklist -- sn_wsd_stock
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid ""
+"Material labels can only be generated for active receipt or storage lot "
+"moves."
+msgstr "只能为有效的收货或入库批次调拨生成物料标签。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__x_can_generate_material_labels
+msgid "Can Generate Material Labels"
+msgstr "可生成物料标签"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_stock\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_print_material_labels
+msgid "Can Print Material Labels"
+msgstr "可打印物料标签"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_report_sn_wsd_stock_report_incoming_material_label_zpl__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_report_sn_wsd_stock_report_incoming_material_label_zpl
+msgid "Incoming Material Label ZPL Report"
+msgstr "来料标签 ZPL 报表"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__is_mes_receipt
+msgid "Is MES Completion Receipt"
+msgstr "是 MES 完工入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_lot__material_label_location
+msgid ""
+"Location printed on the material label. The final path segment of the "
+"receipt destination is preferred; the current quant location is used as a "
+"fallback."
+msgstr "打印在物料标签上的库位。优先取收货目标的最后一段路径；否则回退使用当前库存库位。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_label_location
+msgid "Material Label Location"
+msgstr "物料标签库位"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move_line__internal_lot_name
+msgid "Unique Lot/Serial Number"
+msgstr "唯一批号/序列号"
