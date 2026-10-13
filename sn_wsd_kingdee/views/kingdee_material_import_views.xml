@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sn_wsd_kingdee_material_import_form" model="ir.ui.view">
+            <field name="name">sn.wsd.kingdee.material.import.form</field>
+            <field name="model">sn.wsd.kingdee.material.import</field>
+            <field name="arch" type="xml">
+                <form string="Import Materials from Kingdee">
+                    <group>
+                        <group string="Kingdee Query">
+                            <field name="filter_string"/>
+                            <field name="limit"/>
+                            <field name="include_disabled"/>
+                        </group>
+                        <group string="Odoo Products">
+                            <field name="update_existing"/>
+                            <field name="create_missing"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">A material is matched on its Kingdee number: a product that only carries the number as its internal reference is linked instead of duplicated. Preview reads Kingdee and reports what an import would create and update, without writing anything.</div>
+                    <footer>
+                        <button name="action_preview"
+                                type="object"
+                                string="Preview"
+                                class="btn-secondary"/>
+                        <button name="action_import"
+                                type="object"
+                                string="Import"
+                                class="btn-primary"/>
+                        <button string="Cancel"
+                                class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sn_wsd_kingdee_material_import" model="ir.actions.act_window">
+            <field name="name">Import Materials from Kingdee</field>
+            <field name="res_model">sn.wsd.kingdee.material.import</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

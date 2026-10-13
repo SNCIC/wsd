@@ -50,11 +50,13 @@ class ResPartner(models.Model):
     def _kingdee_check_ready(self):
         """Refuse early when a field this account requires is not configured.
 
-        The BD_Customer metadata marks only ``FName`` / ``FCreateOrgId`` /
-        ``FTRADINGCURRID`` as mandatory, but this account also rejects a customer
-        without ``FSELLER`` (销售员) and ``FSALDEPTID`` (销售部门) — verified by
-        trial on 2026-10-13 (see the SOP). Failing here shows an actionable
-        message instead of the Kingdee one.
+        The **platform** metadata marks only ``FName`` / ``FCreateOrgId`` /
+        ``FTRADINGCURRID`` as mandatory, but the **account** metadata marks
+        ``FSELLER`` (销售员) and ``FSALDEPTID`` (销售部门) as mandatory too — both
+        are ``必录=Y`` in ``fields_master.csv`` (the account-first master index),
+        and the account rejects a customer without them. The two sources disagree
+        on this form, so read the master index rather than the registration tree;
+        checking it here shows an actionable message instead of the Kingdee one.
         """
         self.ensure_one()
         client = self.env["sn.wsd.kingdee.client"]

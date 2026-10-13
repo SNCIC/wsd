@@ -8,7 +8,8 @@
 - 一键测试连接：不需要先保存设置，可直接用当前填写的参数跑一次真实业务查询（读取 1 条物料编码）来验证凭据；
   `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
 - 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
-- 物料主数据单向/双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看
+- 物料主数据双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看，以及**从金蝶批量导入物料**
+  （菜单 `Kingdee → Import Materials`，向导可设过滤条件、数量上限与是否新建，并支持 `Preview` 预演）
 - 客户主数据单向/双向同步：`BD_Customer` 的保存、提交、审核、反审核、查看、删除
 - 新单据只需实现字段映射与 payload（`_kingdee_number()` / `_kingdee_payload()`），状态、动作、
   逐条错误隔离、日志与通知由 `sn.wsd.kingdee.sync.mixin` 提供，工序见 `docs/kingdee-接入SOP.md`
@@ -24,11 +25,20 @@
 > `models/product_template.py` 的 `MATERIAL_FIELD_ENTITY`。特别注意 `FErpClsID`（物料属性）
 > 平铺一定被拒且会被金蝶默认成 `1`（外购），必须嵌套在 `SubHeadEntity` 里才能写入 2=自制。
 
-> **字段标识来源：** 任何 `formId` / `fieldKey` 一律以金蝶开放平台元数据为准
-> （本地离线库 `odoo-kingdee/data/kingdee-openapi`：`fields_index.csv` 查字段名、
-> `metadata/{formId}.json` 查完整字段树与必录标记、`kingdee_api_catalog.csv` 查接口），
+> **字段标识来源：** 任何 `formId` / `fieldKey` 一律以本地离线金蝶知识库为准
+> （`odoo-kingdee/data/kingdee-openapi`）：
+> **`fields_master.csv` 查字段名 / 必录 / 枚举 / 引用对象 —— 该表把实际账套元数据合并到
+> 平台登记版之上，「必录」以账套为准**；`kingdee_api_catalog.csv` 查 formId 与操作；
+> 只有在需要完整实体树时才读 `metadata/{formId}.json`（那是**平台登记版**）。
 > **禁止凭命名习惯或 SDK 自带 demo 推测：** demo 里的 `FUserOrgId` 已失效，
-> 正确为 `FUseOrgId`；本文档字段名均按该索引校正过）。
+> 正确为 `FUseOrgId`；本文档字段名均按该索引校正过。
+
+> ⚠️ **平台版元数据 ≠ 账套元数据，两者的「必录」会不一致。** 实测 `BD_Customer`：
+> 平台版 `metadata/BD_Customer.json` 只标 `FName` / `FCreateOrgId` / `FTRADINGCURRID` 必录，
+> 而账套版**另外**标了 `FSELLER`（销售员）/ `FSALDEPTID`（销售部门）/ `FTTel`（固定电话）。
+> **只读平台版会漏掉账套的强制字段**，只能等 `Save` 被拒才发现。查必录请用主索引
+> （`python tools/kingdee_fields.py must <formId>`；`tools/probe_form.py` 默认也读主索引，
+> 加 `--legacy` 才读平台版树）。
 
 > **默认值只有一个来源**：连接与物料的默认值（`lcid`、`org_num`、超时、单位、物料属性、
 > 物料类别、物料分组）集中在 `models/kingdee_client.py` 的 `DEFAULTS`；设置页只存与默认值不同的部分，
@@ -179,7 +189,42 @@ systemctl start odoo19
 
 批量操作：在客户列表勾选多行 → `动作` 菜单 → `Kingdee: Save / Audit / Refresh Customers`。
 
-### 3）排查问题
+### 3）从金蝶导入物料
+
+进入 `Kingdee → Import Materials`（管理员可见），在向导里确认选项后点 **Import**：
+
+| 选项 | 说明 |
+| :--- | :--- |
+| `Kingdee Filter` | 可选的金蝶 `FilterString`，如 `FDocumentStatus = 'C'` 只读已审核物料；留空读全部 |
+| `Maximum Materials` | 最多读取多少条，`0` 表示全部 |
+| `Include Disabled Materials` | 是否连金蝶已禁用（`FForbidStatus = B`）的物料一起导入，默认跳过；**无论是否勾选都不会归档 Odoo 产品** |
+| `Update Linked Products` | 刷新已对接产品的金蝶分类信息 |
+| `Create Missing Products` | 为 Odoo 里还没有的金蝶物料新建产品 |
+
+**先点 `Preview`**：只读金蝶，报出「一次导入会新建 / 更新 / 跳过多少条」，不写任何数据。
+
+匹配与去重（`_kingdee_find_material()` 逐条判定，顺序如下）：
+
+| 情形 | 结果 |
+| :--- | :--- |
+| 已有产品的 `Kingdee Number` == 物料编码 | **更新**，不新建 |
+| 某产品 `Kingdee Number` 为空、而**内部参考** == 物料编码 | **关联**该产品并补写 `Kingdee Number`，不新建 |
+| 内部参考 == 物料编码，但该产品已对接**另一个**金蝶编码 | **拒绝**并报错，不新建（计入「失败」） |
+| 以上都不中 | **新建** |
+| 金蝶已禁用（`FForbidStatus = B`） | 默认**跳过**（不会归档 Odoo 产品） |
+| `Kingdee Number` 相同的两条 | 由数据库 `UNIQUE(kingdee_number)` 兜底，插不进去 |
+
+> ⚠️ **唯一的重复风险是「内部参考没填」。** 匹配键是物料编码，**不是名称**：若 Odoo 里已有的产品
+> 内部参考为空（或填的不是金蝶编码），导入会为这些物料**新建**产品，结果是同名的两条。
+> 首次导入前务必先 `Preview`，或先把既有产品的内部参考整理成与金蝶编码一致。
+>
+> 另一个边界：若两条 Odoo 产品的内部参考都与同一物料编码相同，只有**第一条**会被关联，另一条保持原样
+> ——既不重复创建，也不会被接管，需要人工改掉它的内部参考。
+
+导入结束后弹通知汇总「新建 / 更新 / 跳过 / 失败」条数，失败的逐条原因也在通知里（最多 5 条），
+完整的请求与响应报文在 `Kingdee → Sync Logs`。
+
+### 4）排查问题
 
 进入 `Kingdee → Sync Logs`：
 
@@ -187,7 +232,7 @@ systemctl start odoo19
 - 打开某条日志可看到完整的请求/响应报文与错误信息
 - 通过“关联记录”列或 `Open Related Record` 按钮跳回对应产品
 
-### 4）启用定时刷新（可选）
+### 5）启用定时刷新（可选）
 
 1. 在 `设置 → Kingdee` 勾选 `Scheduled Material Refresh` 并保存
 2. 进入 `设置 → 技术 → 计划任务`，找到 `Kingdee: refresh linked materials`，把“有效”打开
@@ -196,8 +241,22 @@ systemctl start odoo19
 ## 已知边界
 
 - 已实现物料（`BD_MATERIAL`）与客户（`BD_Customer`）。其它单据（销售订单、采购订单、生产订单等）按 `docs/kingdee-接入SOP.md` 走一遍，再复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
-- **推送字段为最小集** （`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；元数据里 `BD_MATERIAL` 另有 36 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FMaterialGroup` 物料分组、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
+- **推送字段为最小集** （`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；**账套版**元数据里 `BD_MATERIAL` 另有 35 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等；**平台版多标了 `FMaterialGroup`**，账套版并未标它必录），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
 - SDK 实例按凭据缓存复用会话（含 Cookie），非线程安全，多线程下共用同一实例存在竞态；如需更高并发请自行在客户端层加锁
-- 金蝶没有提供 Odoo 侧的回调入口，因此这里是**只有出站调用**的单向对接
+- 金蝶没有提供 Odoo 侧的回调入口，**所有同步都由 Odoo 发起**：出站是逐条 `Save`（表单按钮或列表动作），
+  入站是 `Refresh from Kingdee`（单条回读）与 `Kingdee → Import Materials`（批量拉取），不存在金蝶推送 Odoo 的通道
+- **入站只写「出站读得到的字段」**：导入与 `Refresh from Kingdee` 只写 `Kingdee Number` / `Kingdee Name` /
+  物料属性 / 物料类别 / 物料分组 / 计量单位（外加同步状态），也就是 `_kingdee_payload()` 取值的那几项——
+  这样「从金蝶导入 → 再推回金蝶」逐字段不变。物料名称只在**新建**时写入，已有产品的改名不会被导入覆盖，
+  金蝶侧的 `FName` 记在 `Kingdee Name`；`Kingdee Unit` 存的是金蝶单位编码（`BD_UNIT`），不会去改 Odoo 的计量单位
+- 导入不写 `Kingdee Master ID`：账套字段索引里 `BD_MATERIAL` 没有可查询的主键字段（不猜字段名），
+  对产品点一次 `Refresh from Kingdee` 即可补上
+- 导入读取的字段清单集中在 `models/product_template.py` 的 `KINGDEE_MATERIAL_FIELDS`：
+  `FNumber` / `FName` / `FDocumentStatus` / `FForbidStatus` / `FErpClsID` /
+  `FCategoryID.FNumber` / `FMaterialGroup.FNumber` / `FBaseUnitId.FNumber`。若该账套拒绝其中某个点号字段，
+  金蝶会以 `MsgCode 9` 报错，把该字段从常量里去掉即可（字段名一律以账套索引为准，不得凭习惯推测）
+- 客户侧：账套元数据把 `FTTel`（联系人子实体 `FT_BD_CUSTCONTACT`）标为必录，但**实测不强制** ——
+  不传联系人子实体照样能保存成功（全量 349 条现网客户的 `FTTel` 均为空）。因此本模块的客户
+  payload 不含联系人子实体。验证脚本：`tools/try_save_customer.py`

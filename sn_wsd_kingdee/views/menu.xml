@@ -7,6 +7,13 @@
                   web_icon="sn_wsd_kingdee,static/description/icon.png"
                   groups="base.group_system"/>
 
+        <menuitem id="menu_sn_wsd_kingdee_import_material"
+                  name="Import Materials"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_sn_wsd_kingdee_material_import"
+                  sequence="5"
+                  groups="base.group_system"/>
+
         <menuitem id="menu_sn_wsd_kingdee_sync_log"
                   name="Sync Logs"
                   parent="menu_sn_wsd_kingdee_root"

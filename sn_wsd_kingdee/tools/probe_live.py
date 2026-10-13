@@ -5,9 +5,13 @@ Run it inside Odoo so the credentials come from Settings::
 
     odoo-bin shell -c /etc/odoo19.conf -d odoo19 --no-http < tools/probe_live.py
 
-It answers the two questions the offline metadata cannot: which values a field
-really holds (enums are not published) and whether the field keys of the mapping
-are accepted by the account. Adjust ``FORM_ID`` / ``FIELD_KEYS`` first.
+It answers the two questions the offline knowledge base cannot: whether the field
+keys of a mapping are accepted by the account, and which values a field really
+holds in production.  For the **enum values of a Selection field prefer the
+master index** (``fields_master.csv``, column ``枚举`` — e.g.
+``python tools/probe_form.py BD_MATERIAL --find FErpClsID --all``): it is offline
+and does not touch the account.  Come here only to confirm what the account
+actually stores.  Adjust ``FORM_ID`` / ``FIELD_KEYS`` first.
 """
 
 import collections

@@ -1027,3 +1027,200 @@ msgid ""
 "department (FSALDEPTID); they are not marked as mandatory in the interface "
 "metadata. Each partner can override these values."
 msgstr "本账套要求客户必须有销售员（FSELLER）与销售部门（FSALDEPTID），而接口元数据未标注为必录。每个客户可覆盖这两个值。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"%(label)s: %(created)s created, %(updated)s updated, %(skipped)s skipped, %(failed)s failed.\n"
+"%(details)s"
+msgstr ""
+"%(label)s：新建 %(created)s 条，更新 %(updated)s 条，跳过 %(skipped)s 条，失败 %(failed)s 条。\n"
+"%(details)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"%(label)s: %(created)s created, %(updated)s updated, %(skipped)s skipped."
+msgstr "%(label)s：新建 %(created)s 条，更新 %(updated)s 条，跳过 %(skipped)s 条。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"%(label)s: %(created)s to create, %(updated)s to update, %(skipped)s skipped, %(failed)s failed.\n"
+"%(details)s"
+msgstr ""
+"%(label)s：预计新建 %(created)s 条，更新 %(updated)s 条，跳过 %(skipped)s 条，失败 %(failed)s 条。\n"
+"%(details)s"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"%(label)s: %(created)s to create, %(updated)s to update, %(skipped)s "
+"skipped."
+msgstr "%(label)s：预计新建 %(created)s 条，更新 %(updated)s 条，跳过 %(skipped)s 条。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "%(number)s: %(message)s"
+msgstr "%(number)s：%(message)s"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid ""
+"A material is matched on its Kingdee number: a product that only carries the"
+" number as its internal reference is linked instead of duplicated. Preview "
+"reads Kingdee and reports what an import would create and update, without "
+"writing anything."
+msgstr ""
+"物料按金蝶编码匹配：仅内部参考与之相同的产品会被关联，而不会重复创建。点 Preview 会读取金蝶并报告一次导入将新建、更新多少条，不写入任何数据。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__include_disabled
+msgid ""
+"Also import the materials disabled (FForbidStatus) in Kingdee. They are "
+"skipped by default. The product is never archived either way."
+msgstr "同时导入在金蝶已禁用（FForbidStatus）的物料，默认跳过；无论哪种情况都不会归档产品。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__create_missing
+msgid "Create Missing Products"
+msgstr "创建缺失的产品"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__create_missing
+msgid "Create the products of the Kingdee materials Odoo does not have yet."
+msgstr "为 Odoo 中尚不存在的金蝶物料创建产品。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__limit
+msgid "Highest number of materials read from Kingdee. 0 reads them all."
+msgstr "从金蝶读取的最大物料数。0 表示读取全部。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_client__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Import"
+msgstr "导入"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_sn_wsd_kingdee_material_import
+msgid "Import Kingdee Materials"
+msgstr "导入金蝶物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.ui.menu,name:sn_wsd_kingdee.menu_sn_wsd_kingdee_import_material
+msgid "Import Materials"
+msgstr "导入物料"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+#: model:ir.actions.act_window,name:sn_wsd_kingdee.action_sn_wsd_kingdee_material_import
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Import Materials from Kingdee"
+msgstr "从金蝶导入物料"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Imported from Kingdee, where the material is disabled."
+msgstr "已从金蝶导入，该物料在金蝶中已禁用。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Imported from Kingdee."
+msgstr "已从金蝶导入。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__include_disabled
+msgid "Include Disabled Materials"
+msgstr "包含已禁用物料"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__filter_string
+msgid "Kingdee Filter"
+msgstr "金蝶过滤条件"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Kingdee Query"
+msgstr "金蝶查询"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Kingdee returned a material without a number."
+msgstr "金蝶返回了没有编码的物料。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__limit
+msgid "Maximum Materials"
+msgstr "最大物料数"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Odoo Products"
+msgstr "Odoo 产品"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__filter_string
+msgid ""
+"Optional Kingdee FilterString, e.g. \"FDocumentStatus = 'C'\" to read the "
+"audited materials only. Empty reads every material."
+msgstr "可选的金蝶 FilterString，例如 \"FDocumentStatus = 'C'\" 只读取已审核的物料；留空则读取全部物料。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_sn_wsd_kingdee_material_import_form
+msgid "Preview"
+msgstr "预演"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid "Preview of Import Materials from Kingdee"
+msgstr "导入物料预演"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__update_existing
+msgid ""
+"Refresh the Kingdee classification of the products already linked to a "
+"material. The product name is never overwritten."
+msgstr "刷新已对接物料的产品的金蝶分类信息，产品名称不会被覆盖。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/product_template.py:0
+msgid ""
+"The internal reference %(number)s is used by '%(product)s', which is already"
+" linked to the Kingdee number %(linked)s: importing the material %(number)s "
+"would create a second product."
+msgstr ""
+"内部参考 %(number)s 已被“%(product)s”占用，该产品已对接金蝶编码 %(linked)s：导入物料 %(number)s "
+"会创建重复产品。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_material_import__update_existing
+msgid "Update Linked Products"
+msgstr "更新已对接的产品"
