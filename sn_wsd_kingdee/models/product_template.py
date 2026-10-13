@@ -42,6 +42,43 @@ MATERIAL_PRESET_FIELDS = {
     "FSuite": "0",                           # 套件
 }
 
+# Entity each material field belongs to, taken from the BD_MATERIAL metadata
+# (entityKey). The Kingdee WebAPI resolves a field through its entity, so the
+# group fields must be nested under this key — sending them flat fails with
+# "寻找实体上 <X> 对应的属性描述符失败，实体不存在此属性". Header fields have no
+# entity and stay flat. Verified on the account: FErpClsID only saves nested.
+MATERIAL_FIELD_ENTITY = {
+    "FCategoryID": "SubHeadEntity",
+    "FErpClsID": "SubHeadEntity",
+    "FBaseUnitId": "SubHeadEntity",
+    "FFeatureItem": "SubHeadEntity",
+    "FSuite": "SubHeadEntity",
+    "FUnitConvertDir": "SubHeadEntity1",
+    "FCurrencyId": "SubHeadEntity1",
+    "FSNManageType": "SubHeadEntity1",
+    "FSNGenerateTime": "SubHeadEntity1",
+    "FStoreUnitID": "SubHeadEntity1",
+    "FSaleUnitId": "SubHeadEntity2",
+    "FSalePriceUnitId": "SubHeadEntity2",
+    "FQuotaType": "SubHeadEntity3",
+    "FPurchaseUnitId": "SubHeadEntity3",
+    "FPurchasePriceUnitId": "SubHeadEntity3",
+    "FReserveType": "SubHeadEntity4",
+    "FPlanningStrategy": "SubHeadEntity4",
+    "FCheckLeadTimeType": "SubHeadEntity4",
+    "FPlanOffsetTimeType": "SubHeadEntity4",
+    "FFixLeadTimeType": "SubHeadEntity4",
+    "FVarLeadTimeType": "SubHeadEntity4",
+    "FOrderPolicy": "SubHeadEntity4",
+    "FOrderIntervalTimeType": "SubHeadEntity4",
+    "FIssueType": "SubHeadEntity5",
+    "FOverControlMode": "SubHeadEntity5",
+    "FMinIssueUnitId": "SubHeadEntity5",
+    "FStandHourUnitId": "SubHeadEntity5",
+    "FBackFlushType": "SubHeadEntity5",
+    "FFirstQCControlType": "SubHeadEntity6",
+}
+
 # Number of already linked materials refreshed by the scheduled job.
 CRON_BATCH_SIZE = 50
 
@@ -119,6 +156,41 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         return (self.kingdee_number or self.default_code or "").strip()
 
+    def _kingdee_payload(self, client, number, unit, erp_cls, category, group):
+        """Return the material Save payload.
+
+        Header fields are sent flat, the group fields are nested under the entity
+        the metadata declares for them; see ``MATERIAL_FIELD_ENTITY``.
+        """
+        fields = dict(MATERIAL_PRESET_FIELDS)
+        fields.update({
+            "FCreateOrgId": {"FNumber": client.get_default_org("create")},
+            "FUseOrgId": {"FNumber": client.get_default_org("use")},
+            "FNumber": number,
+            "FName": (self.name or "").strip() or number,
+            "FErpClsID": erp_cls,
+            "FCategoryID": {"FNumber": category},
+            "FBaseUnitId": {"FNumber": unit},
+            "FStoreUnitID": {"FNumber": unit},
+            "FPurchaseUnitId": {"FNumber": unit},
+            "FPurchasePriceUnitId": {"FNumber": unit},
+            "FSaleUnitId": {"FNumber": unit},
+            "FSalePriceUnitId": {"FNumber": unit},
+            "FMinIssueUnitId": {"FNumber": unit},
+        })
+        if group:
+            # FMaterialGroup is required by the metadata; when nothing is configured
+            # it is left out and Kingdee applies the default of the account.
+            fields["FMaterialGroup"] = {"FNumber": group}
+        payload = {}
+        for field, value in fields.items():
+            entity = MATERIAL_FIELD_ENTITY.get(field)
+            if entity:
+                payload.setdefault(entity, {})[field] = value
+            else:
+                payload[field] = value
+        return payload
+
     def _kingdee_prepare_save(self):
         """Return the material number and the Kingdee ``Model`` mapping to save."""
         self.ensure_one()
@@ -145,26 +217,8 @@ class ProductTemplate(models.Model):
                     or client.get_material_setting("category_number", DEFAULT_CATEGORY_NUMBER))
         group = ((self.kingdee_material_group or "").strip()
                  or client.get_material_setting("material_group"))
-        model = dict(MATERIAL_PRESET_FIELDS)
-        model.update({
-            "FCreateOrgId": {"FNumber": create_org},
-            "FUseOrgId": {"FNumber": client.get_default_org("use")},
-            "FErpClsID": erp_cls,
-            "FCategoryID": {"FNumber": category},
-            "FNumber": number,
-            "FName": (self.name or "").strip() or number,
-            "FBaseUnitId": {"FNumber": unit},
-            "FStoreUnitID": {"FNumber": unit},
-            "FPurchaseUnitId": {"FNumber": unit},
-            "FPurchasePriceUnitId": {"FNumber": unit},
-            "FSaleUnitId": {"FNumber": unit},
-            "FSalePriceUnitId": {"FNumber": unit},
-            "FMinIssueUnitId": {"FNumber": unit},
-        })
-        if group:
-            # FMaterialGroup is required by the metadata; when nothing is configured
-            # it is left out and Kingdee applies the default of the account.
-            model["FMaterialGroup"] = {"FNumber": group}
+        model = self._kingdee_payload(
+            client, number, unit, erp_cls, category, group)
         return number, model
 
     def _kingdee_mark_done(self, state, message, number=None, master_id=None, name=None):
