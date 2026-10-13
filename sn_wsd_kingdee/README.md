@@ -119,6 +119,7 @@ systemctl start odoo19
 | Locale ID | 账套语系，默认 2052 |
 | Connection / Request Timeout | 连接与读取超时（秒） |
 | Create Organization | 物料创建组织（`FCreateOrgId`），**必填** |
+| Material Unit | 物料计量单位：金蝶 `BD_UNIT` 编码（如 `001`=只、`GE`=个），写入物料的基准/库存/采购/销售等 7 个单位字段；留空按 `001` |
 | Use Organization | 物料使用组织（`FUserOrgId`），留空则取创建组织 |
 | Scheduled Material Refresh | 允许定时任务刷新已对接物料 |
 
@@ -132,7 +133,8 @@ systemctl start odoo19
 
 进入 `库存/销售 → 产品`，打开某个产品：
 
-1. 在“Kingdee”页签填写 `Kingdee Number`（留空则取产品的内部参考 `default_code`）
+1. 在“Kingdee”页签填写 `Kingdee Number`（留空则取产品的内部参考 `default_code`）；
+   `Kingdee Unit` 留空则取 `设置 → Kingdee → Material Defaults` 里配置的物料计量单位
 2. 点击 **Save to Kingdee** → 状态变为 `Saved`
 3. 需要走审批流时依次点 **Submit** → **Audit**；需要退回时点 **Un-audit**
 4. 点击 **Refresh from Kingdee** 可按物料编码回读金蝶侧的编码/名称/内码
@@ -156,7 +158,7 @@ systemctl start odoo19
 ## 已知边界
 
 - 目前实现的是物料主数据（`BD_MATERIAL`）。其它单据（销售订单、采购订单、生产订单等）请复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可
-- **推送字段为最小集**（`FCreateOrgId` / `FUserOrgId` / `FNumber` / `FName` / 可选 `FMaterialGroup`）。如需同步规格、计量单位、基本计量单位等，请在 `product.template._kingdee_prepare_save()` 中按项目的金蝶基础资料编码补齐
+- **推送字段为最小集**（`FCreateOrgId` / `FUserOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；如需同步规格、物料分组、单位组等，请在 `product.template._kingdee_prepare_save()` 中按项目的金蝶基础资料编码补齐
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
 - SDK 实例按凭据缓存复用会话（含 Cookie），非线程安全，多线程下共用同一实例存在竞态；如需更高并发请自行在客户端层加锁
