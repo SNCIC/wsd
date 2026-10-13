@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!--
+            The action on the root menu is deliberate: ir.ui.menu.load_web_menus()
+            gives an app the action of the first menu on its first-child chain that
+            has one ("if it's an app take action of first (sub)child having one
+            defined"), and that action is what opening the app runs. Without an
+            action here the app would open its first submenu entry - "Import
+            Materials", which is a modal wizard. Landing on the log list keeps the
+            app usable; sn_wsd_barcode carries an action on its root for the same
+            reason.
+        -->
         <menuitem id="menu_sn_wsd_kingdee_root"
                   name="Kingdee"
                   sequence="210"
                   web_icon="sn_wsd_kingdee,static/description/icon.png"
+                  action="action_kingdee_sync_log"
                   groups="base.group_system"/>
 
         <menuitem id="menu_sn_wsd_kingdee_import_material"
