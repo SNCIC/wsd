@@ -5,14 +5,12 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
+from .kingdee_client import MATERIAL_FORM_ID
+
 _logger = logging.getLogger(__name__)
 
-# Kingdee business object used for materials (basic data).
-MATERIAL_FORM_ID = "BD_MATERIAL"
-
-# Defaults used when Settings → Kingdee → Material Defaults are left empty.
-DEFAULT_ERP_CLS_ID = "2"                  # 物料属性：2 = 自制（账套现有物料实测）
-DEFAULT_CATEGORY_NUMBER = "CHLB05_SYS"    # 物料类别：产成品
+# The Kingdee form id and every default (material type, category, unit, ...) come
+# from kingdee_client: this module keeps no copy of them.
 
 # Material fields whose value is fixed for this account. They were read from the
 # account's own materials (BD_MATERIAL, 2026-10-13) instead of relying on the
@@ -212,9 +210,9 @@ class ProductTemplate(models.Model):
         # sale fields unless the product overrides it.
         unit = (self.kingdee_unit_number or "").strip() or client.get_unit_number()
         erp_cls = ((self.kingdee_erp_cls_id or "").strip()
-                   or client.get_material_setting("erp_cls_id", DEFAULT_ERP_CLS_ID))
+                   or client.get_material_setting("erp_cls_id"))
         category = ((self.kingdee_category_number or "").strip()
-                    or client.get_material_setting("category_number", DEFAULT_CATEGORY_NUMBER))
+                    or client.get_material_setting("category_number"))
         group = ((self.kingdee_material_group or "").strip()
                  or client.get_material_setting("material_group"))
         model = self._kingdee_payload(

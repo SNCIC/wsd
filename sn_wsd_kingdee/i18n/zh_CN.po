@@ -38,17 +38,6 @@ msgid "%(name)s: %(message)s"
 msgstr "%(name)s：%(message)s"
 
 #. module: sn_wsd_kingdee
-#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
-msgid "123456_xxxxxxxx"
-msgstr ""
-
-#. module: sn_wsd_kingdee
-#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__api_name
-#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
-msgid "API"
-msgstr ""
-
-#. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_acct_id
 msgid "Account ID"
 msgstr "账套 ID"
@@ -142,18 +131,6 @@ msgid "Connection Timeout (s)"
 msgstr "连接超时（秒）"
 
 #. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
-msgid "Connection succeeded."
-msgstr "连接成功。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
-msgid "Connection succeeded. %s data center(s) returned."
-msgstr "连接成功，返回 %s 个数据中心。"
-
-#. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_create_org_number
 msgid "Create Organization"
 msgstr "创建组织"
@@ -215,6 +192,13 @@ msgid ""
 msgstr "启用后，还需在计划任务中激活“金蝶：刷新已对接物料”。"
 
 #. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"Verify the credentials with a real business query: GetDataCenters answers "
+"without authentication, so it cannot prove them."
+msgstr "用真实业务查询校验凭据：GetDataCenters 免鉴权，无法证明凭据是否正确。"
+
+#. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__error_message
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__state__error
@@ -232,14 +216,6 @@ msgstr "错误"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_search
 msgid "Form ID"
 msgstr "单据标识"
-
-#. module: sn_wsd_kingdee
-#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__id
-#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__id
-#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_client__id
-#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__id
-msgid "ID"
-msgstr ""
 
 #. module: sn_wsd_kingdee
 #. odoo-python
@@ -554,11 +530,6 @@ msgid ""
 msgstr "产品 %s 既没有内部参考也没有金蝶编码，无法在金蝶中标识。"
 
 #. module: sn_wsd_kingdee
-#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
-msgid "Query the data centers declared for the account above."
-msgstr "查询上述账套已授权的数据中心。"
-
-#. module: sn_wsd_kingdee
 #. odoo-python
 #: code:addons/sn_wsd_kingdee/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
@@ -675,8 +646,7 @@ msgstr "金蝶 SDK 拒绝了该配置，请检查设置中的凭据并查看服�
 #. odoo-python
 #: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
 msgid ""
-"The Kingdee WebAPI SDK is not installed for the interpreter running Odoo "
-"(%(error)s).\n"
+"The Kingdee WebAPI SDK is not installed for the interpreter running Odoo (%(error)s).\n"
 "Install the wheel shipped with this module and restart Odoo:\n"
 "%(hint)s"
 msgstr ""
@@ -742,11 +712,6 @@ msgid "WebAPI Endpoint"
 msgstr "WebAPI 地址"
 
 #. module: sn_wsd_kingdee
-#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
-msgid "https://your-server/k3cloud/"
-msgstr ""
-
-#. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_unit_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_unit_number
 msgid "Kingdee Unit"
@@ -757,9 +722,11 @@ msgstr "金蝶计量单位"
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_unit_number
 msgid ""
 "Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to this material's "
-"base, store, purchase and sale unit fields. The unit configured in "
-"Settings (Kingdee > Material Defaults) is used when empty."
-msgstr "该物料写入金蝶的计量单位编码（BD_UNIT，如 001 或 GE），对应基准/库存/采购/销售等计量单位字段；留空时取 设置 → Kingdee → Material Defaults 中配置的单位。"
+"base, store, purchase and sale unit fields. The unit configured in Settings "
+"(Kingdee > Material Defaults) is used when empty."
+msgstr ""
+"该物料写入金蝶的计量单位编码（BD_UNIT，如 001 或 GE），对应基准/库存/采购/销售等计量单位字段；留空时取 设置 → Kingdee → "
+"Material Defaults 中配置的单位。"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_unit_number
@@ -772,7 +739,8 @@ msgid ""
 "Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to the base, store, "
 "purchase and sale unit fields of a material. It can be overridden on each "
 "product. Defaults to 001 when empty."
-msgstr "写入物料基准/库存/采购/销售等计量单位字段的金蝶单位编码（BD_UNIT，如 001 或 GE）；可在每个物料上单独覆盖；留空时按 001 处理。"
+msgstr ""
+"写入物料基准/库存/采购/销售等计量单位字段的金蝶单位编码（BD_UNIT，如 001 或 GE）；可在每个物料上单独覆盖；留空时按 001 处理。"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_erp_cls_id
@@ -782,9 +750,9 @@ msgstr "物料属性"
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_erp_cls_id
 msgid ""
-"Default Kingdee material type code (FErpClsID) applied to a material, "
-"e.g. 2 for self-made or 3 for subcontract (values observed in this "
-"account). Each product can override it."
+"Default Kingdee material type code (FErpClsID) applied to a material, e.g. 2"
+" for self-made or 3 for subcontract (values observed in this account). Each "
+"product can override it."
 msgstr "默认的金蝶物料属性编码（FErpClsID），如 2=自制、3=委外（账套实测值）；每个物料可单独覆盖。"
 
 #. module: sn_wsd_kingdee
@@ -797,7 +765,8 @@ msgstr "物料类别"
 msgid ""
 "Default Kingdee material category number (FCategoryID), e.g. CHLB05_SYS "
 "(产成品) or CHLB03_SYS (自制半成品). Each product can override it."
-msgstr "默认的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；每个物料可单独覆盖。"
+msgstr ""
+"默认的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；每个物料可单独覆盖。"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_material_group
@@ -807,8 +776,8 @@ msgstr "物料分组"
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_material_group
 msgid ""
-"Default Kingdee material group number (FMaterialGroup). When empty the "
-"field is not sent and Kingdee applies the default of the account."
+"Default Kingdee material group number (FMaterialGroup). When empty the field"
+" is not sent and Kingdee applies the default of the account."
 msgstr "默认的金蝶物料分组编码（FMaterialGroup）；留空则不推送该字段，由金蝶按账套默认处理。"
 
 #. module: sn_wsd_kingdee
@@ -838,4 +807,39 @@ msgstr "金蝶物料类别"
 msgid ""
 "Kingdee material category number (FCategoryID), e.g. CHLB05_SYS (产成品) or "
 "CHLB03_SYS (自制半成品). The default from Settings is used when empty."
-msgstr "该物料的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；留空时取设置中的默认值。"
+msgstr ""
+"该物料的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；留空时取设置中的默认值。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_config_settings.py:0
+msgid ""
+"Connection succeeded: the credentials were accepted by a %(form)s query "
+"(%(count)s row(s) read)."
+msgstr "连接成功：凭据已通过 %(form)s 查询校验（读取 %(count)s 行）。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "a field name does not exist on this form"
+msgstr "该表单上不存在此字段名"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "a required parameter is empty"
+msgstr "必录参数为空"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"the credentials were refused, check App ID, App Secret and User Name "
+"(retrying will not help)"
+msgstr "凭据被拒绝，请检查 App ID、App Secret 与用户名（重试无效）"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid "this form id does not exist in the account"
+msgstr "该表单标识在当前账套中不存在"

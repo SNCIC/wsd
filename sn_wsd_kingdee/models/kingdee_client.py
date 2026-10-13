@@ -14,11 +14,36 @@ _logger = logging.getLogger(__name__)
 
 PARAM_PREFIX = "sn_wsd_kingdee"
 
-# Kingdee unit number applied to the unit fields of a material (base, store,
-# purchase, purchase price, sale, sale price and minimum issue unit) when no
-# other value is configured. It is the unit's number in Kingdee (BD_UNIT), for
-# instance "001" for 只 or "GE" for 个.
-DEFAULT_UNIT_NUMBER = "001"
+# Every default of this integration lives here: Settings → Kingdee only has to
+# store what differs from these values, and callers read them through
+# ``get_material_setting()`` / ``get_unit_number()`` instead of keeping their own
+# copy of a default (a default that exists twice drifts).
+DEFAULTS = {
+    # Connection
+    "lcid": 2052,                     # locale, 2052 = 简体中文
+    "org_num": 0,                     # 0 = single organization account
+    "connect_timeout": 120,
+    "request_timeout": 120,
+    # Material defaults (Settings → Kingdee → Material Defaults)
+    # Unit number applied to the unit fields of a material (base, store, purchase,
+    # purchase price, sale, sale price and minimum issue unit): BD_UNIT, for
+    # instance "001" for 只 or "GE" for 个.
+    "unit_number": "001",
+    "erp_cls_id": "2",                # FErpClsID, 2 = 自制（账套现有物料实测）
+    "category_number": "CHLB05_SYS",  # FCategoryID, 物料类别 产成品
+    "material_group": "",             # FMaterialGroup, empty = Kingdee default
+}
+
+# Kingdee business object used for materials (basic data). It doubles as the
+# cheapest object to prove the credentials with: ``GetDataCenters`` is served
+# without authentication (it answers even with a wrong app secret), so it cannot
+# be used to test a connection.
+MATERIAL_FORM_ID = "BD_MATERIAL"
+CREDENTIAL_CHECK_FORM_ID = MATERIAL_FORM_ID
+CREDENTIAL_CHECK_FIELD = "FNumber"
+
+# Kingdee caps a single query at 2000 rows.
+MAX_BILL_QUERY_PAGE_SIZE = 2000
 
 # The Kingdee WebAPI SDK ships as a local wheel inside this module (it is not
 # published on PyPI):
@@ -111,13 +136,21 @@ class SnWsdKingdeeClient(models.AbstractModel):
 
     def get_unit_number(self):
         """Return the Kingdee unit number applied to a material's unit fields."""
-        value = (self._get_param("unit_number") or "").strip()
-        return value or DEFAULT_UNIT_NUMBER
+        return self.get_material_setting("unit_number")
 
-    def get_material_setting(self, key, default=""):
-        """Return a material default from the settings (erp_cls_id, category_number, ...)."""
+    def get_material_setting(self, key, default=None):
+        """Return a material default (unit_number, erp_cls_id, category_number, ...).
+
+        The value configured in Settings wins, ``DEFAULTS`` is the fallback and an
+        explicit ``default`` overrides both, so a caller never needs its own copy
+        of a default.
+        """
         value = (self._get_param(key) or "").strip()
-        return value or default
+        if value:
+            return value
+        if default is not None:
+            return default
+        return DEFAULTS.get(key, "")
 
     def _get_config(self, override=None):
         config = {
@@ -126,10 +159,12 @@ class SnWsdKingdeeClient(models.AbstractModel):
             "user_name": (self._get_param("user_name") or "").strip(),
             "app_id": (self._get_param("app_id") or "").strip(),
             "app_secret": (self._get_param("app_secret") or "").strip(),
-            "lcid": self._get_int_param("lcid", 2052) or 2052,
-            "org_num": self._get_int_param("org_num", 0),
-            "connect_timeout": self._get_int_param("connect_timeout", 120) or 120,
-            "request_timeout": self._get_int_param("request_timeout", 120) or 120,
+            "lcid": self._get_int_param("lcid", DEFAULTS["lcid"]) or DEFAULTS["lcid"],
+            "org_num": self._get_int_param("org_num", DEFAULTS["org_num"]),
+            "connect_timeout": (self._get_int_param("connect_timeout", DEFAULTS["connect_timeout"])
+                                or DEFAULTS["connect_timeout"]),
+            "request_timeout": (self._get_int_param("request_timeout", DEFAULTS["request_timeout"])
+                                or DEFAULTS["request_timeout"]),
         }
         for key, value in (override or {}).items():
             if value not in (None, "", False):
@@ -257,6 +292,43 @@ class SnWsdKingdeeClient(models.AbstractModel):
             messages.append(str(status.get("Message") or _("Unknown error")))
         return " | ".join(dict.fromkeys(messages))
 
+    # ``MsgCode`` values that deserve a hint of their own. They are not in the
+    # official documentation but are stable in practice: 1 = authentication
+    # failed, 4 = the form does not exist, 8 = a required parameter is empty,
+    # 9 = a field name does not exist.
+    AUTH_MSG_CODE = "1"
+
+    @classmethod
+    def msg_code_hint(cls, msg_code):
+        """Return an actionable hint for a Kingdee ``MsgCode`` (empty when unknown)."""
+        code = str(msg_code or "").strip()
+        if code == cls.AUTH_MSG_CODE:
+            # The message of this failure claims the session was lost, which is
+            # misleading: with a valid session the server does not check the
+            # credentials at all, so the credentials themselves are wrong and
+            # retrying or clearing the session never fixes it.
+            return _("the credentials were refused, check App ID, App Secret and User Name "
+                     "(retrying will not help)")
+        if code == "4":
+            return _("this form id does not exist in the account")
+        if code == "8":
+            return _("a required parameter is empty")
+        if code == "9":
+            return _("a field name does not exist on this form")
+        return ""
+
+    @classmethod
+    def is_authentication_error(cls, status):
+        """Tell whether a failed answer is a credential problem (retrying is useless)."""
+        return str((status or {}).get("MsgCode") or "").strip() == cls.AUTH_MSG_CODE
+
+    @classmethod
+    def _error_message(cls, status):
+        """Error text of a failed call, enriched with the ``MsgCode`` hint."""
+        message = cls._status_error(status)
+        hint = cls.msg_code_hint(status.get("MsgCode"))
+        return "%s (%s)" % (message, hint) if hint else message
+
     @classmethod
     def _check_success(cls, payload, api_name):
         status = cls._response_status(payload)
@@ -267,7 +339,7 @@ class SnWsdKingdeeClient(models.AbstractModel):
             return payload
         raise UserError(
             _("Kingdee %(api)s failed: %(message)s")
-            % {"api": api_name, "message": cls._status_error(status)}
+            % {"api": api_name, "message": cls._error_message(status)}
         )
 
     @staticmethod
@@ -487,28 +559,43 @@ class SnWsdKingdeeClient(models.AbstractModel):
         )
 
     def execute_bill_query(self, form_id, field_keys, filter_string="", order_string="",
-                           top_row_count=0, start_row=0, limit=2000, sub_system_id=""):
-        """Paged query. Returns a list of rows, each row being a list of values
-        ordered like ``field_keys``. Field names are not echoed back."""
-        payload = {
-            "FormId": form_id,
-            "FieldKeys": field_keys,
-            "FilterString": filter_string,
-            "OrderString": order_string,
-            "TopRowCount": top_row_count,
-            "StartRow": start_row,
-            "Limit": limit,
-            "SubSystemId": sub_system_id,
-        }
+                           top_row_count=0, start_row=0, limit=MAX_BILL_QUERY_PAGE_SIZE,
+                           sub_system_id="", override=None):
+        """One query page, as positional rows (ordered like ``field_keys``).
+
+        ``TopRowCount`` is an **absolute terminating row number**, not a page
+        size: for the second page it must be ``start_row + limit``. Prefer
+        :meth:`iter_bill_query`, which pages the correct way.
+
+        :param dict override: credentials used instead of the stored settings.
+        """
+        payload = self._bill_query_payload(
+            form_id, field_keys, filter_string, order_string, top_row_count, start_row,
+            limit, sub_system_id,
+        )
         return self._call(
-            "ExecuteBillQuery", lambda: self._get_sdk().ExecuteBillQuery(payload),
+            "ExecuteBillQuery",
+            lambda: self._get_sdk(override=override).ExecuteBillQuery(payload),
             form_id=form_id, direction="in", request_payload=payload,
         )
 
     def bill_query(self, form_id, field_keys, filter_string="", order_string="",
-                   top_row_count=0, start_row=0, limit=2000, sub_system_id=""):
-        """Paged query returning rows as mappings (field names included)."""
-        payload = {
+                   top_row_count=0, start_row=0, limit=MAX_BILL_QUERY_PAGE_SIZE,
+                   sub_system_id="", override=None):
+        """One query page, rows as mappings (field names included)."""
+        payload = self._bill_query_payload(
+            form_id, field_keys, filter_string, order_string, top_row_count, start_row,
+            limit, sub_system_id,
+        )
+        return self._call(
+            "BillQuery", lambda: self._get_sdk(override=override).BillQuery(payload),
+            form_id=form_id, direction="in", request_payload=payload,
+        )
+
+    @staticmethod
+    def _bill_query_payload(form_id, field_keys, filter_string, order_string,
+                            top_row_count, start_row, limit, sub_system_id):
+        return {
             "FormId": form_id,
             "FieldKeys": field_keys,
             "FilterString": filter_string,
@@ -518,10 +605,59 @@ class SnWsdKingdeeClient(models.AbstractModel):
             "Limit": limit,
             "SubSystemId": sub_system_id,
         }
-        return self._call(
-            "BillQuery", lambda: self._get_sdk().BillQuery(payload), form_id=form_id,
-            direction="in", request_payload=payload,
-        )
+
+    @staticmethod
+    def query_rows(payload, field_keys=""):
+        """Normalise a query answer into a list of mappings.
+
+        ``BillQuery`` answers with mappings, ``ExecuteBillQuery`` with positional
+        rows; both are accepted, positional rows are named with ``field_keys``.
+        """
+        if isinstance(payload, list):
+            raw = payload
+        elif isinstance(payload, dict):
+            raw = payload.get("Result") or []
+        else:
+            raw = []
+        if not isinstance(raw, list):
+            raw = []
+        keys = [key.strip() for key in (field_keys or "").split(",") if key.strip()]
+        rows = []
+        for row in raw:
+            if isinstance(row, dict):
+                rows.append(row)
+            elif isinstance(row, list) and keys:
+                rows.append(dict(zip(keys, row)))
+            else:
+                rows.append({"value": row})
+        return rows
+
+    def iter_bill_query(self, form_id, field_keys, filter_string="", order_string="",
+                        page_size=MAX_BILL_QUERY_PAGE_SIZE, sub_system_id="", override=None):
+        """Yield every row of a query, paging the way Kingdee expects.
+
+        ``StartRow`` is the offset and ``TopRowCount`` grows with it — it is an
+        absolute end row, not a page size, which is the trap that makes every
+        page after the first one come back wrong.
+        """
+        try:
+            size = int(page_size or MAX_BILL_QUERY_PAGE_SIZE)
+        except (TypeError, ValueError):
+            size = MAX_BILL_QUERY_PAGE_SIZE
+        size = max(1, min(size, MAX_BILL_QUERY_PAGE_SIZE))
+        offset = 0
+        while True:
+            payload = self.bill_query(
+                form_id, field_keys, filter_string=filter_string, order_string=order_string,
+                top_row_count=offset + size, start_row=offset, limit=size,
+                sub_system_id=sub_system_id, override=override,
+            )
+            rows = self.query_rows(payload, field_keys)
+            for row in rows:
+                yield row
+            if len(rows) < size:
+                return
+            offset += size
 
     def allocate(self, form_id, pk_ids, target_org_ids, auto_submit_audit="false", res_record=None):
         payload = {
@@ -581,14 +717,27 @@ class SnWsdKingdeeClient(models.AbstractModel):
     # ------------------------------------------------------------------
     # Connectivity
     # ------------------------------------------------------------------
-    def test_connection(self, override=None):
+    def get_data_centers(self, override=None):
         """Return the data centers declared for the configured account.
 
-        Raises a ``UserError`` describing precisely what went wrong when the
-        credentials, the URL or the SDK are not usable.
+        Warning: this service is **not authenticated** — it answers even with a
+        wrong app secret, so it proves nothing about the credentials.
         """
-        payload = self._call(
+        return self._call(
             "GetDataCenters",
-            lambda: self._get_sdk(override=override, force_refresh=True).GetDataCenters(),
+            lambda: self._get_sdk(override=override).GetDataCenters(),
         )
-        return payload
+
+    def test_connection(self, override=None):
+        """Prove the credentials with the lightest business call available.
+
+        A fresh session is created (a cached one may belong to other credentials)
+        and one ``BD_MATERIAL`` number is read. Returns the rows of that query and
+        raises a ``UserError`` describing what went wrong when the credentials,
+        the URL or the SDK are not usable.
+        """
+        self._get_sdk(override=override, force_refresh=True)
+        return self.execute_bill_query(
+            CREDENTIAL_CHECK_FORM_ID, CREDENTIAL_CHECK_FIELD,
+            top_row_count=1, limit=1, override=override,
+        )

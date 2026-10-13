@@ -62,7 +62,7 @@
 
                             <setting id="sn_wsd_kingdee_test_setting"
                                      string="Connection Test"
-                                     help="Query the data centers declared for the account above.">
+                                     help="Verify the credentials with a real business query: GetDataCenters answers without authentication, so it cannot prove them.">
                                 <div class="content-group">
                                     <div class="mt16">
                                         <button type="object"

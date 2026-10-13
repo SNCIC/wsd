@@ -4,6 +4,8 @@ import logging
 
 from odoo import _, fields, models
 
+from .kingdee_client import CREDENTIAL_CHECK_FORM_ID
+
 _logger = logging.getLogger(__name__)
 
 
@@ -114,12 +116,17 @@ class ResConfigSettings(models.TransientModel):
         }
 
     def action_kingdee_test_connection(self):
-        """Check the WebAPI credentials without leaving the settings screen."""
+        """Check the WebAPI credentials without leaving the settings screen.
+
+        The check runs a real business query: ``GetDataCenters`` is served without
+        authentication, so it answers even when the app secret is wrong and
+        cannot be used to prove the credentials.
+        """
         self.ensure_one()
         client = self.env["sn.wsd.kingdee.client"]
         try:
             # The form values are used directly: the settings may not be saved yet.
-            payload = client.test_connection(override=self._kingdee_settings_config())
+            rows = client.test_connection(override=self._kingdee_settings_config())
         except Exception as err:  # noqa: BLE001 - surfaced to the user as a notification
             _logger.warning("Kingdee connection test failed: %s", err)
             return {
@@ -133,16 +140,11 @@ class ResConfigSettings(models.TransientModel):
                 },
             }
 
-        if isinstance(payload, list):
-            count = len(payload)
-        elif isinstance(payload, dict):
-            data = payload.get("Result")
-            count = len(data) if isinstance(data, (list, dict)) else 0
-        else:
-            count = 0
-        message = _("Connection succeeded.")
-        if count:
-            message = _("Connection succeeded. %s data center(s) returned.") % count
+        count = len(rows) if isinstance(rows, (list, tuple)) else 0
+        message = _(
+            "Connection succeeded: the credentials were accepted by a %(form)s query "
+            "(%(count)s row(s) read)."
+        ) % {"form": CREDENTIAL_CHECK_FORM_ID, "count": count}
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",

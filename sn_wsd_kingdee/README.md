@@ -5,9 +5,12 @@
 通过金蝶官方的 Python 版 WebAPI SDK（`k3cloud_webapi_sdk`）对接金蝶云星空（K/3 Cloud）：
 
 - 在“设置 → Kingdee”里维护 WebAPI 连接参数与物料默认组织
-- 一键测试连接（不需要先保存设置即可用当前填写的参数试连）
+- 一键测试连接：不需要先保存设置，可直接用当前填写的参数跑一次真实业务查询（读取 1 条物料编码）来验证凭据；
+  `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
+- 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
 - 物料主数据单向/双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看
 - 每次调用都落库到“金蝶同步日志”，含请求/响应报文、耗时、错误信息；**失败的日志用独立事务写入，不会因为后续报错回滚而丢失**
+- 错误按金蝶 `MsgCode` 给出可操作提示（`1` 凭据错且重试无效、`4` 表单不存在、`8` 参数为空、`9` 字段名不存在）
 - 定时任务刷新已对接物料（默认关闭）
 - 物料表单新增“Kingdee”页签，可查看同步状态与相关日志
 
@@ -23,6 +26,10 @@
 > `metadata/{formId}.json` 查完整字段树与必录标记、`kingdee_api_catalog.csv` 查接口），
 > **禁止凭命名习惯或 SDK 自带 demo 推测**（demo 里的 `FUserOrgId` 已失效，
 > 正确为 `FUseOrgId`；本文档字段名均按该索引校正过）。
+
+> **默认值只有一个来源**：连接与物料的默认值（`lcid`、`org_num`、超时、单位、物料属性、
+> 物料类别、物料分组）集中在 `models/kingdee_client.py` 的 `DEFAULTS`；设置页只存与默认值不同的部分，
+> 调用方一律通过 `get_unit_number()` / `get_material_setting()` 读取，不要在别处再抄一份。
 
 ## 依赖
 
@@ -97,7 +104,8 @@ systemctl start odoo19
 
 ### 4. 验收
 
-1. 设置 → Kingdee：填好 `Server URL / Account ID / User Name / App ID / App Secret` → 点 **Test Connection**，成功会提示“连接成功，返回 N 个数据中心”
+1. 设置 → Kingdee：填好 `Server URL / Account ID / User Name / App ID / App Secret` → 点 **Test Connection**，成功会提示
+   “连接成功：凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”，该结论来自真实业务查询（`GetDataCenters` 免鉴权，不作凭据判据）
 2. 取一个物料点 **Save to Kingdee**，到 `Kingdee → Sync Logs` 看请求/响应报文
 3. 若报“组织”相关错误，再补 `Organization Number`（该账套的组织编码）与 `Create Organization`
 
@@ -136,7 +144,7 @@ systemctl start odoo19
 | Use Organization | 物料使用组织（`FUseOrgId`），留空则取创建组织 |
 | Scheduled Material Refresh | 允许定时任务刷新已对接物料 |
 
-配置完成后点 **Test Connection**，成功会提示返回的数据中心数量。
+配置完成后点 **Test Connection**，成功会提示“凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”。
 
 > 注意：`App Secret` 保存在 `ir.config_parameter` 中，数据库内为明文，请把设置页权限限制在管理员范围内。
 
@@ -170,7 +178,7 @@ systemctl start odoo19
 
 ## 已知边界
 
-- 目前实现的是物料主数据（`BD_MATERIAL`）。其它单据（销售订单、采购订单、生产订单等）请复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可
+- 目前实现的是物料主数据（`BD_MATERIAL`）。其它单据（销售订单、采购订单、生产订单等）请复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
 - **推送字段为最小集**（`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；元数据里 `BD_MATERIAL` 另有 36 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FMaterialGroup` 物料分组、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
