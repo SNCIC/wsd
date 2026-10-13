@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        One record per entity and direction. Adding an entity to the console is a
+        record here plus the method its model exposes for that direction
+        (see SYNC_METHODS in models/kingdee_sync_target.py).
+
+        noupdate: the console is configuration, so an upgrade must not undo the
+        filter or the batch limit an administrator sets on a row.
+    -->
+    <data noupdate="1">
+        <record id="sync_target_material_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Materials</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">10</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="form_id">BD_MATERIAL</field>
+        </record>
+
+        <record id="sync_target_material_out" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Materials</field>
+            <field name="module">base</field>
+            <field name="direction">out</field>
+            <field name="sequence">10</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="form_id">BD_MATERIAL</field>
+        </record>
+
+        <record id="sync_target_customer_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Customers</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">20</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="form_id">BD_Customer</field>
+        </record>
+
+        <record id="sync_target_customer_out" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Customers</field>
+            <field name="module">base</field>
+            <field name="direction">out</field>
+            <field name="sequence">20</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="form_id">BD_Customer</field>
+        </record>
+    </data>
+</odoo>

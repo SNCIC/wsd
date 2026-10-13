@@ -8,8 +8,10 @@
 - 一键测试连接：不需要先保存设置，可直接用当前填写的参数跑一次真实业务查询（读取 1 条物料编码）来验证凭据；
   `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
 - 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
-- 物料主数据双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看，以及**从金蝶批量导入物料**
-  （菜单 `Kingdee → Import Materials`，向导可设过滤条件、数量上限与是否新建，并支持 `Preview` 预演）
+- **统一的同步控制台**：`Kingdee → Synchronization`（同步）下按方向分「金蝶 → Odoo」与「Odoo → 金蝶」，
+  页面按模块分组列出每个同步对象，行内 **Synchronize** 直接同步（入站另有 `Preview` 预演，不写入）
+- 物料主数据双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看，以及批量导入——带回**规格型号**、
+  物料属性 / 类别 / 分组的**编码与其中文名**，自动落 Odoo 产品类别，并把物料置为**管理库存 + 按批次追溯**
 - 客户主数据单向/双向同步：`BD_Customer` 的保存、提交、审核、反审核、查看、删除
 - 新单据只需实现字段映射与 payload（`_kingdee_number()` / `_kingdee_payload()`），状态、动作、
   逐条错误隔离、日志与通知由 `sn.wsd.kingdee.sync.mixin` 提供，工序见 `docs/kingdee-接入SOP.md`
@@ -189,19 +191,34 @@ systemctl start odoo19
 
 批量操作：在客户列表勾选多行 → `动作` 菜单 → `Kingdee: Save / Audit / Refresh Customers`。
 
-### 3）从金蝶导入物料
+### 3）同步控制台
 
-进入 `Kingdee → Import Materials` 菜单（管理员可见），在向导里确认选项后点 **Import** 按钮。
+所有同步都从这一个入口出发：菜单 `Kingdee → Synchronization` 下按方向分两个子菜单。
 
-| 选项 | 说明 |
+| 菜单 | 做什么 |
 | :--- | :--- |
-| `Kingdee Filter` | 可选的金蝶 `FilterString`，如 `FDocumentStatus = 'C'` 只读已审核物料；留空读全部 |
-| `Maximum Materials` | 最多读取多少条，`0` 表示全部 |
-| `Include Disabled Materials` | 是否连金蝶已禁用（`FForbidStatus = B`）的物料一起导入，默认跳过；**无论是否勾选都不会归档 Odoo 产品** |
-| `Update Linked Products` | 刷新已对接产品的金蝶分类信息 |
-| `Create Missing Products` | 为 Odoo 里还没有的金蝶物料新建产品 |
+| `Kingdee to Odoo` （金蝶 → Odoo） | 从金蝶读回 Odoo |
+| `Odoo to Kingdee` （Odoo → 金蝶） | 把 Odoo 推送到金蝶 |
 
-**先点 `Preview`**：只读金蝶，报出「一次导入会新建 / 更新 / 跳过多少条」，不写任何数据。
+两个页面是同一张**同步对象清单**，默认按「模块」分组，一行一个同步对象（当前是物料与客户）。
+每行一个 **Synchronize** 按钮，点了直接同步、不弹向导；入站行另有 **Preview** 按钮，
+只读金蝶并报出「预计新建 / 更新 / 跳过」多少条，不写任何数据。
+
+行上的配置（点开该行修改）：
+
+| 字段 | 说明 |
+| :--- | :--- |
+| `Module` | 分组归属：基础资料 / 销售 / 采购 / 库存 / 生产 |
+| `Kingdee Filter` | 入站时的金蝶 `FilterString`，如 `FDocumentStatus = 'C'` 只读已审核；留空读全部 |
+| `Batch Limit` | 单次上限，`0` 表示用同步自身的上限（导入不限；推送默认一封顶，见下） |
+| `Linked Records` / `Pending` | 已对接条数 / 仍需推送条数 |
+| `Last Call` | 该对象最近一次调用时间（取同步日志） |
+
+> ⚠️ **推送方向会写入共享的金蝶账套。** 所以一次只发一批（物料 200 条、客户 50 条），且只挑
+> 「从未保存 / 上次失败」的记录，不会把整本目录重推一遍。首次使用先点 `Preview` 看清要发多少条。
+
+**加一个同步对象** = 一条数据（`data/kingdee_sync_targets.xml`）+ 该模型上对应方向的一个方法
+（在 `models/kingdee_sync_target.py` 的 `SYNC_METHODS` 里登记一行），不需要新视图、新菜单或新向导。
 
 匹配与去重（`_kingdee_find_material()` 逐条判定，顺序如下）：
 

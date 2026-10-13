@@ -13,8 +13,27 @@
                                 <field name="kingdee_number"
                                        placeholder="Defaults to the reference"/>
                                 <field name="kingdee_name"/>
-                                <field name="kingdee_currency_number"
-                                       placeholder="Defaults to the currency from Settings"/>
+                                <label for="kingdee_currency_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_currency_number" nolabel="1"
+                                           placeholder="Defaults to the currency from Settings"/>
+                                    <field name="kingdee_currency_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
+                                <label for="kingdee_salesman_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_salesman_number" nolabel="1"
+                                           placeholder="Defaults to the salesman from Settings"/>
+                                    <field name="kingdee_salesman_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
+                                <label for="kingdee_sales_dept_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_sales_dept_number" nolabel="1"
+                                           placeholder="Defaults to the department from Settings"/>
+                                    <field name="kingdee_sales_dept_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
                             </group>
                             <group string="Synchronization">
                                 <field name="kingdee_sync_state"/>

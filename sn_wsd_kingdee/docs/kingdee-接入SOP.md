@@ -123,13 +123,19 @@ PY
 > 待接（按建议顺序）：`STK_InStock`（采购入库，对接现有三步入库/IQC）→ `SAL_SaleOrder` /
 > `PUR_PurchaseOrder` → `PRD_*` → 报表（`GetSysReportData` 需先在金蝶保存查询方案）。
 
-**入站（金蝶 → Odoo）**：物料有两个入口，共用同一份字段清单
-（`models/product_template.py` 的 `KINGDEE_MATERIAL_FIELDS`）与同一份映射：
+**同步控制台**：所有同步从 `Kingdee → Synchronization`（同步）进入，按方向分两个子菜单，
+页面是 `sn.wsd.kingdee.sync.target` 的清单，按模块分组，行内按钮点了直接同步（不弹向导）。
+调度规则在 `models/kingdee_sync_target.py` 的 `SYNC_METHODS`：`(方向, Odoo 模型) -> 该模型的方法`，
+每个方法签名统一为 `(filter_string, limit, dry_run)`。**加一个对象 = 一条数据 + 一个方法 + 一行登记**，
+不需要新视图、新菜单或新向导。
 
-| 入口 | 机制 | 范围 |
+| 方向 / 入口 | 机制 | 范围 |
 | :--- | :--- | :--- |
-| 产品表单 `Refresh from Kingdee` | `View` 单条回读 → 钩子 `_kingdee_apply_readback()` | 一条 |
-| 菜单 `Kingdee → Import Materials` | `BillQuery` 分页 → `_kingdee_import_materials()` | 批量，可过滤/限条，`Preview` 预演不写入 |
+| 金蝶 → Odoo（控制台 `Synchronize` / `Preview`） | `BillQuery` 分页 → mixin `_kingdee_import_records()` | 批量；`Preview` 走 `dry_run`，零写入 |
+| Odoo → 金蝶（控制台 `Synchronize`） | 逐条 `Save`（mixin `action_kingdee_save`，逐条 savepoint） | 只发 `not_synced` / `error`，一封顶（物料 200、客户 50） |
+| 金蝶 → Odoo（表单 `Refresh from Kingdee`） | `View` → 钩子 `_kingdee_apply_readback()` | 一条 |
 
-入站**只写「出站读得到的字段」**（编码/名称/物料属性/物料类别/物料分组/计量单位 + 同步状态），
-故「导入后再推送」逐字段不变；名称只在新建时写入。客户尚未实现入站。
+入站骨架放在 mixin，具体模型只声明三个类属性：`_kingdee_query_fields`（查询字段，点号记法）、
+`_kingdee_value_map`（金蝶键→Odoo 字段）、`_kingdee_number_field`（除 `kingdee_number` 外的第二匹配键），
+外加可选钩子 `_kingdee_import_extra_values()`。入站**写的是「出站读得到的字段」**，
+故「导入后再推送」逐字段不变；记录名称只在新建时写入。

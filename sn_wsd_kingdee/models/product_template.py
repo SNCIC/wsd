@@ -3,9 +3,9 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
 
 from .kingdee_client import MATERIAL_FORM_ID
+from .kingdee_sync_mixin import KINGDEE_PENDING_STATES
 
 _logger = logging.getLogger(__name__)
 
@@ -82,54 +82,86 @@ MATERIAL_FIELD_ENTITY = {
 # ---------------------------------------------------------------------------
 # Material fields read from Kingdee, written in the BillQuery notation. Every key
 # comes from the account field index (fields_master.csv, BD_MATERIAL): the header
-# entity FBillHead carries FNumber, FName, FDocumentStatus, FForbidStatus and
-# FMaterialGroup, SubHeadEntity carries FErpClsID, FCategoryID and FBaseUnitId.
-# The reference fields are read through .FNumber, the form this account accepts
-# for a reference (the payload sends exactly the same form).
+# entity FBillHead carries FNumber, FName, FSpecification, FDocumentStatus,
+# FForbidStatus and FMaterialGroup, SubHeadEntity carries FErpClsID, FCategoryID
+# and FBaseUnitId. A reference is read through .FNumber (the form the payload
+# sends) and .FName, so the screen can show the code and what it stands for.
 KINGDEE_MATERIAL_FIELDS = (
     "FNumber",
     "FName",
+    "FSpecification",
     "FDocumentStatus",
     "FForbidStatus",
     "FErpClsID",
     "FCategoryID.FNumber",
+    "FCategoryID.FName",
     "FMaterialGroup.FNumber",
+    "FMaterialGroup.FName",
     "FBaseUnitId.FNumber",
+    "FBaseUnitId.FName",
 )
 
-# The same field list as the comma separated FieldKeys of a query call.
-KINGDEE_MATERIAL_QUERY = ",".join(KINGDEE_MATERIAL_FIELDS)
-
-# Inbound field mapping (Kingdee field -> Odoo field). It holds exactly the values
-# the outbound payload derives from a record, so the inbound direction is the
-# inverse of the outbound one: a material imported here can be pushed back
-# without any value changing.
+# Inbound field mapping (Kingdee field -> Odoo field). It holds the values the
+# outbound payload derives from a record, so a material imported here can be pushed
+# back without any value changing, plus the descriptive ones the Kingdee page
+# shows. ``material_specification`` is owned by sn_wsd_mrp: it is written only when
+# that module is installed (see ``_kingdee_base_values`` in the mixin).
 KINGDEE_MATERIAL_VALUE_MAP = {
     "FErpClsID": "kingdee_erp_cls_id",
     "FCategoryID.FNumber": "kingdee_category_number",
+    "FCategoryID.FName": "kingdee_category_name",
     "FMaterialGroup.FNumber": "kingdee_material_group",
+    "FMaterialGroup.FName": "kingdee_material_group_name",
     "FBaseUnitId.FNumber": "kingdee_unit_number",
+    "FBaseUnitId.FName": "kingdee_unit_name",
+    "FSpecification": "material_specification",
 }
 
-# FDocumentStatus of a material -> synchronization state. The five values of the
-# account are Z (draft), A (created), B (submitted), C (audited) and D
-# (re-audited); anything but B and C is a material that simply exists in Kingdee.
-KINGDEE_DOCUMENT_STATE = {
-    "B": "submitted",
-    "C": "audited",
+# Values every imported material gets on top of the mapping: the catalogue is
+# inventory managed and traced by lot. Kingdee's 启用批号管理 (FIsBatchManage) is
+# True on every material of this account (2000 of 2000 sampled on 2026-10-13) and
+# the whole Odoo catalogue is is_storable / tracking=lot, so the import follows it
+# instead of leaving Odoo's default (not storable, no tracking, which is also what
+# silently blocks lot traceability).
+KINGDEE_MATERIAL_IMPORT_VALUES = {
+    "is_storable": True,
+    "tracking": "lot",
 }
 
-# FForbidStatus of a material: A (enabled) or B (disabled).
-KINGDEE_FORBIDDEN_STATUS = "B"
+# Kingdee FErpClsID (物料属性). It is a Selection so the screen shows a readable
+# option instead of a bare code; Odoo refuses a value a Selection does not list,
+# therefore an unknown code is reported and skipped rather than stored.
+KINGDEE_ERP_CLS_SELECTION = [
+    ("1", "Purchased"),
+    ("2", "Self-made"),
+    ("3", "Subcontract"),
+    ("4", "Feature"),
+    ("5", "Virtual"),
+    ("6", "Service"),
+    ("7", "One-off"),
+    ("9", "Configuration"),
+    ("10", "Asset"),
+    ("11", "Expense"),
+    ("12", "Model"),
+    ("13", "Product Series"),
+]
 
 # Number of already linked materials refreshed by the scheduled job.
 CRON_BATCH_SIZE = 50
+
+# Number of records one "push to Kingdee" click sends at most. The catalogue counts
+# thousands of products: sending all of them on every click would be thousands of
+# WebAPI calls, so a run only takes what is not in sync yet.
+PUSH_BATCH_LIMIT = 200
 
 
 class ProductTemplate(models.Model):
     _inherit = ["product.template", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = MATERIAL_FORM_ID
+    _kingdee_query_fields = KINGDEE_MATERIAL_FIELDS
+    _kingdee_value_map = KINGDEE_MATERIAL_VALUE_MAP
+    _kingdee_number_field = "default_code"
 
     kingdee_material_group = fields.Char(
         string="Kingdee Material Group", copy=False,
@@ -141,15 +173,31 @@ class ProductTemplate(models.Model):
              "base, store, purchase and sale unit fields. The unit configured in "
              "Settings (Kingdee > Material Defaults) is used when empty.",
     )
-    kingdee_erp_cls_id = fields.Char(
+    kingdee_erp_cls_id = fields.Selection(
+        KINGDEE_ERP_CLS_SELECTION,
         string="Kingdee Material Type", copy=False,
-        help="Kingdee material type code (FErpClsID), e.g. 2 self-made or 3 subcontract "
-             "(values observed in this account). The default from Settings is used when empty.",
+        help="Kingdee material type (FErpClsID): 1 purchased, 2 self-made, 3 subcontract "
+             "(the options of the account). The default from Settings is used when empty.",
     )
     kingdee_category_number = fields.Char(
         string="Kingdee Material Category", copy=False,
         help="Kingdee material category number (FCategoryID), e.g. CHLB05_SYS (产成品) or "
              "CHLB03_SYS (自制半成品). The default from Settings is used when empty.",
+    )
+    kingdee_category_name = fields.Char(
+        string="Kingdee Category Name", copy=False, readonly=True,
+        help="Name the account gives to the category above (FCategoryID), so the screen "
+             "shows the code and what it stands for. Read from Kingdee.",
+    )
+    kingdee_material_group_name = fields.Char(
+        string="Kingdee Group Name", copy=False, readonly=True,
+        help="Name the account gives to the material group (FMaterialGroup), so the screen "
+             "shows the code and what it stands for. Read from Kingdee.",
+    )
+    kingdee_unit_name = fields.Char(
+        string="Kingdee Unit Name", copy=False, readonly=True,
+        help="Name the account gives to the unit (BD_UNIT), so the screen shows the code "
+             "and what it stands for. Read from Kingdee.",
     )
 
     # ------------------------------------------------------------------
@@ -211,298 +259,74 @@ class ProductTemplate(models.Model):
                 payload[field] = value
         return payload
 
-    # ------------------------------------------------------------------
-    # Inbound: values read from Kingdee
-    # ------------------------------------------------------------------
-    @staticmethod
-    def _kingdee_text(value):
-        """Text of one value of a Kingdee answer.
+    def _kingdee_import_extra_values(self, data):
+        """How an imported material is managed, and which category it belongs to.
 
-        A ``View`` answer returns a translated field as a locale list
-        (``[{"Key": 2052, "Value": "..."}]``) and a reference as a mapping, a
-        query answer returns plain strings; the three shapes are normalised here
-        so the callers only ever deal with text.
+        ``self`` is the product being written, or an empty recordset when the
+        material is new to Odoo (see ``_kingdee_import_extra_values`` in the mixin).
         """
-        if value is None or value is False:
-            return ""
-        if isinstance(value, list):
-            for item in value:
-                if isinstance(item, dict) and item.get("Value") not in (None, ""):
-                    return str(item["Value"]).strip()
-            return ""
-        if isinstance(value, dict):
-            for key in ("Value", "FNumber", "Number"):
-                if value.get(key) not in (None, ""):
-                    return str(value[key]).strip()
-            return ""
-        return str(value).strip()
-
-    @classmethod
-    def _kingdee_mappings(cls, data):
-        """Yield every mapping of a nested Kingdee answer, outermost first.
-
-        ``View`` holds the values nested per entity (``SubHeadEntity``, ...), so a
-        field has to be searched at any depth. Walking breadth first means the
-        root wins, which is where the header fields are.
-        """
-        queue = [data] if isinstance(data, dict) else []
-        while queue:
-            node = queue.pop(0)
-            yield node
-            for value in node.values():
-                if isinstance(value, dict):
-                    queue.append(value)
-                elif isinstance(value, list):
-                    queue.extend(item for item in value if isinstance(item, dict))
-
-    @classmethod
-    def _kingdee_nested_value(cls, data, key):
-        """Value of ``key`` in a ``View`` answer (values nested per entity).
-
-        ``key`` uses the query notation: the first segment names the field, an
-        optional second one the property to read on it (``FCategoryID.FNumber``).
-        """
-        field, _, prop = key.partition(".")
-        for mapping in cls._kingdee_mappings(data):
-            if field not in mapping:
-                continue
-            value = mapping[field]
-            if not prop:
-                return value
-            if isinstance(value, dict):
-                return value.get(prop)
-        return None
-
-    @classmethod
-    def _kingdee_row_value(cls, row, key):
-        """Value of ``key`` in a query row.
-
-        ``BillQuery`` keys a row with the ``FieldKeys`` exactly as they were sent
-        (``FCategoryID.FNumber``), and ``query_rows()`` gives the positional rows
-        of ``ExecuteBillQuery`` the same shape. Nothing is ever guessed from the
-        bare field name: an unexpected answer shape yields an empty value rather
-        than the value of another field (``FNumber`` is also the last segment of
-        the three reference keys, so a bare name would be ambiguous).
-        """
-        return row.get(key)
-
-    @classmethod
-    def _kingdee_data_from_row(cls, row):
-        """Normalise a query row to the ``KINGDEE_MATERIAL_FIELDS`` key shape."""
-        return {
-            key: cls._kingdee_text(cls._kingdee_row_value(row, key))
-            for key in KINGDEE_MATERIAL_FIELDS
-        }
-
-    @classmethod
-    def _kingdee_data_from_view(cls, data):
-        """Normalise a ``View`` answer to the same key shape."""
-        return {
-            key: cls._kingdee_text(cls._kingdee_nested_value(data, key))
-            for key in KINGDEE_MATERIAL_FIELDS
-        }
-
-    @api.model
-    def _kingdee_classification_values(self, data):
-        """Odoo values of the classification fields a material carries.
-
-        Only the fields the payload derives its values from are returned, so the
-        inbound direction stays the exact inverse of the outbound one.
-        """
-        values = {}
-        for key, field in KINGDEE_MATERIAL_VALUE_MAP.items():
-            value = data.get(key)
-            if value:
-                values[field] = value
+        values = dict(KINGDEE_MATERIAL_IMPORT_VALUES)
+        # The Odoo category is a local catalogue: it is filled when the product has
+        # none, never reassigned behind the back of whoever classified it.
+        category = self._kingdee_category(data.get("FMaterialGroup.FNumber"))
+        if category and not self.categ_id:
+            values["categ_id"] = category.id
         return values
 
     @api.model
-    def _kingdee_sync_state(self, data):
-        """Synchronization state matching the FDocumentStatus of a material."""
-        return KINGDEE_DOCUMENT_STATE.get(data.get("FDocumentStatus"), "saved")
+    def _kingdee_category(self, group_number):
+        """Odoo category of a Kingdee material group (``FMaterialGroup``).
 
-    @api.model
-    def _kingdee_is_forbidden(self, data):
-        """Whether the material is disabled (FForbidStatus) in Kingdee."""
-        return data.get("FForbidStatus") == KINGDEE_FORBIDDEN_STATUS
-
-    def _kingdee_apply_readback(self, data):
-        """Store the classification a ``View`` of this material answered.
-
-        Called by ``action_kingdee_pull()``, which already stored the number, the
-        name and the master id: this adds the classification fields and the real
-        status, so "Refresh from Kingdee" refreshes the record itself and not only
-        its synchronization state.
+        The Odoo catalogue mirrors the Kingdee material groups: a category is named
+        ``<group number>(<name>)``. Matching on that name resolves the category of
+        11 560 of the 11 571 materials of this account that are already linked
+        (checked on the account on 2026-10-13). An empty recordset means "no
+        category": an unknown group must never clear the one a product already has.
         """
-        self.ensure_one()
-        flat = self._kingdee_data_from_view(data)
-        values = self._kingdee_classification_values(flat)
-        values["kingdee_sync_state"] = self._kingdee_sync_state(flat)
-        self.write(values)
+        group = (group_number or "").strip()
+        if not group:
+            return self.env["product.category"]
+        category = self.env["product.category"]
+        return (category.search([("name", "=", group)], limit=1)
+                or category.search([("name", "=like", "%s(%%" % group)], limit=1))
 
     # ------------------------------------------------------------------
-    # Inbound: import (Kingdee to Odoo)
+    # Synchronization entries (called by the sync console)
     # ------------------------------------------------------------------
-    @api.model
-    def _kingdee_find_material(self, number):
-        """Product already linked to the Kingdee material ``number``.
-
-        The link is ``kingdee_number``. A product that only carries the number as
-        its internal reference is adopted, which is how an existing Odoo
-        catalogue gets linked. A product whose internal reference collides with a
-        material linked to another number is a conflict: importing it would create
-        a second product, so it is refused instead.
-        """
-        product = self.search([("kingdee_number", "=", number)], limit=1)
-        if product:
-            return product
-        product = self.search([("default_code", "=", number)], limit=1)
-        if not product or not product.kingdee_number:
-            return product
-        raise UserError(_(
-            "The internal reference %(number)s is used by '%(product)s', which is already "
-            "linked to the Kingdee number %(linked)s: importing the material %(number)s "
-            "would create a second product."
-        ) % {
-            "number": number,
-            "product": product.name,
-            "linked": product.kingdee_number,
-        })
-
-    @api.model
-    def _kingdee_import_row(self, row, update_existing=True, create_missing=True,
-                            include_disabled=False, dry_run=False):
-        """Create or update one product from a Kingdee material row.
-
-        Returns ``"created"``, ``"updated"`` or ``"skipped"`` (a material the
-        caller asked not to touch). With ``dry_run`` the decision is returned and
-        nothing is written, which is what the preview reports. The name of an
-        existing product is left alone: it is pushed to Kingdee by the payload, so
-        Odoo owns it, and the Kingdee name is kept on ``kingdee_name``.
-        """
-        data = self._kingdee_data_from_row(row)
-        number = data.get("FNumber")
-        if not number:
-            raise UserError(_("Kingdee returned a material without a number."))
-        forbidden = self._kingdee_is_forbidden(data)
-        if forbidden and not include_disabled:
-            return "skipped"
-        product = self._kingdee_find_material(number)
-        if product and not update_existing:
-            return "skipped"
-        if not product and not create_missing:
-            return "skipped"
-        if dry_run:
-            # Nothing has been written before this point, so the decision alone
-            # is the whole answer and no record has to be touched.
-            return "updated" if product else "created"
-        values = self._kingdee_classification_values(data)
-        values["kingdee_sync_state"] = self._kingdee_sync_state(data)
-        values["kingdee_last_sync_at"] = fields.Datetime.now()
-        values["kingdee_sync_message"] = (
-            _("Imported from Kingdee, where the material is disabled.")
-            if forbidden else _("Imported from Kingdee.")
-        )
-        name = data.get("FName")
-        if name:
-            values["kingdee_name"] = name
-        if product:
-            if not product.kingdee_number:
-                # The product was adopted through its internal reference: record
-                # the link now, otherwise nothing would ever tie the two together.
-                values["kingdee_number"] = number
-            product.write(values)
-            return "updated"
-        values["kingdee_number"] = number
-        values["kingdee_name"] = name or number
-        values["default_code"] = number
-        values["name"] = name or number
-        self.create(values)
-        return "created"
-
     @api.model
     def _kingdee_import_materials(self, filter_string="", limit=0, update_existing=True,
-                                  create_missing=True, include_disabled=False, dry_run=False):
-        """Read the Kingdee materials and create or update the matching products.
-
-        Every material runs inside its own savepoint: a row Kingdee or Odoo
-        refuses is reported and does not stop the run, the same isolation
-        ``_kingdee_run()`` gives to the outbound actions.
-
-        :param str filter_string: Kingdee ``FilterString``, e.g. ``FDocumentStatus = 'C'``.
-        :param int limit: highest number of materials read (0 reads them all).
-        :param bool dry_run: report what the run would do without writing anything.
-            A preview classifies as if both write switches were on, so its counts
-            describe a full import.
-        :return dict: counters ``read`` / ``created`` / ``updated`` / ``skipped`` /
-            ``failed``, and the first failures under ``errors``.
-        """
-        if dry_run:
-            update_existing = create_missing = True
-        client = self.env["sn.wsd.kingdee.client"]
-        summary = {"read": 0, "created": 0, "updated": 0, "skipped": 0, "failed": 0,
-                   "errors": []}
-        for row in client.iter_bill_query(
-            MATERIAL_FORM_ID,
-            KINGDEE_MATERIAL_QUERY,
-            filter_string=(filter_string or "").strip(),
-            order_string="FNumber",
-        ):
-            if limit and summary["read"] >= limit:
-                break
-            summary["read"] += 1
-            number = self._kingdee_text(self._kingdee_row_value(row, "FNumber"))
-            try:
-                with self.env.cr.savepoint():
-                    outcome = self._kingdee_import_row(
-                        row,
-                        update_existing=update_existing,
-                        create_missing=create_missing,
-                        include_disabled=include_disabled,
-                        dry_run=dry_run,
-                    )
-            except Exception as err:  # noqa: BLE001 - reported, the run must go on
-                summary["failed"] += 1
-                _logger.warning(
-                    "Kingdee material import failed for %s: %s", number or "?", err,
-                )
-                if len(summary["errors"]) < 5:
-                    summary["errors"].append(_("%(number)s: %(message)s") % {
-                        "number": number or "?", "message": err,
-                    })
-                continue
-            summary[outcome] += 1
-        return summary
+                                  create_missing=True, include_disabled=False,
+                                  dry_run=False):
+        """Read the Kingdee materials and create or update the matching products."""
+        summary = self._kingdee_import_records(
+            filter_string=filter_string,
+            limit=limit,
+            update_existing=update_existing,
+            create_missing=create_missing,
+            include_disabled=include_disabled,
+            dry_run=dry_run,
+        )
+        return self._kingdee_import_notification(summary, dry_run=dry_run)
 
     @api.model
-    def _kingdee_import_notification(self, summary, dry_run=False):
-        """Notification reporting the outcome of an import or preview run."""
-        label = (_("Preview of Import Materials from Kingdee") if dry_run
-                 else _("Import Materials from Kingdee"))
-        counts = {
-            "label": label,
-            "created": summary["created"],
-            "updated": summary["updated"],
-            "skipped": summary["skipped"],
-        }
-        if dry_run:
-            done = _("%(label)s: %(created)s to create, %(updated)s to update, "
-                     "%(skipped)s skipped.")
-            failed = _("%(label)s: %(created)s to create, %(updated)s to update, "
-                       "%(skipped)s skipped, %(failed)s failed.\n%(details)s")
-        else:
-            done = _("%(label)s: %(created)s created, %(updated)s updated, %(skipped)s skipped.")
-            failed = _("%(label)s: %(created)s created, %(updated)s updated, %(skipped)s skipped, "
-                       "%(failed)s failed.\n%(details)s")
-        if not summary["failed"]:
-            return self._kingdee_notify(_("Kingdee"), done % counts)
-        details = "\n".join(summary["errors"])
-        return self._kingdee_notify(
-            _("Kingdee"),
-            failed % dict(counts, failed=summary["failed"], details=details),
-            kind="danger",
-            sticky=True,
+    def _kingdee_push_materials(self, filter_string="", limit=0, dry_run=False):
+        """Save the products that are not in sync yet to Kingdee, oldest first.
+
+        A click only takes what is pending: re-sending the whole catalogue would be
+        thousands of WebAPI calls.
+        """
+        products = self.search(
+            [("kingdee_sync_state", "in", KINGDEE_PENDING_STATES)],
+            limit=limit or PUSH_BATCH_LIMIT,
+            order="id",
         )
+        if dry_run:
+            return self._kingdee_notify(_("Kingdee"), _(
+                "Preview push to Kingdee: %s product(s) to send.") % len(products))
+        if not products:
+            return self._kingdee_notify(_("Kingdee"), _(
+                "Push to Kingdee: every product is already in sync."))
+        return products.action_kingdee_save()
 
     # ------------------------------------------------------------------
     # Scheduled job

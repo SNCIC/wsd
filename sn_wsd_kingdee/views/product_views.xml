@@ -13,13 +13,29 @@
                                 <field name="kingdee_number"
                                        placeholder="Defaults to the internal reference"/>
                                 <field name="kingdee_name"/>
-                                <field name="kingdee_material_group"/>
-                                <field name="kingdee_unit_number"
-                                       placeholder="Defaults to the unit from Settings"/>
+                                <label for="kingdee_material_group"/>
+                                <div class="o_row">
+                                    <field name="kingdee_material_group" nolabel="1"
+                                           placeholder="e.g. E.01.001"/>
+                                    <field name="kingdee_material_group_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
+                                <label for="kingdee_unit_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_unit_number" nolabel="1"
+                                           placeholder="Defaults to the unit from Settings"/>
+                                    <field name="kingdee_unit_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
                                 <field name="kingdee_erp_cls_id"
                                        placeholder="Material type, e.g. 2"/>
-                                <field name="kingdee_category_number"
-                                       placeholder="Material category, e.g. CHLB05_SYS"/>
+                                <label for="kingdee_category_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_category_number" nolabel="1"
+                                           placeholder="Material category, e.g. CHLB05_SYS"/>
+                                    <field name="kingdee_category_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
                             </group>
                             <group string="Synchronization">
                                 <field name="kingdee_sync_state"/>

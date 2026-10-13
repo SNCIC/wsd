@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sn_wsd_kingdee_sync_target_list" model="ir.ui.view">
+            <field name="name">sn.wsd.kingdee.sync.target.list</field>
+            <field name="model">sn.wsd.kingdee.sync.target</field>
+            <field name="arch" type="xml">
+                <list default_group_by="module" create="false" delete="false"
+                      multi_edit="false">
+                    <field name="module"/>
+                    <field name="sequence" optional="hide"/>
+                    <field name="name"/>
+                    <field name="direction"
+                           decoration-info="direction == 'in'"
+                           decoration-warning="direction == 'out'"/>
+                    <field name="model_name" optional="show"/>
+                    <field name="form_id" optional="show"/>
+                    <field name="linked_count" optional="show"/>
+                    <field name="pending_count" optional="show"/>
+                    <field name="last_sync_at" optional="show"/>
+                    <field name="model_id" optional="hide"/>
+                    <field name="sync_filter" optional="hide"/>
+                    <field name="sync_limit" optional="hide"/>
+                    <button name="action_sync"
+                            type="object"
+                            string="Synchronize"
+                            class="btn-primary"/>
+                    <button name="action_preview"
+                            type="object"
+                            string="Preview"
+                            class="btn-secondary"
+                            invisible="direction != 'in'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sn_wsd_kingdee_sync_target_form" model="ir.ui.view">
+            <field name="name">sn.wsd.kingdee.sync.target.form</field>
+            <field name="model">sn.wsd.kingdee.sync.target</field>
+            <field name="arch" type="xml">
+                <form create="false" delete="false">
+                    <header>
+                        <button name="action_sync"
+                                type="object"
+                                string="Synchronize"
+                                class="btn-primary"/>
+                        <button name="action_preview"
+                                type="object"
+                                string="Preview"
+                                class="btn-secondary"
+                                invisible="direction != 'in'"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Target">
+                                <field name="name"/>
+                                <field name="module"/>
+                                <field name="direction"/>
+                                <field name="active" invisible="1"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group string="Scope">
+                                <field name="model_id"/>
+                                <field name="model_name"/>
+                                <field name="form_id"/>
+                                <field name="sync_filter"/>
+                                <field name="sync_limit"/>
+                            </group>
+                        </group>
+                        <group string="State">
+                            <field name="linked_count"/>
+                            <field name="pending_count"/>
+                            <field name="last_sync_at"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sn_wsd_kingdee_sync_in" model="ir.actions.act_window">
+            <field name="name">Kingdee to Odoo</field>
+            <field name="res_model">sn.wsd.kingdee.sync.target</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('direction', '=', 'in')]</field>
+        </record>
+
+        <record id="action_sn_wsd_kingdee_sync_out" model="ir.actions.act_window">
+            <field name="name">Odoo to Kingdee</field>
+            <field name="res_model">sn.wsd.kingdee.sync.target</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('direction', '=', 'out')]</field>
+        </record>
+    </data>
+</odoo>
