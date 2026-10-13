@@ -11,6 +11,13 @@
 - 定时任务刷新已对接物料（默认关闭）
 - 物料表单新增“Kingdee”页签，可查看同步状态与相关日志
 
+> **子实体字段必须嵌套**：Material 的子实体字段（`SubHeadEntity`、`SubHeadEntity1`…
+> `SubHeadEntity6`）平铺发送会被 WebAPI 拒绝——报"寻找实体上 X 对应的属性描述符失败，
+> 实体不存在此属性"；必须按元数据 `entityKey` 嵌套，单据头字段（`FCreateOrgId` /
+> `FUseOrgId` / `FNumber` / `FName` / `FMaterialGroup`）才平铺。字段与实体的对应见
+> `models/product_template.py` 的 `MATERIAL_FIELD_ENTITY`。特别注意 `FErpClsID`（物料属性）
+> 平铺一定被拒且会被金蝶默认成 `1`（外购），必须嵌套在 `SubHeadEntity` 里才能写入 2=自制。
+
 > **字段标识来源**：任何 `formId` / `fieldKey` 一律以金蝶开放平台元数据为准
 > （本地离线库 `odoo-kingdee/data/kingdee-openapi`：`fields_index.csv` 查字段名、
 > `metadata/{formId}.json` 查完整字段树与必录标记、`kingdee_api_catalog.csv` 查接口），
