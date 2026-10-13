@@ -561,7 +561,13 @@ class SnWsdKingdeeClient(models.AbstractModel):
             form_id=form_id, res_record=res_record, request_payload=payload,
         )
 
-    def view(self, form_id, number=None, record_id=None, create_org_id=0, is_sort_by_seq="false"):
+    def view(self, form_id, number=None, record_id=None, create_org_id=0, is_sort_by_seq="false",
+             res_record=None):
+        """Read one bill back.
+
+        :param res_record: record the read-back is logged against, so the sync
+            log of a "Refresh from Kingdee" points at the record it refreshed.
+        """
         payload = {
             "CreateOrgId": create_org_id,
             "Number": number or "",
@@ -570,7 +576,7 @@ class SnWsdKingdeeClient(models.AbstractModel):
         }
         return self._call(
             "View", lambda: self._get_sdk().View(form_id, payload), form_id=form_id,
-            direction="in", request_payload=payload,
+            direction="in", res_record=res_record, request_payload=payload,
         )
 
     def execute_bill_query(self, form_id, field_keys, filter_string="", order_string="",

@@ -146,6 +146,7 @@ systemctl start odoo19
 | Material Unit | 物料计量单位：金蝶 `BD_UNIT` 编码（如 `001`=只、`GE`=个），写入物料的基准/库存/采购/销售等 7 个单位字段；留空按 `001` |
 | Use Organization | 物料使用组织（`FUseOrgId`），留空则取创建组织 |
 | Customer Currency | 客户结算币别（`FTRADINGCURRID`，如 `PRE001`），留空按 `PRE001` |
+| Customer Salesman & Department | 本账套要求客户必填销售员（`FSELLER`）与销售部门（`FSALDEPTID`），部门须为销售类部门（如 `ZN0801` 销售一部） |
 | Scheduled Material Refresh | 允许定时任务刷新已对接物料 |
 
 配置完成后点 **Test Connection**，成功会提示“凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”。
@@ -173,7 +174,7 @@ systemctl start odoo19
 1. `Kingdee Number` 留空则取客户的 `参考`（`ref`），两者都空时报错提示
 2. 先在 `设置 → Kingdee` 配置 `Customer Currency` 与 `Customer Salesman & Department`
    （本账套要求客户必须有销售员 `FSELLER` 与销售部门 `FSALDEPTID`，否则推送被拒），也可在客户上覆盖
-3. 点 **Save to Kingdee** → `Saved`；需要审批时依次 **Submit** → **Audit**
+3. 点 **Save to Kingdee** → `Saved`；本账套的客户必须先提交（Submit）再审核（Audit），否则审核会被拒绝
 4. **Refresh from Kingdee** 按客户编码回读；**Delete in Kingdee** 删除金蝶侧记录并清空对接状态
 
 批量操作：在客户列表勾选多行 → `动作` 菜单 → `Kingdee: Save / Audit / Refresh Customers`。

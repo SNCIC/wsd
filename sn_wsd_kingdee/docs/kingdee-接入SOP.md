@@ -88,6 +88,7 @@ kingdee_last_sync_at / kingdee_sync_message / kingdee_log_ids` 状态字段、
 | 9 | 多组织：单据落错组织 | 写入必带 `FCreateOrgId`/`FUseOrgId` |
 | 10 | 密钥易外泄（明文入库、日志、终端） | 不进日志；终端输出只报长度；泄露后轮换 |
 | 11 | **元数据必录 ≠ 账套必录**：`BD_Customer` 只标 3 项必录，本账套还要求"销售员/销售部门" | 第 6 步一定用真实 `Save` 试推；把账套的额外要求写进 `_kingdee_check_ready()`，让失败信息可操作 |
+| 12 | **业务规则不在元数据里**：本账套的客户**必须先提交（Submit）再审核（Audit）**，销售部门还必须是**销售类**部门（如 `ZN0801` 销售一部，`ZN01` 总经办会被当成未填） | 第 4 步顺便读几条已有单据的真实取值；第 7 步按完整生命周期（Save→Submit→Audit→Un-audit→Delete）走一遍 |
 
 ## 5. 重构时的 payload 回归（工具化做法）
 
