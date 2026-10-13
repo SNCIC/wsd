@@ -675,18 +675,6 @@ msgstr "金蝶 SDK 拒绝了该配置，请检查设置中的凭据并查看服�
 #. odoo-python
 #: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
 msgid ""
-"The Kingdee WebAPI SDK is not installed on this server (%(error)s).\n"
-"Install the provided wheel and restart Odoo:\n"
-"%(hint)s"
-msgstr ""
-"本服务器未安装金蝶 WebAPI SDK（%(error)s）。\n"
-"请安装提供的 wheel 包后重启 Odoo：\n"
-"%(hint)s"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
-msgid ""
 "The Kingdee WebAPI SDK is not installed for the interpreter running Odoo "
 "(%(error)s).\n"
 "Install the wheel shipped with this module and restart Odoo:\n"

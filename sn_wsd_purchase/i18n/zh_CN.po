@@ -218,6 +218,7 @@ msgstr "含税合计"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 msgid "Untaxed Amount"
 msgstr "不含税金额"
 
@@ -278,6 +279,7 @@ msgstr "页，共"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_unit_price
 msgid "Tax Included Unit Price"
 msgstr "含税单价"
 
@@ -288,6 +290,7 @@ msgstr "含税单价"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__price_unit_tax_excluded
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 msgid "Untaxed Unit Price"
 msgstr "不含税单价"
 
@@ -295,16 +298,6 @@ msgstr "不含税单价"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
 msgid "Unit Price"
 msgstr "含税单价"
-
-#. module: sn_wsd_purchase
-#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
-msgid "Untaxed Unit Price"
-msgstr "不含税单价"
-
-#. module: sn_wsd_purchase
-#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
-msgid "Untaxed Amount"
-msgstr "不含税金额"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
@@ -486,11 +479,6 @@ msgstr "全部收货"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
 msgid "Purchase Order"
 msgstr "采购订单"
-
-#. module: sn_wsd_purchase
-#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_unit_price
-msgid "Tax Included Unit Price"
-msgstr "含税单价"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_amount
