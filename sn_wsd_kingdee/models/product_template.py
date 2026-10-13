@@ -211,15 +211,22 @@ class ProductTemplate(models.Model):
     def _kingdee_unit(self, client):
         """Kingdee unit number applied to the unit fields of the material.
 
-        Three levels, the product winning over the settings: the Kingdee number of
-        the product's **own** unit (``BD_UNIT`` is synchronized, so a unit carries the
-        number it has in the account), then the number typed on the material, then the
-        one from Settings. A product whose unit is not linked to the account therefore
-        keeps behaving exactly as before.
+        Three levels, the most specific one first:
+
+        1. ``kingdee_unit_number`` — what the material carries in the account. It is
+           written by the import (``FBaseUnitId``) or typed by hand, so it is the
+           account's own value: sending anything else would **change the unit of an
+           existing material**, which Kingdee may refuse once the material has
+           transactions.
+        2. the Kingdee number of the product's **own** unit (``BD_UNIT`` is
+           synchronized, so a unit carries the number it has in the account). This is
+           the level that removes the need for the Setting.
+        3. the number from Settings, which is what every product without a link used
+           before this field existed.
         """
         self.ensure_one()
-        return ((self.uom_id.kingdee_number or "").strip()
-                or (self.kingdee_unit_number or "").strip()
+        return ((self.kingdee_unit_number or "").strip()
+                or (self.uom_id.kingdee_number or "").strip()
                 or client.get_unit_number())
 
     def _kingdee_payload(self, client):
