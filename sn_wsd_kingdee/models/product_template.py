@@ -99,12 +99,12 @@ class ProductTemplate(models.Model):
         unit = (self.kingdee_unit_number or "").strip() or client.get_unit_number()
         model = {
             "FCreateOrgId": {"FNumber": create_org},
-            "FUserOrgId": {"FNumber": client.get_default_org("use")},
+            "FUseOrgId": {"FNumber": client.get_default_org("use")},
             "FNumber": number,
             "FName": (self.name or "").strip() or number,
             "FBaseUnitId": {"FNumber": unit},
             "FStoreUnitID": {"FNumber": unit},
-            "FPurchaseUnitID": {"FNumber": unit},
+            "FPurchaseUnitId": {"FNumber": unit},
             "FPurchasePriceUnitId": {"FNumber": unit},
             "FSaleUnitId": {"FNumber": unit},
             "FSalePriceUnitId": {"FNumber": unit},

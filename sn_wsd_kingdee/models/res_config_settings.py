@@ -69,7 +69,7 @@ class ResConfigSettings(models.TransientModel):
     kingdee_use_org_number = fields.Char(
         string="Use Organization",
         config_parameter="sn_wsd_kingdee.use_org_number",
-        help="Organization number (FUserOrgId) of the material. Defaults to the create organization.",
+        help="Organization number (FUseOrgId) of the material. Defaults to the create organization.",
     )
     kingdee_unit_number = fields.Char(
         string="Material Unit",

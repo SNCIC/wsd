@@ -525,9 +525,9 @@ msgstr "在金蝶创建物料时使用的创建组织编码（FCreateOrgId）。
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_use_org_number
 msgid ""
-"Organization number (FUserOrgId) of the material. Defaults to the create "
+"Organization number (FUseOrgId) of the material. Defaults to the create "
 "organization."
-msgstr "物料的使用组织编码（FUserOrgId），留空则取创建组织。"
+msgstr "物料的使用组织编码（FUseOrgId），留空则取创建组织。"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_org_num
