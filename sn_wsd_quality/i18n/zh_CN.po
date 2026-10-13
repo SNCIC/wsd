@@ -3483,29 +3483,6 @@ msgid "WSD Quality: Generate IPQC Inspections"
 msgstr "WSD 质量：生成 IPQC 检验"
 
 #. module: sn_wsd_quality
-#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_fai_state__passed
-#: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_mes_order__x_oqc_state__passed
-msgid "Passed"
-msgstr "已通过"
-
-#. module: sn_wsd_quality
-#. odoo-python
-#: code:addons/sn_wsd_quality/models/quality_inspection.py:0
-msgid "Inspection schemes of type %(type)s require an operation."
-msgstr "检验类型为 %(type)s 的方案必须配置工序。"
-
-#. module: sn_wsd_quality
-#. odoo-python
-#: code:addons/sn_wsd_quality/models/mes_order_fai.py:0
-msgid "First article confirmation is in progress on MES order %(order)s: report at most %(remaining)s OK unit(s) in this batch."
-msgstr "制令单 %(order)s 首件确认中：本笔最多可报 %(remaining)s 台合格。"
-
-#. module: sn_wsd_quality
-#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__x_line_id
-msgid "Inspection Item"
-msgstr "检验项目"
-
-#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__nominal_value
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__nominal_value
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__nominal_value
