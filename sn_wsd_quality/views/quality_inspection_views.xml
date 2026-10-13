@@ -215,6 +215,7 @@
                                            required="inspection_type != 'iqc'"/>
                                     <field name="production_line_id"
                                            invisible="inspection_type != 'ipqc'"/>
+                                    <field name="x_inspection_basis"/>
                                 </group>
                             </group>
                         </page>
@@ -334,8 +335,10 @@
                 <header>
                     <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_set_all_pass" type="object" string="Set All Pass" invisible="state not in ['open', 'in_progress']"/>
+                    <button name="action_generate_all_values" type="object" string="Generate Values" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_done" type="object" string="Finish" class="btn-primary" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_mark_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
+                    <button name="%(action_report_iqc_inspection)d" type="action" string="Inspection Record" invisible="inspection_type != 'iqc'"/>
                     <button name="action_reset_open" type="object" string="Reset" invisible="state not in ['done', 'overdue', 'skipped']"/>
                     <field name="state" widget="statusbar" statusbar_visible="open,in_progress,done"/>
                 </header>
@@ -372,6 +375,8 @@
                                     <field name="name"/>
                                     <field name="item_type"/>
                                     <field name="required"/>
+                                    <field name="x_inspect_qty" readonly="inspection_id.state == 'done'"/>
+                                    <field name="x_checked_qty"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
                                     <field name="nominal_value" invisible="item_type != 'numeric'"/>
@@ -382,6 +387,12 @@
                                     <field name="result"/>
                                     <field name="unit"/>
                                     <field name="note"/>
+                                    <button name="action_open_measure_wizard" type="object"
+                                            string="Measure" icon="fa-flask"
+                                            invisible="inspection_id.state == 'done'"/>
+                                    <button name="action_generate_values" type="object"
+                                            string="Generate" icon="fa-magic"
+                                            invisible="inspection_id.state == 'done'"/>
                                 </list>
                                 <form>
                                     <sheet>
@@ -453,6 +464,23 @@
                                     <field name="sample_window_start"/>
                                     <field name="sample_window_end"/>
                                     <field name="evidence_serial_identity_id"/>
+                                </group>
+                            </group>
+                            <group invisible="inspection_type != 'iqc'">
+                                <!-- Printed record of an incoming inspection:
+                                     basis and reviewer are kept with the
+                                     document, qualified qty/rate roll up the
+                                     recorded measurements. -->
+                                <group>
+                                    <field name="x_inspection_basis"/>
+                                    <field name="x_reviewer_id"/>
+                                </group>
+                                <group>
+                                    <field name="x_pass_qty" readonly="1"/>
+                                    <field name="x_pass_rate" readonly="1"/>
+                                    <field name="x_report_filename" invisible="1"/>
+                                    <field name="x_report_file" filename="x_report_filename"
+                                           string="Inspection Report"/>
                                 </group>
                             </group>
                         </page>

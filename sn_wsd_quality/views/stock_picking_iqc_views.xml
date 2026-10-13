@@ -25,9 +25,17 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom_qty']" position="after">
+                <field name="x_iqc_inspect_qty"
+                       string="Qty to Inspect"
+                       optional="show"/>
                 <field name="x_quality_inspection_count"
                        string="IQC"
                        optional="hide"/>
+                <button name="action_create_iqc_inspection"
+                        type="object"
+                        string="IQC"
+                        icon="fa-flask"
+                        invisible="not parent.x_is_iqc_control_picking"/>
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <field name="x_iqc_inspection_count" invisible="1"/>

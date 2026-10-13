@@ -9205,3 +9205,34 @@ msgstr "放行"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_form
 msgid "Operator"
 msgstr "操作人"
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__brand_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__brand_id
+msgid "Brand"
+msgstr "品牌"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_brand__name
+msgid "Brand Name"
+msgstr "品牌名称"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_product_template__brand_id
+msgid "Brand of the material, printed on the purchase contract."
+msgstr "物料的品牌，打印在采购合同上。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_brand_name_uniq
+msgid "Brand name already exists!"
+msgstr "品牌名称已存在！"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_brand
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_brand
+msgid "Brands"
+msgstr "品牌"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_brand
+msgid "Product Brand"
+msgstr "品牌"

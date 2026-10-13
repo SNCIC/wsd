@@ -266,3 +266,34 @@ class ProductTemplate(models.Model):
             return False
         products.action_kingdee_pull()
         return True
+
+
+class ProductProduct(models.Model):
+    """Kingdee material actions on the product variants.
+
+    The Kingdee page of the product form also shows up on ``product.product``:
+    the variant form is a primary view built on the template form
+    (``product.product_normal_form_view`` inherits
+    ``product.product_template_form_view``), so its buttons are validated
+    against ``product.product``. The variant does not inherit the template
+    methods in Odoo 19 (``_inherits`` only delegates the fields), therefore
+    every action is exposed here and delegated to the template, where the
+    whole synchronization state lives.
+    """
+
+    _inherit = "product.product"
+
+    def action_kingdee_save(self):
+        return self.product_tmpl_id.action_kingdee_save()
+
+    def action_kingdee_submit(self):
+        return self.product_tmpl_id.action_kingdee_submit()
+
+    def action_kingdee_audit(self):
+        return self.product_tmpl_id.action_kingdee_audit()
+
+    def action_kingdee_unaudit(self):
+        return self.product_tmpl_id.action_kingdee_unaudit()
+
+    def action_kingdee_pull(self):
+        return self.product_tmpl_id.action_kingdee_pull()

@@ -152,7 +152,7 @@
                                 <td><span t-out="line.product_id.default_code or ''"/></td>
                                 <td><span t-out="line.product_id.name or line.name"/></td>
                                 <td><span t-out="line.product_id.material_specification or ''"/></td>
-                                <td/>
+                                <td><span t-out="line.product_id.brand_id.name or ''"/></td>
                                 <td class="center"><span t-out="line.product_uom_id.name or ''"/></td>
                                 <td class="amount"><span t-out="o._format_contract_quantity(line.product_qty)"/></td>
                                 <td class="amount"><span t-out="o._format_contract_unit_price(line.price_unit_tax_included)"/></td>

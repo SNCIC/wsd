@@ -209,6 +209,13 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
+    brand_id = fields.Many2one(
+        comodel_name='sn.wsd.brand',
+        related='product_id.brand_id',
+        string='Brand',
+        readonly=True,
+        help='Brand of the ordered product, printed on the purchase contract.',
+    )
     price_unit_tax_included = fields.Float(
         string='Unit Price Tax Included',
         min_display_digits='Product Price',

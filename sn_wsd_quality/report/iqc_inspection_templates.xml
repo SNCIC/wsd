@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_iqc_inspection">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_quality.report_iqc_inspection_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_iqc_inspection_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="lot" t-value="o.lot_id"/>
+        <t t-set="supplier" t-value="o.picking_id.partner_id"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <div class="page sn-iqc-record"
+                 style="font-family: SimSun, serif; color: #111; font-size: 11px;">
+                <style>
+                    .sn-iqc-record, .sn-iqc-record table, .sn-iqc-record td,
+                    .sn-iqc-record th, .sn-iqc-record span, .sn-iqc-record b {
+                        font-family: SimSun, serif;
+                    }
+                    .sn-iqc-record table { width: 100%; border-collapse: collapse; }
+                    .sn-iqc-record td, .sn-iqc-record th {
+                        border: 1px solid #111;
+                        padding: 3px 4px;
+                        vertical-align: middle;
+                    }
+                    .sn-iqc-record table.plain td, .sn-iqc-record table.plain th {
+                        border: 0 !important;
+                        border-style: none !important;
+                    }
+                    .sn-iqc-record .title {
+                        text-align: center;
+                        font-size: 21px;
+                        font-weight: 700;
+                        margin: 0 0 4px;
+                    }
+                    .sn-iqc-record .logo { height: 34px; }
+                    .sn-iqc-record .label { white-space: nowrap; }
+                    .sn-iqc-record .center { text-align: center; }
+                    .sn-iqc-record .test-data td {
+                        text-align: center;
+                        padding: 2px 3px;
+                    }
+                    .sn-iqc-record .fail { color: #b00; }
+                    .sn-iqc-record .marks span { margin-right: 3px; }
+                    .sn-iqc-record .description { height: 44px; vertical-align: top; }
+                </style>
+
+                <table class="plain">
+                    <tr>
+                        <td style="width: 30%;">
+                            <img t-if="company.logo"
+                                 t-att-src="image_data_uri(company.logo)"
+                                 class="logo"/>
+                        </td>
+                        <td class="center">
+                            <div class="title">Inspection Record of Purchased (Outsourced) Parts</div>
+                        </td>
+                        <td style="width: 30%;"/>
+                    </tr>
+                </table>
+                <table class="plain">
+                    <tr>
+                        <td>No.: <span t-field="o.name"/></td>
+                        <td class="center">
+                            Inspection Date:
+                            <span t-field="o.finish_time" t-options='{"widget": "datetime"}'/>
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="label" style="width: 14%;">Part Name</td>
+                        <td style="width: 19%;"><span t-field="o.product_id.name"/></td>
+                        <td class="label" style="width: 14%;">Part Model</td>
+                        <td style="width: 19%;"><span t-field="o.model_code"/></td>
+                        <td class="label" style="width: 14%;">Batch Qty</td>
+                        <td class="center" style="width: 20%;"><span t-field="o.lot_qty"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Production Batch No.</td>
+                        <td><span t-field="lot.supplier_batch_no"/></td>
+                        <td class="label">Manufacturer (Supplier)</td>
+                        <td><span t-field="supplier.name"/></td>
+                        <td class="label">Inspection Qty</td>
+                        <td class="center"><span t-field="o.sample_size"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspection Batch No.</td>
+                        <td><span t-field="lot.name"/></td>
+                        <td class="label">Inspection Basis</td>
+                        <td><span t-field="o.x_inspection_basis"/></td>
+                        <td class="label">Qualified Qty</td>
+                        <td class="center"><span t-field="o.x_pass_qty"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspection Mode</td>
+                        <td>
+                            <t t-if="o.sampling_method == 'full'">Full Inspection</t>
+                            <t t-else="">Sampling Inspection</t>
+                        </td>
+                        <td colspan="2" class="center">
+                            <span t-esc="o._get_iqc_sampling_notice()"/>
+                        </td>
+                        <td class="label">Qualified Rate</td>
+                        <td class="center"><span t-field="o.x_pass_rate"/>%</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 7%;">Item No.</th>
+                            <th style="width: 14%;">Inspection Item</th>
+                            <th style="width: 22%;">Requirement</th>
+                            <th>Test Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.line_ids" t-as="line">
+                            <td class="center"><t t-esc="line_index + 1"/></td>
+                            <td class="center"><span t-field="line.name"/></td>
+                            <td>
+                                <span t-esc="line._get_report_requirement()"/>
+                            </td>
+                            <td>
+                                <t t-if="line.item_type == 'numeric'">
+                                    <table class="test-data">
+                                        <tr t-foreach="line._get_report_test_data_rows()"
+                                            t-as="row">
+                                            <td t-foreach="row" t-as="cell"
+                                                t-att-class="cell[1]">
+                                                <t t-esc="cell[0]"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </t>
+                                <t t-else="">
+                                    <div class="marks">
+                                        <t t-foreach="line._get_report_mark_cells()"
+                                           t-as="mark">
+                                            <span t-if="mark == 'pass'">&#10003;</span>
+                                            <span t-elif="mark == 'fail'" class="fail">&#10007;</span>
+                                            <span t-else="">&#9633;</span>
+                                        </t>
+                                    </div>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="label" style="width: 14%;">Defect Description</td>
+                        <td class="description" colspan="5">
+                            <span t-field="o.note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Conclusion</td>
+                        <td colspan="5">
+                            <span>
+                                <t t-if="o.result == 'pass'">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span>Qualified</span>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result in ('fail', 'reject', 'concession')">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span>Unqualified</span>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result in ('fail', 'reject')">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span>Return</span>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result == 'concession'">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span>Concession</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspector</td>
+                        <td colspan="2"><span t-field="o.inspector_id.name"/></td>
+                        <td class="label" style="width: 14%;">Reviewer</td>
+                        <td colspan="2"><span t-field="o.x_reviewer_id.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+</odoo>

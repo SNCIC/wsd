@@ -496,3 +496,12 @@ msgstr "含税单价"
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_amount
 msgid "Tax Included Amount"
 msgstr "含税金额"
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__brand_id
+msgid "Brand"
+msgstr "品牌"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order_line__brand_id
+msgid "Brand of the ordered product, printed on the purchase contract."
+msgstr "订购产品的品牌，打印在采购合同上。"

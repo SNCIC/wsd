@@ -4555,3 +4555,352 @@ msgid ""
 "Operation %(op)s is covered by first-article inspection scheme "
 "%(scheme)s: batch pass would skip the first article. It is not allowed."
 msgstr "工序 %(op)s 命中首件检验方案 %(scheme)s：批量过站会跳过首件，不允许。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_inspection_basis
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__x_inspection_basis
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_scheme_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Basis"
+msgstr "检验依据"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme__x_inspection_basis
+msgid ""
+"Standard the inspection follows, for instance the incoming inspection"
+"specification. Printed on the incoming inspection record and copied onto"
+"the inspections taken from this scheme."
+msgstr "检验所遵循的规范（如电子元器件进厂检验规范）；打印在来料检验记录上，并复制到由该方案开出的检验单。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_inspection_basis
+msgid "Standard the inspection follows; copied from the scheme."
+msgstr "检验所遵循的规范，由检验方案带入。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_reviewer_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Reviewer"
+msgstr "审核人"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_reviewer_id
+msgid "Person who reviewed the inspection record."
+msgstr "审核该检验记录的人员。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_report_file
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__x_report_file
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Inspection Report"
+msgstr "检验报告"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_report_file
+msgid "Measuring report handed in by the inspection unit (PDF only)."
+msgstr "检验单位提交的检验报告（仅支持 PDF）。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_report_filename
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__x_report_filename
+msgid "Report Filename"
+msgstr "报告文件名"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_pass_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Qualified Qty"
+msgstr "合格数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__x_pass_qty
+msgid "Measured samples that came out qualified."
+msgstr "判定为合格的测量样本数。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_pass_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Qualified Rate (%)"
+msgstr "合格率(%)"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Qualified Rate"
+msgstr "合格率"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__x_inspect_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__inspect_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move__x_iqc_inspect_qty
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_move_line__x_iqc_inspect_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_picking_form_iqc
+msgid "Qty to Inspect"
+msgstr "应检数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_line__x_inspect_qty
+msgid ""
+"How many measurements this item requires: one per sample for 'One Value"
+"per Sample' items, a single one otherwise. Derived from the sampling"
+"result and editable while the inspection is open."
+msgstr "该检验项需要录入的测量值条数：逐样本记录的项目等于样本数，其余为一条；由抽样结果自动算出，检验单未完成前可人工修改。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__x_checked_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Checked Qty"
+msgstr "已检数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_line__x_checked_qty
+msgid "Measurements already concluded (qualified or failed)."
+msgstr "已判定结论（合格或不合格）的测量值条数。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_stock_move__x_iqc_inspect_qty
+#: model:ir.model.fields,help:sn_wsd_quality.field_stock_move_line__x_iqc_inspect_qty
+msgid ""
+"Sample size the incoming quality control requires for this line, taken"
+"from the inspection the transfer generated."
+msgstr "该行来料检验要求的抽样数量，取自本调拨单开出的检验单。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__product_categ_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Material Type"
+msgstr "原材料类型"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__lot_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Internal Batch"
+msgstr "厂内批次号"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__partner_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__lot_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Received Qty"
+msgstr "到货数量"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__nominal_value
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Standard Value"
+msgstr "标准值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__upper_limit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Max Value"
+msgstr "最大值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__lower_limit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Min Value"
+msgstr "最小值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard__value_ids
+msgid "Inspection Results"
+msgstr "检验结果明细"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__sample_id
+msgid "Sample"
+msgstr "样本"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__error_value
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Deviation"
+msgstr "误差值"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__manual_result
+msgid "Non-numeric items only. Legacy keypad entry: 0 qualifies, 1 fails."
+msgstr "仅非数值型检验项使用。旧系统键入口径：输入 0 代表合格，输入 1 代表不合格。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+msgid "Generate Values"
+msgstr "自动生成"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Measure"
+msgstr "质检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Generate"
+msgstr "自动生成"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "Inspection Record"
+msgstr "检验记录"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Record of Purchased (Outsourced) Parts"
+msgstr "外购（协）件检验记录"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "No.:"
+msgstr "编号："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Date:"
+msgstr "检验日期："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Part Name"
+msgstr "检验件名称"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Part Model"
+msgstr "检验件型号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Batch Qty"
+msgstr "批次数量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Production Batch No."
+msgstr "生产批次号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Manufacturer (Supplier)"
+msgstr "制造商名称（供应商名称）"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Qty"
+msgstr "检验数量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Batch No."
+msgstr "检验批次号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Mode"
+msgstr "检验方式"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Full Inspection"
+msgstr "全检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Sampling Inspection"
+msgstr "抽检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Item No."
+msgstr "项数"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Requirement"
+msgstr "检验要求"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Test Data"
+msgstr "测试数据"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Defect Description"
+msgstr "不合格品描述"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_measure_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Conclusion"
+msgstr "结论"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Qualified"
+msgstr "合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Unqualified"
+msgstr "不合格"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Return"
+msgstr "退货"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+#: code:addons/sn_wsd_quality/wizard/measure_wizard.py:0
+msgid "Inspection Measurement"
+msgstr "检验录入"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "The inspection report must be a PDF file."
+msgstr "检验报告必须是 PDF 文件。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "Reset the inspection before generating new values."
+msgstr "重新生成测量值前，请先将检验单重置为未完成。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/wizard/measure_wizard.py:0
+msgid "Reset the inspection before recording new measurements."
+msgstr "录入新的测量值前，请先将检验单重置为未完成。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "No effective incoming inspection scheme matches %s."
+msgstr "没有匹配的生效来料检验方案：%s。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid ""
+"GB/T 2828.1 normal inspection, single sampling: level %(level)s, AQL"
+"%(aql)s, AC %(ac)s, Re %(re)s"
+msgstr "GB/T 2828.1 正常检验一次抽样：检验水平 %(level)s，AQL %(aql)s，AC %(ac)s，Re %(re)s"

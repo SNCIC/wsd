@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_information']//group[@name='group_general']/field[@name='type']" position="after">
                 <field name="material_specification"/>
+                <field name="brand_id"/>
                 <field name="rated_current"/>
             </xpath>
             <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']/field[@name='categ_id']" position="after">
@@ -38,6 +39,7 @@
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="material_specification" optional="show"/>
+                <field name="brand_id" optional="show"/>
                 <field name="abc_class" optional="hide"/>
                 <field name="rated_current" optional="hide"/>
                 <field name="is_eip_material" optional="hide"/>
@@ -67,6 +69,7 @@
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="material_specification" optional="show" readonly="1"/>
+                <field name="brand_id" optional="show" readonly="1"/>
                 <field name="abc_class" optional="hide" readonly="1"/>
                 <field name="rated_current" optional="hide" readonly="1"/>
                 <field name="is_eip_material" optional="hide" readonly="1"/>

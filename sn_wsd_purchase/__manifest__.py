@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Purchase Contract Report',
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.2.0',
     'summary': 'Purchase contract fields and purchase detail tracking',
     'depends': ['purchase', 'purchase_request', 'account', 'stock', 'sn_wsd_mrp', 'sn_wsd_material'],
     'data': [

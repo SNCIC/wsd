@@ -4,6 +4,30 @@ from odoo.exceptions import ValidationError
 from .constants import BOARD_SIDE_SELECTION
 
 
+class SnWsdBrand(models.Model):
+    """Brand master data used on the products and printed on the documents.
+
+    A brand is shared by every company: brands are manufacturer names
+    (supplier side), not local catalogue entries.
+    """
+
+    _name = 'sn.wsd.brand'
+    _description = 'Product Brand'
+    _order = 'sequence, name'
+
+    name = fields.Char(
+        string='Brand Name',
+        required=True,
+    )
+    sequence = fields.Integer(default=10)
+    active = fields.Boolean(default=True)
+
+    _name_uniq = models.Constraint(
+        'unique (name)',
+        'Brand name already exists!',
+    )
+
+
 class ProductCategory(models.Model):
     _inherit = 'product.category'
 
@@ -31,6 +55,12 @@ class ProductTemplate(models.Model):
     material_specification = fields.Char(
         string='Material Specification',
         tracking=True,
+    )
+    brand_id = fields.Many2one(
+        comodel_name='sn.wsd.brand',
+        string='Brand',
+        tracking=True,
+        help='Brand of the material, printed on the purchase contract.',
     )
     abc_class = fields.Selection(
         [
@@ -102,6 +132,12 @@ class ProductProduct(models.Model):
 
     material_specification = fields.Char(
         related='product_tmpl_id.material_specification',
+        store=True,
+        readonly=False,
+    )
+    brand_id = fields.Many2one(
+        related='product_tmpl_id.brand_id',
+        string='Brand',
         store=True,
         readonly=False,
     )
