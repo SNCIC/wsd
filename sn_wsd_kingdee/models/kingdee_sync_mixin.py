@@ -103,6 +103,15 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         """Return the ``Save`` payload (field mapping, nested per entity)."""
         raise NotImplementedError("_kingdee_payload() must be implemented")
 
+    def _kingdee_check_ready(self):
+        """Refuse early when a value the account requires is not configured.
+
+        Optional hook: raise a ``UserError`` with an actionable message instead of
+        letting Kingdee answer with its own. An account may require fields the
+        metadata does not mark as mandatory, so this is where that knowledge goes.
+        """
+        return None
+
     def _kingdee_apply_readback(self, data):
         """Store extra values returned by a read-back (optional hook)."""
         return None
@@ -216,6 +225,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
                 "%s has no Kingdee number and none could be derived from its Odoo "
                 "data, it cannot be identified in Kingdee."
             ) % self.display_name)
+        self._kingdee_check_ready()
         return number, self._kingdee_payload(client)
 
     def action_kingdee_save(self):

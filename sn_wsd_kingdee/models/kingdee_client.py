@@ -34,6 +34,12 @@ DEFAULTS = {
     "material_group": "",             # FMaterialGroup, empty = Kingdee default
     # Customer defaults (BD_Customer)
     "customer_currency_number": "PRE001",  # FTRADINGCURRID, 结算币别 人民币
+    # This account also requires a salesman and a sales department on a customer
+    # although the metadata marks neither as mandatory (verified on 2026-10-13,
+    # see docs/kingdee-接入SOP.md). They stay empty on purpose: they are account
+    # data to be chosen, not guessed.
+    "customer_salesman_number": "",        # FSELLER, 销售员 (BD_Saler)
+    "customer_sales_dept_number": "",      # FSALDEPTID, 销售部门 (BD_Department)
 }
 
 # Kingdee business objects handled by the sync mixin. Each one gets its own
@@ -320,7 +326,10 @@ class SnWsdKingdeeClient(models.AbstractModel):
         if code == "8":
             return _("a required parameter is empty")
         if code == "9":
-            return _("a field name does not exist on this form")
+            # Observed in two situations: an unknown field name, and a number that
+            # does not exist (e.g. deleting a bill whose Save had failed).
+            return _("Kingdee could not resolve the object or the field, check that the "
+                     "number exists and that the field names are right")
         return ""
 
     @classmethod

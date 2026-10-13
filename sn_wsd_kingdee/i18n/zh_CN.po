@@ -745,12 +745,6 @@ msgstr "连接成功：凭据已通过 %(form)s 查询校验（读取 %(count)s 
 #. module: sn_wsd_kingdee
 #. odoo-python
 #: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
-msgid "a field name does not exist on this form"
-msgstr "该表单上不存在此字段名"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
 msgid "a required parameter is empty"
 msgstr "必录参数为空"
 
@@ -944,3 +938,92 @@ msgstr "该记录没有金蝶编码，无法在金蝶中识别。"
 #: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
 msgid "Un-audited in Kingdee."
 msgstr "已在金蝶反审核。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_sales_dept_number
+msgid "Customer Sales Department"
+msgstr "客户销售部门"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_salesman_number
+msgid "Customer Salesman"
+msgstr "客户销售员"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Customer Salesman & Department"
+msgstr "客户销售员与销售部门"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_partner.py:0
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_sales_dept_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_sales_dept_number
+msgid "Kingdee Sales Department"
+msgstr "金蝶销售部门"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_partner.py:0
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_salesman_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_salesman_number
+msgid "Kingdee Salesman"
+msgstr "金蝶销售员"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"Kingdee could not resolve the object or the field, check that the number "
+"exists and that the field names are right"
+msgstr "金蝶无法解析该对象或字段，请检查编码是否存在、字段名是否正确"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_sales_dept_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_sales_dept_number
+msgid ""
+"Kingdee department number (BD_Department) sent as FSALDEPTID. This account "
+"refuses a customer without it. The default from Settings (Kingdee) is used "
+"when empty."
+msgstr ""
+"发送为 FSALDEPTID 的金蝶部门编号（BD_Department）。本账套不接受缺少该值的客户；留空时取“设置 → Kingdee”的默认值。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_sales_dept_number
+msgid ""
+"Kingdee department number (BD_Department) this account requires on a "
+"customer (FSALDEPTID). Each partner can override it."
+msgstr "本账套要求的客户销售部门编号（BD_Department，对应 FSALDEPTID）。每个客户可覆盖。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_salesman_number
+msgid ""
+"Kingdee salesman number (BD_Saler) this account requires on a customer "
+"(FSELLER). Each partner can override it."
+msgstr "本账套要求的客户销售员编号（BD_Saler，对应 FSELLER）。每个客户可覆盖。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_salesman_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_salesman_number
+msgid ""
+"Kingdee salesman number (BD_Saler, e.g. 001) sent as FSELLER. This account "
+"refuses a customer without it. The default from Settings (Kingdee) is used "
+"when empty."
+msgstr ""
+"发送为 FSELLER 的金蝶销售员编号（BD_Saler，如 001）。本账套不接受缺少该值的客户；留空时取“设置 → Kingdee”的默认值。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/res_partner.py:0
+msgid ""
+"Set these values in Settings (Kingdee) or on the partner before "
+"synchronizing: %s. This account refuses a customer without them."
+msgstr "请先在“设置 → Kingdee”或该客户上配置：%s。本账套不接受缺少这些值的客户。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"This account refuses a customer without a salesman (FSELLER) and a sales "
+"department (FSALDEPTID); they are not marked as mandatory in the interface "
+"metadata. Each partner can override these values."
+msgstr "本账套要求客户必须有销售员（FSELLER）与销售部门（FSALDEPTID），而接口元数据未标注为必录。每个客户可覆盖这两个值。"

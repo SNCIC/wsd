@@ -125,6 +125,20 @@
                                      help="Kingdee currency sent as the settlement currency of a customer, e.g. PRE001 (人民币).">
                                 <field name="kingdee_customer_currency_number" placeholder="PRE001"/>
                             </setting>
+                            <setting id="sn_wsd_kingdee_customer_sales_setting"
+                                     string="Customer Salesman &amp; Department"
+                                     help="This account refuses a customer without a salesman (FSELLER) and a sales department (FSALDEPTID); they are not marked as mandatory in the interface metadata. Each partner can override these values.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="kingdee_customer_salesman_number" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_customer_salesman_number" placeholder="BD_Saler number"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_customer_sales_dept_number" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_customer_sales_dept_number" placeholder="BD_Department number"/>
+                                    </div>
+                                </div>
+                            </setting>
                             <setting id="sn_wsd_kingdee_cron_setting"
                                      string="Scheduled Material Refresh"
                                      help="Enable the scheduled action before activating 'Kingdee: refresh linked materials' in the scheduled actions.">

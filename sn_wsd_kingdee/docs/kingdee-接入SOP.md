@@ -87,6 +87,7 @@ kingdee_last_sync_at / kingdee_sync_message / kingdee_log_ids` 状态字段、
 | 8 | po 条目缺 `#. module:` 注释会让 `-u` 直接 255 崩 | 译文用 `trans_export()` 生成/合并，勿手改结构 |
 | 9 | 多组织：单据落错组织 | 写入必带 `FCreateOrgId`/`FUseOrgId` |
 | 10 | 密钥易外泄（明文入库、日志、终端） | 不进日志；终端输出只报长度；泄露后轮换 |
+| 11 | **元数据必录 ≠ 账套必录**：`BD_Customer` 只标 3 项必录，本账套还要求"销售员/销售部门" | 第 6 步一定用真实 `Save` 试推；把账套的额外要求写进 `_kingdee_check_ready()`，让失败信息可操作 |
 
 ## 5. 重构时的 payload 回归（工具化做法）
 
@@ -115,7 +116,7 @@ PY
 | Odoo 模型 | formId | 必录 | 推送字段 | 默认值来源 |
 | :--- | :--- | :---: | :--- | :--- |
 | `product.template` | `BD_MATERIAL` | 36 | 最小集：组织 ×2、`FNumber`/`FName`、7 个计量单位、属性/类别/分组 + 20 项账套固定值 | `kingdee_client.DEFAULTS` + 设置页 + 物料级覆盖 |
-| `res.partner` | `BD_Customer` | 3 | 组织 ×2、`FNumber`/`FName`、`FTRADINGCURRID`（结算币别） | `DEFAULTS.customer_currency_number` + 设置页 + 伙伴级覆盖 |
+| `res.partner` | `BD_Customer` | 3 + 2 账套强制 | 组织 ×2、`FNumber`/`FName`、`FTRADINGCURRID`（结算币别）、`FSELLER`（销售员）、`FSALDEPTID`（销售部门） | `DEFAULTS.customer_*` + 设置页 + 伙伴级覆盖；销售员/销售部门须先配置，`_kingdee_check_ready()` 会提前报错 |
 
 > 待接（按建议顺序）：`STK_InStock`（采购入库，对接现有三步入库/IQC）→ `SAL_SaleOrder` /
 > `PUR_PurchaseOrder` → `PRD_*` → 报表（`GetSysReportData` 需先在金蝶保存查询方案）。

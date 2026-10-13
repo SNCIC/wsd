@@ -108,6 +108,19 @@ class ResConfigSettings(models.TransientModel):
              "override it. Defaults to PRE001 when empty.",
     )
 
+    kingdee_customer_salesman_number = fields.Char(
+        string="Customer Salesman",
+        config_parameter="sn_wsd_kingdee.customer_salesman_number",
+        help="Kingdee salesman number (BD_Saler) this account requires on a customer "
+             "(FSELLER). Each partner can override it.",
+    )
+    kingdee_customer_sales_dept_number = fields.Char(
+        string="Customer Sales Department",
+        config_parameter="sn_wsd_kingdee.customer_sales_dept_number",
+        help="Kingdee department number (BD_Department) this account requires on a "
+             "customer (FSALDEPTID). Each partner can override it.",
+    )
+
     def _kingdee_settings_config(self):
         """Return the credentials currently typed in the settings form."""
         self.ensure_one()
