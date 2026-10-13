@@ -191,7 +191,7 @@ systemctl start odoo19
 
 ### 3）从金蝶导入物料
 
-进入 `Kingdee → Import Materials`（管理员可见），在向导里确认选项后点 **Import**：
+进入 `Kingdee → Import Materials` 菜单（管理员可见），在向导里确认选项后点 **Import** 按钮。
 
 | 选项 | 说明 |
 | :--- | :--- |
@@ -208,8 +208,8 @@ systemctl start odoo19
 | 情形 | 结果 |
 | :--- | :--- |
 | 已有产品的 `Kingdee Number` == 物料编码 | **更新**，不新建 |
-| 某产品 `Kingdee Number` 为空、而**内部参考** == 物料编码 | **关联**该产品并补写 `Kingdee Number`，不新建 |
-| 内部参考 == 物料编码，但该产品已对接**另一个**金蝶编码 | **拒绝**并报错，不新建（计入「失败」） |
+| 某产品 `Kingdee Number` 为空、但其 **内部参考** 等于物料编码 | **关联** 该产品并补写 `Kingdee Number`，不新建 |
+| 内部参考等于物料编码，但该产品已对接 **另一个** 金蝶编码 | **拒绝** 并报错，不新建（计入「失败」） |
 | 以上都不中 | **新建** |
 | 金蝶已禁用（`FForbidStatus = B`） | 默认**跳过**（不会归档 Odoo 产品） |
 | `Kingdee Number` 相同的两条 | 由数据库 `UNIQUE(kingdee_number)` 兜底，插不进去 |
@@ -245,8 +245,8 @@ systemctl start odoo19
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
 - SDK 实例按凭据缓存复用会话（含 Cookie），非线程安全，多线程下共用同一实例存在竞态；如需更高并发请自行在客户端层加锁
-- 金蝶没有提供 Odoo 侧的回调入口，**所有同步都由 Odoo 发起**：出站是逐条 `Save`（表单按钮或列表动作），
-  入站是 `Refresh from Kingdee`（单条回读）与 `Kingdee → Import Materials`（批量拉取），不存在金蝶推送 Odoo 的通道
+- 金蝶没有提供 Odoo 侧的回调入口：**所有同步都由 Odoo 发起**，出站是逐条 **Save** （表单按钮或列表动作），
+  入站是 **Refresh from Kingdee** 单条回读与 **Kingdee → Import Materials** 批量拉取，不存在金蝶推送 Odoo 的通道
 - **入站只写「出站读得到的字段」**：导入与 `Refresh from Kingdee` 只写 `Kingdee Number` / `Kingdee Name` /
   物料属性 / 物料类别 / 物料分组 / 计量单位（外加同步状态），也就是 `_kingdee_payload()` 取值的那几项——
   这样「从金蝶导入 → 再推回金蝶」逐字段不变。物料名称只在**新建**时写入，已有产品的改名不会被导入覆盖，
