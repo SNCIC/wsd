@@ -684,6 +684,19 @@ msgstr ""
 "%(hint)s"
 
 #. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
+msgid ""
+"The Kingdee WebAPI SDK is not installed for the interpreter running Odoo "
+"(%(error)s).\n"
+"Install the wheel shipped with this module and restart Odoo:\n"
+"%(hint)s"
+msgstr ""
+"运行 Odoo 的解释器未安装金蝶 WebAPI SDK（%(error)s）。\n"
+"请安装本模块随附的 wheel 后重启 Odoo：\n"
+"%(hint)s"
+
+#. module: sn_wsd_kingdee
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_product_template_kingdee_number_unique
 msgid "The Kingdee number must be unique across products."
 msgstr "金蝶编码在产品之间必须唯一。"

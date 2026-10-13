@@ -2,6 +2,8 @@
 
 import json
 import logging
+import os
+import sys
 import threading
 import time
 
@@ -12,14 +14,39 @@ _logger = logging.getLogger(__name__)
 
 PARAM_PREFIX = "sn_wsd_kingdee"
 
-# The Kingdee WebAPI SDK ships as a local wheel (it is not published on PyPI):
-#   SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl
+# The Kingdee WebAPI SDK ships as a local wheel inside this module (it is not
+# published on PyPI):
+#   <this module>/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl
 # It is imported lazily so this module stays installable and configurable before
-# the wheel is deployed on the server.
-SDK_INSTALL_HINT = (
-    "pip install SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/"
+# the wheel is deployed on the server. Note the wheel's distribution name
+# (kingdee.cdp.webapi.sdk) differs from the package it installs
+# (k3cloud_webapi_sdk), so `pip show` is not a valid check.
+SDK_WHEEL_RELATIVE_PATH = (
+    "SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/"
     "kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
 )
+MODULE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def sdk_wheel_path():
+    """Absolute path of the wheel shipped with this module."""
+    return os.path.normpath(os.path.join(MODULE_ROOT, SDK_WHEEL_RELATIVE_PATH))
+
+
+def sdk_install_hint():
+    """Copy-pasteable install command for the interpreter that runs Odoo.
+
+    Installing into another environment is the usual reason for the missing
+    SDK, so the hint names ``sys.executable`` and the wheel of this module
+    instead of a relative path that only makes sense on a developer machine.
+    """
+    executable = '"%s"' % sys.executable
+    wheel = sdk_wheel_path()
+    if os.path.isfile(wheel):
+        return '%s -m pip install "%s"' % (executable, wheel)
+    return '%s -m pip install <path to %s>  (the wheel is normally shipped in %s)' % (
+        executable, os.path.basename(SDK_WHEEL_RELATIVE_PATH), MODULE_ROOT,
+    )
 
 REQUIRED_CONFIG = (
     ("server_url", "Server URL"),
@@ -110,9 +137,11 @@ class SnWsdKingdeeClient(models.AbstractModel):
         except ImportError as err:
             raise UserError(
                 _(
-                    "The Kingdee WebAPI SDK is not installed on this server (%(error)s).\n"
-                    "Install the provided wheel and restart Odoo:\n%(hint)s"
-                ) % {"error": err, "hint": SDK_INSTALL_HINT}
+                    "The Kingdee WebAPI SDK is not installed for the interpreter "
+                    "running Odoo (%(error)s).\n"
+                    "Install the wheel shipped with this module and restart Odoo:\n"
+                    "%(hint)s"
+                ) % {"error": err, "hint": sdk_install_hint()}
             ) from err
 
         config = self._check_config(self._get_config(override=override))
