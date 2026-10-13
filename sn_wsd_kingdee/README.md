@@ -15,18 +15,87 @@
 
 - Odoo：19.0
 - Python：`requests`（Odoo 必装）
-- 金蝶 WebAPI SDK：本地 wheel，**不在 PyPI 上**，需要单独安装：
-  `SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl`
+- 金蝶 WebAPI SDK：本地 wheel，**不在 PyPI 上**，随本模块一起分发：
+  `sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl`
+
+> ⚠️ **发行名 ≠ 导入名**：wheel 的文件名/发行名是 `kingdee.cdp.webapi.sdk`，但它装出来的可导入包是 **`k3cloud_webapi_sdk`**（wheel 内的 `top_level.txt` 即此）。
+> 所以 `pip show kingdee.cdp.webapi.sdk` 有输出 **不等于** 代码可用；真正的判据是 `import k3cloud_webapi_sdk`。代码里的导入是 `from k3cloud_webapi_sdk.main import K3CloudApiSdk`（与官方 demo 一致），**不要**照着 wheel 文件名去改导入。
 
 SDK 采用懒加载（`models/kingdee_client.py`），因此**未安装 wheel 时模块也能正常安装和配置**，只有在真正调用接口时才会报出带安装命令的错误提示。
 
-安装命令（用项目虚拟环境）：
-
-```
-.venv\Scripts\python.exe -m pip install "SDK_Python3.0_V8.2.0\python_sdk_v8.2.0\kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
-```
-
 `kingdee.cdp.webapi.sdk` 为 MIT 许可，声明依赖 `requests`、`urllib3`。
+
+### SDK 目录里哪些要部署
+
+| 内容 | 部署需要吗 | 说明 |
+| :--- | :--- | :--- |
+| `python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl` | **需要** | 运行时依赖的安装来源，随仓库一起带上即可保证任何新机器都能确定性安装 |
+| `python_sdk_demo/` | 不需要 | 官方示例（含 `.idea`、`.pytest_cache`），仅供开发查接口用法 |
+| `Python3.0SDK使用说明.docx` | 不需要 | 官方文档 |
+| `python_sdk_demo/conf.ini` | **禁止部署** | 内含体验环境的真实 `AppID` / `AppSecret` / `AcctID`；已在仓库根 `.gitignore` 忽略（`**/SDK_Python3.0_V8.2.0/python_sdk_demo/conf.ini`），`git clone/pull` 不会带出 |
+
+> 运行时真正被 import 的是**装在 Odoo 解释器里的包**，而不是这个目录本身；目录只是“安装来源”。
+
+## 部署（正式环境）
+
+Odoo **不会**自动安装本地 wheel（`external_dependencies` 只能从 PyPI 安装），必须手动装进**运行 Odoo 的那个解释器**。顺序：同步代码 → 停服务 → 装 SDK → 升级模块 → 起服务 → 验收。
+
+### 1. 同步代码
+
+把 `myaddons` 同步到服务器的 addons 目录（例：`/opt/odoo/odoo19/myaddons`）。若服务器是 git 仓库：
+
+```
+cd /opt/odoo/odoo19/myaddons
+git fetch && git merge --ff-only origin/main
+```
+
+### 2. 安装 SDK（关键：用 Odoo 自己的解释器）
+
+先查出 Odoo 实际使用的解释器，**不要**用裸 `python3` / `pip`（极易装到别的环境）：
+
+```
+ps -eo pid,user,args | grep -i odoo | head      # 例：/opt/odoo/venv/bin/python3 …/odoo-bin -c /etc/odoo19.conf
+systemctl cat odoo19 | grep -i exec             # 容器部署则看 docker inspect <容器> | grep -i cmd
+```
+
+用同一个解释器安装模块内的 wheel，并立即自检：
+
+```
+PY=/opt/odoo/venv/bin/python3                   # ← 换成上一步查到的解释器
+$PY -m pip install /opt/odoo/odoo19/myaddons/sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl
+$PY -c "import sys, k3cloud_webapi_sdk; print('SDK_OK', k3cloud_webapi_sdk.__file__, sys.executable)"
+```
+
+Windows 开发机：
+
+```
+.venv\Scripts\python.exe -m pip install "myaddons\sn_wsd_kingdee\SDK_Python3.0_V8.2.0\python_sdk_v8.2.0\kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
+```
+
+### 3. 升级模块并重启
+
+```
+systemctl stop odoo19
+su - odoo -s /bin/bash -c "/opt/odoo/venv/bin/python3 /opt/odoo/odoo19/odoo-bin -c /etc/odoo19.conf -d <数据库名> -u sn_wsd_kingdee --stop-after-init --no-http"
+systemctl start odoo19
+```
+
+（服务用户以 systemd 单元里的 `User=` 为准；`-d` 取实际库名，本例 `odoo19`。）
+
+### 4. 验收
+
+1. 设置 → Kingdee：填好 `Server URL / Account ID / User Name / App ID / App Secret` → 点 **Test Connection**，成功会提示“连接成功，返回 N 个数据中心”
+2. 取一个物料点 **Save to Kingdee**，到 `Kingdee → Sync Logs` 看请求/响应报文
+3. 若报“组织”相关错误，再补 `Organization Number`（该账套的组织编码）与 `Create Organization`
+
+### 5. 排查「运行 Odoo 的解释器未安装金蝶 WebAPI SDK（No module named 'k3cloud_webapi_sdk'）」
+
+该提示只说明**运行 Odoo 的解释器 import 不到这个包**。提示末尾会直接给出**可复制的安装命令**（由 `sys.executable` 与模块内 wheel 的绝对路径拼成），先照抄执行；若仍失败，再按序核查：
+
+1. 用 `ps -eo pid,user,args | grep -i odoo` 找到真正的解释器（如 `/opt/odoo/venv/bin/python3`）
+2. 用它验证：`<该解释器> -c "import k3cloud_webapi_sdk"`，再用 `-m pip show kingdee.cdp.webapi.sdk` 对照
+3. 常见原因：装进了别的 venv / 系统 python；`pip install --user` 装到了另一个用户（Odoo 以 `odoo` 运行）；装在容器外而 Odoo 在容器内；Debian/Ubuntu 24.04 的 `externally-managed-environment` 拦截（实际未装成功）；装完没重启服务
+4. 用同一解释器重装后 `systemctl restart odoo19`（多 worker 时确认全部重启）
 
 ## 金蝶侧准备
 
