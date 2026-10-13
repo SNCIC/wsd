@@ -9,6 +9,9 @@
   `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
 - 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
 - 物料主数据单向/双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看
+- 客户主数据单向/双向同步：`BD_Customer` 的保存、提交、审核、反审核、查看、删除
+- 新单据只需实现字段映射与 payload（`_kingdee_number()` / `_kingdee_payload()`），状态、动作、
+  逐条错误隔离、日志与通知由 `sn.wsd.kingdee.sync.mixin` 提供，工序见 `docs/kingdee-接入SOP.md`
 - 每次调用都落库到“金蝶同步日志”，含请求/响应报文、耗时、错误信息；**失败的日志用独立事务写入，不会因为后续报错回滚而丢失**
 - 错误按金蝶 `MsgCode` 给出可操作提示（`1` 凭据错且重试无效、`4` 表单不存在、`8` 参数为空、`9` 字段名不存在）
 - 定时任务刷新已对接物料（默认关闭）
@@ -29,7 +32,7 @@
 
 > **默认值只有一个来源**：连接与物料的默认值（`lcid`、`org_num`、超时、单位、物料属性、
 > 物料类别、物料分组）集中在 `models/kingdee_client.py` 的 `DEFAULTS`；设置页只存与默认值不同的部分，
-> 调用方一律通过 `get_unit_number()` / `get_material_setting()` 读取，不要在别处再抄一份。
+> 调用方一律通过 `get_unit_number()` / `get_setting()` 读取，不要在别处再抄一份。
 
 ## 依赖
 
@@ -142,6 +145,7 @@ systemctl start odoo19
 | Create Organization | 物料创建组织（`FCreateOrgId`），**必填** |
 | Material Unit | 物料计量单位：金蝶 `BD_UNIT` 编码（如 `001`=只、`GE`=个），写入物料的基准/库存/采购/销售等 7 个单位字段；留空按 `001` |
 | Use Organization | 物料使用组织（`FUseOrgId`），留空则取创建组织 |
+| Customer Currency | 客户结算币别（`FTRADINGCURRID`，如 `PRE001`），留空按 `PRE001` |
 | Scheduled Material Refresh | 允许定时任务刷新已对接物料 |
 
 配置完成后点 **Test Connection**，成功会提示“凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”。
@@ -162,7 +166,17 @@ systemctl start odoo19
 
 批量操作：在“产品”列表勾选多行 → `动作` 菜单 → `Kingdee: Save Materials / Audit Materials / Refresh Materials`。
 
-### 2）排查问题
+### 2）把客户推送到金蝶
+
+打开某个客户（`销售 → 客户`），切到 **Kingdee** 页签：
+
+1. `Kingdee Number` 留空则取客户的 `参考`（`ref`），两者都空时报错提示
+2. 点 **Save to Kingdee** → `Saved`；需要审批时依次 **Submit** → **Audit**
+3. **Refresh from Kingdee** 按客户编码回读；**Delete in Kingdee** 删除金蝶侧记录并清空对接状态
+
+批量操作：在客户列表勾选多行 → `动作` 菜单 → `Kingdee: Save / Audit / Refresh Customers`。
+
+### 3）排查问题
 
 进入 `Kingdee → Sync Logs`：
 
@@ -170,7 +184,7 @@ systemctl start odoo19
 - 打开某条日志可看到完整的请求/响应报文与错误信息
 - 通过“关联记录”列或 `Open Related Record` 按钮跳回对应产品
 
-### 3）启用定时刷新（可选）
+### 4）启用定时刷新（可选）
 
 1. 在 `设置 → Kingdee` 勾选 `Scheduled Material Refresh` 并保存
 2. 进入 `设置 → 技术 → 计划任务`，找到 `Kingdee: refresh linked materials`，把“有效”打开
@@ -178,7 +192,7 @@ systemctl start odoo19
 
 ## 已知边界
 
-- 目前实现的是物料主数据（`BD_MATERIAL`）。其它单据（销售订单、采购订单、生产订单等）请复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
+- 已实现物料（`BD_MATERIAL`）与客户（`BD_Customer`）。其它单据（销售订单、采购订单、生产订单等）按 `docs/kingdee-接入SOP.md` 走一遍，再复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
 - **推送字段为最小集** （`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；元数据里 `BD_MATERIAL` 另有 36 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FMaterialGroup` 物料分组、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书

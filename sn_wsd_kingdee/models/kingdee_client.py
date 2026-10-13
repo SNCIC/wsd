@@ -32,7 +32,13 @@ DEFAULTS = {
     "erp_cls_id": "2",                # FErpClsID, 2 = 自制（账套现有物料实测）
     "category_number": "CHLB05_SYS",  # FCategoryID, 物料类别 产成品
     "material_group": "",             # FMaterialGroup, empty = Kingdee default
+    # Customer defaults (BD_Customer)
+    "customer_currency_number": "PRE001",  # FTRADINGCURRID, 结算币别 人民币
 }
+
+# Kingdee business objects handled by the sync mixin. Each one gets its own
+# mapping; see docs/kingdee-接入SOP.md for the procedure that produces it.
+CUSTOMER_FORM_ID = "BD_Customer"
 
 # Kingdee business object used for materials (basic data). It doubles as the
 # cheapest object to prove the credentials with: ``GetDataCenters`` is served
@@ -136,10 +142,10 @@ class SnWsdKingdeeClient(models.AbstractModel):
 
     def get_unit_number(self):
         """Return the Kingdee unit number applied to a material's unit fields."""
-        return self.get_material_setting("unit_number")
+        return self.get_setting("unit_number")
 
-    def get_material_setting(self, key, default=None):
-        """Return a material default (unit_number, erp_cls_id, category_number, ...).
+    def get_setting(self, key, default=None):
+        """Return a default of the integration (unit_number, erp_cls_id, ...).
 
         The value configured in Settings wins, ``DEFAULTS`` is the fallback and an
         explicit ``default`` overrides both, so a caller never needs its own copy

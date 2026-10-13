@@ -100,6 +100,14 @@ class ResConfigSettings(models.TransientModel):
              "each product. Defaults to 001 when empty.",
     )
 
+    kingdee_customer_currency_number = fields.Char(
+        string="Customer Currency",
+        config_parameter="sn_wsd_kingdee.customer_currency_number",
+        help="Default Kingdee currency number (BD_Currency, e.g. PRE001) sent as the "
+             "settlement currency (FTRADINGCURRID) of a customer. Each partner can "
+             "override it. Defaults to PRE001 when empty.",
+    )
+
     def _kingdee_settings_config(self):
         """Return the credentials currently typed in the settings form."""
         self.ensure_one()

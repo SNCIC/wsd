@@ -30,5 +30,35 @@
             <field name="code">action = records.action_kingdee_pull()</field>
             <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
         </record>
+
+        <record id="action_server_kingdee_customer_save" model="ir.actions.server">
+            <field name="name">Kingdee: Save Customers</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_save()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
+
+        <record id="action_server_kingdee_customer_audit" model="ir.actions.server">
+            <field name="name">Kingdee: Audit Customers</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_audit()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
+
+        <record id="action_server_kingdee_customer_pull" model="ir.actions.server">
+            <field name="name">Kingdee: Refresh Customers</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_kingdee_pull()</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        </record>
     </data>
 </odoo>

@@ -113,14 +113,6 @@ msgid "Configuration"
 msgstr "配置"
 
 #. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid ""
-"Configure the default Kingdee organization in Settings (Kingdee > Material "
-"Defaults) before synchronizing materials."
-msgstr "同步物料前，请先在“设置 → 金蝶 → 物料默认值”中配置默认组织。"
-
-#. module: sn_wsd_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
 msgid "Connection Test"
 msgstr "连接测试"
@@ -409,55 +401,6 @@ msgid "Material"
 msgstr "物料"
 
 #. module: sn_wsd_kingdee
-#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
-msgid "Material Defaults"
-msgstr "物料默认值"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "Material audited in Kingdee."
-msgstr "已在金蝶审核物料。"
-
-#. module: sn_wsd_kingdee
-#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_name
-#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_name
-msgid "Material name (FName) as returned by Kingdee."
-msgstr "金蝶返回的物料名称（FName）。"
-
-#. module: sn_wsd_kingdee
-#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_number
-#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_number
-msgid ""
-"Material number (FNumber) in Kingdee. The internal reference is used when "
-"empty."
-msgstr "金蝶物料编码（FNumber）。留空时使用产品内部参考。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "Material refreshed from Kingdee."
-msgstr "已从金蝶刷新物料。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "Material saved to Kingdee."
-msgstr "已保存物料到金蝶。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "Material submitted in Kingdee."
-msgstr "已在金蝶提交物料。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "Material un-audited in Kingdee."
-msgstr "已在金蝶反审核物料。"
-
-#. module: sn_wsd_kingdee
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__not_synced
 msgid "Not Synchronized"
 msgstr "未同步"
@@ -520,14 +463,6 @@ msgstr "产品保存为金蝶物料时使用的组织编码。"
 #: model:ir.model,name:sn_wsd_kingdee.model_product_template
 msgid "Product"
 msgstr "产品"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid ""
-"Product %s has neither an internal reference nor a Kingdee number, it cannot"
-" be identified in Kingdee."
-msgstr "产品 %s 既没有内部参考也没有金蝶编码，无法在金蝶中标识。"
 
 #. module: sn_wsd_kingdee
 #. odoo-python
@@ -653,17 +588,6 @@ msgstr ""
 "运行 Odoo 的解释器未安装金蝶 WebAPI SDK（%(error)s）。\n"
 "请安装本模块随附的 wheel 后重启 Odoo：\n"
 "%(hint)s"
-
-#. module: sn_wsd_kingdee
-#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_product_template_kingdee_number_unique
-msgid "The Kingdee number must be unique across products."
-msgstr "金蝶编码在产品之间必须唯一。"
-
-#. module: sn_wsd_kingdee
-#. odoo-python
-#: code:addons/sn_wsd_kingdee/models/product_template.py:0
-msgid "The product has no material number to identify it in Kingdee."
-msgstr "该产品没有可用于金蝶标识的物料编码。"
 
 #. module: sn_wsd_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
@@ -843,3 +767,180 @@ msgstr "凭据被拒绝，请检查 App ID、App Secret 与用户名（重试无
 #: code:addons/sn_wsd_kingdee/models/kingdee_client.py:0
 msgid "this form id does not exist in the account"
 msgstr "该表单标识在当前账套中不存在"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid ""
+"%s has no Kingdee number and none could be derived from its Odoo data, it "
+"cannot be identified in Kingdee."
+msgstr "%s 没有金蝶编码，也无法从 Odoo 数据推导，无法在金蝶中识别。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Audited in Kingdee."
+msgstr "已在金蝶审核。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid ""
+"Configure the default Kingdee organization in Settings (Kingdee) before "
+"synchronizing records."
+msgstr "请先在“设置 → Kingdee”里配置默认组织，再进行同步。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_form_kingdee
+msgid "Customer"
+msgstr "客户"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_currency_number
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Customer Currency"
+msgstr "客户结算币别"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_customer_currency_number
+msgid ""
+"Default Kingdee currency number (BD_Currency, e.g. PRE001) sent as the "
+"settlement currency (FTRADINGCURRID) of a customer. Each partner can "
+"override it. Defaults to PRE001 when empty."
+msgstr ""
+"客户结算币别（FTRADINGCURRID）的默认金蝶币别编码（BD_Currency，如 PRE001）。每个客户可覆盖，留空按 PRE001。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_form_kingdee
+msgid "Delete in Kingdee"
+msgstr "在金蝶中删除"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Deleted in Kingdee."
+msgstr "已在金蝶删除。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_kingdee_search
+msgid "Kingdee Errors"
+msgstr "金蝶同步失败"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_currency_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_currency_number
+msgid "Kingdee Settle Currency"
+msgstr "金蝶结算币别"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_sn_wsd_kingdee_sync_mixin
+msgid "Kingdee Synchronized Record"
+msgstr "金蝶同步记录"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_currency_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_currency_number
+msgid ""
+"Kingdee currency number (BD_Currency, e.g. PRE001) sent as the settlement "
+"currency (FTRADINGCURRID) of the customer. The default from Settings "
+"(Kingdee) is used when empty."
+msgstr ""
+"作为客户结算币别（FTRADINGCURRID）的金蝶币别编码（BD_Currency，如 PRE001）。留空时取“设置 → "
+"Kingdee”的默认值。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid ""
+"Kingdee currency sent as the settlement currency of a customer, e.g. PRE001 "
+"(人民币)."
+msgstr "作为客户结算币别的金蝶币别编码，如 PRE001（人民币）。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_customer_audit
+msgid "Kingdee: Audit Customers"
+msgstr "金蝶：审核客户"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_customer_pull
+msgid "Kingdee: Refresh Customers"
+msgstr "金蝶：刷新客户"
+
+#. module: sn_wsd_kingdee
+#: model:ir.actions.server,name:sn_wsd_kingdee.action_server_kingdee_customer_save
+msgid "Kingdee: Save Customers"
+msgstr "金蝶：推送客户"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_kingdee_search
+msgid "Linked to Kingdee"
+msgstr "已对接金蝶"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_name
+msgid "Name (FName) as returned by Kingdee."
+msgstr "金蝶返回的名称（FName）。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_number
+msgid ""
+"Number (FNumber) of this record in Kingdee. While it is empty the model "
+"derives one from the Odoo data: the internal reference for a product, the "
+"reference for a partner."
+msgstr "该记录在金蝶的编码（FNumber）。留空时由模型从 Odoo 数据推导：产品取内部参考，客户取参考。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Refreshed from Kingdee."
+msgstr "已从金蝶刷新。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Saved to Kingdee."
+msgstr "已保存到金蝶。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Submitted in Kingdee."
+msgstr "已在金蝶提交。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+msgid "Synchronization Defaults"
+msgstr "同步默认值"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_product_template_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_res_partner_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_sn_wsd_kingdee_sync_mixin_kingdee_number_unique
+msgid "The Kingdee number must be unique."
+msgstr "金蝶编码必须唯一。"
+
+#. module: sn_wsd_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_form_kingdee
+msgid "The customer is deleted in Kingdee. Continue?"
+msgstr "该客户将在金蝶中被删除，是否继续？"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "The record has no Kingdee number to identify it in Kingdee."
+msgstr "该记录没有金蝶编码，无法在金蝶中识别。"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
+msgid "Un-audited in Kingdee."
+msgstr "已在金蝶反审核。"
