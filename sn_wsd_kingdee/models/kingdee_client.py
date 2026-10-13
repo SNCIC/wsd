@@ -14,6 +14,12 @@ _logger = logging.getLogger(__name__)
 
 PARAM_PREFIX = "sn_wsd_kingdee"
 
+# Kingdee unit number applied to the unit fields of a material (base, store,
+# purchase, purchase price, sale, sale price and minimum issue unit) when no
+# other value is configured. It is the unit's number in Kingdee (BD_UNIT), for
+# instance "001" for 只 or "GE" for 个.
+DEFAULT_UNIT_NUMBER = "001"
+
 # The Kingdee WebAPI SDK ships as a local wheel inside this module (it is not
 # published on PyPI):
 #   <this module>/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl
@@ -102,6 +108,11 @@ class SnWsdKingdeeClient(models.AbstractModel):
         if kind == "use" and not value:
             value = (self._get_param("create_org_number") or "").strip()
         return value
+
+    def get_unit_number(self):
+        """Return the Kingdee unit number applied to a material's unit fields."""
+        value = (self._get_param("unit_number") or "").strip()
+        return value or DEFAULT_UNIT_NUMBER
 
     def _get_config(self, override=None):
         config = {

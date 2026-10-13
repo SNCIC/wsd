@@ -745,3 +745,31 @@ msgstr "WebAPI 地址"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
 msgid "https://your-server/k3cloud/"
 msgstr ""
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_unit_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_unit_number
+msgid "Kingdee Unit"
+msgstr "金蝶计量单位"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_unit_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_unit_number
+msgid ""
+"Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to this material's "
+"base, store, purchase and sale unit fields. The unit configured in "
+"Settings (Kingdee > Material Defaults) is used when empty."
+msgstr "该物料写入金蝶的计量单位编码（BD_UNIT，如 001 或 GE），对应基准/库存/采购/销售等计量单位字段；留空时取 设置 → Kingdee → Material Defaults 中配置的单位。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_unit_number
+msgid "Material Unit"
+msgstr "物料计量单位"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_unit_number
+msgid ""
+"Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to the base, store, "
+"purchase and sale unit fields of a material. It can be overridden on each "
+"product. Defaults to 001 when empty."
+msgstr "写入物料基准/库存/采购/销售等计量单位字段的金蝶单位编码（BD_UNIT，如 001 或 GE）；可在每个物料上单独覆盖；留空时按 001 处理。"

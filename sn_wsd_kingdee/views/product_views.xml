@@ -14,6 +14,8 @@
                                        placeholder="Defaults to the internal reference"/>
                                 <field name="kingdee_name"/>
                                 <field name="kingdee_material_group"/>
+                                <field name="kingdee_unit_number"
+                                       placeholder="Defaults to the unit from Settings"/>
                             </group>
                             <group string="Synchronization">
                                 <field name="kingdee_sync_state"/>

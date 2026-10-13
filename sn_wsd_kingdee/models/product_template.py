@@ -31,6 +31,12 @@ class ProductTemplate(models.Model):
         string="Kingdee Material Group", copy=False,
         help="Optional material group number (FMaterialGroup) applied when saving to Kingdee.",
     )
+    kingdee_unit_number = fields.Char(
+        string="Kingdee Unit", copy=False,
+        help="Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to this material's "
+             "base, store, purchase and sale unit fields. The unit configured in "
+             "Settings (Kingdee > Material Defaults) is used when empty.",
+    )
     kingdee_master_id = fields.Char(string="Kingdee Master ID", copy=False, readonly=True)
     kingdee_sync_state = fields.Selection(
         selection=[
@@ -87,11 +93,22 @@ class ProductTemplate(models.Model):
                 "Product %s has neither an internal reference nor a Kingdee number, "
                 "it cannot be identified in Kingdee."
             ) % self.display_name)
+        # Kingdee requires the unit fields on a material: they are what links it
+        # to BD_UNIT. The same unit is applied to the base, store, purchase and
+        # sale fields unless the product overrides it.
+        unit = (self.kingdee_unit_number or "").strip() or client.get_unit_number()
         model = {
             "FCreateOrgId": {"FNumber": create_org},
             "FUserOrgId": {"FNumber": client.get_default_org("use")},
             "FNumber": number,
             "FName": (self.name or "").strip() or number,
+            "FBaseUnitId": {"FNumber": unit},
+            "FStoreUnitID": {"FNumber": unit},
+            "FPurchaseUnitID": {"FNumber": unit},
+            "FPurchasePriceUnitId": {"FNumber": unit},
+            "FSaleUnitId": {"FNumber": unit},
+            "FSalePriceUnitId": {"FNumber": unit},
+            "FMinIssueUnitId": {"FNumber": unit},
         }
         if self.kingdee_material_group:
             model["FMaterialGroup"] = {"FNumber": self.kingdee_material_group}

@@ -97,6 +97,11 @@
                                     </div>
                                 </div>
                             </setting>
+                            <setting id="sn_wsd_kingdee_material_unit_setting"
+                                     string="Material Unit"
+                                     help="Kingdee unit number applied to the unit fields of a material, e.g. 001 (只) or GE (个).">
+                                <field name="kingdee_unit_number" placeholder="001"/>
+                            </setting>
                             <setting id="sn_wsd_kingdee_cron_setting"
                                      string="Scheduled Material Refresh"
                                      help="Enable the scheduled action before activating 'Kingdee: refresh linked materials' in the scheduled actions.">

@@ -71,6 +71,13 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="sn_wsd_kingdee.use_org_number",
         help="Organization number (FUserOrgId) of the material. Defaults to the create organization.",
     )
+    kingdee_unit_number = fields.Char(
+        string="Material Unit",
+        config_parameter="sn_wsd_kingdee.unit_number",
+        help="Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to the base, store, "
+             "purchase and sale unit fields of a material. It can be overridden on "
+             "each product. Defaults to 001 when empty.",
+    )
 
     def _kingdee_settings_config(self):
         """Return the credentials currently typed in the settings form."""
