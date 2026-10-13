@@ -16,6 +16,10 @@
                                 <field name="kingdee_material_group"/>
                                 <field name="kingdee_unit_number"
                                        placeholder="Defaults to the unit from Settings"/>
+                                <field name="kingdee_erp_cls_id"
+                                       placeholder="Material type, e.g. 2"/>
+                                <field name="kingdee_category_number"
+                                       placeholder="Material category, e.g. CHLB05_SYS"/>
                             </group>
                             <group string="Synchronization">
                                 <field name="kingdee_sync_state"/>

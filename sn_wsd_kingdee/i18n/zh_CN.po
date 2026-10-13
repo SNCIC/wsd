@@ -773,3 +773,69 @@ msgid ""
 "purchase and sale unit fields of a material. It can be overridden on each "
 "product. Defaults to 001 when empty."
 msgstr "写入物料基准/库存/采购/销售等计量单位字段的金蝶单位编码（BD_UNIT，如 001 或 GE）；可在每个物料上单独覆盖；留空时按 001 处理。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_erp_cls_id
+msgid "Material Type"
+msgstr "物料属性"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_erp_cls_id
+msgid ""
+"Default Kingdee material type code (FErpClsID) applied to a material, "
+"e.g. 2 for self-made or 3 for subcontract (values observed in this "
+"account). Each product can override it."
+msgstr "默认的金蝶物料属性编码（FErpClsID），如 2=自制、3=委外（账套实测值）；每个物料可单独覆盖。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_category_number
+msgid "Material Category"
+msgstr "物料类别"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_category_number
+msgid ""
+"Default Kingdee material category number (FCategoryID), e.g. CHLB05_SYS "
+"(产成品) or CHLB03_SYS (自制半成品). Each product can override it."
+msgstr "默认的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；每个物料可单独覆盖。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__kingdee_material_group
+msgid "Material Group"
+msgstr "物料分组"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_config_settings__kingdee_material_group
+msgid ""
+"Default Kingdee material group number (FMaterialGroup). When empty the "
+"field is not sent and Kingdee applies the default of the account."
+msgstr "默认的金蝶物料分组编码（FMaterialGroup）；留空则不推送该字段，由金蝶按账套默认处理。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_erp_cls_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_erp_cls_id
+msgid "Kingdee Material Type"
+msgstr "金蝶物料属性"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_erp_cls_id
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_erp_cls_id
+msgid ""
+"Kingdee material type code (FErpClsID), e.g. 2 self-made or 3 subcontract "
+"(values observed in this account). The default from Settings is used when "
+"empty."
+msgstr "该物料的金蝶物料属性编码（FErpClsID），如 2=自制、3=委外（账套实测值）；留空时取设置中的默认值。"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_category_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_category_number
+msgid "Kingdee Material Category"
+msgstr "金蝶物料类别"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_category_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_category_number
+msgid ""
+"Kingdee material category number (FCategoryID), e.g. CHLB05_SYS (产成品) or "
+"CHLB03_SYS (自制半成品). The default from Settings is used when empty."
+msgstr "该物料的金蝶物料类别编码（FCategoryID），如 CHLB05_SYS（产成品）、CHLB03_SYS（自制半成品）；留空时取设置中的默认值。"

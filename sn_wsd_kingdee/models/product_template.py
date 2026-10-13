@@ -10,6 +10,38 @@ _logger = logging.getLogger(__name__)
 # Kingdee business object used for materials (basic data).
 MATERIAL_FORM_ID = "BD_MATERIAL"
 
+# Defaults used when Settings → Kingdee → Material Defaults are left empty.
+DEFAULT_ERP_CLS_ID = "2"                  # 物料属性：2 = 自制（账套现有物料实测）
+DEFAULT_CATEGORY_NUMBER = "CHLB05_SYS"    # 物料类别：产成品
+
+# Material fields whose value is fixed for this account. They were read from the
+# account's own materials (BD_MATERIAL, 2026-10-13) instead of relying on the
+# WebAPI defaults, so a pushed material matches the account's standard settings.
+# FCurrencyId is a base data reference and uses the {"FNumber": ...} form; the
+# others are plain codes (see the BD_MATERIAL metadata of the field index).
+MATERIAL_PRESET_FIELDS = {
+    "FUnitConvertDir": "1",                  # 换算方式
+    "FCurrencyId": {"FNumber": "PRE001"},    # 币别（人民币）
+    "FSNManageType": "1",                    # 业务范围
+    "FSNGenerateTime": "1",                  # 序列号生成时机
+    "FQuotaType": "1",                       # 配额方式
+    "FReserveType": "1",                     # 预留类型
+    "FPlanningStrategy": "1",                # 计划策略
+    "FCheckLeadTimeType": "1",               # 检验提前期单位
+    "FPlanOffsetTimeType": "1",              # 计划偏移时间单位
+    "FFixLeadTimeType": "1",                 # 固定提前期单位
+    "FVarLeadTimeType": "1",                 # 变动提前期单位
+    "FOrderPolicy": "0",                     # 订货策略
+    "FOrderIntervalTimeType": "3",           # 订货间隔时间单位
+    "FIssueType": "1",                       # 发料方式
+    "FOverControlMode": "3",                 # 超发控制方式
+    "FStandHourUnitId": "3600",              # 工时单位（秒）
+    "FBackFlushType": "1",                   # 倒冲类型
+    "FFirstQCControlType": "0",              # 首检方式
+    "FFeatureItem": "1",                     # 特征件
+    "FSuite": "0",                           # 套件
+}
+
 # Number of already linked materials refreshed by the scheduled job.
 CRON_BATCH_SIZE = 50
 
@@ -36,6 +68,16 @@ class ProductTemplate(models.Model):
         help="Kingdee unit number (BD_UNIT, e.g. 001 or GE) applied to this material's "
              "base, store, purchase and sale unit fields. The unit configured in "
              "Settings (Kingdee > Material Defaults) is used when empty.",
+    )
+    kingdee_erp_cls_id = fields.Char(
+        string="Kingdee Material Type", copy=False,
+        help="Kingdee material type code (FErpClsID), e.g. 2 self-made or 3 subcontract "
+             "(values observed in this account). The default from Settings is used when empty.",
+    )
+    kingdee_category_number = fields.Char(
+        string="Kingdee Material Category", copy=False,
+        help="Kingdee material category number (FCategoryID), e.g. CHLB05_SYS (产成品) or "
+             "CHLB03_SYS (自制半成品). The default from Settings is used when empty.",
     )
     kingdee_master_id = fields.Char(string="Kingdee Master ID", copy=False, readonly=True)
     kingdee_sync_state = fields.Selection(
@@ -97,9 +139,18 @@ class ProductTemplate(models.Model):
         # to BD_UNIT. The same unit is applied to the base, store, purchase and
         # sale fields unless the product overrides it.
         unit = (self.kingdee_unit_number or "").strip() or client.get_unit_number()
-        model = {
+        erp_cls = ((self.kingdee_erp_cls_id or "").strip()
+                   or client.get_material_setting("erp_cls_id", DEFAULT_ERP_CLS_ID))
+        category = ((self.kingdee_category_number or "").strip()
+                    or client.get_material_setting("category_number", DEFAULT_CATEGORY_NUMBER))
+        group = ((self.kingdee_material_group or "").strip()
+                 or client.get_material_setting("material_group"))
+        model = dict(MATERIAL_PRESET_FIELDS)
+        model.update({
             "FCreateOrgId": {"FNumber": create_org},
             "FUseOrgId": {"FNumber": client.get_default_org("use")},
+            "FErpClsID": erp_cls,
+            "FCategoryID": {"FNumber": category},
             "FNumber": number,
             "FName": (self.name or "").strip() or number,
             "FBaseUnitId": {"FNumber": unit},
@@ -109,9 +160,11 @@ class ProductTemplate(models.Model):
             "FSaleUnitId": {"FNumber": unit},
             "FSalePriceUnitId": {"FNumber": unit},
             "FMinIssueUnitId": {"FNumber": unit},
-        }
-        if self.kingdee_material_group:
-            model["FMaterialGroup"] = {"FNumber": self.kingdee_material_group}
+        })
+        if group:
+            # FMaterialGroup is required by the metadata; when nothing is configured
+            # it is left out and Kingdee applies the default of the account.
+            model["FMaterialGroup"] = {"FNumber": group}
         return number, model
 
     def _kingdee_mark_done(self, state, message, number=None, master_id=None, name=None):

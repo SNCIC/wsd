@@ -71,6 +71,25 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="sn_wsd_kingdee.use_org_number",
         help="Organization number (FUseOrgId) of the material. Defaults to the create organization.",
     )
+    kingdee_erp_cls_id = fields.Char(
+        string="Material Type",
+        config_parameter="sn_wsd_kingdee.erp_cls_id",
+        help="Default Kingdee material type code (FErpClsID) applied to a material, e.g. "
+             "2 for self-made or 3 for subcontract (values observed in this account). "
+             "Each product can override it.",
+    )
+    kingdee_category_number = fields.Char(
+        string="Material Category",
+        config_parameter="sn_wsd_kingdee.category_number",
+        help="Default Kingdee material category number (FCategoryID), e.g. CHLB05_SYS "
+             "(产成品) or CHLB03_SYS (自制半成品). Each product can override it.",
+    )
+    kingdee_material_group = fields.Char(
+        string="Material Group",
+        config_parameter="sn_wsd_kingdee.material_group",
+        help="Default Kingdee material group number (FMaterialGroup). When empty the field "
+             "is not sent and Kingdee applies the default of the account.",
+    )
     kingdee_unit_number = fields.Char(
         string="Material Unit",
         config_parameter="sn_wsd_kingdee.unit_number",

@@ -114,6 +114,11 @@ class SnWsdKingdeeClient(models.AbstractModel):
         value = (self._get_param("unit_number") or "").strip()
         return value or DEFAULT_UNIT_NUMBER
 
+    def get_material_setting(self, key, default=""):
+        """Return a material default from the settings (erp_cls_id, category_number, ...)."""
+        value = (self._get_param(key) or "").strip()
+        return value or default
+
     def _get_config(self, override=None):
         config = {
             "server_url": (self._get_param("server_url") or "").strip(),

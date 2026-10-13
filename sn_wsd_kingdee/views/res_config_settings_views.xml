@@ -97,6 +97,24 @@
                                     </div>
                                 </div>
                             </setting>
+                            <setting id="sn_wsd_kingdee_material_class_setting"
+                                     string="Material Classification"
+                                     help="Kingdee classification applied when a product is saved as a material; each product can override these values.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="kingdee_erp_cls_id" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_erp_cls_id" placeholder="2"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_category_number" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_category_number" placeholder="CHLB05_SYS"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="kingdee_material_group" class="col-lg-3 o_light_label"/>
+                                        <field name="kingdee_material_group" placeholder="(optional)"/>
+                                    </div>
+                                </div>
+                            </setting>
                             <setting id="sn_wsd_kingdee_material_unit_setting"
                                      string="Material Unit"
                                      help="Kingdee unit number applied to the unit fields of a material, e.g. 001 (只) or GE (个).">

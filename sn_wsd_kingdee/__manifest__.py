@@ -1,6 +1,6 @@
 {
     "name": "SN WSD Kingdee Cloud Galaxy Integration",
-    "version": "19.0.1.4",
+    "version": "19.0.1.5",
     "category": "Tools",
     "summary": "Synchronize Odoo with Kingdee Cloud Galaxy (K/3 Cloud) through the WebAPI Python SDK",
     "author": "SNCIC",
