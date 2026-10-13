@@ -9,10 +9,21 @@
   `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
 - 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
 - **统一的同步控制台**：`Kingdee → Synchronization`（同步）下按方向分「金蝶 → Odoo」与「Odoo → 金蝶」，
-  页面按模块分组列出每个同步对象，行内 **Synchronize** 直接同步（入站另有 `Preview` 预演，不写入）
+  页面按模块分组列出每个同步对象，行内 **Synchronize** 直接同步（入站另有 `Preview` 预演，不写入）。
+  调度键是 **(方向, 金蝶对象)** 而不是 Odoo 模型——客户与供应商共用 `res.partner`，只能靠对象区分。
+  已登记但尚未实现的行会灰显且不显示按钮，控制台因此同时是**账套基础资料地图**
+  （全量清单、被引用次数与实施顺序见 `docs/基础资料同步清单.md`）
 - 物料主数据双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看，以及批量导入——带回**规格型号**、
   物料属性 / 类别 / 分组的**编码与其中文名**，自动落 Odoo 产品类别，并把物料置为**管理库存 + 按批次追溯**
-- 客户主数据单向/双向同步：`BD_Customer` 的保存、提交、审核、反审核、查看、删除
+- 客户与供应商主数据：`BD_Customer` 双向（保存 / 提交 / 审核 / 反审核 / 查看 / 删除），
+  `BD_Supplier` **仅入站**。两者在 Odoo 里都是 `res.partner`，但账套**分别编号**，
+  所以各有一套金蝶字段（`kingdee_number` 对 `kingdee_supplier_number`），
+  入站还会写 `customer_rank` / `supplier_rank`；**推送客户时只取真正的客户**，
+  本库 831 个纯供应商不会再被当作客户写进金蝶
+- 基础资料入站：`BD_Currency` 币别（按 ISO 代码**认领**已有币别，不重复创建）、`BD_Department` 部门、
+  `BD_UNIT` 计量单位（按名称认领，并把金蝶的单位组换算重建成 Odoo 的参考单位链条，**只添加不拆散**）
+- 物料推送的单位不再是写死的默认值：按 **产品自身单位的金蝶编码 → 物料上的编码 → 设置页** 三级取值
+  （产品单位未对接时行为与从前完全一致）
 - 新单据只需实现字段映射与 payload（`_kingdee_number()` / `_kingdee_payload()`），状态、动作、
   逐条错误隔离、日志与通知由 `sn.wsd.kingdee.sync.mixin` 提供，工序见 `docs/kingdee-接入SOP.md`
 - 每次调用都落库到“金蝶同步日志”，含请求/响应报文、耗时、错误信息；**失败的日志用独立事务写入，不会因为后续报错回滚而丢失**
@@ -49,6 +60,9 @@
 ## 依赖
 
 - Odoo：19.0
+- Odoo 模块：`base`、`web`、`product`（含 `uom`）、`hr`（部门基础资料用）。
+  **依赖按需增加**：仓库落地时才加 `stock`，会计科目类落地时才加 `account`，
+  这样「在控制台加一行」永远不会顺手拖进一个应用
 - Python（Odoo 必装）：`requests`
 - 金蝶 WebAPI SDK：本地 wheel，**不在 PyPI 上**，随本模块一起分发：
   `sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl`

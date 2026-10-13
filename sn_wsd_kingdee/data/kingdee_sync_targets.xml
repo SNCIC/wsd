@@ -1,9 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        One record per entity and direction. Adding an entity to the console is a
-        record here plus the method its model exposes for that direction
+        One record per Kingdee object and direction. Adding an entity to the console
+        is a record here plus the method its model exposes for that object
         (see SYNC_METHODS in models/kingdee_sync_target.py).
+
+        A row whose object is not wired to a method yet is kept on purpose: the
+        console then shows the whole master data map of the account, the row is greyed
+        out and has no button. Objects whose Odoo model needs an application this
+        module does not depend on yet (BD_STOCK -> stock.warehouse) are listed in
+        docs/基础资料同步清单.md instead of here, so that adding a row never drags an
+        application in.
+
+        Direction follows the source of truth of each object: the account owns the
+        currencies, the departments, the units and the organization; Odoo owns the
+        materials, the customers and the suppliers.
 
         noupdate: the console is configuration, so an upgrade must not undo the
         filter or the batch limit an administrator sets on a row.
@@ -43,6 +53,73 @@
             <field name="sequence">20</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="form_id">BD_Customer</field>
+        </record>
+
+        <!-- The vendor link. Inbound is implemented; the outbound payload is not
+             established on the account yet, so that row is listed without a method. -->
+        <record id="sync_target_supplier_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Suppliers</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">30</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="form_id">BD_Supplier</field>
+        </record>
+
+        <record id="sync_target_supplier_out" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Suppliers</field>
+            <field name="module">base</field>
+            <field name="direction">out</field>
+            <field name="sequence">30</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="form_id">BD_Supplier</field>
+        </record>
+
+        <record id="sync_target_currency_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Currencies</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">40</field>
+            <field name="model_id" ref="base.model_res_currency"/>
+            <field name="form_id">BD_Currency</field>
+        </record>
+
+        <record id="sync_target_department_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Departments</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">50</field>
+            <field name="model_id" ref="hr.model_hr_department"/>
+            <field name="form_id">BD_Department</field>
+        </record>
+
+        <!-- Declared, not implemented yet: the rows mark what still has to land, and
+             the objects they need are already available (uom comes with product). -->
+        <record id="sync_target_unit_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Units of Measure</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">60</field>
+            <field name="model_id" ref="uom.model_uom_uom"/>
+            <field name="form_id">BD_UNIT</field>
+        </record>
+
+        <record id="sync_target_organization_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Organizations</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">70</field>
+            <field name="model_id" ref="base.model_res_company"/>
+            <field name="form_id">ORG_Organizations</field>
+        </record>
+
+        <record id="sync_target_employee_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Employees</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">80</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="form_id">BD_Empinfo</field>
         </record>
     </data>
 </odoo>

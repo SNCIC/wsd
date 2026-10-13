@@ -1,24 +1,32 @@
 # -*- coding: utf-8 -*-
 """The synchronization console: one row per target, grouped by business module.
 
-The console is the single entry point of the integration. A target is declared by
-one data record (``data/kingdee_sync_targets.xml``) naming an Odoo model and a
-direction; the button of the row dispatches to the method that model exposes for
-that direction (``SYNC_METHODS`` below). Adding an entity - a sale order, a stock
-receipt - is therefore one data record, one method and one line here, never a new
-view, menu or wizard.
+The console is the single entry point of the integration. A target is one data
+record (``data/kingdee_sync_targets.xml``) naming a Kingdee object, an Odoo model
+and a direction; the button of the row dispatches to the method that model exposes
+for that object (``SYNC_METHODS`` below). Adding an entity - a currency, a supplier
+- is therefore one data record, one method and one line here, never a new view,
+menu or wizard.
+
+The dispatch is keyed on the **Kingdee object** and not on the Odoo model: a partner
+is both a customer and a supplier, so two console rows share ``res.partner`` and
+have to land on two different methods.
 """
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-# (direction, Odoo model) -> method of that model. Every method takes
+# (direction, Kingdee object) -> method of the Odoo model. Every method takes
 # (filter_string, limit, dry_run) and returns an action (a notification).
 SYNC_METHODS = {
-    ("in", "product.template"): "_kingdee_import_materials",
-    ("out", "product.template"): "_kingdee_push_materials",
-    ("in", "res.partner"): "_kingdee_import_partners",
-    ("out", "res.partner"): "_kingdee_push_partners",
+    ("in", "BD_MATERIAL"): "_kingdee_import_materials",
+    ("out", "BD_MATERIAL"): "_kingdee_push_materials",
+    ("in", "BD_Customer"): "_kingdee_import_customers",
+    ("out", "BD_Customer"): "_kingdee_push_customers",
+    ("in", "BD_Supplier"): "_kingdee_import_suppliers",
+    ("in", "BD_Currency"): "_kingdee_import_currencies",
+    ("in", "BD_Department"): "_kingdee_import_departments",
+    ("in", "BD_UNIT"): "_kingdee_import_units",
 }
 
 SYNC_DIRECTION_SELECTION = [
@@ -35,6 +43,9 @@ SYNC_MODULE_SELECTION = [
     ("stock", "Inventory"),
     ("mrp", "Manufacturing"),
 ]
+
+# States of a record that still has to be sent to Kingdee (see the mixin).
+SYNC_PENDING_STATES = ("not_synced", "error")
 
 
 class SnWsdKingdeeSyncTarget(models.Model):
@@ -60,8 +71,9 @@ class SnWsdKingdeeSyncTarget(models.Model):
     )
     model_name = fields.Char(related="model_id.model", string="Model Name")
     form_id = fields.Char(
-        string="Kingdee Object",
-        help="Kingdee form id of the business object, e.g. BD_MATERIAL.",
+        string="Kingdee Object", required=True,
+        help="Kingdee object of the business object, e.g. BD_MATERIAL. Together with "
+             "the direction it selects the method a click runs.",
     )
     sync_filter = fields.Char(
         string="Kingdee Filter",
@@ -73,18 +85,29 @@ class SnWsdKingdeeSyncTarget(models.Model):
         help="Highest number of records one run handles. 0 uses the limit of the "
              "synchronization itself.",
     )
+    implemented = fields.Boolean(
+        string="Implemented", compute="_compute_implemented",
+        help="Whether this object and direction are wired to a method yet. A row that "
+             "is not implemented is listed so the console shows the whole master data "
+             "map of the account, but it has nothing to run.",
+    )
     linked_count = fields.Integer(
         string="Linked Records", compute="_compute_counts",
-        help="Records already carrying a Kingdee number.",
+        help="Records already carrying the Kingdee number of this object.",
     )
     pending_count = fields.Integer(
         string="Pending", compute="_compute_counts",
-        help="Records that still have to be sent to Kingdee (never saved, or whose "
-             "last attempt failed).",
+        help="Records of this object that still have to be sent to Kingdee (never "
+             "saved, or whose last attempt failed).",
     )
     last_sync_at = fields.Datetime(string="Last Call", compute="_compute_last_sync_at")
 
-    @api.depends("model_id", "direction")
+    @api.depends("direction", "form_id")
+    def _compute_implemented(self):
+        for target in self:
+            target.implemented = (target.direction, target.form_id) in SYNC_METHODS
+
+    @api.depends("model_id", "direction", "form_id")
     def _compute_counts(self):
         for target in self:
             target.linked_count = 0
@@ -94,11 +117,18 @@ class SnWsdKingdeeSyncTarget(models.Model):
                 continue
             model = self.env[model_name]
             if "kingdee_number" not in model._fields:
+                # The model is declared but does not synchronize anything yet.
                 continue
-            target.linked_count = model.search_count([("kingdee_number", "!=", False)])
-            if "kingdee_sync_state" in model._fields:
-                target.pending_count = model.search_count(
-                    [("kingdee_sync_state", "in", ("not_synced", "error"))])
+            # A model that carries several Kingdee objects narrows both counts to the
+            # records of the one this row is about: a partner is both a customer and a
+            # supplier, and each role has its own number and status.
+            domain = model._kingdee_target_domain(target.form_id)
+            number_field = model._kingdee_field("number", target.form_id)
+            state_field = model._kingdee_field("state", target.form_id)
+            target.linked_count = model.search_count(
+                domain + [(number_field, "!=", False)])
+            target.pending_count = model.search_count(
+                domain + [(state_field, "in", SYNC_PENDING_STATES)])
 
     @api.depends("form_id", "direction")
     def _compute_last_sync_at(self):
@@ -129,15 +159,16 @@ class SnWsdKingdeeSyncTarget(models.Model):
         return self._kingdee_run_target(dry_run=True)
 
     def _kingdee_run_target(self, dry_run=False):
-        """Dispatch to the method the target's model exposes for this direction."""
+        """Dispatch to the method the target's model exposes for this object."""
         self.ensure_one()
-        method_name = SYNC_METHODS.get((self.direction, self.model_id.model))
+        method_name = SYNC_METHODS.get((self.direction, self.form_id))
         if not method_name:
             raise UserError(_(
-                "%(entity)s is declared in the synchronization console but its "
-                "%(direction)s run is not implemented yet."
+                "%(entity)s is declared in the synchronization console for %(object)s "
+                "but its %(direction)s run is not implemented yet."
             ) % {
                 "entity": self.name,
+                "object": self.form_id or _("no Kingdee object"),
                 "direction": dict(SYNC_DIRECTION_SELECTION)[self.direction],
             })
         handler = getattr(self.env[self.model_id.model], method_name)

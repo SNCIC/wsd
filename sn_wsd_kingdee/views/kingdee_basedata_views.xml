@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            The master data the account owns (see docs/基础资料同步清单.md) is inbound
+            only, so these forms show the link and offer the read back, not a push: a
+            currency or a department is created in Kingdee, and here it is read.
+        -->
+        <record id="view_currency_form_kingdee" model="ir.ui.view">
+            <field name="name">res.currency.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_uom_form_kingdee" model="ir.ui.view">
+            <field name="name">uom.uom.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">uom.uom</field>
+            <field name="inherit_id" ref="uom.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_department_form_kingdee" model="ir.ui.view">
+            <field name="name">hr.department.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                    </group>
+                    <field name="kingdee_sync_message" readonly="1"/>
+                    <div class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

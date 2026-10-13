@@ -45,6 +45,16 @@ KINGDEE_FORBIDDEN_STATUS = "B"
 # there, and one whose last attempt failed.
 KINGDEE_PENDING_STATES = ("not_synced", "error")
 
+# Synchronization states, shared by every synchronized model: ``kingdee_sync_state``
+# and the state field a model declares per Kingdee object when it carries several.
+KINGDEE_SYNC_STATES = [
+    ("not_synced", "Not Synchronized"),
+    ("saved", "Saved"),
+    ("submitted", "Submitted"),
+    ("audited", "Audited"),
+    ("error", "Error"),
+]
+
 
 class SnWsdKingdeeSyncMixin(models.AbstractModel):
     """Kingdee synchronization skeleton (state, actions, log, notifications)."""
@@ -62,8 +72,27 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
     # Kingdee key -> Odoo field, for the values such a row carries.
     _kingdee_value_map = {}
     # Odoo field that identifies a record beside ``kingdee_number``: the internal
-    # reference for a product, the reference for a partner.
+    # reference for a product, the reference for a partner. ``None`` when the Kingdee
+    # number is mirrored on no Odoo field at all (a currency is identified by its ISO
+    # code, a department by its name), in which case ``kingdee_number`` is the only
+    # link and nothing else is filled on creation.
     _kingdee_number_field = "default_code"
+
+    # Kingdee object -> the Odoo fields storing **its** synchronization state, for a
+    # model that talks to several Kingdee objects. A partner is both a customer and a
+    # supplier: the account numbers them independently, so each role keeps its own
+    # number, name and status apart (see ``res_partner.py``). Any key left out falls
+    # back to ``KINGDEE_DEFAULT_FIELDS``.
+    _kingdee_form_fields = {}
+
+    KINGDEE_DEFAULT_FIELDS = {
+        "number": "kingdee_number",
+        "name": "kingdee_name",
+        "master_id": "kingdee_master_id",
+        "state": "kingdee_sync_state",
+        "last_sync": "kingdee_last_sync_at",
+        "message": "kingdee_sync_message",
+    }
 
     kingdee_number = fields.Char(
         string="Kingdee Number",
@@ -81,13 +110,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
     )
     kingdee_master_id = fields.Char(string="Kingdee Master ID", copy=False, readonly=True)
     kingdee_sync_state = fields.Selection(
-        selection=[
-            ("not_synced", "Not Synchronized"),
-            ("saved", "Saved"),
-            ("submitted", "Submitted"),
-            ("audited", "Audited"),
-            ("error", "Error"),
-        ],
+        selection=KINGDEE_SYNC_STATES,
         string="Kingdee Status",
         default="not_synced",
         copy=False,
@@ -111,6 +134,64 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         "UNIQUE(kingdee_number)",
         "The Kingdee number must be unique.",
     )
+
+    # ------------------------------------------------------------------
+    # Which Kingdee object a call applies to
+    # ------------------------------------------------------------------
+    @classmethod
+    def _kingdee_form(cls, form_id=None):
+        """Kingdee object a call applies to: the given one, else the model's own.
+
+        A model bound to a single object never passes ``form_id``; a model bound to
+        several (``res.partner``) passes it on every entry point, which is what keeps
+        the customer run and the supplier run apart.
+        """
+        return form_id or cls._kingdee_form_id
+
+    @classmethod
+    def _kingdee_query_fields_for(cls, form_id=None):
+        """FieldKeys read from ``form_id`` (overridden per object)."""
+        return cls._kingdee_query_fields
+
+    @classmethod
+    def _kingdee_value_map_for(cls, form_id=None):
+        """Kingdee key -> Odoo field for ``form_id`` (overridden per object)."""
+        return cls._kingdee_value_map
+
+    @classmethod
+    def _kingdee_field(cls, key, form_id=None):
+        """Odoo field storing ``key`` of ``form_id``.
+
+        ``key`` is one of ``KINGDEE_DEFAULT_FIELDS``: the field a number, a name or a
+        status is written to. A model bound to several Kingdee objects declares its
+        own set per object in ``_kingdee_form_fields``; anything else gets the
+        ``kingdee_*`` fields every synchronized record already carries.
+        """
+        form = cls._kingdee_form(form_id)
+        return (cls._kingdee_form_fields.get(form) or {}).get(
+            key, cls.KINGDEE_DEFAULT_FIELDS[key])
+
+    @api.model
+    def _kingdee_target_domain(self, form_id=None):
+        """Odoo records a console row of ``form_id`` applies to.
+
+        Empty means the whole model (a material, a currency). A model carrying
+        several Kingdee objects narrows it here, so the counts of each console row
+        describe that row and not the model.
+        """
+        return []
+
+    def _kingdee_adopt_domain(self, data, number):
+        """Domain of an existing Odoo record a Kingdee row describes.
+
+        Default: the Odoo field that mirrors the Kingdee number (``default_code`` for
+        a product, ``ref`` for a partner). A model whose Kingdee number is mirrored
+        nowhere matches on the value that identifies the record instead — a currency
+        is known by its ISO code, not by its Kingdee number.
+        """
+        if not self._kingdee_number_field:
+            return []
+        return [(self._kingdee_number_field, "=", number)]
 
     # ------------------------------------------------------------------
     # Hooks
@@ -137,11 +218,13 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         """
         return None
 
-    def _kingdee_import_extra_values(self, data):
+    def _kingdee_import_extra_values(self, data, form_id=None):
         """Extra Odoo values a read row carries, on top of ``_kingdee_value_map``.
 
         Optional hook. ``self`` is the record being written, or an empty recordset
-        when the record is new to Odoo, so a hook can tell the two apart.
+        when the record is new to Odoo, so a hook can tell the two apart. ``form_id``
+        is the Kingdee object being read, which a model bound to several of them
+        needs to tell its roles apart.
         """
         return {}
 
@@ -247,30 +330,30 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         return row.get(key)
 
     @classmethod
-    def _kingdee_data_from_row(cls, row):
-        """Normalise a query row to the ``_kingdee_query_fields`` key shape."""
+    def _kingdee_data_from_row(cls, row, form_id=None):
+        """Normalise a query row to the ``_kingdee_query_fields_for()`` key shape."""
         return {
             key: cls._kingdee_text(cls._kingdee_row_value(row, key))
-            for key in cls._kingdee_query_fields
+            for key in cls._kingdee_query_fields_for(form_id)
         }
 
     @classmethod
-    def _kingdee_data_from_view(cls, data):
+    def _kingdee_data_from_view(cls, data, form_id=None):
         """Normalise a ``View`` answer to the same key shape."""
         return {
             key: cls._kingdee_text(cls._kingdee_nested_value(data, key))
-            for key in cls._kingdee_query_fields
+            for key in cls._kingdee_query_fields_for(form_id)
         }
 
     @api.model
-    def _kingdee_base_values(self, data):
+    def _kingdee_base_values(self, data, form_id=None):
         """Odoo values of the mapped fields a read row carries.
 
         The mapped fields are the ones the payload derives its values from, so a
         record imported here can be pushed back unchanged.
         """
         values = {}
-        for key, field_name in self._kingdee_value_map.items():
+        for key, field_name in self._kingdee_value_map_for(form_id).items():
             if field_name not in self._fields:
                 # A field another module owns is written only when it is there, so
                 # this integration also works on a bare database.
@@ -280,7 +363,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
                 values[field_name] = value
         return values
 
-    def _kingdee_apply_readback(self, data):
+    def _kingdee_apply_readback(self, data, form_id=None):
         """Store what a ``View`` of this record answered.
 
         Called by ``action_kingdee_pull()``, which already stored the number, the
@@ -289,30 +372,36 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         synchronization state.
         """
         self.ensure_one()
-        flat = self._kingdee_data_from_view(data)
-        values = self._kingdee_base_values(flat)
-        values.update(self._kingdee_import_extra_values(flat))
-        values["kingdee_sync_state"] = self._kingdee_sync_state(flat)
+        flat = self._kingdee_data_from_view(data, form_id=form_id)
+        values = self._kingdee_base_values(flat, form_id=form_id)
+        values.update(self._kingdee_import_extra_values(flat, form_id=form_id))
+        values[self._kingdee_field("state", form_id)] = self._kingdee_sync_state(flat)
         self.write(values)
 
     # ------------------------------------------------------------------
     # Inbound: import (Kingdee to Odoo)
     # ------------------------------------------------------------------
     @api.model
-    def _kingdee_find_record(self, number):
-        """Record already linked to the Kingdee record ``number``.
+    def _kingdee_find_record(self, number, form_id=None, data=None):
+        """Record already linked to ``number`` in the object ``form_id``.
 
-        The link is ``kingdee_number``. A record that only carries the number on its
-        own reference field is adopted, which is how an existing catalogue gets
-        linked. A record whose reference collides with a Kingdee number already used
-        by another one is a conflict: importing it would create a second record, so
-        it is refused instead.
+        The link is the number field of that object (``kingdee_number`` for a model
+        bound to a single object). A record that only carries the number on its own
+        identifying value is adopted, which is how an existing catalogue gets linked.
+        A record whose identifying value collides with a number already used by
+        another one is a conflict: importing it would create a second record, so it
+        is refused instead.
         """
-        record = self.search([("kingdee_number", "=", number)], limit=1)
+        number_field = self._kingdee_field("number", form_id)
+        record = self.search([(number_field, "=", number)], limit=1)
         if record:
             return record
-        record = self.search([(self._kingdee_number_field, "=", number)], limit=1)
-        if not record or not record.kingdee_number:
+        domain = self._kingdee_adopt_domain(data or {}, number)
+        if not domain:
+            # The number is mirrored nowhere: there is nothing to adopt.
+            return self.browse()
+        record = self.search(domain, limit=1)
+        if not record or not record[number_field]:
             return record
         raise UserError(_(
             "The reference %(number)s is used by '%(record)s', which is already linked "
@@ -321,28 +410,31 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         ) % {
             "number": number,
             "record": record.name,
-            "linked": record.kingdee_number,
+            "linked": record[number_field],
         })
 
     @api.model
     def _kingdee_import_row(self, row, update_existing=True, create_missing=True,
-                            include_disabled=False, dry_run=False):
-        """Create or update one record from a Kingdee row.
+                            include_disabled=False, dry_run=False, form_id=None):
+        """Create or update one record from a Kingdee row of ``form_id``.
 
         Returns ``"created"``, ``"updated"`` or ``"skipped"`` (a record the caller
         asked not to touch). With ``dry_run`` the decision is returned and nothing is
         written, which is what a preview reports. The name of an existing record is
         left alone: it is pushed to Kingdee by the payload, so Odoo owns it, and the
-        Kingdee name is kept on ``kingdee_name``.
+        Kingdee name is kept beside the number.
         """
-        data = self._kingdee_data_from_row(row)
+        number_field = self._kingdee_field("number", form_id)
+        name_field = self._kingdee_field("name", form_id)
+        state_field = self._kingdee_field("state", form_id)
+        data = self._kingdee_data_from_row(row, form_id=form_id)
         number = data.get("FNumber")
         if not number:
             raise UserError(_("Kingdee returned a record without a number."))
         forbidden = self._kingdee_is_forbidden(data)
         if forbidden and not include_disabled:
             return "skipped"
-        record = self._kingdee_find_record(number)
+        record = self._kingdee_find_record(number, form_id=form_id, data=data)
         if record and not update_existing:
             return "skipped"
         if not record and not create_missing:
@@ -351,36 +443,39 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
             # Nothing has been written before this point, so the decision alone is
             # the whole answer and no record has to be touched.
             return "updated" if record else "created"
-        values = record._kingdee_base_values(data)
-        values.update(record._kingdee_import_extra_values(data))
-        values["kingdee_sync_state"] = self._kingdee_sync_state(data)
-        values["kingdee_last_sync_at"] = fields.Datetime.now()
-        values["kingdee_sync_message"] = (
+        values = record._kingdee_base_values(data, form_id=form_id)
+        values.update(record._kingdee_import_extra_values(data, form_id=form_id))
+        values[state_field] = self._kingdee_sync_state(data)
+        values[self._kingdee_field("last_sync", form_id)] = fields.Datetime.now()
+        values[self._kingdee_field("message", form_id)] = (
             _("Imported from Kingdee, where the record is disabled.")
             if forbidden else _("Imported from Kingdee.")
         )
         name = data.get("FName")
         if name:
-            values["kingdee_name"] = name
+            values[name_field] = name
         if record:
-            if not record.kingdee_number:
+            if not record[number_field]:
                 # The record was adopted through its reference: record the link now,
                 # otherwise nothing would ever tie the two together.
-                values["kingdee_number"] = number
+                values[number_field] = number
             record.write(values)
             return "updated"
-        values["kingdee_number"] = number
-        values["kingdee_name"] = name or number
-        values[self._kingdee_number_field] = number
-        values["name"] = name or number
+        values[number_field] = number
+        values[name_field] = name or number
+        if self._kingdee_number_field:
+            values[self._kingdee_number_field] = number
+        # A hook that owns the Odoo name of a new record (a currency is named by its
+        # ISO code, not by the Kingdee number) has its value kept.
+        values.setdefault("name", name or number)
         self.create(values)
         return "created"
 
     @api.model
     def _kingdee_import_records(self, filter_string="", limit=0, update_existing=True,
                                 create_missing=True, include_disabled=False,
-                                dry_run=False):
-        """Read the Kingdee records and create or update the matching Odoo ones.
+                                dry_run=False, form_id=None):
+        """Read the Kingdee records of ``form_id`` and sync the matching Odoo ones.
 
         Every record runs inside its own savepoint: a row Kingdee or Odoo refuses is
         reported and does not stop the run, the same isolation ``_kingdee_run()``
@@ -391,20 +486,42 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         :param bool dry_run: report what the run would do without writing anything.
             A preview classifies as if both write switches were on, so its counts
             describe a full import.
+        :param str form_id: Kingdee object to read, when the model is bound to several.
         :return dict: counters ``read`` / ``created`` / ``updated`` / ``skipped`` /
             ``failed``, and the first failures under ``errors``.
         """
-        if dry_run:
-            update_existing = create_missing = True
         client = self.env[CLIENT_MODEL]
-        summary = {"read": 0, "created": 0, "updated": 0, "skipped": 0, "failed": 0,
-                   "errors": []}
-        for row in client.iter_bill_query(
-            self._kingdee_form_id,
-            ",".join(self._kingdee_query_fields),
+        rows = client.iter_bill_query(
+            self._kingdee_form(form_id),
+            ",".join(self._kingdee_query_fields_for(form_id)),
             filter_string=(filter_string or "").strip(),
             order_string="FNumber",
-        ):
+        )
+        return self._kingdee_import_row_list(
+            rows,
+            limit=limit,
+            update_existing=update_existing,
+            create_missing=create_missing,
+            include_disabled=include_disabled,
+            dry_run=dry_run,
+            form_id=form_id,
+        )
+
+    @api.model
+    def _kingdee_import_row_list(self, rows, limit=0, update_existing=True,
+                                 create_missing=True, include_disabled=False,
+                                 dry_run=False, form_id=None):
+        """Sync one Odoo record per row of ``rows``, with the counters of a run.
+
+        Split from :meth:`_kingdee_import_records` so a model can read the rows once
+        and walk them twice: a unit of measure, for instance, converts to another one
+        that may only appear later in the answer (see ``models/uom_uom.py``).
+        """
+        if dry_run:
+            update_existing = create_missing = True
+        summary = {"read": 0, "created": 0, "updated": 0, "skipped": 0, "failed": 0,
+                   "errors": []}
+        for row in rows:
             if limit and summary["read"] >= limit:
                 break
             summary["read"] += 1
@@ -417,6 +534,7 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
                         create_missing=create_missing,
                         include_disabled=include_disabled,
                         dry_run=dry_run,
+                        form_id=form_id,
                     )
             except Exception as err:  # noqa: BLE001 - reported, the run must go on
                 summary["failed"] += 1
@@ -432,13 +550,17 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         return summary
 
     @api.model
-    def _kingdee_import_notification(self, summary, dry_run=False):
-        """Notification reporting the outcome of an import or of a preview run."""
+    def _kingdee_import_notification(self, summary, dry_run=False, entity=None):
+        """Notification reporting the outcome of an import or of a preview run.
+
+        ``entity`` names what was read when the Odoo model name is not enough: the
+        two rows of ``res.partner`` would both report "Contact" otherwise.
+        """
         # ``_description`` is the English class attribute: the translated model name
         # is the one on ir.model.
         model = self.env["ir.model"]._get(self._name)
         counts = {
-            "entity": model.name if model else self._description,
+            "entity": entity or (model.name if model else self._description),
             "created": summary["created"],
             "updated": summary["updated"],
             "skipped": summary["skipped"],

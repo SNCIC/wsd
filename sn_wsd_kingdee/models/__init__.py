@@ -6,4 +6,7 @@ from . import kingdee_sync_mixin
 from . import kingdee_sync_target
 from . import product_template
 from . import res_partner
+from . import res_currency
+from . import hr_department
+from . import uom_uom
 from . import res_config_settings

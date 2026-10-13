@@ -208,6 +208,20 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         return (self.kingdee_number or self.default_code or "").strip()
 
+    def _kingdee_unit(self, client):
+        """Kingdee unit number applied to the unit fields of the material.
+
+        Three levels, the product winning over the settings: the Kingdee number of
+        the product's **own** unit (``BD_UNIT`` is synchronized, so a unit carries the
+        number it has in the account), then the number typed on the material, then the
+        one from Settings. A product whose unit is not linked to the account therefore
+        keeps behaving exactly as before.
+        """
+        self.ensure_one()
+        return ((self.uom_id.kingdee_number or "").strip()
+                or (self.kingdee_unit_number or "").strip()
+                or client.get_unit_number())
+
     def _kingdee_payload(self, client):
         """Return the material Save payload.
 
@@ -219,7 +233,7 @@ class ProductTemplate(models.Model):
         # Kingdee requires the unit fields on a material: they are what links it
         # to BD_UNIT. The same unit is applied to the base, store, purchase and
         # sale fields unless the product overrides it.
-        unit = (self.kingdee_unit_number or "").strip() or client.get_unit_number()
+        unit = self._kingdee_unit(client)
         erp_cls = ((self.kingdee_erp_cls_id or "").strip()
                    or client.get_setting("erp_cls_id"))
         category = ((self.kingdee_category_number or "").strip()
@@ -259,11 +273,13 @@ class ProductTemplate(models.Model):
                 payload[field] = value
         return payload
 
-    def _kingdee_import_extra_values(self, data):
+    def _kingdee_import_extra_values(self, data, form_id=None):
         """How an imported material is managed, and which category it belongs to.
 
         ``self`` is the product being written, or an empty recordset when the
         material is new to Odoo (see ``_kingdee_import_extra_values`` in the mixin).
+        ``form_id`` is accepted because the mixin passes it to every model: a
+        material has a single Kingdee object, so it is not used here.
         """
         values = dict(KINGDEE_MATERIAL_IMPORT_VALUES)
         # The Odoo category is a local catalogue: it is filled when the product has

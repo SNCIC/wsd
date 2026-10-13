@@ -119,8 +119,16 @@ PY
 | :--- | :--- | :---: | :--- | :--- |
 | `product.template` | `BD_MATERIAL` | 35（账套版；平台版 36，多标 `FMaterialGroup`） | 最小集：组织 ×2、`FNumber`/`FName`、7 个计量单位、属性/类别/分组 + 20 项账套固定值 | `kingdee_client.DEFAULTS` + 设置页 + 物料级覆盖 |
 | `res.partner` | `BD_Customer` | **5**（账套版；平台版仅 3）。子实体 `FTTel` 虽标必录但**已实测不强制** | 组织 ×2、`FNumber`/`FName`、`FTRADINGCURRID`（结算币别）、`FSELLER`（销售员）、`FSALDEPTID`（销售部门） | `DEFAULTS.customer_*` + 设置页 + 伙伴级覆盖；销售员/销售部门须先配置，`_kingdee_check_ready()` 会提前报错 |
+| `res.partner` | `BD_Supplier` | **8**（账套版），其中 4 个在子实体 `FLocationInfo` | **仅入站**：编码/名称、禁用状态、`FPayCurrencyId`（结算币别），入站写 `supplier_rank` | 出站 payload 尚未在账套上实推验证，故控制台那一行标为未实现 |
+| `res.currency` | `BD_Currency` | **4**（`FName`/`FNumber`/`FCODE`/`FRoundType`） | **仅入站**：`FCODE`（ISO 码）、`FName`、`FSYSMBOL`（符号，Odoo 19 必填） | 按 ISO 码认领已有币别；`FRoundType` 是舍入模式，不映射 |
+| `hr.department` | `BD_Department` | **3** | **仅入站**：编码、名称 | 部门在 Odoo 无编码字段，仅按 `kingdee_number` 匹配 |
+| `uom.uom` | `BD_UNIT` | **3**（`FName`/`FUnitGroupId`/`FRoundType`） | **仅入站**：编码、名称、换算（`relative_uom_id` + `relative_factor`） | 按名称认领；换算链**一次读取两次遍历**，只添加不拆散（见 `models/uom_uom.py`） |
 
-> 待接（按建议顺序）：`STK_InStock`（采购入库，对接现有三步入库/IQC）→ `SAL_SaleOrder` /
+> 同一模型同步多个对象时，调度键是 **(方向, 金蝶对象)**，字段也按对象分列
+> （见 `models/res_partner.py` 的 `_kingdee_form_fields`）：客户与供应商各有编码与状态，互不覆盖。
+
+> 基础资料的整体清单、被引用次数、实施顺序与方向策略见 `docs/基础资料同步清单.md`。
+> 单据类待接（按建议顺序）：`STK_InStock`（采购入库，对接现有三步入库/IQC）→ `SAL_SaleOrder` /
 > `PUR_PurchaseOrder` → `PRD_*` → 报表（`GetSysReportData` 需先在金蝶保存查询方案）。
 
 **同步控制台**：所有同步从 `Kingdee → Synchronization`（同步）进入，按方向分两个子菜单，

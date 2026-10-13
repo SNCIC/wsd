@@ -43,8 +43,13 @@ DEFAULTS = {
 }
 
 # Kingdee business objects handled by the sync mixin. Each one gets its own
-# mapping; see docs/kingdee-接入SOP.md for the procedure that produces it.
+# mapping; see docs/kingdee-接入SOP.md for the procedure that produces it, and
+# docs/基础资料同步清单.md for the master data of the account and their order.
 CUSTOMER_FORM_ID = "BD_Customer"
+SUPPLIER_FORM_ID = "BD_Supplier"
+CURRENCY_FORM_ID = "BD_Currency"
+DEPARTMENT_FORM_ID = "BD_Department"
+UOM_FORM_ID = "BD_UNIT"
 
 # Kingdee business object used for materials (basic data). It doubles as the
 # cheapest object to prove the credentials with: ``GetDataCenters`` is served

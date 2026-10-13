@@ -6,7 +6,7 @@
             <field name="model">sn.wsd.kingdee.sync.target</field>
             <field name="arch" type="xml">
                 <list default_group_by="module" create="false" delete="false"
-                      multi_edit="false">
+                      multi_edit="false" decoration-muted="not implemented">
                     <field name="module"/>
                     <field name="sequence" optional="hide"/>
                     <field name="name"/>
@@ -15,6 +15,7 @@
                            decoration-warning="direction == 'out'"/>
                     <field name="model_name" optional="show"/>
                     <field name="form_id" optional="show"/>
+                    <field name="implemented" optional="hide"/>
                     <field name="linked_count" optional="show"/>
                     <field name="pending_count" optional="show"/>
                     <field name="last_sync_at" optional="show"/>
@@ -24,12 +25,13 @@
                     <button name="action_sync"
                             type="object"
                             string="Synchronize"
-                            class="btn-primary"/>
+                            class="btn-primary"
+                            invisible="not implemented"/>
                     <button name="action_preview"
                             type="object"
                             string="Preview"
                             class="btn-secondary"
-                            invisible="direction != 'in'"/>
+                            invisible="direction != 'in' or not implemented"/>
                 </list>
             </field>
         </record>
@@ -43,12 +45,13 @@
                         <button name="action_sync"
                                 type="object"
                                 string="Synchronize"
-                                class="btn-primary"/>
+                                class="btn-primary"
+                                invisible="not implemented"/>
                         <button name="action_preview"
                                 type="object"
                                 string="Preview"
                                 class="btn-secondary"
-                                invisible="direction != 'in'"/>
+                                invisible="direction != 'in' or not implemented"/>
                     </header>
                     <sheet>
                         <group>
@@ -63,6 +66,7 @@
                                 <field name="model_id"/>
                                 <field name="model_name"/>
                                 <field name="form_id"/>
+                                <field name="implemented"/>
                                 <field name="sync_filter"/>
                                 <field name="sync_limit"/>
                             </group>

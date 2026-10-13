@@ -35,10 +35,22 @@
                                            nolabel="1" readonly="1" class="text-muted"/>
                                 </div>
                             </group>
+                            <group string="Supplier">
+                                <field name="kingdee_supplier_number"/>
+                                <field name="kingdee_supplier_name"/>
+                                <label for="kingdee_supplier_currency_number"/>
+                                <div class="o_row">
+                                    <field name="kingdee_supplier_currency_number" nolabel="1"/>
+                                    <field name="kingdee_supplier_currency_name"
+                                           nolabel="1" readonly="1" class="text-muted"/>
+                                </div>
+                            </group>
                             <group string="Synchronization">
                                 <field name="kingdee_sync_state"/>
                                 <field name="kingdee_master_id"/>
                                 <field name="kingdee_last_sync_at"/>
+                                <field name="kingdee_supplier_state"/>
+                                <field name="kingdee_supplier_last_sync_at"/>
                             </group>
                         </group>
                         <div class="mt16">
@@ -100,6 +112,12 @@
                     <filter name="kingdee_error"
                             string="Kingdee Errors"
                             domain="[('kingdee_sync_state', '=', 'error')]"/>
+                    <filter name="kingdee_supplier_linked"
+                            string="Linked to a Kingdee Supplier"
+                            domain="[('kingdee_supplier_number', '!=', False)]"/>
+                    <filter name="kingdee_supplier_error"
+                            string="Kingdee Supplier Errors"
+                            domain="[('kingdee_supplier_state', '=', 'error')]"/>
                 </xpath>
             </field>
         </record>
