@@ -21,10 +21,10 @@
 > `models/product_template.py` 的 `MATERIAL_FIELD_ENTITY`。特别注意 `FErpClsID`（物料属性）
 > 平铺一定被拒且会被金蝶默认成 `1`（外购），必须嵌套在 `SubHeadEntity` 里才能写入 2=自制。
 
-> **字段标识来源**：任何 `formId` / `fieldKey` 一律以金蝶开放平台元数据为准
+> **字段标识来源：** 任何 `formId` / `fieldKey` 一律以金蝶开放平台元数据为准
 > （本地离线库 `odoo-kingdee/data/kingdee-openapi`：`fields_index.csv` 查字段名、
 > `metadata/{formId}.json` 查完整字段树与必录标记、`kingdee_api_catalog.csv` 查接口），
-> **禁止凭命名习惯或 SDK 自带 demo 推测**（demo 里的 `FUserOrgId` 已失效，
+> **禁止凭命名习惯或 SDK 自带 demo 推测：** demo 里的 `FUserOrgId` 已失效，
 > 正确为 `FUseOrgId`；本文档字段名均按该索引校正过）。
 
 > **默认值只有一个来源**：连接与物料的默认值（`lcid`、`org_num`、超时、单位、物料属性、
@@ -34,12 +34,12 @@
 ## 依赖
 
 - Odoo：19.0
-- Python：`requests`（Odoo 必装）
+- Python（Odoo 必装）：`requests`
 - 金蝶 WebAPI SDK：本地 wheel，**不在 PyPI 上**，随本模块一起分发：
   `sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl`
 
-> ⚠️ **发行名 ≠ 导入名**：wheel 的文件名/发行名是 `kingdee.cdp.webapi.sdk`，但它装出来的可导入包是 **`k3cloud_webapi_sdk`**（wheel 内的 `top_level.txt` 即此）。
-> 所以 `pip show kingdee.cdp.webapi.sdk` 有输出 **不等于** 代码可用；真正的判据是 `import k3cloud_webapi_sdk`。代码里的导入是 `from k3cloud_webapi_sdk.main import K3CloudApiSdk`（与官方 demo 一致），**不要**照着 wheel 文件名去改导入。
+> ⚠️ **发行名 ≠ 导入名：** wheel 的文件名/发行名是 `kingdee.cdp.webapi.sdk`，但它装出来的可导入包是 **`k3cloud_webapi_sdk`** （wheel 内的 `top_level.txt` 即此）。
+> 所以 `pip show kingdee.cdp.webapi.sdk` 有输出 **不等于** 代码可用；真正的判据是能 import k3cloud_webapi_sdk。代码里的导入是 `from k3cloud_webapi_sdk.main import K3CloudApiSdk` （与官方 demo 一致），**不要** 照着 wheel 文件名去改导入。
 
 SDK 采用懒加载（`models/kingdee_client.py`），因此**未安装 wheel 时模块也能正常安装和配置**，只有在真正调用接口时才会报出带安装命令的错误提示。
 
@@ -71,7 +71,7 @@ git fetch && git merge --ff-only origin/main
 
 ### 2. 安装 SDK（关键：用 Odoo 自己的解释器）
 
-先查出 Odoo 实际使用的解释器，**不要**用裸 `python3` / `pip`（极易装到别的环境）：
+先查出 Odoo 实际使用的解释器，**不要** 用裸 `python3` / `pip` （极易装到别的环境）：
 
 ```
 ps -eo pid,user,args | grep -i odoo | head      # 例：/opt/odoo/venv/bin/python3 …/odoo-bin -c /etc/odoo19.conf
@@ -116,7 +116,7 @@ systemctl start odoo19
 1. 用 `ps -eo pid,user,args | grep -i odoo` 找到真正的解释器（如 `/opt/odoo/venv/bin/python3`）
 2. 用它验证：`<该解释器> -c "import k3cloud_webapi_sdk"`，再用 `-m pip show kingdee.cdp.webapi.sdk` 对照
 3. 常见原因：装进了别的 venv / 系统 python；`pip install --user` 装到了另一个用户（Odoo 以 `odoo` 运行）；装在容器外而 Odoo 在容器内；Debian/Ubuntu 24.04 的 `externally-managed-environment` 拦截（实际未装成功）；装完没重启服务
-4. 用同一解释器重装后 `systemctl restart odoo19`（多 worker 时确认全部重启）
+4. 用同一解释器重装后（多 worker 时确认全部重启）执行 `systemctl restart odoo19`
 
 ## 金蝶侧准备
 
@@ -179,7 +179,7 @@ systemctl start odoo19
 ## 已知边界
 
 - 目前实现的是物料主数据（`BD_MATERIAL`）。其它单据（销售订单、采购订单、生产订单等）请复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
-- **推送字段为最小集**（`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；元数据里 `BD_MATERIAL` 另有 36 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FMaterialGroup` 物料分组、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
+- **推送字段为最小集** （`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；元数据里 `BD_MATERIAL` 另有 36 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FMaterialGroup` 物料分组、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
 - 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
 - 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
 - SDK 实例按凭据缓存复用会话（含 Cookie），非线程安全，多线程下共用同一实例存在竞态；如需更高并发请自行在客户端层加锁
