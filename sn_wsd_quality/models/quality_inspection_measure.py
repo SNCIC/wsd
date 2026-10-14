@@ -491,7 +491,19 @@ class QualityInspectionLine(models.Model):
                     lambda item: item.result == 'pending'):
                 values = {'measured_at': now}
                 if line.item_type == 'numeric':
-                    values['measured_value'] = line._get_pass_numeric_value()
+                    measured = line._get_pass_numeric_value()
+                    # The conclusion is written along with the measurement,
+                    # the way action_generate_values does it: the sample value
+                    # only refreshes its result as a side effect of the
+                    # deviation, which a caller reading the item later in the
+                    # same transaction (the batch pass) never triggers.
+                    values['measured_value'] = measured
+                    values['result'] = line._judge_item_value(
+                        'numeric',
+                        measured=measured,
+                        lower=line.lower_limit,
+                        upper=line.upper_limit,
+                    )
                 else:
                     # A non-numeric row carries no judgement of its own: the
                     # conclusion is written along with the value.
