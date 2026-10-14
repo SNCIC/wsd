@@ -69,6 +69,12 @@ class ResCurrency(models.Model):
         mixin keeps a name a hook already provided, this is what gets stored.
         """
         values = {}
+        if self and not self.active:
+            # Odoo ships about a hundred and fifty currencies and archives most of
+            # them. Adopting one has to bring it back: the account uses it, and while
+            # it stays archived the next run would keep finding it and writing to a
+            # currency nobody can select.
+            values["active"] = True
         code = (data or {}).get("FCODE")
         if code:
             values["name"] = code

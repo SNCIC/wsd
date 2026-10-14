@@ -416,15 +416,19 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         another one is a conflict: importing it would create a second record, so it
         is refused instead.
         """
+        # Archived records are searched too: Odoo ships most of its currencies
+        # archived, and a record that already carries the number must be found rather
+        # than duplicated by a create.
+        searchable = self.with_context(active_test=False)
         number_field = self._kingdee_field("number", form_id)
-        record = self.search([(number_field, "=", number)], limit=1)
+        record = searchable.search([(number_field, "=", number)], limit=1)
         if record:
             return record
         domain = self._kingdee_adopt_domain(data or {}, number)
         if not domain:
             # The number is mirrored nowhere: there is nothing to adopt.
             return self.browse()
-        record = self.search(domain, limit=1)
+        record = searchable.search(domain, limit=1)
         if not record or not record[number_field]:
             return record
         raise UserError(_(
