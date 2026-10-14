@@ -28,10 +28,10 @@
                        grows into the room that is left over, and nothing is
                        pushed onto a second page. */
                     .sn-iqc-record { page-break-inside: avoid; }
-                    /* Block heights the sheet is laid out with. They mirror
-                       REPORT_HEIGHT_MM of the report helper: wkhtmltopdf
-                       honours a cell height, not a table height. */
-                    .sn-iqc-record table.info td { height: 11mm; }
+                    /* Block heights are applied as symmetric cell padding by
+                       the markup (see REPORT_HEIGHT_MM of the report helper):
+                       wkhtmltopdf sizes a row from its content, and symmetric
+                       padding keeps what a row holds centred in it. */
                     .sn-iqc-record table.items tr { page-break-inside: avoid; }
                     .sn-iqc-record td, .sn-iqc-record th {
                         border: 1px solid #111;
@@ -57,10 +57,10 @@
                     }
                     .sn-iqc-record .fail { color: #b00; }
                     .sn-iqc-record .marks span { margin-right: 3px; }
-                    .sn-iqc-record .description { vertical-align: top; }
                 </style>
+                <style t-out="o._get_iqc_report_styles()"/>
 
-                <table class="plain">
+                <table class="plain head">
                     <tr>
                         <td style="width: 30%;">
                             <img t-if="company.logo"
@@ -70,18 +70,15 @@
                         <td class="center">
                             <div class="title">Inspection Record of Purchased (Outsourced) Parts</div>
                         </td>
-                        <td style="width: 30%;">
-                            <div t-attf-style="height: #{metrics['title']}mm;"></div>
-                        </td>
+                        <td class="head-block" style="width: 30%;"></td>
                     </tr>
                 </table>
-                <table class="plain">
+                <table class="plain meta">
                     <tr>
                         <td>No.: <span t-field="o.name"/></td>
-                        <td class="center">
+                        <td class="center meta-block">
                             Inspection Date:
                             <span t-field="o.finish_time" t-options='{"widget": "datetime"}'/>
-                            <div t-attf-style="height: #{metrics['meta']}mm;"></div>
                         </td>
                     </tr>
                 </table>
@@ -93,17 +90,15 @@
                         <td class="label" style="width: 14%;">Part Model</td>
                         <td style="width: 19%;"><span t-field="o.model_code"/></td>
                         <td class="label" style="width: 14%;">Batch Qty</td>
-                        <td class="center" style="width: 20%;"><span t-field="o.lot_qty"/>
-                            <div t-attf-style="height: #{metrics['info_div']}mm;"></div></td>
+                        <td class="center info-block" style="width: 20%;"><span t-field="o.lot_qty"/></td>
                     </tr>
                     <tr>
                         <td class="label">Production Batch No.</td>
                         <td><span t-esc="o._get_iqc_supplier_batch_no()"/></td>
                         <td class="label">Manufacturer (Supplier)</td>
-                        <td><span t-field="supplier.name"/></td>
+                        <td><span t-esc="o._get_iqc_manufacturer_supplier()"/></td>
                         <td class="label">Inspection Qty</td>
-                        <td class="center"><span t-field="o.sample_size"/>
-                            <div t-attf-style="height: #{metrics['info_div']}mm;"></div></td>
+                        <td class="center info-block"><span t-field="o.sample_size"/></td>
                     </tr>
                     <tr>
                         <td class="label">Inspection Batch No.</td>
@@ -111,8 +106,7 @@
                         <td class="label">Inspection Basis</td>
                         <td><span t-field="o.x_inspection_basis"/></td>
                         <td class="label">Qualified Qty</td>
-                        <td class="center"><span t-field="o.x_pass_qty"/>
-                            <div t-attf-style="height: #{metrics['info_div']}mm;"></div></td>
+                        <td class="center info-block"><span t-field="o.x_pass_qty"/></td>
                     </tr>
                     <tr>
                         <td class="label">Inspection Mode</td>
@@ -124,8 +118,7 @@
                             <span t-esc="o._get_iqc_sampling_notice()"/>
                         </td>
                         <td class="label">Qualified Rate</td>
-                        <td class="center"><span t-field="o.x_pass_rate"/>%
-                            <div t-attf-style="height: #{metrics['info_div']}mm;"></div></td>
+                        <td class="center info-block"><span t-field="o.x_pass_rate"/>%</td>
                     </tr>
                 </table>
 
@@ -140,9 +133,8 @@
                     </thead>
                     <tbody>
                         <tr t-foreach="o.line_ids" t-as="line">
-                            <td class="center" style="vertical-align: top;">
+                            <td t-att-class="'center numeric-item-block' if line.item_type == 'numeric' else 'center plain-item-block'">
                                 <t t-esc="line_index + 1"/>
-                                <div t-attf-style="height: #{metrics['item_div']}mm;"></div>
                             </td>
                             <td class="center"><span t-field="line.name"/></td>
                             <td>
@@ -155,8 +147,7 @@
                                         <tr t-foreach="line._get_report_test_data_rows()"
                                             t-as="row">
                                             <td t-foreach="row" t-as="cell"
-                                                t-att-class="cell[1]"
-                                                t-attf-style="height: #{metrics['row_height']}mm;">
+                                                t-att-class="cell[1]">
                                                 <t t-esc="cell[0]"/>
                                             </td>
                                         </tr>
@@ -177,17 +168,16 @@
                     </tbody>
                 </table>
 
-                <table>
+                <table class="summary">
                     <tr>
                         <td class="label" style="width: 14%;">Defect Description</td>
                         <td class="description" colspan="5">
                             <span t-field="o.note"/>
-                            <div t-attf-style="height: #{metrics['description']}mm;"></div>
                         </td>
                     </tr>
                     <tr>
                         <td class="label">Conclusion</td>
-                        <td colspan="5">
+                        <td class="conclusion" colspan="5">
                             <span>
                                 <t t-if="o.result == 'pass'">&#9745;</t>
                                 <t t-else="">&#9744;</t>
@@ -208,15 +198,13 @@
                                 <t t-else="">&#9744;</t>
                             </span>
                             <span t-esc="result_labels['concession']"/>
-                            <div t-attf-style="height: #{metrics['conclusion']}mm;"></div>
                         </td>
                     </tr>
                     <tr>
                         <td class="label">Inspector</td>
                         <td colspan="2"><span t-field="o.inspector_id.name"/></td>
                         <td class="label" style="width: 14%;">Reviewer</td>
-                        <td colspan="2"><span t-field="o.x_reviewer_id.name"/>
-                            <div t-attf-style="height: #{metrics['inspector']}mm;"></div></td>
+                        <td class="inspector" colspan="2"><span t-field="o.x_reviewer_id.name"/></td>
                     </tr>
                 </table>
             </div>

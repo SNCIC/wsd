@@ -15,7 +15,7 @@ from odoo.tools.float_utils import float_repr
 REPORT_TEST_DATA_COLUMNS = 7
 # Rows the printed test data grid always shows, so a short series of
 # measurements still fills the sheet like the paper form it mirrors.
-REPORT_TEST_DATA_ROWS = 4
+REPORT_TEST_DATA_ROWS = 8
 REPORT_FILE_SUFFIX = '.pdf'
 # Height the printed record fills on one A4 page (297mm minus the 10mm
 # margins, kept short of the edge) and the height of every block that is not
@@ -25,27 +25,21 @@ REPORT_FILE_SUFFIX = '.pdf'
 # little shorter than the spacer it holds, so the figure keeps a margin over
 # the 277mm printable height of the sheet: the record lands close to it
 # without ever spilling onto a second page.
-REPORT_PAGE_HEIGHT_MM = 300.0
+REPORT_PAGE_HEIGHT_MM = 270.0
 REPORT_HEIGHT_MM = {
     'title': 18.0,
     'meta': 8.0,
-    'info_row': 10.0,
-    'description': 28.0,
+    'info_row': 11.0,
+    'description': 26.0,
     'conclusion': 11.0,
     'inspector': 11.0,
     'item_header': 8.0,
+    'plain_item_row': 13.0,
 }
 REPORT_INFO_ROWS = 4
-# wkhtmltopdf sizes a cell from the height of what it contains, not from the
-# height of the cell itself: the layout pushes blocks apart with empty divs,
-# so a row keeps a couple of millimetres of its own padding out of the maths.
-REPORT_DIV_PADDING_MM = 2.2
-# Rows that already carry a line of text next to their block share the height
-# with it, so their spacer only fills what the text leaves.
-REPORT_ROW_TEXT_MM = 6.0
 REPORT_GRID_PADDING_MM = 4.0
-REPORT_MAX_ROW_HEIGHT_MM = 7.0
-REPORT_MIN_ROW_HEIGHT_MM = 2.4
+REPORT_MAX_ROW_HEIGHT_MM = 12.0
+REPORT_MIN_ROW_HEIGHT_MM = 3.0
 REPORT_MAX_FONT_SIZE = 11.0
 REPORT_MIN_FONT_SIZE = 6.5
 
@@ -72,6 +66,7 @@ class QualityInspection(models.Model):
     x_reviewer_id = fields.Many2one(
         'res.users',
         string='Reviewer',
+        default=lambda self: self.env.user,
         tracking=True,
         help='Person who reviewed the inspection record.',
     )
@@ -225,14 +220,15 @@ class QualityInspection(models.Model):
     def _get_iqc_report_metrics(self):
         """Heights the printed record needs to cover one A4 page.
 
-        Every block except the item table has a fixed height (they mirror the
-        paper form); the item table takes the room that is left, so the record
-        fills the sheet. The test data grid gets what the item table leaves
-        after its own rows: a long series of measurements is printed in smaller
-        type and shorter rows instead of pushing the record onto a second page.
+        Every block carries the height of the paper form it mirrors; the item
+        table takes the room that is left, and inside it the numeric row is
+        the tallest cell of the sheet: its grid of figures is printed with
+        REPORT_TEST_DATA_ROWS rows and fills that row. A long series of
+        measurements is printed in smaller type and shorter rows instead of
+        pushing the record onto a second page.
         """
         self.ensure_one()
-        heights = REPORT_HEIGHT_MM
+        heights = dict(REPORT_HEIGHT_MM)
         numeric_lines = self.line_ids.filtered(
             lambda line: line.item_type == 'numeric')
         rows = max(
@@ -243,35 +239,73 @@ class QualityInspection(models.Model):
             + REPORT_INFO_ROWS * heights['info_row']
             + heights['description'] + heights['conclusion']
             + heights['inspector'])
-        item_count = len(self.line_ids)
-        item_row = (
-            max(items_height - heights['item_header'], 0.0) / item_count
-            if item_count else 0.0)
+        other_rows = len(self.line_ids) - len(numeric_lines)
+        numeric_row = max(
+            items_height - heights['item_header']
+            - other_rows * heights['plain_item_row'],
+            heights['plain_item_row'])
         row_height = max(
             min(REPORT_MAX_ROW_HEIGHT_MM,
-                (item_row - REPORT_GRID_PADDING_MM) / rows),
+                (numeric_row - REPORT_GRID_PADDING_MM) / rows),
             REPORT_MIN_ROW_HEIGHT_MM)
         font_size = max(
             min(REPORT_MAX_FONT_SIZE, row_height * 1.55),
             REPORT_MIN_FONT_SIZE)
-        spacer = {}
-        for key, value in heights.items():
-            if key not in ('item_header', 'info_row'):
-                spacer[key] = round(max(value - REPORT_DIV_PADDING_MM, 2.0), 2)
-        for key in ('conclusion', 'inspector'):
-            spacer[key] = round(
-                max(heights[key] - REPORT_ROW_TEXT_MM, 2.0), 2)
-        return {
+        metrics = {
             'rows': rows,
             'row_height': round(row_height, 2),
             'font_size': round(font_size, 2),
             'items_height': round(items_height, 1),
-            'item_row': round(item_row, 2),
-            'item_div': round(max(item_row - REPORT_DIV_PADDING_MM, 2.0), 2),
-            'info_div': round(
-                max(heights['info_row'] - REPORT_DIV_PADDING_MM, 2.0), 2),
-            **spacer,
+            'numeric_row': round(numeric_row, 2),
         }
+        metrics.update(heights)
+        return metrics
+
+    def _get_iqc_report_styles(self):
+        """Layout of the sheet, handed over as a stylesheet.
+
+        wkhtmltopdf sizes a table row from a rule, not from the height or the
+        padding written on the cell itself (an inline style is dropped), so
+        the block heights of the paper form are emitted as CSS. Every cell
+        keeps centring what it holds, which is what vertical-align does.
+        """
+        self.ensure_one()
+        values = dict(self._get_iqc_report_metrics())
+        values['grid_row_height'] = values['row_height']
+        rules = (
+            'table.head td.head-block { height: %(title)smm; }',
+            'table.meta td.meta-block { height: %(meta)smm; }',
+            'table.info td.info-block { height: %(info_row)smm; }',
+            'table.items tbody td.plain-item-block {'
+            ' height: %(plain_item_row)smm; }',
+            'table.items tbody td.numeric-item-block {'
+            ' height: %(numeric_row)smm; }',
+            'table.summary td.description { height: %(description)smm; }',
+            'table.summary td.conclusion { height: %(conclusion)smm; }',
+            'table.summary td.inspector { height: %(inspector)smm; }',
+            'table.test-data td { height: %(grid_row_height)smm; }',
+        )
+        return '\n'.join(
+            '                    .sn-iqc-record %s' % (rule % values)
+            for rule in rules)
+
+    def _get_iqc_manufacturer_supplier(self):
+        """Maker of the incoming material, with the supplier behind it.
+
+        The brand of the product is its manufacturer, the way the purchase
+        contract prints it; the supplier is quoted next to it when the two are
+        not the same name.
+        """
+        self.ensure_one()
+        supplier = self.picking_id.partner_id.name or ''
+        manufacturer = self.product_id.brand_id.name or ''
+        if manufacturer and supplier and manufacturer != supplier:
+            return self.env._(
+                '%(manufacturer)s (%(supplier)s)',
+                manufacturer=manufacturer,
+                supplier=supplier,
+            )
+        return supplier or manufacturer
 
 
 class QualityInspectionLine(models.Model):
