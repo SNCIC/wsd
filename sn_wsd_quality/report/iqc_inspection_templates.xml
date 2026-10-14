@@ -34,10 +34,10 @@
                        padding keeps what a row holds centred in it. */
                     .sn-iqc-record table.items tr { page-break-inside: avoid; }
                     /* Only the blocks of the paper form carry rules. The head
-                       band and the No./Date band stay plain: wkhtmltopdf does
-                       not reliably honour a border:none override on the cells
-                       of a bordered table, so the plain tables are simply
-                       never given a border. */
+                       band and the No./Date band stay plain, and the border is
+                       switched off on every level of those two tables: the
+                       report assets bring their own cell rules, and a border
+                       left on the row or the section shows through as well. */
                     .sn-iqc-record td, .sn-iqc-record th {
                         padding: 3px 4px;
                         vertical-align: middle;
@@ -51,6 +51,20 @@
                     .sn-iqc-record table.test-data td,
                     .sn-iqc-record table.test-data th {
                         border: 1px solid #111;
+                    }
+                    .sn-iqc-record table.head,
+                    .sn-iqc-record table.head thead,
+                    .sn-iqc-record table.head tbody,
+                    .sn-iqc-record table.head tr,
+                    .sn-iqc-record table.head td,
+                    .sn-iqc-record table.head th,
+                    .sn-iqc-record table.meta,
+                    .sn-iqc-record table.meta thead,
+                    .sn-iqc-record table.meta tbody,
+                    .sn-iqc-record table.meta tr,
+                    .sn-iqc-record table.meta td,
+                    .sn-iqc-record table.meta th {
+                        border: 0 none !important;
                     }
                     .sn-iqc-record .title {
                         text-align: center;
@@ -95,18 +109,22 @@
 
                 <table class="info">
                     <tr>
-                        <td class="label" style="width: 14%;">Part Name</td>
-                        <td style="width: 19%;"><span t-field="o.product_id.name"/></td>
-                        <td class="label" style="width: 14%;">Part Model</td>
-                        <td style="width: 19%;"><span t-field="o.material_specification"/></td>
-                        <td class="label" style="width: 14%;">Batch Qty</td>
-                        <td class="center info-block" style="width: 20%;"><span t-field="o.lot_qty"/></td>
+                        <!-- Columns: label, value, label, maker value (widest,
+                             so the maker and the supplier behind it keep one
+                             line each), qty label and qty value (narrow, they
+                             only hold a short word and a figure). -->
+                        <td class="label" style="width: 12%;">Part Name</td>
+                        <td style="width: 16%;"><span t-field="o.product_id.name"/></td>
+                        <td class="label" style="width: 12%;">Part Model</td>
+                        <td style="width: 32%;"><span t-field="o.material_specification"/></td>
+                        <td class="label" style="width: 12%;">Batch Qty</td>
+                        <td class="center info-block" style="width: 16%;"><span t-field="o.lot_qty"/></td>
                     </tr>
                     <tr>
                         <td class="label">Production Batch No.</td>
                         <td><span t-esc="o._get_iqc_supplier_batch_no()"/></td>
-                        <td class="label">Manufacturer Name<div>(Supplier Name)</div></td>
-                        <td>
+                        <td class="label center">Manufacturer Name<div>(Supplier Name)</div></td>
+                        <td class="center">
                             <div t-foreach="o._get_iqc_manufacturer_supplier_lines()"
                                  t-as="maker_line" t-esc="maker_line"/>
                         </td>
