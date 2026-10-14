@@ -38,9 +38,20 @@
                        switched off on every level of those two tables: the
                        report assets bring their own cell rules, and a border
                        left on the row or the section shows through as well. */
+                    /* Field names and values sit centred in their cell, the way
+                       the paper form reads. */
                     .sn-iqc-record td, .sn-iqc-record th {
                         padding: 3px 4px;
                         vertical-align: middle;
+                        text-align: center;
+                    }
+                    /* The tick ledger and the conclusion line keep their own
+                       alignment: the ticks line up from the left the way the
+                       boxes of the paper form are filled in, instead of being
+                       spread out across the cell. */
+                    .sn-iqc-record .marks,
+                    .sn-iqc-record td.conclusion {
+                        text-align: left;
                     }
                     .sn-iqc-record table.info td,
                     .sn-iqc-record table.info th,
