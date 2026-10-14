@@ -25,21 +25,23 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom_qty']" position="after">
-                <!-- The sample size only tells something on the operation the
-                     incoming control gates: on any other transfer the column
-                     is dropped instead of showing a line of zeroes. -->
+                <!-- The incoming control only speaks about the operation it
+                     gates: on any other transfer its columns are dropped as a
+                     whole. Hiding the button alone would leave its column
+                     behind as an empty strip between Demand and Quantity. -->
                 <field name="x_iqc_inspect_qty"
                        string="Qty to Inspect"
                        optional="show"
                        column_invisible="not parent.x_is_iqc_control_picking"/>
                 <field name="x_quality_inspection_count"
                        string="IQC"
-                       optional="hide"/>
+                       optional="hide"
+                       column_invisible="not parent.x_is_iqc_control_picking"/>
                 <button name="action_create_iqc_inspection"
                         type="object"
                         string="IQC"
                         icon="fa-flask"
-                        invisible="not parent.x_is_iqc_control_picking"/>
+                        column_invisible="not parent.x_is_iqc_control_picking"/>
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <field name="x_iqc_inspection_count" invisible="1"/>
