@@ -25,9 +25,13 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom_qty']" position="after">
+                <!-- The sample size only tells something on the operation the
+                     incoming control gates: on any other transfer the column
+                     is dropped instead of showing a line of zeroes. -->
                 <field name="x_iqc_inspect_qty"
                        string="Qty to Inspect"
-                       optional="show"/>
+                       optional="show"
+                       column_invisible="not parent.x_is_iqc_control_picking"/>
                 <field name="x_quality_inspection_count"
                        string="IQC"
                        optional="hide"/>
