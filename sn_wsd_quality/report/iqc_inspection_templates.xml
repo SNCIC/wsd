@@ -88,7 +88,7 @@
                         <td class="label" style="width: 14%;">Part Name</td>
                         <td style="width: 19%;"><span t-field="o.product_id.name"/></td>
                         <td class="label" style="width: 14%;">Part Model</td>
-                        <td style="width: 19%;"><span t-field="o.model_code"/></td>
+                        <td style="width: 19%;"><span t-field="o.material_specification"/></td>
                         <td class="label" style="width: 14%;">Batch Qty</td>
                         <td class="center info-block" style="width: 20%;"><span t-field="o.lot_qty"/></td>
                     </tr>
