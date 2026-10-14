@@ -28,8 +28,11 @@ class TestIssueMaterialLabel(TransactionCase):
         sequence = cls.env['ir.sequence'].create({
             'name': 'Material Issue: %s' % cls.warehouse.name,
             'code': 'sn.wsd.mes.picking.issue',
-            'prefix': 'WH/MI/',
+            # test-only prefix and high next number: the picking name must not
+            # collide with the real MES issue names (stock_picking_name_uniq)
+            'prefix': 'TEST/MI/',
             'padding': 4,
+            'number_next_actual': 990001,
             'company_id': cls.company.id,
         })
         cls.issue_type = cls.env['stock.picking.type'].create({
