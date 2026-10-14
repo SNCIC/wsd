@@ -86,6 +86,12 @@ msgid "Activity Type Icon"
 msgstr "活动类型图标"
 
 #. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/issue_material_label.py:0
+msgid "An issue material label can only be printed for a tracked non-reel material line with an issued quantity."
+msgstr "仅可为已实际出料、非电子料盘的批次跟踪明细打印领料标签。"
+
+#. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
 msgid "Apply Reel Split"
 msgstr "应用料盘拆分"
@@ -115,6 +121,16 @@ msgstr "批次"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_generate_reel_lots
 msgid "Can Generate Reel Lots"
 msgstr "可生成料盘批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__x_can_print_issue_material_label
+msgid "Can Print Issue Material Label"
+msgstr "可打印领料标签"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_print_issue_material_labels
+msgid "Can Print Issue Material Labels"
+msgstr "可打印领料标签"
 
 #. module: sn_wsd_stock
 #. odoo-python
@@ -382,6 +398,16 @@ msgid "Is Follower"
 msgstr "是关注者"
 
 #. module: sn_wsd_stock
+#: model:sn.label.template,name:sn_wsd_stock.label_template_issue_material
+msgid "Issue Material Label"
+msgstr "领料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.actions.report,name:sn_wsd_stock.action_report_issue_material_label_zpl
+msgid "Issue Material Labels (ZPL)"
+msgstr "领料标签（ZPL）"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__label_print_count
 msgid "Label Print Count"
 msgstr "标签打印次数"
@@ -414,6 +440,11 @@ msgid "Location"
 msgstr "库位"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move_line__material_label_location
+msgid "Location printed on the material label: the final path segment of the operation destination (the line side for an issue, the rack for a receipt)."
+msgstr "打印在物料标签上的库位：取作业目标位置的最后一段路径（领料为线边，收货为货架）。"
+
+#. module: sn_wsd_stock
 #: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split
 msgid "Lot Reel Split"
 msgstr "批次料盘拆分"
@@ -432,6 +463,12 @@ msgstr "批次/序列号"
 #: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_material_code
 msgid "Material Code"
 msgstr "物料编码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_label_location
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_label_location
+msgid "Material Label Location"
+msgstr "物料标签库位"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_label_printed
@@ -524,9 +561,21 @@ msgstr "不排除周末"
 
 #. module: sn_wsd_stock
 #. odoo-python
+#: code:addons/sn_wsd_stock/report/issue_material_label.py:0
+msgid "Nothing to print: no tracked non-reel material operation with an issued quantity was selected."
+msgstr "无可打印内容：所选明细中没有已实际出料、非电子料盘的批次跟踪明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
 #: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
 msgid "Nothing to print: no tracked product on this receipt."
 msgstr "无可打印内容：这张收货单上没有批次追踪产品。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/issue_material_label.py:0
+msgid "Nothing to print: this operation has no tracked non-reel material line with an issued quantity."
+msgstr "无可打印内容：本单据没有已实际出料、非电子料盘的批次跟踪明细。"
 
 
 #. module: sn_wsd_stock
@@ -569,6 +618,16 @@ msgstr "只有按批次追溯的物料才能拆分为料盘批次。"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__move_line_id
 msgid "Operation Line"
 msgstr "操作明细"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_line_detailed_operation_tree_issue_label
+msgid "Print Issue Material Label"
+msgstr "打印领料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_issue_labels
+msgid "Print Issue Material Labels"
+msgstr "打印领料标签"
 
 #. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_reel_split
