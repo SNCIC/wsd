@@ -438,31 +438,20 @@
                             </field>
                         </page>
                         <page name="scope" string="Scope">
+                            <!-- The notebook holding this page only shows for an
+                                 incoming inspection: the ipqc/fai/oqc section
+                                 form hides it and carries its own scope block.
+                                 The page therefore keeps the incoming material
+                                 source and the record printed with it, and no
+                                 field of another type: every nested group of an
+                                 outer group owns a column, so a nested group
+                                 whose fields are all hidden still leaves its
+                                 column blank. -->
                             <group>
                                 <group>
-                                    <!-- ipqc keeps its own scope trio (manufacturing order,
-                                         production line, patrol operation). IQC only looks at
-                                         the incoming material: the MES and production fields
-                                         (manufacturing order, production operation, line)
-                                         have nothing to do with an incoming inspection. -->
-                                    <field name="mes_order_id" invisible="inspection_type == 'iqc'"/>
-                                    <field name="route_operation_id" invisible="inspection_type in ('ipqc', 'iqc')"/>
-                                    <field name="x_patrol_operation_id" invisible="inspection_type != 'ipqc'"/>
-                                    <field name="production_line_id" invisible="inspection_type == 'iqc'"/>
-                                </group>
-                                <group>
-                                    <!-- 调拨/明细行仅 IQC；批次 IQC/OQC（出货检挂批次） -->
-                                    <field name="picking_id" invisible="inspection_type != 'iqc'"/>
-                                    <field name="move_line_id" invisible="inspection_type != 'iqc'"/>
-                                    <field name="lot_id" invisible="inspection_type not in ('iqc', 'oqc')"/>
-                                </group>
-                            </group>
-                            <group invisible="inspection_type != 'iqc'">
-                                <!-- Printed record of an incoming inspection:
-                                     basis and reviewer are kept with the
-                                     document, qualified qty/rate roll up the
-                                     recorded measurements. -->
-                                <group>
+                                    <field name="picking_id"/>
+                                    <field name="move_line_id"/>
+                                    <field name="lot_id"/>
                                     <field name="x_inspection_basis"/>
                                     <field name="x_reviewer_id"/>
                                 </group>
