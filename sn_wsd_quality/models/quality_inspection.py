@@ -14,6 +14,12 @@ SAMPLE_RECORD_MODE_SELECTION = [
     ('per_sample', 'One Value per Sample'),
 ]
 
+# Decimals a generated or displayed measurement keeps when the inspection item
+# says nothing: the three-decimal figures items carried before the setting
+# existed. An item measured in whole units is set to 0 instead.
+DEFAULT_DECIMAL_PLACES = 3
+MAX_DECIMAL_PLACES = 6
+
 
 class QualityInspectionScheme(models.Model):
     _name = 'sn.wsd.quality.inspection.scheme'
@@ -362,6 +368,10 @@ class QualityInspectionSchemeLine(models.Model):
         default='none',
         required=True,
     )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+    )
     instruction = fields.Text(string='Instruction')
 
     _plan_item_code_uniq = models.Constraint(
@@ -417,6 +427,7 @@ class QualityInspectionSchemeLine(models.Model):
             'selection_values': item.selection_values,
             'unit': item.unit,
             'sample_record_mode': item.sample_record_mode,
+            'decimal_places': item.decimal_places,
             'instruction': item.instruction,
         }
 
@@ -473,6 +484,13 @@ class QualityInspectionItem(models.Model):
         default='none',
         required=True,
         help='Controls whether this item gets one lot value, one value per sample, or no separate value rows.',
+    )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+        help='Decimals a generated value keeps for this item. An item measured '
+             'in whole units is set to 0 so generated figures stay integral '
+             'and the printed record shows them the same way.',
     )
     instruction = fields.Text(string='Instruction')
     note = fields.Text(string='Notes')
@@ -573,6 +591,10 @@ class QualityInspectionItemGroupLine(models.Model):
     unit = fields.Char(related='item_id.unit', string='Unit', store=True, readonly=True)
     sample_record_mode = fields.Selection(
         related='item_id.sample_record_mode', string='Sample Recording', store=True, readonly=True,
+    )
+    decimal_places = fields.Integer(
+        related='item_id.decimal_places', string='Decimal Places',
+        store=True, readonly=True,
     )
 
     _group_item_uniq = models.Constraint(
@@ -940,6 +962,15 @@ class QualityInspection(models.Model):
                 else:
                     inspection_type = vals.get('inspection_type') or 'quality'
                     vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
+            if not vals.get('model_code'):
+                # The part model printed on the record is the product's own
+                # specification unless the caller states one (a manufacturing
+                # order carries the meter model instead), so an inspection
+                # taken from a transfer needs no retyping.
+                product = self.env['product.product'].browse(
+                    vals.get('product_id')).exists()
+                if product:
+                    vals['model_code'] = product.material_specification or ''
             if not vals.get('mes_order_id'):
                 workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else self.env['sn.wsd.mes.order.route.operation']
                 production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else (workorder.mes_order_id.production_id if workorder else False)
@@ -1037,11 +1068,24 @@ class QualityInspection(models.Model):
         })
         return True
 
+    def _is_sample_matrix_inspection(self):
+        """Whether the samples ride on the sample × item result cells.
+
+        Station-mode FAI/OQC record one cell per sample and item; report-mode
+        (and manually created) inspections keep the document-level lines with
+        the measurements of the incoming record instead.
+        """
+        self.ensure_one()
+        return bool(
+            self.inspection_type in ('fai', 'oqc')
+            and self.mes_order_id
+            and self.mes_order_id.x_manage_mode != 'report')
+
     def action_set_all_pass(self):
         for inspection in self:
-            if inspection.inspection_type in ('fai', 'oqc') and inspection.mes_order_id \
-                    and inspection.mes_order_id.x_manage_mode != 'report':
-                # 过站 FAI/OQC 矩阵（决策 4）：逐格置 pass，项目行结果随格派生
+            if inspection._is_sample_matrix_inspection():
+                # Station-mode FAI/OQC: every cell goes pass, the item results
+                # follow their cells.
                 inspection.cell_ids._set_pass_values()
             else:
                 inspection.line_ids._set_pass_values()
@@ -1186,6 +1230,62 @@ class QualityInspection(models.Model):
         })
 
     @api.model
+    def _single_lot_from_move_lines(self, move_lines):
+        """Lot the incoming material carries, when it is unambiguous.
+
+        The lines of one product on a transfer usually share a single lot; the
+        inspection copies it so the printed record carries the batch without
+        anyone retyping it. Several lots stay for the inspector to pick.
+        """
+        lots = move_lines.mapped('lot_id')
+        return lots if len(lots) == 1 else self.env['stock.lot']
+
+    @api.model
+    def _iqc_source_move_lines(self, move_lines, product):
+        """Lines carrying the incoming batch of a transfer.
+
+        The batch the receiving flow recorded may sit on the quality-control
+        transfer or on the receipt that fed it: both are read back so the
+        inspection quotes the batch the goods actually arrived with.
+        """
+        upstream = move_lines.move_id.move_orig_ids.picking_id.move_line_ids
+        return move_lines | upstream.filtered(
+            lambda line: line.product_id == product)
+
+    @api.model
+    def _iqc_lot_from_move_lines(self, move_lines, product):
+        """Lot of the incoming batch, numbered when the transfer carries none.
+
+        The lot the receiving flow labelled rides along on the transfer lines.
+        A receipt without one still gets a numbered batch for the inspection,
+        out of the stock.lot coding rule (see the quality coding seeder), so
+        the printed record always has a batch to quote.
+        """
+        lot = self._single_lot_from_move_lines(move_lines)
+        if lot or not product:
+            return lot
+        lot_model = self.env['stock.lot']
+        company = product.company_id or self.env.company
+        proxy = lot_model.new({
+            'name': '/',
+            'product_id': product.id,
+            'company_id': company.id,
+        })
+        rule = self.env['sn.code.rule']._find_rule(proxy)
+        if not rule:
+            return lot_model
+        supplier_batch = next(
+            (line.supplier_batch_no for line
+             in self._iqc_source_move_lines(move_lines, product)
+             if line.supplier_batch_no), '')
+        return lot_model.create({
+            'name': rule.render(proxy),
+            'product_id': product.id,
+            'company_id': company.id,
+            'supplier_batch_no': supplier_batch,
+        })
+
+    @api.model
     def create_iqc_for_move_line(self, move_line):
         if not move_line or not move_line.picking_id:
             return self.browse()
@@ -1234,10 +1334,15 @@ class QualityInspection(models.Model):
         else:
             lot_qty = 0
 
+        move_lines = move_line or self.env['stock.move.line']
+        if not move_lines and move:
+            move_lines = move.move_line_ids
+
         return self.create_from_scheme(scheme, {
             'picking_id': picking.id,
             'move_line_id': move_line.id if move_line else False,
             'product_id': product.id,
+            'lot_id': self._iqc_lot_from_move_lines(move_lines, product).id,
             'lot_qty': lot_qty,
             'scheduled_time': picking.scheduled_date,
         })
@@ -1295,6 +1400,10 @@ class QualityInspectionLine(models.Model):
         default='none',
         required=True,
     )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+    )
     instruction = fields.Text(string='Instruction')
     is_checked = fields.Boolean(string='Checked')
     measured_value = fields.Float(string='Measured Value')
@@ -1346,10 +1455,16 @@ class QualityInspectionLine(models.Model):
             line.write(vals)
         return True
 
+    def _get_value_digits(self):
+        """Decimals the measurements of this item are written with."""
+        self.ensure_one()
+        return max(0, min(MAX_DECIMAL_PLACES, self.decimal_places))
+
     def _get_pass_numeric_value(self):
         self.ensure_one()
         if float_compare(self.lower_limit, self.upper_limit, precision_rounding=0.0001) <= 0:
-            return (self.lower_limit + self.upper_limit) / 2.0
+            return round((self.lower_limit + self.upper_limit) / 2.0,
+                         self._get_value_digits())
         return self.measured_value
 
     def _get_pass_text_value(self):
@@ -1842,6 +1957,7 @@ class StockPicking(models.Model):
                     'picking_id': picking.id,
                     'move_line_id': move_lines.id if len(move_lines) == 1 else False,
                     'product_id': product.id,
+                    'lot_id': inspection_model._iqc_lot_from_move_lines(move_lines, product).id,
                     'lot_qty': int(round(lot_qty)),
                     'scheduled_time': picking.scheduled_date,
                 })

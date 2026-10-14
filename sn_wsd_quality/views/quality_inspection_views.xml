@@ -31,6 +31,7 @@
                 <field name="lower_limit" optional="hide"/>
                 <field name="upper_limit" optional="hide"/>
                 <field name="sample_record_mode"/>
+                <field name="decimal_places"/>
                 <field name="expected_value"/>
                 <field name="unit"/>
                 <field name="active"/>
@@ -59,6 +60,7 @@
                             <field name="upper_limit" invisible="item_type != 'numeric'"/>
                             <field name="nominal_value" invisible="item_type != 'numeric'"/>
                             <field name="sample_record_mode"/>
+                            <field name="decimal_places" invisible="item_type != 'numeric'"/>
                             <field name="expected_value"/>
                             <field name="selection_values" invisible="item_type != 'selection'"/>
                             <field name="unit"/>
@@ -252,6 +254,7 @@
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
                                     <field name="nominal_value" invisible="item_type != 'numeric'"/>
+                                    <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                     <field name="sample_record_mode"/>
                                     <field name="expected_value"/>
                                     <field name="selection_values" invisible="item_type != 'selection'"/>
@@ -271,6 +274,7 @@
                                             <group>
                                                 <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                                 <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                                 <field name="expected_value"/>
                                                 <field name="selection_values" invisible="item_type != 'selection'"/>
                                                 <field name="unit"/>
@@ -335,7 +339,6 @@
                 <header>
                     <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_set_all_pass" type="object" string="Set All Pass" invisible="state not in ['open', 'in_progress']"/>
-                    <button name="action_generate_all_values" type="object" string="Generate Values" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_done" type="object" string="Finish" class="btn-primary" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_mark_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
                     <button name="%(action_report_iqc_inspection)d" type="action" string="Inspection Record" invisible="inspection_type != 'iqc'"/>
@@ -380,6 +383,7 @@
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                     <field name="upper_limit" invisible="item_type != 'numeric'"/>
                                     <field name="nominal_value" invisible="item_type != 'numeric'"/>
+                                    <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                     <field name="measured_value" invisible="item_type != 'numeric'"/>
                                     <field name="text_value" invisible="item_type == 'numeric'"/>
                                     <field name="manual_result" invisible="item_type == 'numeric'"/>
@@ -407,6 +411,7 @@
                                             <group>
                                                 <field name="lower_limit" invisible="item_type != 'numeric'"/>
                                                 <field name="upper_limit" invisible="item_type != 'numeric'"/>
+                                                <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                                 <field name="measured_value" invisible="item_type != 'numeric'"/>
                                                 <field name="text_value" invisible="item_type == 'numeric'"/>
                                                 <field name="manual_result" invisible="item_type == 'numeric'"/>
@@ -430,29 +435,26 @@
                                 </form>
                             </field>
                         </page>
-                        <page name="attachments" string="Attachments">
-                            <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
-                        </page>
                         <page name="scope" string="Scope">
                             <group>
                                 <!-- 范围页归 IQC：ipqc/fai/oqc 各自的区段式表单
                                      （mes_order_fai_views.xml）自带范围区；
                                      制造订单/工作中心/原生工序/区域/型号仅 IQC -->
                                 <group>
-                                    <field name="production_id" invisible="inspection_type in ('ipqc', 'fai', 'oqc')"/>
-                                    <field name="mes_order_id"/>
-                                    <field name="route_operation_id" invisible="inspection_type == 'ipqc'"/>
-                                    <field name="workcenter_id" invisible="inspection_type != 'iqc'"/>
-                                    <field name="operation_id" invisible="inspection_type != 'iqc'"/>
+                                    <!-- ipqc keeps its own scope trio (manufacturing order,
+                                         production line, patrol operation). IQC only looks at
+                                         the incoming material: the MES and production fields
+                                         (manufacturing order, production operation, line)
+                                         have nothing to do with an incoming inspection. -->
+                                    <field name="mes_order_id" invisible="inspection_type == 'iqc'"/>
+                                    <field name="route_operation_id" invisible="inspection_type in ('ipqc', 'iqc')"/>
+                                    <field name="x_patrol_operation_id" invisible="inspection_type != 'ipqc'"/>
+                                    <field name="production_line_id" invisible="inspection_type == 'iqc'"/>
                                 </group>
                                 <group>
-                                    <!-- ipqc：范围三件套=制令单(参考)+生产线+巡检工序 -->
-                                    <field name="x_patrol_operation_id" invisible="inspection_type != 'ipqc'"/>
-                                    <field name="production_line_id"/>
-                                    <field name="area_sn" invisible="inspection_type != 'iqc'"/>
-                                    <field name="model_code" invisible="inspection_type != 'iqc'"/>
                                     <field name="product_id" invisible="inspection_type == 'ipqc'"/>
                                     <field name="material_specification" invisible="inspection_type == 'ipqc'"/>
+                                    <field name="model_code" invisible="inspection_type != 'iqc'"/>
                                 </group>
                                 <group>
                                     <!-- 调拨/明细行仅 IQC；批次 IQC/OQC（出货检挂批次） -->
@@ -463,7 +465,6 @@
                                 <group invisible="inspection_type != 'iqc'">
                                     <field name="sample_window_start"/>
                                     <field name="sample_window_end"/>
-                                    <field name="evidence_serial_identity_id"/>
                                 </group>
                             </group>
                             <group invisible="inspection_type != 'iqc'">

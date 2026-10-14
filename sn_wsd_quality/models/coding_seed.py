@@ -24,6 +24,10 @@ QUALITY_RULE_SEEDS = [
 # type through the group field — one sequence per type, as before.
 INSPECTION_TYPE_PREFIXES = ['FAI', 'IQC', 'IPQC', 'OQC']
 
+# Prefix of the batch number an incoming inspection quotes when the transfer
+# carries no lot of its own (see _seed_iqc_lot_rule).
+IQC_LOT_PREFIX = '11_'
+
 
 class SnCodeRuleSeedQuality(models.AbstractModel):
     """Seeder for the quality-family coding rules (mes-coding-rule batch 4).
@@ -69,6 +73,7 @@ class SnCodeRuleSeedQuality(models.AbstractModel):
             })
             self._carry_sequence_value(rule, month_key, seq_code)
         self._seed_inspection_rule(rule_env, month_key)
+        self._seed_iqc_lot_rule(rule_env)
 
     @api.model
     def _legacy_next(self, sequence_code):
@@ -128,3 +133,36 @@ class SnCodeRuleSeedQuality(models.AbstractModel):
                 'value': max(self._legacy_next(
                     f'sn.wsd.quality.inspection.{prefix.lower()}') - 1, 0),
             })
+
+    @api.model
+    def _seed_iqc_lot_rule(self, rule_env):
+        """Rule numbering the internal batch an incoming inspection quotes.
+
+        The receiving flow labels and numbers its own lots; this rule only
+        serves the incoming inspections that find no batch on the transfer
+        they are opened from, so it stays out of the receiving numbering and
+        out of the material labels.
+        """
+        model_id = self.env['ir.model']._get_id('stock.lot')
+        if rule_env.search_count([
+                ('model_id', '=', model_id),
+                ('picking_type_id', '=', False)]):
+            return
+        rule_env.create({
+            'name': 'Incoming Inspection Batch Coding',
+            'model_id': model_id,
+            'company_id': False,
+            'target_field': 'name',
+            'separator': '',
+            'segment_ids': [
+                (0, 0, {'segment_type': 'fixed',
+                        'text_value': IQC_LOT_PREFIX}),
+                (0, 0, {'segment_type': 'date',
+                        'date_format': '%Y',
+                        'date_source': 'today'}),
+                (0, 0, {'segment_type': 'seq',
+                        'padding': 7,
+                        'period': 'year',
+                        'seq_impl': 'engine'}),
+            ],
+        })

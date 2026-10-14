@@ -12,10 +12,20 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_repr
 
 
-RANDOM_VALUE_DIGITS = 3
-REPORT_MEASURED_DIGITS = 3
 REPORT_TEST_DATA_COLUMNS = 7
+# Rows the printed test data grid always shows, so a short series of
+# measurements still fills the sheet like the paper form it mirrors.
+REPORT_TEST_DATA_ROWS = 4
 REPORT_FILE_SUFFIX = '.pdf'
+# Room the record may spend on the test data of one A4 page (297mm minus the
+# 10mm margins), and the type sizes that go with it: a long series of
+# measurements is printed smaller than pushed onto a second page.
+REPORT_PAGE_HEIGHT_MM = 273.0
+REPORT_TEST_DATA_HEIGHT_MM = 96.0
+REPORT_MAX_ROW_HEIGHT_MM = 7.0
+REPORT_MIN_ROW_HEIGHT_MM = 3.2
+REPORT_MAX_FONT_SIZE = 11.0
+REPORT_MIN_FONT_SIZE = 6.5
 
 
 class QualityInspectionScheme(models.Model):
@@ -63,21 +73,39 @@ class QualityInspection(models.Model):
         digits=(16, 2),
     )
 
-    @api.depends('sample_value_ids.result', 'sample_ids.result')
+    @api.depends('sample_value_ids.result', 'sample_value_ids.sample_id',
+                 'sample_ids.result', 'sample_ids.qty', 'sample_size')
     def _compute_x_report_stats(self):
+        """Qualified pieces of the incoming record.
+
+        The printed record counts pieces, not measurements: a sample is
+        qualified unless one of its measurements came out failed. Counting the
+        judged measurement rows instead would multiply the quantity by the
+        number of inspection items and break the figure of the record.
+        """
         for inspection in self:
-            measured = inspection.sample_value_ids
-            if measured:
-                judged = measured.filtered(
-                    lambda value: value.result in ('pass', 'fail'))
-            else:
-                judged = inspection.sample_ids.filtered(
-                    lambda sample: sample.result in ('pass', 'fail'))
-            passed = judged.filtered(
-                lambda record: record.result == 'pass')
-            inspection.x_pass_qty = len(passed)
+            judged_values = inspection.sample_value_ids.filtered(
+                lambda value: value.result in ('pass', 'fail'))
+            judged_samples = inspection.sample_ids.filtered(
+                lambda sample: sample.result in ('pass', 'fail'))
+            failed_values = judged_values.filtered(
+                lambda value: value.result == 'fail')
+            defect_samples = failed_values.mapped('sample_id') \
+                | judged_samples.filtered(
+                    lambda sample: sample.result == 'fail')
+            defect_qty = sum(defect_samples.mapped('qty'))
+            if not defect_samples:
+                # An item recorded per lot carries no sample: the failed item
+                # itself stands for the defect.
+                defect_qty = len(failed_values.mapped('line_id'))
+            # Nothing judged yet: the record reports no quantity instead of a
+            # fully qualified lot nobody has looked at.
+            measured = bool(judged_values or judged_samples)
+            inspection.x_pass_qty = max(
+                inspection.sample_size - defect_qty, 0) if measured else 0
             inspection.x_pass_rate = (
-                100.0 * len(passed) / len(judged) if judged else 0.0)
+                100.0 * inspection.x_pass_qty / inspection.sample_size
+                if measured and inspection.sample_size else 0.0)
 
     @api.constrains('x_report_filename')
     def _check_x_report_filename(self):
@@ -115,6 +143,20 @@ class QualityInspection(models.Model):
             lambda sample: sample.result == 'pending').write({'result': 'pass'})
         return True
 
+    def action_set_all_pass(self):
+        """Set the whole inspection pass: items, measurements and samples.
+
+        One button for the inspector. The measurements are what makes an
+        incoming inspection pass, so the items read sample by sample are
+        settled here as well instead of staying pending until someone types
+        every figure.
+        """
+        result = super().action_set_all_pass()
+        self.filtered(
+            lambda inspection: not inspection._is_sample_matrix_inspection()
+        ).line_ids._record_pass_values()
+        return result
+
     def _get_iqc_sampling_notice(self):
         """Sampling rule of the printed record, as a single term."""
         self.ensure_one()
@@ -128,6 +170,48 @@ class QualityInspection(models.Model):
             ac=self.accept_qty,
             re=self.reject_qty,
         )
+
+
+    def _get_iqc_supplier_batch_no(self):
+        """Supplier production batch printed on the incoming record.
+
+        The batch the receiving flow recorded sits on the lot; when the lot
+        carries none, the transfers behind the inspection are read back — the
+        quality-control transfer and the receipt that fed it — so the printed
+        record never shows a blank production batch.
+        """
+        self.ensure_one()
+        if self.lot_id.supplier_batch_no:
+            return self.lot_id.supplier_batch_no
+        lines = self._iqc_source_move_lines(
+            self.picking_id.move_line_ids, self.product_id)
+        return next(
+            (line.supplier_batch_no for line in lines
+             if line.supplier_batch_no), '')
+
+    def _get_iqc_report_metrics(self):
+        """Type size and row height that keep the record on a single A4 page.
+
+        The test data room of the sheet is fixed, so a long series of
+        measurements is printed in smaller type and shorter rows instead of
+        being pushed onto a second page.
+        """
+        self.ensure_one()
+        rows = max(
+            [len(line._get_report_test_data_rows()) for line in self.line_ids
+             if line.item_type == 'numeric'] or [1])
+        row_height = max(
+            min(REPORT_MAX_ROW_HEIGHT_MM, REPORT_TEST_DATA_HEIGHT_MM / rows),
+            REPORT_MIN_ROW_HEIGHT_MM)
+        font_size = max(
+            min(REPORT_MAX_FONT_SIZE, row_height * 1.55),
+            REPORT_MIN_FONT_SIZE)
+        return {
+            'rows': rows,
+            'row_height': round(row_height, 2),
+            'font_size': round(font_size, 2),
+            'page_height': REPORT_PAGE_HEIGHT_MM,
+        }
 
 
 class QualityInspectionLine(models.Model):
@@ -247,7 +331,7 @@ class QualityInspectionLine(models.Model):
         seed = '%s-%s-%s-%s' % (self.id, index, lower, upper)
         digest = hashlib.sha1(seed.encode('utf-8')).hexdigest()[:12]
         generator = random.Random(int(digest, 16))
-        return round(generator.uniform(lower, upper), RANDOM_VALUE_DIGITS)
+        return round(generator.uniform(lower, upper), self._get_value_digits())
 
     def action_generate_values(self):
         """Fill every pending measurement of this item."""
@@ -277,6 +361,32 @@ class QualityInspectionLine(models.Model):
                 })
         else:
             pending.write({'result': 'pass', 'measured_at': now})
+        return True
+
+    def _record_pass_values(self):
+        """Record a qualifying value on every measurement still waiting.
+
+        Deterministic counterpart of ``action_generate_values``: numeric items
+        take the middle of their limits instead of a random figure, so a record
+        filled by "all pass" reads back the same every time.
+        """
+        for line in self:
+            if line.inspection_id.state == 'done':
+                raise UserError(_(
+                    'Reset the inspection before recording new values.'))
+            line._ensure_sample_value_rows()
+            now = fields.Datetime.now()
+            for value in line.sample_value_ids.filtered(
+                    lambda item: item.result == 'pending'):
+                values = {'measured_at': now}
+                if line.item_type == 'numeric':
+                    values['measured_value'] = line._get_pass_numeric_value()
+                else:
+                    # A non-numeric row carries no judgement of its own: the
+                    # conclusion is written along with the value.
+                    values['text_value'] = line._get_pass_text_value()
+                    values['result'] = 'pass'
+                value.write(values)
         return True
 
     def _measure_wizard_line_values(self):
@@ -335,18 +445,24 @@ class QualityInspectionLine(models.Model):
                  for value in values]
         while cells and len(cells) % columns:
             cells.append(('', 'empty'))
-        return [cells[index:index + columns]
+        rows = [cells[index:index + columns]
                 for index in range(0, len(cells), columns)]
+        # The grid keeps the shape of the paper form: empty rows are printed
+        # under the figures instead of leaving the sheet half blank.
+        while len(rows) < REPORT_TEST_DATA_ROWS:
+            rows.append([('', 'empty')] * columns)
+        return rows
 
     def _get_report_requirement(self):
         """Requirement cell of the printed record, as a single term."""
         self.ensure_one()
         if self.item_type != 'numeric':
             return self.expected_value or self.instruction or ''
+        digits = self._get_value_digits()
         limits = '%s (%s ~ %s)' % (
-            float_repr(self.nominal_value, REPORT_MEASURED_DIGITS),
-            float_repr(self.lower_limit, REPORT_MEASURED_DIGITS),
-            float_repr(self.upper_limit, REPORT_MEASURED_DIGITS),
+            float_repr(self.nominal_value, digits),
+            float_repr(self.lower_limit, digits),
+            float_repr(self.upper_limit, digits),
         )
         return '%s %s' % (limits, self.unit) if self.unit else limits
 
@@ -369,7 +485,8 @@ class QualityInspectionSampleValue(models.Model):
     def _get_report_measured_text(self):
         self.ensure_one()
         if self.line_id.item_type == 'numeric':
-            return float_repr(self.measured_value, REPORT_MEASURED_DIGITS)
+            return float_repr(
+                self.measured_value, self.line_id._get_value_digits())
         return self.text_value or ''
 
 

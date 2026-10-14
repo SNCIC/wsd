@@ -1001,12 +1001,14 @@ class QualityInspectionSampleValue(models.Model):
             value.error_value = value.measured_value - value.line_id.nominal_value
             if value.line_id.item_type != 'numeric':
                 continue
-            if not value.measured_value and not value.text_value:
+            if not value.measured_value and not value.text_value \
+                    and not value.measured_at:
                 # A row nobody has measured yet holds no figure: judging it
                 # against the limits would read the default 0.0 as a real
                 # measurement and fail the item before the inspector starts.
-                # Keep it pending, exactly like the result cell and the
-                # measuring wizard row do.
+                # The recording stamp is what tells an untouched row from a
+                # measured zero, which a PPM item does record, so the row
+                # only stays pending while nothing was ever written on it.
                 value.result = 'pending'
             elif value.measured_value < value.line_id.lower_limit \
                     or value.measured_value > value.line_id.upper_limit:

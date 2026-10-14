@@ -3916,3 +3916,19 @@ msgid ""
 "GB/T 2828.1 normal inspection, single sampling: level %(level)s, AQL "
 "%(aql)s, AC %(ac)s, Re %(re)s"
 msgstr "GB/T 2828.1 正常检验一次抽样：检验水平 %(level)s，AQL %(aql)s，AC %(ac)s，Re %(re)s"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__decimal_places
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__decimal_places
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__decimal_places
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__decimal_places
+msgid "Decimal Places"
+msgstr "小数位数"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item__decimal_places
+msgid ""
+"Decimals a generated value keeps for this item. An item measured in whole "
+"units is set to 0 so generated figures stay integral and the printed record "
+"shows them the same way."
+msgstr "该检验项生成数值时保留的小数位数。只以整数计量的项目设为 0，生成的数值即为整数，打印记录也按相同精度显示。"

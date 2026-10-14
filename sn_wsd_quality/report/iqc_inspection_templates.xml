@@ -13,15 +13,22 @@
         <t t-set="company" t-value="o.company_id"/>
         <t t-set="lot" t-value="o.lot_id"/>
         <t t-set="supplier" t-value="o.picking_id.partner_id"/>
+        <t t-set="metrics" t-value="o._get_iqc_report_metrics()"/>
         <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
             <div class="page sn-iqc-record"
-                 style="font-family: SimSun, serif; color: #111; font-size: 11px;">
+                 t-attf-style="font-family: SimSun, serif; color: #111; font-size: 11px; height: #{metrics['page_height']}mm; box-sizing: border-box;">
                 <style>
                     .sn-iqc-record, .sn-iqc-record table, .sn-iqc-record td,
                     .sn-iqc-record th, .sn-iqc-record span, .sn-iqc-record b {
                         font-family: SimSun, serif;
                     }
                     .sn-iqc-record table { width: 100%; border-collapse: collapse; }
+                    /* The sheet is laid out once for A4: the test data block
+                       grows into the room that is left over, and nothing is
+                       pushed onto a second page. */
+                    .sn-iqc-record { page-break-inside: avoid; }
+                    .sn-iqc-record table.items { height: 42%; }
+                    .sn-iqc-record table.items tr { page-break-inside: avoid; }
                     .sn-iqc-record td, .sn-iqc-record th {
                         border: 1px solid #111;
                         padding: 3px 4px;
@@ -83,7 +90,7 @@
                     </tr>
                     <tr>
                         <td class="label">Production Batch No.</td>
-                        <td><span t-field="lot.supplier_batch_no"/></td>
+                        <td><span t-esc="o._get_iqc_supplier_batch_no()"/></td>
                         <td class="label">Manufacturer (Supplier)</td>
                         <td><span t-field="supplier.name"/></td>
                         <td class="label">Inspection Qty</td>
@@ -111,7 +118,7 @@
                     </tr>
                 </table>
 
-                <table>
+                <table class="items">
                     <thead>
                         <tr>
                             <th style="width: 7%;">Item No.</th>
@@ -129,11 +136,13 @@
                             </td>
                             <td>
                                 <t t-if="line.item_type == 'numeric'">
-                                    <table class="test-data">
+                                    <table class="test-data"
+                                           t-attf-style="font-size: #{metrics['font_size']}px;">
                                         <tr t-foreach="line._get_report_test_data_rows()"
                                             t-as="row">
                                             <td t-foreach="row" t-as="cell"
-                                                t-att-class="cell[1]">
+                                                t-att-class="cell[1]"
+                                                t-attf-style="height: #{metrics['row_height']}mm;">
                                                 <t t-esc="cell[0]"/>
                                             </td>
                                         </tr>
