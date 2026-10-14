@@ -1,4 +1,4 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_quality
 #
@@ -482,6 +482,7 @@ msgstr "元器件类型"
 #. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__concession
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
 msgid "Concession"
 msgstr "让步接收"
 
@@ -1357,6 +1358,7 @@ msgstr "检验类型"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__inspector_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
 msgid "Inspector"
 msgstr "检验员"
 
@@ -3932,3 +3934,8 @@ msgid ""
 "units is set to 0 so generated figures stay integral and the printed record "
 "shows them the same way."
 msgstr "该检验项生成数值时保留的小数位数。只以整数计量的项目设为 0，生成的数值即为整数，打印记录也按相同精度显示。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Inspection Items"
+msgstr "检验项目"

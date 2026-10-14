@@ -17,13 +17,31 @@ REPORT_TEST_DATA_COLUMNS = 7
 # measurements still fills the sheet like the paper form it mirrors.
 REPORT_TEST_DATA_ROWS = 4
 REPORT_FILE_SUFFIX = '.pdf'
-# Room the record may spend on the test data of one A4 page (297mm minus the
-# 10mm margins), and the type sizes that go with it: a long series of
-# measurements is printed smaller than pushed onto a second page.
-REPORT_PAGE_HEIGHT_MM = 273.0
-REPORT_TEST_DATA_HEIGHT_MM = 96.0
+# Height the printed record fills on one A4 page (297mm minus the 10mm
+# margins, kept short of the edge) and the height of every block that is not
+# the item table: the item table takes the room that is left, so the record
+# covers the sheet instead of stopping in the middle of it.
+REPORT_PAGE_HEIGHT_MM = 270.0
+REPORT_HEIGHT_MM = {
+    'title': 18.0,
+    'meta': 8.0,
+    'info_row': 10.0,
+    'description': 28.0,
+    'conclusion': 11.0,
+    'inspector': 11.0,
+    'item_header': 8.0,
+}
+REPORT_INFO_ROWS = 4
+# wkhtmltopdf sizes a cell from the height of what it contains, not from the
+# height of the cell itself: the layout pushes blocks apart with empty divs,
+# so a row keeps a couple of millimetres of its own padding out of the maths.
+REPORT_DIV_PADDING_MM = 2.2
+# Rows that already carry a line of text next to their block share the height
+# with it, so their spacer only fills what the text leaves.
+REPORT_ROW_TEXT_MM = 6.0
+REPORT_GRID_PADDING_MM = 4.0
 REPORT_MAX_ROW_HEIGHT_MM = 7.0
-REPORT_MIN_ROW_HEIGHT_MM = 3.2
+REPORT_MIN_ROW_HEIGHT_MM = 2.4
 REPORT_MAX_FONT_SIZE = 11.0
 REPORT_MIN_FONT_SIZE = 6.5
 
@@ -190,27 +208,54 @@ class QualityInspection(models.Model):
              if line.supplier_batch_no), '')
 
     def _get_iqc_report_metrics(self):
-        """Type size and row height that keep the record on a single A4 page.
+        """Heights the printed record needs to cover one A4 page.
 
-        The test data room of the sheet is fixed, so a long series of
-        measurements is printed in smaller type and shorter rows instead of
-        being pushed onto a second page.
+        Every block except the item table has a fixed height (they mirror the
+        paper form); the item table takes the room that is left, so the record
+        fills the sheet. The test data grid gets what the item table leaves
+        after its own rows: a long series of measurements is printed in smaller
+        type and shorter rows instead of pushing the record onto a second page.
         """
         self.ensure_one()
+        heights = REPORT_HEIGHT_MM
+        numeric_lines = self.line_ids.filtered(
+            lambda line: line.item_type == 'numeric')
         rows = max(
-            [len(line._get_report_test_data_rows()) for line in self.line_ids
-             if line.item_type == 'numeric'] or [1])
+            [len(line._get_report_test_data_rows()) for line in numeric_lines]
+            or [1])
+        items_height = REPORT_PAGE_HEIGHT_MM - (
+            heights['title'] + heights['meta']
+            + REPORT_INFO_ROWS * heights['info_row']
+            + heights['description'] + heights['conclusion']
+            + heights['inspector'])
+        item_count = len(self.line_ids)
+        item_row = (
+            max(items_height - heights['item_header'], 0.0) / item_count
+            if item_count else 0.0)
         row_height = max(
-            min(REPORT_MAX_ROW_HEIGHT_MM, REPORT_TEST_DATA_HEIGHT_MM / rows),
+            min(REPORT_MAX_ROW_HEIGHT_MM,
+                (item_row - REPORT_GRID_PADDING_MM) / rows),
             REPORT_MIN_ROW_HEIGHT_MM)
         font_size = max(
             min(REPORT_MAX_FONT_SIZE, row_height * 1.55),
             REPORT_MIN_FONT_SIZE)
+        spacer = {}
+        for key, value in heights.items():
+            if key not in ('item_header', 'info_row'):
+                spacer[key] = round(max(value - REPORT_DIV_PADDING_MM, 2.0), 2)
+        for key in ('conclusion', 'inspector'):
+            spacer[key] = round(
+                max(heights[key] - REPORT_ROW_TEXT_MM, 2.0), 2)
         return {
             'rows': rows,
             'row_height': round(row_height, 2),
             'font_size': round(font_size, 2),
-            'page_height': REPORT_PAGE_HEIGHT_MM,
+            'items_height': round(items_height, 1),
+            'item_row': round(item_row, 2),
+            'item_div': round(max(item_row - REPORT_DIV_PADDING_MM, 2.0), 2),
+            'info_div': round(
+                max(heights['info_row'] - REPORT_DIV_PADDING_MM, 2.0), 2),
+            **spacer,
         }
 
 
