@@ -14,6 +14,7 @@
         <t t-set="lot" t-value="o.lot_id"/>
         <t t-set="supplier" t-value="o.picking_id.partner_id"/>
         <t t-set="metrics" t-value="o._get_iqc_report_metrics()"/>
+        <t t-set="result_labels" t-value="o._get_iqc_result_labels()"/>
         <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
             <div class="page sn-iqc-record"
                  style="font-family: SimSun, serif; color: #111; font-size: 11px;">
@@ -132,7 +133,7 @@
                     <thead>
                         <tr>
                             <th style="width: 7%;">Item No.</th>
-                            <th style="width: 14%;">Inspection Items</th>
+                            <th style="width: 14%;">Items Inspected</th>
                             <th style="width: 22%;">Requirement</th>
                             <th>Test Data</th>
                         </tr>
@@ -191,22 +192,22 @@
                                 <t t-if="o.result == 'pass'">&#9745;</t>
                                 <t t-else="">&#9744;</t>
                             </span>
-                            <span>Qualified</span>
+                            <span t-esc="result_labels['pass']"/>
                             <span style="margin-left: 46px;">
                                 <t t-if="o.result in ('fail', 'reject', 'concession')">&#9745;</t>
                                 <t t-else="">&#9744;</t>
                             </span>
-                            <span>Unqualified</span>
+                            <span t-esc="result_labels['fail']"/>
                             <span style="margin-left: 46px;">
                                 <t t-if="o.result in ('fail', 'reject')">&#9745;</t>
                                 <t t-else="">&#9744;</t>
                             </span>
-                            <span>Return</span>
+                            <span t-esc="result_labels['reject']"/>
                             <span style="margin-left: 46px;">
                                 <t t-if="o.result == 'concession'">&#9745;</t>
                                 <t t-else="">&#9744;</t>
                             </span>
-                            <span>Concession</span>
+                            <span t-esc="result_labels['concession']"/>
                             <div t-attf-style="height: #{metrics['conclusion']}mm;"></div>
                         </td>
                     </tr>

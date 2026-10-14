@@ -21,7 +21,11 @@ REPORT_FILE_SUFFIX = '.pdf'
 # margins, kept short of the edge) and the height of every block that is not
 # the item table: the item table takes the room that is left, so the record
 # covers the sheet instead of stopping in the middle of it.
-REPORT_PAGE_HEIGHT_MM = 270.0
+# Height the printed record is laid out for. wkhtmltopdf renders a cell a
+# little shorter than the spacer it holds, so the figure keeps a margin over
+# the 277mm printable height of the sheet: the record lands close to it
+# without ever spilling onto a second page.
+REPORT_PAGE_HEIGHT_MM = 300.0
 REPORT_HEIGHT_MM = {
     'title': 18.0,
     'meta': 8.0,
@@ -206,6 +210,17 @@ class QualityInspection(models.Model):
         return next(
             (line.supplier_batch_no for line in lines
              if line.supplier_batch_no), '')
+
+    def _get_iqc_result_labels(self):
+        """Conclusion words of the printed record, one per possible result.
+
+        They come from the result field itself: its selection labels are
+        translated from the module's own entries, while a plain word such as
+        "Qualified" is shared with other modules and would be translated by
+        whichever of them loads last.
+        """
+        self.ensure_one()
+        return dict(self._fields['result']._description_selection(self.env))
 
     def _get_iqc_report_metrics(self):
         """Heights the printed record needs to cover one A4 page.

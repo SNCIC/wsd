@@ -483,6 +483,7 @@ msgstr "元器件类型"
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection__result__concession
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "Concession"
 msgstr "让步接收"
 
@@ -1307,7 +1308,8 @@ msgstr "检验项组"
 #: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_item
 #: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_item
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_fai
-msgid "Inspection Items"
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "Items Inspected"
 msgstr "检验项"
 
 #. module: sn_wsd_quality
@@ -3867,16 +3869,19 @@ msgstr "结论"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "Qualified"
 msgstr "合格"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "Unqualified"
 msgstr "不合格"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "Return"
 msgstr "退货"
 
@@ -3937,5 +3942,6 @@ msgstr "该检验项生成数值时保留的小数位数。只以整数计量的
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
-msgid "Inspection Items"
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "Items Inspected"
 msgstr "检验项目"
