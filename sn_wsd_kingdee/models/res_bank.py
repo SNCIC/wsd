@@ -29,6 +29,7 @@ KINGDEE_BANK_FIELDS = (
 class ResBank(models.Model):
     """A bank of the account, kept in step with BD_BANK."""
 
+    _name = "res.bank"
     _inherit = ["res.bank", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = BANK_FORM_ID

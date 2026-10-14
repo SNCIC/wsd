@@ -29,6 +29,7 @@ KINGDEE_JOB_FIELDS = (
 class HrJob(models.Model):
     """A job position of the account, kept in step with HR_ORG_HRPOST."""
 
+    _name = "hr.job"
     _inherit = ["hr.job", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = JOB_FORM_ID

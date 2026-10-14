@@ -36,6 +36,7 @@ KINGDEE_EMPLOYEE_FIELDS = (
 class HrEmployee(models.Model):
     """An employee of the account, kept in step with BD_Empinfo."""
 
+    _name = "hr.employee"
     _inherit = ["hr.employee", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = EMPLOYEE_FORM_ID

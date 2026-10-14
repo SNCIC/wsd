@@ -55,6 +55,7 @@ KINGDEE_UNIT_FIELDS = (
 class UomUom(models.Model):
     """A unit of the account, kept in step with BD_UNIT."""
 
+    _name = "uom.uom"
     _inherit = ["uom.uom", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = UOM_FORM_ID

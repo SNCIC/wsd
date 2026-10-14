@@ -44,6 +44,7 @@ KINGDEE_BATCH_FIELDS = (
 class StockLot(models.Model):
     """A batch of the account, kept in step with BD_BatchMainFile."""
 
+    _name = "stock.lot"
     _inherit = ["stock.lot", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = BATCH_FORM_ID

@@ -29,6 +29,7 @@ KINGDEE_DEPARTMENT_FIELDS = (
 class HrDepartment(models.Model):
     """A department of the account, kept in step with BD_Department."""
 
+    _name = "hr.department"
     _inherit = ["hr.department", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = DEPARTMENT_FORM_ID

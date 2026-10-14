@@ -77,6 +77,7 @@ PUSH_BATCH_LIMIT = 50
 
 
 class ResPartner(models.Model):
+    _name = "res.partner"
     _inherit = ["res.partner", "sn.wsd.kingdee.sync.mixin"]
 
     # A partner is pushed to Kingdee as a customer: that is the object its payload

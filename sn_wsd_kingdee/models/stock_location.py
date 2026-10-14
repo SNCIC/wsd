@@ -37,6 +37,7 @@ KINGDEE_STOCK_FIELDS = (
 class StockLocation(models.Model):
     """A storage place of the account, kept in step with BD_STOCK."""
 
+    _name = "stock.location"
     _inherit = ["stock.location", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = STOCK_FORM_ID

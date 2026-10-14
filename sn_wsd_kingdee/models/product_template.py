@@ -156,6 +156,7 @@ PUSH_BATCH_LIMIT = 200
 
 
 class ProductTemplate(models.Model):
+    _name = "product.template"
     _inherit = ["product.template", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = MATERIAL_FORM_ID

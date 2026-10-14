@@ -43,6 +43,7 @@ KINGDEE_CURRENCY_VALUE_MAP = {
 class ResCurrency(models.Model):
     """A currency of the account, kept in step with BD_Currency."""
 
+    _name = "res.currency"
     _inherit = ["res.currency", "sn.wsd.kingdee.sync.mixin"]
 
     _kingdee_form_id = CURRENCY_FORM_ID
