@@ -33,14 +33,24 @@
                        wkhtmltopdf sizes a row from its content, and symmetric
                        padding keeps what a row holds centred in it. */
                     .sn-iqc-record table.items tr { page-break-inside: avoid; }
+                    /* Only the blocks of the paper form carry rules. The head
+                       band and the No./Date band stay plain: wkhtmltopdf does
+                       not reliably honour a border:none override on the cells
+                       of a bordered table, so the plain tables are simply
+                       never given a border. */
                     .sn-iqc-record td, .sn-iqc-record th {
-                        border: 1px solid #111;
                         padding: 3px 4px;
                         vertical-align: middle;
                     }
-                    .sn-iqc-record table.plain td, .sn-iqc-record table.plain th {
-                        border: 0 !important;
-                        border-style: none !important;
+                    .sn-iqc-record table.info td,
+                    .sn-iqc-record table.info th,
+                    .sn-iqc-record table.items td,
+                    .sn-iqc-record table.items th,
+                    .sn-iqc-record table.summary td,
+                    .sn-iqc-record table.summary th,
+                    .sn-iqc-record table.test-data td,
+                    .sn-iqc-record table.test-data th {
+                        border: 1px solid #111;
                     }
                     .sn-iqc-record .title {
                         text-align: center;
@@ -95,8 +105,11 @@
                     <tr>
                         <td class="label">Production Batch No.</td>
                         <td><span t-esc="o._get_iqc_supplier_batch_no()"/></td>
-                        <td class="label">Manufacturer (Supplier)</td>
-                        <td><span t-esc="o._get_iqc_manufacturer_supplier()"/></td>
+                        <td class="label">Manufacturer Name<div>(Supplier Name)</div></td>
+                        <td>
+                            <div t-foreach="o._get_iqc_manufacturer_supplier_lines()"
+                                 t-as="maker_line" t-esc="maker_line"/>
+                        </td>
                         <td class="label">Inspection Qty</td>
                         <td class="center info-block"><span t-field="o.sample_size"/></td>
                     </tr>

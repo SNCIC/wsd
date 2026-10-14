@@ -3961,3 +3961,19 @@ msgstr "制造商"
 #: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__manufacturer
 msgid "Maker of the incoming material. Defaulted from the supplier and editable: printed next to the supplier on the inspection record."
 msgstr "来料制造商。默认取供应商档案上的制造商，可修改；打印在检验记录的供应商旁。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "Manufacturer Name"
+msgstr "制造商名称"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
+msgid "(Supplier Name)"
+msgstr "（供应商名称）"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+msgid "(%(name)s)"
+msgstr "（%(name)s）"

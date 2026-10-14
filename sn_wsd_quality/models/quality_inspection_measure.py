@@ -305,24 +305,25 @@ class QualityInspection(models.Model):
             '                    .sn-iqc-record %s' % (rule % values)
             for rule in rules)
 
-    def _get_iqc_manufacturer_supplier(self):
-        """Maker of the incoming material, with the supplier behind it.
+    def _get_iqc_manufacturer_supplier_lines(self):
+        """Names printed on the maker line, one entry per printed line.
 
-        The maker defaults from the supplier and stays editable on the
-        inspection, so an incoming batch bought from a distributor names the
-        maker that actually produced it. A single name is printed when the
-        supplier is the maker itself or when no maker is recorded.
+        The maker stands on its own line and the supplier follows in brackets
+        on the next one, so a long pair still reads as two names rather than
+        as one run-on string. The maker defaults from the supplier and stays
+        editable on the inspection, so an incoming batch bought from a
+        distributor names the maker that actually produced it. A single name
+        is printed when the supplier made the material itself, and the
+        supplier stands alone when no maker was recorded.
         """
         self.ensure_one()
-        supplier = self.picking_id.partner_id.name or ''
         manufacturer = self.manufacturer or ''
-        if manufacturer and supplier and manufacturer != supplier:
-            return self.env._(
-                '%(manufacturer)s (%(supplier)s)',
-                manufacturer=manufacturer,
-                supplier=supplier,
-            )
-        return supplier or manufacturer
+        supplier = self.picking_id.partner_id.name or ''
+        if not manufacturer:
+            return [supplier] if supplier else []
+        if not supplier or supplier == manufacturer:
+            return [manufacturer]
+        return [manufacturer, self.env._('(%(name)s)', name=supplier)]
 
 
 class QualityInspectionLine(models.Model):
