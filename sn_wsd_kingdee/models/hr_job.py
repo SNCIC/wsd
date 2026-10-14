@@ -33,14 +33,10 @@ class HrJob(models.Model):
 
     _kingdee_form_id = JOB_FORM_ID
     _kingdee_query_fields = KINGDEE_JOB_FIELDS
-    # Nothing mirrors the Kingdee number of a position: it is stored on kingdee_number,
-    # and a position Odoo already has is adopted through its name (采购部经理).
+    # A position is matched on the Kingdee number only, never on its name: the account
+    # repeats a position name across departments (收发料 exists in two of them), so a
+    # name is not an identity here.
     _kingdee_number_field = None
-
-    def _kingdee_adopt_domain(self, data, number):
-        """Adopt the position Odoo already has, by name."""
-        name = (data or {}).get("FName") or ""
-        return [("name", "=", name)] if name else []
 
     @api.model
     def _kingdee_import_extra_values(self, data, form_id=None):

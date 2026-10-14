@@ -181,6 +181,16 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         """
         return []
 
+    def _kingdee_record_number(self, data, number):
+        """Identity of the Odoo record a Kingdee row describes.
+
+        Default: the Kingdee number itself, which is what ``kingdee_number`` stores and
+        what makes a run idempotent. A model whose Kingdee object is not identified by
+        its number alone overrides this: a batch number repeats across materials, so
+        the identity of a lot is the material **and** the batch.
+        """
+        return number
+
     def _kingdee_adopt_domain(self, data, number):
         """Domain of an existing Odoo record a Kingdee row describes.
 
@@ -445,6 +455,9 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
         number = data.get("FNumber")
         if not number:
             raise UserError(_("Kingdee returned a record without a number."))
+        # The identity the record is matched and stored by: the number, unless the
+        # object is identified by more than it (see ``_kingdee_record_number()``).
+        number = self._kingdee_record_number(data, number)
         forbidden = self._kingdee_is_forbidden(data)
         if forbidden and not include_disabled:
             return "skipped"

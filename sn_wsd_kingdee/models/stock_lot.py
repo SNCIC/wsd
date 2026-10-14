@@ -10,6 +10,11 @@ as a failure of that row - explicit and isolated - instead of creating a lot wit
 product. The material is resolved through its Kingdee number, then its internal
 reference.
 
+**A batch number is only unique per material.** Every material of this account has its
+own ``1``, ``01`` or ``·`` (measured on the account), so the identity a lot is matched
+and stored by is ``<material>|<batch>`` - not the batch alone, which would make the
+second material's batch overwrite the first one's. See ``_kingdee_record_number()``.
+
 **The account's batch master file is a historical record**: the first page of 2000
 rows is already full, so a first run is meant to be narrowed with the console's
 ``Kingdee Filter`` (per material, per date) and ``Batch Limit``.
@@ -46,6 +51,17 @@ class StockLot(models.Model):
     # Nothing mirrors the Kingdee number of a batch: it is stored on kingdee_number and
     # a batch is never adopted through its name (batch codes repeat across materials).
     _kingdee_number_field = None
+
+    def _kingdee_record_number(self, data, number):
+        """Identity of a batch: its material **and** its number.
+
+        A batch number is unique per material, not in the account: every material has
+        its own ``1``, ``01``, ``·``. Storing the number alone would make the second
+        material's batch look like the first one's and overwrite it, so what
+        ``kingdee_number`` keeps here is ``<material>|<batch>``.
+        """
+        material = ((data or {}).get("FMaterialID.FNumber") or "").strip()
+        return "%s|%s" % (material, number)
 
     @api.model
     def _kingdee_import_extra_values(self, data, form_id=None):
