@@ -999,11 +999,20 @@ class QualityInspectionSampleValue(models.Model):
     def _compute_value_result(self):
         for value in self:
             value.error_value = value.measured_value - value.line_id.nominal_value
-            if value.line_id.item_type == 'numeric':
-                if value.measured_value < value.line_id.lower_limit or value.measured_value > value.line_id.upper_limit:
-                    value.result = 'fail'
-                else:
-                    value.result = 'pass'
+            if value.line_id.item_type != 'numeric':
+                continue
+            if not value.measured_value and not value.text_value:
+                # A row nobody has measured yet holds no figure: judging it
+                # against the limits would read the default 0.0 as a real
+                # measurement and fail the item before the inspector starts.
+                # Keep it pending, exactly like the result cell and the
+                # measuring wizard row do.
+                value.result = 'pending'
+            elif value.measured_value < value.line_id.lower_limit \
+                    or value.measured_value > value.line_id.upper_limit:
+                value.result = 'fail'
+            else:
+                value.result = 'pass'
 
     @api.onchange('measured_value', 'text_value')
     def _onchange_measured_value(self):
