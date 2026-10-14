@@ -121,5 +121,43 @@
             <field name="model_id" ref="hr.model_hr_employee"/>
             <field name="form_id">BD_Empinfo</field>
         </record>
+
+        <record id="sync_target_job_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Job Positions</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">90</field>
+            <field name="model_id" ref="hr.model_hr_job"/>
+            <field name="form_id">HR_ORG_HRPOST</field>
+        </record>
+
+        <record id="sync_target_bank_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Banks</field>
+            <field name="module">base</field>
+            <field name="direction">in</field>
+            <field name="sequence">100</field>
+            <field name="model_id" ref="base.model_res_bank"/>
+            <field name="form_id">BD_BANK</field>
+        </record>
+
+        <!-- The storage places and the batch master file belong to the inventory
+             module: a document (a receipt, a delivery) is what needs them. -->
+        <record id="sync_target_stock_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Warehouses</field>
+            <field name="module">stock</field>
+            <field name="direction">in</field>
+            <field name="sequence">10</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="form_id">BD_STOCK</field>
+        </record>
+
+        <record id="sync_target_batch_in" model="sn.wsd.kingdee.sync.target">
+            <field name="name">Batch Master File</field>
+            <field name="module">stock</field>
+            <field name="direction">in</field>
+            <field name="sequence">20</field>
+            <field name="model_id" ref="stock.model_stock_lot"/>
+            <field name="form_id">BD_BatchMainFile</field>
+        </record>
     </data>
 </odoo>

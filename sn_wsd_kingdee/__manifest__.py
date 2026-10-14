@@ -1,15 +1,16 @@
 {
     "name": "SN WSD Kingdee Cloud Galaxy Integration",
-    "version": "19.0.2.1",
+    "version": "19.0.3.0",
     "category": "Tools",
     "summary": "Synchronize Odoo with Kingdee Cloud Galaxy (K/3 Cloud) through the WebAPI Python SDK",
     "author": "SNCIC",
     "website": "https://www.ylhctec.com",
     "license": "LGPL-3",
-    # ``uom`` comes with ``product``; ``hr`` is needed by the department master data
-    # (BD_Department -> hr.department). Further applications (stock, account) are
-    # added together with the object that needs them, never in advance.
-    "depends": ["base", "web", "product", "hr"],
+    # ``uom`` comes with ``product``; ``hr`` is needed by the department, employee and
+    # job master data; ``stock`` by the warehouses and the batch master file. Further
+    # applications (account) are added together with the object that needs them, never
+    # in advance.
+    "depends": ["base", "web", "product", "hr", "stock"],
     # The Kingdee WebAPI SDK is delivered as a local wheel (it is not published
     # on PyPI). It is imported lazily by models/kingdee_client.py so this module
     # remains installable and configurable before the wheel is deployed.

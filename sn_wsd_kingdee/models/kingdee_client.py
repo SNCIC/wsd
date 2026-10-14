@@ -50,6 +50,11 @@ SUPPLIER_FORM_ID = "BD_Supplier"
 CURRENCY_FORM_ID = "BD_Currency"
 DEPARTMENT_FORM_ID = "BD_Department"
 UOM_FORM_ID = "BD_UNIT"
+STOCK_FORM_ID = "BD_STOCK"
+BATCH_FORM_ID = "BD_BatchMainFile"
+EMPLOYEE_FORM_ID = "BD_Empinfo"
+JOB_FORM_ID = "HR_ORG_HRPOST"
+BANK_FORM_ID = "BD_BANK"
 
 # Kingdee business object used for materials (basic data). It doubles as the
 # cheapest object to prove the credentials with: ``GetDataCenters`` is served

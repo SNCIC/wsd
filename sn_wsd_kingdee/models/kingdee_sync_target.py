@@ -27,6 +27,11 @@ SYNC_METHODS = {
     ("in", "BD_Currency"): "_kingdee_import_currencies",
     ("in", "BD_Department"): "_kingdee_import_departments",
     ("in", "BD_UNIT"): "_kingdee_import_units",
+    ("in", "BD_STOCK"): "_kingdee_import_stocks",
+    ("in", "BD_BatchMainFile"): "_kingdee_import_batches",
+    ("in", "BD_Empinfo"): "_kingdee_import_employees",
+    ("in", "HR_ORG_HRPOST"): "_kingdee_import_jobs",
+    ("in", "BD_BANK"): "_kingdee_import_banks",
 }
 
 SYNC_DIRECTION_SELECTION = [

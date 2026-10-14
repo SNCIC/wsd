@@ -123,6 +123,11 @@ PY
 | `res.currency` | `BD_Currency` | **4**（`FName`/`FNumber`/`FCODE`/`FRoundType`） | **仅入站**：`FCODE`（ISO 码）、`FName`、`FSYSMBOL`（符号，Odoo 19 必填） | 按 ISO 码认领已有币别；`FRoundType` 是舍入模式，不映射 |
 | `hr.department` | `BD_Department` | **3** | **仅入站**：编码、名称 | 部门在 Odoo 无编码字段，仅按 `kingdee_number` 匹配 |
 | `uom.uom` | `BD_UNIT` | **3**（`FName`/`FUnitGroupId`/`FRoundType`） | **仅入站**：编码、名称、换算（`relative_uom_id` + `relative_factor`） | 按名称认领；换算链**一次读取两次遍历**，只添加不拆散（见 `models/uom_uom.py`） |
+| `stock.location` | `BD_STOCK` | **6** | **仅入站**：编码、名称，落为 `usage='internal'` 的库位 | 不做成 `stock.warehouse`：那边短名只有 5 字符，装不下 `02.01禁用` |
+| `stock.lot` | `BD_BatchMainFile` | **5** | **仅入站**：批号、所属物料（按金蝶编码解析） | 没有物料的批号明确报错；主档是历史档案，首次同步用 `Kingdee Filter` 收窄 |
+| `hr.employee` | `BD_Empinfo` | **7** | **仅入站**：编码、姓名、部门、岗位 | 部门/岗位用 `_kingdee_linked()` 按金蝶编码解析，解析不到留空 |
+| `hr.job` | `HR_ORG_HRPOST` | **9** | **仅入站**：编码、名称、所属部门 | 按名称认领；账套的生效/失效日期与角色实体不读 |
+| `res.bank` | `BD_BANK` | **3** | **仅入站**：编码、名称 | 按名称认领（同币别按 ISO 码、单位按名称） |
 
 > 同一模型同步多个对象时，调度键是 **(方向, 金蝶对象)**，字段也按对象分列
 > （见 `models/res_partner.py` 的 `_kingdee_form_fields`）：客户与供应商各有编码与状态，互不覆盖。

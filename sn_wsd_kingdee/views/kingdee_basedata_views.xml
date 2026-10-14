@@ -74,5 +74,122 @@
                 </xpath>
             </field>
         </record>
+        <!-- The objects of the second batch: the storage places, the batch master file,
+             the employees, the job positions and the banks. Same shape as above: the
+             link read from the account, its state, and the read back button. -->
+        <record id="view_location_form_kingdee" model="ir.ui.view">
+            <field name="name">stock.location.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_lot_form_kingdee" model="ir.ui.view">
+            <field name="name">stock.lot.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">stock.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_employee_form_kingdee" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_job_form_kingdee" model="ir.ui.view">
+            <field name="name">hr.job.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_bank_form_kingdee" model="ir.ui.view">
+            <field name="name">res.bank.form.inherit.sn.wsd.kingdee</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="Kingdee" name="kingdee">
+                        <field name="kingdee_number" readonly="1"/>
+                        <field name="kingdee_name"/>
+                        <field name="kingdee_sync_state"/>
+                        <field name="kingdee_last_sync_at"/>
+                        <field name="kingdee_sync_message" readonly="1"/>
+                    </group>
+                    <div name="kingdee_buttons" class="mt16">
+                        <button name="action_kingdee_pull"
+                                type="object"
+                                string="Refresh from Kingdee"
+                                class="btn-secondary"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

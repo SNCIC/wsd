@@ -193,6 +193,20 @@ class SnWsdKingdeeSyncMixin(models.AbstractModel):
             return []
         return [(self._kingdee_number_field, "=", number)]
 
+    @api.model
+    def _kingdee_linked(self, model_name, number, field="kingdee_number"):
+        """Odoo record of ``model_name`` synchronized with ``number``, if any.
+
+        Resolves a reference of the account (``FPostDept`` -> a department, ``FPost``
+        -> a position) through the Kingdee number of the object it points at. An empty
+        recordset means that object is not synchronized yet: the caller then leaves the
+        link empty rather than guessing one.
+        """
+        number = (number or "").strip()
+        if not number:
+            return self.env[model_name].browse()
+        return self.env[model_name].search([(field, "=", number)], limit=1)
+
     # ------------------------------------------------------------------
     # Hooks
     # ------------------------------------------------------------------

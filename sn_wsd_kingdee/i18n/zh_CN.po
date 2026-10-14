@@ -117,11 +117,16 @@ msgstr "审核"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_department__kingdee_sync_state__audited
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_employee__kingdee_sync_state__audited
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_job__kingdee_sync_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__audited
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_bank__kingdee_sync_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_currency__kingdee_sync_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_supplier_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_sync_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_mixin__kingdee_sync_state__audited
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_location__kingdee_sync_state__audited
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_lot__kingdee_sync_state__audited
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__uom_uom__kingdee_sync_state__audited
 msgid "Audited"
 msgstr "已审核"
@@ -370,8 +375,11 @@ msgstr "方向"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__display_name
@@ -379,6 +387,8 @@ msgstr "方向"
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_target__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__display_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__display_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__display_name
 msgid "Display Name"
 msgstr "显示名称"
@@ -403,12 +413,17 @@ msgstr "实体"
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__error_message
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_department__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_employee__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_job__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_bank__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_currency__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_supplier_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_log__state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_mixin__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_location__kingdee_sync_state__error
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_lot__kingdee_sync_state__error
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__uom_uom__kingdee_sync_state__error
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_kingdee_sync_log_form
 msgid "Error"
@@ -444,8 +459,11 @@ msgstr "单次同步最多处理的记录数。0 表示使用同步自身的上�
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_config_settings__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__id
@@ -453,6 +471,8 @@ msgstr "单次同步最多处理的记录数。0 表示使用同步自身的上�
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_log__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_target__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__id
 msgid "ID"
 msgstr "ID"
@@ -501,8 +521,13 @@ msgstr "库存"
 #: model:ir.ui.menu,name:sn_wsd_kingdee.menu_sn_wsd_kingdee_root
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.res_config_settings_view_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_bank_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_currency_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_department_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_employee_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_job_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_location_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_lot_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_uom_form_kingdee
 msgid "Kingdee"
@@ -602,36 +627,51 @@ msgstr "金蝶云星空服务地址，必须以 /k3cloud/ 结尾。"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_last_sync_at
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_last_sync_at
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_last_sync_at
 msgid "Kingdee Last Sync"
 msgstr "金蝶最后同步"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_log_ids
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_log_ids
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_log_ids
 msgid "Kingdee Logs"
 msgstr "金蝶日志"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_master_id
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_master_id
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_master_id
 msgid "Kingdee Master ID"
 msgstr "金蝶内码"
@@ -656,36 +696,51 @@ msgstr "金蝶物料属性"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_sync_message
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_sync_message
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_sync_message
 msgid "Kingdee Message"
 msgstr "金蝶消息"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_name
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_name
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_name
 msgid "Kingdee Name"
 msgstr "金蝶名称"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_number
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_number
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_number
 msgid "Kingdee Number"
 msgstr "金蝶编码"
@@ -725,12 +780,17 @@ msgstr "金蝶结算币别"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_department__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_employee__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_hr_job__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_product__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_product_template__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_bank__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_currency__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_partner__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_res_users__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_location__kingdee_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_kingdee.field_stock_lot__kingdee_sync_state
 #: model:ir.model.fields,field_description:sn_wsd_kingdee.field_uom_uom__kingdee_sync_state
 msgid "Kingdee Status"
 msgstr "金蝶状态"
@@ -1058,12 +1118,17 @@ msgstr "模块"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_department__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_employee__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_job__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_bank__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_currency__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_stock_location__kingdee_name
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_stock_lot__kingdee_name
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_uom_uom__kingdee_name
 msgid "Name (FName) as returned by Kingdee."
 msgstr "金蝶返回的名称（FName）。"
@@ -1118,23 +1183,33 @@ msgstr "金蝶给该计量单位（BD_UNIT）的名称，便于从编码看出�
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_department__kingdee_sync_state__not_synced
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_employee__kingdee_sync_state__not_synced
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_job__kingdee_sync_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__not_synced
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_bank__kingdee_sync_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_currency__kingdee_sync_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_supplier_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_sync_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_mixin__kingdee_sync_state__not_synced
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_location__kingdee_sync_state__not_synced
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_lot__kingdee_sync_state__not_synced
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__uom_uom__kingdee_sync_state__not_synced
 msgid "Not Synchronized"
 msgstr "未同步"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_department__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_employee__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_hr_job__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_product_product__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_product_template__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_res_bank__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_currency__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_partner__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_res_users__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_sn_wsd_kingdee_sync_mixin__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_stock_location__kingdee_number
+#: model:ir.model.fields,help:sn_wsd_kingdee.field_stock_lot__kingdee_number
 #: model:ir.model.fields,help:sn_wsd_kingdee.field_uom_uom__kingdee_number
 msgid ""
 "Number (FNumber) of this record in Kingdee. While it is empty the model "
@@ -1311,8 +1386,13 @@ msgstr "推送到金蝶：所有产品均已同步。"
 #. odoo-python
 #: code:addons/sn_wsd_kingdee/models/kingdee_sync_mixin.py:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.product_template_form_view_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_bank_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_currency_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_department_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_employee_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_job_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_location_form_kingdee
+#: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_lot_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_partner_form_kingdee
 #: model_terms:ir.ui.view,arch_db:sn_wsd_kingdee.view_uom_form_kingdee
 msgid "Refresh from Kingdee"
@@ -1371,11 +1451,16 @@ msgstr "保存到金蝶"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_department__kingdee_sync_state__saved
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_employee__kingdee_sync_state__saved
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_job__kingdee_sync_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__saved
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_bank__kingdee_sync_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_currency__kingdee_sync_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_supplier_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_sync_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_mixin__kingdee_sync_state__saved
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_location__kingdee_sync_state__saved
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_lot__kingdee_sync_state__saved
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__uom_uom__kingdee_sync_state__saved
 msgid "Saved"
 msgstr "已保存"
@@ -1456,11 +1541,16 @@ msgstr "提交"
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_department__kingdee_sync_state__submitted
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_employee__kingdee_sync_state__submitted
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__hr_job__kingdee_sync_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__product_template__kingdee_sync_state__submitted
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_bank__kingdee_sync_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_currency__kingdee_sync_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_supplier_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__res_partner__kingdee_sync_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__sn_wsd_kingdee_sync_mixin__kingdee_sync_state__submitted
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_location__kingdee_sync_state__submitted
+#: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__stock_lot__kingdee_sync_state__submitted
 #: model:ir.model.fields.selection,name:sn_wsd_kingdee.selection__uom_uom__kingdee_sync_state__submitted
 msgid "Submitted"
 msgstr "已提交"
@@ -1531,10 +1621,15 @@ msgstr ""
 
 #. module: sn_wsd_kingdee
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_hr_department_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_hr_employee_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_hr_job_kingdee_number_unique
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_product_template_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_res_bank_kingdee_number_unique
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_res_currency_kingdee_number_unique
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_res_partner_kingdee_number_unique
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_sn_wsd_kingdee_sync_mixin_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_stock_location_kingdee_number_unique
+#: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_stock_lot_kingdee_number_unique
 #: model:ir.model.constraint,message:sn_wsd_kingdee.constraint_uom_uom_kingdee_number_unique
 msgid "The Kingdee number must be unique."
 msgstr "金蝶编码必须唯一。"
@@ -1864,3 +1959,62 @@ msgstr "未指定金蝶对象"
 #: model:ir.model,name:sn_wsd_kingdee.model_uom_uom
 msgid "Product Unit of Measure"
 msgstr "产品计量单位"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/stock_lot.py:0
+msgid "(no material in the answer)"
+msgstr "（金蝶返回中没有物料）"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_res_bank
+msgid "Bank"
+msgstr "银行"
+
+#. module: sn_wsd_kingdee
+#: model:sn.wsd.kingdee.sync.target,name:sn_wsd_kingdee.sync_target_bank_in
+msgid "Banks"
+msgstr "银行"
+
+#. module: sn_wsd_kingdee
+#: model:sn.wsd.kingdee.sync.target,name:sn_wsd_kingdee.sync_target_batch_in
+msgid "Batch Master File"
+msgstr "批号主档"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_hr_employee
+msgid "Employee"
+msgstr "员工"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_stock_location
+msgid "Inventory Locations"
+msgstr "库存位置"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_hr_job
+msgid "Job Position"
+msgstr "工作岗位"
+
+#. module: sn_wsd_kingdee
+#: model:sn.wsd.kingdee.sync.target,name:sn_wsd_kingdee.sync_target_job_in
+msgid "Job Positions"
+msgstr "岗位"
+
+#. module: sn_wsd_kingdee
+#: model:ir.model,name:sn_wsd_kingdee.model_stock_lot
+msgid "Lot/Serial"
+msgstr "批次/序列号"
+
+#. module: sn_wsd_kingdee
+#. odoo-python
+#: code:addons/sn_wsd_kingdee/models/stock_lot.py:0
+msgid ""
+"The batch belongs to the material %(number)s, which is not in Odoo: "
+"synchronize the materials first."
+msgstr "该批号属于物料 %(number)s，而该物料尚未同步到 Odoo：请先同步物料。"
+
+#. module: sn_wsd_kingdee
+#: model:sn.wsd.kingdee.sync.target,name:sn_wsd_kingdee.sync_target_stock_in
+msgid "Warehouses"
+msgstr "仓库"
