@@ -39,18 +39,22 @@
                        report assets bring their own cell rules, and a border
                        left on the row or the section shows through as well. */
                     /* Field names and values sit centred in their cell, the way
-                       the paper form reads. */
+                       the paper form reads. The head band and the No./Date band
+                       are left alone: they keep the alignment they had, the
+                       logo and the sheet number on the left, the title and the
+                       date centred. */
                     .sn-iqc-record td, .sn-iqc-record th {
                         padding: 3px 4px;
                         vertical-align: middle;
-                        text-align: center;
                     }
                     /* The tick ledger and the conclusion line keep their own
                        alignment: the ticks line up from the left the way the
                        boxes of the paper form are filled in, instead of being
-                       spread out across the cell. */
+                       spread out across the cell. The conclusion selector
+                       spells the table out so it outweighs the centring rule
+                       of the summary block. */
                     .sn-iqc-record .marks,
-                    .sn-iqc-record td.conclusion {
+                    .sn-iqc-record table.summary td.conclusion {
                         text-align: left;
                     }
                     .sn-iqc-record table.info td,
@@ -62,6 +66,7 @@
                     .sn-iqc-record table.test-data td,
                     .sn-iqc-record table.test-data th {
                         border: 1px solid #111;
+                        text-align: center;
                     }
                     .sn-iqc-record table.head,
                     .sn-iqc-record table.head thead,

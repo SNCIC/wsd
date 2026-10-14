@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Quality',
-    'version': '19.0.4.7.0',
+    'version': '19.0.4.8.0',
     'summary': 'Quality management for WSD meter manufacturing',
     'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
     'post_init_hook': 'post_init_hook',
