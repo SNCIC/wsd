@@ -93,9 +93,10 @@ class TestIssueMaterialLabel(TransactionCase):
         })
 
     @classmethod
-    def _create_line(cls, lot, quantity, picking=None, dest_location=None):
+    def _create_line(cls, lot, quantity, picking=None, dest_location=None,
+                     move=None):
         picking = picking or cls.picking
-        return cls.env['stock.move.line'].create({
+        values = {
             'picking_id': picking.id,
             'company_id': cls.company.id,
             'product_id': lot.product_id.id,
@@ -105,6 +106,21 @@ class TestIssueMaterialLabel(TransactionCase):
             'location_dest_id': (dest_location or cls.line_side_location).id,
             'lot_id': lot.id,
             'lot_name': lot.name,
+        }
+        if move:
+            values['move_id'] = move.id
+        return cls.env['stock.move.line'].create(values)
+
+    @classmethod
+    def _create_move(cls, picking, product, quantity):
+        return cls.env['stock.move'].create({
+            'picking_id': picking.id,
+            'company_id': cls.company.id,
+            'product_id': product.id,
+            'product_uom': product.uom_id.id,
+            'product_uom_qty': quantity,
+            'location_id': picking.location_id.id,
+            'location_dest_id': picking.location_dest_id.id,
         })
 
     def _render_zpl(self, lines):
@@ -286,6 +302,30 @@ class TestIssueMaterialLabel(TransactionCase):
         self.assertIn('^FDACME^FS', zpl)
         self.assertIn('^FDLine Side^FS', zpl)
         self.assertIn(f'^FD{self.lot.name}^FS', zpl)
+
+    def test_move_dialog_action_prints_whole_operation_detail(self):
+        picking = self._create_picking(self.warehouse.int_type_id)
+        move = self._create_move(picking, self.product, 20)
+        first_line = self._create_line(self.lot, 12, picking, move=move)
+        second_line = self._create_line(self.lot, 3, picking, move=move)
+        action = move.action_print_issue_material_labels()
+        self.assertEqual(action['type'], 'ir.actions.report')
+        self.assertTrue(action['close_on_report_download'])
+        lines = move._issue_material_label_lines()
+        self.assertEqual(lines, first_line + second_line)
+        zpl = self._render_zpl(lines)
+        self.assertEqual(zpl.count('^XA'), 2)
+        self.assertIn('^FD12^FS', zpl)
+        self.assertIn('^FD3^FS', zpl)
+        self.assertNotIn('^FD100.5^FS', zpl)
+
+    def test_move_dialog_action_skips_reel_lines(self):
+        picking = self._create_picking(self.warehouse.int_type_id)
+        move = self._create_move(picking, self.reel_product, 5000)
+        self._create_line(self.reel_lot, 5000, picking, move=move)
+        self.assertFalse(move._issue_material_label_lines())
+        with self.assertRaises(UserError):
+            move.action_print_issue_material_labels()
 
     def test_single_line_action_renders_one_label(self):
         action = self.line.action_print_issue_material_label()

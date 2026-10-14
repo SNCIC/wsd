@@ -130,3 +130,32 @@ class StockMoveLine(models.Model):
         ).report_action(self, config=False)
         action['close_on_report_download'] = True
         return action
+
+
+class StockMove(models.Model):
+    """Operation detail dialog entry point: print the labels of the whole
+    operation detail (every eligible line of the move) in one go."""
+
+    _inherit = 'stock.move'
+
+    def _issue_material_label_lines(self):
+        """Eligible lines of this move (same predicate as the picking)."""
+        self.ensure_one()
+        picking = self.picking_id
+        if not picking or not picking._is_issue_material_label_picking():
+            return self.env['stock.move.line']
+        return self.move_line_ids.filtered(
+            lambda line: line._is_issue_material_label_candidate())
+
+    def action_print_issue_material_labels(self):
+        self.ensure_one()
+        lines = self._issue_material_label_lines()
+        if not lines:
+            raise UserError(_(
+                'Nothing to print: this operation has no tracked non-reel '
+                'material line with an issued quantity.'))
+        action = self.env.ref(
+            'sn_wsd_stock.action_report_issue_material_label_zpl'
+        ).report_action(lines, config=False)
+        action['close_on_report_download'] = True
+        return action
