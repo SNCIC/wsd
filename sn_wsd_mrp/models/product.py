@@ -7,8 +7,9 @@ from .constants import BOARD_SIDE_SELECTION
 class SnWsdBrand(models.Model):
     """Brand master data used on the products and printed on the documents.
 
-    A brand is shared by every company: brands are manufacturer names
-    (supplier side), not local catalogue entries.
+    A brand is shared by every company: the trade mark a material is sold
+    under, not the maker of the material. The maker of a supplied material
+    is kept on the partner instead (res.partner.manufacturer).
     """
 
     _name = 'sn.wsd.brand'

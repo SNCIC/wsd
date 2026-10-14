@@ -8544,3 +8544,15 @@ msgstr "品牌"
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_brand
 msgid "Product Brand"
 msgstr "品牌"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_res_partner__manufacturer
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_res_users__manufacturer
+msgid "Manufacturer"
+msgstr "制造商"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_res_partner__manufacturer
+#: model:ir.model.fields,help:sn_wsd_mrp.field_res_users__manufacturer
+msgid "Maker of the material the partner supplies, when the goods come from a distributor rather than from the maker itself. Printed as \"Manufacturer (Supplier)\" on the incoming inspection record."
+msgstr "该供应商所供物料的制造商：当货物来自经销商而非制造商本身时填写。打印在来料检验记录的“制造商名称（供应商名称）”栏。"

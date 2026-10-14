@@ -70,6 +70,22 @@ class QualityInspection(models.Model):
         tracking=True,
         help='Person who reviewed the inspection record.',
     )
+    manufacturer = fields.Char(
+        string='Manufacturer',
+        compute='_compute_manufacturer',
+        store=True,
+        readonly=False,
+        tracking=True,
+        help='Maker of the incoming material. Defaulted from the supplier '
+             'and editable: printed next to the supplier on the inspection '
+             'record.',
+    )
+
+    @api.depends('picking_id.partner_id.manufacturer')
+    def _compute_manufacturer(self):
+        for inspection in self:
+            inspection.manufacturer = (
+                inspection.picking_id.partner_id.manufacturer or '')
     x_report_file = fields.Binary(
         string='Inspection Report',
         attachment=True,
@@ -292,13 +308,14 @@ class QualityInspection(models.Model):
     def _get_iqc_manufacturer_supplier(self):
         """Maker of the incoming material, with the supplier behind it.
 
-        The brand of the product is its manufacturer, the way the purchase
-        contract prints it; the supplier is quoted next to it when the two are
-        not the same name.
+        The maker defaults from the supplier and stays editable on the
+        inspection, so an incoming batch bought from a distributor names the
+        maker that actually produced it. A single name is printed when the
+        supplier is the maker itself or when no maker is recorded.
         """
         self.ensure_one()
         supplier = self.picking_id.partner_id.name or ''
-        manufacturer = self.product_id.brand_id.name or ''
+        manufacturer = self.manufacturer or ''
         if manufacturer and supplier and manufacturer != supplier:
             return self.env._(
                 '%(manufacturer)s (%(supplier)s)',

@@ -3951,3 +3951,13 @@ msgstr "检验项目"
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "%(manufacturer)s (%(supplier)s)"
 msgstr "%(manufacturer)s（%(supplier)s）"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__manufacturer
+msgid "Manufacturer"
+msgstr "制造商"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection__manufacturer
+msgid "Maker of the incoming material. Defaulted from the supplier and editable: printed next to the supplier on the inspection record."
+msgstr "来料制造商。默认取供应商档案上的制造商，可修改；打印在检验记录的供应商旁。"
