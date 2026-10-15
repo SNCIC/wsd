@@ -68,10 +68,10 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
-            <!-- Switch sitting right above the order lines: it decides whether
-                 the prices changed on those lines are remembered as the
-                 default prices of the vendor. -->
-            <xpath expr="//page[@name='products']/field[@name='order_line']" position="before">
+            <!-- Switch living with the other confirmation options: it decides
+                 whether the prices changed on the order lines are remembered as
+                 the default prices of the vendor. -->
+            <xpath expr="//page[@name='purchase_delivery_invoice']//group[@name='other_info']" position="inside">
                 <field name="sync_price_to_vendor_pricelist"/>
             </xpath>
         </field>

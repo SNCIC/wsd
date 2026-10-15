@@ -486,3 +486,23 @@ msgstr "采购订单"
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order_line__brand_id
 msgid "Brand of the ordered product, printed on the purchase contract."
 msgstr "订购产品的品牌，打印在采购合同上。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid "Update Vendor Pricelist"
+msgstr "更新供应商价格表"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid "Write the unit prices and discounts changed on the order lines back to the vendor pricelist of the order vendor when the order is confirmed, so that the next purchase order defaults to them."
+msgstr "确认订单时，把订单行上修改过的单价与折扣写回该订单供应商的价格表，使下一张采购订单默认带出这些价格。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "%(order)s updated the vendor price of %(vendor)s from %(old_price)s to %(new_price)s %(currency)s (discount %(old_discount)s%% -> %(new_discount)s%%)."
+msgstr "%(order)s 已将 %(vendor)s 的供应商价格由 %(old_price)s 更新为 %(new_price)s %(currency)s（折扣 %(old_discount)s%% → %(new_discount)s%%）。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "%(order)s: the vendor pricelist was not updated for %(product)s, the taxes of the order line differ from the vendor taxes of the product."
+msgstr "%(order)s：未更新 %(product)s 的供应商价格表，订单行的税与产品的供应商税不一致。"
