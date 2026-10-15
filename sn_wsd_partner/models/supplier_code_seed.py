@@ -13,8 +13,8 @@ class SnSupplierCodeSeed(models.AbstractModel):
     _name = 'sn.supplier.code.seed'
     _description = 'Supplier Code Rule Seeder'
 
-    FIELD_PATH = 'supplier_categ_id.prefix'
-    LEGACY_FIELD_PATH = 'supplier_categ_id.code'
+    FIELD_PATH = 'supplier_categ_id.code'
+    LEGACY_FIELD_PATH = 'supplier_categ_id.prefix'
 
     @api.model
     def _seed_supplier_code_rule(self):
@@ -54,10 +54,10 @@ class SnSupplierCodeSeed(models.AbstractModel):
 
     @api.model
     def _refresh_supplier_code_rule(self, rule):
-        """Repoint a rule seeded by an earlier version at the group prefix:
-        the sub-groups kept under 10 (10.001, 10.002) share the top-level
-        number, so the segment reads the prefix and no longer the group code.
-        Only the legacy path is rewritten, hand-made edits are left alone."""
+        """Repoint a rule seeded by an earlier version at the group code: a
+        sub-group numbers its suppliers with its own full number (10.002.xxx)
+        and keeps its own serial, so the segment reads the group code. Only
+        the legacy path is rewritten, hand-made edits are left alone."""
         for segment in rule.segment_ids:
             if segment.field_path == self.LEGACY_FIELD_PATH:
                 segment.field_path = self.FIELD_PATH
@@ -135,13 +135,12 @@ class SnSupplierCodeSeed(models.AbstractModel):
 
     @api.model
     def group_max_tail(self, rule, partner):
-        """Largest serial already used inside the branch of ``partner``: the
-        references are read as ``<prefix><separator><serial>`` — the prefix
-        being the top-level number, so a sub-group continues the numbering of
-        the group it sits under — and entries that do not start with a plain
-        number are skipped (a branch may also carry hand-written references
-        with extra levels)."""
-        code = partner.supplier_categ_id.prefix or ''
+        """Largest serial already used inside the group of ``partner``: the
+        references are read as ``<group code><separator><serial>``, so a group
+        continues its own numbering (the fees sub-group from its own 10.002.xxx
+        references, the fees group itself from its 10.xxx ones), and entries
+        that do not start with a plain number are skipped."""
+        code = partner.supplier_categ_id.code or ''
         if not code:
             return 0
         separator = rule.separator or ''

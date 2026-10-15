@@ -7,11 +7,12 @@ class SnWsdSupplierGroup(models.Model):
     """Supplier group: the number that prefixes the supplier code.
 
     The account keeps a two-level tree — 01, 02 ... 09, 10 (fees) carrying the
-    sub-groups 10.001 (certification fees) and 10.002 (other fees), and 99 — so
-    a group may sit under another one. The prefix of the generated supplier
-    code always comes from the top-level group: a supplier filed under 10.001
-    is numbered 10.xxx, like every other supplier of the fees group, and the
-    whole tree branch shares one counter.
+    sub-groups 10.001 (certification fees) and 10.002 (other fees), and 99 —
+    so a group may sit under another one. A supplier is numbered with the full
+    number of the group it is filed under: 10.688 for the fees group itself,
+    10.002.683 for the other-fees sub-group, each group carrying its own
+    serial. The code is what the coding rule reads, hence nothing else to
+    derive.
 
     Deliberately a model of its own, not a contact tag: a group numbers the
     suppliers that belong to it, a tag classifies contacts, and the two carry
@@ -27,17 +28,14 @@ class SnWsdSupplierGroup(models.Model):
         string='Code', required=True,
         help='Number of the group as the account shows it: two digits for a '
              'top-level group (01, 99) and the parent number plus a serial '
-             'for a sub-group (10.001). Each code may exist once.')
+             'for a sub-group (10.001). It is also the prefix of the supplier '
+             'code, and each group counts its own serial on top of it.')
     parent_id = fields.Many2one(
         'sn.wsd.supplier.group', string='Parent Group', index=True,
         ondelete='restrict',
         help='Top-level group this one sits under, if any.')
     child_ids = fields.One2many(
         'sn.wsd.supplier.group', 'parent_id', string='Sub-groups')
-    prefix = fields.Char(
-        string='Code Prefix', compute='_compute_prefix',
-        help='Top-level number used to prefix the supplier code; equals the '
-             'code itself for a top-level group.')
     active = fields.Boolean(default=True)
     display_name = fields.Char(
         string='Group', compute='_compute_display_name', store=False)
@@ -48,14 +46,6 @@ class SnWsdSupplierGroup(models.Model):
         'unique(code)',
         'The group code must be unique.',
     )
-
-    @api.depends('code', 'parent_id')
-    def _compute_prefix(self):
-        for group in self:
-            root = group
-            while root.parent_id:
-                root = root.parent_id
-            group.prefix = root.code or ''
 
     @api.depends('code', 'name')
     def _compute_display_name(self):

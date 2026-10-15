@@ -30,7 +30,6 @@
                             <field name="active" widget="boolean_toggle"/>
                         </group>
                         <group>
-                            <field name="prefix" readonly="1"/>
                             <field name="supplier_count"/>
                         </group>
                     </group>
@@ -45,9 +44,10 @@
                         </field>
                     </group>
                     <div class="text-muted">
-                        The supplier code is prefixed with the top-level number:
-                        a sub-group numbers its suppliers with the number of the
-                        group it sits under, and shares that group's counter.
+                        A supplier is numbered with the full number of its group
+                        followed by a serial, and every group counts its own:
+                        the fees group issues 10.xxx, its other-fees sub-group
+                        10.002.xxx.
                     </div>
                 </sheet>
             </form>

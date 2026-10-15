@@ -29,17 +29,13 @@ msgid "Code"
 msgstr "编码"
 
 #. module: sn_wsd_partner
-#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__prefix
-msgid "Code Prefix"
-msgstr "编码前缀"
-
-#. module: sn_wsd_partner
 #: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__code
 msgid ""
 "Number of the group as the account shows it: two digits for a top-level "
 "group (01, 99) and the parent number plus a serial for a sub-group "
-"(10.001). Each code may exist once."
-msgstr "分组的编号，与账套一致：顶层分组为两位（01、99），子分组为父编号加流水（10.001）。每个编码只能出现一次。"
+"(10.001). It is also the prefix of the supplier code, and each group counts "
+"its own serial on top of it."
+msgstr "分组的编号，与账套一致：顶层分组为两位（01、99），子分组为父编号加流水（10.001）。它同时是供应商编码的前置部分，每个分组各自在此之上计数。"
 
 #. module: sn_wsd_partner
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
@@ -53,8 +49,6 @@ msgid "Group"
 msgstr "分组"
 
 #. module: sn_wsd_partner
-#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__child_ids
-#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__parent_id
 #: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__name
 msgid "Name"
 msgstr "名称"
@@ -81,13 +75,6 @@ msgid "Sub-groups"
 msgstr "子分组"
 
 #. module: sn_wsd_partner
-#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__prefix
-msgid ""
-"Top-level number used to prefix the supplier code; equals the code itself "
-"for a top-level group."
-msgstr "用于生成供应商编码的顶层编号；顶层分组的该值即其编码本身。"
-
-#. module: sn_wsd_partner
 #: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__supplier_categ_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
 msgid "Supplier Group"
@@ -98,7 +85,7 @@ msgstr "供应商分组"
 msgid ""
 "Group the contact is a supplier of. Its code prefixes the supplier code "
 "generated when the reference is left empty."
-msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组（顶层）编号开头。"
+msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组的编号开头。"
 
 #. module: sn_wsd_partner
 #: model:ir.actions.act_window,name:sn_wsd_partner.action_sn_wsd_supplier_group
@@ -130,7 +117,7 @@ msgstr "供应商分组只支持一层子分组：%s 已位于 %s 之下。"
 msgid ""
 "A group carries the number that prefixes the supplier code of the suppliers "
 "numbered in it."
-msgstr "分组的编号会作为该分组下供应商编码的前置位。"
+msgstr "分组的编号会作为该分组下供应商编码的前置部分。"
 
 #. module: sn_wsd_partner
 #: model_terms:ir.actions.act_window,help:sn_wsd_partner.action_sn_wsd_supplier_group
@@ -140,7 +127,7 @@ msgstr "创建第一个供应商分组"
 #. module: sn_wsd_partner
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
 msgid ""
-"The supplier code is prefixed with the top-level number: a sub-group numbers "
-"its suppliers with the number of the group it sits under, and shares that "
-"group's counter."
-msgstr "供应商编码以顶层分组的编号作为前置位：子分组按其上级分组的编号为供应商编号，并与该分组共用同一个流水号。"
+"A supplier is numbered with the full number of its group followed by a "
+"serial, and every group counts its own: the fees group issues 10.xxx, its "
+"other-fees sub-group 10.002.xxx."
+msgstr "供应商编码用其分组的完整编号加流水号组成，各分组各自计数：费用组为 10.xxx，其下的其他费用子分组为 10.002.xxx。"
