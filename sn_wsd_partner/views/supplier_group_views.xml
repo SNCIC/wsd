@@ -65,8 +65,10 @@
         </field>
     </record>
 
+    <!-- Under Contacts > Configuration, alongside the other contact master
+         data. No groups attribute of its own: the menu inherits the
+         visibility of that configuration menu. -->
     <menuitem id="menu_sn_wsd_supplier_group" name="Supplier Groups"
               action="action_sn_wsd_supplier_group"
-              parent="contacts.menu_contacts" sequence="30"
-              groups="base.group_partner_manager"/>
+              parent="contacts.res_partner_menu_config" sequence="2"/>
 </odoo>
