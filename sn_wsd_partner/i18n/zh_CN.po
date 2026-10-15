@@ -1,0 +1,54 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_partner
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner_category__code
+msgid "Code"
+msgstr "编码"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,help:sn_wsd_partner.field_res_partner_category__code
+msgid ""
+"Code prefixed to the automatically generated supplier code, e.g. 01 for the "
+"electronic components group. Fill it only on the groups used as supplier "
+"groups; each code may exist once."
+msgstr "自动生成的供应商编码前置位，例如电子元器件类为 01。只需在用作供应商分组的分组上填写；每个编码只能出现一次。"
+
+#. module: sn_wsd_partner
+#: model:ir.model.constraint,message:sn_wsd_partner.constraint_res_partner_category_code_unique
+msgid "The group code must be unique."
+msgstr "分组编码必须唯一。"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__supplier_categ_id
+msgid "Supplier Group"
+msgstr "供应商分组"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,help:sn_wsd_partner.field_res_partner__supplier_categ_id
+msgid ""
+"Group the contact is a supplier of. Its code is prefixed to the supplier "
+"code generated when the reference is left empty."
+msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组的编码开头。"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_category_form_supplier_code
+msgid "e.g. 01"
+msgstr "例如 01"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_supplier_code
+msgid "Pick a group to get a code"
+msgstr "选择分组后自动生成编码"

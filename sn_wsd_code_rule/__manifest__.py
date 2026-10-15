@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Code Rule',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'Configurable document coding rules for the manufacturing domain',
     'category': 'Manufacturing/Manufacturing',
     'depends': ['stock', 'sn_wsd_field'],

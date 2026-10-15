@@ -146,10 +146,12 @@ class SnCodeRule(models.Model):
         code = self.separator.join(part for part in parts if part != '')
         if not code:
             return code
-        duplicate = self.env[record._name].search_count([
-            (self.target_field, '=', code),
-            ('id', '!=', record.id),
-        ], limit=1)
+        domain = [(self.target_field, '=', code)]
+        if record.id:
+            # a record still being created has no id yet: nothing to exclude,
+            # and a NewId in the domain is not supported
+            domain.append(('id', '!=', record.id))
+        duplicate = self.env[record._name].search_count(domain, limit=1)
         if duplicate:
             raise ValidationError(_(
                 'Generated code "%(code)s" already exists on another '
