@@ -63,6 +63,20 @@
         </field>
     </record>
 
+    <record id="purchase_order_form_vendor_price_sync" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.price.sync</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Switch sitting right above the order lines: it decides whether
+                 the prices changed on those lines are remembered as the
+                 default prices of the vendor. -->
+            <xpath expr="//page[@name='products']/field[@name='order_line']" position="before">
+                <field name="sync_price_to_vendor_pricelist"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="purchase_order_kpis_tree_contract_attachment" model="ir.ui.view">
         <field name="name">purchase.order.kpis.tree.contract.attachment</field>
         <field name="model">purchase.order</field>

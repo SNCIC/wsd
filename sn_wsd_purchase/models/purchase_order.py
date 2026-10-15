@@ -1,8 +1,9 @@
 from decimal import Decimal
 from datetime import datetime
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.tools import formatLang
+from odoo.tools.float_utils import float_compare, float_round
 from odoo.tools.misc import NON_BREAKING_SPACE, format_amount, get_lang
 
 
@@ -192,6 +193,14 @@ class PurchaseOrder(models.Model):
         compute='_compute_has_contract_attachment',
         store=True,
     )
+    sync_price_to_vendor_pricelist = fields.Boolean(
+        string='Update Vendor Pricelist',
+        default=True,
+        copy=True,
+        help="Write the unit prices and discounts changed on the order lines back "
+             "to the vendor pricelist of the order vendor when the order is "
+             "confirmed, so that the next purchase order defaults to them.",
+    )
 
     @api.depends('contract_attachment_ids')
     def _compute_has_contract_attachment(self):
@@ -204,6 +213,18 @@ class PurchaseOrder(models.Model):
             order.amount_total_chinese = cncurrency(order.amount_total, prefix=True)
             order.amount_untaxed_chinese = cncurrency(order.amount_untaxed, prefix=True)
             order.amount_tax_chinese = cncurrency(order.amount_tax, prefix=True)
+
+    def _add_supplier_to_product(self):
+        res = super()._add_supplier_to_product()
+        self._sync_vendor_pricelist_prices()
+        return res
+
+    def _sync_vendor_pricelist_prices(self):
+        """Remember the prices changed on the order as the default vendor prices."""
+        for order in self:
+            if not order.sync_price_to_vendor_pricelist:
+                continue
+            order.order_line._sync_price_to_vendor_pricelist()
 
 
 class PurchaseOrderLine(models.Model):
@@ -358,3 +379,147 @@ class PurchaseOrderLine(models.Model):
                 'price_unit_tax_included': included,
                 'price_unit_tax_excluded': excluded,
             })
+
+    def _get_price_precision(self):
+        """Return the precision used by the standard flow to compare unit prices."""
+        self.ensure_one()
+        return max(
+            self.currency_id.decimal_places,
+            self.env['decimal.precision'].precision_get('Product Price'),
+        )
+
+    def _is_price_manually_changed(self):
+        """Return whether the unit price of the line was changed by hand.
+
+        The standard computation stores the price it derived from the vendor
+        pricelist in ``technical_price_unit`` and stops refreshing
+        ``price_unit`` as soon as both differ, which makes that difference the
+        reliable flag of a manual price change.
+        """
+        self.ensure_one()
+        return float_compare(
+            self.price_unit,
+            self.technical_price_unit,
+            precision_digits=self._get_price_precision(),
+        ) != 0
+
+    def _get_quantity_in_seller_uom(self, seller):
+        """Return the ordered quantity expressed in the unit of the vendor pricelist."""
+        self.ensure_one()
+        quantity = abs(self.product_qty)
+        if self.product_uom_id and seller.product_uom_id != self.product_uom_id:
+            quantity = self.product_uom_id._compute_quantity(quantity, seller.product_uom_id)
+        return quantity
+
+    def _find_vendor_pricelist_entry(self):
+        """Return the vendor pricelist entry holding the default price of the line.
+
+        The entry already selected by the standard flow is used when available.
+        Otherwise the most specific entry (the one with the highest reached
+        minimum quantity) of the order vendor for that product is returned, and
+        failing that the entry with the lowest minimum quantity.
+        """
+        self.ensure_one()
+        if self.selected_seller_id:
+            return self.selected_seller_id
+        partner = self.order_id.partner_id
+        entries = self.product_id.seller_ids.filtered(
+            lambda seller: seller.partner_id in (partner | partner.parent_id)
+            and (not seller.company_id or seller.company_id == self.company_id)
+            and (not seller.product_id or seller.product_id == self.product_id)
+        )
+        if not entries:
+            return self.env['product.supplierinfo']
+        precision = self.env['decimal.precision'].precision_get('Product Unit')
+        reached = entries.filtered(
+            lambda seller: float_compare(
+                self._get_quantity_in_seller_uom(seller),
+                seller.min_qty,
+                precision_digits=precision,
+            ) >= 0
+        )
+        if reached:
+            return reached.sorted(key=lambda seller: (seller.min_qty, -seller.sequence, -seller.id))[-1]
+        return entries.sorted(key=lambda seller: (seller.min_qty, seller.sequence, seller.id))[0]
+
+    def _is_price_writable_to_vendor_pricelist(self):
+        """Return whether the line price can be stored as the vendor price.
+
+        A vendor price is expressed with the vendor taxes of the product. A line
+        taxed differently on a price-included tax cannot be written back without
+        shifting the default price of the next order.
+        """
+        self.ensure_one()
+        line_taxes = self.tax_ids
+        seller_taxes = self.product_id.supplier_taxes_id.filtered(
+            lambda tax: tax.company_id == self.company_id
+        )
+        differing_taxes = (seller_taxes - line_taxes) | (line_taxes - seller_taxes)
+        return not differing_taxes.filtered('price_include')
+
+    def _write_price_to_vendor_pricelist(self, seller):
+        """Store the line price and discount on the given vendor pricelist entry."""
+        self.ensure_one()
+        if not self._is_price_writable_to_vendor_pricelist():
+            self.product_id.product_tmpl_id.sudo().message_post(body=_(
+                "%(order)s: the vendor pricelist was not updated for %(product)s, the "
+                "taxes of the order line differ from the vendor taxes of the product.",
+                order=self.order_id.display_name,
+                product=self.product_id.display_name,
+            ))
+            return
+        price = self.price_unit
+        if seller.product_uom_id != self.product_uom_id:
+            price = self.product_uom_id._compute_price(price, seller.product_uom_id)
+        if seller.currency_id != self.currency_id:
+            price = self.currency_id._convert(
+                price,
+                seller.currency_id,
+                self.company_id,
+                self.order_id.date_order or fields.Date.context_today(self),
+            )
+        price = float_round(price, precision_digits=max(
+            seller.currency_id.decimal_places,
+            self.env['decimal.precision'].precision_get('Product Price'),
+        ))
+        discount = self.discount
+        if (
+            seller.currency_id.compare_amounts(price, seller.price) == 0
+            and float_compare(
+                discount,
+                seller.discount,
+                precision_digits=self.env['decimal.precision'].precision_get('Discount'),
+            ) == 0
+        ):
+            return
+        old_price = seller.price
+        old_discount = seller.discount
+        seller.sudo().write({
+            'price': price,
+            'discount': discount,
+        })
+        seller.product_tmpl_id.sudo().message_post(body=_(
+            "%(order)s updated the vendor price of %(vendor)s from %(old_price)s to "
+            "%(new_price)s %(currency)s (discount %(old_discount)s%% -> %(new_discount)s%%).",
+            order=self.order_id.display_name,
+            vendor=seller.partner_id.display_name,
+            old_price=old_price,
+            new_price=price,
+            currency=seller.currency_id.name,
+            old_discount=old_discount,
+            new_discount=discount,
+        ))
+
+    def _sync_price_to_vendor_pricelist(self):
+        """Remember the prices changed on the lines as the default vendor prices."""
+        for line in self:
+            if line.display_type or line.is_downpayment or not line.product_id:
+                continue
+            if not line._is_price_manually_changed():
+                continue
+            seller = line._find_vendor_pricelist_entry()
+            if not seller:
+                # The standard flow already created the entry of an unknown
+                # vendor with the price of this line.
+                continue
+            line._write_price_to_vendor_pricelist(seller)
