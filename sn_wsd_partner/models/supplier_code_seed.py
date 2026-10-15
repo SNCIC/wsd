@@ -13,13 +13,20 @@ class SnSupplierCodeSeed(models.AbstractModel):
     _name = 'sn.supplier.code.seed'
     _description = 'Supplier Code Rule Seeder'
 
+    FIELD_PATH = 'supplier_categ_id.prefix'
+    LEGACY_FIELD_PATH = 'supplier_categ_id.code'
+
     @api.model
     def _seed_supplier_code_rule(self):
         Rule = self.env['sn.code.rule']
         model_id = self.env['ir.model']._get_id('res.partner')
-        if not model_id or Rule.search_count([
-                ('model_id', '=', model_id),
-                ('picking_type_id', '=', False)]):
+        if not model_id:
+            return
+        existing = Rule.search([
+            ('model_id', '=', model_id),
+            ('picking_type_id', '=', False)], limit=1)
+        if existing:
+            self._refresh_supplier_code_rule(existing)
             return
         Rule.create({
             'name': 'Supplier Code',
@@ -30,7 +37,7 @@ class SnSupplierCodeSeed(models.AbstractModel):
                 (0, 0, {
                     'sequence': 10,
                     'segment_type': 'field',
-                    'field_path': 'supplier_categ_id.code',
+                    'field_path': self.FIELD_PATH,
                     'empty_policy': 'error',
                 }),
                 (0, 0, {
@@ -40,10 +47,22 @@ class SnSupplierCodeSeed(models.AbstractModel):
                     'number_next': 1,
                     'period': 'none',
                     'seq_impl': 'engine',
-                    'group_field_paths': 'supplier_categ_id.code',
+                    'group_field_paths': self.FIELD_PATH,
                 }),
             ],
         })
+
+    @api.model
+    def _refresh_supplier_code_rule(self, rule):
+        """Repoint a rule seeded by an earlier version at the group prefix:
+        the sub-groups kept under 10 (10.001, 10.002) share the top-level
+        number, so the segment reads the prefix and no longer the group code.
+        Only the legacy path is rewritten, hand-made edits are left alone."""
+        for segment in rule.segment_ids:
+            if segment.field_path == self.LEGACY_FIELD_PATH:
+                segment.field_path = self.FIELD_PATH
+            if (segment.group_field_paths or '').strip() == self.LEGACY_FIELD_PATH:
+                segment.group_field_paths = self.FIELD_PATH
 
     @api.model
     def _seed_supplier_counters(self):
@@ -116,11 +135,13 @@ class SnSupplierCodeSeed(models.AbstractModel):
 
     @api.model
     def group_max_tail(self, rule, partner):
-        """Largest serial already used inside the group of ``partner``: the
-        references are read as ``<group code><separator><serial>`` and entries
-        that do not end on a plain number are skipped (a group may also carry
-        hand-written references with extra levels)."""
-        code = partner.supplier_categ_id.code or ''
+        """Largest serial already used inside the branch of ``partner``: the
+        references are read as ``<prefix><separator><serial>`` — the prefix
+        being the top-level number, so a sub-group continues the numbering of
+        the group it sits under — and entries that do not start with a plain
+        number are skipped (a branch may also carry hand-written references
+        with extra levels)."""
+        code = partner.supplier_categ_id.prefix or ''
         if not code:
             return 0
         separator = rule.separator or ''

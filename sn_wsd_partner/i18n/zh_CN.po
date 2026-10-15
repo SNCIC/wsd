@@ -29,11 +29,17 @@ msgid "Code"
 msgstr "编码"
 
 #. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__prefix
+msgid "Code Prefix"
+msgstr "编码前缀"
+
+#. module: sn_wsd_partner
 #: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__code
 msgid ""
-"Code prefixed to the supplier code, e.g. 01 for the electronic components "
-"group. Two digits by convention; each code may exist once."
-msgstr "供应商编码的前置位，例如电子元器件类为 01。按惯例为两位；每个编码只能出现一次。"
+"Number of the group as the account shows it: two digits for a top-level "
+"group (01, 99) and the parent number plus a serial for a sub-group "
+"(10.001). Each code may exist once."
+msgstr "分组的编号，与账套一致：顶层分组为两位（01、99），子分组为父编号加流水（10.001）。每个编码只能出现一次。"
 
 #. module: sn_wsd_partner
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
@@ -47,14 +53,39 @@ msgid "Group"
 msgstr "分组"
 
 #. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__child_ids
+#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__parent_id
 #: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__name
 msgid "Name"
 msgstr "名称"
 
 #. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__parent_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_search
+msgid "Parent Group"
+msgstr "上级分组"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__parent_id
+msgid "Top-level group this one sits under, if any."
+msgstr "该分组所属的上一层分组（若是子分组）。"
+
+#. module: sn_wsd_partner
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_supplier_code
 msgid "Pick a group to get a code"
 msgstr "选择分组后自动生成编码"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__child_ids
+msgid "Sub-groups"
+msgstr "子分组"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__prefix
+msgid ""
+"Top-level number used to prefix the supplier code; equals the code itself "
+"for a top-level group."
+msgstr "用于生成供应商编码的顶层编号；顶层分组的该值即其编码本身。"
 
 #. module: sn_wsd_partner
 #: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__supplier_categ_id
@@ -67,7 +98,7 @@ msgstr "供应商分组"
 msgid ""
 "Group the contact is a supplier of. Its code prefixes the supplier code "
 "generated when the reference is left empty."
-msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组的编码开头。"
+msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组（顶层）编号开头。"
 
 #. module: sn_wsd_partner
 #: model:ir.actions.act_window,name:sn_wsd_partner.action_sn_wsd_supplier_group
@@ -88,11 +119,18 @@ msgid "The group code must be unique."
 msgstr "分组编码必须唯一。"
 
 #. module: sn_wsd_partner
+#: model:ir.model.constraint,message:sn_wsd_partner.constraint_sn_wsd_supplier_group_check_parent_depth
+msgid ""
+"Supplier groups support one level of sub-groups only: %s already sits "
+"under %s."
+msgstr "供应商分组只支持一层子分组：%s 已位于 %s 之下。"
+
+#. module: sn_wsd_partner
 #: model_terms:ir.actions.act_window,help:sn_wsd_partner.action_sn_wsd_supplier_group
 msgid ""
-"A group carries the code that prefixes the supplier code of the suppliers "
+"A group carries the number that prefixes the supplier code of the suppliers "
 "numbered in it."
-msgstr "分组的编码会作为该分组下供应商编码的前置位。"
+msgstr "分组的编号会作为该分组下供应商编码的前置位。"
 
 #. module: sn_wsd_partner
 #: model_terms:ir.actions.act_window,help:sn_wsd_partner.action_sn_wsd_supplier_group
@@ -102,6 +140,7 @@ msgstr "创建第一个供应商分组"
 #. module: sn_wsd_partner
 #: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
 msgid ""
-"New suppliers numbered in this group continue from the highest reference "
-"already used inside it; a fresh code starts at 001."
-msgstr "该分组下新建的供应商编码接续组内现有最大的编号；全新编码从 001 开始。"
+"The supplier code is prefixed with the top-level number: a sub-group numbers "
+"its suppliers with the number of the group it sits under, and shares that "
+"group's counter."
+msgstr "供应商编码以顶层分组的编号作为前置位：子分组按其上级分组的编号为供应商编号，并与该分组共用同一个流水号。"
