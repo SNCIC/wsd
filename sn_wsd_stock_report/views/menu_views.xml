@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Reporting is limited to stock managers by default: open it to stock
+         users as well, so the reports can be read without manager rights.
+         Linking adds the group, it never drops the manager one. -->
+    <record id="stock.menu_warehouse_report" model="ir.ui.menu">
+        <field name="group_ids" eval="[Command.link(ref('stock.group_stock_user'))]"/>
+    </record>
+
     <!-- 库存 → 报表（stock.menu_warehouse_report 本身限库存管理员可见） -->
     <menuitem id="menu_sn_wsd_stock_balance_report" name="收发汇总表"
               parent="stock.menu_warehouse_report"

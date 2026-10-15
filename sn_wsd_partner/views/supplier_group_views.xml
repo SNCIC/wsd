@@ -65,6 +65,14 @@
         </field>
     </record>
 
+    <!-- The configuration menu is limited to system administrators by
+         default: open it to contact managers so they can maintain the
+         supplier groups themselves. Linking adds the group, it never drops
+         the administrator one. -->
+    <record id="contacts.res_partner_menu_config" model="ir.ui.menu">
+        <field name="group_ids" eval="[Command.link(ref('base.group_partner_manager'))]"/>
+    </record>
+
     <!-- Under Contacts > Configuration, alongside the other contact master
          data. No groups attribute of its own: the menu inherits the
          visibility of that configuration menu. -->

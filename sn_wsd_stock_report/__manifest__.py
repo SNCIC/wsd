@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Stock Report',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.3.1',
     'summary': 'Stock in/out balance report (with drill-down detail) and quant valuation aggregation',
     'category': 'Inventory/Inventory',
     'depends': ['stock', 'stock_account', 'sn_wsd_material'],
