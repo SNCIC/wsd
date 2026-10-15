@@ -5,9 +5,9 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     supplier_categ_id = fields.Many2one(
-        'res.partner.category', string='Supplier Group', copy=False,
-        index=True, domain="[('code', '!=', False)]",
-        help='Group the contact is a supplier of. Its code is prefixed to the '
+        'sn.wsd.supplier.group', string='Supplier Group', copy=False,
+        index=True, ondelete='restrict',
+        help='Group the contact is a supplier of. Its code prefixes the '
              'supplier code generated when the reference is left empty.')
 
     @api.model_create_multi

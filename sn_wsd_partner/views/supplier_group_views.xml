@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_supplier_group_list" model="ir.ui.view">
+        <field name="name">sn.wsd.supplier.group.list</field>
+        <field name="model">sn.wsd.supplier.group</field>
+        <field name="arch" type="xml">
+            <list string="Supplier Groups" editable="bottom">
+                <field name="code" placeholder="01"/>
+                <field name="name" placeholder="Electronic Components"/>
+                <field name="supplier_count"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_supplier_group_form" model="ir.ui.view">
+        <field name="name">sn.wsd.supplier.group.form</field>
+        <field name="model">sn.wsd.supplier.group</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Group">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Electronic Components"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code" placeholder="01"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="supplier_count"/>
+                        </group>
+                    </group>
+                    <div class="text-muted" colspan="2">
+                        New suppliers numbered in this group continue from the
+                        highest reference already used inside it; a fresh code
+                        starts at 001.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_supplier_group_search" model="ir.ui.view">
+        <field name="name">sn.wsd.supplier.group.search</field>
+        <field name="model">sn.wsd.supplier.group</field>
+        <field name="arch" type="xml">
+            <search string="Supplier Groups">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Archived" name="inactive"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_supplier_group" model="ir.actions.act_window">
+        <field name="name">Supplier Groups</field>
+        <field name="res_model">sn.wsd.supplier.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first supplier group</p>
+            <p>A group carries the code that prefixes the supplier code of the
+               suppliers numbered in it.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_supplier_group" name="Supplier Groups"
+              action="action_sn_wsd_supplier_group"
+              parent="contacts.menu_contacts" sequence="30"
+              groups="base.group_partner_manager"/>
+</odoo>

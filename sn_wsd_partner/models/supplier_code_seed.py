@@ -55,8 +55,7 @@ class SnSupplierCodeSeed(models.AbstractModel):
         segment = self._supplier_seq_segment(rule)
         if not segment:
             return
-        groups = self.env['res.partner.category'].sudo().search(
-            [('code', '!=', False)])
+        groups = self.env['sn.wsd.supplier.group'].sudo().search([])
         for group in groups:
             self._seed_supplier_counter(rule, self._group_probe(group))
 

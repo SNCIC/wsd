@@ -14,41 +14,94 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_partner
-#: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner_category__code
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__code
 msgid "Code"
 msgstr "编码"
 
 #. module: sn_wsd_partner
-#: model:ir.model.fields,help:sn_wsd_partner.field_res_partner_category__code
+#: model:ir.model.fields,help:sn_wsd_partner.field_sn_wsd_supplier_group__code
 msgid ""
-"Code prefixed to the automatically generated supplier code, e.g. 01 for the "
-"electronic components group. Fill it only on the groups used as supplier "
-"groups; each code may exist once."
-msgstr "自动生成的供应商编码前置位，例如电子元器件类为 01。只需在用作供应商分组的分组上填写；每个编码只能出现一次。"
+"Code prefixed to the supplier code, e.g. 01 for the electronic components "
+"group. Two digits by convention; each code may exist once."
+msgstr "供应商编码的前置位，例如电子元器件类为 01。按惯例为两位；每个编码只能出现一次。"
 
 #. module: sn_wsd_partner
-#: model:ir.model.constraint,message:sn_wsd_partner.constraint_res_partner_category_code_unique
-msgid "The group code must be unique."
-msgstr "分组编码必须唯一。"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_list
+msgid "Electronic Components"
+msgstr "电子元器件类"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__display_name
+msgid "Group"
+msgstr "分组"
+
+#. module: sn_wsd_partner
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_supplier_code
+msgid "Pick a group to get a code"
+msgstr "选择分组后自动生成编码"
 
 #. module: sn_wsd_partner
 #: model:ir.model.fields,field_description:sn_wsd_partner.field_res_partner__supplier_categ_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
 msgid "Supplier Group"
 msgstr "供应商分组"
 
 #. module: sn_wsd_partner
 #: model:ir.model.fields,help:sn_wsd_partner.field_res_partner__supplier_categ_id
 msgid ""
-"Group the contact is a supplier of. Its code is prefixed to the supplier "
-"code generated when the reference is left empty."
+"Group the contact is a supplier of. Its code prefixes the supplier code "
+"generated when the reference is left empty."
 msgstr "该联系人所属的供应商分组。留空编码时，生成的供应商编码以该分组的编码开头。"
 
 #. module: sn_wsd_partner
-#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_category_form_supplier_code
-msgid "e.g. 01"
-msgstr "例如 01"
+#: model:ir.actions.act_window,name:sn_wsd_partner.action_sn_wsd_supplier_group
+#: model:ir.ui.menu,name:sn_wsd_partner.menu_sn_wsd_supplier_group
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_search
+msgid "Supplier Groups"
+msgstr "供应商分组"
 
 #. module: sn_wsd_partner
-#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_partner_form_supplier_code
-msgid "Pick a group to get a code"
-msgstr "选择分组后自动生成编码"
+#: model:ir.model.fields,field_description:sn_wsd_partner.field_sn_wsd_supplier_group__supplier_count
+msgid "Suppliers"
+msgstr "供应商数"
+
+#. module: sn_wsd_partner
+#: model:ir.model.constraint,message:sn_wsd_partner.constraint_sn_wsd_supplier_group_code_unique
+msgid "The group code must be unique."
+msgstr "分组编码必须唯一。"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.actions.act_window,help:sn_wsd_partner.action_sn_wsd_supplier_group
+msgid ""
+"A group carries the code that prefixes the supplier code of the suppliers "
+"numbered in it."
+msgstr "分组的编码会作为该分组下供应商编码的前置位。"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.actions.act_window,help:sn_wsd_partner.action_sn_wsd_supplier_group
+msgid "Create your first supplier group"
+msgstr "创建第一个供应商分组"
+
+#. module: sn_wsd_partner
+#: model_terms:ir.ui.view,arch_db:sn_wsd_partner.view_sn_wsd_supplier_group_form
+msgid ""
+"New suppliers numbered in this group continue from the highest reference "
+"already used inside it; a fresh code starts at 001."
+msgstr "该分组下新建的供应商编码接续组内现有最大的编号；全新编码从 001 开始。"
