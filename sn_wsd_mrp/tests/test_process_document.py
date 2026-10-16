@@ -20,6 +20,10 @@ class TestProcessDocument(TransactionCase):
             'product_id': cls.product.id,
             'product_qty': 1,
         })
+        cls.mo_target = cls.env['mrp.production'].create({
+            'product_id': cls.product.id,
+            'product_qty': 1,
+        })
         cls.doc_type = cls.env.ref('sn_wsd_mrp.doc_type_parameter_plan')
         Operation = cls.env['sn.wsd.operation']
         cls.op_smt = Operation.create({
@@ -107,3 +111,46 @@ class TestProcessDocument(TransactionCase):
             sorted(docs.code_ids.mapped('code')), ['PLAN-A', 'PLAN-B'])
         message = action['params']['message']
         self.assertIn('1', message)
+
+    def _copy_wizard(self, source, target, docs):
+        wizard = self.env['production.process.doc.copy.wizard'].create({
+            'source_production_id': source.id,
+            'target_production_id': target.id,
+            'line_ids': [(0, 0, {'source_document_id': doc.id}) for doc in docs],
+        })
+        return wizard.action_apply()
+
+    def test_copy_creates_lists_on_target_order(self):
+        doc_a = self._create_doc(
+            route_operation_code='SMTPRG', operation_id=self.op_smt.id)
+        doc_a.code_ids = [(0, 0, {'code': 'PLAN-A'}),
+                          (0, 0, {'code': 'PLAN-B'})]
+        action = self._copy_wizard(self.mo, self.mo_target, doc_a)
+        copied = self.env['production.process.document'].search([
+            ('production_id', '=', self.mo_target.id)])
+        self.assertEqual(len(copied), 1)
+        self.assertEqual(copied.operation_id, self.op_smt)
+        self.assertEqual(copied.type_id, self.doc_type)
+        self.assertEqual(
+            sorted(copied.code_ids.mapped('code')), ['PLAN-A', 'PLAN-B'])
+        self.assertEqual(action['tag'], 'display_notification')
+
+    def test_copy_appends_to_existing_target_list(self):
+        doc_a = self._create_doc(
+            route_operation_code='SMTPRG', operation_id=self.op_smt.id)
+        doc_a.code_ids = [(0, 0, {'code': 'PLAN-A'}),
+                          (0, 0, {'code': 'PLAN-B'})]
+        # 目标单已有同组合清单，带一个交集编号
+        target_doc = self.env['production.process.document'].create({
+            'production_id': self.mo_target.id,
+            'operation_id': self.op_smt.id,
+            'route_operation_code': 'SMTPRG',
+            'type_id': self.doc_type.id,
+            'code_ids': [(0, 0, {'code': 'PLAN-A'})],
+        })
+        self._copy_wizard(self.mo, self.mo_target, doc_a)
+        self.assertEqual(
+            sorted(target_doc.code_ids.mapped('code')), ['PLAN-A', 'PLAN-B'])
+        docs = self.env['production.process.document'].search([
+            ('production_id', '=', self.mo_target.id)])
+        self.assertEqual(len(docs), 1)

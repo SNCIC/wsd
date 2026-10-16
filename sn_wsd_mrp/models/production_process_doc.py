@@ -62,6 +62,38 @@ class ProductionProcessDoc(models.Model):
             self.route_operation_code = (
                 self.operation_id.code or self.operation_id.name)
 
+    @api.model
+    def _upsert_document_list(self, production, operation, doc_type, codes):
+        """查找或创建 制造订单+工序+类型 的清单并追加缺失编号（不删不改
+        既有编号）。返回 (清单, 追加数, 跳过数)；快速录入与跨订单复制共用。"""
+        self = self.with_company(production.company_id)
+        op_code = operation.code or operation.name
+        document = self.search([
+            ('production_id', '=', production.id),
+            ('route_operation_code', '=', op_code),
+            ('type_id', '=', doc_type.id),
+        ], limit=1)
+        created = False
+        if not document:
+            document = self.create({
+                'production_id': production.id,
+                'operation_id': operation.id,
+                'route_operation_code': op_code,
+                'type_id': doc_type.id,
+            })
+            created = True
+        existing = set(document.code_ids.mapped('code'))
+        appended = skipped = 0
+        for code in codes:
+            if code in existing:
+                skipped += 1
+                continue
+            self.env['production.process.document.code'].create({
+                'document_id': document.id, 'code': code})
+            existing.add(code)
+            appended += 1
+        return document, created, appended, skipped
+
     @api.depends('code_ids.code')
     def _compute_codes_display(self):
         for doc in self:

@@ -42,31 +42,14 @@ class ProcessDocQuickEntryWizard(models.TransientModel):
                 code for code in codes if code
                 and code not in grouped[(line.operation_id, line.type_id)]]
         Document = self.env['production.process.document']
-        Code = self.env['production.process.document.code']
         created = appended = skipped = 0
         for (operation, doc_type), codes in grouped.items():
-            op_code = operation.code or operation.name
-            doc = Document.search([
-                ('production_id', '=', self.production_id.id),
-                ('route_operation_code', '=', op_code),
-                ('type_id', '=', doc_type.id),
-            ], limit=1)
-            if not doc:
-                doc = Document.create({
-                    'production_id': self.production_id.id,
-                    'operation_id': operation.id,
-                    'route_operation_code': op_code,
-                    'type_id': doc_type.id,
-                })
-                created += 1
-            existing = set(doc.code_ids.mapped('code'))
-            for code in codes:
-                if code in existing:
-                    skipped += 1
-                    continue
-                Code.create({'document_id': doc.id, 'code': code})
-                existing.add(code)
-                appended += 1
+            _doc, was_created, line_appended, line_skipped = (
+                Document._upsert_document_list(
+                    self.production_id, operation, doc_type, codes))
+            created += int(was_created)
+            appended += line_appended
+            skipped += line_skipped
         return self._notify_applied(created, appended, skipped)
 
     def _notify_applied(self, created, appended, skipped):

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_process_doc_copy_form" model="ir.ui.view">
+        <field name="name">production.process.doc.copy.wizard.form</field>
+        <field name="model">production.process.doc.copy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Copy">
+                <group col="4">
+                    <field name="source_production_id" colspan="2"/>
+                    <field name="source_drawing_code" colspan="2"/>
+                    <field name="target_production_id" colspan="2"/>
+                    <field name="target_drawing_code" colspan="2"/>
+                </group>
+                <field name="line_ids">
+                    <list>
+                        <field name="operation_id"/>
+                        <field name="type_id"/>
+                        <field name="codes_display"/>
+                        <field name="source_document_id" column_invisible="1"/>
+                    </list>
+                </field>
+                <div class="text-muted">Pick a source order to load its lists, remove the ones you do not need, then choose the target order. Existing lists on the target are only appended to, never replaced.</div>
+                <footer>
+                    <button name="action_apply" type="object"
+                            string="Copy" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_process_doc_copy" model="ir.actions.act_window">
+        <field name="name">Copy</field>
+        <field name="res_model">production.process.doc.copy.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

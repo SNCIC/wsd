@@ -53,6 +53,8 @@
                     <button name="%(sn_wsd_mrp.action_process_doc_quick_entry)d"
                             type="action" string="Quick Entry" display="always"
                             class="btn-primary"/>
+                    <button name="%(sn_wsd_mrp.action_process_doc_copy)d"
+                            type="action" string="Copy" display="always"/>
                 </header>
                 <field name="production_id"/>
                 <field name="drawing_code"/>

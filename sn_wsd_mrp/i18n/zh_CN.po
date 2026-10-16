@@ -322,6 +322,12 @@ msgid "Add at least one line."
 msgstr "请至少添加一行。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_copy_wizard.py:0
+msgid "Add at least one list to copy."
+msgstr "请至少选择一条要复制的清单。"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_list
 msgid "Add B Route"
 msgstr "补B面工艺"
@@ -877,6 +883,7 @@ msgstr "可退回余料"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -996,6 +1003,7 @@ msgstr "编号"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__codes_display
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__codes_display
 msgid "Codes Display"
 msgstr "编号列表"
 
@@ -1072,6 +1080,13 @@ msgstr "版本对比"
 #: model:ir.actions.client,name:sn_wsd_mrp.action_route_version_compare
 msgid "Compare Route Versions"
 msgstr "版本对比"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_process_doc_copy
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_list
+msgid "Copy"
+msgstr "复制"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__machine
@@ -1703,6 +1718,8 @@ msgstr "图号键"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_drawing_no
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__drawing_code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_wizard__drawing_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__source_drawing_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__target_drawing_code
 msgid "Drawing No."
 msgstr "图号"
 
@@ -2747,6 +2764,11 @@ msgstr "当组件必须通过飞达或物料架流程进行核验时启用此项
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__line_count
 msgid "Line Count"
 msgstr "明细行数"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__line_ids
+msgid "Lists to Copy"
+msgstr "要复制的清单"
 
 #. module: sn_wsd_mrp
 #. odoo-python
@@ -4187,6 +4209,7 @@ msgstr "打开工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__current_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__operation_id
 msgid "Operation"
 msgstr "工序"
 
@@ -4777,6 +4800,11 @@ msgid ""
 msgstr "按图号选择产品；图号键自动取自产品内部参考号。"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
+msgid "Pick a source order to load its lists, remove the ones you do not need, then choose the target order. Existing lists on the target are only appended to, never replaced."
+msgstr "选源订单载入其清单，删掉不需要的，再选目标订单。目标单既有清单只追加、不替换。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order__state__picked
 msgid "Picked"
 msgstr "已领料"
@@ -4913,6 +4941,16 @@ msgid "Priority"
 msgstr "优先级"
 
 #. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_copy_wizard
+msgid "Process Document Copy"
+msgstr "工艺文件复制"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_copy_line
+msgid "Process Document Copy Line"
+msgstr "工艺文件复制行"
+
+#. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_quick_entry_wizard
 msgid "Process Document Quick Entry"
 msgstr "工艺文件快速录入"
@@ -4941,6 +4979,12 @@ msgstr "工艺文件"
 #: code:addons/sn_wsd_mrp/wizard/process_doc_quick_entry_wizard.py:0
 msgid "Process Documents Saved"
 msgstr "工艺文件已保存"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_copy_wizard.py:0
+msgid "Process Documents Copied"
+msgstr "工艺文件已复制"
 
 #. module: sn_wsd_mrp
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_process_management
@@ -6391,6 +6435,11 @@ msgid "Source Engineering Route"
 msgstr "来源设计工艺路线"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__source_production_id
+msgid "Source Manufacturing Order"
+msgstr "源制造订单"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
 msgid "Source field of the uploaded barcode, e.g. M_PACK_MAC."
 msgstr "上报条码的来源字段，如 M_PACK_MAC。"
@@ -6713,6 +6762,11 @@ msgstr "确定下线该制令单？将立即停止过站投入。"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__target_field
 msgid "Target Field"
 msgstr "目标字段"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__target_production_id
+msgid "Target Manufacturing Order"
+msgstr "目标制造订单"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__target_model
@@ -7397,6 +7451,7 @@ msgstr "当工序没有前置工序时为真：SN 从这些工序进入订单。
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__type_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__type_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__type_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 msgid "Type"
 msgstr "类型"
