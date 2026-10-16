@@ -51,7 +51,7 @@
             <list duplicate="false">
                 <header>
                     <button name="%(sn_wsd_mrp.action_process_doc_quick_entry)d"
-                            type="action" string="Quick Entry"
+                            type="action" string="Quick Entry" display="always"
                             class="btn-primary"/>
                 </header>
                 <field name="production_id"/>

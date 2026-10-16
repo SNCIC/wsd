@@ -876,6 +876,7 @@ msgstr "可退回余料"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -2950,6 +2951,7 @@ msgstr "制造库位"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_schedule_wizard_form
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_wizard__production_id
 msgid "Manufacturing Order"
 msgstr "制造订单"
 
@@ -4184,6 +4186,7 @@ msgstr "打开工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__current_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__operation_id
 msgid "Operation"
 msgstr "工序"
 
@@ -5808,6 +5811,11 @@ msgid "Route Workshop"
 msgstr "路线车间"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+msgid "Save"
+msgstr "保存"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_canvas_x
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_canvas_y
 msgid "Saved canvas position so the flow editor restores the layout."
@@ -7388,6 +7396,7 @@ msgstr "当工序没有前置工序时为真：SN 从这些工序进入订单。
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__type_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__type_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 msgid "Type"
 msgstr "类型"

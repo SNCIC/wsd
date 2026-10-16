@@ -22,11 +22,7 @@
                         <field name="company_id" column_invisible="1"/>
                     </list>
                 </field>
-                <div class="text-muted">
-                    One line per operation and type: pasted numbers become
-                    one row each on the list. Existing lists are only
-                    appended to, never replaced.
-                </div>
+                <div class="text-muted">One line per operation and type: pasted numbers become one row each on the list. Existing lists are only appended to, never replaced.</div>
                 <footer>
                     <button name="action_apply" type="object"
                             string="Save" class="btn-primary"/>
