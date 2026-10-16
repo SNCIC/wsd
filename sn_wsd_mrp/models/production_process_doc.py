@@ -8,7 +8,7 @@ class ProductionProcessDocType(models.Model):
     _description = 'Production Process Document Type'
     _order = 'sequence, id'
 
-    name = fields.Char(required=True)
+    name = fields.Char(required=True, translate=True)
     code = fields.Char(required=True, index=True,
                        help='Stable key the device API checks against.')
     sequence = fields.Integer(default=10)
@@ -35,10 +35,14 @@ class ProductionProcessDoc(models.Model):
         'res.company', required=True, index=True,
         default=lambda self: self.env.company,
         related='production_id.company_id', store=True, readonly=False)
+    operation_id = fields.Many2one(
+        'sn.wsd.operation', string='Operation', index=True,
+        check_company=True)
     route_operation_code = fields.Char(
         required=True, index=True,
         help='Operation code of the MES-order route operation this list '
-             'applies to.')
+             'applies to. Auto-filled from the operation picker; the '
+             'device API matches uploaded numbers against it.')
     type_id = fields.Many2one(
         'production.process.doc.type', required=True, index=True,
         domain="[('company_id', 'in', [company_id, False])]")
@@ -46,6 +50,14 @@ class ProductionProcessDoc(models.Model):
         'production.process.document.code', 'document_id', string='Codes')
     codes_display = fields.Char(compute='_compute_codes_display')
     note = fields.Text()
+
+    @api.onchange('operation_id')
+    def _onchange_operation_id(self):
+        # 选择工序后自动落码：API 匹配键 = 工序.code（无 code 用 name），
+        # 与 _check_process_documents 的匹配口径一致。
+        if self.operation_id:
+            self.route_operation_code = (
+                self.operation_id.code or self.operation_id.name)
 
     @api.depends('code_ids.code')
     def _compute_codes_display(self):
