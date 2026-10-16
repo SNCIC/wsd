@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_process_doc_quick_entry_form" model="ir.ui.view">
+        <field name="name">production.process.doc.quick.entry.wizard.form</field>
+        <field name="model">production.process.doc.quick.entry.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Quick Entry">
+                <group>
+                    <group>
+                        <field name="production_id"/>
+                        <field name="drawing_code"/>
+                        <field name="company_id" invisible="1"/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <field name="operation_id"
+                               options="{'no_quick_create': True}"
+                               domain="[('company_id', '=', company_id), ('active', '=', True)]"/>
+                        <field name="type_id"/>
+                        <field name="codes_text"/>
+                        <field name="company_id" column_invisible="1"/>
+                    </list>
+                </field>
+                <div class="text-muted">One line per operation and type: pasted numbers become one row each on the list. Existing lists are only appended to, never replaced.</div>
+                <footer>
+                    <button name="action_apply" type="object"
+                            string="Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_process_doc_quick_entry" model="ir.actions.act_window">
+        <field name="name">Quick Entry</field>
+        <field name="res_model">production.process.doc.quick.entry.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -17,6 +17,21 @@ class SnWsdOperation(models.Model):
     _order = 'code, id'
     _check_company_auto = True
 
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # 名称或代码都能搜到：代码是业务稳定键（工艺文件清单、设备 API
+        # 匹配都用它），选择器按代码搜索是现场常态，纯增量不改名称匹配。
+        # Odoo 19 无 _name_search，基类 name_search 只搜 display_name。
+        if name and operator in ('like', 'ilike'):
+            records = self.search_fetch(
+                ['|', ('code', operator, name),
+                 ('display_name', operator, name)] + list(domain or []),
+                ['display_name'], limit=limit)
+            return [(record.id, record.display_name)
+                    for record in records.sudo()]
+        return super().name_search(
+            name, domain=domain, operator=operator, limit=limit)
+
     code = fields.Char(string='Operation Code', index=True, copy=False)
     name = fields.Char(string='Operation', required=True)
     active = fields.Boolean(default=True)
