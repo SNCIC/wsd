@@ -25,16 +25,4 @@
     <menuitem id="menu_sn_wsd_quality_inspection_iqc" name="IQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_iqc" sequence="62"/>
     <menuitem id="menu_sn_wsd_quality_inspection_oqc" name="OQC Inspections" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_oqc" sequence="65"/>
     <menuitem id="menu_sn_wsd_quality_inspection_skip" name="IPQC Skip Records" parent="sn_wsd_mrp.menu_sn_quality_operation" action="action_sn_wsd_quality_inspection_skip" sequence="70"/>
-
-    <!-- Inventory -> Reporting: the incoming inspection details are listed next
-         to the receipt and the putaway of the same reception. Reporting is
-         limited to stock managers by default, so stock users are linked to it
-         here as well (linking adds the group, it never drops the manager one). -->
-    <record id="stock.menu_warehouse_report" model="ir.ui.menu">
-        <field name="group_ids" eval="[Command.link(ref('stock.group_stock_user'))]"/>
-    </record>
-    <menuitem id="menu_sn_wsd_quality_inspection_iqc_detail" name="Inspection Details"
-              parent="stock.menu_warehouse_report"
-              action="action_sn_wsd_quality_inspection_iqc_detail"
-              sequence="23"/>
 </odoo>
