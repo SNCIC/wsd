@@ -9,3 +9,4 @@ from . import generate_sn_wizard
 from . import mes_return_wizard
 from . import mes_online_confirm_wizard
 from . import batch_pass_wizard
+from . import process_doc_quick_entry_wizard

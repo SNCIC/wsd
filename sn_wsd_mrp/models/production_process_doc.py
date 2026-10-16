@@ -31,6 +31,9 @@ class ProductionProcessDoc(models.Model):
 
     production_id = fields.Many2one(
         'mrp.production', required=True, index=True, ondelete='cascade')
+    drawing_code = fields.Char(
+        related='production_id.product_id.default_code',
+        string='Drawing No.', store=True, index=True)
     company_id = fields.Many2one(
         'res.company', required=True, index=True,
         default=lambda self: self.env.company,

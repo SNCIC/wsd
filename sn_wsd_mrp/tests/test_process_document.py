@@ -64,3 +64,46 @@ class TestProcessDocument(TransactionCase):
         self._create_doc(route_operation_code='SMTPRG')
         # one order, several lists of the same type on different operations
         self._create_doc(route_operation_code='APIIN2')
+
+    def _quick_entry(self, lines):
+        wizard = self.env['production.process.doc.quick.entry.wizard'].create({
+            'production_id': self.mo.id,
+            'line_ids': [(0, 0, line) for line in lines],
+        })
+        return wizard, wizard.action_apply()
+
+    def test_quick_entry_merges_same_combo_into_one_list(self):
+        software_type = self.env.ref('sn_wsd_mrp.doc_type_production_software')
+        _, action = self._quick_entry([
+            {'operation_id': self.op_smt.id, 'type_id': self.doc_type.id,
+             'codes_text': 'PLAN-A, PLAN-B'},
+            # same operation + type on a second line: merged, deduped
+            {'operation_id': self.op_smt.id, 'type_id': self.doc_type.id,
+             'codes_text': 'PLAN-B\nPLAN-C'},
+            {'operation_id': self.op_smt.id, 'type_id': software_type.id,
+             'codes_text': 'SW-001'},
+        ])
+        docs = self.env['production.process.document'].search([
+            ('production_id', '=', self.mo.id)])
+        self.assertEqual(len(docs), 2)
+        param_doc = docs.filtered(lambda d: d.type_id == self.doc_type)
+        self.assertEqual(
+            sorted(param_doc.code_ids.mapped('code')),
+            ['PLAN-A', 'PLAN-B', 'PLAN-C'])
+        self.assertEqual(action['tag'], 'display_notification')
+
+    def test_quick_entry_appends_to_existing_list(self):
+        doc = self._create_doc(route_operation_code='SMTPRG')
+        doc.code_ids = [(0, 0, {'code': 'PLAN-A'})]
+        _, action = self._quick_entry([{
+            'operation_id': self.op_smt.id, 'type_id': self.doc_type.id,
+            'codes_text': 'PLAN-A, PLAN-B',
+        }])
+        docs = self.env['production.process.document'].search([
+            ('production_id', '=', self.mo.id),
+            ('type_id', '=', self.doc_type.id)])
+        self.assertEqual(len(docs), 1)
+        self.assertEqual(
+            sorted(docs.code_ids.mapped('code')), ['PLAN-A', 'PLAN-B'])
+        message = action['params']['message']
+        self.assertIn('1', message)
