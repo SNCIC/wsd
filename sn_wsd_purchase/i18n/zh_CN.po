@@ -335,8 +335,16 @@ msgstr "批准数量必须介于零和申请数量之间。"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__create_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
 msgid "Created By"
 msgstr "创建人"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
+msgid "Description"
+msgstr "说明"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_code

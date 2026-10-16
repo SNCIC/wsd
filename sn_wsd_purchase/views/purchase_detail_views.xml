@@ -4,14 +4,19 @@
         <field name="name">purchase.request.line.purchase.detail.list</field>
         <field name="model">purchase.request.line</field>
         <field name="arch" type="xml">
-            <list string="Purchase Details" create="false" delete="false">
+            <!-- The header information of a request is printed on the first
+                 line of its details only: the merged cells renderer hides the
+                 values the lines below repeat. -->
+            <list string="Purchase Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list">
                 <field name="request_id"/>
-                <field name="create_user_id"/>
+                <field name="date_required"/>
+                <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>
+                <field name="description" string="Description" readonly="1"/>
                 <field name="request_state" widget="badge"
                        decoration-success="request_state in ('approved', 'in_progress', 'done')"
                        decoration-warning="request_state == 'to_approve'"
                        decoration-danger="request_state == 'rejected'"/>
-                <field name="date_required"/>
                 <field name="product_code"/>
                 <field name="product_name"/>
                 <field name="material_specification"/>
@@ -138,14 +143,16 @@
         <field name="name">purchase.request.line.receipt.detail.list</field>
         <field name="model">purchase.request.line</field>
         <field name="arch" type="xml">
-            <list string="Receipt Details" create="false" delete="false">
+            <list string="Receipt Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list">
                 <field name="request_id"/>
-                <field name="create_user_id"/>
+                <field name="date_required"/>
+                <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>
+                <field name="description" string="Description" readonly="1"/>
                 <field name="request_state" widget="badge"
                        decoration-success="request_state in ('approved', 'in_progress', 'done')"
                        decoration-warning="request_state == 'to_approve'"
                        decoration-danger="request_state == 'rejected'"/>
-                <field name="date_required"/>
                 <field name="product_code"/>
                 <field name="product_name"/>
                 <field name="material_specification"/>
