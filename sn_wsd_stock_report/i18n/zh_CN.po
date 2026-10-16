@@ -1,0 +1,139 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_stock_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Done Date"
+msgstr "完成日期"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock_report.action_sn_wsd_goods_receipt_detail
+msgid ""
+"Every receipt of the warehouses is listed here, with the vendor,\n"
+"                the source document it comes from and the day it was completed."
+msgstr ""
+"仓库的每一次收货都列在此处，含供应商、来源单据以及完成日期。"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock_report.action_sn_wsd_putaway_detail
+msgid ""
+"Every storage of the warehouses is listed here: the operation\n"
+"                that brings the inspected goods into the stock on a three-step\n"
+"                reception."
+msgstr ""
+"仓库的每一次上架都列在此处：三步入库中把检验合格的物料移入库存的作业。"
+
+#. module: sn_wsd_stock_report
+#: model:ir.actions.act_window,name:sn_wsd_stock_report.action_sn_wsd_goods_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_stock_report.menu_sn_wsd_goods_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_goods_receipt_detail_list
+msgid "Goods Receipt Details"
+msgstr "收货明细"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock_report.action_sn_wsd_goods_receipt_detail
+msgid "No goods receipt yet"
+msgstr "暂无收货单"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.actions.act_window,help:sn_wsd_stock_report.action_sn_wsd_putaway_detail
+msgid "No putaway yet"
+msgstr "暂无入库单"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Operation Type"
+msgstr "作业类型"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields.selection,name:sn_wsd_stock_report.selection__stock_picking__x_reception_step__other
+msgid "Other"
+msgstr "其它"
+
+#. module: sn_wsd_stock_report
+#: model:ir.actions.act_window,name:sn_wsd_stock_report.action_sn_wsd_putaway_detail
+#: model:ir.ui.menu,name:sn_wsd_stock_report.menu_sn_wsd_putaway_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_putaway_detail_list
+msgid "Putaway Details"
+msgstr "入库明细"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields.selection,name:sn_wsd_stock_report.selection__stock_picking__x_reception_step__quality
+msgid "Quality Control"
+msgstr "质量控制"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields.selection,name:sn_wsd_stock_report.selection__stock_picking__x_reception_step__receipt
+msgid "Receipt"
+msgstr "收货"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Reception Details"
+msgstr "收货明细"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields,field_description:sn_wsd_stock_report.field_stock_picking__x_reception_step
+msgid "Reception Step"
+msgstr "收货环节"
+
+#. module: sn_wsd_stock_report
+#. odoo-python
+#: code:addons/sn_wsd_stock_report/models/stock_picking.py:0
+msgid "Reception Step only supports the = and != operators."
+msgstr "收货环节只支持 = 与 != 运算符。"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Source Document"
+msgstr "来源单据"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields,help:sn_wsd_stock_report.field_stock_picking__x_reception_step
+msgid ""
+"Step of the reception this transfer performs: the receipt of the vendor "
+"goods, the quality control that follows it on a three-step reception, or "
+"their storage into the warehouse stock. A transfer of any other operation "
+"reports no step."
+msgstr ""
+"本调拨执行的收货环节：供应商来料的收货、三步入库中随后的质量控制、或把物料上架到仓库库存。其它作业的调拨不标注环节。"
+
+#. module: sn_wsd_stock_report
+#: model:ir.model.fields.selection,name:sn_wsd_stock_report.selection__stock_picking__x_reception_step__storage
+msgid "Storage"
+msgstr "上架入库"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "To Process"
+msgstr "待处理"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_reception_detail_search
+msgid "Vendor"
+msgstr "供应商"

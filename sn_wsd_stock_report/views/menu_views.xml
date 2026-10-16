@@ -12,4 +12,16 @@
               parent="stock.menu_warehouse_report"
               action="action_sn_wsd_stock_balance_wizard"
               sequence="10"/>
+
+    <!-- One list per step of the reception, next to the purchase request
+         receipt report: the operation steps are listed from their own
+         documents instead of being read back from the request lines. -->
+    <menuitem id="menu_sn_wsd_goods_receipt_detail" name="Goods Receipt Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_goods_receipt_detail"
+              sequence="21"/>
+    <menuitem id="menu_sn_wsd_putaway_detail" name="Putaway Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_putaway_detail"
+              sequence="22"/>
 </odoo>

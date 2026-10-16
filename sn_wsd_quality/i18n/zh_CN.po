@@ -3977,3 +3977,23 @@ msgstr "（供应商名称）"
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "(%(name)s)"
 msgstr "（%(name)s）"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_sn_wsd_quality_inspection_iqc_detail
+#: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_quality_inspection_iqc_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_iqc_detail_list
+msgid "Inspection Details"
+msgstr "检验明细"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.actions.act_window,help:sn_wsd_quality.action_sn_wsd_quality_inspection_iqc_detail
+msgid "No incoming inspection yet"
+msgstr "暂无来料检验"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.actions.act_window,help:sn_wsd_quality.action_sn_wsd_quality_inspection_iqc_detail
+msgid ""
+"The incoming quality controls are listed here, with the receipt\n"
+"                they control, the material and the batch that arrived."
+msgstr ""
+"来料检验单都列在此处，含其对应的收货单、物料与到货批次。"
