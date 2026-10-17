@@ -91,37 +91,44 @@
         </field>
     </record>
 
-    <!-- Operations moving goods out (internal transfers, MES material issues
-         and outgoing deliveries): print the issue labels of the whole
-         operation at once (non-reel tracked lines only, quantity = the issued
-         quantity). Reel materials keep their receipt label and are skipped by
-         the eligibility computation.
-         No visibility rule on purpose: the button stays available in every
-         state, and a document with nothing to print reports it when clicked. -->
+    <!-- Operations taking material out of the warehouse (deliveries, MES
+         material issue / return / over-pick, outsourcing issue): print the
+         issue labels of the whole operation at once (non-reel tracked lines
+         only, quantity = the issued quantity). Reel materials keep their
+         receipt label and are skipped by the eligibility computation.
+         The button follows the document type only: receipts, storage, quality
+         control and plain internal transfers do not show it, and a document
+         with nothing to print reports it when clicked. -->
     <record id="view_picking_form_issue_labels" model="ir.ui.view">
         <field name="name">stock.picking.form.issue.labels</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
+                <field name="x_issue_label_available" invisible="1"/>
                 <button name="action_print_issue_material_labels" type="object"
-                        string="Print Issue Material Labels" class="btn-secondary"/>
+                        string="Print Issue Material Labels" class="btn-secondary"
+                        invisible="not x_issue_label_available"/>
             </xpath>
         </field>
     </record>
 
     <!-- Operation detail dialog (作业 tab -> Details): one button on top of
          the dialog, above the operation lines, printing the whole operation
-         detail in one go. No visibility rule either. -->
+         detail in one go. Same document type rule as the form header. -->
     <record id="view_stock_move_operations_issue_labels" model="ir.ui.view">
         <field name="name">stock.move.operations.issue.labels</field>
         <field name="model">stock.move</field>
         <field name="inherit_id" ref="stock.view_stock_move_operations"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_code']" position="after">
+                <field name="x_issue_label_available" invisible="1"/>
+            </xpath>
             <xpath expr="//widget[@name='import_lots']" position="after">
                 <button name="action_print_issue_material_labels" type="object"
                         string="Print Issue Material Labels" class="btn btn-link"
-                        icon="fa-print"/>
+                        icon="fa-print"
+                        invisible="not x_issue_label_available"/>
             </xpath>
         </field>
     </record>

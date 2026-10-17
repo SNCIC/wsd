@@ -168,20 +168,21 @@ class StockMove(models.Model):
         existing_lots = self.move_line_ids.lot_id.filtered(
             lambda lot: lot.material_sn_base
         )
+        today = fields.Date.context_today(self).strftime('%Y%m%d')
         for move_line in move_lines.filtered(
-            lambda line: not line.supplier_batch_no and line.lot_name
+            lambda line: not (line.supplier_batch_no or '').strip()
         ):
-            move_line.supplier_batch_no = move_line.lot_name
+            # The supplier batch is the batch segment of the material SN: fall
+            # back to the internal batch name typed on the line, then to the
+            # arrival date, so a receipt without a supplier batch never blocks
+            # the label generation.
+            move_line.supplier_batch_no = move_line.lot_name or today
         if not move_lines:
             if existing_lots:
                 raise ValidationError(
                     _('Internal batches have already been generated for this move.')
                 )
             raise ValidationError(_('There are no material lines to generate.'))
-        if any(not (line.supplier_batch_no or '').strip() for line in move_lines):
-            raise ValidationError(
-                _('Enter a supplier batch for every line before generating material labels.')
-            )
         if any(line.quantity_per_label <= 0 for line in move_lines):
             raise ValidationError(
                 _('Enter a quantity per label greater than zero for every line before generating material labels.')
@@ -345,15 +346,40 @@ class StockMoveLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        """Initialize the label quantity once when a detailed operation is created.
+        """Initialize the label quantity and the supplier batch of a new line.
 
-        The value is intentionally not recomputed when the operation quantity is
-        edited later; users may choose a different quantity per label.
+        The label quantity is intentionally not recomputed when the operation
+        quantity is edited later; users may choose a different quantity per
+        label. The supplier batch of a receipt (or of the transfer storing it)
+        defaults to the arrival date: it is the batch segment of the material
+        SN, and is overwritten only when the supplier printed a batch of its
+        own.
         """
+        today = fields.Date.context_today(self).strftime('%Y%m%d')
         for vals in vals_list:
             if 'quantity_per_label' not in vals and vals.get('quantity'):
                 vals['quantity_per_label'] = vals['quantity']
+            if (not (vals.get('supplier_batch_no') or '').strip()
+                    and self._supplier_batch_default_applies(vals)):
+                vals['supplier_batch_no'] = today
         return super().create(vals_list)
+
+    @api.model
+    def _supplier_batch_default_applies(self, vals):
+        """Whether the line belongs to an operation carrying a supplier batch.
+
+        That is the receipt and the transfer storing the received goods: both
+        generate the material labels. Deliveries and internal transfers do not,
+        so their lines keep the field empty.
+        """
+        picking = self.env['stock.picking']
+        if vals.get('picking_id'):
+            picking = picking.browse(vals['picking_id'])
+        elif vals.get('move_id'):
+            picking = self.env['stock.move'].browse(vals['move_id']).picking_id
+        return bool(picking) and (
+            picking.picking_type_code == 'incoming'
+            or picking._is_final_receipt_picking())
 
     @api.onchange('quantity')
     def _onchange_quantity_per_label(self):

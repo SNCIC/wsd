@@ -9,8 +9,10 @@ class TestIssueMaterialLabel(TransactionCase):
     Non-reel materials are issued / transferred by an exact quantity, so the
     label is printed from the operation line (quantity = the issued quantity)
     and reuses the incoming material layout on a stock.move.line bound
-    template. Scope: internal transfers (MES material issues included) and
-    outgoing deliveries; electronic reel materials and receipts stay out.
+    template. Scope: the documents taking material out of the warehouse
+    (deliveries, the MES material issue / return / over-pick and the
+    outsourcing issue); electronic reel materials, receipts, storage, quality
+    control and plain internal transfers stay out.
     """
 
     @classmethod
@@ -227,17 +229,19 @@ class TestIssueMaterialLabel(TransactionCase):
         with self.assertRaises(UserError):
             line.action_print_issue_material_label()
 
-    def test_plain_internal_transfer_is_eligible(self):
+    def test_plain_internal_transfer_is_out_of_scope(self):
+        """Only the documents taking material out of the warehouse print issue
+        labels: a plain internal transfer stays out."""
         if not self.warehouse.int_type_id:
             self.skipTest('The warehouse has no internal transfer type.')
         picking = self._create_picking(self.warehouse.int_type_id)
         line = self._create_line(self.lot, 12, picking)
-        self.assertTrue(picking.can_print_issue_material_labels)
-        self.assertTrue(line.x_can_print_issue_material_label)
-        self.assertEqual(picking._issue_material_label_lines(), line)
-        zpl = self._render_zpl(line)
-        self.assertEqual(zpl.count('^XA'), 1)
-        self.assertIn('^FD12^FS', zpl)
+        self.assertFalse(picking._is_issue_material_label_picking())
+        self.assertFalse(picking.can_print_issue_material_labels)
+        self.assertFalse(line.x_can_print_issue_material_label)
+        self.assertFalse(picking._issue_material_label_lines())
+        with self.assertRaises(UserError):
+            picking.action_print_issue_material_labels()
 
     def test_outgoing_delivery_is_eligible(self):
         if not self.warehouse.out_type_id:
@@ -270,7 +274,7 @@ class TestIssueMaterialLabel(TransactionCase):
         self.assertFalse(picking.can_print_issue_material_labels)
 
     def test_cancelled_operation_is_out_of_scope(self):
-        picking = self._create_picking(self.warehouse.int_type_id)
+        picking = self._create_picking(self.issue_type)
         self._create_line(self.lot, 5, picking)
         self.assertTrue(picking.can_print_issue_material_labels)
         picking.write({'state': 'cancel'})
@@ -304,7 +308,7 @@ class TestIssueMaterialLabel(TransactionCase):
         self.assertIn(f'^FD{self.lot.name}^FS', zpl)
 
     def test_move_dialog_action_prints_whole_operation_detail(self):
-        picking = self._create_picking(self.warehouse.int_type_id)
+        picking = self._create_picking(self.issue_type)
         move = self._create_move(picking, self.product, 20)
         first_line = self._create_line(self.lot, 12, picking, move=move)
         second_line = self._create_line(self.lot, 3, picking, move=move)
@@ -320,7 +324,7 @@ class TestIssueMaterialLabel(TransactionCase):
         self.assertNotIn('^FD100.5^FS', zpl)
 
     def test_move_dialog_action_skips_reel_lines(self):
-        picking = self._create_picking(self.warehouse.int_type_id)
+        picking = self._create_picking(self.issue_type)
         move = self._create_move(picking, self.reel_product, 5000)
         self._create_line(self.reel_lot, 5000, picking, move=move)
         self.assertFalse(move._issue_material_label_lines())
