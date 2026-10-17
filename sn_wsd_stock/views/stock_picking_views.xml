@@ -125,4 +125,33 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Delivery address (partner_id: delivery address on a delivery,
+         receive-from on a receipt, contact on an internal transfer) stays
+         editable in every state: an address forgotten before validation can
+         still be corrected afterwards. Returns, deliveries and internal
+         transfers share this form and this list, so both are opened up. A
+         change made on a done or cancelled transfer is logged on the chatter
+         by stock.picking.write(). -->
+    <record id="view_picking_form_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.form.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.list.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
