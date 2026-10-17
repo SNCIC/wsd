@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Quality',
-    'version': '19.0.5.0.0',
+    'version': '19.0.5.1.0',
     'summary': 'Quality management for WSD meter manufacturing',
     'depends': ['sn_wsd_api', 'mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
     'post_init_hook': 'post_init_hook',
@@ -12,6 +12,8 @@
         'wizard/measure_wizard_views.xml',
         'report/iqc_inspection_templates.xml',
         'report/iqc_inspection_reports.xml',
+        'report/fai_inspection_templates.xml',
+        'report/fai_inspection_reports.xml',
         'views/sampling_views.xml',
         'views/meter_component_trace_views.xml',
         'views/meter_quality_views.xml',

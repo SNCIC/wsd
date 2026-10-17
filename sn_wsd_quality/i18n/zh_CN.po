@@ -2588,6 +2588,7 @@ msgstr "责任用户"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__result
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
 msgid "Result"
 msgstr "结果"
 
@@ -3870,12 +3871,14 @@ msgstr "结论"
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
 msgid "Qualified"
 msgstr "合格"
 
 #. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_iqc_inspection_document
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
 msgid "Unqualified"
 msgstr "不合格"
 
@@ -3977,3 +3980,98 @@ msgstr "（供应商名称）"
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "(%(name)s)"
 msgstr "（%(name)s）"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Process First Article Confirmation Sheet"
+msgstr "工序首件确认单"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Work Order No.:"
+msgstr "工单号："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Product Name:"
+msgstr "产品名称："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Customer:"
+msgstr "客户："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Batch Qty:"
+msgstr "批次数量："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Model / Specification:"
+msgstr "型号规格："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Production Line:"
+msgstr "产线："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Daily Plan Qty:"
+msgstr "单日计划数："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Others:"
+msgstr "其它："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Production Date:"
+msgstr "生产日期："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Item"
+msgstr "项目"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Content"
+msgstr "内容"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Operator Confirmation:"
+msgstr "生产操作员确认："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Inspector Confirmation:"
+msgstr "品质部检验员确认："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_fai_inspection_document
+msgid "Supervisor Confirmation:"
+msgstr "品质部主管确认："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form
+msgid "First Article Sheet"
+msgstr "首件确认单"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.report,name:sn_wsd_quality.action_report_fai_inspection
+msgid "First Article Confirmation Sheet"
+msgstr "首件确认单"
