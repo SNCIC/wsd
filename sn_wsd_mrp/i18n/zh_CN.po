@@ -8581,3 +8581,31 @@ msgstr "制造商"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_res_users__manufacturer
 msgid "Maker of the material the partner supplies, when the goods come from a distributor rather than from the maker itself. Printed as \"Manufacturer (Supplier)\" on the incoming inspection record."
 msgstr "该供应商所供物料的制造商：当货物来自经销商而非制造商本身时填写。打印在来料检验记录的“制造商名称（供应商名称）”栏。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__product_code
+msgid "Component Code"
+msgstr "组件编码"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__qty_denominator
+msgid "Denominator"
+msgstr "分母"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_bom_line__qty_numerator
+msgid "Numerator"
+msgstr "分子"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_bom_line_qty.py:0
+#: model:ir.model.constraint,message:sn_wsd_mrp.constraint_mrp_bom_line_qty_denominator_not_zero
+msgid "The denominator of the component quantity must not be zero."
+msgstr "组件用量的分母不能为 0。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__qty_denominator
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_bom_line__qty_numerator
+msgid "The component quantity is the numerator divided by the denominator, as in the ERP bill of materials."
+msgstr "组件用量为分子除以分母，与 ERP 物料清单一致。"

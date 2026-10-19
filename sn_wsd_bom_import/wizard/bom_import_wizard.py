@@ -9,8 +9,11 @@ Workflow inside one form:
    BOMs. Each run is recorded in ``sn.bom.import.log``.
 
 Import rules:
-- ``product_qty`` comes from the Excel standard quantity column and is already
-  normalized from the numerator/denominator fields.
+- The component usage is written as the ``qty_numerator`` /
+  ``qty_denominator`` pair of the ERP columns ``用量:分子`` / ``用量:分母``;
+  ``product_qty`` is then derived from it (quantity = numerator / denominator).
+- When the file has no fraction columns, ``product_qty`` falls back to the
+  standard quantity column and the pair is derived from it.
 - Disabled rows are skipped and never become BOM lines.
 - BOM header: ``code`` = BOM version, ``type`` = normal, ``product_qty`` = 1,
   ``product_uom_id`` = the ERP unit of the produced item, ``x_workshop_id`` =
@@ -372,12 +375,23 @@ class BomImportWizard(models.TransientModel):
                 if line['disabled'] or not line['code']:
                     continue
                 seq += 1
-                line_commands.append(Command.create({
+                line_values = {
                     'product_id': product_map[line['code']].id,
-                    'product_qty': float(line['std_qty']),
                     'product_uom_id': uom_map[line['uom']].id,
                     'sequence': seq,
-                }))
+                }
+                numerator = line.get('num')
+                denominator = line.get('den')
+                if numerator and denominator and float(denominator).is_integer():
+                    # The ERP expresses the usage as numerator / denominator;
+                    # the standard quantity column is only a rounded copy.
+                    line_values.update({
+                        'qty_numerator': float(numerator),
+                        'qty_denominator': int(denominator),
+                    })
+                else:
+                    line_values['product_qty'] = float(line['std_qty'])
+                line_commands.append(Command.create(line_values))
 
             Bom.create({
                 'code': cand['bom_code'],

@@ -13,6 +13,10 @@ BOM层级 / 子项物料编码 / 物料名称 / 规格型号 / 物料属性 / BO
 单位 / 用量:分子 / 用量:分母 / 标准用量 / 子项类型 / 是否跳层 / 是否禁用 /
 生产车间 / 工艺路线 / 质检方案 / 默认仓库 / ...
 
+The component usage of the ERP is expressed by the ``用量:分子`` /
+``用量:分母`` columns, so both values are returned next to the standard
+quantity of the export.
+
 This module contains no Odoo import; it is a plain reusable helper.
 """
 
@@ -135,8 +139,10 @@ def parse_bom_xlsx(data):
           'subs': [node, ...],   # de-duplicated by 子项物料编码
         }
         node = {'row','code','name','spec','attr','bom_version','uom',
-                'workshop','disabled','std_qty','depth','line_count','lines'}
-        line = {'row','code','name','spec','uom','std_qty','disabled','workshop'}
+                'workshop','disabled','std_qty','num','den','depth',
+                'line_count','lines'}
+        line = {'row','code','name','spec','uom','std_qty','num','den',
+                'disabled','workshop'}
     """
     archive, sheets, rid_to_target, shared = _load_workbook(data)
     try:
@@ -176,11 +182,10 @@ def _build_result(sheet_name, header_cols, records):
         if disabled:
             disabled_count += 1
         std_qty = _to_float(cell(record, '标准用量'))
-        if std_qty is None:
-            num = _to_float(cell(record, '用量:分子'))
-            den = _to_float(cell(record, '用量:分母'))
-            if num is not None and den:
-                std_qty = num / den
+        num = _to_float(cell(record, '用量:分子'))
+        den = _to_float(cell(record, '用量:分母'))
+        if std_qty is None and num is not None and den:
+            std_qty = num / den
         node = {
             'row': record['row'],
             'depth': depth,
@@ -193,6 +198,8 @@ def _build_result(sheet_name, header_cols, records):
             'workshop': cell(record, '生产车间'),
             'disabled': disabled,
             'std_qty': std_qty,
+            'num': num,
+            'den': den,
             'children': [],
         }
         while stack and stack[-1][0] >= depth:
@@ -211,6 +218,8 @@ def _build_result(sheet_name, header_cols, records):
             'spec': child['spec'],
             'uom': child['uom'],
             'std_qty': child['std_qty'],
+            'num': child['num'],
+            'den': child['den'],
             'disabled': child['disabled'],
             'workshop': child['workshop'],
         }
