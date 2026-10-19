@@ -447,10 +447,14 @@ msgid "Piece Rates"
 msgstr "计件单价"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled_label
 msgid "Piece Settled"
 msgstr "已计件"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled
+msgid "Piece Settled (Flag)"
+msgstr "计件已结算（标识）"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_settlement

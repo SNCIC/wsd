@@ -14,7 +14,7 @@ class MesOperationReport(models.Model):
         'sn.wsd.piece.settlement', 'operation_report_id',
         string='Piece Settlements')
     x_piece_settled = fields.Boolean(
-        string='Piece Settled',
+        string='Piece Settled (Flag)',
         compute='_compute_piece_settled',
         search='_search_piece_settled',
         help='True when a non-void piece settlement references this report.')

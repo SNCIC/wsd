@@ -118,7 +118,7 @@ class SnToolingTemplate(models.Model):
     default_flatness = fields.Float(string='Default Flatness (μm)')
     note = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
-    tooling_ids = fields.One2many('sn.tooling', 'template_id', string='Tooling')
+    tooling_ids = fields.One2many('sn.tooling', 'template_id', string='Tooling Records')
     tooling_count = fields.Integer(string='Tooling', compute='_compute_tooling_count')
     company_id = fields.Many2one(
         'res.company',

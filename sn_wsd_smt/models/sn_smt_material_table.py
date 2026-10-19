@@ -589,7 +589,7 @@ class SnSmtMaterialLog(models.Model):
     required_item_code = fields.Char(string='Required Item Code', index=True)
     required_item_spec = fields.Char(string='Specification', compute='_compute_required_item_spec')
     actual_item_code = fields.Char(string='Actual Item Code', index=True)
-    actual_item_spec = fields.Char(string='Specification', compute='_compute_actual_item_spec')
+    actual_item_spec = fields.Char(string='Actual Specification', compute='_compute_actual_item_spec')
     qty_before = fields.Float(string='Points Before', copy=False)
     qty_after = fields.Float(string='Points After', copy=False)
     operator_id = fields.Many2one(

@@ -1275,9 +1275,13 @@ msgstr "AOI 缺陷"
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_code
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
 msgid "Defect Code"
 msgstr "缺陷代码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
+msgid "Defect Code (Raw)"
+msgstr "缺陷代码（原始）"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_name

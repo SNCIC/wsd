@@ -24,7 +24,7 @@ class SnWsdSerialFreezeWizard(models.TransientModel):
     )
     serial_identity_id = fields.Many2one(
         'sn.wsd.serial.identity',
-        string='SN',
+        string='SN Record',
         check_company=True,
     )
     production_id = fields.Many2one(

@@ -194,7 +194,12 @@ class SnConsumableInfo(models.Model):
         index=True,
         check_company=True,
     )
-    template_code = fields.Char(related='template_id.code', store=True, index=True)
+    template_code = fields.Char(
+        string='Template Code',
+        related='template_id.code',
+        store=True,
+        index=True,
+    )
     type_id = fields.Many2one(related='template_id.type_id', store=True, index=True)
     stir_control = fields.Boolean(related='template_id.stir_control')
     aux_state = fields.Selection(

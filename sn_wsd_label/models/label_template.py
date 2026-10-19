@@ -68,7 +68,12 @@ class SnLabelTemplate(models.Model):
     model_id = fields.Many2one(
         'ir.model', string='Model', required=True, index=True,
         domain=[('transient', '=', False)], ondelete='cascade')
-    model_name = fields.Char(related='model_id.model', store=True, index=True)
+    model_name = fields.Char(
+        string='Model Name',
+        related='model_id.model',
+        store=True,
+        index=True,
+    )
     width_dots = fields.Integer(string='Width (dots)', required=True, default=560)
     height_dots = fields.Integer(string='Height (dots)', required=True, default=320)
     dpi = fields.Integer(
