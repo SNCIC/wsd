@@ -6872,6 +6872,12 @@ msgstr "在同一工艺路线中，路线工序编码必须唯一。"
 
 #. module: sn_wsd_mrp
 #. odoo-python
+#: code:addons/sn_wsd_mrp/models/product.py:0
+msgid "The material code is required."
+msgstr "物料编码为必填项。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
 msgid "The operation must belong to the same company as the process route."
 msgstr "工序必须与工艺路线属于同一家公司。"
@@ -6922,6 +6928,12 @@ msgstr "每个公司的工艺路线代码和版本必须唯一。"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_route_code_company_uniq
 msgid "The process route code must be unique per company."
 msgstr "每个公司的工艺路线编码必须唯一。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/product.py:0
+msgid "The product category is required."
+msgstr "产品类别为必填项。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_mrp_production_line_sn_mrp_production_line_company__31639eab

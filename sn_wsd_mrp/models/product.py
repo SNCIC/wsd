@@ -127,6 +127,19 @@ class ProductTemplate(models.Model):
                     'Products with a drawing number must declare their board '
                     'side type (single or double).'))
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        # A product must be classified and carry its material code as soon as
+        # it is created. Multi-variant templates keep their code on the
+        # variants instead, so the material code is only required when no
+        # attribute line is provided.
+        for vals in vals_list:
+            if not vals.get('categ_id'):
+                raise ValidationError(_('The product category is required.'))
+            if not vals.get('default_code') and not vals.get('attribute_line_ids'):
+                raise ValidationError(_('The material code is required.'))
+        return super().create(vals_list)
+
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
