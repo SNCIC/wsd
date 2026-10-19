@@ -6,6 +6,18 @@
         <field name="view_id" ref="product.product_template_tree_view"/>
     </record>
 
+    <!-- Inventory > Products > Products -->
+    <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" ref="product.product_template_tree_view"/>
+    </record>
+
+    <!-- Product category smart button -->
+    <record id="product.product_template_action_all" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" ref="product.product_template_tree_view"/>
+    </record>
+
     <record id="sale.product_template_action" model="ir.actions.act_window">
         <field name="res_model">product.template</field>
         <field name="view_ids" eval="[Command.clear(),
