@@ -210,17 +210,64 @@ class QualityInspection(models.Model):
 
         The batch the receiving flow recorded sits on the lot; when the lot
         carries none, the transfers behind the inspection are read back — the
-        quality-control transfer and the receipt that fed it — so the printed
-        record never shows a blank production batch.
+        quality-control transfer and the receipt that fed it. With a multi-step
+        reception the supplier batch is only read at putaway, on the reels
+        themselves, so an inspection printed before that quotes the arrival
+        batch instead of leaving the cell blank.
         """
         self.ensure_one()
         if self.lot_id.supplier_batch_no:
             return self.lot_id.supplier_batch_no
         lines = self._iqc_source_move_lines(
             self.picking_id.move_line_ids, self.product_id)
-        return next(
+        batch_no = next(
             (line.supplier_batch_no for line in lines
              if line.supplier_batch_no), '')
+        return batch_no or self._get_iqc_arrival_batch_no()
+
+    def _get_iqc_arrival_batch_no(self):
+        """Arrival batch quoted when the supplier batch is not known yet.
+
+        That is the batch the goods arrived with: the one recorded on the lot,
+        otherwise the receipt validation date, or its planned date while the
+        receipt is still open. It is only rendered on the report, nothing is
+        written on the inspection.
+        """
+        self.ensure_one()
+        if self.lot_id.arrival_batch_no:
+            return self.lot_id.arrival_batch_no
+        receipt = self._get_iqc_receipt_picking()
+        arrival_date = (
+            (receipt.date_done or receipt.scheduled_date) if receipt else False
+        )
+        return (arrival_date or fields.Datetime.now()).strftime('%Y%m%d')
+
+    def _get_iqc_receipt_picking(self):
+        """Receipt the inspected goods came from.
+
+        On a multi-step reception the inspection sits on the quality control
+        transfer: the receipt is found by walking the chained moves. On a
+        one/two-step reception the gated transfer already is the receipt.
+        """
+        self.ensure_one()
+        picking = self.picking_id
+        if not picking:
+            return self.env['stock.picking']
+        if picking.picking_type_code == 'incoming':
+            return picking
+        visited = self.env['stock.move']
+        pending = picking.move_ids
+        while pending:
+            origins = pending.move_orig_ids - visited
+            if not origins:
+                break
+            visited |= origins
+            receipts = origins.picking_id.filtered(
+                lambda origin: origin.picking_type_code == 'incoming')
+            if receipts:
+                return receipts[:1]
+            pending = origins
+        return self.env['stock.picking']
 
     def _get_iqc_result_labels(self):
         """Conclusion words of the printed record, one per possible result.

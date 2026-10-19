@@ -68,6 +68,20 @@ class StockMoveLine(models.Model):
         if any(line.state in ('done', 'cancel') for line in self):
             raise UserError(_('Completed or cancelled operation lines cannot be allocated.'))
 
+        # Rack allocation works on one line per physical label: the line must
+        # be split into its internal batches first, otherwise every new line
+        # of the split would inherit the single location allocated here.
+        unlabelled_lines = self.filtered(
+            lambda line: line.product_id.tracking == 'lot'
+            and not line.lot_id
+            and line.move_id._is_material_label_picking()
+        )
+        if unlabelled_lines:
+            raise UserError(_(
+                'Generate internal batches before allocating rack locations: %s',
+                ', '.join(unlabelled_lines.mapped('product_id.display_name')),
+            ))
+
         pickings = self.picking_id
         if len(pickings) != 1:
             raise UserError(_('Select operation lines from one storage transfer only.'))

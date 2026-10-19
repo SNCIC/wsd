@@ -18,6 +18,12 @@
                         type="object"
                         class="btn btn-link"
                         invisible="not x_can_generate_material_labels"/>
+                <button name="action_revoke_material_labels"
+                        string="Revoke Internal Batches"
+                        type="object"
+                        class="btn btn-link"
+                        confirm="This removes the internal batches generated on this operation so the split can be redone. Continue?"
+                        invisible="not x_can_generate_material_labels"/>
                 <button name="action_print_material_labels"
                         string="Print Material Labels"
                         type="object"
@@ -54,13 +60,19 @@
             </xpath>
             <xpath expr="//field[@name='lot_name']" position="before">
                 <field name="internal_lot_name" column_invisible="1"/>
+                <!-- The supplier batch is only read at putaway, on the reels
+                     themselves: the upstream receipt and quality control
+                     transfers may cover several batches on one line. -->
                 <field name="supplier_batch_no"
-                       column_invisible="parent.has_tracking != 'lot'"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
             <xpath expr="//field[@name='quantity']" position="after">
+                <!-- The quantity per label only matters on the operation that
+                     generates the internal batches: the receipt of a one-step
+                     reception, the storage transfer otherwise. -->
                 <field name="quantity_per_label"
-                       column_invisible="parent.has_tracking != 'lot'"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
         </field>
