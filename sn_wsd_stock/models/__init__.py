@@ -3,3 +3,4 @@ from . import incoming_material_label
 from . import issue_material_label
 from . import stock_picking
 from . import stock_rule
+from . import stock_warehouse

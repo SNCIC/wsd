@@ -120,6 +120,25 @@ class TestMaterialLabelPutaway(TransactionCase):
         )
         self.assertTrue(receipt_move.x_can_generate_material_labels)
 
+    def test_pre_putaway_transfers_do_not_require_a_lot(self):
+        self.assertFalse(self.warehouse.in_type_id.use_create_lots)
+        self.assertFalse(self.warehouse.in_type_id.use_existing_lots)
+        self.assertFalse(self.warehouse.qc_type_id.use_create_lots)
+        self.assertFalse(self.warehouse.qc_type_id.use_existing_lots)
+        self.assertTrue(self.warehouse.store_type_id.use_existing_lots)
+
+    def test_three_step_receipt_validates_without_a_lot(self):
+        move = self._create_move(
+            self.warehouse.in_type_id,
+            self.supplier_location,
+            self.warehouse.wh_input_stock_loc_id,
+            10,
+        )
+        picking = move.picking_id
+        self._line(move, 10).write({'quantity': 10, 'picked': True})
+        picking.button_validate()
+        self.assertEqual(picking.state, 'done')
+
     def test_quantity_per_label_splits_on_storage(self):
         move = self._storage_move(140000)
         move.move_line_ids.write({
