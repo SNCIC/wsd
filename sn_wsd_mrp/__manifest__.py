@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD MRP',
-    'version': '19.0.14.5.0',
+    'version': '19.0.14.6.0',
     'summary': 'Manufacturing extensions built on Odoo MRP (MES orders, station flow)',
     'depends': ['product', 'mrp', 'stock', 'purchase', 'hr', 'mail', 'sn_wsd_device', 'sn_wsd_code_rule'],
     'data': [
@@ -43,6 +43,11 @@
             ('include', 'web.chartjs_lib'),
             'sn_wsd_mrp/static/src/scss/mrp_production.scss',
             'sn_wsd_mrp/static/src/views/fields/x2many_multi_add/x2many_multi_add_field.js',
+            'sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.xml',
+            'sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_dialog.xml',
+            'sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js',
+            'sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_dialog.js',
+            'sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer.scss',
         ],
     },
     'installable': True,

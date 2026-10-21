@@ -1649,6 +1649,12 @@ msgid "Double Side"
 msgstr "双面"
 
 #. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Download"
+msgstr "下载"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_excess_return__state__draft
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__draft
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_online_state__draft
@@ -2022,6 +2028,12 @@ msgid ""
 "Feeding SN %(sn)s would exceed the scheduled quantity of MES order "
 "%(order)s: %(fed)s SNs have already been fed in, the plan is %(planned)s."
 msgstr "投入 SN %(sn)s 将超出制令单 %(order)s 的排产数量：已投入 %(fed)s 台，排产 %(planned)s 台。"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Field serving the full size image opened in the viewer."
+msgstr "查看器中打开的原图字段。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_result
@@ -2430,9 +2442,17 @@ msgid "If checked, some messages have a delivery error."
 msgstr "若勾选，则某些消息存在发送错误。"
 
 #. module: sn_wsd_mrp
+#. odoo-javascript
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_list_material_info
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
 msgid "Image"
 msgstr "图片"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Image Viewer"
+msgstr "图片查看器"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__in_date
@@ -5536,6 +5556,12 @@ msgid "Requires Feeder Verification"
 msgstr "需要飞达核验"
 
 #. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Reset"
+msgstr "还原"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
 msgid "Reset to Draft"
 msgstr "重置为草稿"
@@ -5637,6 +5663,18 @@ msgid ""
 "Reworkable defects of this batch. Pure statistic: it does not consume the "
 "plan quota; reworked boards are re-reported as OK."
 msgstr "本批次可返修不良。纯统计：不消耗计划额度；返修板重新按OK报工。"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Rotate left"
+msgstr "向左旋转"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Rotate right"
+msgstr "向右旋转"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form
@@ -7518,6 +7556,12 @@ msgid "Versions"
 msgstr "版本"
 
 #. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Viewer image"
+msgstr "查看器图片"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_voltage_spec
 msgid "Voltage Spec"
 msgstr "电压规格"
@@ -7950,6 +7994,18 @@ msgstr "在移除当前团队负责人之前，您必须指定一个新的团队
 msgid ""
 "You must choose a new team leader before removing the current team leader."
 msgstr "在移除当前团队负责人之前，您必须选择一个新的团队负责人。"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Zoom in"
+msgstr "放大"
+
+#. module: sn_wsd_mrp
+#. odoo-javascript
+#: code:addons/sn_wsd_mrp/static/src/views/fields/image_viewer/image_viewer_field.js:0
+msgid "Zoom out"
+msgstr "缩小"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_form

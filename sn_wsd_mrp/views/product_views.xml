@@ -21,6 +21,10 @@
                 <field name="is_eip_material"/>
                 <field name="is_nqi_material"/>
             </xpath>
+            <!-- Product picture opens the full size viewer on click. -->
+            <xpath expr="//field[@name='image_1920']" position="attributes">
+                <attribute name="widget">image_viewer</attribute>
+            </xpath>
         </field>
     </record>
 
@@ -66,8 +70,9 @@
             <!-- Optional thumbnail appended last: the user can toggle the
                  column with the list header gear menu. -->
             <xpath expr="//list" position="inside">
-                <field name="image_128" string="Image" widget="image"
-                       options="{'size': [40, 40], 'img_class': 'object-fit-contain'}"
+                <field name="image_128" string="Image" widget="image_viewer"
+                       options="{'size': [40, 40], 'img_class': 'object-fit-contain',
+                                 'viewer_image': 'image_1920'}"
                        optional="show" readonly="1"/>
             </xpath>
         </field>
@@ -110,6 +115,10 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="attributes">
                 <attribute name="string">Material Code</attribute>
+            </xpath>
+            <!-- Product variant picture opens the full size viewer on click. -->
+            <xpath expr="//field[@name='image_1920']" position="attributes">
+                <attribute name="widget">image_viewer</attribute>
             </xpath>
         </field>
     </record>

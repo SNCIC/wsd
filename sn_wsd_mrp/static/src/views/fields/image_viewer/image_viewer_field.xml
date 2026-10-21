@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Reuse the standard image widget rendering and only add the click
+         handler opening the full size viewer. -->
+    <t t-name="sn_wsd_mrp.ImageViewerField">
+        <div t-attf-class="o_sn_image_viewer {{ hasImage ? 'o_sn_image_viewer_active' : '' }}"
+             t-on-click="onClickImage">
+            <t t-call="web.ImageField"/>
+        </div>
+    </t>
+</templates>
