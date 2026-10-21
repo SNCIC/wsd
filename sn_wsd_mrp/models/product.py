@@ -1,3 +1,5 @@
+import re
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -139,6 +141,56 @@ class ProductTemplate(models.Model):
             if not vals.get('default_code') and not vals.get('attribute_line_ids'):
                 raise ValidationError(_('The material code is required.'))
         return super().create(vals_list)
+
+    def copy(self, default=None):
+        """Give a duplicated product the next free material code.
+
+        default_code is a computed field, so copy() does not carry it over.
+        Without a generated value the required check above would refuse the
+        duplicate; the new code keeps the prefix and increments the trailing
+        number from the highest one already used with that prefix.
+        """
+        self.ensure_one()
+        default = dict(default or {})
+        if not default.get('default_code') and self.default_code:
+            default['default_code'] = self._next_material_code(self.default_code)
+        return super().copy(default=default)
+
+    @api.model
+    def _next_material_code(self, code):
+        """Next code inside the same series, e.g. E.08.001.0010 -> E.08.001.0024.
+
+        Material codes are numbered per series: the leading digit of the last
+        numeric segment selects the series (E.08.001.0xxx, E.08.001.1xxx,
+        ...), the remaining digits are the counter. The counter continues
+        from the highest one already used in that series, keeping its width.
+        """
+        match = re.match(r'^(.*?)(\d+)$', code or '')
+        if not match:
+            return False
+        prefix, digits = match.groups()
+        if len(digits) > 1:
+            series_prefix = prefix + digits[0]
+            counter = digits[1:]
+        else:
+            series_prefix = prefix
+            counter = digits
+        width = len(counter)
+        numbers = []
+        for candidate in self.sudo().search(
+                [('default_code', '=like', series_prefix + '%')]).mapped('default_code'):
+            suffix = candidate[len(series_prefix):]
+            if (candidate.startswith(series_prefix)
+                    and suffix.isdigit()
+                    and len(suffix) == width):
+                numbers.append(int(suffix))
+        next_number = max(numbers + [int(counter or 0)]) + 1
+        for _attempt in range(1000):
+            candidate = series_prefix + str(next_number).zfill(width)
+            if not self.sudo().search_count([('default_code', '=', candidate)]):
+                return candidate
+            next_number += 1
+        return False
 
 
 class ProductProduct(models.Model):
