@@ -483,20 +483,41 @@ class StockMoveLine(models.Model):
                 line.quantity_per_label = line.quantity
 
     def _sync_material_lot_quantity(self):
+        """Mirror the operation quantity on the internal batch it labels.
+
+        Only the operation that decides the batch quantity may synchronize it:
+        the receipt of a one-step reception or the storage transfer that
+        generates the labels. There the line quantity *is* the batch quantity,
+        so an edit renames the batch and refreshes its initial quantity, and a
+        printed label freezes the value.
+
+        Operations moving the goods afterwards (issues, returns, deliveries)
+        carry a transported quantity instead: a reel leaves as the whole reel,
+        at the balance it still has, while its label keeps describing the
+        original reel. Those writes must neither rename the batch nor be
+        blocked, hence the caller restricts the synchronization to the
+        label-generating operation.
+        """
         for line in self.filtered(
             lambda item: item.lot_id
             and item.lot_id.material_sn_base
             and item.product_id.tracking == 'lot'
         ):
             lot = line.lot_id
+            quantity = line.product_uom_id._compute_quantity(
+                line.quantity, line.product_id.uom_id,
+            )
+            if line.product_id.uom_id.compare(
+                quantity, lot.initial_quantity,
+            ) == 0:
+                # Rewriting the same quantity (reservation, validation) must
+                # neither rename the batch nor trip the printed label guard.
+                continue
             if lot.label_print_count:
                 raise ValidationError(_(
                     'The material label of %s was already printed: the quantity can no longer be changed.',
                     lot.name,
                 ))
-            quantity = line.product_uom_id._compute_quantity(
-                line.quantity, line.product_id.uom_id,
-            )
             lot_vals = {'initial_quantity': quantity}
             parts = (lot.name or '').split('$')
             if len(parts) >= 5 and parts[3].isdigit():
@@ -526,8 +547,11 @@ class StockMoveLine(models.Model):
 
     def write(self, vals):
         result = super().write(vals)
-        if 'quantity' in vals or 'qty_done' in vals:
-            self._sync_material_lot_quantity()
+        if 'quantity' in vals:
+            self.filtered(
+                lambda line: line.move_id
+                and line.move_id._is_material_label_picking(),
+            )._sync_material_lot_quantity()
         return result
 
 

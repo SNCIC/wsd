@@ -236,3 +236,58 @@ class TestMaterialLabelPutaway(TransactionCase):
             move.action_revoke_material_labels()
         with self.assertRaises(ValidationError):
             move.move_line_ids.quantity = 40
+
+    def test_same_quantity_write_on_a_printed_batch_is_a_no_op(self):
+        """Reservation and validation rewrite the same quantity: no guard."""
+        move = self._storage_move(100)
+        move.move_line_ids.quantity_per_label = 100
+        move.action_generate_material_labels()
+        lot = move.move_line_ids.lot_id
+        lot.write({'label_print_count': 1})
+
+        move.move_line_ids.write({'quantity': 100})
+
+        self.assertEqual(move.move_line_ids.quantity, 100)
+        self.assertEqual(lot.initial_quantity, 100)
+
+    def test_picking_operation_resizes_a_printed_batch(self):
+        """Goods leaving the stock keep their label: the transported quantity
+        is free, the batch name and its printed quantity are not."""
+        lot_name = 'CAP-900$SUP-01$B907$40$000001'
+        lot = self.env['stock.lot'].create({
+            'name': lot_name,
+            'product_id': self.product.id,
+            'company_id': self.env.company.id,
+            'material_sn_base': lot_name,
+            'initial_quantity': 40,
+            'label_print_count': 1,
+        })
+        stock_location = self.warehouse.lot_stock_id
+        self.env['stock.quant']._update_available_quantity(
+            self.product, stock_location, 40, lot_id=lot,
+        )
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': self.warehouse.pick_type_id.id,
+            'location_id': stock_location.id,
+            'location_dest_id': self.env['stock.location'].create({
+                'name': 'Issue Destination', 'usage': 'internal',
+            }).id,
+        })
+        move = self.env['stock.move'].create({
+            'product_id': self.product.id,
+            'product_uom_qty': 12,
+            'product_uom': self.product.uom_id.id,
+            'picking_id': picking.id,
+            'location_id': picking.location_id.id,
+            'location_dest_id': picking.location_dest_id.id,
+        })
+        move._action_confirm()
+        move._action_assign()
+        line = move.move_line_ids
+        self.assertEqual(line.lot_id, lot)
+
+        line.write({'quantity': 10})
+
+        self.assertEqual(line.quantity, 10)
+        self.assertEqual(lot.name, lot_name)
+        self.assertEqual(lot.initial_quantity, 40)
