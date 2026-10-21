@@ -63,6 +63,13 @@
                 <field name="is_eip_material" optional="hide"/>
                 <field name="is_nqi_material" optional="hide"/>
             </xpath>
+            <!-- Optional thumbnail appended last: the user can toggle the
+                 column with the list header gear menu. -->
+            <xpath expr="//list" position="inside">
+                <field name="image_128" string="Image" widget="image"
+                       options="{'size': [40, 40], 'img_class': 'object-fit-contain'}"
+                       optional="show" readonly="1"/>
+            </xpath>
         </field>
     </record>
 
