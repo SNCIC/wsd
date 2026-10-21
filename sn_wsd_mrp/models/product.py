@@ -129,17 +129,27 @@ class ProductTemplate(models.Model):
                     'Products with a drawing number must declare their board '
                     'side type (single or double).'))
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        # A product must be classified and carry its material code as soon as
-        # it is created. Multi-variant templates keep their code on the
-        # variants instead, so the material code is only required when no
-        # attribute line is provided.
+    @api.model
+    def _check_classification(self, vals_list):
+        """A product must be classified and carry its material code as soon as
+        it is created. Multi-variant templates keep their code on the variants
+        instead, so the material code is only required when no attribute line
+        is provided."""
         for vals in vals_list:
             if not vals.get('categ_id'):
                 raise ValidationError(_('The product category is required.'))
             if not vals.get('default_code') and not vals.get('attribute_line_ids'):
                 raise ValidationError(_('The material code is required.'))
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # The rule is checked on the template creation (product form, imports),
+        # which is the only place carrying the category and the material code
+        # together. A variant creation builds its template first while
+        # default_code stays on the variant, so the template never sees the
+        # code: ProductProduct.create opts out through the context.
+        if not self.env.context.get('sn_wsd_suppress_classification_check'):
+            self._check_classification(vals_list)
         return super().create(vals_list)
 
     def copy(self, default=None):
@@ -256,8 +266,13 @@ class ProductProduct(models.Model):
     def create(self, vals_list):
         # 抑制模板约束在 related 逐字段写回的中间态触发（见
         # ProductTemplate._check_board_side_declared），创建完成后复检。
+        # 一并跳过模板的分类/物料编码校验：变体创建会先建模板，而
+        # default_code 落在变体上，模板侧永远拿不到编码；分类与编码只有
+        # 直接建模板（产品表单、导入）时才是成对出现的。
         products = super(ProductProduct, self.with_context(
-            sn_wsd_suppress_board_side_check=True)).create(vals_list)
+            sn_wsd_suppress_board_side_check=True,
+            sn_wsd_suppress_classification_check=True,
+        )).create(vals_list)
         products.with_context(
             sn_wsd_suppress_board_side_check=False,
         ).mapped('product_tmpl_id')._check_board_side_declared()
