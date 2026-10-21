@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sn_bom_import_wizard_user,access.sn.bom.import.wizard.user,model_sn_bom_import_wizard,mrp.group_mrp_user,1,1,1,1
 access_sn_bom_import_log_user,access.sn.bom.import.log.user,model_sn_bom_import_log,mrp.group_mrp_user,1,1,1,0
+access_sn_bom_line_batch_update_user,sn.bom.line.batch.update user,model_sn_bom_line_batch_update,mrp.group_mrp_user,1,0,0,0
+access_sn_bom_line_batch_update_manager,sn.bom.line.batch.update manager,model_sn_bom_line_batch_update,mrp.group_mrp_manager,1,1,1,1
