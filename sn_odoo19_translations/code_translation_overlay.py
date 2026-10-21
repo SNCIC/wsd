@@ -150,8 +150,10 @@ def install():
                 touched.add(f"{module}[{kind}]")
                 total += len(translations)
             if touched:
-                _logger.info("%s: merged %s code term(s) for %s into language %s",
-                             path.name, total, ', '.join(sorted(touched)), lang)
+                # Debug level on purpose: the overlay is merged on every start
+                # and the line only repeats the content of the po file.
+                _logger.debug("%s: merged %s code term(s) for %s into language %s",
+                              path.name, total, ', '.join(sorted(touched)), lang)
         _applied = True
     except Exception:
         _applied = False
