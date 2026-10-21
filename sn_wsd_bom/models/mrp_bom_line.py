@@ -40,10 +40,11 @@ class MrpBomLine(models.Model):
         index=True,
         readonly=True,
     )
+    # Not stored: the product name is translatable, a stored related field
+    # would keep the value of the language used when the line was written.
     parent_product_name = fields.Char(
         string='Parent Product Name',
         related='bom_id.product_tmpl_id.name',
-        store=True,
         readonly=True,
     )
     parent_material_specification = fields.Char(
