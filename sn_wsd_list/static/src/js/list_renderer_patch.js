@@ -118,13 +118,14 @@ patch(ListRenderer.prototype, {
             if (!column || !this.canFilterColumn(column)) {
                 continue;
             }
+            th.classList.add("o_column_filterable");
             let button = th.querySelector(".o_column_filter_button");
             if (!button) {
-                const label = th.querySelector("div[class*='d-flex']") || th;
+                // Absolute positioned on the header cell itself, on the left of the
+                // sort icon, to avoid overlapping it.
                 button = document.createElement("button");
                 button.type = "button";
                 button.className = "o_column_filter_button btn btn-sm btn-link p-0";
-                button.setAttribute("data-tooltip", _t("Filter"));
                 button.setAttribute("aria-label", _t("Filter"));
                 button.innerHTML = '<i class="fa fa-filter"/>';
                 button.addEventListener("mousedown", (ev) => ev.stopPropagation());
@@ -134,7 +135,7 @@ patch(ListRenderer.prototype, {
                     ev.preventDefault();
                     this.toggleColumnFilterPopover(button, column);
                 });
-                label.appendChild(button);
+                th.appendChild(button);
             }
             button.classList.toggle(
                 "o_column_filter_active",

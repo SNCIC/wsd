@@ -1,13 +1,26 @@
 .o_list_renderer {
-    th {
+    th.o_column_filterable {
+        position: relative;
+
+        // The button is only displayed on hover and is positioned right before
+        // the sort icon, both of them being absolutely positioned like the
+        // native sort icon. It must not reserve layout space, otherwise the
+        // column label would be truncated.
         .o_column_filter_button {
-            flex: 0 0 auto;
-            width: 18px;
-            height: 18px;
+            border-radius: 2px;
+            background: var(--ListRenderer-thead-bg-color, transparent);
+            padding: 0 2px;
+            position: absolute;
+            top: 50%;
+            right: 0.25rem;
+            z-index: 1;
+            width: 14px;
+            height: 14px;
             padding: 0;
-            margin-left: 2px;
+            margin: 0;
             line-height: 1;
-            color: inherit;
+            transform: translateY(-50%);
+            color: var(--bs-secondary-color, #6c757d);
             opacity: 0;
             transition: opacity ease 200ms;
 
@@ -20,6 +33,12 @@
                 opacity: 1;
                 color: var(--bs-primary, #714b67);
             }
+        }
+
+        // The native sort icon stays at its usual place (0.5rem from the right
+        // edge), the filter button is placed right before it.
+        &.o_column_sortable .o_column_filter_button {
+            right: 1.5rem;
         }
 
         &:hover .o_column_filter_button {
