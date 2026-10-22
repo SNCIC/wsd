@@ -12,6 +12,11 @@ import {
 
 const PAGE_SIZE = 100;
 const APPLY_DELAY = 350;
+const SEARCH_DELAY = 300;
+// Field types for which the value list can be searched on the server. Other
+// types either have few values (selection, boolean) or are filtered through a
+// range (numbers, dates).
+const SERVER_SEARCH_TYPES = ["char", "text", "many2one"];
 
 function toISODate(date) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -37,6 +42,10 @@ export class ColumnFilterPanel extends Component {
     setup() {
         this.orm = useService("orm");
         this.applyTimer = null;
+        this.searchTimer = null;
+        // Incremented on each (re)load to discard the responses of previous
+        // searches.
+        this.loadToken = 0;
         const filter = this.props.filter || {};
         this.state = useState({
             mode: filter.mode === "exclude" ? "exclude" : "include",
@@ -58,7 +67,10 @@ export class ColumnFilterPanel extends Component {
             }
             return Promise.resolve();
         });
-        onWillDestroy(() => browser.clearTimeout(this.applyTimer));
+        onWillDestroy(() => {
+            browser.clearTimeout(this.applyTimer);
+            browser.clearTimeout(this.searchTimer);
+        });
     }
 
     get labels() {
@@ -71,10 +83,23 @@ export class ColumnFilterPanel extends Component {
             clear: _t("Clear"),
             apply: _t("Apply"),
             loadMore: _t("Load more"),
+            noResults: _t("No results"),
             today: _t("Today"),
             thisMonth: _t("This Month"),
             thisYear: _t("This Year"),
         };
+    }
+
+    get shouldSearchOnServer() {
+        return this.props.isRootList && SERVER_SEARCH_TYPES.includes(this.fieldType);
+    }
+
+    getSearchDomain() {
+        const search = this.state.search.trim();
+        if (!search || !this.shouldSearchOnServer) {
+            return [];
+        }
+        return [[this.props.column.name, "ilike", search]];
     }
 
     get fieldType() {
@@ -101,12 +126,18 @@ export class ColumnFilterPanel extends Component {
 
     get visibleGroups() {
         const search = this.state.search.trim().toLowerCase();
-        if (!search) {
-            return this.state.groups;
-        }
-        return this.state.groups.filter((group) =>
-            String(group.label).toLowerCase().includes(search)
-        );
+        const groups = search
+            ? this.state.groups.filter((group) =>
+                  String(group.label).toLowerCase().includes(search)
+              )
+            : this.state.groups;
+        // Keep the selected values visible even when they are not part of the
+        // loaded/search results, so that they can still be unchecked.
+        const shownKeys = new Set(groups.map((group) => group.key));
+        const missingSelected = this.state.selected
+            .filter((key) => !shownKeys.has(key) && key in this.state.valueLabels)
+            .map((key) => ({ key, label: this.state.valueLabels[key], count: 0 }));
+        return [...missingSelected, ...groups];
     }
 
     isSelected(key) {
@@ -114,9 +145,10 @@ export class ColumnFilterPanel extends Component {
     }
 
     async loadValues(reset) {
-        if (this.state.loading) {
+        if (this.state.loading && !reset) {
             return;
         }
+        const token = ++this.loadToken;
         if (reset) {
             this.state.offset = 0;
             this.state.groups = [];
@@ -125,30 +157,52 @@ export class ColumnFilterPanel extends Component {
         try {
             let groups;
             let loadedCount;
+            let hasMore = false;
             if (this.props.isRootList) {
                 const result = await this.orm.webReadGroup(
                     this.props.resModel,
-                    this.props.getBaseDomain(),
+                    [...this.props.getBaseDomain(), ...this.getSearchDomain()],
                     [this.props.column.name],
                     ["__count"],
                     { limit: PAGE_SIZE, offset: this.state.offset }
                 );
+                if (token !== this.loadToken) {
+                    return; // a more recent search superseded this one
+                }
                 const rawGroups = result.groups || [];
                 groups = this.normalizeGroups(rawGroups);
                 loadedCount = rawGroups.length;
-                this.state.hasMore = loadedCount === PAGE_SIZE;
+                hasMore = loadedCount === PAGE_SIZE;
             } else {
                 groups = this.getLocalGroups();
                 loadedCount = groups.length;
-                this.state.hasMore = false;
+                hasMore = false;
             }
             this.state.groups = reset ? groups : [...this.state.groups, ...groups];
+            this.state.hasMore = hasMore;
             if (this.props.isRootList) {
                 this.state.offset += loadedCount;
             }
         } finally {
-            this.state.loading = false;
+            if (token === this.loadToken) {
+                this.state.loading = false;
+            }
         }
+    }
+
+    /**
+     * Search is applied on the server side when possible: the value list only
+     * contains the first page of values, so filtering locally would miss the
+     * values that are not loaded yet.
+     */
+    onSearchInput(ev) {
+        this.state.search = ev.target.value;
+        browser.clearTimeout(this.searchTimer);
+        this.searchTimer = browser.setTimeout(() => {
+            if (this.shouldSearchOnServer) {
+                this.loadValues(true);
+            }
+        }, SEARCH_DELAY);
     }
 
     normalizeGroups(rawGroups) {

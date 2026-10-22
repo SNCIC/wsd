@@ -48,7 +48,8 @@
                 <div class="o_column_filter_search">
                     <input class="form-control form-control-sm"
                            t-att-placeholder="labels.search"
-                           t-model="state.search"/>
+                           t-model="state.search"
+                           t-on-input="(ev) => this.onSearchInput(ev)"/>
                     <i class="fa fa-search"/>
                 </div>
                 <div class="o_column_filter_values">
@@ -73,6 +74,9 @@
                             <span class="o_column_filter_count" t-esc="group.count"/>
                         </label>
                     </t>
+                    <div t-if="!visibleGroups.length and !state.loading" class="o_column_filter_no_result">
+                        <t t-esc="labels.noResults"/>
+                    </div>
                     <div t-if="state.loading" class="o_column_filter_loading">
                         <i class="fa fa-spinner fa-spin"/>
                     </div>

@@ -53,6 +53,13 @@
     }
 }
 
+.o_column_filter_no_result {
+    padding: 0.5rem;
+    color: var(--bs-secondary-color, #6c757d);
+    text-align: center;
+    font-size: 0.85rem;
+}
+
 .o_column_filter_panel {
     display: flex;
     flex-direction: column;
