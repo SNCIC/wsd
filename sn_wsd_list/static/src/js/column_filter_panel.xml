@@ -52,14 +52,18 @@
                            t-on-input="(ev) => this.onSearchInput(ev)"/>
                     <i class="fa fa-search"/>
                 </div>
+                <div t-if="state.search.trim() and !state.selected.length and !state.empty and !state.nonEmpty"
+                     class="o_column_filter_hint">
+                    <t t-esc="labels.keywordHint"/>
+                </div>
                 <div class="o_column_filter_values">
-                    <label class="o_column_filter_value">
+                    <label class="o_column_filter_value" t-att-data-tooltip="labels.emptyHelp">
                         <input type="checkbox"
                                t-att-checked="state.empty"
                                t-on-change="() => this.toggleSpecial('empty')"/>
                         <span class="text-truncate" t-esc="labels.empty"/>
                     </label>
-                    <label class="o_column_filter_value">
+                    <label class="o_column_filter_value" t-att-data-tooltip="labels.nonEmptyHelp">
                         <input type="checkbox"
                                t-att-checked="state.nonEmpty"
                                t-on-change="() => this.toggleSpecial('nonEmpty')"/>

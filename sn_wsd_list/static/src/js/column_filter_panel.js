@@ -55,7 +55,7 @@ export class ColumnFilterPanel extends Component {
             nonEmpty: Boolean(filter.nonEmpty),
             from: filter.from || "",
             to: filter.to || "",
-            search: "",
+            search: filter.search || "",
             groups: [],
             loading: false,
             hasMore: false,
@@ -78,12 +78,15 @@ export class ColumnFilterPanel extends Component {
             search: _t("Search"),
             empty: _t("(empty)"),
             nonEmpty: _t("(not empty)"),
+            emptyHelp: _t("Records without a value for this column"),
+            nonEmptyHelp: _t("Records with a value for this column"),
             include: _t("Include"),
             exclude: _t("Exclude"),
             clear: _t("Clear"),
             apply: _t("Apply"),
             loadMore: _t("Load more"),
             noResults: _t("No results"),
+            keywordHint: _t("Apply to filter on this keyword"),
             today: _t("Today"),
             thisMonth: _t("This Month"),
             thisYear: _t("This Year"),
@@ -310,6 +313,7 @@ export class ColumnFilterPanel extends Component {
             nonEmpty: this.state.nonEmpty,
             from: this.state.from,
             to: this.state.to,
+            search: this.state.search.trim(),
         });
     }
 

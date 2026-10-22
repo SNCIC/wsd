@@ -19,6 +19,10 @@ export const FILTERABLE_TYPES = new Set([
 // Field types filtered with a "from / to" range instead of a value list.
 export const RANGE_TYPES = new Set(["integer", "float", "monetary", "date", "datetime"]);
 
+// Field types that can be filtered with a keyword ("contains") instead of a
+// list of values.
+export const KEYWORD_TYPES = new Set(["char", "text", "many2one"]);
+
 export function newFilter() {
     return {
         mode: "include",
@@ -28,6 +32,7 @@ export function newFilter() {
         nonEmpty: false,
         from: "",
         to: "",
+        search: "",
     };
 }
 
@@ -44,7 +49,8 @@ export function isEmptyFilter(filter) {
         filter.nonEmpty ||
         (filter.values && filter.values.length) ||
         filter.from ||
-        filter.to
+        filter.to ||
+        (filter.search && filter.search.trim())
     );
 }
 
@@ -111,13 +117,34 @@ function orDomains(leafs) {
         return null;
     }
     if (leafs.length === 1) {
-        return leafs[0];
+        return [leafs[0]];
     }
     const domain = [];
     for (let i = 1; i < leafs.length; i++) {
         domain.push("|");
     }
     domain.push(...leafs);
+    return domain;
+}
+
+/**
+ * Combine domain expressions with a "AND". The result is a flat domain (prefix
+ * notation), as nested domains are not supported by the ORM.
+ */
+function andDomains(domains) {
+    if (!domains.length) {
+        return null;
+    }
+    if (domains.length === 1) {
+        return domains[0];
+    }
+    const domain = [];
+    for (let i = 1; i < domains.length; i++) {
+        domain.push("&");
+    }
+    for (const subDomain of domains) {
+        domain.push(...subDomain);
+    }
     return domain;
 }
 
@@ -139,21 +166,37 @@ export function buildFilterDomain(fieldName, fieldType, filter) {
         const from = normalizeRangeValue(filter.from, fieldType, false);
         const to = normalizeRangeValue(filter.to, fieldType, true);
         if (from) {
-            domains.push([fieldName, exclude ? "<" : ">=", from]);
+            domains.push([[fieldName, exclude ? "<" : ">=", from]]);
         }
         if (to) {
-            domains.push([fieldName, exclude ? ">" : "<=", to]);
+            domains.push([[fieldName, exclude ? ">" : "<=", to]]);
         }
     }
     const values = (filter.values || []).filter(
         (value) => value !== false && value !== null && value !== undefined
     );
+    const keyword = (filter.search || "").trim();
+    // When nothing is checked, the keyword itself filters the records.
+    const useKeyword =
+        Boolean(keyword) &&
+        KEYWORD_TYPES.has(fieldType) &&
+        !values.length &&
+        !filter.empty &&
+        !filter.nonEmpty;
+    if (useKeyword) {
+        if (exclude) {
+            // Keep the empty values: they do not contain the keyword.
+            domains.push(["|", [fieldName, "=", false], [fieldName, "not ilike", keyword]]);
+        } else {
+            domains.push([[fieldName, "ilike", keyword]]);
+        }
+    }
     if (exclude) {
         if (filter.empty) {
-            domains.push([fieldName, "!=", false]);
+            domains.push([[fieldName, "!=", false]]);
         }
         if (filter.nonEmpty) {
-            domains.push([fieldName, "=", false]);
+            domains.push([[fieldName, "=", false]]);
         }
         if (values.length) {
             // Keep empty values: "not in" does not match NULL in SQL.
@@ -175,7 +218,7 @@ export function buildFilterDomain(fieldName, fieldType, filter) {
             domains.push(domain);
         }
     }
-    return domains.length ? domains : null;
+    return andDomains(domains);
 }
 
 /**
@@ -199,6 +242,10 @@ export function buildFilterDescription(fieldLabel, filter) {
     }
     if (filter.from || filter.to) {
         parts.push(`${filter.from || "…"} ~ ${filter.to || "…"}`);
+    }
+    const keyword = (filter.search || "").trim();
+    if (keyword && !parts.length) {
+        parts.push(keyword);
     }
     const description = parts.join(", ") || _t("(all)");
     return isExcludeMode(filter) ? `${fieldLabel} ≠ ${description}` : `${fieldLabel}: ${description}`;
@@ -232,6 +279,20 @@ export function matchFilterValue(value, fieldType, filter) {
         return exclude ? !inRange : inRange;
     }
     const values = filter.values || [];
+    const keyword = (filter.search || "").trim();
+    if (
+        keyword &&
+        KEYWORD_TYPES.has(fieldType) &&
+        !values.length &&
+        !filter.empty &&
+        !filter.nonEmpty
+    ) {
+        if (isNil) {
+            return exclude;
+        }
+        const match = String(raw).toLowerCase().includes(keyword.toLowerCase());
+        return exclude ? !match : match;
+    }
     if (exclude) {
         if (filter.empty) {
             return !isNil;
