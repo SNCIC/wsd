@@ -14,6 +14,26 @@ class StockPicking(models.Model):
 
     _inherit = 'stock.picking'
 
+    def _get_unstored_return_picking_type(self):
+        """Return operation to use while the goods are not stored yet.
+
+        The receipt and the quality control transfers of a multi-step
+        reception do not manage lots, so the goods they move carry no batch.
+        Returning them to the vendor must therefore not require a batch: they
+        go through the dedicated return operation, whose lot options are both
+        disabled. A one-step reception creates the lots itself and the storage
+        transfer works on existing lots, so their returns keep the standard
+        delivery operation, which requires a batch.
+        """
+        self.ensure_one()
+        warehouse = self.picking_type_id.warehouse_id
+        if not warehouse or warehouse.reception_steps == 'one_step':
+            return self.env['stock.picking.type']
+        pre_putaway_types = warehouse.in_type_id | warehouse.qc_type_id
+        if self.picking_type_id not in pre_putaway_types:
+            return self.env['stock.picking.type']
+        return warehouse._ensure_unstored_return_type()
+
     def write(self, vals):
         if 'partner_id' not in vals or self.env.context.get(
                 'sn_skip_picking_partner_audit'):
