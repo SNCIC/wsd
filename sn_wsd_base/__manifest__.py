@@ -13,6 +13,7 @@
     'assets': {
         'web.assets_backend': [
             'sn_wsd_base/static/src/js/quantity_field_defaults.js',
+            'sn_wsd_base/static/src/js/image_field_remove_confirm.js',
         ],
     },
     'installable': True,

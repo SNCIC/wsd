@@ -15,10 +15,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_base
+#. odoo-javascript
+#: code:addons/sn_wsd_base/static/src/js/image_field_remove_confirm.js:0
+msgid ""
+"Are you sure you want to delete this image? The image will only be removed "
+"once the record is saved."
+msgstr "确定要删除这张图片吗？保存后才会真正删除。"
+
+#. module: sn_wsd_base
 #: model_terms:ir.ui.view,arch_db:sn_wsd_base.product_template_search_view_hierarchical
 #: model_terms:ir.ui.view,arch_db:sn_wsd_base.product_category_search_view_hierarchical
 msgid "Categories"
 msgstr "分类"
+
+#. module: sn_wsd_base
+#. odoo-javascript
+#: code:addons/sn_wsd_base/static/src/js/image_field_remove_confirm.js:0
+msgid "Delete Image"
+msgstr "删除图片"
 
 #. module: sn_wsd_base
 #: model_terms:ir.ui.view,arch_db:sn_wsd_base.stock_location_search_view_hierarchical
