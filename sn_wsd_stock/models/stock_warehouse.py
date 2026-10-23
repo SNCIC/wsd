@@ -6,11 +6,12 @@ class StockWarehouse(models.Model):
 
     sn_unstored_return_type_id = fields.Many2one(
         'stock.picking.type',
-        string='Not Stored Return Type',
+        string='Vendor Return Type',
         copy=False,
         check_company=True,
-        help="Operation type used to return goods to the vendor before they "
-             "are stored, i.e. before the internal batches are generated.",
+        help="Operation type used to return received goods to the vendor, "
+             "either before they are stored (no batch yet) or after (the "
+             "stored batch is reused).",
     )
 
     def _pre_putaway_lot_settings(self):
@@ -41,18 +42,19 @@ class StockWarehouse(models.Model):
         }
 
     def _get_unstored_return_create_values(self):
-        """Values of the return operation preceding the storage transfer.
+        """Values of the operation returning goods to the vendor.
 
         Goods sent back before putaway never received an internal batch, so
-        the return operation must not manage lots either. Both lot options are
-        disabled, which is Odoo's way of saying an operation does not manage
-        lots: the return of a not yet stored receipt is validated without a
-        batch, just like the receipt and quality control transfers it undoes.
+        the return operation must not require one: both lot options are
+        disabled, which is how Odoo knows an operation does not manage lots.
+        The goods already stored keep their batch anyway, because the
+        reservation puts it on the move line, so the stock is still decreased
+        on the right batch.
         """
         self.ensure_one()
         supplier_location = self.env.ref('stock.stock_location_suppliers')
         return {
-            'name': _('Return to Vendor (Not Stored)'),
+            'name': _('Return to Vendor'),
             'code': 'outgoing',
             'sequence_code': 'RTV',
             'use_create_lots': False,
@@ -64,7 +66,7 @@ class StockWarehouse(models.Model):
         }
 
     def _ensure_unstored_return_type(self):
-        """Return the not stored return operation, creating it when missing.
+        """Return the vendor return operation, creating it when missing.
 
         The operation type is normally created with the warehouse, but a
         warehouse installed before this feature only gets it once the
@@ -109,7 +111,7 @@ class StockWarehouse(models.Model):
         name = name if name else self.name
         code = code if code else self.code
         values['sn_unstored_return_type_id'] = {
-            'name': _('%(name)s Sequence return to vendor', name=name),
+            'name': _('%(name)s Sequence vendor return', name=name),
             'prefix': code + '/' + (
                 self.sn_unstored_return_type_id.sequence_code or 'RTV') + '/',
             'padding': 5,

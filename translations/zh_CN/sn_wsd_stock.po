@@ -23,6 +23,12 @@ msgstr "%(name)s 未入库退货序列"
 
 #. module: sn_wsd_stock
 #. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence vendor return"
+msgstr "%(name)s 退回供应商序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
 #: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
 msgid ""
 "Material labels can only be generated for active receipt or storage lot "
@@ -82,6 +88,20 @@ msgid ""
 msgstr "用于在货物入库前（即内部批次生成前）退回供应商的作业类型。"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return received goods to the vendor, either "
+"before they are stored (no batch yet) or after (the stored batch is "
+"reused)."
+msgstr "用于将已收货货物退回供应商的作业类型：可在入库前（尚无批次）或入库后（沿用已入库批次）使用。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor"
+msgstr "退回供应商"
+
+#. module: sn_wsd_stock
 #. odoo-python
 #: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
 msgid "Return to Vendor (Not Stored)"
@@ -93,4 +113,8 @@ msgstr "退回供应商（未入库）"
 msgid "Unique Lot/Serial Number"
 msgstr "唯一批号/序列号"
 
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Vendor Return Type"
+msgstr "供应商退货作业类型"
 
