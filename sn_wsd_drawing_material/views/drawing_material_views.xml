@@ -5,6 +5,7 @@
         <field name="model">sn.wsd.drawing.material</field>
         <field name="arch" type="xml">
             <list>
+                <field name="active" widget="boolean_toggle"/>
                 <field name="x_drawing_no"/>
                 <field name="product_specification" optional="show"/>
                 <field name="product_name" optional="show"/>
@@ -25,6 +26,8 @@
                 <field name="x_drawing_no" string="Drawing No."/>
                 <field name="operation_id"/>
                 <field name="workshop_id"/>
+                <filter name="filter_inactive" string="Archived"
+                        domain="[('active', '=', False)]"/>
                 <filter name="filter_side_top" string="Top (T)"
                         domain="[('x_side', '=', 'top')]"/>
                 <filter name="filter_side_bottom" string="Bottom (B)"
@@ -56,6 +59,7 @@
                             <field name="x_drawing_no" default_focus="1"/>
                             <field name="operation_id"/>
                             <field name="x_side"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                         <group name="product_info" string="Product Info">
                             <field name="product_id" readonly="1"/>

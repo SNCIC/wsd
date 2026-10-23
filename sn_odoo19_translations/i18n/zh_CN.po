@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-12 06:51+0000\n"
-"PO-Revision-Date: 2026-10-12 06:51+0000\n"
+"POT-Creation-Date: 2026-10-23 01:37+0000\n"
+"PO-Revision-Date: 2026-10-23 01:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -160,6 +160,18 @@ msgstr "%(label)s，金额 %(currency_amount)s"
 msgid "%(label)s at %(currency_amount)s (Draft)"
 msgstr "%(label)s，金额 %(currency_amount)s（草稿）"
 
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence return to vendor"
+msgstr "%(name)s 未入库退货序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence vendor return"
+msgstr "%(name)s 退回供应商序列"
+
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
@@ -181,6 +193,25 @@ msgstr ""
 #: code:addons/account/wizard/accrued_orders.py:0
 msgid "%(order)s - %(order_line)s; price difference for %(product)s"
 msgstr "%(order)s - %(order_line)s；%(product)s 的价差"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid ""
+"%(order)s updated the vendor price of %(vendor)s from %(old_price)s to "
+"%(new_price)s %(currency)s (discount %(old_discount)s%% -> "
+"%(new_discount)s%%)."
+msgstr ""
+"%(order)s 已将 %(vendor)s 的供应商价格由 %(old_price)s 更新为 %(new_price)s "
+"%(currency)s（折扣 %(old_discount)s%% → %(new_discount)s%%）。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid ""
+"%(order)s: the vendor pricelist was not updated for %(product)s, the taxes "
+"of the order line differ from the vendor taxes of the product."
+msgstr "%(order)s：未更新 %(product)s 的供应商价格表，订单行的税与产品的供应商税不一致。"
 
 #. module: muk_web_chatter
 #. odoo-javascript
@@ -1420,9 +1451,11 @@ msgstr "应用栏文字颜色"
 
 #. module: sn_wsd_code_rule
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#. module: sn_wsd_drawing_material
 #. module: sn_wsd_exception
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_identity_form
@@ -2287,6 +2320,12 @@ msgstr "公司"
 #: model:ir.model.fields,field_description:muk_web_theme.field_res_config_settings__theme_favicon
 msgid "Company Favicon"
 msgstr "公司站点图标"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Complete All"
+msgstr "一键完成"
 
 #. module: sn_wsd_picklight
 #. odoo-python
@@ -4162,6 +4201,12 @@ msgstr "文件"
 msgid "File Name"
 msgstr "文件名"
 
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Fill every unchecked item as Pass and submit this task?"
+msgstr "将未填写结果的项目全部置为合格并提交本任务？"
+
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__final_test
@@ -5335,6 +5380,11 @@ msgstr "是否为草稿重复参考"
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__is_editable
 msgid "Is Editable"
 msgstr "能编辑"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__active
+msgid "Is Effective"
+msgstr "是否生效"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__is_exact_move_duplicate
@@ -6825,6 +6875,11 @@ msgstr "正常"
 msgid "Not Done"
 msgstr "未完成"
 
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Not Stored Return Type"
+msgstr "未入库退货作业类型"
+
 #. module: sn_wsd_picklight
 #. odoo-python
 #: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
@@ -7343,10 +7398,29 @@ msgstr "方案的工序范围。FAI：首件工位样本必须以 OK 结果流�
 msgid "Operation the patrol scheme watches (from the scheme)."
 msgstr "巡检方案监控的工序（取自方案）。"
 
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return goods to the vendor before they are stored, "
+"i.e. before the internal batches are generated."
+msgstr "用于在货物入库前（即内部批次生成前）退回供应商的作业类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return received goods to the vendor, either before "
+"they are stored (no batch yet) or after (the stored batch is reused)."
+msgstr "用于将已收货货物退回供应商的作业类型：可在入库前（尚无批次）或入库后（沿用已入库批次）使用。"
+
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_routing_workcenter_form_view
 msgid "Operation..."
 msgstr "工序..."
+
+#. module: mrp
+#: model:ir.ui.menu,name:mrp.menu_mrp_routing_action
+msgid "Operations"
+msgstr "工序"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_bom__operation_count
@@ -8792,6 +8866,18 @@ msgstr "返回"
 #: code:addons/spreadsheet_account/static/src/accounting_functions.js:0
 msgid "Return the balance of accounts for the specified tag(s) and period"
 msgstr "返回指定标签和期间下科目的余额"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor"
+msgstr "退回供应商"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor (Not Stored)"
+msgstr "退回供应商（未入库）"
 
 #. module: web
 #. odoo-javascript
@@ -11366,6 +11452,13 @@ msgid ""
 "set"
 msgstr "无法导入带有属性值但未设置产品名称的产品"
 
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material__active
+msgid ""
+"Uncheck to stop this relation from feeding the MES material list. Unchecked "
+"relations are archived and stay visible through the Archived filter."
+msgstr "取消勾选后，该方案不再为 MES 上线料表提供清单；取消勾选的方案会被归档，可通过“已归档”过滤器查看。"
+
 #. module: sn_wsd_gantt
 #. odoo-javascript
 #: code:addons/sn_wsd_gantt/static/src/gantt_model.js:0
@@ -11462,6 +11555,11 @@ msgstr "不支持的操作符"
 #: code:addons/account_edi_ubl_cii/models/account_move.py:0
 msgid "Untaxed"
 msgstr "不含税"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid "Update Vendor Pricelist"
+msgstr "更新供应商价格表"
 
 #. module: account
 #. odoo-python
@@ -11876,6 +11974,11 @@ msgstr "此处设置的值是特定于每家公司的"
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii.report_invoice_document
 msgid "Vendor Bill"
 msgstr "供应商账单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Vendor Return Type"
+msgstr "供应商退货作业类型"
 
 #. module: om_account_asset
 #. odoo-python
@@ -12467,6 +12570,14 @@ msgstr "撰写说明文字..."
 #: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
 msgid "Write a rejection note first."
 msgstr "请先填写驳回说明。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid ""
+"Write the unit prices and discounts changed on the order lines back to the "
+"vendor pricelist of the order vendor when the order is confirmed, so that "
+"the next purchase order defaults to them."
+msgstr "确认订单时，把订单行上修改过的单价与折扣写回该订单供应商的价格表，使下一张采购订单默认带出这些价格。"
 
 #. module: sn_wsd_gantt
 #. odoo-javascript

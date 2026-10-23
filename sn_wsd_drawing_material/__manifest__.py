@@ -1,7 +1,7 @@
 {
     'name': 'SN WSD Drawing Material Relations',
     'summary': 'Drawing-number material lists and ESOP work instructions',
-    'version': '19.0.2.2.0',
+    'version': '19.0.2.3.0',
     'depends': [
         'sn_wsd_mrp',
         'sn_wsd_tooling',

@@ -100,7 +100,14 @@ class SnWsdDrawingMaterial(models.Model):
         copy=True,
     )
     line_count = fields.Integer(string='Lines', compute='_compute_line_count')
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(
+        string='Is Effective',
+        default=True,
+        tracking=True,
+        help='Uncheck to stop this relation from feeding the MES material '
+             'list. Unchecked relations are archived and stay visible through '
+             'the Archived filter.',
+    )
 
     # 维度唯一即仲裁：同图号不同面别/工序/车间各自成行，无需"默认"标记。
     _drawing_material_dim_uniq = models.Constraint(

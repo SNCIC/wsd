@@ -234,3 +234,18 @@ msgstr "版本"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_esop_document_form
 msgid "ESOP Document"
 msgstr "ESOP 文件"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,field_description:sn_wsd_drawing_material.field_sn_wsd_drawing_material__active
+msgid "Is Effective"
+msgstr "是否生效"
+
+#. module: sn_wsd_drawing_material
+#: model:ir.model.fields,help:sn_wsd_drawing_material.field_sn_wsd_drawing_material__active
+msgid "Uncheck to stop this relation from feeding the MES material list. Unchecked relations are archived and stay visible through the Archived filter."
+msgstr "取消勾选后，该方案不再为 MES 上线料表提供清单；取消勾选的方案会被归档，可通过“已归档”过滤器查看。"
+
+#. module: sn_wsd_drawing_material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
+msgid "Archived"
+msgstr "已归档"

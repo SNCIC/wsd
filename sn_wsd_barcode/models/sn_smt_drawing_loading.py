@@ -175,6 +175,10 @@ class MesOrderDrawingSplit(models.Model):
                 ('x_drawing_no', '=', drawing_no),
                 ('operation_id', '=', route_op.operation_id.id),
                 ('x_side', '=', self.x_side),
+                # A relation switched off ("Is Effective" unchecked) must not
+                # feed the online material list; active is archived by Odoo
+                # but the domain is kept explicit on purpose.
+                ('active', '=', True),
             ], limit=1)
             if not lst or not lst.line_ids:
                 continue
