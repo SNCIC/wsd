@@ -13,6 +13,24 @@ class StockWarehouse(models.Model):
              "either before they are stored (no batch yet) or after (the "
              "stored batch is reused).",
     )
+    other_in_type_id = fields.Many2one(
+        'stock.picking.type',
+        string='Other Receipt Type',
+        copy=False,
+        check_company=True,
+        help="Operation type of the other receipts: goods entering the stock "
+             "through the inventory adjustment location, without a purchase "
+             "order.",
+    )
+    other_out_type_id = fields.Many2one(
+        'stock.picking.type',
+        string='Other Delivery Type',
+        copy=False,
+        check_company=True,
+        help="Operation type of the other deliveries: goods leaving the stock "
+             "through the inventory adjustment location, without a sales "
+             "order.",
+    )
 
     def _pre_putaway_lot_settings(self):
         """Lot handling of the operations preceding the storage transfer.
@@ -92,7 +110,34 @@ class StockWarehouse(models.Model):
         values['sn_unstored_return_type_id'] = {
             'active': self.reception_steps != 'one_step',
         }
+        adjustment_location = self._get_inventory_adjustment_location()
+        values['other_in_type_id'] = {
+            'active': self.active,
+            'default_location_src_id': (
+                adjustment_location
+                or self.env.ref('stock.stock_location_suppliers')).id,
+            'default_location_dest_id': self.lot_stock_id.id,
+        }
+        values['other_out_type_id'] = {
+            'active': self.active,
+            'default_location_src_id': self.lot_stock_id.id,
+            'default_location_dest_id': (
+                adjustment_location
+                or self.env.ref('stock.stock_location_customers')).id,
+        }
         return values
+
+    def _get_inventory_adjustment_location(self):
+        """Inventory adjustment location the other operations end on.
+
+        Odoo does not give that location a XML id: it is the first location of
+        the company whose usage is ``inventory``.
+        """
+        self.ensure_one()
+        return self.env['stock.location'].search([
+            ('usage', '=', 'inventory'),
+            ('company_id', 'in', [self.company_id.id, False]),
+        ], limit=1)
 
     def _get_picking_type_create_values(self, max_sequence):
         values, max_sequence = super()._get_picking_type_create_values(
@@ -104,7 +149,50 @@ class StockWarehouse(models.Model):
             self._get_unstored_return_create_values(),
             sequence=max_sequence,
         )
-        return values, max_sequence + 1
+        values['other_in_type_id'] = dict(
+            self._get_other_operation_create_values('in'),
+            sequence=max_sequence + 1,
+        )
+        values['other_out_type_id'] = dict(
+            self._get_other_operation_create_values('out'),
+            sequence=max_sequence + 2,
+        )
+        return values, max_sequence + 3
+
+    def _get_other_operation_create_values(self, kind):
+        """Values of the other receipt and other delivery operations.
+
+        Both take the inventory adjustment location as their external end:
+        the goods come from the outside without a purchase order and leave
+        without a sales order, the way the Kingdee other documents do.
+        """
+        self.ensure_one()
+        adjustment_location = self._get_inventory_adjustment_location()
+        if kind == 'in':
+            name = _('Other Receipts')
+            code = 'incoming'
+            sequence_code = 'OIN'
+            src_location = (
+                adjustment_location
+                or self.env.ref('stock.stock_location_suppliers'))
+            dest_location = self.lot_stock_id
+        else:
+            name = _('Other Deliveries')
+            code = 'outgoing'
+            sequence_code = 'OOUT'
+            src_location = self.lot_stock_id
+            dest_location = (
+                adjustment_location
+                or self.env.ref('stock.stock_location_customers'))
+        return {
+            'name': name,
+            'code': code,
+            'sequence_code': sequence_code,
+            'default_location_src_id': src_location.id,
+            'default_location_dest_id': dest_location.id,
+            'barcode': self.code.replace(" ", "").upper() + sequence_code,
+            'company_id': self.company_id.id,
+        }
 
     def _get_sequence_values(self, name=False, code=False):
         values = super()._get_sequence_values(name=name, code=code)
@@ -114,6 +202,20 @@ class StockWarehouse(models.Model):
             'name': _('%(name)s Sequence vendor return', name=name),
             'prefix': code + '/' + (
                 self.sn_unstored_return_type_id.sequence_code or 'RTV') + '/',
+            'padding': 5,
+            'company_id': self.company_id.id,
+        }
+        values['other_in_type_id'] = {
+            'name': _('%(name)s Sequence other receipts', name=name),
+            'prefix': code + '/' + (
+                self.other_in_type_id.sequence_code or 'OIN') + '/',
+            'padding': 5,
+            'company_id': self.company_id.id,
+        }
+        values['other_out_type_id'] = {
+            'name': _('%(name)s Sequence other deliveries', name=name),
+            'prefix': code + '/' + (
+                self.other_out_type_id.sequence_code or 'OOUT') + '/',
             'padding': 5,
             'company_id': self.company_id.id,
         }

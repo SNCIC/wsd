@@ -276,3 +276,91 @@ msgstr "单据作业的验证日期；单据未完成时为空。"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
 msgid "Destination Location"
 msgstr "目的位置"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_receipt
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_receipt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Other Receipts"
+msgstr "其他入库单"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_delivery
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_delivery
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Other Deliveries"
+msgstr "其他出库单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_in
+msgid "Other Receipt"
+msgstr "其他入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_out
+msgid "Other Delivery"
+msgstr "其他出库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_other_operation
+msgid "Other Operation"
+msgstr "其他出入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_other_operation
+msgid "Other receipt or other delivery the transfer was created from, empty on the purchase receipts and the sales deliveries."
+msgstr "该调拨由其他入库单或其他出库单创建；采购收货与销售交货为空。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__other_in_type_id
+msgid "Other Receipt Type"
+msgstr "其他入库作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__other_in_type_id
+msgid "Operation type of the other receipts: goods entering the stock without a purchase order."
+msgstr "其他入库的作业类型：不通过采购订单直接入库。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__other_out_type_id
+msgid "Other Delivery Type"
+msgstr "其他出库作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__other_out_type_id
+msgid "Operation type of the other deliveries: goods leaving the stock without a sales order."
+msgstr "其他出库的作业类型：不通过销售订单直接出库。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other receipts"
+msgstr "%(name)s 其他入库单序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other deliveries"
+msgstr "%(name)s 其他出库单序列"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Source Location"
+msgstr "源位置"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Source Document"
+msgstr "来源单据"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Contact"
+msgstr "往来单位"
