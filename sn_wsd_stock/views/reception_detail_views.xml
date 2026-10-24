@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <list string="Receipt Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="sn_picking_date desc, picking_id, id">
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
                 <field name="sn_picking_date" options="{'show_time': False}"/>
@@ -56,7 +56,7 @@
         <field name="arch" type="xml">
             <list string="Quality Control Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="sn_picking_date desc, picking_id, id">
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
                 <field name="sn_picking_date" options="{'show_time': False}"/>
@@ -92,7 +92,7 @@
         <field name="arch" type="xml">
             <list string="Storage Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="sn_picking_date desc, picking_id, id">
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
                 <field name="sn_picking_date" options="{'show_time': False}"/>
