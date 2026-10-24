@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Other Stock Operations',
-    'version': '19.0.1.0.4',
+    'version': '19.0.1.0.5',
     'summary': 'Other receipts and deliveries moving the stock without a purchase or a sale',
     'category': 'Supply Chain/Inventory',
     'depends': ['stock'],

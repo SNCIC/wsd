@@ -48,7 +48,9 @@ class StockPicking(models.Model):
         """
         res = super().default_get(fields_list)
         other_operation = self.env.context.get('sn_other_operation_default')
-        if not other_operation or res.get('picking_type_id'):
+        if not other_operation:
+            return res
+        if self.env.context.get('default_picking_type_id'):
             return res
         warehouse = self.env['stock.warehouse'].search(
             [('company_id', '=', self.env.company.id)], limit=1)
