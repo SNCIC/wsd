@@ -258,3 +258,21 @@ msgstr "入库明细"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "Reception Details"
 msgstr "来料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_validation_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Validation Date"
+msgstr "验证日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_validation_date
+msgid "Date the operation of the document was validated. Empty while the document is still open."
+msgstr "单据作业的验证日期；单据未完成时为空。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+msgid "Destination Location"
+msgstr "目的位置"

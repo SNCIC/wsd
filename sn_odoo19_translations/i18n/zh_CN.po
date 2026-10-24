@@ -5122,6 +5122,7 @@ msgstr "无法排到过去的日期。"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_gantt.mrp_production_gantt_search_view
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_wip_qty
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "In Progress"
 msgstr "进行中"
 
@@ -6317,6 +6318,7 @@ msgstr "群发邮件模板：“%(name)s”（ID：%(record_id)s）"
 #. from po: d:\odoo\odoo19wsd\addons\resource\i18n\zh_CN.po
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "Material"
 msgstr "物料"
 
@@ -10166,6 +10168,7 @@ msgstr ""
 #. module: sn_wsd_tooling
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "Status"
 msgstr "状态"
 
@@ -13205,3 +13208,29 @@ msgstr "入库明细"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "Reception Details"
 msgstr "来料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_validation_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Validation Date"
+msgstr "验证日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_validation_date
+msgid "Date the operation of the document was validated. Empty while the document is still open."
+msgstr "单据作业的验证日期；单据未完成时为空。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_summary_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_summary_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_summary_detail_list
+msgid "Summary Details"
+msgstr "汇总明细"
+
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+msgid "Destination Location"
+msgstr "目的位置"

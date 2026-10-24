@@ -20,10 +20,11 @@
         <field name="arch" type="xml">
             <list string="Receipt Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="picking_id, id">
+                  default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date"/>
+                <field name="sn_picking_date" widget="date"/>
+                <field name="sn_validation_date" widget="date"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
@@ -41,7 +42,8 @@
                 <field name="product_uom" groups="uom.group_uom"/>
                 <field name="sn_supplier_batch_no" optional="show"/>
                 <field name="sn_lot_names" optional="hide"/>
-                <field name="location_dest_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
                 <field name="state" optional="hide" widget="badge"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
@@ -54,10 +56,11 @@
         <field name="arch" type="xml">
             <list string="Quality Control Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="picking_id, id">
+                  default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date"/>
+                <field name="sn_picking_date" widget="date"/>
+                <field name="sn_validation_date" widget="date"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
@@ -75,7 +78,8 @@
                 <field name="product_uom" groups="uom.group_uom"/>
                 <field name="sn_lot_names" optional="show"/>
                 <field name="location_id" optional="hide"/>
-                <field name="location_dest_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
                 <field name="state" optional="hide" widget="badge"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
@@ -88,10 +92,11 @@
         <field name="arch" type="xml">
             <list string="Storage Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
-                  default_order="picking_id, id">
+                  default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date"/>
+                <field name="sn_picking_date" widget="date"/>
+                <field name="sn_validation_date" widget="date"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
@@ -108,7 +113,8 @@
                 <field name="quantity" sum="Total Quantity"/>
                 <field name="product_uom" groups="uom.group_uom"/>
                 <field name="sn_lot_names" optional="show"/>
-                <field name="location_dest_id" optional="show"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="show"/>
                 <field name="location_id" optional="hide"/>
                 <field name="state" optional="hide" widget="badge"/>
                 <field name="company_id" groups="base.group_multi_company"/>
@@ -128,6 +134,7 @@
                 <field name="product_name" string="Material Name"/>
                 <field name="material_specification" string="Material Specification"/>
                 <field name="sn_picking_date" string="Scheduled Date"/>
+                <field name="sn_validation_date" string="Validation Date"/>
                 <field name="picking_id"/>
                 <field name="product_id"/>
                 <separator/>
@@ -143,8 +150,10 @@
                             context="{'group_by': 'product_id'}"/>
                     <filter name="group_step" string="Reception Step"
                             context="{'group_by': 'sn_reception_step'}"/>
-                    <filter name="group_date" string="Date"
-                            context="{'group_by': 'date:day'}"/>
+                    <filter name="group_date" string="Scheduled Date"
+                            context="{'group_by': 'sn_picking_date:day'}"/>
+                    <filter name="group_validation_date" string="Validation Date"
+                            context="{'group_by': 'sn_validation_date:day'}"/>
                     <filter name="group_state" string="Status"
                             context="{'group_by': 'state'}"/>
                 </group>
@@ -160,7 +169,7 @@
         <field name="search_view_id" ref="view_sn_wsd_reception_detail_search"/>
         <field name="domain">[('sn_reception_step', '=', 'receipt')]</field>
         <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
-            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
     </record>
 
     <record id="action_sn_wsd_quality_detail" model="ir.actions.act_window">
@@ -171,7 +180,7 @@
         <field name="search_view_id" ref="view_sn_wsd_reception_detail_search"/>
         <field name="domain">[('sn_reception_step', '=', 'qc')]</field>
         <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
-            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
     </record>
 
     <record id="action_sn_wsd_storage_detail" model="ir.actions.act_window">
@@ -184,7 +193,7 @@
              receipt already reaches the stock, so it is listed here too. -->
         <field name="domain">['|', ('sn_reception_step', '=', 'storage'), '&amp;', ('sn_reception_step', '=', 'receipt'), ('picking_type_id.warehouse_id.reception_steps', '=', 'one_step')]</field>
         <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
-            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
     </record>
 
     <menuitem id="menu_sn_wsd_receipt_detail"

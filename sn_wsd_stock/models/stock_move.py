@@ -35,26 +35,39 @@ class StockMove(models.Model):
         related='picking_id.scheduled_date',
         string='Scheduled Date',
         readonly=True,
+        store=True,
+    )
+    sn_validation_date = fields.Datetime(
+        related='picking_id.date_done',
+        string='Validation Date',
+        readonly=True,
+        store=True,
+        help='Date the operation of the document was validated. Empty while '
+             'the document is still open.',
     )
     sn_picking_partner_id = fields.Many2one(
         related='picking_id.partner_id',
         string='Vendor',
         readonly=True,
+        store=True,
     )
     sn_picking_origin = fields.Char(
         related='picking_id.origin',
         string='Transfer Source',
         readonly=True,
+        store=True,
     )
     sn_picking_state = fields.Selection(
         related='picking_id.state',
         string='Transfer Status',
         readonly=True,
+        store=True,
     )
     sn_picking_user_id = fields.Many2one(
         related='picking_id.user_id',
         string='Responsible',
         readonly=True,
+        store=True,
     )
     product_code = fields.Char(
         related='product_id.default_code',
