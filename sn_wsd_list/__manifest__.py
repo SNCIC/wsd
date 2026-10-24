@@ -2,8 +2,8 @@
 
 {
     'name': 'SN WSD List',
-    'version': '19.0.1.0.0',
-    'summary': 'Per-column filters on list view headers',
+    'version': '19.0.1.1.0',
+    'summary': 'Per-column filters and merged document cells on list views',
     'category': 'Hidden',
     'depends': ['web'],
     'assets': {
@@ -14,7 +14,9 @@
             'sn_wsd_list/static/src/js/column_filter_panel.js',
             'sn_wsd_list/static/src/js/column_filter_panel.xml',
             'sn_wsd_list/static/src/js/list_renderer_patch.js',
+            'sn_wsd_list/static/src/js/merged_cells_list.js',
             'sn_wsd_list/static/src/scss/column_filter.scss',
+            'sn_wsd_list/static/src/scss/merged_cells_list.scss',
         ],
     },
     'installable': True,

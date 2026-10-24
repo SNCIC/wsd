@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Reception detail reports (Inventory > Reporting).
+
+         A three-step reception creates one operation per step (receipt,
+         quality control, storage), each one carrying its own document and its
+         own product lines. The three lists below show those operations step by
+         step, one line per move. Refer to the purchase detail list: the
+         document information is printed on the first line of its document
+         only, the cells of the other lines staying blank (merged cells list of
+         sn_wsd_list).
+
+         The three views are written out instead of inheriting each other:
+         Odoo applies every view inheriting a view to that view too, so adding
+         or removing a column in a child view would change the other reports as
+         well. -->
+    <record id="view_sn_wsd_receipt_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.receipt.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Receipt Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="sn_picking_date"/>
+                <field name="sn_picking_partner_id"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_supplier_batch_no" optional="show"/>
+                <field name="sn_lot_names" optional="hide"/>
+                <field name="location_dest_id" optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quality_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.quality.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Quality Control Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="sn_picking_date"/>
+                <field name="sn_picking_partner_id"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_storage_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.storage.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Storage Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="sn_picking_date"/>
+                <field name="sn_picking_partner_id"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="location_dest_id" optional="show"/>
+                <field name="location_id" optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_reception_detail_search" model="ir.ui.view">
+        <field name="name">stock.move.reception.detail.search</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Reception Details">
+                <field name="reference" string="Document No."/>
+                <field name="sn_picking_origin" string="Transfer Source"/>
+                <field name="sn_picking_partner_id" string="Vendor"/>
+                <field name="product_code" string="Material Code"/>
+                <field name="product_name" string="Material Name"/>
+                <field name="material_specification" string="Material Specification"/>
+                <field name="sn_picking_date" string="Scheduled Date"/>
+                <field name="picking_id"/>
+                <field name="product_id"/>
+                <separator/>
+                <filter name="filter_in_progress" string="In Progress"
+                        domain="[('picking_id.state', 'not in', ('done', 'cancel'))]"/>
+                <filter name="filter_done" string="Done"
+                        domain="[('picking_id.state', '=', 'done')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_document" string="Document No."
+                            context="{'group_by': 'picking_id'}"/>
+                    <filter name="group_product" string="Material"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="group_step" string="Reception Step"
+                            context="{'group_by': 'sn_reception_step'}"/>
+                    <filter name="group_date" string="Date"
+                            context="{'group_by': 'date:day'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_receipt_detail" model="ir.actions.act_window">
+        <field name="name">Receipt Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_receipt_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_reception_detail_search"/>
+        <field name="domain">[('sn_reception_step', '=', 'receipt')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_quality_detail" model="ir.actions.act_window">
+        <field name="name">Quality Control Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_quality_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_reception_detail_search"/>
+        <field name="domain">[('sn_reception_step', '=', 'qc')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_storage_detail" model="ir.actions.act_window">
+        <field name="name">Storage Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_storage_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_reception_detail_search"/>
+        <!-- A one-step reception has no storage operation of its own: its
+             receipt already reaches the stock, so it is listed here too. -->
+        <field name="domain">['|', ('sn_reception_step', '=', 'storage'), '&amp;', ('sn_reception_step', '=', 'receipt'), ('picking_type_id.warehouse_id.reception_steps', '=', 'one_step')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_receipt_detail"
+              name="Receipt Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_receipt_detail"
+              sequence="20"/>
+    <menuitem id="menu_sn_wsd_quality_detail"
+              name="Quality Control Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_quality_detail"
+              sequence="21"/>
+    <menuitem id="menu_sn_wsd_storage_detail"
+              name="Storage Details"
+              parent="stock.menu_warehouse_report"
+              action="action_sn_wsd_storage_detail"
+              sequence="22"/>
+</odoo>
