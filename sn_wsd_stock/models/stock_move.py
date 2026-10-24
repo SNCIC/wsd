@@ -105,6 +105,11 @@ class StockMove(models.Model):
         reception already reaches the stock: the receipt report lists it and
         the storage report adds it through the one-step fallback of its
         action.
+
+        Only the operation types of the reception are recognized: the other
+        receipts (goods entering the stock without a purchase order) are also
+        incoming transfers, but they are not part of a purchase reception and
+        stay out of the three reports.
         """
         self.ensure_one()
         picking_type = self.picking_type_id
@@ -117,7 +122,7 @@ class StockMove(models.Model):
         store_type = warehouse.store_type_id
         if store_type and store_type.active and picking_type == store_type:
             return 'storage'
-        if picking_type == warehouse.in_type_id or picking_type.code == 'incoming':
+        if picking_type == warehouse.in_type_id:
             return 'receipt'
         return False
 
