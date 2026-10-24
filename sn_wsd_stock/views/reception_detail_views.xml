@@ -23,8 +23,8 @@
                   default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date" widget="date"/>
-                <field name="sn_validation_date" widget="date"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
@@ -59,8 +59,8 @@
                   default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date" widget="date"/>
-                <field name="sn_validation_date" widget="date"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
@@ -95,8 +95,8 @@
                   default_order="sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
-                <field name="sn_picking_date" widget="date"/>
-                <field name="sn_validation_date" widget="date"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
                 <field name="sn_picking_partner_id"/>
                 <field name="sn_picking_origin"/>
                 <field name="sn_picking_state" widget="badge"
