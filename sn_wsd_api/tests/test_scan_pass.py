@@ -463,6 +463,46 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertFalse(self.env['sn.wsd.mes.test.result'].search([
             ('serial_identity_id.name', '=', 'SN-API-MULTI2')]))
 
+    def test_17_retest_at_parked_successor(self):
+        # 复测回流：板停在 X 的直接后继时，X 的设备重报 = 板被拿回 X 复测
+        # （OK 不封口、次数拦下一次进站）——撤销停放预判、回站过站，OK 后
+        # 重新停放；绝不给后继凭空记 OK（线上 FCT 复测误当到站拉进）
+        self.op_in.x_max_test_count = 3
+        self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
+        result = self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
+        self.assertTrue(result['ok'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-RT1')])
+        in_rows = history.filtered(
+            lambda r: r.route_operation_id.operation_id == self.op_in)
+        out_rows = history.filtered(
+            lambda r: r.route_operation_id.operation_id == self.op_out)
+        # 首测 + 复测：两行 OK 合法，台数按 SN 去重
+        self.assertEqual(len(in_rows), 2)
+        self.assertEqual(set(in_rows.mapped('result')), {'ok'})
+        # 后继只保留复测后重新生成的一条在制停放行，没有任何伪造判定
+        self.assertEqual(len(out_rows), 1)
+        self.assertEqual(out_rows.result, 'in_progress')
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-API-RT1')])
+        self.assertEqual(wip.route_operation_id.operation_id, self.op_out)
+
+    def test_18_retest_pass_limit_not_recorded(self):
+        # 次数上限拦复测（默认 1 次）：不落第二行 OK，也不给后继伪造判定
+        self.service.scan_pass(self._payload(M_SN='SN-API-RT2'))
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.scan_pass(self._payload(M_SN='SN-API-RT2'))
+        self.assertIn('reached the pass limit', str(ctx.exception))
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-RT2')])
+        in_rows = history.filtered(
+            lambda r: r.route_operation_id.operation_id == self.op_in)
+        self.assertEqual(len(in_rows), 1)
+        self.assertEqual(in_rows.result, 'ok')
+        self.assertFalse(history.filtered(
+            lambda r: r.route_operation_id.operation_id == self.op_out
+            and r.result != 'in_progress'))
+
 
 @tagged('post_install', '-at_install')
 class TestScanPassHttp(ScanPassFixture, HttpCase):

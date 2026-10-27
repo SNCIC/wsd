@@ -271,16 +271,33 @@ class SnWsdApiService(models.AbstractModel):
             mes_order = wip.mes_order_id
             route_op = wip.route_operation_id
             if route_op.operation_id != workcenter.x_operation_id:
-                # arrival pull: the parked operation hands the board over
-                mes_order.leave_station(identity, 'ok',
-                                        operator_code=operator_code)
                 target_op = mes_order.x_mes_route_id.operation_ids.filtered(
                     lambda r: r.operation_id == workcenter.x_operation_id)[:1]
-                # 首件保持：到位已随出站登记，检验未判定时本站不接板——
-                # 板停在途（不 raise，防止回滚到位登记）
-                if mes_order.must_hold_for_fai(identity, target_op):
-                    return False, mes_order
-                mes_order.scan_enter(identity.name, workcenter)
+                if target_op and route_op in mes_order._station_successors(
+                        target_op):
+                    # 复测回流（B-1，2026-10-27）：设备在 X 重报、板恰好停在
+                    # X 的直接后继（中间无任何已判定工序）= 板被拿回 X 复测
+                    # ——OK 不封口、次数拦下一次进站（concepts: 过站次数）。
+                    # 撤销那条纯预判的停放在制行，板回 X 按上限正常进站；
+                    # 绝不给下游工序凭空记 OK（原到站拉进在这里会把结束工
+                    # 序伪判成产出、再被 finished 闸拒绝回滚）。
+                    self.env['sn.wsd.serial.operation.history'].sudo().search([
+                        ('serial_identity_id', '=', identity.id),
+                        ('mes_order_id', '=', mes_order.id),
+                        ('route_operation_id', '=', route_op.id),
+                        ('result', '=', 'in_progress'),
+                    ]).unlink()
+                    wip.sudo().unlink()
+                    mes_order.scan_enter(identity.name, workcenter)
+                else:
+                    # arrival pull: the parked operation hands the board over
+                    mes_order.leave_station(identity, 'ok',
+                                            operator_code=operator_code)
+                    # 首件保持：到位已随出站登记，检验未判定时本站不接板——
+                    # 板停在途（不 raise，防止回滚到位登记）
+                    if mes_order.must_hold_for_fai(identity, target_op):
+                        return False, mes_order
+                    mes_order.scan_enter(identity.name, workcenter)
                 route_op = target_op
             finished = mes_order.leave_station(
                 identity, result, ng_defect=defect,
