@@ -130,14 +130,14 @@ class StockWarehouse(models.Model):
     def _get_inventory_adjustment_location(self):
         """Inventory adjustment location the other operations end on.
 
-        Odoo does not give that location a XML id: it is the first location of
-        the company whose usage is ``inventory``.
+        The location is read by name, not on its usage: a database carrying
+        the virtual locations of the other operations has several locations
+        with the ``inventory`` usage, and the inventory adjustment one is not
+        the first on ``complete_name`` any more.
         """
         self.ensure_one()
-        return self.env['stock.location'].search([
-            ('usage', '=', 'inventory'),
-            ('company_id', 'in', [self.company_id.id, False]),
-        ], limit=1)
+        return self.env['stock.location']._sn_get_inventory_adjustment_location(
+            self.company_id)
 
     def _get_picking_type_create_values(self, max_sequence):
         values, max_sequence = super()._get_picking_type_create_values(

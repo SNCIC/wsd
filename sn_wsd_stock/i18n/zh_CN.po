@@ -172,6 +172,7 @@ msgstr "生成料盘批次前请先取消“已捡货”状态。"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__company_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__company_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -897,6 +898,7 @@ msgstr "周六休息"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__sequence
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__sequence
 msgid "Sequence"
 msgstr "序号"
 
@@ -1283,3 +1285,198 @@ msgstr "%(name)s 其他出库单序列"
 #: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
 msgid "%(name)s Sequence other receipts"
 msgstr "%(name)s 其他入库单序列"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+msgid "Issuing Department"
+msgstr "领料部门"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+msgid "Issuing Employee"
+msgstr "领料人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+msgid "Issue Type"
+msgstr "领料类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Issue Location"
+msgstr "出库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+msgid "Receiving Department"
+msgstr "入库部门"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+msgid "Receiving Employee"
+msgstr "入库人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+msgid "Receipt Type"
+msgstr "入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Receipt Location"
+msgstr "入库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+msgid "Department taking the goods out of the stock."
+msgstr "从库存领用物料的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+msgid "Employee taking the goods out of the stock, filtered on the issuing department."
+msgstr "从库存领用物料的员工，按领料部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+msgid "Type of the other delivery. It selects the virtual location the goods leave to, hence the stock valuation account of the operation."
+msgstr "其他出库单的类型。它决定物料出库的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Virtual location the goods leave to, read from the issue type."
+msgstr "物料出库的虚拟库位，取自领料类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+msgid "Department the goods enter the stock for."
+msgstr "物料入库归属的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+msgid "Employee bringing the goods into the stock, filtered on the receiving department."
+msgstr "将物料入库的员工，按入库部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+msgid "Type of the other receipt. It selects the virtual location the goods come from, hence the stock valuation account of the operation."
+msgstr "其他入库单的类型。它决定物料入库来源的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Virtual location the goods come from, read from the receipt type."
+msgstr "物料入库来源的虚拟库位，取自入库类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_wsd_stock_other_operation_type
+msgid "Other Receipt and Delivery Type"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Applies To"
+msgstr "适用范围"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid "Virtual Location"
+msgstr "虚拟库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__code
+msgid "Code"
+msgstr "编码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__both
+msgid "Both"
+msgstr "两者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Direction of the other operations this type may be selected on."
+msgstr "该类型可用于的其他出入库方向。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid "Virtual location the goods leave to (other delivery) or come from (other receipt). Its stock valuation account is the one used by the accounting entries of the operation."
+msgstr "其他出库时物料出库、其他入库时物料来源的虚拟库位。该库位上的存货计价科目即该业务会计凭证使用的科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__company_id
+msgid "Company the type and its virtual location belong to."
+msgstr "该类型及其虚拟库位所属的公司。"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_stock_other_operation_type
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_stock_other_operation_type
+msgid "Other Operation Types"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select an issue type on the other delivery %s before validating it."
+msgstr "验证其他出库单 %s 前请先选择领料类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select a receipt type on the other receipt %s before validating it."
+msgstr "验证其他入库单 %s 前请先选择入库类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other delivery."
+msgstr "类型 %s 不能用于其他出库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other receipt."
+msgstr "类型 %s 不能用于其他入库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The issuing employee %(employee)s does not belong to the department %(department)s."
+msgstr "领料人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The receiving employee %(employee)s does not belong to the department %(department)s."
+msgstr "入库人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/sn_wsd_stock_other_operation_type.py:0
+msgid "The type code must be unique."
+msgstr "类型编码必须唯一。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_out
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_out
+msgid "Other Delivery"
+msgstr "其他出库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_in
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_in
+msgid "Other Receipt"
+msgstr "其他入库"

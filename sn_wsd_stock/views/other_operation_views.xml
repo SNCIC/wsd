@@ -17,6 +17,10 @@
                        options="{'show_time': False}"/>
                 <field name="date_done" string="Validation Date"
                        options="{'show_time': False}"/>
+                <field name="sn_receive_type_id" string="Receipt Type"/>
+                <field name="sn_receive_department_id" string="Receiving Department"/>
+                <field name="sn_receive_employee_id" string="Receiving Employee"
+                       widget="many2one_avatar_employee"/>
                 <field name="partner_id" string="Contact"/>
                 <field name="location_id" string="Source Location"/>
                 <field name="location_dest_id" string="Destination Location"/>
@@ -45,7 +49,10 @@
                        options="{'show_time': False}"/>
                 <field name="date_done" string="Validation Date"
                        options="{'show_time': False}"/>
-                <field name="partner_id" string="Contact"/>
+                <field name="sn_issue_type_id" string="Issue Type"/>
+                <field name="sn_issue_department_id" string="Issuing Department"/>
+                <field name="sn_issue_employee_id" string="Issuing Employee"
+                       widget="many2one_avatar_employee"/>
                 <field name="location_id" string="Source Location"/>
                 <field name="location_dest_id" string="Destination Location"/>
                 <field name="origin" string="Source Document"/>

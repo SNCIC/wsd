@@ -1,10 +1,11 @@
 {
     'name': 'SN WSD Stock',
-    'version': '19.0.1.25.0',
+    'version': '19.0.1.26.0',
     'summary': 'Incoming material labels, internal lot generation and reception detail reports',
     'category': 'Supply Chain/Inventory',
     'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp', 'sn_wsd_label', 'sn_wsd_list', 'sn_wsd_material'],
     'data': [
+        'security/ir.model.access.csv',
         'data/ir_sequence.xml',
         'data/label_template_incoming.xml',
         'data/label_template_issue.xml',
@@ -17,12 +18,14 @@
         'views/stock_rule_views.xml',
         'views/reception_detail_views.xml',
         'views/other_operation_views.xml',
+        'views/sn_other_operation_type_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'sn_wsd_stock/static/src/js/refresh_current_view_action.js',
         ],
     },
+    'post_init_hook': 'post_init_hook',
     'installable': True,
     'application': False,
     'author': 'SNCIC',

@@ -173,4 +173,48 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Other receipts and other deliveries: department, employee and type of
+         the operation. The delivery address has no meaning on an other
+         delivery and is hidden, together with the label block the standard
+         form renders separately from the field. The virtual location of the
+         type is shown read only: it is the one selecting the stock valuation
+         account of the operation. -->
+    <record id="view_picking_form_other_operation" model="ir.ui.view">
+        <field name="name">stock.picking.form.other.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_td_label')][label[@for='partner_id']]"
+                   position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="after">
+                <field name="sn_other_operation" invisible="1"/>
+                <field name="sn_issue_type_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       required="sn_other_operation == 'other_out'"/>
+                <field name="sn_issue_department_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_issue_employee_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       domain="[('department_id', '=', sn_issue_department_id)] if sn_issue_department_id else []"/>
+                <field name="sn_issue_location_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_receive_type_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       required="sn_other_operation == 'other_in'"/>
+                <field name="sn_receive_department_id"
+                       invisible="sn_other_operation != 'other_in'"/>
+                <field name="sn_receive_employee_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       domain="[('department_id', '=', sn_receive_department_id)] if sn_receive_department_id else []"/>
+                <field name="sn_receive_location_id"
+                       invisible="sn_other_operation != 'other_in'"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
