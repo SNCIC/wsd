@@ -316,6 +316,18 @@ msgid "Add a drawing number binding"
 msgstr "添加图号绑定"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_quick_entry_wizard.py:0
+msgid "Add at least one line."
+msgstr "请至少添加一行。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_copy_wizard.py:0
+msgid "Add at least one list to copy."
+msgstr "请至少选择一条要复制的清单。"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_route_check_list
 msgid "Add B Route"
 msgstr "补B面工艺"
@@ -870,6 +882,8 @@ msgstr "可退回余料"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -989,6 +1003,7 @@ msgstr "编号"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__codes_display
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__codes_display
 msgid "Codes Display"
 msgstr "编号列表"
 
@@ -1065,6 +1080,13 @@ msgstr "版本对比"
 #: model:ir.actions.client,name:sn_wsd_mrp.action_route_version_compare
 msgid "Compare Route Versions"
 msgstr "版本对比"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_process_doc_copy
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_list
+msgid "Copy"
+msgstr "复制"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__machine
@@ -1254,6 +1276,14 @@ msgstr "创建退料单"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__created
 msgid "Created"
 msgstr "已创建"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_quick_entry_wizard.py:0
+msgid ""
+"Created %(created)s list(s), appended %(appended)s number(s), skipped "
+"%(skipped)s already present."
+msgstr "已创建 %(created)s 张清单、追加 %(appended)s 个编号、跳过 %(skipped)s 个已存在编号。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__create_uid
@@ -1692,6 +1722,10 @@ msgstr "图号键"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_drawing_no
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_daily_production_order__x_drawing_no
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_drawing_no
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__drawing_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_wizard__drawing_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__source_drawing_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__target_drawing_code
 msgid "Drawing No."
 msgstr "图号"
 
@@ -2757,6 +2791,11 @@ msgid "Line Count"
 msgstr "明细行数"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__line_ids
+msgid "Lists to Copy"
+msgstr "要复制的清单"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mrp_base_config.py:0
 msgid "Line Type"
@@ -2959,6 +2998,7 @@ msgstr "制造库位"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_schedule_wizard_form
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__production_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_wizard__production_id
 msgid "Manufacturing Order"
 msgstr "制造订单"
 
@@ -4054,6 +4094,11 @@ msgid "Number of messages with delivery error"
 msgstr "发送错误的消息数量"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__codes_text
+msgid "Numbers"
+msgstr "编号"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_plm_state__obsolete
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
 msgid "Obsolete"
@@ -4085,6 +4130,20 @@ msgstr "OK数量"
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_production_process_document_op_type_uniq
 msgid "One document list per operation and type on a manufacturing order."
 msgstr "同一制造订单的同一工序同一类型只允许一份文件清单。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_production_process_doc_quick_entry_line__codes_text
+msgid ""
+"One or more document numbers separated by commas or line breaks. They "
+"become one row each on the list."
+msgstr "一个或多个文件编号，逗号或换行分隔；每个编号在清单里各占一行。"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+msgid ""
+"One line per operation and type: pasted numbers become one row each on the"
+" list. Existing lists are only appended to, never replaced."
+msgstr "一行对应一个工序+类型：粘贴的编号在清单里各占一行。既有清单只追加、不替换。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_online_state__online
@@ -4182,6 +4241,9 @@ msgstr "打开工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_log__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard_line__current_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__operation_id
 msgid "Operation"
 msgstr "工序"
 
@@ -4232,8 +4294,11 @@ msgstr "工序编码"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_production_process_document__route_operation_code
-msgid "Operation code of the MES-order route operation this list applies to."
-msgstr "该清单适用的制令单路线工序编码。"
+msgid ""
+"Operation code of the MES-order route operation this list applies to. Auto-"
+"filled from the operation picker; the device API matches uploaded numbers "
+"against it."
+msgstr "该清单适用的制令单路线工序编码：由工序选择自动带出，设备 API 上报编号按它匹配校验。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_operation_data_definition
@@ -4621,6 +4686,11 @@ msgid "Panel No"
 msgstr "拼板号"
 
 #. module: sn_wsd_mrp
+#: model:production.process.doc.type,name:sn_wsd_mrp.doc_type_parameter_plan
+msgid "Parameter Plan"
+msgstr "参数计划"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_parameter_template
 msgid "Parameter Template"
 msgstr "参数模板"
@@ -4764,6 +4834,11 @@ msgid ""
 msgstr "按图号选择产品；图号键自动取自产品内部参考号。"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_copy_form
+msgid "Pick a source order to load its lists, remove the ones you do not need, then choose the target order. Existing lists on the target are only appended to, never replaced."
+msgstr "选源订单载入其清单，删掉不需要的，再选目标订单。目标单既有清单只追加、不替换。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_mes_order__state__picked
 msgid "Picked"
 msgstr "已领料"
@@ -4900,6 +4975,26 @@ msgid "Priority"
 msgstr "优先级"
 
 #. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_copy_wizard
+msgid "Process Document Copy"
+msgstr "工艺文件复制"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_copy_line
+msgid "Process Document Copy Line"
+msgstr "工艺文件复制行"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_quick_entry_wizard
+msgid "Process Document Quick Entry"
+msgstr "工艺文件快速录入"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_production_process_doc_quick_entry_line
+msgid "Process Document Quick Entry Line"
+msgstr "工艺文件快速录入行"
+
+#. module: sn_wsd_mrp
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_production_process_doc_type
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_production_process_doc_type
 msgid "Process Document Types"
@@ -4912,6 +5007,18 @@ msgstr "工艺文件类型"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_process_docs
 msgid "Process Documents"
 msgstr "工艺文件"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_quick_entry_wizard.py:0
+msgid "Process Documents Saved"
+msgstr "工艺文件已保存"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/wizard/process_doc_copy_wizard.py:0
+msgid "Process Documents Copied"
+msgstr "工艺文件已复制"
 
 #. module: sn_wsd_mrp
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_process_management
@@ -5141,6 +5248,11 @@ msgid "Production Route Count"
 msgstr "制造工艺路线数量"
 
 #. module: sn_wsd_mrp
+#: model:production.process.doc.type,name:sn_wsd_mrp.doc_type_production_software
+msgid "Production Software"
+msgstr "生产软件"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route__x_production_route_ids
@@ -5187,6 +5299,7 @@ msgstr "带图号的产品必须声明板面类型（单面/双面）。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_program_version
+#: model:production.process.doc.type,name:sn_wsd_mrp.doc_type_program_version
 msgid "Program Version"
 msgstr "程序版本"
 
@@ -5230,6 +5343,13 @@ msgstr "采购订单"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__qr_code
 msgid "Qr Code"
 msgstr "二维码"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_process_doc_quick_entry
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_list
+msgid "Quick Entry"
+msgstr "快速录入"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_operation_report__qty
@@ -5785,6 +5905,11 @@ msgstr "路线快照"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__route_workshop_id
 msgid "Route Workshop"
 msgstr "路线车间"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_process_doc_quick_entry_form
+msgid "Save"
+msgstr "保存"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_canvas_x
@@ -6365,6 +6490,11 @@ msgid "Source Engineering Route"
 msgstr "来源设计工艺路线"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__source_production_id
+msgid "Source Manufacturing Order"
+msgstr "源制造订单"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
 msgid "Source field of the uploaded barcode, e.g. M_PACK_MAC."
 msgstr "上报条码的来源字段，如 M_PACK_MAC。"
@@ -6689,6 +6819,11 @@ msgid "Target Field"
 msgstr "目标字段"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_wizard__target_production_id
+msgid "Target Manufacturing Order"
+msgstr "目标制造订单"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__target_model
 msgid "Target Model"
 msgstr "目标模型"
@@ -6724,6 +6859,11 @@ msgstr "标书号 / 招标号"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__meter_product_type__terminal
 msgid "Terminal"
 msgstr "终端"
+
+#. module: sn_wsd_mrp
+#: model:production.process.doc.type,name:sn_wsd_mrp.doc_type_test_plan
+msgid "Test Plan"
+msgstr "测试计划"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_test_profile
@@ -7377,6 +7517,8 @@ msgstr "当工序没有前置工序时为真：SN 从这些工序进入订单。
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__type_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_quick_entry_line__type_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_copy_line__type_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_production_process_document_search
 msgid "Type"
 msgstr "类型"

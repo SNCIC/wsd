@@ -91,20 +91,51 @@ export class SnTracePage extends Component {
             }
             const identityId = identityIds[0];
             this.state.identityId = identityId;
-            const history = await this.orm.silent.searchRead(
-                "sn.wsd.serial.operation.history",
-                [["serial_identity_id", "=", identityId]],
-                ["route_operation_id", "workcenter_id", "result", "in_date",
-                 "out_date", "mes_order_id", "operator_code"],
-                { order: "out_date asc, id asc" });
+            // one web_search_read: the row's own MES order comes along as a
+            // nested spec (line/production/product per row -- an SN may span
+            // several orders, e.g. SMT order then unit order)
+            const historyRes = await this.orm.silent.call(
+                "sn.wsd.serial.operation.history", "web_search_read", [],
+                {
+                    domain: [["serial_identity_id", "=", identityId]],
+                    specification: {
+                        route_operation_id: {},
+                        workcenter_id: {},
+                        result: {},
+                        in_date: {},
+                        out_date: {},
+                        operator_code: {},
+                        mes_order_id: {
+                            fields: {
+                                name: {},
+                                production_line_id: {},
+                                x_side: {},
+                                x_mes_route_id: {},
+                                production_id: {
+                                    fields: {
+                                        name: {},
+                                        product_id: {
+                                            fields: {
+                                                default_code: {},
+                                                material_specification: {},
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    order: "out_date asc, id asc",
+                });
+            const history = historyRes.records;
             if (!history.length) {
                 this.state.notFound = true;
                 return;
             }
             this.state.committedSn = sn;
-            const lastOrder = history[history.length - 1].mes_order_id;
+            const lastRow = history[history.length - 1];
             const [productInfo, tests, components, materials] = await Promise.all([
-                this._loadProductInfo(sn, history, lastOrder),
+                this._loadProductInfo(sn, history, lastRow),
                 this.orm.silent.searchRead(
                     "sn.wsd.mes.test.result",
                     [["serial_identity_id", "=", identityId]],
@@ -122,7 +153,7 @@ export class SnTracePage extends Component {
                 type: COMPONENT_TYPE_LABELS[c.component_type] || c.component_type,
                 id: c.id,
             }));
-            this.state.processRows = this._buildProcessRows(history, tests, productInfo);
+            this.state.processRows = this._buildProcessRows(history, tests);
             this.state.materialRows = materials;
             const [quality, repair] = await Promise.all([
                 this._loadQuality(identityId),
@@ -135,31 +166,18 @@ export class SnTracePage extends Component {
         }
     }
 
-    async _loadProductInfo(sn, history, lastOrder) {
-        const orderId = lastOrder && lastOrder[0];
-        const order = orderId
-            ? await this.orm.silent.read(
-                "sn.wsd.mes.order", [orderId],
-                ["name", "production_id", "production_line_id", "x_side",
-                 "x_mes_route_id"])
-            : [];
-        const o = order[0] || {};
-        const production = o.production_id
-            ? (await this.orm.silent.read(
-                "mrp.production", [o.production_id[0]],
-                ["name", "product_id"]))[0] || {}
-            : {};
-        const product = production.product_id
-            ? (await this.orm.silent.read(
-                "product.product", [production.product_id[0]],
-                ["default_code", "material_specification"]))[0] || {}
-            : {};
+    async _loadProductInfo(sn, history, lastRow) {
+        // the info panel describes the SN's latest MES order; the row
+        // already carries it nested (web_search_read spec)
+        const order = (lastRow && lastRow.mes_order_id) || {};
+        const production = order.production_id || {};
+        const product = production.product_id || {};
         // flow finished (option A): an OK leave on the route's exit operation
         let finished = false;
-        if (o.x_mes_route_id) {
+        if (order.x_mes_route_id) {
             const ops = await this.orm.silent.searchRead(
                 "sn.wsd.mes.order.route.operation",
-                [["mes_route_id", "=", o.x_mes_route_id[0]]],
+                [["mes_route_id", "=", order.x_mes_route_id[0]]],
                 ["x_allow_exit"]);
             const exitOpIds = ops.filter((r) => r.x_allow_exit).map((r) => r.id);
             finished = history.some(
@@ -169,12 +187,12 @@ export class SnTracePage extends Component {
         return {
             sn,
             productionName: production.name || "",
-            orderName: o.name || "",
+            orderName: order.name || "",
             productCode: product.default_code || "",
             spec: product.material_specification || "",
-            line: o.production_line_id ? o.production_line_id[1] : "",
-            side: o.x_side || "",
-            route: o.x_mes_route_id ? o.x_mes_route_id[1] : "",
+            line: order.production_line_id ? order.production_line_id[1] : "",
+            side: order.x_side || "",
+            route: order.x_mes_route_id ? order.x_mes_route_id[1] : "",
             finished,
         };
     }
@@ -282,7 +300,7 @@ export class SnTracePage extends Component {
         }));
     }
 
-    _buildProcessRows(history, tests, productInfo) {
+    _buildProcessRows(history, tests) {
         // latest test per operation carries the device/tooling columns
         const testByOp = {};
         for (const t of tests) {
@@ -294,19 +312,24 @@ export class SnTracePage extends Component {
             const opCode = sep > 0 ? opLabel.slice(0, sep) : opLabel;
             const opName = sep > 0 ? opLabel.slice(sep + 3) : "";
             const test = testByOp[h.route_operation_id[0]];
+            // per-row order context (nested web_search_read spec): the
+            // row's own order line/production/product
+            const order = h.mes_order_id || {};
+            const production = order.production_id || {};
+            const product = production.product_id || {};
             return {
                 seq: idx + 1,
                 opCode,
                 opName,
                 workcenter: h.workcenter_id ? h.workcenter_id[1] : "",
-                line: productInfo && productInfo.line,
+                line: order.production_line_id ? order.production_line_id[1] : "",
                 flag: RESULT_LABELS[h.result] || h.result,
                 isNg: h.result === "ng",
-                orderName: h.mes_order_id ? h.mes_order_id[1] : "",
-                orderId: h.mes_order_id ? h.mes_order_id[0] : false,
-                productionName: productInfo && productInfo.productionName,
-                productCode: productInfo && productInfo.productCode,
-                spec: productInfo && productInfo.spec,
+                orderName: order.name || "",
+                orderId: order.id || false,
+                productionName: production.name || "",
+                productCode: product.default_code || "",
+                spec: product.material_specification || "",
                 operator: h.operator_code || "",
                 equipment: test ? test.equipment_sn || "" : "",
                 tooling: test ? test.tooling_sns || "" : "",

@@ -1842,6 +1842,17 @@ msgid "Production Lines"
 msgstr "适用线体"
 
 #. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Production line(s) %(lines)s already linked to valid material table "
+"%(table)s for model %(model)s, side %(side)s: a production line can only "
+"be linked to one valid material table per model and side."
+msgstr ""
+"产线 %(lines)s 已被有效料站表 %(table)s（图号 %(model)s，面别 "
+"%(side)s）占用：同图号同面别下，一条产线只能挂在一张有效料站表上。"
+
+#. module: sn_wsd_smt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_query_wizard_form
 msgid "Query"
 msgstr "查询"

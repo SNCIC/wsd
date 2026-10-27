@@ -120,6 +120,39 @@ class SnSmtMaterialTable(models.Model):
             if any(link.company_id != record.company_id for link in record.line_link_ids):
                 raise ValidationError(_('The linked production line company must match the material table company.'))
 
+    @api.constrains('model_code', 'product_side', 'is_valid', 'line_link_ids')
+    def _check_line_exclusive_per_model(self):
+        # 同公司同图号+面别的有效表之间，一条产线只能挂在一张表上：
+        # 产线绑定是制令单上线匹配的第一优先级（_match_for_mes_order），
+        # 重复挂线会让 limit=1 静默取表。作废（is_valid='N'）即释放产线，
+        # 挂接行保留不删（历史可追溯）。
+        for record in self:
+            if record.is_valid != 'Y':
+                continue
+            lines = record.line_link_ids.mapped('production_line_id')
+            if not lines:
+                continue
+            conflict = self.search([
+                ('company_id', '=', record.company_id.id),
+                ('model_code', '=', record.model_code),
+                ('product_side', '=', record.product_side),
+                ('is_valid', '=', 'Y'),
+                ('id', '!=', record.id),
+                ('line_link_ids.production_line_id', 'in', lines.ids),
+            ], limit=1)
+            if conflict:
+                clash_lines = lines & conflict.line_link_ids.mapped('production_line_id')
+                raise ValidationError(_(
+                    'Production line(s) %(lines)s already linked to valid '
+                    'material table %(table)s for model %(model)s, side '
+                    '%(side)s: a production line can only be linked to one '
+                    'valid material table per model and side.',
+                    lines=', '.join(clash_lines.mapped('code')),
+                    table=conflict.table_name,
+                    model=record.model_code,
+                    side=record.product_side,
+                ))
+
     @api.model
     def _match_for_mes_order(self, mes_order):
         """按 图号+面别 匹配制令单的料站表；优先取产线绑定的表，

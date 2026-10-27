@@ -235,7 +235,7 @@ class MesOrderFai(models.Model):
     # 出站登记：首件工序 OK→到位；NG/报废→剔除释放名额（维修回流不回补）
     # ------------------------------------------------------------------
     def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False, operator_code=False):
+                      ng_defect=False, operator_code=False, workcenter=False):
         self.ensure_one()
         # super 之后 WIP 已流转，工序实例要在之前取
         wip = self.env['sn.wsd.serial.wip'].search([
@@ -245,7 +245,8 @@ class MesOrderFai(models.Model):
         route_operation = wip.route_operation_id if wip else False
         res = super().leave_station(
             serial_identity, result, scrap_reason=scrap_reason,
-            ng_defect=ng_defect, operator_code=operator_code)
+            ng_defect=ng_defect, operator_code=operator_code,
+            workcenter=workcenter)
         if route_operation:
             self._fai_on_leave(serial_identity, result, route_operation)
         return res
