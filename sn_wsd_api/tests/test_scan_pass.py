@@ -451,17 +451,36 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(test_result.defect_code_id, self.defect)
         self.assertEqual(test_result.defect_code_raw, 'APID; APID2；APID')
 
-    def test_16_multi_defect_unknown_rejected(self):
-        # 多码中任一未知：整笔拒绝，不落任何台账
-        with self.assertRaises(ApiNotFound) as ctx:
-            self.service.scan_pass(self._payload(
-                M_SN='SN-API-MULTI2', M_TEST_RESULT='NG',
-                M_STR2='APID;NOPE'))
-        self.assertIn('NOPE', str(ctx.exception))
-        self.assertFalse(self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI2')]))
-        self.assertFalse(self.env['sn.wsd.mes.test.result'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI2')]))
+    def test_16_multi_defect_partial_unknown_tolerated(self):
+        # 未知缺陷码放行（2026-10-27 用户口径）：字典没维护的码不拒收，
+        # 能解析的码取第一个作主码，原文串留在镜像列供人工补录
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-API-MULTI2', M_TEST_RESULT='NG',
+            M_STR2='APID;NOPE'))
+        self.assertTrue(result['ok'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI2')])
+        self.assertEqual(history.result, 'ng')
+        self.assertEqual(history.defect_code_id, self.defect)
+        test_result = self.env['sn.wsd.mes.test.result'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI2')], limit=1)
+        self.assertEqual(test_result.defect_code_raw, 'APID;NOPE')
+
+    def test_19_all_defects_unknown_pending_manual(self):
+        # 全部码未知：NG 台账照落、缺陷码留空待人工从字典补，
+        # 原文串照存；设备通道不再被字典缺口卡住
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-API-PENDING', M_TEST_RESULT='NG',
+            M_STR2='NOPE1;NOPE2'))
+        self.assertTrue(result['ok'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-PENDING')])
+        self.assertEqual(history.result, 'ng')
+        self.assertFalse(history.defect_code_id)
+        test_result = self.env['sn.wsd.mes.test.result'].search([
+            ('serial_identity_id.name', '=', 'SN-API-PENDING')], limit=1)
+        self.assertEqual(test_result.defect_code_raw, 'NOPE1;NOPE2')
+        self.assertFalse(test_result.defect_code_id)
 
     def test_17_retest_at_parked_successor(self):
         # 复测回流：板停在 X 的直接后继时，X 的设备重报 = 板被拿回 X 复测

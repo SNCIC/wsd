@@ -104,15 +104,25 @@ class SnWsdApiService(models.AbstractModel):
             raise ApiNotFound(_('Defect code %s does not exist.', raw))
         return defect
 
-    def _match_defect_codes(self, raw):
-        """M_STR2 may carry several ';' separated defect codes: every one
-        must resolve in the dictionary (any unknown rejects the report) and
-        the first match is the NG primary stamped on the pass row -- the
-        ledger keeps a single defect code, same rule as the AOI
-        first-confirmed-defect. The verbatim list survives in the
-        test-result defect_code_raw mirror column."""
-        return [self._match_defect_code(part)
-                for part in split_defect_codes(raw)]
+    def _match_defect_codes(self, raw, tolerant=False):
+        """M_STR2 may carry several ';' separated defect codes; the first
+        resolved one is the NG primary stamped on the pass row (single m2o,
+        same rule as the AOI first-confirmed-defect).
+
+        Strict mode rejects the report when any code is unknown. Tolerant
+        mode (scan-pass, 2026-10-27 user rule) skips unknown codes -- the
+        device dictionary may lag the shop floor, blocking the upload
+        stops the line; the NG ledger row lands without a dictionary code
+        and staff backfills it later. The verbatim list always survives in
+        the test-result defect_code_raw mirror column either way."""
+        defects = self.env['sn.wsd.quality.defect.code']
+        for part in split_defect_codes(raw):
+            try:
+                defects |= self._match_defect_code(part)
+            except ApiNotFound:
+                if not tolerant:
+                    raise
+        return defects
 
     # 拼版扇出停用（2026-09-12 用户确认可能用不到，只停过站扇出）：
     # 扫一板只过一板，不再自动带出同拼版成员。laser 的 panelQty 自动
@@ -446,10 +456,13 @@ class SnWsdApiService(models.AbstractModel):
                 origin_type='external')
         defect = False
         if result == RESULT_FAIL:
-            # several ';' separated codes all resolve, the first is the
-            # primary on the pass row
+            # 未知缺陷码放行（2026-10-27 用户口径）：设备字典没维护的码
+            # 不再拒收，NG 台账照落、缺陷码人工事后从字典补；能解析的
+            # 码取第一个作主码。设备无法交互选码，同步豁免终端的
+            # "NG 必须带缺陷码"人机闸（终端通道闸门不动）
+            self = self.with_context(sn_wsd_ng_defect_pending=True)
             defect = self._match_defect_codes(
-                payload.get('M_STR2') or 'TEST1')[0]
+                payload.get('M_STR2') or 'TEST1', tolerant=True)[:1]
         # 拼版扇出停用（2026-09-12）：单板过站，见上方方法注释
         finished, mes_order = self._pass_station(
             identity, workcenter, result, defect, employee)

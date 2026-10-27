@@ -35,8 +35,12 @@ class MesOrder(models.Model):
     def leave_station(self, serial_identity, result, scrap_reason=False,
                       ng_defect=False, operator_code=False, workcenter=False):
         """NG passes must carry a defect code; it is stamped on the history
-        row so the repair side knows what to fix."""
-        if result == 'ng' and not ng_defect:
+        row so the repair side knows what to fix. Device uploads carrying
+        unmaintained dictionary codes are exempt (sn_wsd_ng_defect_pending
+        context, set by the device API): the row lands without a code for
+        manual backfill instead of blocking the upload."""
+        if result == 'ng' and not ng_defect \
+                and not self.env.context.get('sn_wsd_ng_defect_pending'):
             raise ValidationError(_('Select a defect code.'))
         return super().leave_station(
             serial_identity, result, scrap_reason=scrap_reason,
