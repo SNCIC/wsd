@@ -93,24 +93,34 @@ export class SnTracePage extends Component {
             this.state.identityId = identityId;
             // one web_search_read: the row's own MES order comes along as a
             // nested spec (line/production/product per row -- an SN may span
-            // several orders, e.g. SMT order then unit order)
+            // several orders, e.g. SMT order then unit order). NB: a m2o
+            // without a "fields" spec comes back as a bare id, so every m2o
+            // we need a label from requests display_name explicitly.
             const historyRes = await this.orm.silent.call(
                 "sn.wsd.serial.operation.history", "web_search_read", [],
                 {
                     domain: [["serial_identity_id", "=", identityId]],
                     specification: {
-                        route_operation_id: {},
-                        workcenter_id: {},
                         result: {},
                         in_date: {},
                         out_date: {},
                         operator_code: {},
+                        route_operation_id: {
+                            fields: { display_name: {} },
+                        },
+                        workcenter_id: {
+                            fields: { display_name: {} },
+                        },
                         mes_order_id: {
                             fields: {
                                 name: {},
-                                production_line_id: {},
+                                production_line_id: {
+                                    fields: { display_name: {} },
+                                },
                                 x_side: {},
-                                x_mes_route_id: {},
+                                x_mes_route_id: {
+                                    fields: { display_name: {} },
+                                },
                                 production_id: {
                                     fields: {
                                         name: {},
@@ -174,15 +184,15 @@ export class SnTracePage extends Component {
         const product = production.product_id || {};
         // flow finished (option A): an OK leave on the route's exit operation
         let finished = false;
-        if (order.x_mes_route_id) {
+        if (order.x_mes_route_id && order.x_mes_route_id.id) {
             const ops = await this.orm.silent.searchRead(
                 "sn.wsd.mes.order.route.operation",
-                [["mes_route_id", "=", order.x_mes_route_id[0]]],
+                [["mes_route_id", "=", order.x_mes_route_id.id]],
                 ["x_allow_exit"]);
             const exitOpIds = ops.filter((r) => r.x_allow_exit).map((r) => r.id);
             finished = history.some(
                 (h) => h.result === "ok" &&
-                    exitOpIds.includes(h.route_operation_id[0]));
+                    exitOpIds.includes((h.route_operation_id || {}).id));
         }
         return {
             sn,
@@ -190,9 +200,11 @@ export class SnTracePage extends Component {
             orderName: order.name || "",
             productCode: product.default_code || "",
             spec: product.material_specification || "",
-            line: order.production_line_id ? order.production_line_id[1] : "",
+            line: order.production_line_id ?
+                order.production_line_id.display_name : "",
             side: order.x_side || "",
-            route: order.x_mes_route_id ? order.x_mes_route_id[1] : "",
+            route: order.x_mes_route_id ?
+                order.x_mes_route_id.display_name : "",
             finished,
         };
     }
@@ -307,11 +319,12 @@ export class SnTracePage extends Component {
             testByOp[t.route_operation_id ? t.route_operation_id[0] : 0] = t;
         }
         return history.map((h, idx) => {
-            const opLabel = h.route_operation_id ? h.route_operation_id[1] : "";
+            const routeOp = h.route_operation_id || {};
+            const opLabel = routeOp.display_name || "";
             const sep = opLabel.indexOf(" / ");
             const opCode = sep > 0 ? opLabel.slice(0, sep) : opLabel;
             const opName = sep > 0 ? opLabel.slice(sep + 3) : "";
-            const test = testByOp[h.route_operation_id[0]];
+            const test = testByOp[routeOp.id];
             // per-row order context (nested web_search_read spec): the
             // row's own order line/production/product
             const order = h.mes_order_id || {};
@@ -321,8 +334,10 @@ export class SnTracePage extends Component {
                 seq: idx + 1,
                 opCode,
                 opName,
-                workcenter: h.workcenter_id ? h.workcenter_id[1] : "",
-                line: order.production_line_id ? order.production_line_id[1] : "",
+                workcenter: h.workcenter_id ?
+                    h.workcenter_id.display_name : "",
+                line: order.production_line_id ?
+                    order.production_line_id.display_name : "",
                 flag: RESULT_LABELS[h.result] || h.result,
                 isNg: h.result === "ng",
                 orderName: order.name || "",
@@ -334,7 +349,7 @@ export class SnTracePage extends Component {
                 equipment: test ? test.equipment_sn || "" : "",
                 tooling: test ? test.tooling_sns || "" : "",
                 time: h.out_date,
-                opId: h.route_operation_id[0],
+                opId: routeOp.id,
             };
         });
     }
