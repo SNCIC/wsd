@@ -193,11 +193,12 @@ class MesOrderBatchPass(models.Model):
     # ------------------------------------------------------------------
     def _prepare_leave_history_vals(self, serial_identity, route_operation,
                                     wip, result, scrap_reason=False,
-                                    ng_defect=False, operator_code=False):
+                                    ng_defect=False, operator_code=False,
+                                    workcenter=False):
         vals = super()._prepare_leave_history_vals(
             serial_identity, route_operation, wip, result,
             scrap_reason=scrap_reason, ng_defect=ng_defect,
-            operator_code=operator_code)
+            operator_code=operator_code, workcenter=workcenter)
         log_id = self.env.context.get('sn_wsd_batch_pass_log_id')
         if log_id and route_operation.id == \
                 self.env.context.get('sn_wsd_batch_pass_target_id'):

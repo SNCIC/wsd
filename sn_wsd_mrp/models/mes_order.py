@@ -867,7 +867,7 @@ class MesOrder(models.Model):
             dict(enter_vals, result='in_progress', in_date=now))
 
     def leave_station(self, serial_identity, result, scrap_reason=False,
-                      ng_defect=False, operator_code=False):
+                      ng_defect=False, operator_code=False, workcenter=False):
         """Station mode: an SN leaves its current station. The verdict is
         backfilled onto the in_progress history row born at its entry scan
         (no new row is created here).
@@ -879,7 +879,14 @@ class MesOrder(models.Model):
         'scrap' is terminal: the board is gone, its components are scrapped
         from the line side through a native scrap order and the SN is
         sealed for this order. Returns True when the SN left through an
-        end operation with OK -- its flow on this order is finished."""
+        end operation with OK -- its flow on this order is finished.
+
+        workcenter: the physical work center that actually processed the
+        board at this station (device channels know it from the report).
+        Stamped onto the backfilled row so the ledger records the real
+        machine, superseding the auto-park placeholder written at entry
+        (which is empty whenever the route operation carries no work
+        center)."""
         self.ensure_one()
         if result not in ('ok', 'ng', 'scrap'):
             raise ValidationError(_(
@@ -920,7 +927,7 @@ class MesOrder(models.Model):
         pending.write(self._prepare_leave_history_vals(
             serial_identity, route_operation, wip, result,
             scrap_reason=scrap_reason, ng_defect=ng_defect,
-            operator_code=operator_code))
+            operator_code=operator_code, workcenter=workcenter))
         wip.sudo().unlink()
         # 一扫内核共用出口：T 面单全部流完时自动完结（含 T 面倒冲）
         self._mes_maybe_auto_close()
@@ -928,16 +935,20 @@ class MesOrder(models.Model):
 
     def _prepare_leave_history_vals(self, serial_identity, route_operation,
                                     wip, result, scrap_reason=False,
-                                    ng_defect=False, operator_code=False):
+                                    ng_defect=False, operator_code=False,
+                                    workcenter=False):
         """Vals backfilled onto the in-progress history row when the SN
         leaves the station (verdict, leave timestamp, operator). Extended
         by sn_wsd_quality to stamp the NG defect code (the comodel lives
         there)."""
-        return {
+        vals = {
             'result': result,
             'out_date': fields.Datetime.now(),
             'operator_code': operator_code or False,
         }
+        if workcenter:
+            vals['workcenter_id'] = workcenter.id
+        return vals
 
     def action_clear_station_pass(self, serial_identity):
         """Clear all station-pass traces of an SN on this order (清除过站).

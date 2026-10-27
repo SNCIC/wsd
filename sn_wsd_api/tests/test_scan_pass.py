@@ -58,6 +58,9 @@ class ScanPassFixture:
         cls.wc_in = cls.env['mrp.workcenter'].create({
             'name': 'API-WC-IN', 'code': 'APIWCIN', 'x_workshop_id': cls.workshop.id,
             'x_production_line_id': cls.line.id, 'x_operation_id': cls.op_in.id})
+        cls.wc_out = cls.env['mrp.workcenter'].create({
+            'name': 'API-WC-OUT', 'code': 'APIWCOUT', 'x_workshop_id': cls.workshop.id,
+            'x_production_line_id': cls.line.id, 'x_operation_id': cls.op_out.id})
         cls.employee = cls.env['hr.employee'].search([('barcode', '=', 'APIOP')], limit=1) or cls.env['hr.employee'].create({'name': 'API Op', 'barcode': 'APIOP'})
         cls.defect = cls.env['sn.wsd.quality.defect.code'].create({
             'name': 'API Defect', 'code': 'APID',
@@ -614,6 +617,47 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         self.assertEqual(
             len(history.filtered(lambda r: r.result != 'in_progress')), 1)
         self.assertEqual(len(history), 2)
+
+    def test_11_parked_board_stamps_device_workcenter(self):
+        # 设备上报的工作中心必须落过站台账：自动停放的占位（路线行工作
+        # 中心，此处为空）在设备出站时被真实机器覆盖
+        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC1'))
+        parked = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-AOI-WC1'),
+            ('result', '=', 'in_progress')])
+        self.assertEqual(parked.route_operation_id.operation_id, self.op_out)
+        self.assertFalse(parked.workcenter_id)
+        result = self.service.submit_aoi_result(_aoi_payload(
+            productSn='SN-AOI-WC1', machineName='APIWCOUT'))
+        self.assertTrue(result['ok'])
+        self.assertEqual(parked.result, 'ok')
+        self.assertEqual(parked.workcenter_id, self.wc_out)
+
+    def test_12_scan_pass_channel_stamps_device_workcenter(self):
+        # 同一口径作用于 scan-pass 通道（M_WORK_STATIONSN）
+        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC2'))
+        self.service.scan_pass(self._payload(
+            M_SN='SN-AOI-WC2', M_WORK_STATIONSN='APIWCOUT'))
+        row = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-AOI-WC2'),
+            ('route_operation_id.operation_id', '=', self.op_out.id)])
+        self.assertEqual(row.result, 'ok')
+        self.assertEqual(row.workcenter_id, self.wc_out)
+
+    def test_13_ng_stamps_defect_and_workcenter(self):
+        # NG 经过 quality 覆写，缺陷码与工作中心都要落行
+        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC3'))
+        result = self.service.submit_aoi_result(_aoi_payload(
+            productSn='SN-AOI-WC3', machineName='APIWCOUT',
+            stationResult='NG',
+            defectDetails=[_aoi_defect(confirmed='确认不良', code='APID')]))
+        self.assertTrue(result['ok'])
+        row = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-AOI-WC3'),
+            ('route_operation_id.operation_id', '=', self.op_out.id)])
+        self.assertEqual(row.result, 'ng')
+        self.assertEqual(row.defect_code_id, self.defect)
+        self.assertEqual(row.workcenter_id, self.wc_out)
 
     # 拼版扇出停用（2026-09-12，AOI 同口径）：恢复扇出时取消本用例注释。
     # def test_10_panel_fanout(self):

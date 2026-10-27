@@ -234,7 +234,9 @@ class SnWsdApiService(models.AbstractModel):
         the board enters X), then X's own result is written. An OK at a
         non-end operation auto-parks the board at the next station when the
         route is linear; a fork leaves it in transit for the branch
-        station's own scan."""
+        station's own scan. The reporting work center is stamped on the
+        pass row at leave, so a board auto-parked here (route work center
+        unknown) still records the machine that really tested it."""
         Wip = self.env['sn.wsd.serial.wip']
         operator_code = (
             employee.barcode
@@ -257,7 +259,7 @@ class SnWsdApiService(models.AbstractModel):
                 route_op = target_op
             finished = mes_order.leave_station(
                 identity, result, ng_defect=defect,
-                operator_code=operator_code)
+                operator_code=operator_code, workcenter=workcenter)
             if result != RESULT_FAIL and not finished:
                 self._park_at_successor(mes_order, route_op, identity)
             return finished, mes_order
@@ -267,7 +269,7 @@ class SnWsdApiService(models.AbstractModel):
             lambda r: r.operation_id == workcenter.x_operation_id)[:1]
         finished = mes_order.leave_station(
             identity, result, ng_defect=defect,
-            operator_code=operator_code)
+            operator_code=operator_code, workcenter=workcenter)
         if result != RESULT_FAIL and not finished:
             self._park_at_successor(mes_order, route_op, identity)
         return finished, mes_order
