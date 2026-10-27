@@ -2,6 +2,7 @@ from decimal import Decimal
 from datetime import datetime
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import formatLang
 from odoo.tools.float_utils import float_compare, float_round
 from odoo.tools.misc import NON_BREAKING_SPACE, format_amount, get_lang
@@ -225,6 +226,62 @@ class PurchaseOrder(models.Model):
             if not order.sync_price_to_vendor_pricelist:
                 continue
             order.order_line._sync_price_to_vendor_pricelist()
+
+    sn_missing_receipt = fields.Boolean(
+        string='Missing Receipt',
+        compute='_compute_sn_missing_receipt',
+        help="Set when the order is confirmed, a quantity is still expected from the "
+             "vendor and every receipt of the order is already done or cancelled. "
+             "Only then is the missing receipt not reachable from the standard flow.",
+    )
+
+    @api.depends('state', 'order_line.product_qty', 'order_line.qty_received', 'picking_ids.state')
+    def _compute_sn_missing_receipt(self):
+        for order in self:
+            has_open_receipt = any(
+                picking.state not in ('done', 'cancel') for picking in order.picking_ids
+            )
+            has_missing_qty = any(
+                line.product_uom_id.compare(line.product_qty - line.qty_received, 0.0) > 0
+                for line in order.order_line
+                if not line.display_type and line.product_id.type == 'consu'
+            )
+            order.sn_missing_receipt = (
+                order.state == 'purchase' and has_missing_qty and not has_open_receipt
+            )
+
+    def action_sn_create_missing_receipt(self):
+        """Create the receipt of the quantity still expected from the vendor.
+
+        The standard Receive button disappears as soon as every receipt of the
+        order is done or cancelled: that happens when the goods are received in
+        full and part of them is returned to the vendor, or when a partial
+        receipt is validated without backorder. The receipt is rebuilt here with
+        the same logic used when the order is confirmed, so the new moves stay
+        linked to the order lines and feed the received quantity.
+        """
+        self.ensure_one()
+        if self.state != 'purchase':
+            raise UserError(_("A missing receipt can only be created on a confirmed purchase order."))
+        if not self.sn_missing_receipt:
+            raise UserError(_("There is no quantity left to receive on this purchase order."))
+        self._create_picking()
+        pickings = self.picking_ids.filtered(
+            lambda picking: picking.state not in ('done', 'cancel')
+        )
+        if not pickings:
+            raise UserError(_(
+                "No receipt was created: the order lines must hold a storable product "
+                "with a quantity left to receive."
+            ))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Receipt'),
+            'res_model': 'stock.picking',
+            'res_id': pickings[0].id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
 
 class PurchaseOrderLine(models.Model):
