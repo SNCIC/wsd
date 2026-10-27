@@ -147,3 +147,25 @@ class StockMove(models.Model):
             move.sn_supplier_batch_no = (
                 ', '.join(sorted(supplier_batches.get(move.id, ()))) or False
             )
+
+    @api.depends(
+        'product_id', 'has_tracking', 'move_line_ids', 'state',
+        'picking_id.picking_type_id',
+    )
+    def _compute_show_details_visible(self):
+        """Show the detail button of the other operations as soon as confirmed.
+
+        The standard computation shows it with the multi-location, package or
+        owner groups, or on a tracked product, because a regular transfer fills
+        its operation lines when it reserves. An other delivery never reserves
+        (its destination is a virtual location) and an other receipt only does
+        when its source is a virtual one: without the groups the button would
+        be missing while its dialog is the only way to enter the batch, the
+        package or the location of the goods.
+        """
+        super()._compute_show_details_visible()
+        for move in self:
+            picking = move.picking_id
+            if (move.product_id and move.state != 'draft' and picking
+                    and picking._sn_get_other_operation_kind()):
+                move.show_details_visible = True
