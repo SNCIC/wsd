@@ -11,3 +11,4 @@ from . import test_substitute_rule
 from . import test_line_side_mo_reservation
 from . import test_batch_pass
 from . import test_process_document
+from . import test_route_graph_edit

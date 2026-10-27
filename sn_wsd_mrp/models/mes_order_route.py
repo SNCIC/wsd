@@ -186,23 +186,35 @@ class MesOrderRoute(models.Model):
 
         for op_id, node in node_by_op.items():
             common_op = common_by_operation.get(op_id)
+            current = by_op.get(op_id)
             allow_serial_creation = node.get('x_allow_serial_creation')
             if allow_serial_creation is None and common_op:
                 allow_serial_creation = common_op.x_allow_serial_creation
             allow_skip_with_override = node.get('x_allow_skip_with_override')
             if allow_skip_with_override is None and common_op:
                 allow_skip_with_override = common_op.x_allow_skip_with_override
+            # canvas payloads may omit the manual duration (older payloads,
+            # legacy callers): keep the stored value instead of resetting it
+            time_cycle = node.get('time_cycle_manual')
+            if time_cycle is None:
+                time_cycle = current.time_cycle_manual if current else 0.0
+            # canvas payloads do not carry the work center either: sync keeps
+            # following the common route first, a local edit keeps the stored
+            # value instead of silently clearing it
+            workcenter_id = node.get('workcenter_id')
+            if workcenter_id is None:
+                if common_op and common_op.workcenter_id:
+                    workcenter_id = common_op.workcenter_id.id
+                elif current and current.workcenter_id:
+                    workcenter_id = current.workcenter_id.id
             vals = {
                 'operation_id': op_id,
-                'workcenter_id': (
-                    node.get('workcenter_id')
-                    or (common_op.workcenter_id.id if common_op and common_op.workcenter_id else False)
-                ),
+                'workcenter_id': workcenter_id or False,
                 'name': node.get('name'),
                 'x_step_code': node.get('step_code'),
                 'x_station_type': node.get('x_station_type'),
                 'sequence': node.get('sequence') or 100,
-                'time_cycle_manual': node.get('time_cycle_manual') or 0.0,
+                'time_cycle_manual': time_cycle,
                 'x_allow_entry': bool(node.get('x_allow_entry')),
                 'x_allow_exit': bool(node.get('x_allow_exit')),
                 'x_allow_serial_creation': bool(allow_serial_creation),
@@ -211,7 +223,6 @@ class MesOrderRoute(models.Model):
                 'x_canvas_x': node.get('x'),
                 'x_canvas_y': node.get('y'),
             }
-            current = by_op.get(op_id)
             if current and current in frozen:
                 continue
             if current:
@@ -234,11 +245,14 @@ class MesOrderRoute(models.Model):
                 new_deps.setdefault(tgt_op, set()).add(src_op)
         for row in rows:
             if row in frozen:
+                # a frozen row keeps its own predecessors (its side is frozen)
                 continue
             fresh_ids = [row_by_op[o].id for o in new_deps.get(row.operation_id.id, ()) if o in row_by_op]
-            # edges pointing at frozen rows are kept as-is (their side is frozen)
-            kept_frozen = row.blocked_by_ids.filtered(lambda r: r in frozen)
-            row.blocked_by_ids = kept_frozen | RouteOp.browse(fresh_ids)
+            # editable rows follow the graph exactly: a deleted edge stays
+            # deleted even when it came from a frozen source (the edge lives
+            # on the editable target's blocked_by_ids, so only the target's
+            # own frozen state protects it)
+            row.blocked_by_ids = RouteOp.browse(fresh_ids)
 
         if common_route:
             counter_map = {
@@ -303,6 +317,7 @@ class MesOrderRoute(models.Model):
                 'name': op.name,
                 'step_code': op.x_step_code,
                 'sequence': op.sequence,
+                'time_cycle_manual': op.time_cycle_manual,
                 'x_station_type': op.x_station_type,
                 'is_input': op.is_input,
                 'x_allow_entry': op.x_allow_entry,
