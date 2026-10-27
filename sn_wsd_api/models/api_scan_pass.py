@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timezone
 
 from odoo import _, api, models
@@ -5,6 +6,20 @@ from odoo.exceptions import AccessDenied, ValidationError
 
 RESULT_PASS = 'ok'
 RESULT_FAIL = 'ng'
+
+# device contract: M_STR2 may carry several defect codes separated by ';'
+# (half or full width); the first one is the pass primary code
+DEFECT_CODE_SPLIT = re.compile(r'[;；]')
+
+
+def split_defect_codes(raw):
+    """'A;B；C' -> ['A', 'B', 'C'] (empty parts dropped). When nothing
+    survives the split the raw string is returned as the single part, so a
+    garbage value keeps the whole-string dictionary lookup (and rejection)
+    of the single-code contract."""
+    parts = [p.strip() for p in DEFECT_CODE_SPLIT.split(raw or '')
+             if p.strip()]
+    return parts or [(raw or '').strip()]
 
 
 class ApiBadRequest(ValidationError):
@@ -88,6 +103,16 @@ class SnWsdApiService(models.AbstractModel):
         if not defect:
             raise ApiNotFound(_('Defect code %s does not exist.', raw))
         return defect
+
+    def _match_defect_codes(self, raw):
+        """M_STR2 may carry several ';' separated defect codes: every one
+        must resolve in the dictionary (any unknown rejects the report) and
+        the first match is the NG primary stamped on the pass row -- the
+        ledger keeps a single defect code, same rule as the AOI
+        first-confirmed-defect. The verbatim list survives in the
+        test-result defect_code_raw mirror column."""
+        return [self._match_defect_code(part)
+                for part in split_defect_codes(raw)]
 
     # 拼版扇出停用（2026-09-12 用户确认可能用不到，只停过站扇出）：
     # 扫一板只过一板，不再自动带出同拼版成员。laser 的 panelQty 自动
@@ -404,7 +429,10 @@ class SnWsdApiService(models.AbstractModel):
                 origin_type='external')
         defect = False
         if result == RESULT_FAIL:
-            defect = self._match_defect_code(payload.get('M_STR2') or 'TEST1')
+            # several ';' separated codes all resolve, the first is the
+            # primary on the pass row
+            defect = self._match_defect_codes(
+                payload.get('M_STR2') or 'TEST1')[0]
         # 拼版扇出停用（2026-09-12）：单板过站，见上方方法注释
         finished, mes_order = self._pass_station(
             identity, workcenter, result, defect, employee)

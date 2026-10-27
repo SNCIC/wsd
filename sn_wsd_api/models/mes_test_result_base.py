@@ -191,13 +191,17 @@ class MesTestResultBase(models.Model):
         for m_key, fname in PAYLOAD_TO_FIELD.items():
             if m_key in payload:
                 vals[fname] = payload.get(m_key) or ''
+        from odoo.addons.sn_wsd_api.models.api_scan_pass import split_defect_codes
         raw_defect = (payload.get('M_STR2') or '').strip()
         if raw_defect and result == 'ng' and 'defect_code_id' in self._fields:
             # link the quality dictionary when installed (terminal NG flow
-            # uses the same field)
+            # uses the same field); devices may report several ';'
+            # separated codes -- the first links, same primary rule as the
+            # station-pass gate, the verbatim list stays in defect_code_raw
+            primary = split_defect_codes(raw_defect)[0]
             defect = self.env['sn.wsd.quality.defect.code'].search([
-                '|', ('code', '=ilike', raw_defect),
-                ('name', '=ilike', raw_defect),
+                '|', ('code', '=ilike', primary),
+                ('name', '=ilike', primary),
                 ('company_id', 'in', [company.id, False]),
             ], limit=1)
             vals['defect_code_id'] = defect.id

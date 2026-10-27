@@ -65,6 +65,9 @@ class ScanPassFixture:
         cls.defect = cls.env['sn.wsd.quality.defect.code'].create({
             'name': 'API Defect', 'code': 'APID',
             'category': 'other', 'severity': 'minor'})
+        cls.defect2 = cls.env['sn.wsd.quality.defect.code'].create({
+            'name': 'API Defect 2', 'code': 'APID2',
+            'category': 'other', 'severity': 'minor'})
         cls.service = cls.env['sn.wsd.api.service']
 
     def _payload(self, **kw):
@@ -431,6 +434,34 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             ('name', '=', 'SN-API-ORG')])
         self.assertTrue(result['ok'])
         self.assertEqual(identity.company_id, self.company)
+
+    def test_15_multi_defect_codes_first_is_primary(self):
+        # 设备报文 M_STR2 可带多个不良码（;／；分隔）：全部必须在字典里，
+        # 第一个落过站行主码，原文列表留在测试结果镜像列
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-API-MULTI', M_TEST_RESULT='NG',
+            M_STR2='APID; APID2；APID'))
+        self.assertTrue(result['ok'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI')])
+        self.assertEqual(history.result, 'ng')
+        self.assertEqual(history.defect_code_id, self.defect)
+        test_result = self.env['sn.wsd.mes.test.result'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI')], limit=1)
+        self.assertEqual(test_result.defect_code_id, self.defect)
+        self.assertEqual(test_result.defect_code_raw, 'APID; APID2；APID')
+
+    def test_16_multi_defect_unknown_rejected(self):
+        # 多码中任一未知：整笔拒绝，不落任何台账
+        with self.assertRaises(ApiNotFound) as ctx:
+            self.service.scan_pass(self._payload(
+                M_SN='SN-API-MULTI2', M_TEST_RESULT='NG',
+                M_STR2='APID;NOPE'))
+        self.assertIn('NOPE', str(ctx.exception))
+        self.assertFalse(self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI2')]))
+        self.assertFalse(self.env['sn.wsd.mes.test.result'].search([
+            ('serial_identity_id.name', '=', 'SN-API-MULTI2')]))
 
 
 @tagged('post_install', '-at_install')
