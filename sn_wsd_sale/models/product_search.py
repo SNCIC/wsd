@@ -11,7 +11,7 @@ def _with_specification_on_second_line(display_name, specification):
     """
     name, _, code = display_name.partition('\t')
     second_line = '\t'.join(part for part in (code, f'--{specification}--') if part)
-    return f'{name}\n\t{second_line}'
+    return f'{name}\n{second_line}'
 
 
 class ProductProduct(models.Model):

@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Sale',
-    'version': '19.0.1.6.0',
+    'version': '19.0.1.7.0',
     'summary': 'Sales order detail report',
     'category': 'Sales/Sales',
     'depends': [
