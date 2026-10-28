@@ -182,11 +182,13 @@ class MesOrderBatchPass(models.Model):
         # target verdict -- marked by _prepare_leave_history_vals via
         # the context keys set in action_batch_pass_station
         self.leave_station(serial_identity, 'ok')
-        successor = self._station_successors(route_operation)[:1]
-        if successor:
+        # 同设备内核口径（fork-parking）：仅线性唯一后继自动停放；分叉
+        # 不停放，板留在途由实际接板的分支工位首扫接板
+        successors = self._station_successors(route_operation)
+        if len(successors) == 1:
             self.enter_station(
-                serial_identity, successor,
-                workcenter=successor.workcenter_id)
+                serial_identity, successors,
+                workcenter=successors.workcenter_id)
 
     # ------------------------------------------------------------------
     # history row marker (consumes the context keys above)
