@@ -350,7 +350,9 @@ class SnWsdApiService(models.AbstractModel):
                 ('route_operation_code', '=', route_operation.operation_id.code or route_operation.operation_id.name),
                 ('type_id.code', '=', type_code),
             ], limit=1)
-            if not doc or value not in doc.code_ids.mapped('code'):
+            # unmaintained lists are not enforced: only what the order
+            # actually maintains is checked (per operation + type)
+            if doc and value not in doc.code_ids.mapped('code'):
                 raise ValidationError(_(
                     '%(field)s %(value)s is not maintained on operation '
                     '%(op)s of manufacturing order %(order)s.',

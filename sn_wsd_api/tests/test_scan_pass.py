@@ -178,6 +178,18 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         # not uploaded -> not checked
         self.service._check_process_documents(
             self.production, route_op, {})
+        # type with no maintained list on the same order -> passes through
+        self.service._check_process_documents(
+            self.production, route_op,
+            {'M_PARAMETER_PLAN': 'PLAN-9', 'M_TEST_PLAN': 'TPLAN-A'})
+        # order maintaining nothing at all -> every uploaded number passes
+        blank = self.env['mrp.production'].create({
+            'product_id': self.product.id, 'product_qty': 10,
+            'company_id': self.company.id})
+        self.service._check_process_documents(
+            blank, route_op,
+            {'M_PARAMETER_PLAN': 'PLAN-9', 'M_PROGRAM_NUM': 'PRG-9',
+             'M_TEST_PLAN': 'TPLAN-9', 'M_SOFTWARE_NUM': 'SW-9'})
 
     def test_07_sn_generation(self):
         identity = self.order.generate_sn()
