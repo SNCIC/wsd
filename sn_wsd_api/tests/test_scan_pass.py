@@ -524,6 +524,112 @@ class TestScanPass(ScanPassFixture, TransactionCase):
 
 
 @tagged('post_install', '-at_install')
+class TestForkRoute(ScanPassFixture, TransactionCase):
+    """并行分叉（fork-parking，2026-10-27）：OK 后仅在唯一后继时自动
+    停放；一站分多站的分叉板留在途，由实际接板的分支工位首扫接板，
+    另一分支永不落行（下游按 OR-join 可达性推进）。"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+        # fork route: FA(entry) → FB ∥ FC，挂在夹具的车间/产线上
+        Operation = cls.env['sn.wsd.operation']
+        cls.op_fa = Operation.create(
+            {'name': 'F-A', 'code': 'FA', 'x_station_type': 'assembly'})
+        cls.op_fb = Operation.create(
+            {'name': 'F-B', 'code': 'FB', 'x_station_type': 'assembly'})
+        cls.op_fc = Operation.create(
+            {'name': 'F-C', 'code': 'FC', 'x_station_type': 'assembly'})
+        route = cls.env['sn.wsd.process.route'].with_context(
+            sn_wsd_skip_flow_versioning=True).create({
+                'name': 'FORK-RT', 'code': 'FORKRT',
+                'x_workshop_id': cls.workshop.id,
+                'state': 'confirmed', 'x_production_side': 'single',
+                'route_operation_ids': [
+                    (0, 0, {'operation_id': cls.op_fa.id, 'sequence': 10,
+                            'x_allow_entry': True}),
+                    (0, 0, {'operation_id': cls.op_fb.id, 'sequence': 20}),
+                    (0, 0, {'operation_id': cls.op_fc.id, 'sequence': 30}),
+                ],
+                'x_daily_input_operation_id': cls.op_fa.id,
+                'x_daily_output_operation_id': cls.op_fc.id,
+                'x_workorder_input_operation_id': cls.op_fa.id,
+            })
+        rows = route.route_operation_ids
+        fa = rows.filtered(lambda r: r.operation_id == cls.op_fa)
+        fb = rows.filtered(lambda r: r.operation_id == cls.op_fb)
+        fc = rows.filtered(lambda r: r.operation_id == cls.op_fc)
+        fb.blocked_by_route_operation_ids = [(6, 0, fa.ids)]
+        fc.blocked_by_route_operation_ids = [(6, 0, fa.ids)]
+        cls.env['sn.wsd.process.route.drawing'].create(
+            {'route_id': route.id, 'x_drawing_no': 'DWG-FORK'})
+        product = cls.env['product.product'].create({
+            'name': 'P-FORK', 'uom_id': cls.env.ref('uom.product_uom_unit').id,
+            'default_code': 'DWG-FORK', 'x_board_side': 'single'})
+        production = cls.env['mrp.production'].create({
+            'product_id': product.id, 'product_qty': 10,
+            'company_id': cls.company.id})
+        # 独立产线：一条线同时只允许一张在线单（action_online 硬闸），
+        # 与夹具单共用产线会被顶替向导挡下
+        cls.fork_line = cls.env['sn.mrp.production.line'].create({
+            'name': 'FORKL', 'code': 'FORKL', 'workshop_id': cls.workshop.id})
+        from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
+        cls.fork_order = cls.env['sn.wsd.mes.order'].create({
+            'production_id': production.id,
+            'production_line_id': cls.fork_line.id,
+            'date_plan': fields.Date.today(), 'planned_qty': 10})
+        give_pick(cls.env, cls.fork_order)
+        cls.fork_order.action_online()
+        WC = cls.env['mrp.workcenter']
+        cls.wc_fa = WC.create({'name': 'F-WC-A', 'code': 'FWCA',
+                               'x_workshop_id': cls.workshop.id,
+                               'x_production_line_id': cls.fork_line.id,
+                               'x_operation_id': cls.op_fa.id})
+        cls.wc_fb = WC.create({'name': 'F-WC-B', 'code': 'FWCB',
+                               'x_workshop_id': cls.workshop.id,
+                               'x_production_line_id': cls.fork_line.id,
+                               'x_operation_id': cls.op_fb.id})
+        cls.wc_fc = WC.create({'name': 'F-WC-C', 'code': 'FWCC',
+                               'x_workshop_id': cls.workshop.id,
+                               'x_production_line_id': cls.fork_line.id,
+                               'x_operation_id': cls.op_fc.id})
+
+    def _scan(self, wc_code, sn):
+        return self.service.scan_pass({
+            'M_DATA_AUTH': 'HQ', 'M_SN': sn, 'M_EMP': 'APIOP',
+            'M_TEST_RESULT': 'OK', 'M_WORK_STATIONSN': wc_code})
+
+    def _rows(self, sn):
+        return self.env['sn.wsd.serial.operation.history'].search_read(
+            [('serial_identity_id.name', '=', sn)],
+            ['route_operation_id', 'result'], order='id asc')
+
+    def test_01_fork_ok_keeps_board_in_transit(self):
+        # 分叉后不预判停放：无在制行、无 WIP，台账只有 FA 的判定行
+        result = self._scan('FWCA', 'FORK-SN-10')
+        self.assertTrue(result['ok'])
+        rows = self._rows('FORK-SN-10')
+        self.assertEqual(len(rows), 1)
+        self.assertTrue(rows[0]['route_operation_id'][1].startswith('FA'))
+        self.assertEqual(rows[0]['result'], 'ok')
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'FORK-SN-10')]))
+
+    def test_02_branch_scan_picks_up_no_fabrication(self):
+        # 分支工位首扫接板；另一分支永不落行，没有任何伪造 OK
+        self._scan('FWCA', 'FORK-SN-11')
+        result = self._scan('FWCB', 'FORK-SN-11')
+        self.assertTrue(result['ok'])
+        rows = self._rows('FORK-SN-11')
+        labels = [(r['route_operation_id'][1].split(' / ')[0], r['result'])
+                  for r in rows]
+        self.assertEqual(labels, [('FA', 'ok'), ('FB', 'ok')])
+        self.assertFalse([r for r in rows
+                          if r['route_operation_id'][1].startswith('FC')])
+
+
+@tagged('post_install', '-at_install')
 class TestScanPassHttp(ScanPassFixture, HttpCase):
     """Controller wire format: plain JSON POST, no authentication, uniform
     response shell, old paths gone."""

@@ -328,12 +328,14 @@ class SnWsdApiService(models.AbstractModel):
 
     def _park_at_successor(self, mes_order, route_op, identity):
         """After an OK at a non-end operation, park the board at the next
-        station when the route is linear; forks stay in transit (the branch
-        station's own scan picks the board up)."""
-        successor = mes_order._station_successors(route_op)[:1]
-        if successor:
+        station only when the route is linear; forks stay in transit (the
+        branch station's own scan picks the board up). Parking at one
+        branch of a fork would fabricate a pass there once another branch
+        scans the board."""
+        successors = mes_order._station_successors(route_op)
+        if len(successors) == 1:
             mes_order.enter_station(
-                identity, successor, workcenter=successor.workcenter_id)
+                identity, successors, workcenter=successors.workcenter_id)
 
     # ------------------------------------------------------------------
     # craft documents / components / nameplate / tooling / packing
