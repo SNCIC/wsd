@@ -32,6 +32,17 @@ class ProductProduct(models.Model):
         ]
         return results[:limit] if limit else results
 
+    @api.depends('product_tmpl_id.material_specification')
+    @api.depends_context('formatted_display_name')
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        if not self.env.context.get('formatted_display_name'):
+            return
+        for product in self:
+            specification = product.product_tmpl_id.material_specification
+            if specification and product.display_name:
+                product.display_name = f'{product.display_name}\n\t{specification}'
+
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -42,3 +53,13 @@ class ProductTemplate(models.Model):
         if operator in Domain.NEGATIVE_OPERATORS or not value:
             return domain
         return Domain.OR([domain, [('material_specification', operator, value)]])
+
+    @api.depends('material_specification')
+    @api.depends_context('formatted_display_name')
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        if not self.env.context.get('formatted_display_name'):
+            return
+        for template in self:
+            if template.material_specification and template.display_name:
+                template.display_name = f'{template.display_name}\n\t{template.material_specification}'
