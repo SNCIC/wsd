@@ -323,6 +323,12 @@ class SerialIdentity(models.Model):
         string='Open Quality Issue Count',
         compute='_compute_quality_issue_summary',
     )
+    inspection_count = fields.Integer(
+        string='Inspection Count',
+        compute='_compute_inspection_count',
+        help='Inspections this serial took part in: as a sample row, as a '
+             'result cell, or registered in the FAI/OQC sample lists.',
+    )
     x_quality_hold_state = fields.Selection(
         [
             ('released', 'Released'),
@@ -362,6 +368,30 @@ class SerialIdentity(models.Model):
             open_issues = record.quality_issue_ids.filtered(lambda item: item.state not in ('closed', 'scrapped'))
             record.quality_issue_count = len(record.quality_issue_ids)
             record.open_quality_issue_count = len(open_issues)
+
+    def _inspection_trace_domain(self):
+        self.ensure_one()
+        return ['|', '|', '|',
+                ('sample_ids.serial_identity_id', '=', self.id),
+                ('cell_ids.serial_identity_id', '=', self.id),
+                ('x_fai_serial_ids', 'in', self.ids),
+                ('x_fai_arrived_serial_ids', 'in', self.ids)]
+
+    def _compute_inspection_count(self):
+        Inspection = self.env['sn.wsd.quality.inspection']
+        for record in self:
+            record.inspection_count = Inspection.search_count(
+                record._inspection_trace_domain())
+
+    def action_view_inspections(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Inspections'),
+            'res_model': 'sn.wsd.quality.inspection',
+            'view_mode': 'list,form',
+            'domain': self._inspection_trace_domain(),
+        }
 
     def action_view_quality_issues(self):
         self.ensure_one()
