@@ -1,8 +1,0 @@
-/* Product lookups show the name, the code and the material specification on
-   the same line. Long entries wrap instead of being truncated, so the
-   specification of the product stays readable in the search results. */
-.o_many2one .o-autocomplete--dropdown-menu .dropdown-item {
-    white-space: normal;
-    overflow-wrap: anywhere;
-    text-overflow: clip;
-}

@@ -2,6 +2,18 @@ from odoo import api, models
 from odoo.fields import Domain
 
 
+def _with_specification_on_second_line(display_name, specification):
+    """Put the code and the specification on a second line.
+
+    The formatted display name of a product is ``name<TAB>--code--``: the
+    name is kept on the first line, the code and the specification are moved
+    to the second one, both as secondary (muted) information.
+    """
+    name, _, code = display_name.partition('\t')
+    second_line = '\t'.join(part for part in (code, f'--{specification}--') if part)
+    return f'{name}\n\t{second_line}'
+
+
 class ProductProduct(models.Model):
     """Let the product lookup of the order lines match the material
     specification typed on the product: the salespeople know the specification
@@ -41,7 +53,8 @@ class ProductProduct(models.Model):
         for product in self:
             specification = product.product_tmpl_id.material_specification
             if specification and product.display_name:
-                product.display_name = f'{product.display_name}\t--{specification}--'
+                product.display_name = _with_specification_on_second_line(
+                    product.display_name, specification)
 
 
 class ProductTemplate(models.Model):
@@ -62,4 +75,5 @@ class ProductTemplate(models.Model):
             return
         for template in self:
             if template.material_specification and template.display_name:
-                template.display_name = f'{template.display_name}\t--{template.material_specification}--'
+                template.display_name = _with_specification_on_second_line(
+                    template.display_name, template.material_specification)

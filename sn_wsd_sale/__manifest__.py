@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Sale',
-    'version': '19.0.1.4.0',
+    'version': '19.0.1.6.0',
     'summary': 'Sales order detail report',
     'category': 'Sales/Sales',
     'depends': [
@@ -12,11 +12,6 @@
         'views/sale_order_views.xml',
         'views/sale_detail_views.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'sn_wsd_sale/static/src/scss/product_lookup.scss',
-        ],
-    },
     'installable': True,
     'application': False,
     'author': 'SNCIC',
