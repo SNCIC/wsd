@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Sale',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'summary': 'Sales order detail report',
     'category': 'Sales/Sales',
     'depends': [
@@ -9,6 +9,7 @@
         'sn_wsd_list',
     ],
     'data': [
+        'views/sale_order_views.xml',
         'views/sale_detail_views.xml',
     ],
     'installable': True,

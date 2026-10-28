@@ -21,3 +21,7 @@ class SaleOrderLine(models.Model):
         string='Order Date',
         readonly=True,
     )
+    note = fields.Char(
+        string='Note',
+        help='Remark written on the line, printed after the amounts.',
+    )

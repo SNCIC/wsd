@@ -29,6 +29,7 @@
                 <field name="price_unit"/>
                 <field name="discount" groups="sale.group_discount_per_so_line"/>
                 <field name="price_subtotal" sum="Total" widget="monetary"/>
+                <field name="note"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>

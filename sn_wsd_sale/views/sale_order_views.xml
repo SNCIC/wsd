@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Note of the order lines: it follows the amounts so the remark of a
+         line is read next to what it is about. -->
+    <record id="view_sale_order_form_line_note" model="ir.ui.view">
+        <field name="name">sale.order.form.line.note</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//list/field[@name='price_subtotal'][last()]" position="after">
+                <field name="note" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//field[@name='name']" position="after">
+                <field name="note"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Delivery date in the order header, next to the order date: the date is
+         read while the order is written, not on the other information page.
+         The field kept on that page is only hidden, so that the fields the
+         delivery modules added to the same group stay where they belong. -->
+    <record id="view_sale_order_form_delivery_date" model="ir.ui.view">
+        <field name="name">sale.order.form.delivery.date</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale_shipping']//label[@for='commitment_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='sale_shipping']//field[@name='commitment_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='sale_shipping']//span[@name='expected_date_span' or not(@name)]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='order_details']" position="inside">
+                <label for="commitment_date"/>
+                <div name="sn_commitment_date_div" class="o_row">
+                    <field name="commitment_date" readonly="state == 'cancel' or locked"/>
+                    <span name="sn_expected_date_span" class="text-muted" invisible="not expected_date">Expected: <field name="expected_date" class="oe_inline"/></span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

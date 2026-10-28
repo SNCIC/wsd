@@ -27,6 +27,11 @@ msgid "Order Date"
 msgstr "订单日期"
 
 #. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_sale
 #: model:ir.model.fields,field_description:sale.field_sale_order__name
 #: model:ir.model.fields,field_description:sale.field_sale_order_line__order_id
 #: model:ir.model.fields,field_description:sale.field_sale_report__name
@@ -50,6 +55,11 @@ msgstr "订单明细"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_list
 msgid "Total"
 msgstr "总计"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sale_order_form_delivery_date
+msgid "Expected:"
+msgstr "预计："
 
 #. module: sn_wsd_sale
 #: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
