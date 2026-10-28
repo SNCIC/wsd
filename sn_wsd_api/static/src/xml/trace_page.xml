@@ -205,7 +205,7 @@
                                         <td t-esc="r.type"/>
                                         <td>
                                             <span t-if="r.result"
-                                                  t-attf-class="badge {{r.result === 'pass' || r.result === 'ok' ? 'text-bg-success' : 'text-bg-warning'}}"
+                                                  t-attf-class="badge {{r.rawResult === 'pass' || r.rawResult === 'ok' ? 'text-bg-success' : 'text-bg-warning'}}"
                                                   t-esc="r.result"/>
                                         </td>
                                         <td t-esc="r.state"/>

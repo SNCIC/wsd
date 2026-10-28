@@ -18,10 +18,28 @@ msgstr ""
 #. module: sn_wsd_api
 #. odoo-python
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
-msgid ""
-"%(field)s %(value)s is not maintained on operation %(op)s of manufacturing "
-"order %(order)s."
+msgid "%(field)s %(value)s is not maintained on operation %(op)s of manufacturing order %(order)s."
 msgstr "%(field)s %(value)s 未维护在制造订单 %(order)s 的工序 %(op)s 中。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aoi
+msgid "AOI"
+msgstr "AOI检测"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_aoi_defect_detail
+msgid "AOI Defect Detail"
+msgstr "AOI 缺陷明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_detail_ids model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_aoi_defect_detail model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_aoi_defect_detail
+msgid "AOI Defect Details"
+msgstr "AOI 缺陷明细"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "AOI Defects"
+msgstr "AOI 缺陷"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_api_request_log__endpoint
@@ -65,9 +83,46 @@ msgid "Basic Info"
 msgstr "基础信息"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__box_sn
+msgid "Box SN"
+msgstr "箱号"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__calibration
 msgid "Calibration"
 msgstr "校准"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Click a test result above to view its item details"
+msgstr "点击上方任意一次测试，查看逐项明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__code_id
+msgid "Code ID"
+msgstr "代码ID"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__collaborator_code
+msgid "Collaborator"
+msgstr "协作人"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__company_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__company_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__company_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__component model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Component"
+msgstr "组件"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Concession"
+msgstr "让步接收"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
@@ -75,12 +130,9 @@ msgid "Confirmed Defect"
 msgstr "确认不良"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__company_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__company_id
-msgid "Company"
-msgstr "公司"
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__confirmed_result
+msgid "Confirmed Result"
+msgstr "确认结果"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -89,23 +141,39 @@ msgid "Container %s already exists in stock."
 msgstr "箱号/托盘 %s 已经在库存中存在。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_uid model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_uid model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_uid
 msgid "Created by"
 msgstr "创建人"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_date
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__create_date model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__create_date model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__create_date
 msgid "Created on"
 msgstr "创建时间"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Current"
+msgstr "现行"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__cycle_time_sec
 msgid "Cycle Time Sec"
 msgstr "节拍时间（秒）"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_code model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
+msgid "Defect Code"
+msgstr "缺陷代码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_name
+msgid "Defect Name"
+msgstr "缺陷名称"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -114,8 +182,13 @@ msgid "Defect code %s does not exist."
 msgstr "不良代码 %s 不存在。"
 
 #. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_request_log
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_request_log
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Defects"
+msgstr "缺陷"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_request_log model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_request_log
 msgid "Device API Logs"
 msgstr "设备接口日志"
 
@@ -125,15 +198,18 @@ msgid "Device API Request Log"
 msgstr "设备接口日志"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Device SN"
+msgstr "设备SN"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__equipment_sn
 msgid "Device SN (M_DEVICE_SN) that performed this test."
 msgstr "执行本次测试的设备SN（M_DEVICE_SN）。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__display_name
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__display_name
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__display_name model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__display_name model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__display_name model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
@@ -141,6 +217,18 @@ msgstr "显示名称"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__display_ref
 msgid "Display Ref"
 msgstr "显示编号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Done Time"
+msgstr "完成时间"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__duration_ms
@@ -180,9 +268,31 @@ msgid "Equipment SN"
 msgstr "设备SN"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_time
+msgid "Event Time"
+msgstr "事件时间"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_type model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Event Type"
+msgstr "事件类型"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__external_event_id
 msgid "External Event"
 msgstr "外部事件"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "FAI - First Article Inspection"
+msgstr "首检(FAI)"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Fail"
+msgstr "不合格"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__final_test
@@ -190,8 +300,19 @@ msgid "Final Test"
 msgstr "最终测试"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Finished"
+msgstr "流程结束"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Flag"
+msgstr "标志"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "Group By"
 msgstr "分组"
 
@@ -201,18 +322,37 @@ msgid "HTTP-ish result code of the response."
 msgstr "响应结果码。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__hold
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__hold model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "Hold"
 msgstr "暂存"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_service__id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__id
 msgid "ID"
 msgstr "ID"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "IPQC - In-Process Quality Control"
+msgstr "过程检验(IPQC)"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "IQC - Incoming Quality Control"
+msgstr "来料检验(IQC)"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__image_path
+msgid "Image Path"
+msgstr "图片路径"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "In Progress"
+msgstr "进行中"
 
 #. module: sn_wsd_api
 #. odoo-javascript
@@ -221,29 +361,92 @@ msgid "Inspection"
 msgstr "检验单号"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Inspector"
+msgstr "检验人"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "Invalid %s: expected ISO 8601 datetime."
+msgstr "无效的 %s：应为 ISO 8601 日期时间。"
+
+#. module: sn_wsd_api
 #. odoo-python
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid "Invalid account or password."
 msgstr "账号或密码错误。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_uid
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Item Code"
+msgstr "料号"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item NG"
+msgstr "单项NG"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Item Result"
+msgstr "单项结果"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Last 30 Days"
+msgstr "最近 30 天"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+msgid "Last 7 Days"
+msgstr "最近 7 天"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_uid model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_uid model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_date
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_date
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__write_date model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__write_date model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__leadseal_codes
+msgid "Lead Seal Codes"
+msgstr "铅封码"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Lead seal"
+msgstr "铅封"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Line"
+msgstr "线别"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__line_code
 msgid "Line Code"
 msgstr "产线代码"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Loadpoint"
+msgstr "料位"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Lot"
+msgstr "批次"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__lower_limit
@@ -252,14 +455,12 @@ msgstr "下限"
 
 #. module: sn_wsd_api
 #. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__mes_order_id
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0 model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__mes_order_id
 msgid "MES Order"
 msgstr "制令单"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__route_operation_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__route_operation_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__route_operation_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__route_operation_id
 msgid "MES Route Operation"
 msgstr "制令单工序"
 
@@ -277,6 +478,11 @@ msgstr "MES测试结果明细项"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_id
 msgid "MES Work Center"
 msgstr "MES工作中心"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__order_no
+msgid "MES order for production events; the document number of the quality/repair/scrap ticket for those."
+msgstr "生产事件显示制令单；质量/维修/报废事件显示其单据号。"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_list_api
@@ -300,9 +506,37 @@ msgid "Manufacturing order %s does not exist."
 msgstr "制造订单 %s 不存在。"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Material SN"
+msgstr "物料SN"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__material_specification
+msgid "Material Specification"
+msgstr "物料规格"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__object_ref
+msgid "Material reel, component SN, nameplate mapping or box/pallet involved in the event."
+msgstr "事件涉及的物料卷号、组件SN、铭牌映射或箱/托盘。"
+
+#. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Measurements"
 msgstr "测量值"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Method"
+msgstr "维修方法"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -329,20 +563,53 @@ msgid "Missing required field: work_order"
 msgstr "缺少必填字段：work_order"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ng
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ng
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ng
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Module"
+msgstr "模块"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__module_codes
+msgid "Module Codes"
+msgstr "模块码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ng model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ng model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ng model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_list model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "NG"
 msgstr "NG"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
+msgid "NG result requires a confirmed defect detail."
+msgstr "NG 结果需要至少一条确认不良的缺陷明细。"
 
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Name"
 msgstr "名称"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__nameplate
+msgid "Nameplate"
+msgstr "铭牌"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__internal_code
+msgid "Nameplate Code"
+msgstr "铭牌码"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_serial_binding_api model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_serial_binding_api
+msgid "Nameplate SN Bindings"
+msgstr "铭牌SN绑定"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "No"
+msgstr "否"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -357,23 +624,80 @@ msgid "No online MES order runs through work center %s."
 msgstr "工作中心 %s 所在线别不存在在线制令单。"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "No trace events found for this SN"
+msgstr "该 SN 没有找到追溯事件"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__note
 msgid "Note"
 msgstr "备注"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ok
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ok
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ok
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_api_request_log__test_result__ok model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__result__ok model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result_detail__result__ok model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "OK"
 msgstr "OK"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__operator_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__operator_code
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "OQC - Outgoing Quality Control"
+msgstr "出厂检验(OQC)"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__object_ref
+msgid "Object"
+msgstr "对象"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Open"
+msgstr "打开/未结"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
+msgid "Open Full Form"
+msgstr "打开完整表单"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_list
+msgid "Open source document"
+msgstr "打开源单据"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Operation Name"
+msgstr "工序名称"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operator model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Operator"
+msgstr "操作员"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__operator_code model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__operator_code
 msgid "Operator Code"
 msgstr "操作员代码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__order_no model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Order / Document"
+msgstr "制令单/单据"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+msgid "Order / Station"
+msgstr "工单/工位"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -388,19 +712,51 @@ msgid "Organization is empty."
 msgstr "组织机构为空。"
 
 #. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
-msgid "Order / Station"
-msgstr "工单/工位"
-
-#. module: sn_wsd_api
 #: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
 msgid "Original raw data before parsing"
 msgstr "解析前的原始数据"
 
 #. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall NG"
+msgstr "总结果NG"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__parent_result model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Overall Result"
+msgstr "总结果"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Overdue"
+msgstr "逾期"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "PCBA"
+msgstr "PCBA"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pcba_codes
+msgid "PCBA Codes"
+msgstr "PCBA码"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__pack model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Pack"
+msgstr "包装"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__packaging
 msgid "Packaging"
 msgstr "包装"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pallet_sn
+msgid "Pallet SN"
+msgstr "托盘号"
 
 #. module: sn_wsd_api
 #. odoo-python
@@ -409,10 +765,37 @@ msgid "Panel quantity must be a positive integer."
 msgstr "拼版数量必须为正整数。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__payload
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__payload
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__parameter_plan
+msgid "Parameter Plan"
+msgstr "参数方案"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__part_id
+msgid "Part ID"
+msgstr "位号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Partial Pass"
+msgstr "部分合格"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__payload model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__payload
 msgid "Payload"
 msgstr "载荷"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Pending"
+msgstr "待定"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__phase_error
@@ -420,10 +803,33 @@ msgid "Phase Error"
 msgstr "相位误差"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__position
+msgid "Position"
+msgstr "坐标位置"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Process"
+msgstr "制程"
+
+#. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Product"
 msgstr "产品料号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Product Information"
+msgstr "产品信息"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Product Structure"
+msgstr "产品结构"
 
 #. module: sn_wsd_api
 #. odoo-javascript
@@ -437,6 +843,11 @@ msgid "Production Line"
 msgstr "生产线"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__program_num
+msgid "Program Number"
+msgstr "程序编号"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__programming
 msgid "Programming"
 msgstr "编程"
@@ -447,10 +858,33 @@ msgid "Project Name"
 msgstr "项目名称"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Qty"
+msgstr "点数"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Quality"
+msgstr "质量"
+
+#. module: sn_wsd_api
 #. odoo-python
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
 msgid "Quantity must be a positive integer no greater than %s."
 msgstr "数量必须为不超过 %s 的正整数。"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Query"
+msgstr "查询"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__payload
+msgid "Raw Detail"
+msgstr "原始明细"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__raw_line
@@ -461,6 +895,36 @@ msgstr "原始行"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Raw Payload"
 msgstr "原始报文"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Reject"
+msgstr "拒绝/不合格"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Repair Order"
+msgstr "维修单号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Repairer"
+msgstr "维修员"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Report Time"
+msgstr "提报时间"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__request_id
@@ -478,8 +942,7 @@ msgid "Requires Repair"
 msgstr "需要维修"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__response
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_form
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__response model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_form
 msgid "Response"
 msgstr "响应"
 
@@ -520,24 +983,20 @@ msgid "Rework Pass"
 msgstr "返工过站"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_identity_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__serial_identity_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__sn
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__serial_identity_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__serial_identity_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__serial_identity_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__sn model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_list model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__serial_identity_id model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "SN"
 msgstr "SN"
 
 #. module: sn_wsd_api
 #. odoo-python
 #: code:addons/sn_wsd_api/models/api_scan_pass.py:0
-msgid ""
-"SN %(sn)s is in progress at operation %(op)s of order %(order)s; use the "
-"matching station."
+msgid "SN %(sn)s is in progress at operation %(op)s of order %(order)s; use the matching station."
 msgstr ""
 
 #. module: sn_wsd_api
@@ -558,10 +1017,9 @@ msgid "SN / Nameplate"
 msgstr "SN/铭牌"
 
 #. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_serial_binding_api
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_serial_binding_api
-msgid "Nameplate SN Bindings"
-msgstr "铭牌SN绑定"
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_trace_event model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_trace_event model:ir.actions.client,name:sn_wsd_api.action_sn_wsd_trace_page
+msgid "SN Trace"
+msgstr "SN 追溯"
 
 #. module: sn_wsd_api
 #: model:ir.model,name:sn_wsd_api.model_sn_wsd_api_service
@@ -575,10 +1033,39 @@ msgid "SN is required."
 msgstr "SN不能为空。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__sequence
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__sequence
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Same Batch Products"
+msgstr "同批次产品"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Scan or type an SN, press Enter to trace"
+msgstr "扫入或输入 SN，回车开始追溯"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__sequence model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__sequence
 msgid "Sequence"
 msgstr "序号"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Side"
+msgstr "面别"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Skipped"
+msgstr "跳站"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__sn
@@ -586,40 +1073,117 @@ msgid "Sn"
 msgstr "SN"
 
 #. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_name
+msgid "Software Name"
+msgstr "软件名"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_num
+msgid "Software Number"
+msgstr "软件编号"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Source"
+msgstr "来源"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__source_system
 msgid "Source System"
 msgstr "来源系统"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__detail_ids
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Spec"
+msgstr "物料规格"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "State"
+msgstr "状态"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Station"
+msgstr "料站"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__station
+msgid "Station / Device"
+msgstr "工位/设备"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__station model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Station Pass"
+msgstr "过站"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
+msgid "Stored flag for fast list grouping and NG count aggregates."
+msgstr "存储标记，用于列表快速分组与NG计数聚合。"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Submit Time"
+msgstr "送检时间"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Submitter"
+msgstr "送检人"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__summary
+msgid "Summary"
+msgstr "摘要"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__table_position
+msgid "Table Position"
+msgstr "表位"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__test
+msgid "Test"
+msgstr "测试"
+
+#. module: sn_wsd_api
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result_detail model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result_detail
+msgid "Test Item Details"
+msgstr "测试项明细"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__detail_ids model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Test Items"
 msgstr "测试项"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__test_result
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_result_id
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_result_id
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_plan_num
+msgid "Test Plan"
+msgstr "测试方案"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__test_result model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_result_id model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_result_id
 msgid "Test Result"
 msgstr "测试结果"
 
 #. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_list
+#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_list
 msgid "Test Results"
 msgstr "测试结果"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_time
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_time
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_time
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_time model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__test_time model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__test_time
 msgid "Test Time"
 msgstr "测试时间"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_type
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_type model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
 msgid "Test Type"
 msgstr "测试类型"
 
@@ -646,6 +1210,23 @@ msgid "The uploaded form, verbatim."
 msgstr "上报表单原文。"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Time"
+msgstr "时间"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+msgid "Today"
+msgstr "今天"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Tooling"
+msgstr "工装"
+
+#. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
 msgid "Tooling & Device"
 msgstr "工装与设备"
@@ -661,6 +1242,24 @@ msgid "Tooling SNs (M_TOOLING) recorded with this pass."
 msgstr "本次过站记录的工装SN（M_TOOLING）。"
 
 #. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Total"
+msgstr "共计"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Trace"
+msgstr "追溯"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_form
 msgid "Uploaded Payload"
 msgstr "上报报文"
@@ -672,9 +1271,7 @@ msgstr "上限"
 
 #. module: sn_wsd_api
 #. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__workcenter_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0 model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__workcenter_id model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
 msgid "Work Center"
 msgstr "工作中心"
 
@@ -691,8 +1288,12 @@ msgid "Work center %s does not match any operation of MES order %s."
 msgstr "工作中心 %s 与制令单 %s 的任何工序都不匹配。"
 
 #. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__workcenter_code
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_code
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__station
+msgid "Work center for passes, device SN for tests, machine.table for material deductions."
+msgstr "过站显示工位，测试显示设备SN，物料扣点显示机台.料站。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__workcenter_code model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workcenter_code
 msgid "Workcenter Code"
 msgstr "工作中心编码"
 
@@ -700,530 +1301,6 @@ msgstr "工作中心编码"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__workshop_id
 msgid "Workshop"
 msgstr "车间"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-msgid "Date"
-msgstr "日期"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-msgid "Item NG"
-msgstr "单项NG"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-msgid "Item Result"
-msgstr "单项结果"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-msgid "Last 7 Days"
-msgstr "最近 7 天"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Operation"
-msgstr "工序"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-msgid "Overall NG"
-msgstr "总结果NG"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__parent_result
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-msgid "Overall Result"
-msgstr "总结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__is_ng
-msgid "Stored flag for fast list grouping and NG count aggregates."
-msgstr "存储标记，用于列表快速分组与NG计数聚合。"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__test
-msgid "Test"
-msgstr "测试"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_test_result_detail
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_test_result_detail
-msgid "Test Item Details"
-msgstr "测试项明细"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
-msgid "Today"
-msgstr "今天"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
-msgid "Open Full Form"
-msgstr "打开完整表单"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/test_result_split.js:0
-msgid "Click a test result above to view its item details"
-msgstr "点击上方任意一次测试，查看逐项明细"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__box_sn
-msgid "Box SN"
-msgstr "箱号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__code_id
-msgid "Code ID"
-msgstr "代码ID"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__collaborator_code
-msgid "Collaborator"
-msgstr "协作人"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
-msgid "Current"
-msgstr "现行"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__leadseal_codes
-msgid "Lead Seal Codes"
-msgstr "铅封码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__module_codes
-msgid "Module Codes"
-msgstr "模块码"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__nameplate
-msgid "Nameplate"
-msgstr "铭牌"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__internal_code
-msgid "Nameplate Code"
-msgstr "铭牌码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pcba_codes
-msgid "PCBA Codes"
-msgstr "PCBA码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pallet_sn
-msgid "Pallet SN"
-msgstr "托盘号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__parameter_plan
-msgid "Parameter Plan"
-msgstr "参数方案"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__program_num
-msgid "Program Number"
-msgstr "程序编号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_name
-msgid "Software Name"
-msgstr "软件名"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__software_num
-msgid "Software Number"
-msgstr "软件编号"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
-msgid "Source"
-msgstr "来源"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__table_position
-msgid "Table Position"
-msgstr "表位"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__test_plan_num
-msgid "Test Plan"
-msgstr "测试方案"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Type"
-msgstr "类型"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__component
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Component"
-msgstr "组件"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_time
-msgid "Event Time"
-msgstr "事件时间"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__event_type
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Event Type"
-msgstr "事件类型"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Last 30 Days"
-msgstr "最近 30 天"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__order_no
-msgid ""
-"MES order for production events; the document number of the "
-"quality/repair/scrap ticket for those."
-msgstr "生产事件显示制令单；质量/维修/报废事件显示其单据号。"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Material"
-msgstr "物料"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result_detail__material_specification
-msgid "Material Specification"
-msgstr "物料规格"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__object_ref
-msgid ""
-"Material reel, component SN, nameplate mapping or box/pallet involved in the"
-" event."
-msgstr "事件涉及的物料卷号、组件SN、铭牌映射或箱/托盘。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__object_ref
-msgid "Object"
-msgstr "对象"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_list
-msgid "Open source document"
-msgstr "打开源单据"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operator
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Operator"
-msgstr "操作员"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__order_no
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Order / Document"
-msgstr "制令单/单据"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__pack
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Pack"
-msgstr "包装"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Quality"
-msgstr "质量"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Repair"
-msgstr "维修"
-
-#. module: sn_wsd_api
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_trace_event
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_trace_event
-#: model:ir.actions.client,name:sn_wsd_api.action_sn_wsd_trace_page
-msgid "SN Trace"
-msgstr "SN 追溯"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Scrap"
-msgstr "报废"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__station
-msgid "Station / Device"
-msgstr "工位/设备"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__station
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-msgid "Station Pass"
-msgstr "过站"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__summary
-msgid "Summary"
-msgstr "摘要"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__station
-msgid ""
-"Work center for passes, device SN for tests, machine.table for material "
-"deductions."
-msgstr "过站显示工位，测试显示设备SN，物料扣点显示机台.料站。"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Trace"
-msgstr "追溯"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Scan or type an SN, press Enter to trace"
-msgstr "扫入或输入 SN，回车开始追溯"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "events"
-msgstr "个事件"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "No trace events found for this SN"
-msgstr "该 SN 没有找到追溯事件"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Operation Name"
-msgstr "工序名称"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Line"
-msgstr "线别"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Side"
-msgstr "面别"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Route"
-msgstr "工艺路线"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Finished"
-msgstr "流程结束"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Device SN"
-msgstr "设备SN"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Tooling"
-msgstr "工装"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Material SN"
-msgstr "物料SN"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Item Code"
-msgstr "料号"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Spec"
-msgstr "物料规格"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Lot"
-msgstr "批次"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Loadpoint"
-msgstr "料位"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Qty"
-msgstr "点数"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Station"
-msgstr "料站"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "State"
-msgstr "状态"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Submit Time"
-msgstr "送检时间"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Submitter"
-msgstr "送检人"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Inspector"
-msgstr "检验人"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Repair Order"
-msgstr "维修单号"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Defects"
-msgstr "缺陷"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Method"
-msgstr "维修方法"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Repairer"
-msgstr "维修员"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Report Time"
-msgstr "提报时间"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Done Time"
-msgstr "完成时间"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Flag"
-msgstr "标志"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
-msgid "Time"
-msgstr "时间"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "PCBA"
-msgstr "PCBA"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Module"
-msgstr "模块"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Lead seal"
-msgstr "铅封"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Skipped"
-msgstr "跳站"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Query"
-msgstr "查询"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Product Structure"
-msgstr "产品结构"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Product Information"
-msgstr "产品信息"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Same Batch Products"
-msgstr "同批次产品"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Process"
-msgstr "制程"
 
 #. module: sn_wsd_api
 #. odoo-javascript
@@ -1234,89 +1311,11 @@ msgstr "是"
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "No"
-msgstr "否"
-
-#. module: sn_wsd_api
-#. odoo-javascript
-#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
-msgid "Total"
-msgstr "共计"
+msgid "events"
+msgstr "个事件"
 
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "rows"
 msgstr "条"
-
-
-#. module: sn_wsd_api
-#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__aoi
-msgid "AOI"
-msgstr "AOI检测"
-
-#. module: sn_wsd_api
-#: model:ir.model,name:sn_wsd_api.model_sn_wsd_aoi_defect_detail
-msgid "AOI Defect Detail"
-msgstr "AOI 缺陷明细"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__aoi_defect_detail_ids
-#: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_aoi_defect_detail
-#: model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_aoi_defect_detail
-msgid "AOI Defect Details"
-msgstr "AOI 缺陷明细"
-
-#. module: sn_wsd_api
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_form
-msgid "AOI Defects"
-msgstr "AOI 缺陷"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_code
-#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
-msgid "Defect Code"
-msgstr "缺陷代码"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__defect_name
-msgid "Defect Name"
-msgstr "缺陷名称"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__image_path
-msgid "Image Path"
-msgstr "图片路径"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
-msgid "Invalid %s: expected ISO 8601 datetime."
-msgstr "无效的 %s：应为 ISO 8601 日期时间。"
-
-#. module: sn_wsd_api
-#. odoo-python
-#: code:addons/sn_wsd_api/models/api_scan_pass.py:0
-msgid "NG result requires a confirmed defect detail."
-msgstr "NG 结果需要至少一条确认不良的缺陷明细。"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__part_id
-msgid "Part ID"
-msgstr "位号"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__position
-msgid "Position"
-msgstr "坐标位置"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__confirmed_result
-msgid "Confirmed Result"
-msgstr "确认结果"
-
-#. module: sn_wsd_api
-#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__payload
-msgid "Raw Detail"
-msgstr "原始明细"
