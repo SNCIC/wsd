@@ -41,7 +41,7 @@ class ProductProduct(models.Model):
         for product in self:
             specification = product.product_tmpl_id.material_specification
             if specification and product.display_name:
-                product.display_name = f'{product.display_name}\n\t{specification}'
+                product.display_name = f'{product.display_name}\t--{specification}--'
 
 
 class ProductTemplate(models.Model):
@@ -62,4 +62,4 @@ class ProductTemplate(models.Model):
             return
         for template in self:
             if template.material_specification and template.display_name:
-                template.display_name = f'{template.display_name}\n\t{template.material_specification}'
+                template.display_name = f'{template.display_name}\t--{template.material_specification}--'
