@@ -166,7 +166,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         doc_type = self.env.ref('sn_wsd_mrp.doc_type_test_plan')
         self.env['production.process.document'].create({
             'production_id': self.production.id,
-            'route_operation_code': route_op.operation_id.code,
+            'operation_id': route_op.operation_id.id,
             'type_id': doc_type.id,
             'code_ids': [(0, 0, {'code': 'TPLAN-A'})],
         })
@@ -276,7 +276,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         route_op = self.order.x_mes_route_id.operation_ids[:1]
         self.env['production.process.document'].create({
             'production_id': self.production.id,
-            'route_operation_code': route_op.operation_id.code,
+            'operation_id': route_op.operation_id.id,
             'type_id': self.env.ref('sn_wsd_mrp.doc_type_parameter_plan').id,
             'code_ids': [(0, 0, {'code': 'PLAN-WIDE'})],
         })
