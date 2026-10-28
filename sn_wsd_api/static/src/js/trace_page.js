@@ -253,9 +253,12 @@ export class SnTracePage extends Component {
 
     async _loadQuality(identityId) {
         const domain = [
-            "|",
+            "|", "|", "|", "|",
             ["evidence_serial_identity_id", "=", identityId],
             ["sample_ids.serial_identity_id", "=", identityId],
+            ["cell_ids.serial_identity_id", "=", identityId],
+            ["x_fai_serial_ids", "in", [identityId]],
+            ["x_fai_arrived_serial_ids", "in", [identityId]],
         ];
         try {
             const rows = await this.orm.silent.searchRead(
