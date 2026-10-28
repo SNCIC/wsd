@@ -1604,6 +1604,8 @@ class QualityInspectionCell(models.Model):
     item_type = fields.Selection(related='line_id.item_type', string='Item Type', readonly=True)
     lower_limit = fields.Float(related='line_id.lower_limit', string='Lower Limit', readonly=True)
     upper_limit = fields.Float(related='line_id.upper_limit', string='Upper Limit', readonly=True)
+    instruction = fields.Text(
+        related='line_id.instruction', string='Instruction', readonly=True)
 
     _sample_line_uniq = models.Constraint(
         'unique(inspection_id, serial_identity_id, line_id)',

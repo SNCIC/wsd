@@ -19,6 +19,30 @@ const RESULT_LABELS = {
     skipped: _t("Skipped"),
 };
 
+const INSPECTION_TYPE_LABELS = {
+    fai: _t("FAI - First Article Inspection"),
+    iqc: _t("IQC - Incoming Quality Control"),
+    ipqc: _t("IPQC - In-Process Quality Control"),
+    oqc: _t("OQC - Outgoing Quality Control"),
+};
+
+const INSPECTION_RESULT_LABELS = {
+    pending: _t("Pending"),
+    pass: _t("Pass"),
+    partial: _t("Partial Pass"),
+    fail: _t("Fail"),
+    concession: _t("Concession"),
+    reject: _t("Reject"),
+};
+
+const INSPECTION_STATE_LABELS = {
+    open: _t("Open"),
+    in_progress: _t("In Progress"),
+    done: _t("Done"),
+    overdue: _t("Overdue"),
+    skipped: _t("Skipped"),
+};
+
 export class SnTracePage extends Component {
     static template = "sn_wsd_api.TracePage";
     static props = { ...standardActionServiceProps };
@@ -253,9 +277,12 @@ export class SnTracePage extends Component {
 
     async _loadQuality(identityId) {
         const domain = [
-            "|",
+            "|", "|", "|", "|",
             ["evidence_serial_identity_id", "=", identityId],
             ["sample_ids.serial_identity_id", "=", identityId],
+            ["cell_ids.serial_identity_id", "=", identityId],
+            ["x_fai_serial_ids", "in", [identityId]],
+            ["x_fai_arrived_serial_ids", "in", [identityId]],
         ];
         try {
             const rows = await this.orm.silent.searchRead(
@@ -265,9 +292,10 @@ export class SnTracePage extends Component {
                 { order: "create_date desc" });
             return rows.map((r) => ({
                 name: r.name,
-                type: r.inspection_type || "",
-                result: r.result || "",
-                state: r.state || "",
+                type: INSPECTION_TYPE_LABELS[r.inspection_type] || r.inspection_type || "",
+                rawResult: r.result || "",
+                result: INSPECTION_RESULT_LABELS[r.result] || r.result || "",
+                state: INSPECTION_STATE_LABELS[r.state] || r.state || "",
                 orderName: r.mes_order_id ? r.mes_order_id[1] : "",
                 submitTime: r.create_date,
                 submitter: r.create_uid ? r.create_uid[1] : "",

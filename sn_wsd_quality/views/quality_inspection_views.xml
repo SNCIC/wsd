@@ -249,6 +249,7 @@
                                     <field name="item_id" domain="[('active', '=', True)]"/>
                                     <field name="item_code" readonly="1"/>
                                     <field name="name" readonly="1"/>
+                                    <field name="instruction" optional="show"/>
                                     <field name="item_type"/>
                                     <field name="required"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
@@ -587,6 +588,10 @@
                 <field name="mes_order_id"/>
                 <field name="route_operation_id"/>
                 <field name="product_id"/>
+                <field name="sample_ids" string="SN" filter_domain="['|', '|',
+                    ('sample_ids.serial_identity_id.name', 'ilike', self),
+                    ('cell_ids.serial_identity_id.name', 'ilike', self),
+                    ('x_fai_serial_ids.name', 'ilike', self)]"/>
                 <filter name="open" string="Open" domain="[('state', 'in', ['open', 'in_progress'])]"/>
                 <filter name="failed" string="Failed" domain="[('result', 'in', ['fail', 'reject'])]"/>
                 <separator/>

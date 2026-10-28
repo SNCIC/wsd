@@ -27,10 +27,12 @@
                         <group>
                             <field name="quality_issue_count" readonly="1"/>
                             <field name="open_quality_issue_count" readonly="1"/>
+                            <field name="inspection_count" readonly="1"/>
                             <field name="freeze_count" readonly="1"/>
                             <field name="component_binding_count" readonly="1"/>
                             <field name="active_component_binding_count" readonly="1"/>
                             <button name="action_view_quality_issues" type="object" string="Open Quality Issues" class="btn-secondary"/>
+                            <button name="action_view_inspections" type="object" string="Open Inspections" class="btn-secondary"/>
                             <button name="action_open_freeze_records" type="object" string="Open Freeze Records" class="btn-secondary"/>
                         </group>
                     </group>
