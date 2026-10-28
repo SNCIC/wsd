@@ -112,6 +112,7 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="item_code"/>
                                         <field name="name"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type"/>
                                         <field name="required"/>
                                         <field name="lower_limit" invisible="item_type != 'numeric'"/>
@@ -187,6 +188,10 @@
                                 <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
                                     <field name="x_fai_current_sn" readonly="1"
                                            options="{'no_create': 1}"/>
+                                    <field name="x_fai_serial_ids" widget="many2many_tags"
+                                           readonly="1" options="{'no_create': 1}"/>
+                                    <field name="x_fai_arrived_serial_ids" widget="many2many_tags"
+                                           readonly="1" options="{'no_create': 1}"/>
                                 </group>
                                 <field name="cell_ids" nolabel="1" readonly="state == 'done'"
                                        domain="[('serial_identity_id', '=', x_fai_current_sn)]"
@@ -194,6 +199,7 @@
                                        create="false" delete="false">
                                     <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                         <field name="line_id" readonly="1" string="Inspection Item"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type" column_invisible="1"/>
                                         <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
                                         <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
@@ -214,6 +220,7 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="item_code"/>
                                         <field name="name"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type"/>
                                         <field name="required"/>
                                         <field name="lower_limit" invisible="item_type != 'numeric'"/>
@@ -252,6 +259,7 @@
                                     <list decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                         <field name="serial_identity_id" readonly="1" options="{'no_create': 1}"/>
                                         <field name="line_id" readonly="1"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type" column_invisible="1"/>
                                         <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
                                         <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
@@ -356,6 +364,10 @@
                                 <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
                                     <field name="x_fai_current_sn" readonly="1"
                                            options="{'no_create': 1}"/>
+                                    <field name="x_fai_serial_ids" widget="many2many_tags"
+                                           readonly="1" options="{'no_create': 1}"/>
+                                    <field name="x_fai_arrived_serial_ids" widget="many2many_tags"
+                                           readonly="1" options="{'no_create': 1}"/>
                                 </group>
                                 <field name="cell_ids" nolabel="1" readonly="state == 'done'"
                                        domain="[('serial_identity_id', '=', x_fai_current_sn)]"
@@ -363,6 +375,7 @@
                                        create="false" delete="false">
                                     <list editable="bottom" decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                         <field name="line_id" readonly="1" string="Inspection Item"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type" column_invisible="1"/>
                                         <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
                                         <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
@@ -383,6 +396,7 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="item_code"/>
                                         <field name="name"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type"/>
                                         <field name="required"/>
                                         <field name="lower_limit" invisible="item_type != 'numeric'"/>
@@ -421,6 +435,7 @@
                                     <list decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
                                         <field name="serial_identity_id" readonly="1" options="{'no_create': 1}"/>
                                         <field name="line_id" readonly="1"/>
+                                        <field name="instruction" optional="show"/>
                                         <field name="item_type" column_invisible="1"/>
                                         <field name="lower_limit" readonly="1" invisible="item_type != 'numeric'"/>
                                         <field name="upper_limit" readonly="1" invisible="item_type != 'numeric'"/>
