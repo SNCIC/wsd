@@ -1325,3 +1325,15 @@ msgstr "条"
 msgid "Defect Code (Raw)"
 msgstr "缺陷代码（原始）"
 
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/controllers/rest_api.py:0
+msgid "OK (concurrency conflict, retried %s times)"
+msgstr "OK（并发冲突，已重试 %s 次）"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/controllers/rest_api.py:0
+msgid "The station was updated by another scan at the same time (%(error)s); please scan the SN again."
+msgstr "本工位同时收到其他板的过站请求（%(error)s），重试后仍未成功，请重新扫描该 SN。"
+

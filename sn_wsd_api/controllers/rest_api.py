@@ -1,7 +1,10 @@
+import copy
 import logging
 import time
 
-from odoo import http
+from psycopg2 import errors as pg_errors
+
+from odoo import _, http
 from odoo.exceptions import ValidationError
 from odoo.http import request
 
@@ -14,6 +17,19 @@ from odoo.addons.sn_wsd_api.models.api_scan_pass import (
 
 _logger = logging.getLogger(__name__)
 
+# Every scan rewrites the shared counters of its operation and of the whole
+# manufacturing order, while a station device pushes several SNs in parallel.
+# Odoo cursors run in REPEATABLE READ, so the loser of such a write race gets
+# a SerializationFailure instead of waiting for the lock. The winner's
+# transaction is short (one station pass, a few hundred milliseconds), hence a
+# few short replays instead of answering 500 on the first collision.
+CONCURRENCY_RETRY_DELAYS = (0.10, 0.30, 0.60)  # seconds, before replay n+1
+CONCURRENCY_ERRORS = (
+    pg_errors.SerializationFailure,
+    pg_errors.DeadlockDetected,
+    pg_errors.LockNotAvailable,
+)
+
 
 class SnWsdDeviceApi(http.Controller):
     """Device-facing endpoints: plain JSON POST, no authentication. The
@@ -25,7 +41,11 @@ class SnWsdDeviceApi(http.Controller):
 
     def _logged_call(self, endpoint, service_method, payload,
                      success_message='OK'):
-        """Run one device call inside a full raw request/response log."""
+        """Run one device call inside a full raw request/response log.
+
+        A call that loses a concurrent-update race on the shared counters is
+        replayed on a fresh transaction: an attempt is only retried when it
+        rolled back in full, so the report is never applied twice."""
         start = time.time()
         base_vals = {
             'endpoint': endpoint,
@@ -57,38 +77,68 @@ class SnWsdDeviceApi(http.Controller):
             log_failure(code, message)
             return {'code': code, 'message': message, 'data': False}
 
-        try:
-            data = service_method(payload)
-            log({
-                'result_code': '200',
-                'result_message': 'OK',
-                'response': data,
-                'duration_ms': int((time.time() - start) * 1000),
-            })
-            request.env.cr.commit()
-            return {'code': 200, 'message': success_message, 'data': data}
-        except ApiBadRequest as error:
+        def reset_attempt():
+            # same recovery as odoo.service.model.retrying: a failed statement
+            # leaves the cursor and the ORM cache unusable for a replay
             request.env.cr.rollback()
-            return fail(400, str(error))
-        except ApiUnauthorized as error:
-            request.env.cr.rollback()
-            return fail(401, str(error))
-        except ApiForbidden as error:
-            request.env.cr.rollback()
-            return fail(403, str(error))
-        except ApiNotFound as error:
-            # graded with the other business rejections: a 404 would read
-            # as an unrouted request
-            request.env.cr.rollback()
-            return fail(422, str(error))
-        except ValidationError as error:
-            # ApiUnprocessable and ungraded business rejections
-            request.env.cr.rollback()
-            return fail(422, str(error))
-        except Exception as error:  # noqa: BLE001 - devices need a JSON body
-            request.env.cr.rollback()
-            _logger.exception('device api %s failed', endpoint)
-            return fail(500, str(error))
+            request.env.transaction.reset()
+            request.registry.reset_changes()
+
+        attempt = 0
+        while True:
+            attempt += 1
+            try:
+                # deep copy: a replay receives the payload exactly as uploaded
+                data = service_method(copy.deepcopy(payload))
+                log({
+                    'result_code': '200',
+                    'result_message': 'OK' if attempt == 1 else _(
+                        'OK (concurrency conflict, retried %s times)',
+                        attempt - 1),
+                    'response': data,
+                    'duration_ms': int((time.time() - start) * 1000),
+                })
+                request.env.cr.commit()
+                return {'code': 200, 'message': success_message, 'data': data}
+            except CONCURRENCY_ERRORS as error:
+                # the commit above is the last step of an attempt, so landing
+                # here always means the whole attempt rolled back untouched
+                reset_attempt()
+                if attempt > len(CONCURRENCY_RETRY_DELAYS):
+                    _logger.warning(
+                        'device api %s gave up after %s concurrent-update '
+                        'attempts: %s', endpoint, attempt, error)
+                    return fail(500, _(
+                        'The station was updated by another scan at the same '
+                        'time (%(error)s); please scan the SN again.',
+                        error=error))
+                _logger.info(
+                    'device api %s lost a concurrent-update race (%s), '
+                    'replaying %s/%s', endpoint, error, attempt,
+                    len(CONCURRENCY_RETRY_DELAYS) + 1)
+                time.sleep(CONCURRENCY_RETRY_DELAYS[attempt - 1])
+            except ApiBadRequest as error:
+                request.env.cr.rollback()
+                return fail(400, str(error))
+            except ApiUnauthorized as error:
+                request.env.cr.rollback()
+                return fail(401, str(error))
+            except ApiForbidden as error:
+                request.env.cr.rollback()
+                return fail(403, str(error))
+            except ApiNotFound as error:
+                # graded with the other business rejections: a 404 would read
+                # as an unrouted request
+                request.env.cr.rollback()
+                return fail(422, str(error))
+            except ValidationError as error:
+                # ApiUnprocessable and ungraded business rejections
+                request.env.cr.rollback()
+                return fail(422, str(error))
+            except Exception as error:  # noqa: BLE001 - devices need a JSON body
+                request.env.cr.rollback()
+                _logger.exception('device api %s failed', endpoint)
+                return fail(500, str(error))
 
     def _body_or_error(self):
         """Raw JSON object body, or a uniform 400 response."""
