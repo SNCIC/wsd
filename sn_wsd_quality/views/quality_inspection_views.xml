@@ -249,6 +249,7 @@
                                     <field name="item_id" domain="[('active', '=', True)]"/>
                                     <field name="item_code" readonly="1"/>
                                     <field name="name" readonly="1"/>
+                                    <field name="instruction" optional="show"/>
                                     <field name="item_type"/>
                                     <field name="required"/>
                                     <field name="lower_limit" invisible="item_type != 'numeric'"/>
