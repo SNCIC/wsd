@@ -29,25 +29,61 @@ export class SnWsdMergedCellsListRenderer extends ListRenderer {
     setup() {
         super.setup();
         this.flatRecordsCache = null;
-        const context = (this.env.searchModel && this.env.searchModel.context) || {};
-        this.mergedKeyField = context.sn_merged_cells_key || DEFAULT_MERGED_KEY_FIELD;
-        const fieldNames = context.sn_merged_cells_fields;
-        this.mergedFieldNames = Array.isArray(fieldNames)
-            ? fieldNames
-            : typeof fieldNames === "string"
-              ? fieldNames
-                    .split(",")
-                    .map((name) => name.trim())
-                    .filter(Boolean)
-              : DEFAULT_MERGED_FIELD_NAMES;
+        this.mergeConfigCache = null;
         onWillRender(() => {
             this.flatRecordsCache = null;
+            this.mergeConfigCache = null;
         });
+    }
+
+    /**
+     * The merge configuration is read on render, not in setup(): the search
+     * model is filled asynchronously (its action context is applied when the
+     * search view loads), so reading it in setup() can miss the context and
+     * silently fall back to the purchase request defaults, which never match
+     * any other list and leave every cell visible.
+     */
+    get mergeConfig() {
+        if (!this.mergeConfigCache) {
+            this.mergeConfigCache = this.readMergeConfig();
+        }
+        return this.mergeConfigCache;
+    }
+
+    readMergeConfig() {
+        const sources = [
+            this.env.searchModel && this.env.searchModel.context,
+            this.props.list && this.props.list.context,
+        ];
+        for (const source of sources) {
+            if (!source || !source.sn_merged_cells_key) {
+                continue;
+            }
+            const fieldNames = source.sn_merged_cells_fields;
+            return {
+                keyField: source.sn_merged_cells_key,
+                fieldNames: Array.isArray(fieldNames)
+                    ? fieldNames
+                    : typeof fieldNames === "string"
+                      ? fieldNames
+                            .split(",")
+                            .map((name) => name.trim())
+                            .filter(Boolean)
+                      : DEFAULT_MERGED_FIELD_NAMES,
+            };
+        }
+        return {
+            keyField: DEFAULT_MERGED_KEY_FIELD,
+            fieldNames: DEFAULT_MERGED_FIELD_NAMES,
+        };
     }
 
     getCellClass(column, record) {
         const classes = super.getCellClass(column, record);
-        if (!this.mergedFieldNames.includes(column.name) || this.isFirstLineOfDocument(record)) {
+        if (
+            !this.mergeConfig.fieldNames.includes(column.name) ||
+            this.isFirstLineOfDocument(record)
+        ) {
             return classes;
         }
         return `${classes} ${MERGED_CELL_CLASS}`;
@@ -74,11 +110,12 @@ export class SnWsdMergedCellsListRenderer extends ListRenderer {
         if (index <= 0) {
             return true;
         }
-        const document = this.cellValue(record, this.mergedKeyField);
+        const keyField = this.mergeConfig.keyField;
+        const document = this.cellValue(record, keyField);
         if (document === false || document === null || document === undefined) {
             return true;
         }
-        return this.cellValue(records[index - 1], this.mergedKeyField) !== document;
+        return this.cellValue(records[index - 1], keyField) !== document;
     }
 
     /**

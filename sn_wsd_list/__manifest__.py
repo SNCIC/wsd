@@ -2,7 +2,7 @@
 
 {
     'name': 'SN WSD List',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.1.2',
     'summary': 'Per-column filters and merged document cells on list views',
     'category': 'Hidden',
     'depends': ['web'],

@@ -48,6 +48,13 @@
 }
 
 .o_column_filter_popover {
+    // Every bootstrap popover is capped at --bs-popover-max-width (276px by
+    // default). The panel below is wider than that, so the popover body used
+    // to clip its right edge: the second date input and the apply button were
+    // cut off. The width is driven by the panel itself instead.
+    --bs-popover-max-width: none;
+    max-width: none;
+
     .popover-body {
         padding: 0;
     }
@@ -69,7 +76,10 @@
 .o_column_filter_panel {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 340px;
+    // Never wider than the viewport on small screens: the popover positioner
+    // takes care of keeping the panel inside the window.
+    max-width: calc(100vw - 1rem);
     font-size: 0.9rem;
 
     .o_column_filter_header {
@@ -144,6 +154,15 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem;
+
+        // Flex items default to min-width: auto, which keeps the native width
+        // of the date and datetime inputs: the range used to overflow the
+        // panel instead of sharing the available width.
+        input {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 0.25rem 0.4rem;
+        }
     }
 
     .o_column_filter_range_sep {
@@ -152,6 +171,7 @@
 
     .o_column_filter_quick {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.25rem;
         padding: 0 0.75rem 0.5rem;
     }
