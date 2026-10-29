@@ -227,15 +227,18 @@ class TestMesFai(TransactionCase):
 
     def test_22_arrival_and_ready_activity(self):
         order = self._order()
-        # 投入满 N 即铺格+齐套提醒（检验在首件工序阶段进行）
+        # 投入满 N 即铺格（检验在首件工序阶段进行），不再排齐套提醒活动
         s1 = self._feed(order, 'SN-FAI-201')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
+        self.assertEqual(len(inspection.cell_ids), 2,
+                         'the first sample spreads its cells at feed time')
+        s2 = self._feed(order, 'SN-FAI-202')
+        self.assertEqual(len(inspection.cell_ids), 4,
+                         'the second sample completes the matrix')
         self.assertFalse(
             inspection.activity_ids.filtered(
-                lambda a: a.summary == 'First article samples ready'))
-        s2 = self._feed(order, 'SN-FAI-202')
-        self.assertIn('First article samples ready',
-                      inspection.activity_ids.mapped('summary'))
+                lambda a: a.summary == 'First article samples ready'),
+            'no samples-ready activity is scheduled anymore')
         # 到检登记仍随首件工序出站 OK 累计
         order.leave_station(s1, 'ok')
         self.assertEqual(order.x_fai_sample_done, 1)

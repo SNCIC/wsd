@@ -230,16 +230,6 @@ class MesOrderFai(models.Model):
             # 投入即铺格：检验员在首件工序阶段（板仍在制）就开始检验，
             # 判定后才放行下道拉板——首件闸门卡在"投下道"这一扫
             inspection._fai_expand_result_cells()
-            if (len(inspection.x_fai_serial_ids) >= inspection.sample_size
-                    and inspection.state == 'open'):
-                inspection.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=self._fai_activity_user(inspection).id,
-                    summary=_('First article samples ready'),
-                    note=_('%(count)s sample(s) are fed on %(order)s; '
-                           'inspection can start.',
-                           count=inspection.sample_size, order=self.name),
-                )
 
     # ------------------------------------------------------------------
     # 出站登记：首件工序 OK→到位；NG/报废→剔除释放名额（维修回流不回补）
