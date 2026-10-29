@@ -196,9 +196,18 @@ class MesOrderStationServices(models.Model):
             # Cache the fields first -- leave_station unlinks the WIP row,
             # and stale record reads would raise MissingError.
             serial_rec = elsewhere.serial_identity_id
+            held = target.must_hold_for_fai(serial_rec, op_row)
             target.leave_station(serial_rec, 'ok')
-            # 首件到检随出站登记，板同次扫码进站——首件闸门只在投入口，
-            # 不拦下道接收（现场对下道只扫一遍）
+            # 首件保持：出站 OK 已把到位登记落库；检验未判定时下一工序
+            # 不得接板——板停在途，判定通过后再扫即接走（不得 raise 回滚
+            # 到位登记）
+            if held:
+                return {
+                    'action': 'entered',
+                    'order_id': target.id,
+                    'data': self.sn_station_floor_data(workcenter_id),
+                    'message': target.fai_hold_message(serial_rec, held),
+                }
             target.scan_enter(code, workcenter)
             if op_row.x_allow_exit:
                 return self._leave_action(code, target)
@@ -244,6 +253,10 @@ class MesOrderStationServices(models.Model):
                 raise ValidationError(_(
                     'SN %(sn)s already passed %(op)s of order %(order)s.',
                     sn=code, op=op_row.display_label, order=target.name))
+            # 首件保持：样本在途且首件未判定 → 下道工序不得接板
+            held = target.must_hold_for_fai(serial, op_row)
+            if held:
+                raise ValidationError(target.fai_hold_message(serial, held))
             # transit pickup: the upstream op is already OK in the history
             target.scan_enter(code, workcenter)
             if op_row.x_allow_exit:
