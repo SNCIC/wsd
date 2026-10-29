@@ -193,6 +193,21 @@
                                     <field name="x_fai_arrived_serial_ids" widget="many2many_tags"
                                            readonly="1" options="{'no_create': 1}"/>
                                 </group>
+                                <!-- 过站：检验项清单建单即见（作业指导随行，只读），
+                                     逐板结果仍打在下方当前板的格上 -->
+                                <field name="line_ids" nolabel="1" readonly="1"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                    <list create="false" edit="false" delete="false"
+                                          decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="item_code"/>
+                                        <field name="name"/>
+                                        <field name="instruction" optional="show"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="required"/>
+                                        <field name="result"/>
+                                    </list>
+                                </field>
                                 <field name="cell_ids" nolabel="1" readonly="state == 'done'"
                                        domain="[('serial_identity_id', '=', x_fai_current_sn)]"
                                        invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'"
@@ -369,6 +384,21 @@
                                     <field name="x_fai_arrived_serial_ids" widget="many2many_tags"
                                            readonly="1" options="{'no_create': 1}"/>
                                 </group>
+                                <!-- 过站：检验项清单建单即见（作业指导随行，只读），
+                                     逐板结果仍打在下方当前板的格上 -->
+                                <field name="line_ids" nolabel="1" readonly="1"
+                                       invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                    <list create="false" edit="false" delete="false"
+                                          decoration-danger="result == 'fail'" decoration-success="result == 'pass'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="item_code"/>
+                                        <field name="name"/>
+                                        <field name="instruction" optional="show"/>
+                                        <field name="item_type" column_invisible="1"/>
+                                        <field name="required"/>
+                                        <field name="result"/>
+                                    </list>
+                                </field>
                                 <field name="cell_ids" nolabel="1" readonly="state == 'done'"
                                        domain="[('serial_identity_id', '=', x_fai_current_sn)]"
                                        invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'"
