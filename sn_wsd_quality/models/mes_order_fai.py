@@ -195,6 +195,16 @@ class MesOrderFai(models.Model):
             return inspection
         return self.env['sn.wsd.quality.inspection']
 
+    def _pass_scan_blocked(self, serial_identity, route_operation):
+        """First-article hold, checked by the one-scan kernel on EVERY scan
+        of a sample board (any channel, any WIP state): the successor of an
+        unjudged first-article operation refuses the board outright."""
+        self.ensure_one()
+        inspection = self.must_hold_for_fai(serial_identity, route_operation)
+        if inspection:
+            return self.fai_hold_message(serial_identity, inspection)
+        return super()._pass_scan_blocked(serial_identity, route_operation)
+
     def fai_hold_message(self, serial_identity, inspection):
         self.ensure_one()
         return _(

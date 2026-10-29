@@ -835,17 +835,18 @@ class TestMesOrder(TransactionCase):
         data = Station.sn_station_floor_data(wc_in.id)
         self.assertEqual([o['name'] for o in data['orders']], [order_a.name])
         # order barcode switches nothing here (B is another line, not listed)
-        # feed a new SN through the scan router
+        # feed a new SN through the scan router: the scan enters the station
+        # and hands back the leave action for the station's own verdict
         result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001', order_a.id)
-        self.assertEqual(result['action'], 'entered')
+        self.assertEqual(result['action'], 'leave')
         self.assertEqual(order_a.x_input_qty, 1.0)
-        # scanning that WIP SN returns the leave action
+        # scanning that WIP SN returns the leave action again
         result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001')
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
-        # 一扫内核：未知 SN 自动解析工位的在线单并投入（无在线单才拒绝）
+        # 一站一扫：未知 SN 自动解析工位的在线单并投入（无在线单才拒绝）
         result = Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
-        self.assertEqual(result['action'], 'entered')
+        self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
         # scanning the order barcode switches the current order
         result = Station.sn_station_scan(wc_in.id, order_a.name)

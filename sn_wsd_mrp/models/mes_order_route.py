@@ -593,11 +593,13 @@ class MesOrderRouteOperation(models.Model):
 
 
 class SerialOperationHistory(models.Model):
-    """Two-phase record of an SN passing an operation of this MES order.
+    """Record of an SN passing an operation of this MES order.
 
     The row is born at the station scan (enter_station writes it together
-    with the WIP row) with result='in_progress' and an empty out_date;
-    leave_station backfills the verdict (result/out_date/operator_code).
+    with the WIP row). A one-scan station pass (pass_one_station) backfills
+    the verdict in the same transaction; the terminal's two-step
+    OK/NG/scrap flow leaves the in_progress row until the operator decides,
+    and the NG-pending state keeps it open until the defect code scan.
     Every completed pass (OK or NG) consumes one of the operation's
     pass-limit attempts; multiple OK rows per (SN, operation) are
     legitimate (test-station retests, rework revisits). The old
@@ -657,6 +659,20 @@ class SerialOperationHistory(models.Model):
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
+
+    def _auto_init(self):
+        """Composite index for the "current operation per SN" projection
+        (``WHERE mes_order_id = %s GROUP BY serial_identity_id, max(id)``,
+        read by the station terminal and the batch-pass candidate list).
+        Created on install as well as on upgrade; migration 19.0.14.11.0
+        runs the same statement for existing databases."""
+        res = super()._auto_init()
+        self.env.cr.execute("""
+            CREATE INDEX IF NOT EXISTS sn_wsd_serial_op_history_order_serial_idx
+            ON sn_wsd_serial_operation_history
+               (mes_order_id, serial_identity_id, id)
+        """)
+        return res
 
     @api.depends('in_date', 'out_date')
     def _compute_x_dwell_hours(self):

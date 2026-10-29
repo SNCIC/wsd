@@ -41,8 +41,15 @@ class TestProcessSection(TransactionCase):
 
     def test_create_section_usable_on_operation(self):
         # spec: process-section/spec/工段清单维护（页面可创建）/页面新建工段
+        # a code suffix keeps the test green on databases where 'aging' was
+        # already created from the maintainable list page
+        code = 'aging-test'
+        suffix = 1
+        while self._section(code):
+            suffix += 1
+            code = 'aging-test-%s' % suffix
         section = self.env['sn.wsd.process.section'].create({
-            'name': 'Aging', 'code': 'aging', 'sequence': 65,
+            'name': 'Aging', 'code': code, 'sequence': 65,
             'company_id': self.company.id,
         })
         op = self._operation('PS-NEW', section)

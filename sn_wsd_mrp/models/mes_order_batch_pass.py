@@ -1,13 +1,13 @@
 """Batch station pass (批量过站 / 行政过站) service layer.
 
 A deliberate, logged bypass of ONE mid-route operation for a batch of
-SNs already in progress on a station-mode MES order: boards keep flowing
-when an operation temporarily cannot (or need not) process them. The
-pass reuses the one-scan kernel semantics -- a board parked at the
-target operation completes it, a board parked upstream is pulled through
-(arrival pull) -- so every existing gate (freeze, pass-count, FAI/OQC)
-still fires. The whole batch is one transaction: any failure rolls the
-entire batch back and names the offending SN."""
+SNs whose previous operation is already OK: boards keep flowing when an
+operation temporarily cannot (or need not) process them. The pass
+records the target operation's own row (strict one-scan-per-station:
+the administrative OK replaces that single scan, it never bridges
+several operations), so every existing gate (freeze, pass-count,
+FAI/OQC) still fires. The whole batch is one transaction: any failure
+rolls the entire batch back and names the offending SN."""
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -67,19 +67,32 @@ class MesOrderBatchPass(models.Model):
         """Why this SN cannot be batch-passed right now, or False when it
         can. Mirrors the same conditions the execution gates enforce (the
         execution stays the final authority); sn_wsd_repair extends it
-        with the quality-freeze check."""
+        with the quality-freeze check.
+
+        Strict one-scan-per-station: a board can only be batch-passed
+        through the operation right after the one it currently sits at --
+        the administrative OK replaces that single scan, it never bridges
+        several operations."""
         self.ensure_one()
-        Wip = self.env['sn.wsd.serial.wip']
-        wip = Wip.search([
-            ('serial_identity_id', '=', serial_identity.id),
-            ('mes_order_id', '=', self.id),
-        ], limit=1)
-        if not wip:
-            return _('not in progress on this order')
-        if wip.route_operation_id != route_operation and \
-                route_operation not in self._batch_pass_downstream_ops(
-                    wip.route_operation_id):
-            return _('parked at or past the target operation')
+        current = self.serial_current_route_operations(
+            [serial_identity.id]).get(serial_identity.id)
+        if not current:
+            return _('not fed into this order')
+        current_op = current.route_operation_id
+        if current_op == route_operation:
+            return _(
+                'already at %(op)s', op=route_operation.display_label)
+        if route_operation not in self._station_successors(current_op):
+            return _(
+                'not the next operation after %(op)s',
+                op=current_op.display_label)
+        if current.result == 'in_progress':
+            return _(
+                'decision pending at %(op)s', op=current_op.display_label)
+        if current.result != 'ok':
+            return _(
+                'last pass at %(op)s was %(result)s',
+                op=current_op.display_label, result=current.result)
         History = self.env['sn.wsd.serial.operation.history']
         passes = History.search_count([
             ('serial_identity_id', '=', serial_identity.id),
@@ -150,45 +163,22 @@ class MesOrderBatchPass(models.Model):
         }
 
     def _batch_pass_one(self, serial_identity, route_operation):
-        """Route one SN through the batch pass, one-scan-kernel style:
-        a board parked at the target completes it; a board parked
-        upstream is pulled forward (its parked operation completes OK,
-        then it enters the target). The OK verdict on the target row is
-        stamped with the batch log marker via context; the pulled
-        upstream row stays unmarked (its work was real). Afterwards the
-        board parks at the successor, exactly like a physical scan."""
+        """Route one SN through the batch pass: the administrative OK
+        replaces the ONE scan of the target operation (strict
+        one-scan-per-station). The board must sit at the operation right
+        before the target; the OK verdict is stamped with the batch log
+        marker via context. Nothing is parked at the successor and no
+        upstream operation is pulled -- the board simply becomes the
+        target's latest pass."""
         self.ensure_one()
-        Wip = self.env['sn.wsd.serial.wip']
-        wip = Wip.search([
-            ('serial_identity_id', '=', serial_identity.id),
-            ('mes_order_id', '=', self.id),
-        ], limit=1)
-        if not wip:
+        block = self._batch_pass_block_reason(serial_identity, route_operation)
+        if block:
             raise ValidationError(_(
-                'SN %(sn)s is not in progress on MES order %(order)s.',
-                sn=serial_identity.name, order=self.name))
-        if wip.route_operation_id != route_operation:
-            if route_operation not in self._batch_pass_downstream_ops(
-                    wip.route_operation_id):
-                raise ValidationError(_(
-                    'SN %(sn)s is parked at %(parked)s, which is not '
-                    'upstream of %(op)s.',
-                    sn=serial_identity.name,
-                    parked=wip.route_operation_id.display_label,
-                    op=route_operation.display_label))
-            # arrival pull: the parked operation hands the board over
-            self.leave_station(serial_identity, 'ok')
-            self.enter_station(serial_identity, route_operation)
-        # target verdict -- marked by _prepare_leave_history_vals via
-        # the context keys set in action_batch_pass_station
+                'SN %(sn)s cannot be batch-passed through %(op)s: %(reason)s',
+                sn=serial_identity.name,
+                op=route_operation.display_label, reason=block))
+        self.enter_station(serial_identity, route_operation)
         self.leave_station(serial_identity, 'ok')
-        # 同设备内核口径（fork-parking）：仅线性唯一后继自动停放；分叉
-        # 不停放，板留在途由实际接板的分支工位首扫接板
-        successors = self._station_successors(route_operation)
-        if len(successors) == 1:
-            self.enter_station(
-                serial_identity, successors,
-                workcenter=successors.workcenter_id)
 
     # ------------------------------------------------------------------
     # history row marker (consumes the context keys above)

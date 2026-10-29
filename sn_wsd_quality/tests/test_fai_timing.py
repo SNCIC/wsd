@@ -74,6 +74,11 @@ class TestFaiTiming(TransactionCase):
             'x_production_line_id': cls.line.id,
             'x_operation_id': cls.op_in.id,
         })
+        cls.wc_out = cls.env['mrp.workcenter'].create({
+            'name': 'WC-FAIT-OUT', 'x_workshop_id': cls.workshop.id,
+            'x_production_line_id': cls.line.id,
+            'x_operation_id': cls.op_out.id,
+        })
         # FAI scheme: first-article operation = op_in (the feeding station),
         # sample size 2, one text item
         cls.scheme = cls.env['sn.wsd.quality.inspection.scheme'].create({
@@ -222,3 +227,28 @@ class TestFaiTiming(TransactionCase):
         self.assertEqual(order.x_fai_state, 'none')
         self.assertFalse(order.x_fai_inspection_ids)
         self.assertEqual(order.x_fai_round, 0)
+
+    # ---------------- the verdict holds every channel's scan ----------------
+    def test_16_fai_hold_on_the_kernel_scan(self):
+        # 首件判定前，样本板在首件工序后继的任何扫码（设备/终端共用内核）
+        # 都必须被拦住；首件工序自身的复测不受影响；判定通过后放行
+        order = self._order()
+        s1 = self._feed(order, 'SN-FAIT-1601')
+        order.leave_station(s1, 'ok')  # 首件工序合格离开，板等后继
+        with self.assertRaises(ValidationError) as ctx:
+            order.pass_one_station(s1, self.wc_out, 'ok')
+        self.assertIn('First article confirmation is in progress',
+                      str(ctx.exception))
+        # 首件工序本身不在闸门范围（复测照常）
+        order.pass_one_station(s1, self.wc_in, 'ok')
+        # 样本齐 + 判定通过后，后继接受该板
+        s2 = self._feed(order, 'SN-FAIT-1602')
+        order.leave_station(s2, 'ok')
+        inspection = order.x_fai_inspection_id
+        inspection.action_set_all_pass()
+        inspection.action_done()
+        order.pass_one_station(s1, self.wc_out, 'ok')
+        row = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id', '=', s1.id),
+            ('route_operation_id.operation_id', '=', self.op_out.id)])
+        self.assertEqual(row.result, 'ok')

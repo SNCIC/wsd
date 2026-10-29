@@ -261,84 +261,30 @@ class SnWsdApiService(models.AbstractModel):
     # station kernel orchestration (one report = one station pass)
     # ------------------------------------------------------------------
     def _pass_station(self, identity, workcenter, result, defect, employee):
-        """Route one identity through the one-scan station kernel, shared
-        with the terminal/PDA channels.
+        """One device report = one station pass on the reporting work center.
 
-        A device report at X means X finished this board: an SN parked at
-        another operation is pulled forward (that operation completes OK,
-        the board enters X), then X's own result is written. An OK at a
-        non-end operation auto-parks the board at the next station when the
-        route is linear; a fork leaves it in transit for the branch
-        station's own scan. The reporting work center is stamped on the
-        pass row at leave, so a board auto-parked here (route work center
-        unknown) still records the machine that really tested it."""
-        Wip = self.env['sn.wsd.serial.wip']
+        Strict one-scan-per-station: the reporting station records its own
+        verdict; nothing is parked at the successor and nothing is pulled
+        from an earlier station. The order comes from the SN's latest pass
+        record (the device contract carries no work order), a brand-new SN
+        binds to the live order running through the work center."""
         operator_code = (
             employee.barcode
             or (employee.user_id.login if employee.user_id else False))
-        wip = Wip.search([('serial_identity_id', '=', identity.id)], limit=1)
+        wip = self.env['sn.wsd.serial.wip'].search(
+            [('serial_identity_id', '=', identity.id)], limit=1)
         if wip:
             mes_order = wip.mes_order_id
-            route_op = wip.route_operation_id
-            if route_op.operation_id != workcenter.x_operation_id:
-                target_op = mes_order.x_mes_route_id.operation_ids.filtered(
-                    lambda r: r.operation_id == workcenter.x_operation_id)[:1]
-                if target_op and route_op in mes_order._station_successors(
-                        target_op):
-                    # 复测回流（B-1，2026-10-27）：设备在 X 重报、板恰好停在
-                    # X 的直接后继（中间无任何已判定工序）= 板被拿回 X 复测
-                    # ——OK 不封口、次数拦下一次进站（concepts: 过站次数）。
-                    # 撤销那条纯预判的停放在制行，板回 X 按上限正常进站；
-                    # 绝不给下游工序凭空记 OK（原到站拉进在这里会把结束工
-                    # 序伪判成产出、再被 finished 闸拒绝回滚）。
-                    self.env['sn.wsd.serial.operation.history'].sudo().search([
-                        ('serial_identity_id', '=', identity.id),
-                        ('mes_order_id', '=', mes_order.id),
-                        ('route_operation_id', '=', route_op.id),
-                        ('result', '=', 'in_progress'),
-                    ]).unlink()
-                    wip.sudo().unlink()
-                    mes_order.scan_enter(identity.name, workcenter)
-                else:
-                    # First-article gate: the sample board stays parked at
-                    # the first-article operation until the round verdict;
-                    # the pull (leave + enter) is refused in one piece.
-                    held = mes_order.must_hold_for_fai(identity, target_op)
-                    if held:
-                        raise ValidationError(
-                            mes_order.fai_hold_message(identity, held))
-                    # arrival pull: the parked operation hands the board over
-                    mes_order.leave_station(identity, 'ok',
-                                            operator_code=operator_code)
-                    mes_order.scan_enter(identity.name, workcenter)
-                route_op = target_op
-            finished = mes_order.leave_station(
-                identity, result, ng_defect=defect,
-                operator_code=operator_code, workcenter=workcenter)
-            if result != RESULT_FAIL and not finished:
-                self._park_at_successor(mes_order, route_op, identity)
-            return finished, mes_order
-        mes_order = self._find_live_order(workcenter)
-        mes_order.scan_enter(identity.name, workcenter)
-        route_op = mes_order.x_mes_route_id.operation_ids.filtered(
-            lambda r: r.operation_id == workcenter.x_operation_id)[:1]
-        finished = mes_order.leave_station(
-            identity, result, ng_defect=defect,
-            operator_code=operator_code, workcenter=workcenter)
-        if result != RESULT_FAIL and not finished:
-            self._park_at_successor(mes_order, route_op, identity)
+        else:
+            history = self.env['sn.wsd.serial.operation.history'].search([
+                ('serial_identity_id', '=', identity.id),
+                ('mes_order_id.state', 'not in', ('cancelled', 'done')),
+            ], order='id desc', limit=1)
+            mes_order = history.mes_order_id or self._find_live_order(workcenter)
+        finished = mes_order.pass_one_station(
+            identity, workcenter, result, ng_defect=defect,
+            operator_code=operator_code)
         return finished, mes_order
-
-    def _park_at_successor(self, mes_order, route_op, identity):
-        """After an OK at a non-end operation, park the board at the next
-        station only when the route is linear; forks stay in transit (the
-        branch station's own scan picks the board up). Parking at one
-        branch of a fork would fabricate a pass there once another branch
-        scans the board."""
-        successors = mes_order._station_successors(route_op)
-        if len(successors) == 1:
-            mes_order.enter_station(
-                identity, successors, workcenter=successors.workcenter_id)
 
     # ------------------------------------------------------------------
     # craft documents / components / nameplate / tooling / packing
@@ -453,6 +399,25 @@ class SnWsdApiService(models.AbstractModel):
         # dictionary, live order and station kernel all resolve in company.
         self = self.with_company(
             self._resolve_company(payload.get('M_DATA_AUTH')))
+        # idempotency gate BEFORE the station pass: a device resend carrying
+        # the same event id must not pass the station twice (and must never
+        # be mistaken for a retest, which would spend a pass-count slot)
+        external_event_id = (
+            payload.get('external_event_id') or payload.get('event_id') or ''
+        ).strip()
+        if external_event_id:
+            existing = self.env['sn.wsd.mes.test.result'].search([
+                ('external_event_id', '=', external_event_id),
+                ('company_id', '=', self.env.company.id),
+            ], limit=1)
+            if existing:
+                return {
+                    'ok': True,
+                    'sn': existing.serial_identity_id.name,
+                    'panel_qty': 1,
+                    'finished': False,
+                    'test_result_id': existing.id,
+                }
         employee = self._resolve_employee(payload.get('M_EMP'))
         workcenter = self._resolve_workcenter(payload.get('M_WORK_STATIONSN'))
         result = self._normalize_result(payload.get('M_TEST_RESULT'))

@@ -13,6 +13,15 @@ def _column_exists(cr, table_name, column_name):
     return cr.fetchone()[0]
 
 
+def _column_type(cr, table_name, column_name):
+    cr.execute(
+        "SELECT data_type FROM information_schema.columns "
+        "WHERE table_name = %s AND column_name = %s",
+        (table_name, column_name))
+    row = cr.fetchone()
+    return row[0] if row else None
+
+
 def migrate(cr, version):
     """Prepare the selection->many2one swap of x_process_section.
 
@@ -20,9 +29,12 @@ def migrate(cr, version):
     legacy keys like 'smt' would abort that cast, and the required stat
     column cannot hold NULLs. So: stash, blank the operation column, and
     move the stat rows aside entirely (post-migrate recreates them).
-    """
+
+    A database whose column is already integer was migrated before (the
+    stored values are section ids, not legacy keys) -- nothing to stash,
+    the post-migrate step then no-ops."""
     if _table_exists(cr, 'sn_wsd_operation') and \
-            _column_exists(cr, 'sn_wsd_operation', 'x_process_section'):
+            _column_type(cr, 'sn_wsd_operation', 'x_process_section') == 'character varying':
         cr.execute("""
             CREATE TABLE tmp_ps_migration_operation AS
             SELECT id, x_process_section
@@ -34,7 +46,7 @@ def migrate(cr, version):
             'UPDATE sn_wsd_operation SET x_process_section = NULL '
             'WHERE x_process_section IS NOT NULL')
     if _table_exists(cr, 'sn_wsd_route_section_stat') and \
-            _column_exists(cr, 'sn_wsd_route_section_stat', 'x_process_section'):
+            _column_type(cr, 'sn_wsd_route_section_stat', 'x_process_section') == 'character varying':
         cr.execute(
             'CREATE TABLE tmp_ps_migration_stat AS '
             'SELECT * FROM sn_wsd_route_section_stat')
