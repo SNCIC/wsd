@@ -107,3 +107,18 @@ class TestReportSource(PieceRateTestCommon):
             self.order, self.op_a, 1.0)
         with self.assertRaises(ValidationError):
             station_settlement._validate_source()
+
+    def test_onchange_report_backfills_source(self):
+        """报工行表单 o2m 加行：onchange 只带反向字段（报工行）也要能
+        回填订单/工序并解析单价（回归 2026-10-29，此前报
+        product False on operation False）。"""
+        self._rate()
+        report = self._make_report(self.order, self.op_a, 300.0)
+        settlement = self.env['sn.wsd.piece.settlement'].new({
+            'operation_report_id': report.id,
+        })
+        settlement._onchange_operation_report_id_source()
+        self.assertEqual(settlement.mes_order_id, report.mes_order_id)
+        self.assertEqual(settlement.route_operation_id, report.route_operation_id)
+        self.assertEqual(settlement.qty_ok, 300.0)
+        self.assertAlmostEqual(settlement.price, 0.3)

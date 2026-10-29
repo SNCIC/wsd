@@ -295,6 +295,14 @@ class SnWsdPieceSettlement(models.Model):
     def _onchange_operation_report_id_source(self):
         if self.operation_report_id:
             report = self.operation_report_id
+            # the report-form o2m "Add a line" instantiates the settlement
+            # with ONLY the inverse operation_report_id set: backfill the
+            # order/operation from the report before resolving the rate,
+            # otherwise the lookup keys are False and resolve hard-blocks
+            if not self.mes_order_id:
+                self.mes_order_id = report.mes_order_id
+            if not self.route_operation_id:
+                self.route_operation_id = report.route_operation_id
             self.qty_ok = report.qty_ok
             if report.reported_at:
                 self.date = report.reported_at.date()
