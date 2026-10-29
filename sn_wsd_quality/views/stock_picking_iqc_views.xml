@@ -12,6 +12,15 @@
                         class="oe_highlight"
                         invisible="not x_is_iqc_control_picking or state in ('done', 'cancel')"
                         groups="stock.group_stock_user"/>
+                <!-- The inspection request travels with the goods from the
+                     receipt to the quality area: printed on the receipt of a
+                     three-step reception, before it is validated. -->
+                <button name="%(action_report_inspection_request)d"
+                        type="action"
+                        string="Print Inspection Request"
+                        class="btn-secondary"
+                        invisible="not sn_is_reception_receipt or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_open_iqc_inspections"
@@ -46,6 +55,14 @@
             <xpath expr="//sheet" position="inside">
                 <field name="x_iqc_inspection_count" invisible="1"/>
                 <field name="x_is_iqc_control_picking" invisible="1"/>
+                <field name="sn_is_reception_receipt" invisible="1"/>
+            </xpath>
+            <!-- Reviewer printed on the inspection request of the receipt: it
+                 stays editable until the receipt is validated. -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_inspection_request_reviewer_id"
+                       invisible="not sn_is_reception_receipt"
+                       readonly="state in ('done', 'cancel')"/>
             </xpath>
         </field>
     </record>

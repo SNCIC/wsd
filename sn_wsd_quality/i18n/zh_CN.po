@@ -4081,3 +4081,131 @@ msgstr "首件确认单"
 #: model:ir.actions.report,name:sn_wsd_quality.action_report_fai_inspection
 msgid "First Article Confirmation Sheet"
 msgstr "首件确认单"
+
+#. module: sn_wsd_quality
+#: model:ir.actions.report,name:sn_wsd_quality.action_report_inspection_request
+msgid "Inspection Request"
+msgstr "送检单"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Inspection Request Sheet"
+msgstr "送检单"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_stock_picking_form_iqc
+msgid "Print Inspection Request"
+msgstr "打印送检单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_picking__sn_is_reception_receipt
+msgid "Reception Receipt"
+msgstr "收货单"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_stock_picking__sn_is_reception_receipt
+msgid ""
+"Receipt of a three-step reception: the operation the inspection request is "
+"printed on."
+msgstr "三步收货的收货作业：打印送检单的作业。"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_stock_picking__sn_inspection_request_reviewer_id
+msgid "Inspection Request Reviewer"
+msgstr "审核人"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_stock_picking__sn_inspection_request_reviewer_id
+msgid ""
+"Person who reviews the inspection request printed on the receipt."
+msgstr "审核收货单上打印的送检单的人员。"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Supplier:"
+msgstr "供应商："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Business Date:"
+msgstr "业务日期："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Document No.:"
+msgstr "单据编号："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Weight"
+msgstr "重量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Batch No."
+msgstr "批号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Qty Received"
+msgstr "收货数量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Receiving Warehouse"
+msgstr "收货仓库"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Purchase Order"
+msgstr "采购订单号"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Warehouse Keeper:"
+msgstr "仓管签字："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "QC Inspector:"
+msgstr "质检签字："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "WAIVED"
+msgstr "免检"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Prepared by:"
+msgstr "制单："
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
+msgid "Reviewed by:"
+msgstr "审核："
