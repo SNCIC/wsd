@@ -103,3 +103,29 @@ msgstr "确认订单时，把订单行上修改过的单价与折扣写回该订
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_summary_detail_list
 msgid "Summary Details"
 msgstr "汇总明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__supplier_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier of the purchase order this request line was ordered on; empty until a purchase order is placed."
+msgstr "该请购明细所下采购订单的供应商；未下采购订单时为空。"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Requests for Quotation"
+msgstr "询价单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Cancelled"
+msgstr "已取消"
