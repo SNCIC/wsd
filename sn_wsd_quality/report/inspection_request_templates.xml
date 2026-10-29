@@ -3,10 +3,14 @@
     <template id="report_inspection_request">
         <t t-call="web.html_container">
             <!-- Page count of the continuous form (241 x 279.4 mm, three
-                 parts): the number sits in the top right corner of the sheet,
+                 parts): the number sits in the footer, centred on the sheet,
                  outside the body of the document. -->
-            <div class="header">
-                <div class="text-end sn-inspection-request-page">
+            <div class="footer">
+                <!-- The footer is rendered on its own by wkhtmltopdf: it does
+                     not inherit the styles of the sheet, so the font is set
+                     inline. -->
+                <div class="text-center"
+                     style="font-family: SimSun, serif; font-size: 8px;">
                     <span class="page"/> / <span class="topage"/>
                 </div>
             </div>
@@ -39,10 +43,10 @@
                     }
                     .sn-inspection-request .title {
                         text-align: center;
-                        font-size: 15px;
+                        font-size: 20px;
                         font-weight: 700;
-                        letter-spacing: 2px;
-                        margin: 0 0 2px;
+                        letter-spacing: 3px;
+                        margin: 0 0 3px;
                     }
                     /* The company name and the sheet name share the title
                        line: block elements carry the translatable terms, the
@@ -67,6 +71,25 @@
                         font-weight: 400;
                     }
                     .sn-inspection-request .center { text-align: center; }
+                    /* Only the item table carries rules: the supplier band
+                       and the signature band sit on the sheet without
+                       borders. The report assets add their own cell rules, so
+                       the border is switched off on every level of those two
+                       tables. */
+                    .sn-inspection-request table.meta,
+                    .sn-inspection-request table.meta thead,
+                    .sn-inspection-request table.meta tbody,
+                    .sn-inspection-request table.meta tr,
+                    .sn-inspection-request table.meta td,
+                    .sn-inspection-request table.meta th,
+                    .sn-inspection-request table.signatures,
+                    .sn-inspection-request table.signatures thead,
+                    .sn-inspection-request table.signatures tbody,
+                    .sn-inspection-request table.signatures tr,
+                    .sn-inspection-request table.signatures td,
+                    .sn-inspection-request table.signatures th {
+                        border: 0 none !important;
+                    }
                     .sn-inspection-request table.signatures td {
                         padding: 5px 2px 0;
                         font-size: 9px;
@@ -77,10 +100,6 @@
                         padding: 0 5px;
                         font-size: 11px;
                         letter-spacing: 1px;
-                    }
-                    .sn-inspection-request-page {
-                        font-family: SimSun, serif;
-                        font-size: 8px;
                     }
                 </style>
 
