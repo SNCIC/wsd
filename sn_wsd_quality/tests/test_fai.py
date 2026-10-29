@@ -227,18 +227,20 @@ class TestMesFai(TransactionCase):
 
     def test_22_arrival_and_ready_activity(self):
         order = self._order()
+        # 投入满 N 即铺格+齐套提醒（检验在首件工序阶段进行）
         s1 = self._feed(order, 'SN-FAI-201')
-        s2 = self._feed(order, 'SN-FAI-202')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
-        order.leave_station(s1, 'ok')
-        self.assertEqual(order.x_fai_sample_done, 1)
         self.assertFalse(
             inspection.activity_ids.filtered(
                 lambda a: a.summary == 'First article samples ready'))
-        order.leave_station(s2, 'ok')
-        self.assertEqual(order.x_fai_sample_done, 2)
+        s2 = self._feed(order, 'SN-FAI-202')
         self.assertIn('First article samples ready',
                       inspection.activity_ids.mapped('summary'))
+        # 到检登记仍随首件工序出站 OK 累计
+        order.leave_station(s1, 'ok')
+        self.assertEqual(order.x_fai_sample_done, 1)
+        order.leave_station(s2, 'ok')
+        self.assertEqual(order.x_fai_sample_done, 2)
 
     # ---------------- R3+R4 判定联动 ----------------
     def test_30_pass_unlocks_feeding(self):
@@ -284,19 +286,15 @@ class TestMesFai(TransactionCase):
 
     def test_32_done_guards(self):
         order = self._order()
-        # 样本未齐（只到位 1/2）：到检即展开，两个守卫依次验证
-        s1 = self._feed(order, 'SN-FAI-501')
-        order.leave_station(s1, 'ok')
+        # 样本未投满（1/2）：铺格+判定都可用，但 done 被样本数守卫拦
+        self._feed(order, 'SN-FAI-501')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
-        with self.assertRaises(UserError):
-            inspection.action_done()
         inspection.action_set_all_pass()
         with self.assertRaises(UserError):
-            inspection.action_done()  # 项目已全过，到位 1 < 2 拦
-        s2 = self._feed(order, 'SN-FAI-502')
-        order.leave_station(s2, 'ok')
-        inspection.action_set_all_pass()  # 齐套已展开矩阵，逐格置 pass
-        inspection.action_done()  # 齐套+全过 → 通过
+            inspection.action_done()  # fed 1 < 2 拦
+        self._feed(order, 'SN-FAI-502')
+        inspection.action_set_all_pass()  # 第二台铺格后逐格置 pass
+        inspection.action_done()  # 样本齐+全过 → 通过
         self.assertEqual(inspection.result, 'pass')
 
     def test_33_gate_passes_without_fai(self):

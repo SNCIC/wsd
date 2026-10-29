@@ -1173,8 +1173,9 @@ class QualityInspection(models.Model):
                     })
 
     def _fai_expand_result_cells(self):
-        # 到检逐台展开矩阵：每个已到检 SN × 每个检验项补缺失的结果格（幂等）。
-        # FAI/OQC 共用（决策 4/5）：OQC 到检走同一条展开链
+        # 投入逐台展开矩阵：每个样本 SN × 每个检验项补缺失的结果格（幂等）。
+        # 检验在首件工序阶段进行（板在制时即可检），判定放行后下道才拉板；
+        # FAI/OQC 共用（决策 4/5）：OQC 走同一条展开链
         Cell = self.env['sn.wsd.quality.inspection.cell']
         for inspection in self:
             if inspection.inspection_type not in ('fai', 'oqc'):
@@ -1192,7 +1193,7 @@ class QualityInspection(models.Model):
                     'serial_identity_id': serial.id,
                     'line_id': line.id,
                 }
-                for serial in inspection.x_fai_arrived_serial_ids
+                for serial in inspection.x_fai_serial_ids
                 for line in inspection.line_ids
                 if (serial.id, line.id) not in existing
             ]

@@ -171,14 +171,11 @@ class MesOrderFai(models.Model):
         return res
 
     def must_hold_for_fai(self, serial_identity, next_route_operation):
-        """First-article hold: a sample board that has (just) completed the
-        first-article operation must wait for the round verdict -- the
-        operation directly downstream of the first-article operation may
-        not take it over yet. Returns the open inspection when the hold
-        applies, else an empty recordset. The one-scan kernel calls this
-        BEFORE parking a board downstream so the arrival registration
-        (the first-article OK written by the same pull) is not rolled back.
-        """
+        """First-article hold: a sample board may not be pulled out of the
+        first-article operation (the downstream scan) until the round
+        verdict is in. The inspector checks the board while it is still
+        parked at the first-article operation, so the verdict gates the
+        ONE downstream scan -- nothing flows on before it."""
         self.ensure_one()
         if self.x_manage_mode != 'station':
             return self.env['sn.wsd.quality.inspection']
@@ -230,6 +227,19 @@ class MesOrderFai(models.Model):
             return
         if serial_identity not in inspection.x_fai_serial_ids                 and serial_identity not in inspection.x_fai_removed_serial_ids:
             inspection.x_fai_serial_ids = [(4, serial_identity.id)]
+            # 投入即铺格：检验员在首件工序阶段（板仍在制）就开始检验，
+            # 判定后才放行下道拉板——首件闸门卡在"投下道"这一扫
+            inspection._fai_expand_result_cells()
+            if (len(inspection.x_fai_serial_ids) >= inspection.sample_size
+                    and inspection.state == 'open'):
+                inspection.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=self._fai_activity_user(inspection).id,
+                    summary=_('First article samples ready'),
+                    note=_('%(count)s sample(s) are fed on %(order)s; '
+                           'inspection can start.',
+                           count=inspection.sample_size, order=self.name),
+                )
 
     # ------------------------------------------------------------------
     # 出站登记：首件工序 OK→到位；NG/报废→剔除释放名额（维修回流不回补）
@@ -261,21 +271,10 @@ class MesOrderFai(models.Model):
         if route_operation.operation_id != inspection.scheme_id.operation_id:
             return  # 非首件工序的出站不参与样本判定
         if result == 'ok':
+            # 出站 OK = 样本合格离开首件工序（判定放行后由下道拉走）；
+            # 结果格与齐套提醒已在投入登记时处理（_fai_register_sample）
             if serial_identity not in inspection.x_fai_arrived_serial_ids:
                 inspection.x_fai_arrived_serial_ids = [(4, serial_identity.id)]
-            # 到检即展开该样本 × 全部检验项的结果格（幂等，仅过站模式；
-            # 逐台累铺，齐套时矩阵自然完整）
-            inspection._fai_expand_result_cells()
-            if len(inspection.x_fai_arrived_serial_ids) >= inspection.sample_size \
-                    and inspection.state == 'open':
-                inspection.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=self._fai_activity_user(inspection).id,
-                    summary=_('First article samples ready'),
-                    note=_('%(count)s samples reached the first-article '
-                           'operation of %(order)s; inspection can start.',
-                           count=inspection.sample_size, order=self.name),
-                )
         else:
             # NG/报废：从样本清单剔除（名额立即释放，投入站自动放行新板
             # 补位）；维修回流后重过 OK 不会回补——首件样本必须是不经
@@ -434,14 +433,20 @@ class QualityInspectionFai(models.Model):
                     'First article inspection: complete every item '
                     '(required or not) before finishing.'))
             if inspection.mes_order_id.x_manage_mode == 'report':
+                # 报工模式按"首件工序合格报工满 N"把关（样本=合格产量）
                 arrived = inspection.x_fai_reported_qty
-            else:
-                arrived = len(inspection.x_fai_arrived_serial_ids)
-            if arrived < inspection.sample_size:
+                if arrived < inspection.sample_size:
+                    raise UserError(_(
+                        'First article inspection: only %(arrived)s of '
+                        '%(need)s OK units were reported on the first-article '
+                        'operation; wait for the full sample set.',
+                        arrived=arrived, need=inspection.sample_size))
+            elif len(inspection.x_fai_serial_ids) < inspection.sample_size:
+                # 过站模式：样本未投满不允许判定（半套样本放行=漏检）
                 raise UserError(_(
-                    'First article inspection: only %(arrived)s of %(need)s '
-                    'samples reached the first-article operation; wait for '
-                    'the full sample set.', arrived=arrived,
+                    'First article inspection: only %(fed)s of %(need)s '
+                    'samples were fed; wait for the full sample set.',
+                    fed=len(inspection.x_fai_serial_ids),
                     need=inspection.sample_size))
         res = super().action_done()
         # FAI 二元判定：非 pass 即判退（含 partial——任一项不符即 NG），

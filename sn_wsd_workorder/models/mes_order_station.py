@@ -191,23 +191,17 @@ class MesOrderStationServices(models.Model):
                 raise ValidationError(_(
                     'SN %(sn)s already passed %(op)s of order %(order)s.',
                     sn=code, op=op_row.display_label, order=target.name))
-            # the parked operation hands the board over with OK; the enter
-            # below validates reachability against the fresh history row.
-            # Cache the fields first -- leave_station unlinks the WIP row,
-            # and stale record reads would raise MissingError.
+            # First-article gate: the sample board stays parked at the
+            # first-article operation until the round verdict -- the
+            # downstream scan is refused outright (no leave), so the board
+            # flows on with the ONE scan that comes after the verdict.
             serial_rec = elsewhere.serial_identity_id
             held = target.must_hold_for_fai(serial_rec, op_row)
-            target.leave_station(serial_rec, 'ok')
-            # 首件保持：出站 OK 已把到位登记落库；检验未判定时下一工序
-            # 不得接板——板停在途，判定通过后再扫即接走（不得 raise 回滚
-            # 到位登记）
             if held:
-                return {
-                    'action': 'entered',
-                    'order_id': target.id,
-                    'data': self.sn_station_floor_data(workcenter_id),
-                    'message': target.fai_hold_message(serial_rec, held),
-                }
+                raise ValidationError(target.fai_hold_message(serial_rec, held))
+            # the parked operation hands the board over with OK; the enter
+            # below validates reachability against the fresh history row.
+            target.leave_station(serial_rec, 'ok')
             target.scan_enter(code, workcenter)
             if op_row.x_allow_exit:
                 return self._leave_action(code, target)

@@ -300,13 +300,16 @@ class SnWsdApiService(models.AbstractModel):
                     wip.sudo().unlink()
                     mes_order.scan_enter(identity.name, workcenter)
                 else:
+                    # First-article gate: the sample board stays parked at
+                    # the first-article operation until the round verdict;
+                    # the pull (leave + enter) is refused in one piece.
+                    held = mes_order.must_hold_for_fai(identity, target_op)
+                    if held:
+                        raise ValidationError(
+                            mes_order.fai_hold_message(identity, held))
                     # arrival pull: the parked operation hands the board over
                     mes_order.leave_station(identity, 'ok',
                                             operator_code=operator_code)
-                    # 首件保持：到位已随出站登记，检验未判定时本站不接板——
-                    # 板停在途（不 raise，防止回滚到位登记）
-                    if mes_order.must_hold_for_fai(identity, target_op):
-                        return False, mes_order
                     mes_order.scan_enter(identity.name, workcenter)
                 route_op = target_op
             finished = mes_order.leave_station(
