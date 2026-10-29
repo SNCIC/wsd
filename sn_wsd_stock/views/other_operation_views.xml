@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Other receipts and other deliveries: transfers of their own operation
+         type, entering or leaving the stock through the inventory adjustment
+         location, without a purchase or a sales order. The menus open the
+         standard transfer form, so the operations keep the confirm, assign,
+         validate and batch flow of every transfer. -->
+    <record id="view_sn_wsd_other_receipt_list" model="ir.ui.view">
+        <field name="name">stock.picking.other.receipt.list</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Other Receipts" create="false" delete="false"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Document No."/>
+                <field name="picking_type_id" column_invisible="1"/>
+                <field name="scheduled_date" string="Scheduled Date"
+                       options="{'show_time': False}"/>
+                <field name="date_done" string="Validation Date"
+                       options="{'show_time': False}"/>
+                <field name="sn_receive_type_id" string="Receipt Type"/>
+                <field name="sn_receive_department_id" string="Receiving Department"/>
+                <field name="sn_receive_employee_id" string="Receiving Employee"
+                       widget="many2one_avatar_employee"/>
+                <field name="partner_id" string="Contact"/>
+                <field name="location_id" string="Source Location"/>
+                <field name="location_dest_id" string="Destination Location"/>
+                <field name="origin" string="Source Document"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="user_id" string="Responsible"
+                       widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_other_delivery_list" model="ir.ui.view">
+        <field name="name">stock.picking.other.delivery.list</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Other Deliveries" create="false" delete="false"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Document No."/>
+                <field name="picking_type_id" column_invisible="1"/>
+                <field name="scheduled_date" string="Scheduled Date"
+                       options="{'show_time': False}"/>
+                <field name="date_done" string="Validation Date"
+                       options="{'show_time': False}"/>
+                <field name="sn_issue_type_id" string="Issue Type"/>
+                <field name="sn_issue_department_id" string="Issuing Department"/>
+                <field name="sn_issue_employee_id" string="Issuing Employee"
+                       widget="many2one_avatar_employee"/>
+                <field name="location_id" string="Source Location"/>
+                <field name="location_dest_id" string="Destination Location"/>
+                <field name="origin" string="Source Document"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="user_id" string="Responsible"
+                       widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_other_receipt" model="ir.actions.act_window">
+        <field name="name">Other Receipts</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_other_receipt_list"/>
+        <field name="domain">[('sn_other_operation', '=', 'other_in')]</field>
+        <field name="context">{'sn_other_operation_default': 'other_in'}</field>
+    </record>
+
+    <record id="action_sn_wsd_other_delivery" model="ir.actions.act_window">
+        <field name="name">Other Deliveries</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_other_delivery_list"/>
+        <field name="domain">[('sn_other_operation', '=', 'other_out')]</field>
+        <field name="context">{'sn_other_operation_default': 'other_out'}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_other_receipt"
+              name="Other Receipts"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_sn_wsd_other_receipt"
+              sequence="6"/>
+    <menuitem id="menu_sn_wsd_other_delivery"
+              name="Other Deliveries"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_sn_wsd_other_delivery"
+              sequence="7"/>
+</odoo>

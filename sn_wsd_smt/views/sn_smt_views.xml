@@ -11,6 +11,7 @@
                 <field name="line_link_ids"/>
                 <filter string="Valid" name="valid_only" domain="[('is_valid', '=', 'Y')]"/>
                 <filter string="Invalid" name="invalid_only" domain="[('is_valid', '=', 'N')]"/>
+                <filter string="Ineffective" name="ineffective_only" domain="[('is_effective', '=', False)]"/>
                 <group>
                     <filter string="Product" name="group_product" context="{'group_by': 'model_code'}"/>
                     <filter string="Side" name="group_side" context="{'group_by': 'product_side'}"/>
@@ -24,6 +25,7 @@
         <field name="model">sn.smt.material.table</field>
         <field name="arch" type="xml">
             <list>
+                <field name="is_effective" widget="boolean_toggle"/>
                 <field name="table_name"/>
                 <field name="table_type"/>
                 <field name="model_code"/>
@@ -63,6 +65,7 @@
                                 <field name="item_count"/>
                                 <field name="total_point_qty"/>
                                 <field name="is_valid"/>
+                                <field name="is_effective" widget="boolean_toggle"/>
                             </group>
                         </group>
                     <notebook>

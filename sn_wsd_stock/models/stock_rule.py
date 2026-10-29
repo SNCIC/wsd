@@ -89,3 +89,20 @@ class StockRule(models.Model):
                 self._shift_lead_time_date(values['date_deadline'], self.delay, direction=-1)
             )
         return move_values
+
+    def _push_prepare_move_copy_values(self, move_to_copy, new_date):
+        """Carry the contact over to the transfer a push rule creates.
+
+        The pushed move is built from scratch and the core values leave the
+        contact out; the new transfer then takes its contact from the moves it
+        is assigned to and ends up empty. That is why the quality control and
+        the storage transfer of a three-step receipt showed no supplier (the
+        inspection record reads it from the transfer). Only an existing
+        contact is copied: a push rule fed by a transfer without one, a plain
+        internal transfer for instance, is left untouched.
+        """
+        move_values = super()._push_prepare_move_copy_values(move_to_copy, new_date)
+        contact = move_to_copy.partner_id or move_to_copy.picking_id.partner_id
+        if contact:
+            move_values['partner_id'] = contact.id
+        return move_values

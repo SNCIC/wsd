@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_list.ColumnFilterPanel">
+        <div class="o_column_filter_panel" t-on-click.stop="">
+            <div class="o_column_filter_header">
+                <span class="o_column_filter_title text-truncate" t-esc="props.column.label"/>
+                <div class="btn-group btn-group-sm o_column_filter_mode">
+                    <button class="btn"
+                            t-att-class="state.mode === 'include' ? 'btn-primary' : 'btn-light'"
+                            t-on-click="() => this.setMode('include')">
+                        <t t-esc="labels.include"/>
+                    </button>
+                    <button class="btn"
+                            t-att-class="state.mode === 'exclude' ? 'btn-primary' : 'btn-light'"
+                            t-on-click="() => this.setMode('exclude')">
+                        <t t-esc="labels.exclude"/>
+                    </button>
+                </div>
+            </div>
+
+            <t t-if="isRange">
+                <div class="o_column_filter_range">
+                    <input class="form-control form-control-sm"
+                           t-att-type="inputType"
+                           t-att-value="state.from"
+                           t-on-input="(ev) => this.setRange('from', ev.target.value)"/>
+                    <span class="o_column_filter_range_sep">~</span>
+                    <input class="form-control form-control-sm"
+                           t-att-type="inputType"
+                           t-att-value="state.to"
+                           t-on-input="(ev) => this.setRange('to', ev.target.value)"/>
+                </div>
+                <div t-if="showQuickRanges" class="o_column_filter_quick">
+                    <button class="btn btn-link btn-sm" t-on-click="(ev) => this.setQuickRange('today', ev)">
+                        <t t-esc="labels.today"/>
+                    </button>
+                    <button class="btn btn-link btn-sm" t-on-click="(ev) => this.setQuickRange('month', ev)">
+                        <t t-esc="labels.thisMonth"/>
+                    </button>
+                    <button class="btn btn-link btn-sm" t-on-click="(ev) => this.setQuickRange('year', ev)">
+                        <t t-esc="labels.thisYear"/>
+                    </button>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="o_column_filter_search">
+                    <input class="form-control form-control-sm"
+                           t-att-placeholder="labels.search"
+                           t-model="state.search"
+                           t-on-input="(ev) => this.onSearchInput(ev)"/>
+                    <i class="fa fa-search"/>
+                </div>
+                <div t-if="state.search.trim() and !state.selected.length and !state.empty and !state.nonEmpty"
+                     class="o_column_filter_hint">
+                    <t t-esc="labels.keywordHint"/>
+                </div>
+                <div class="o_column_filter_values">
+                    <label class="o_column_filter_value" t-att-data-tooltip="labels.emptyHelp">
+                        <input type="checkbox"
+                               t-att-checked="state.empty"
+                               t-on-change="() => this.toggleSpecial('empty')"/>
+                        <span class="text-truncate" t-esc="labels.empty"/>
+                    </label>
+                    <label class="o_column_filter_value" t-att-data-tooltip="labels.nonEmptyHelp">
+                        <input type="checkbox"
+                               t-att-checked="state.nonEmpty"
+                               t-on-change="() => this.toggleSpecial('nonEmpty')"/>
+                        <span class="text-truncate" t-esc="labels.nonEmpty"/>
+                    </label>
+                    <t t-foreach="visibleGroups" t-as="group" t-key="group.key">
+                        <label class="o_column_filter_value">
+                            <input type="checkbox"
+                                   t-att-checked="isSelected(group.key)"
+                                   t-on-change="() => this.toggleValue(group.key, group.label)"/>
+                            <span class="text-truncate flex-grow-1" t-esc="group.label"/>
+                            <span class="o_column_filter_count" t-esc="group.count"/>
+                        </label>
+                    </t>
+                    <div t-if="!visibleGroups.length and !state.loading" class="o_column_filter_no_result">
+                        <t t-esc="labels.noResults"/>
+                    </div>
+                    <div t-if="state.loading" class="o_column_filter_loading">
+                        <i class="fa fa-spinner fa-spin"/>
+                    </div>
+                    <button t-if="state.hasMore and !state.loading"
+                            class="btn btn-link btn-sm o_column_filter_load_more"
+                            t-on-click="onLoadMore">
+                        <t t-esc="labels.loadMore"/>
+                    </button>
+                </div>
+            </t>
+
+            <div class="o_column_filter_footer">
+                <button class="btn btn-link btn-sm" t-on-click="onClear">
+                    <t t-esc="labels.clear"/>
+                </button>
+                <button class="btn btn-primary btn-sm" t-on-click="onClose">
+                    <t t-esc="labels.apply"/>
+                </button>
+            </div>
+        </div>
+    </t>
+
+</templates>

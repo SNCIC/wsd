@@ -1,0 +1,112 @@
+﻿#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 00:00+0000\n"
+"PO-Revision-Date: 2026-10-28 00:00+0000\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__product_code
+msgid "Product Code"
+msgstr "产品编码"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__product_name
+msgid "Product Name"
+msgstr "产品名称"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__order_date
+msgid "Order Date"
+msgstr "订单日期"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sale.field_sale_order__name
+#: model:ir.model.fields,field_description:sale.field_sale_order_line__order_id
+#: model:ir.model.fields,field_description:sale.field_sale_report__name
+msgid "Order Reference"
+msgstr "订单编号"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_tree
+msgid "Number"
+msgstr "订单编号"
+
+#. module: sn_wsd_sale
+#: model:ir.actions.act_window,name:sn_wsd_sale.action_sn_sale_detail
+#: model:ir.ui.menu,name:sn_wsd_sale.menu_sn_sale_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Order Details"
+msgstr "订单明细"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_list
+msgid "Total"
+msgstr "总计"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sale_order_form_delivery_date
+msgid "Expected:"
+msgstr "预计："
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Quotations"
+msgstr "报价单"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Sales Orders"
+msgstr "销售订单"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "To Invoice"
+msgstr "待开票"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "My Orders"
+msgstr "我的订单"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Order"
+msgstr "订单"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Customer"
+msgstr "客户"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Salesperson"
+msgstr "销售人员"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
+msgid "Status"
+msgstr "状态"

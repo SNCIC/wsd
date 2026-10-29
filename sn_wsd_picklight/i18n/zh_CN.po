@@ -66,7 +66,12 @@ msgid "Completed or cancelled operation lines cannot be allocated."
 msgstr "已完成或已取消的操作明细无法分配库位。"
 
 #. module: sn_wsd_picklight
-#: selection:sn.wsd.picklight.shelf,shelf_type:0
+#: code:addons/sn_wsd_picklight/models/stock_move_line.py:0
+msgid "Generate internal batches before allocating rack locations: %s"
+msgstr "请先生成内部批次，再分配库位：%s"
+
+#. module: sn_wsd_picklight
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_shelf__shelf_type__large
 msgid "Large Rack"
 msgstr "大料架"
 
@@ -92,7 +97,7 @@ msgid "Select operation lines from one receipt only."
 msgstr "只能选择同一张收货单的操作明细。"
 
 #. module: sn_wsd_picklight
-#: selection:sn.wsd.picklight.shelf,shelf_type:0
+#: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_shelf__shelf_type__small
 msgid "Small Rack"
 msgstr "小料架"
 

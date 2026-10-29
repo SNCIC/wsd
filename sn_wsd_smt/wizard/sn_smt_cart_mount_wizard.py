@@ -9,13 +9,11 @@ class SnSmtCartMountWizard(models.TransientModel):
         'sn.smt.cart',
         string='CART_SN',
         required=True,
-        check_company=True,
     )
     workcenter_id = fields.Many2one(
         'mrp.workcenter',
         string='Work Center',
         required=True,
-        check_company=True,
     )
 
     def action_confirm(self):

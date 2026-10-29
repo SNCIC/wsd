@@ -254,6 +254,13 @@ class MrpProduction(models.Model):
 
     def _apply_workshop_manufacturing_locations(self):
         for production in self:
+            # Subcontracting orders must keep the subcontracting location as
+            # their component source: the resupply route (stock -> subcontracting)
+            # is what generates the material issue picking for the vendor. Moving
+            # the source to a workshop line-side location breaks that pull chain,
+            # so the components never leave the warehouse on a document.
+            if 'subcontractor_id' in production._fields and production.subcontractor_id:
+                continue
             warehouse = production.picking_type_id.warehouse_id
             workshop = production.x_workshop_id
             if not warehouse or not workshop:

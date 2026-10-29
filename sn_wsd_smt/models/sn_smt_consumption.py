@@ -224,6 +224,8 @@ class SnSmtMaterialConsumption(models.Model):
             lambda line: line.source == 'smt_table')
         if not table_rows:
             return self.env['sn.smt.online.material']
+        # 料站表停用即整表禁止操作：过站门禁与扣点一并拒绝。
+        table_rows._ensure_material_table_effective()
         lines = self._get_active_lines(route_operation)
         expected_lines = table_rows.filtered(lambda line: line.is_skip != 'Y')
         if len(lines) != len(expected_lines):
@@ -254,6 +256,8 @@ class SnSmtMaterialConsumption(models.Model):
         table_rows = mes_order.x_smt_online_material_ids.filtered(
             lambda line: line.source == 'smt_table')
         if table_rows:
+            # 停用表的行连过站扣点也不做：先报停用，再谈工序归属。
+            table_rows._ensure_material_table_effective()
             material_rop = mes_order.x_material_operation_id
             if not material_rop or material_rop.mes_route_id != mes_order.x_mes_route_id:
                 raise ValidationError(_(

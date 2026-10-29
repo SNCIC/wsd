@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Order details (Sales > Orders > Order Details): every sale order line
+         on one line, with the order header printed once per order. The list is
+         read only: the lines are maintained from their order. -->
+    <record id="view_sn_sale_detail_list" model="ir.ui.view">
+        <field name="name">sale.order.line.sale.detail.list</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <list string="Order Details" create="false" delete="false"
+                  default_order="order_id, sequence, id"
+                  js_class="sn_wsd_merged_cells_list">
+                <field name="order_id"/>
+                <field name="order_date"/>
+                <field name="order_partner_id"/>
+                <field name="salesman_id" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'sale'"
+                       decoration-info="state in ('draft', 'sent')"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="qty_delivered"/>
+                <field name="qty_invoiced"/>
+                <field name="qty_to_invoice"/>
+                <field name="product_uom_id" groups="uom.group_uom" widget="many2one_uom"/>
+                <field name="price_unit"/>
+                <field name="discount" groups="sale.group_discount_per_so_line"/>
+                <field name="price_subtotal" sum="Total" widget="monetary"/>
+                <field name="note"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_sale_detail_search" model="ir.ui.view">
+        <field name="name">sale.order.line.sale.detail.search</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Order Details">
+                <field name="order_id"/>
+                <field name="order_partner_id" operator="child_of"/>
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="salesman_id"/>
+                <separator/>
+                <filter name="state_quotation"
+                        string="Quotations"
+                        domain="[('state', 'in', ['draft', 'sent'])]"/>
+                <filter name="state_sale"
+                        string="Sales Orders"
+                        domain="[('state', '=', 'sale')]"/>
+                <filter name="state_cancel"
+                        string="Cancelled"
+                        domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <filter name="to_invoice"
+                        string="To Invoice"
+                        domain="[('qty_to_invoice', '!=', 0)]"/>
+                <filter name="my_orders"
+                        string="My Orders"
+                        domain="[('salesman_id', '=', uid)]"/>
+                <group>
+                    <filter name="group_order" string="Order" context="{'group_by': 'order_id'}"/>
+                    <filter name="group_partner" string="Customer" context="{'group_by': 'order_partner_id'}"/>
+                    <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_salesman" string="Salesperson" context="{'group_by': 'salesman_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_sale_detail" model="ir.actions.act_window">
+        <field name="name">Order Details</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_ids" eval="[Command.clear(),
+            Command.create({'view_mode': 'list', 'view_id': ref('view_sn_sale_detail_list')}),
+            Command.create({'view_mode': 'form', 'view_id': ref('sale.sale_order_line_view_form_readonly')})]"/>
+        <field name="search_view_id" ref="view_sn_sale_detail_search"/>
+        <field name="domain">[('display_type', '=', False)]</field>
+        <!-- The order header information is printed once per order: the merged
+             cells list compares the lines on the order of the list below. -->
+        <field name="context">{'create': False,
+            'sn_merged_cells_key': 'order_id',
+            'sn_merged_cells_fields': ['order_id', 'order_date', 'order_partner_id', 'salesman_id', 'state']}</field>
+    </record>
+
+    <!-- Listed next to the order menus of the Sales app, right after Orders. -->
+    <menuitem id="menu_sn_sale_detail"
+              name="Order Details"
+              parent="sale.sale_order_menu"
+              action="action_sn_sale_detail"
+              groups="sales_team.group_sale_salesman"
+              sequence="25"/>
+</odoo>

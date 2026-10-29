@@ -70,3 +70,23 @@ msgstr "SMT 扣点流水"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__source__smt_table
 msgid "SMT Material Table"
 msgstr "SMT 料站表"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table__is_effective
+msgid "Is Effective"
+msgstr "是否生效"
+
+#. module: sn_wsd_smt
+#: model:ir.model.fields,help:sn_wsd_smt.field_sn_smt_material_table__is_effective
+msgid ""
+"Uncheck to stop this material table from matching MES orders and to block "
+"loading, unloading and consumption on its loadpoints."
+msgstr "取消勾选后该料站表不再参与制令单匹配，其料站的上下料与过站扣点都会被拒绝。"
+
+#. module: sn_wsd_smt
+#. odoo-python
+#: code:addons/sn_wsd_smt/models/sn_smt_material_table.py:0
+msgid ""
+"Material table %(table)s is not effective. Re-enable it before operating "
+"loadpoint %(pos)s of %(order)s."
+msgstr "料站表 %(table)s 已停用：请先恢复生效，再操作制令单 %(order)s 的料站 %(pos)s。"

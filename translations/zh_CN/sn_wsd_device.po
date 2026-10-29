@@ -490,3 +490,15 @@ msgstr "<i class=\"fa fa-download\"/> 下载模板"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_cal_task_form
 msgid "<i class=\"fa fa-upload\"/> Import Lines"
 msgstr "<i class=\"fa fa-upload\"/> 导入行"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Complete All"
+msgstr "一键完成"
+
+#. module: sn_wsd_device
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_check_task_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_maint_task_form
+msgid "Fill every unchecked item as Pass and submit this task?"
+msgstr "将未填写结果的项目全部置为合格并提交本任务？"

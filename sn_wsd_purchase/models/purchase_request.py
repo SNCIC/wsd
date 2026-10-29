@@ -83,6 +83,13 @@ class PurchaseRequestLine(models.Model):
         store=True,
         readonly=True,
     )
+    po_supplier_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Supplier',
+        compute='_compute_po_supplier_id',
+        help='Supplier of the purchase order this request line was ordered on; '
+             'empty until a purchase order is placed.',
+    )
     qc_qty = fields.Float(
         string='Quality Control Quantity',
         digits='Product Unit of Measure',
@@ -170,6 +177,13 @@ class PurchaseRequestLine(models.Model):
             if line.request_state in ('draft', 'to_approve'):
                 line.approved_qty = line.product_qty
         return result
+
+    @api.depends('purchase_lines.order_id.partner_id')
+    def _compute_po_supplier_id(self):
+        # Supplier of the purchase order, not the product default vendor: a
+        # request line shows a supplier only once it has been ordered.
+        for line in self:
+            line.po_supplier_id = line.purchase_lines.order_id.partner_id[:1]
 
     @api.depends('purchase_lines.order_id')
     def _compute_purchase_order_ids(self):
@@ -353,3 +367,23 @@ class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
             'discount': official_vals['discount'],
         })
         return vals
+
+
+class PurchaseRequest(models.Model):
+    """Code a request the way the coding rules of the project do.
+
+    The coding rule engine resets its counter on the period its sequence
+    segment asks for, which the plain sequence of the module cannot do: the
+    requests are numbered per month (PR-2026-10-0001). The sequence stays the
+    fallback for a database where no rule is configured for the model.
+    """
+
+    _inherit = 'purchase.request'
+
+    @api.model
+    def _get_default_name(self):
+        proxy = self.new({})
+        rule = self.env['sn.code.rule']._find_rule(proxy)
+        if rule:
+            return rule.render(proxy)
+        return self.env['ir.sequence'].next_by_code('purchase.request')

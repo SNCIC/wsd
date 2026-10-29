@@ -12,6 +12,16 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__contract_number
 msgid "Contract Number"
 msgstr "合同号"
@@ -82,9 +92,22 @@ msgid "Buyer Agent"
 msgstr "买方委托代理人"
 
 #. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__supplier_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__supplier_agent
 msgid "Supplier Agent"
 msgstr "供方委托代理人"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid ""
+"Supplier of the purchase order this request line was ordered on; empty until "
+"a purchase order is placed."
+msgstr "该请购明细所下采购订单的供应商；未下采购订单时为空。"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
@@ -280,6 +303,7 @@ msgstr "页，共"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_unit_price
 msgid "Tax Included Unit Price"
 msgstr "含税单价"
@@ -302,6 +326,7 @@ msgstr "含税单价"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__tax_included_amount
 msgid "Tax Included Amount"
 msgstr "含税金额"
@@ -335,15 +360,25 @@ msgstr "批准数量必须介于零和申请数量之间。"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__create_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
 msgid "Created By"
 msgstr "创建人"
 
 #. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
+msgid "Description"
+msgstr "说明"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__product_code
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_code
 msgid "Material Code"
 msgstr "物料编码"
 
 #. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__product_name
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_name
 msgid "Material Name"
 msgstr "物料名称"
@@ -369,6 +404,7 @@ msgid "Expected Arrival"
 msgstr "预计到货日期"
 
 #. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
 msgid "Received Quantity"
 msgstr "收货数量"
@@ -408,6 +444,8 @@ msgstr "采购明细"
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
 #: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_detail
 #: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_detail
 msgid "Purchase Details"
@@ -435,6 +473,11 @@ msgid "Request Reference"
 msgstr "采购申请单号"
 
 #. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Requests for Quotation"
+msgstr "询价单"
+
+#. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
@@ -451,6 +494,7 @@ msgstr "申请日期"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
 msgid "Product"
 msgstr "产品"
 
@@ -479,8 +523,21 @@ msgstr "全部收货"
 
 #. module: sn_wsd_purchase
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
 msgid "Purchase Order"
 msgstr "采购订单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__qc_qty
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quality Control Quantity"
+msgstr "质检数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order_line__qc_qty
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quantity that has completed the quality control step of the reception."
+msgstr "已完成来料质检环节的数量。"
 
 #. module: sn_wsd_purchase
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order_line__brand_id
@@ -506,3 +563,50 @@ msgstr "%(order)s 已将 %(vendor)s 的供应商价格由 %(old_price)s 更新�
 #: code:addons/sn_wsd_purchase/models/purchase_order.py:0
 msgid "%(order)s: the vendor pricelist was not updated for %(product)s, the taxes of the order line differ from the vendor taxes of the product."
 msgstr "%(order)s：未更新 %(product)s 的供应商价格表，订单行的税与产品的供应商税不一致。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_missing_receipt
+msgid "Missing Receipt"
+msgstr "缺收货"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_missing_receipt
+msgid "Set when the order is confirmed, a quantity is still expected from the vendor and every receipt of the order is already done or cancelled. Only then is the missing receipt not reachable from the standard flow."
+msgstr "当订单已确认、仍有数量待向供应商收取，且订单下的收货单全部已完成或已取消时置位。只有这种情况才无法从标准流程进入收货。"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_missing_receipt
+msgid "Receive Remaining"
+msgstr "补收货"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "Receipt"
+msgstr "收货单"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "A missing receipt can only be created on a confirmed purchase order."
+msgstr "只有已确认的采购订单才能补建收货单。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "There is no quantity left to receive on this purchase order."
+msgstr "该采购订单没有待收数量。"
+
+#. module: sn_wsd_purchase
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "No receipt was created: the order lines must hold a storable product with a quantity left to receive."
+msgstr "未生成收货单：订单行必须是可库存的产品，且仍有待收数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__stocked_qty
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Stocked Quantity"
+msgstr "入库数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order_line__stocked_qty
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Quantity that has completed the storage step of the reception."
+msgstr "已完成来料上架入库环节的数量。"

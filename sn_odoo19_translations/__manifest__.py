@@ -41,7 +41,7 @@ the `i18n/zh_CN.po` file of this module is generated from it with the
 The generated file must not be edited by hand.  After an upstream pull the
 translations are still in place: only the terms upstream added need work.
 """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'author': 'SNCIC',
     'license': 'LGPL-3',
     'category': 'Hidden',

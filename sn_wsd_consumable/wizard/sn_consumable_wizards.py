@@ -9,13 +9,11 @@ class SnConsumableLoadWizard(models.TransientModel):
         'sn.consumable.info',
         string='Consumable SN',
         required=True,
-        check_company=True,
     )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
         required=True,
-        check_company=True,
     )
 
     def action_confirm(self):
@@ -32,7 +30,6 @@ class SnConsumableScrapWizard(models.TransientModel):
         'sn.consumable.info',
         string='Consumable SN',
         required=True,
-        check_company=True,
     )
     reason = fields.Char(string='Scrap Reason', required=True)
 

@@ -120,7 +120,7 @@ class SnWsdBatchPassWizardLine(models.TransientModel):
         'sn.wsd.batch.pass.wizard', required=True, ondelete='cascade',
     )
     serial_identity_id = fields.Many2one(
-        'sn.wsd.serial.identity', string='SN', required=True,
+        'sn.wsd.serial.identity', string='SN Record', required=True,
         ondelete='cascade',
     )
     serial_name = fields.Char(string='SN')

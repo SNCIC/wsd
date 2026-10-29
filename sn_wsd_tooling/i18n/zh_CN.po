@@ -255,12 +255,16 @@ msgstr "制具 %s：已登记使用 %s 次。"
 #: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling
 #: model:ir.ui.menu,name:sn_wsd_tooling.menu_sn_tooling
 #: model:ir.model,name:sn_wsd_tooling.model_sn_tooling
-#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_ids
 #: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_count
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
 msgid "Tooling"
 msgstr "制具信息"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__tooling_ids
+msgid "Tooling Records"
+msgstr "制具明细"
 
 #. module: sn_wsd_tooling
 #: model:ir.actions.act_window,name:sn_wsd_tooling.action_sn_tooling_record

@@ -1,11 +1,21 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-# Operation types an issue label can be printed for: operations moving goods
-# out of a location. The MES material issue / return / over-pick operations
-# share the internal code, so they are covered by the same whitelist, while
-# receipts keep their own flow (one label per internal batch at goods-in).
-ISSUE_LABEL_PICKING_TYPE_CODES = ('internal', 'outgoing')
+# Operation types an issue label can be printed for: the documents taking
+# material out of the warehouse -- deliveries, the MES material issue / return
+# / over-pick operations and the outsourcing issue. Those internal types
+# cannot be told apart from receipts, storage or quality control by their
+# code alone (they all share 'internal'), so the dedicated operation types are
+# listed by sequence code. Receipts keep their own flow (one label per
+# internal batch at goods-in).
+ISSUE_LABEL_PICKING_TYPE_CODES = ('outgoing',)
+ISSUE_LABEL_PICKING_TYPE_SEQUENCE_CODES = (
+    'OUT',
+    'RES',
+    'sn.wsd.mes.picking.issue',
+    'sn.wsd.mes.picking.return',
+    'sn.wsd.mes.picking.over',
+)
 
 
 class StockPicking(models.Model):
@@ -28,13 +38,25 @@ class StockPicking(models.Model):
         string='Can Print Issue Material Labels',
         compute='_compute_can_print_issue_material_labels',
     )
+    x_issue_label_available = fields.Boolean(
+        string='Issue Material Labels Available',
+        compute='_compute_x_issue_label_available',
+        help='Operation type taking material out of the warehouse: the '
+             'deliveries, the MES material issue / return / over-pick and the '
+             'outsourcing issue. Gates the print button of the operation '
+             'detail and of the form header.',
+    )
 
     def _is_issue_material_label_picking(self):
         """Whether this operation may print issue labels."""
         self.ensure_one()
+        picking_type = self.picking_type_id
+        if self.state == 'cancel' or not picking_type:
+            return False
         return (
-            self.state != 'cancel'
-            and self.picking_type_id.code in ISSUE_LABEL_PICKING_TYPE_CODES
+            picking_type.code in ISSUE_LABEL_PICKING_TYPE_CODES
+            or (picking_type.sequence_code or '')
+            in ISSUE_LABEL_PICKING_TYPE_SEQUENCE_CODES
         )
 
     def _issue_material_label_lines(self):
@@ -59,6 +81,13 @@ class StockPicking(models.Model):
         for picking in self:
             picking.can_print_issue_material_labels = bool(
                 picking._issue_material_label_lines())
+
+    @api.depends('picking_type_id', 'picking_type_id.code',
+                 'picking_type_id.sequence_code', 'state')
+    def _compute_x_issue_label_available(self):
+        for picking in self:
+            picking.x_issue_label_available = (
+                picking._is_issue_material_label_picking())
 
     def action_print_issue_material_labels(self):
         """Print one label per eligible operation line of the whole picking."""
@@ -137,6 +166,12 @@ class StockMove(models.Model):
     operation detail (every eligible line of the move) in one go."""
 
     _inherit = 'stock.move'
+
+    x_issue_label_available = fields.Boolean(
+        related='picking_id.x_issue_label_available',
+        string='Issue Material Labels Available',
+        help='Gates the print button of the operation detail.',
+    )
 
     def _issue_material_label_lines(self):
         """Eligible lines of this move (same predicate as the picking)."""

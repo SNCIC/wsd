@@ -421,8 +421,10 @@ class MeterProcessRoute(models.Model):
         for route in self:
             nodes = route._flow_graph()['nodes']
             nodes = sorted(nodes, key=lambda n: (n.get('sequence') or 0, str(n.get('uid', ''))))
+            # The operation name is the wording operators read; the step code
+            # is only the fallback for nodes saved without a name.
             route.route_flow_text = ' → '.join(
-                (n.get('step_code') or n.get('name') or '') for n in nodes
+                (n.get('name') or n.get('step_code') or '') for n in nodes
             ) if nodes else False
 
     @api.model

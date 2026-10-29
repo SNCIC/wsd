@@ -26,7 +26,7 @@ class SnWsdSerialFreeze(models.Model):
     )
     serial_identity_id = fields.Many2one(
         'sn.wsd.serial.identity',
-        string='SN',
+        string='SN Record',
         required=True,
         index=True,
         check_company=True,

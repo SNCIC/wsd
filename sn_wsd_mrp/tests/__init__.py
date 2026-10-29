@@ -1,4 +1,5 @@
 from . import test_mes_order
+from . import test_product_classification
 from . import test_mes_side
 from . import test_station_pass_count
 from . import test_station_feed_quota

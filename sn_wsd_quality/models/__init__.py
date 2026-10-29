@@ -3,6 +3,7 @@ from . import meter_quality
 from . import mes_order_ng_defect
 from . import serial_freeze
 from . import quality_inspection
+from . import inspection_request
 from . import sampling
 from . import quality_inspection_measure
 from . import mes_order_fai

@@ -18,6 +18,12 @@
                         type="object"
                         class="btn btn-link"
                         invisible="not x_can_generate_material_labels"/>
+                <button name="action_revoke_material_labels"
+                        string="Revoke Internal Batches"
+                        type="object"
+                        class="btn btn-link"
+                        confirm="This removes the internal batches generated on this operation so the split can be redone. Continue?"
+                        invisible="not x_can_generate_material_labels"/>
                 <button name="action_print_material_labels"
                         string="Print Material Labels"
                         type="object"
@@ -54,13 +60,19 @@
             </xpath>
             <xpath expr="//field[@name='lot_name']" position="before">
                 <field name="internal_lot_name" column_invisible="1"/>
+                <!-- The supplier batch is only read at putaway, on the reels
+                     themselves: the upstream receipt and quality control
+                     transfers may cover several batches on one line. -->
                 <field name="supplier_batch_no"
-                       column_invisible="parent.has_tracking != 'lot'"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
             <xpath expr="//field[@name='quantity']" position="after">
+                <!-- The quantity per label only matters on the operation that
+                     generates the internal batches: the receipt of a one-step
+                     reception, the storage transfer otherwise. -->
                 <field name="quantity_per_label"
-                       column_invisible="parent.has_tracking != 'lot'"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
                        readonly="lot_id or (state == 'done' and is_locked)"/>
             </xpath>
         </field>
@@ -91,37 +103,117 @@
         </field>
     </record>
 
-    <!-- Operations moving goods out (internal transfers, MES material issues
-         and outgoing deliveries): print the issue labels of the whole
-         operation at once (non-reel tracked lines only, quantity = the issued
-         quantity). Reel materials keep their receipt label and are skipped by
-         the eligibility computation.
-         No visibility rule on purpose: the button stays available in every
-         state, and a document with nothing to print reports it when clicked. -->
+    <!-- Operations taking material out of the warehouse (deliveries, MES
+         material issue / return / over-pick, outsourcing issue): print the
+         issue labels of the whole operation at once (non-reel tracked lines
+         only, quantity = the issued quantity). Reel materials keep their
+         receipt label and are skipped by the eligibility computation.
+         The button follows the document type only: receipts, storage, quality
+         control and plain internal transfers do not show it, and a document
+         with nothing to print reports it when clicked. -->
     <record id="view_picking_form_issue_labels" model="ir.ui.view">
         <field name="name">stock.picking.form.issue.labels</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
+                <field name="x_issue_label_available" invisible="1"/>
                 <button name="action_print_issue_material_labels" type="object"
-                        string="Print Issue Material Labels" class="btn-secondary"/>
+                        string="Print Issue Material Labels" class="btn-secondary"
+                        invisible="not x_issue_label_available"/>
             </xpath>
         </field>
     </record>
 
     <!-- Operation detail dialog (作业 tab -> Details): one button on top of
          the dialog, above the operation lines, printing the whole operation
-         detail in one go. No visibility rule either. -->
+         detail in one go. Same document type rule as the form header. -->
     <record id="view_stock_move_operations_issue_labels" model="ir.ui.view">
         <field name="name">stock.move.operations.issue.labels</field>
         <field name="model">stock.move</field>
         <field name="inherit_id" ref="stock.view_stock_move_operations"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_code']" position="after">
+                <field name="x_issue_label_available" invisible="1"/>
+            </xpath>
             <xpath expr="//widget[@name='import_lots']" position="after">
                 <button name="action_print_issue_material_labels" type="object"
                         string="Print Issue Material Labels" class="btn btn-link"
-                        icon="fa-print"/>
+                        icon="fa-print"
+                        invisible="not x_issue_label_available"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Delivery address (partner_id: delivery address on a delivery,
+         receive-from on a receipt, contact on an internal transfer) stays
+         editable in every state: an address forgotten before validation can
+         still be corrected afterwards. Returns, deliveries and internal
+         transfers share this form and this list, so both are opened up. A
+         change made on a done or cancelled transfer is logged on the chatter
+         by stock.picking.write(). -->
+    <record id="view_picking_form_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.form.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.list.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Other receipts and other deliveries: department, employee and type of
+         the operation. The delivery address has no meaning on an other
+         delivery and is hidden, together with the label block the standard
+         form renders separately from the field. The virtual location of the
+         type is shown read only: it is the one selecting the stock valuation
+         account of the operation. -->
+    <record id="view_picking_form_other_operation" model="ir.ui.view">
+        <field name="name">stock.picking.form.other.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_td_label')][label[@for='partner_id']]"
+                   position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="after">
+                <field name="sn_other_operation" invisible="1"/>
+                <field name="sn_issue_type_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       required="sn_other_operation == 'other_out'"/>
+                <field name="sn_issue_department_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_issue_employee_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       domain="[('department_id', '=', sn_issue_department_id)] if sn_issue_department_id else []"/>
+                <field name="sn_issue_location_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_receive_type_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       required="sn_other_operation == 'other_in'"/>
+                <field name="sn_receive_department_id"
+                       invisible="sn_other_operation != 'other_in'"/>
+                <field name="sn_receive_employee_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       domain="[('department_id', '=', sn_receive_department_id)] if sn_receive_department_id else []"/>
+                <field name="sn_receive_location_id"
+                       invisible="sn_other_operation != 'other_in'"/>
             </xpath>
         </field>
     </record>

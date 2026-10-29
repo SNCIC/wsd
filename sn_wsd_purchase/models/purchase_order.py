@@ -1,7 +1,9 @@
+from collections import defaultdict
 from decimal import Decimal
 from datetime import datetime
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import formatLang
 from odoo.tools.float_utils import float_compare, float_round
 from odoo.tools.misc import NON_BREAKING_SPACE, format_amount, get_lang
@@ -226,16 +228,102 @@ class PurchaseOrder(models.Model):
                 continue
             order.order_line._sync_price_to_vendor_pricelist()
 
+    sn_missing_receipt = fields.Boolean(
+        string='Missing Receipt',
+        compute='_compute_sn_missing_receipt',
+        help="Set when the order is confirmed, a quantity is still expected from the "
+             "vendor and every receipt of the order is already done or cancelled. "
+             "Only then is the missing receipt not reachable from the standard flow.",
+    )
+
+    @api.depends('state', 'order_line.product_qty', 'order_line.qty_received', 'picking_ids.state')
+    def _compute_sn_missing_receipt(self):
+        for order in self:
+            has_open_receipt = any(
+                picking.state not in ('done', 'cancel') for picking in order.picking_ids
+            )
+            has_missing_qty = any(
+                line.product_uom_id.compare(line.product_qty - line.qty_received, 0.0) > 0
+                for line in order.order_line
+                if not line.display_type and line.product_id.type == 'consu'
+            )
+            order.sn_missing_receipt = (
+                order.state == 'purchase' and has_missing_qty and not has_open_receipt
+            )
+
+    def action_sn_create_missing_receipt(self):
+        """Create the receipt of the quantity still expected from the vendor.
+
+        The standard Receive button disappears as soon as every receipt of the
+        order is done or cancelled: that happens when the goods are received in
+        full and part of them is returned to the vendor, or when a partial
+        receipt is validated without backorder. The receipt is rebuilt here with
+        the same logic used when the order is confirmed, so the new moves stay
+        linked to the order lines and feed the received quantity.
+        """
+        self.ensure_one()
+        if self.state != 'purchase':
+            raise UserError(_("A missing receipt can only be created on a confirmed purchase order."))
+        if not self.sn_missing_receipt:
+            raise UserError(_("There is no quantity left to receive on this purchase order."))
+        self._create_picking()
+        pickings = self.picking_ids.filtered(
+            lambda picking: picking.state not in ('done', 'cancel')
+        )
+        if not pickings:
+            raise UserError(_(
+                "No receipt was created: the order lines must hold a storable product "
+                "with a quantity left to receive."
+            ))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Receipt'),
+            'res_model': 'stock.picking',
+            'res_id': pickings[0].id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
 
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
+    # Purchase details report: the supplier comes from the order itself (an
+    # order line always has one), the material fields from the product.
+    supplier_id = fields.Many2one(
+        comodel_name='res.partner',
+        related='order_id.partner_id',
+        string='Supplier',
+        readonly=True,
+    )
+    product_code = fields.Char(
+        related='product_id.default_code',
+        string='Material Code',
+        readonly=True,
+    )
+    product_name = fields.Char(
+        related='product_id.name',
+        string='Material Name',
+        readonly=True,
+    )
     brand_id = fields.Many2one(
         comodel_name='sn.wsd.brand',
         related='product_id.brand_id',
         string='Brand',
         readonly=True,
         help='Brand of the ordered product, printed on the purchase contract.',
+    )
+    qc_qty = fields.Float(
+        string='Quality Control Quantity',
+        compute='_compute_reception_step_quantities',
+        digits='Product Unit',
+        help='Quantity that has completed the quality control step of the reception.',
+    )
+    stocked_qty = fields.Float(
+        string='Stocked Quantity',
+        compute='_compute_reception_step_quantities',
+        digits='Product Unit',
+        help='Quantity that has completed the storage step of the reception.',
     )
     price_unit_tax_included = fields.Float(
         string='Unit Price Tax Included',
@@ -245,6 +333,73 @@ class PurchaseOrderLine(models.Model):
         string='Untaxed Unit Price',
         min_display_digits='Product Price',
     )
+
+    def _get_reception_step(self, move):
+        """与请购明细同口径：来料收货之后的质检/入库环节。
+
+        三步收货时来料入库后按推式规则生成质检与上架移动，这两个移动
+        类型只在仓库开启对应收货方式时存在；一步收货没有独立的入库
+        环节，收货移动本身就是入库。
+        """
+        self.ensure_one()
+        picking_type = move.picking_type_id
+        warehouse = picking_type.warehouse_id
+        if not warehouse:
+            return False
+        qc_type = warehouse.qc_type_id
+        if qc_type.active and picking_type == qc_type:
+            return 'qc'
+        store_type = warehouse.store_type_id
+        if store_type.active:
+            return 'storage' if picking_type == store_type else False
+        return 'storage' if picking_type.code == 'incoming' else False
+
+    @api.depends('move_ids.quantity', 'move_ids.state', 'move_ids.picking_type_id')
+    def _compute_reception_step_quantities(self):
+        """质检/入库数量：从收货移动沿推式规则链走到下游移动汇总。
+
+        采购行是移动的最终归属（move.purchase_line_id），推式规则生成的
+        下游移动清空了该字段，所以先记下链首移动再回挂到采购行。
+        """
+        for line in self:
+            line.qc_qty = 0.0
+            line.stocked_qty = 0.0
+        lines = self.filtered('id')
+        if not lines:
+            return
+        receipt_moves = self.env['stock.move'].search([
+            ('purchase_line_id', 'in', lines.ids),
+        ])
+        if not receipt_moves:
+            return
+        origin_moves = {move.id: move for move in receipt_moves}
+        chain = receipt_moves
+        frontier = receipt_moves
+        while frontier:
+            frontier = self.env['stock.move'].search([
+                ('move_orig_ids', 'in', frontier.ids),
+                ('id', 'not in', chain.ids),
+            ])
+            for move in frontier:
+                parent = move.move_orig_ids & chain
+                origin_moves[move.id] = origin_moves.get(parent[:1].id, move)
+            chain |= frontier
+        quantities = defaultdict(lambda: defaultdict(float))
+        for move in chain:
+            if move.state != 'done' or move.quantity <= 0.0:
+                continue
+            line = origin_moves.get(move.id, move).purchase_line_id
+            if not line or line not in lines:
+                continue
+            step = line._get_reception_step(move)
+            if not step:
+                continue
+            uom = line.product_uom_id or move.product_uom
+            quantities[line.id][step] += move.product_uom._compute_quantity(
+                move.quantity, uom, rounding_method='HALF-UP')
+        for line in lines:
+            line.qc_qty = quantities[line.id]['qc']
+            line.stocked_qty = quantities[line.id]['storage']
 
     def _get_tax_details(self, price_unit, special_mode=False):
         self.ensure_one()

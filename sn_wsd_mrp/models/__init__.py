@@ -22,6 +22,7 @@ from . import mrp_workcenter
 from . import mrp_routing_workcenter_daily_plan
 from . import product
 from . import mrp_electronics
+from . import mrp_bom_line_qty
 from . import stock_move_line
 from . import serial_identity_code_seed
 from . import substitute_rule

@@ -73,7 +73,7 @@ msgstr "已完成来料上架入库环节的数量。"
 #: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_receipt_detail
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
 msgid "Receipt Details"
-msgstr "入库明细"
+msgstr "收货明细"
 
 #. module: sn_wsd_purchase
 #. odoo-python
@@ -96,3 +96,36 @@ msgstr "更新供应商价格表"
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
 msgid "Write the unit prices and discounts changed on the order lines back to the vendor pricelist of the order vendor when the order is confirmed, so that the next purchase order defaults to them."
 msgstr "确认订单时，把订单行上修改过的单价与折扣写回该订单供应商的价格表，使下一张采购订单默认带出这些价格。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_summary_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_summary_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_summary_detail_list
+msgid "Summary Details"
+msgstr "汇总明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__supplier_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier of the purchase order this request line was ordered on; empty until a purchase order is placed."
+msgstr "该请购明细所下采购订单的供应商；未下采购订单时为空。"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Requests for Quotation"
+msgstr "询价单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Cancelled"
+msgstr "已取消"

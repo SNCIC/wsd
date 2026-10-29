@@ -4,17 +4,23 @@
         <field name="name">purchase.request.line.purchase.detail.list</field>
         <field name="model">purchase.request.line</field>
         <field name="arch" type="xml">
-            <list string="Purchase Details" create="false" delete="false">
+            <!-- The header information of a request is printed on the first
+                 line of its details only: the merged cells renderer hides the
+                 values the lines below repeat. -->
+            <list string="Purchase Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list">
                 <field name="request_id"/>
-                <field name="create_user_id"/>
+                <field name="date_required"/>
+                <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>
+                <field name="description" string="Description" readonly="1"/>
                 <field name="request_state" widget="badge"
                        decoration-success="request_state in ('approved', 'in_progress', 'done')"
                        decoration-warning="request_state == 'to_approve'"
                        decoration-danger="request_state == 'rejected'"/>
-                <field name="date_required"/>
                 <field name="product_code"/>
                 <field name="product_name"/>
                 <field name="material_specification"/>
+                <field name="po_supplier_id"/>
                 <field name="requested_qty"/>
                 <field name="approved_qty" readonly="request_state not in ['draft', 'to_approve']"/>
                 <field name="purchased_qty"/>
@@ -62,6 +68,7 @@
                         <field name="stocked_qty"/>
                     </group>
                     <group string="Purchasing">
+                        <field name="po_supplier_id"/>
                         <field name="purchase_order_ids" widget="many2many_tags"/>
                         <field name="purchase_state"/>
                         <field name="expected_arrival_date"/>
@@ -104,12 +111,78 @@
         </field>
     </record>
 
+    <!-- Purchase details report of the purchase order lines: the supplier is
+         the vendor of the order, so every line carries one. The request line
+         report above stays the purchase request details report. -->
+    <record id="view_sn_purchase_order_detail_list" model="ir.ui.view">
+        <field name="name">purchase.order.line.purchase.detail.list</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <list string="Purchase Details" create="false" delete="false"
+                  default_order="order_id, sequence, id"
+                  js_class="sn_wsd_merged_cells_list">
+                <field name="order_id"/>
+                <field name="supplier_id"/>
+                <field name="date_order"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft', 'sent')"
+                       decoration-success="state in ('purchase', 'done')"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id" groups="uom.group_uom"/>
+                <field name="price_unit_tax_included" string="Tax Included Unit Price"/>
+                <field name="price_total" string="Tax Included Amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="qty_received" string="Received Quantity"/>
+                <field name="qc_qty"/>
+                <field name="stocked_qty"/>
+                <field name="date_planned"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_purchase_order_detail_search" model="ir.ui.view">
+        <field name="name">purchase.order.line.purchase.detail.search</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Purchase Details">
+                <field name="order_id"/>
+                <field name="supplier_id"/>
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="date_order"/>
+                <separator/>
+                <filter name="filter_rfq" string="Requests for Quotation"
+                        domain="[('state', 'in', ['draft', 'sent'])]"/>
+                <filter name="filter_confirmed" string="Confirmed"
+                        domain="[('state', 'in', ['purchase', 'done'])]"/>
+                <filter name="filter_cancelled" string="Cancelled"
+                        domain="[('state', '=', 'cancel')]"/>
+                <group>
+                    <filter name="group_order" string="Purchase Order"
+                            context="{'group_by': 'order_id'}"/>
+                    <filter name="group_product" string="Product"
+                            context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_purchase_detail" model="ir.actions.act_window">
         <field name="name">Purchase Details</field>
-        <field name="res_model">purchase.request.line</field>
-        <field name="view_mode">list,form</field>
-        <field name="view_id" ref="view_sn_purchase_detail_list"/>
-        <field name="search_view_id" ref="view_sn_purchase_detail_search"/>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_purchase_order_detail_list"/>
+        <field name="search_view_id" ref="view_sn_purchase_order_detail_search"/>
+        <!-- The order header is printed once per order: the merged cells list
+             compares the lines on the order of the list below. -->
+        <field name="context">{'create': False,
+            'sn_merged_cells_key': 'order_id',
+            'sn_merged_cells_fields': ['order_id', 'supplier_id', 'date_order', 'state']}</field>
     </record>
 
     <menuitem id="menu_sn_purchase_detail"
@@ -118,9 +191,9 @@
               action="action_sn_purchase_detail"
               sequence="7"/>
 
-    <!-- Purchase Request Details (Purchase > Purchase Request Lines): the
-         request lines report shares the list and the search of the purchase
-         details report above, so both menus show the same columns. -->
+    <!-- Purchase Request Lines (Purchase > Purchase Request Lines): the menu
+         keeps the request line report and its search view, so the supplier it
+         shows is the one of the purchase order the line was ordered on. -->
     <record id="purchase_request.purchase_request_line_form_action_tree" model="ir.actions.act_window.view">
         <field name="view_id" ref="view_sn_purchase_detail_list"/>
     </record>
@@ -129,23 +202,26 @@
         <field name="search_view_id" ref="view_sn_purchase_detail_search"/>
     </record>
 
-    <!-- Receipt Details (Inventory > Reporting): the purchase details report
-         without the price columns, for the warehouse. The columns are written
-         out instead of inheriting them: Odoo applies every view inheriting a
-         view to that view too, so removing the price columns in a child view
-         would remove them from the purchase details report as well. -->
-    <record id="view_sn_purchase_receipt_detail_list" model="ir.ui.view">
-        <field name="name">purchase.request.line.receipt.detail.list</field>
+    <!-- Summary Details (Inventory > Reporting): the reception quantities of
+         every purchase request line (received, quality controlled and stored)
+         on one line, with the request header printed once per request. The
+         receipt, quality control and storage reports of sn_wsd_stock list the
+         operations of each step instead; this one keeps the quantities of the
+         three steps side by side for the warehouse to reconcile them. -->
+    <record id="view_sn_purchase_summary_detail_list" model="ir.ui.view">
+        <field name="name">purchase.request.line.summary.detail.list</field>
         <field name="model">purchase.request.line</field>
         <field name="arch" type="xml">
-            <list string="Receipt Details" create="false" delete="false">
+            <list string="Summary Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list">
                 <field name="request_id"/>
-                <field name="create_user_id"/>
+                <field name="date_required"/>
+                <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>
+                <field name="description" string="Description" readonly="1"/>
                 <field name="request_state" widget="badge"
                        decoration-success="request_state in ('approved', 'in_progress', 'done')"
                        decoration-warning="request_state == 'to_approve'"
                        decoration-danger="request_state == 'rejected'"/>
-                <field name="date_required"/>
                 <field name="product_code"/>
                 <field name="product_name"/>
                 <field name="material_specification"/>
@@ -163,17 +239,17 @@
         </field>
     </record>
 
-    <record id="action_sn_purchase_receipt_detail" model="ir.actions.act_window">
-        <field name="name">Receipt Details</field>
+    <record id="action_sn_purchase_summary_detail" model="ir.actions.act_window">
+        <field name="name">Summary Details</field>
         <field name="res_model">purchase.request.line</field>
         <field name="view_mode">list,form</field>
-        <field name="view_id" ref="view_sn_purchase_receipt_detail_list"/>
+        <field name="view_id" ref="view_sn_purchase_summary_detail_list"/>
         <field name="search_view_id" ref="view_sn_purchase_detail_search"/>
     </record>
 
-    <menuitem id="menu_sn_purchase_receipt_detail"
-              name="Receipt Details"
+    <menuitem id="menu_sn_purchase_summary_detail"
+              name="Summary Details"
               parent="stock.menu_warehouse_report"
-              action="action_sn_purchase_receipt_detail"
-              sequence="20"/>
+              action="action_sn_purchase_summary_detail"
+              sequence="23"/>
 </odoo>

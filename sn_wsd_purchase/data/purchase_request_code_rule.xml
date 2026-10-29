@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Purchase requests are numbered by month: PR-2026-10-0001. The sequence
+         segment resets its counter every month, so each month restarts at 0001.
+         noupdate: the numbering of the requests already issued must not be
+         rewritten by an upgrade. -->
+    <data noupdate="1">
+        <record id="code_rule_purchase_request" model="sn.code.rule">
+            <field name="name">Purchase Request Coding</field>
+            <field name="model_id" ref="purchase_request.model_purchase_request"/>
+            <field name="target_field">name</field>
+            <field name="separator">-</field>
+            <field name="segment_ids" eval="[
+                Command.create({'sequence': 10, 'segment_type': 'fixed', 'text_value': 'PR'}),
+                Command.create({'sequence': 20, 'segment_type': 'date', 'date_source': 'today', 'date_format': '%Y'}),
+                Command.create({'sequence': 30, 'segment_type': 'date', 'date_source': 'today', 'date_format': '%m'}),
+                Command.create({'sequence': 40, 'segment_type': 'seq', 'seq_impl': 'engine', 'padding': 4, 'period': 'month'}),
+            ]"/>
+        </record>
+    </data>
+</odoo>

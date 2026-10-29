@@ -80,7 +80,7 @@ class MesTestResultInterfaceColumns(models.Model):
         string='Nameplate Code', index=True,
         help='Verbatim uploaded form field M_STR1 (nameplate scanned with this pass).')
     defect_code_raw = fields.Char(
-        string='Defect Code', index=True,
+        string='Defect Code (Raw)', index=True,
         help='Verbatim uploaded form field M_STR2 (defect code).')
     assembly_crc = fields.Char(
         string='Assembly CRC', index=True,

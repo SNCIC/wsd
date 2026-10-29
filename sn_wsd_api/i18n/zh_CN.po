@@ -1319,3 +1319,21 @@ msgstr "个事件"
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "rows"
 msgstr "条"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
+msgid "Defect Code (Raw)"
+msgstr "缺陷代码（原始）"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/controllers/rest_api.py:0
+msgid "OK (concurrency conflict, retried %s times)"
+msgstr "OK（并发冲突，已重试 %s 次）"
+
+#. module: sn_wsd_api
+#. odoo-python
+#: code:addons/sn_wsd_api/controllers/rest_api.py:0
+msgid "The station was updated by another scan at the same time (%(error)s); please scan the SN again."
+msgstr "本工位同时收到其他板的过站请求（%(error)s），重试后仍未成功，请重新扫描该 SN。"
+

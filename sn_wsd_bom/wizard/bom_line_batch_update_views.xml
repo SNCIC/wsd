@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_bom_line_batch_update_form" model="ir.ui.view">
+        <field name="name">sn.bom.line.batch.update.form</field>
+        <field name="model">sn.bom.line.batch.update</field>
+        <field name="arch" type="xml">
+            <form string="Batch Update BOM Lines">
+                <p class="text-muted">
+                    Tick a value to write it on every selected BOM line.
+                    Unticked values are left as they are.
+                </p>
+                <group>
+                    <field name="line_count"/>
+                    <field name="line_ids" widget="many2many_tags" readonly="1"
+                           invisible="1"/>
+                </group>
+                <group string="Usage">
+                    <field name="update_usage"/>
+                    <field name="qty_numerator" readonly="not update_usage"
+                           options="{'hide_trailing_zeros': True}"/>
+                    <field name="qty_denominator" readonly="not update_usage"/>
+                </group>
+                <group string="Board Side">
+                    <field name="update_board_side"/>
+                    <field name="x_board_side" readonly="not update_board_side"/>
+                </group>
+                <group string="Advance Issue">
+                    <field name="update_advance_issue"/>
+                    <field name="x_advance_issue" readonly="not update_advance_issue"/>
+                </group>
+                <group string="Sequence">
+                    <field name="update_sequence"/>
+                    <field name="sequence" readonly="not update_sequence"/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Apply" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_bom_line_batch_update" model="ir.actions.act_window">
+        <field name="name">Batch Update BOM Lines</field>
+        <field name="res_model">sn.bom.line.batch.update</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="mrp.model_mrp_bom_line"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[Command.link(ref('mrp.group_mrp_manager'))]"/>
+    </record>
+</odoo>

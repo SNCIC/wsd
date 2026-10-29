@@ -115,6 +115,11 @@ msgid "Consumable Code"
 msgstr "辅料料号"
 
 #. module: sn_wsd_consumable
+#: model:ir.model.fields,field_description:sn_wsd_consumable.field_sn_consumable_info__template_code
+msgid "Template Code"
+msgstr "模板编码"
+
+#. module: sn_wsd_consumable
 #: model:ir.actions.act_window,name:sn_wsd_consumable.action_sn_consumable_info
 #: model:ir.ui.menu,name:sn_wsd_consumable.menu_sn_consumable_info
 #: model:ir.model,name:sn_wsd_consumable.model_sn_consumable_info

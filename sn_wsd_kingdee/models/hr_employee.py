@@ -17,7 +17,7 @@ the reporting entities of the form belong to the payroll perimeter, not to this
 integration.
 """
 
-from odoo import api, models
+from odoo import api, fields, models
 
 from .kingdee_client import EMPLOYEE_FORM_ID
 
@@ -44,6 +44,21 @@ class HrEmployee(models.Model):
     # No Odoo field mirrors the employee number: it is stored on kingdee_number, and an
     # employee Odoo already has is adopted through the name.
     _kingdee_number_field = None
+
+    # The synchronization fields of an employee live on ``hr.employee`` only, and the
+    # note at the top of ``addons/hr/models/hr_employee.py`` says what that implies: a
+    # field that ``hr.employee.public`` does not carry must be restricted to the HR
+    # group, because the prefetch of a user who cannot read ``hr.employee`` asks for
+    # the whole group and fails on the public profile check -- reading the name of an
+    # operator at the shop-floor terminal was enough. ``hr_employee_public.py``
+    # declares them on the public model as well, which is the layout the official HR
+    # modules use; the group is what keeps them out of that prefetch.
+    kingdee_number = fields.Char(groups="hr.group_hr_user")
+    kingdee_name = fields.Char(groups="hr.group_hr_user")
+    kingdee_master_id = fields.Char(groups="hr.group_hr_user")
+    kingdee_sync_state = fields.Selection(groups="hr.group_hr_user")
+    kingdee_last_sync_at = fields.Datetime(groups="hr.group_hr_user")
+    kingdee_sync_message = fields.Text(groups="hr.group_hr_user")
 
     def _kingdee_adopt_domain(self, data, number):
         """Adopt the employee Odoo already has, by name."""
