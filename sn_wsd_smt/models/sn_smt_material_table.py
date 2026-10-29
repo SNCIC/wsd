@@ -56,6 +56,14 @@ class SnSmtMaterialTable(models.Model):
     total_point_qty = fields.Integer(compute='_compute_total_point_qty', string='Total Points')
     track_type = fields.Selection(TRACK_TYPE_SELECTION, string='TRACK_TYPE', default='single', required=True)
     is_valid = fields.Selection(YN_SELECTION, string='IS_VALID', default='Y', required=True, tracking=True)
+    is_effective = fields.Boolean(
+        string='Is Effective',
+        default=True,
+        tracking=True,
+        help='Uncheck to stop this material table from matching MES orders '
+             'and to block loading, unloading and consumption on its '
+             'loadpoints.',
+    )
     note = fields.Text(string='Note')
     company_id = fields.Many2one(
         'res.company',
@@ -120,14 +128,14 @@ class SnSmtMaterialTable(models.Model):
             if any(link.company_id != record.company_id for link in record.line_link_ids):
                 raise ValidationError(_('The linked production line company must match the material table company.'))
 
-    @api.constrains('model_code', 'product_side', 'is_valid', 'line_link_ids')
+    @api.constrains('model_code', 'product_side', 'is_valid', 'is_effective', 'line_link_ids')
     def _check_line_exclusive_per_model(self):
-        # 同公司同图号+面别的有效表之间，一条产线只能挂在一张表上：
+        # 同公司同图号+面别的有效且生效表之间，一条产线只能挂在一张表上：
         # 产线绑定是制令单上线匹配的第一优先级（_match_for_mes_order），
-        # 重复挂线会让 limit=1 静默取表。作废（is_valid='N'）即释放产线，
-        # 挂接行保留不删（历史可追溯）。
+        # 重复挂线会让 limit=1 静默取表。作废（is_valid='N'）或停用
+        # （is_effective=False）即释放产线，挂接行保留不删（历史可追溯）。
         for record in self:
-            if record.is_valid != 'Y':
+            if record.is_valid != 'Y' or not record.is_effective:
                 continue
             lines = record.line_link_ids.mapped('production_line_id')
             if not lines:
@@ -137,6 +145,7 @@ class SnSmtMaterialTable(models.Model):
                 ('model_code', '=', record.model_code),
                 ('product_side', '=', record.product_side),
                 ('is_valid', '=', 'Y'),
+                ('is_effective', '=', True),
                 ('id', '!=', record.id),
                 ('line_link_ids.production_line_id', 'in', lines.ids),
             ], limit=1)
@@ -156,12 +165,14 @@ class SnSmtMaterialTable(models.Model):
     @api.model
     def _match_for_mes_order(self, mes_order):
         """按 图号+面别 匹配制令单的料站表；优先取产线绑定的表，
-        否则回退到未绑定任何产线的表。"""
+        否则回退到未绑定任何产线的表。停用（is_effective=False）的表
+        一律不参与匹配——记录不归档，只是不生效。"""
         base_domain = [
             ('company_id', '=', mes_order.company_id.id),
             ('model_code', '=', mes_order.product_id.default_code),
             ('product_side', '=', mes_order.x_side),
             ('is_valid', '=', 'Y'),
+            ('is_effective', '=', True),
         ]
         line = mes_order.production_line_id
         if line:
@@ -509,6 +520,23 @@ class SnSmtOnlineMaterial(models.Model):
             lines = lines.filtered(lambda line: line.is_skip != 'Y')
         return lines
 
+    def _ensure_material_table_effective(self):
+        """料站表停用（is_effective=False）后，该表拆出的料站行不得再做
+        任何料站操作：上料/换料/续料/料车上料/转机继承/过站门禁与扣点/
+        下料一律拒绝，必须先恢复生效。drawing_list 行（mt_id 为空，
+        来自关键物料清单）不受此门禁约束。"""
+        for line in self:
+            table = line.mt_id
+            if table and not table.is_effective:
+                raise ValidationError(_(
+                    'Material table %(table)s is not effective. Re-enable it '
+                    'before operating loadpoint %(pos)s of %(order)s.',
+                    table=table.table_name,
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name,
+                ))
+        return True
+
     @api.model
     def _get_completion_snapshot(self, mes_order):
         active_lines = self._get_active_lines(mes_order)
@@ -722,6 +750,8 @@ class SnSmtOperationMixin(models.AbstractModel):
         """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。
 
         拒绝提示列出要求料号及命中规则的可用替代料号清单。"""
+        # 料站表停用即整表禁止操作：上料/换料/续料/上料校验都在此收口。
+        online_material._ensure_material_table_effective()
         if not material_lot:
             raise ValidationError(_('The material SN could not be resolved to a stock lot.'))
         product_model = self.env['product.product']

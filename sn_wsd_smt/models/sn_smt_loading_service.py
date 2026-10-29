@@ -257,6 +257,8 @@ class SnSmtLoadingService(models.AbstractModel):
         position = mes_order.x_smt_online_material_ids.filtered(
             lambda item: item.loadpoint == slot_no
         )[:1]
+        # 料站表停用即整表禁止操作：离线备料同样落不了位。
+        position._ensure_material_table_effective()
         self._log(
             mes_order, position, 'offline_prepare',
             material_lot=material_lot, feeder=feeder, cart=cart,
@@ -330,6 +332,8 @@ class SnSmtLoadingService(models.AbstractModel):
             if not target:
                 skipped.append(line.slot_no)
                 continue
+            # 料站表停用即整表禁止操作（含无物料SN的料车落位分支）。
+            target._ensure_material_table_effective()
             material_lot = line.material_lot_id
             if material_lot:
                 self._load_position(
@@ -431,6 +435,8 @@ class SnSmtLoadingService(models.AbstractModel):
             raise UserError(_('The unload scope is invalid.'))
         if not lines:
             raise UserError(_('No loaded SMT material position matches the unload request.'))
+        # 料站表停用后连下料/卷终确认一并拒绝：必须先恢复生效再清场。
+        lines._ensure_material_table_effective()
         for line in lines:
             if reel_end and line.loaded_material_lot_id:
                 line.loaded_material_lot_id.write({
@@ -454,6 +460,8 @@ class SnSmtLoadingService(models.AbstractModel):
         product_model = self.env['product.product']
         inherited, manual, fallback = [], [], []
         for target_line in target_mes_order.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y'):
+            # 目标单料站表停用：转机继承同属料站操作，一并禁止。
+            target_line._ensure_material_table_effective()
             source_line = source_lines.filtered(
                 lambda line: line.device_seq == target_line.device_seq
                 and line.table_no == target_line.table_no
