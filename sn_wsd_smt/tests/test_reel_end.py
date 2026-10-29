@@ -60,7 +60,7 @@ class TestReelEnd(TransactionCase):
         })
         cls.workcenter = cls.env['mrp.workcenter'].create({'name': 'RE-WC'})
         cls.op = cls.env['sn.wsd.operation'].create({
-            'name': 'RE-OP', 'code': 'RE-OP', 'x_station_type': 'assembly',
+            'name': 'RE-OP', 'code': 'RE-OP',
         })
         cls.service = cls.env['sn.smt.loading.service']
 

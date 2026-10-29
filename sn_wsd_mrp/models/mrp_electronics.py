@@ -185,13 +185,6 @@ class MrpProduction(models.Model):
         string='Feeder Lines',
     )
 
-    def _requires_feeder_verification(self):
-        self.ensure_one()
-        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
-            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
-        )
-        return bool(feeder_operations)
-
     @api.depends('move_raw_ids.state', 'move_raw_ids.product_uom_qty', 'move_raw_ids.quantity')
     def _compute_can_return_excess(self):
         for production in self:
@@ -242,44 +235,6 @@ class MrpProduction(models.Model):
             lambda move: move.state != 'cancel' and self._is_allowed_substitute_product(move.product_id, material_product)
         )
 
-    def _generate_feeder_lines(self):
-        self.ensure_one()
-        if not self._requires_feeder_verification():
-            return
-        existing_lines = self.feeder_line_ids.filtered(lambda line: line.state != 'returned')
-        if existing_lines:
-            return
-
-        commands = []
-        raw_moves = self.move_raw_ids.filtered(
-            lambda move: move.bom_line_id
-            and move.bom_line_id.x_requires_feeder_verification
-            and move.state != 'cancel'
-        )
-        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
-            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
-        )
-        bom_feeder_operations = feeder_operations.filtered(
-            lambda operation: operation.operation_id.x_station_type != 'smt'
-        )
-        if not bom_feeder_operations:
-            return
-        for feeder_index, move in enumerate(raw_moves, start=1):
-            route_operation = bom_feeder_operations[:1]
-            if not route_operation:
-                continue
-            commands.append(Command.create({
-                'route_operation_id': route_operation.id,
-                'production_id': self.id,
-                'feeder_no': f'F{feeder_index:02d}',
-                'expected_product_id': move.product_id.id,
-                'source_move_id': move.id,
-                'expected_qty': move.product_uom_qty,
-                'state': 'pending',
-            }))
-        if commands:
-            self.write({'feeder_line_ids': commands})
-
     def _sync_feeder_consumption(self):
         for production in self:
             feeder_lines = production.feeder_line_ids.filtered(
@@ -309,12 +264,6 @@ class MrpProduction(models.Model):
                     precision_rounding=line.uom_id.rounding or 0.01,
                 ) > 0 else 'depleted'
                 line.write(vals)
-
-    def action_confirm(self):
-        res = super().action_confirm()
-        for production in self:
-            production._generate_feeder_lines()
-        return res
 
     def _post_inventory(self, cancel_backorder=False):
         res = super()._post_inventory(cancel_backorder=cancel_backorder)

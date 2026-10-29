@@ -28,6 +28,16 @@ msgid "Board Side Type"
 msgstr "板面类型"
 
 #. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_board_test
+msgid "Board Test"
+msgstr "单板调试"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_inspection
+msgid "Inspection"
+msgstr "检验"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Material Over-pick"
@@ -40,6 +50,16 @@ msgid "Material Return"
 msgstr "物料退料"
 
 #. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_packaging
+msgid "Packaging"
+msgstr "包装"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_smt
+msgid "SMT"
+msgstr "SMT"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "SN Operation History"
@@ -48,14 +68,9 @@ msgstr "SN 工序履历"
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__active
 msgid "Active"
 msgstr "有效"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__aging
-msgid "Aging"
-msgstr "老化"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
@@ -71,8 +86,8 @@ msgstr "允许强制跳过"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__assembly
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_production_stage__assembly
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_assembly
 msgid "Assembly"
 msgstr "装配"
 
@@ -108,16 +123,11 @@ msgid "Bom Product"
 msgstr "物料清单产品"
 
 #. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__calibration
-msgid "Calibration"
-msgstr "校准"
-
-#. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__code
 msgid "Code"
 msgstr "代码"
 
@@ -133,6 +143,7 @@ msgstr "代码"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -275,12 +286,6 @@ msgid "Feeder Control"
 msgstr "管控Feeder"
 
 #. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__final_test
-msgid "Final Test"
-msgstr "最终测试"
-
-#. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_mes_return_wizard__picked_qty
 msgid "Finished-unit quantity accumulated from done material pickings."
@@ -305,12 +310,6 @@ msgid ""
 "Hours the SN spent at this operation once it left: out_date - in_date. Zero "
 "for in-progress rows."
 msgstr "SN 离开本工序时在此停留的小时数：出站时间 - 进站时间。进行中的行该值为零。"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__inspection
-msgid "Inspection"
-msgstr "检验单号"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_stock_warehouse__picking_type_return_id
@@ -422,6 +421,7 @@ msgstr "信息"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__name
 msgid "Name"
 msgstr "名称"
 
@@ -451,22 +451,10 @@ msgid "Occupying Orders"
 msgstr "占用工单"
 
 #. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_station_type
-msgid "Operation Type"
-msgstr "作业类型"
-
-#. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_carton_pallet_binding_log__operator_code
 msgid "Operator Code"
 msgstr "操作员代码"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\addons\sale\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__packaging
-msgid "Packaging"
-msgstr "包装"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
@@ -485,12 +473,6 @@ msgstr "工艺路线"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document__production_id
 msgid "Production"
 msgstr "生产"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__programming
-msgid "Programming"
-msgstr "编程"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
@@ -515,12 +497,6 @@ msgstr "已收"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_ng_qty
 msgid "Rejected"
 msgstr "拒绝"
-
-#. module: sn_wsd_mrp
-#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__repair
-msgid "Repair"
-msgstr "维修"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
@@ -594,6 +570,11 @@ msgstr ""
 #: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_batch_pass_wizard__workcenter_id
 msgid "Terminal entry context only (which screen opened the dialog)."
 msgstr "仅用于终端入口上下文（哪个界面打开了该对话框）。"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_testing
+msgid "Testing"
+msgstr "调试"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__x_is_over_pick
@@ -783,3 +764,14 @@ msgstr "车间"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 msgid "<strong>Excluded:</strong>"
 msgstr "<strong>已排除：</strong>"
+
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_dip
+msgid "DIP"
+msgstr "DIP"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__sequence
+msgid "Sequence"
+msgstr "序号"

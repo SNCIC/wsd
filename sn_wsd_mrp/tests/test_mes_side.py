@@ -29,8 +29,8 @@ class TestMesSide(TransactionCase):
             'name': 'LS2', 'code': 'LS2', 'workshop_id': cls.ws2.id,
         })
         Operation = cls.env['sn.wsd.operation']
-        cls.op_in = Operation.create({'name': 'OP-S-IN', 'code': 'SIN1', 'x_station_type': 'assembly'})
-        cls.op_out = Operation.create({'name': 'OP-S-OUT', 'code': 'SOUT1', 'x_station_type': 'final_test'})
+        cls.op_in = Operation.create({'name': 'OP-S-IN', 'code': 'SIN1'})
+        cls.op_out = Operation.create({'name': 'OP-S-OUT', 'code': 'SOUT1'})
 
     # ------------------------------------------------------------------
     # helpers

@@ -24,7 +24,7 @@
                         <t t-foreach="paletteGroups" t-as="group" t-key="group.key">
                             <div class="o_palette_group_title" t-esc="group.label"/>
                             <div t-foreach="group.ops" t-as="op" t-key="op.id"
-                                 t-att-class="'o_palette_card ' + paletteThemeClass(op) + (op.used ? ' o_used' : '')"
+                                 t-att-class="'o_palette_card' + (op.used ? ' o_used' : '')"
                                  t-on-click="onPaletteClick"
                                  t-att-data-op-id="op.id">
                                 <div class="o_palette_icon" t-esc="paletteIcon(op)"/>

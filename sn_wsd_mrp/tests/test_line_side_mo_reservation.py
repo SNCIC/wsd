@@ -52,9 +52,9 @@ class TestLineSideMoReservation(TransactionCase):
         })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create(
-            {'name': 'LSR-IN', 'code': 'LSRIN', 'x_station_type': 'assembly'})
+            {'name': 'LSR-IN', 'code': 'LSRIN'})
         cls.op_out = Operation.create(
-            {'name': 'LSR-OUT', 'code': 'LSROUT', 'x_station_type': 'final_test'})
+            {'name': 'LSR-OUT', 'code': 'LSROUT'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

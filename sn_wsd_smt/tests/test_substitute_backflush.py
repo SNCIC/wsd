@@ -29,7 +29,7 @@ class TestSubstituteBackflush(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op = Operation.create({
-            'name': 'SBF-OP', 'code': 'SBFOP', 'x_station_type': 'assembly'})
+            'name': 'SBF-OP', 'code': 'SBFOP'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

@@ -26,15 +26,15 @@ class TestOqcEntry(TransactionCase):
             {'name': 'LINESIDE-OQC', 'usage': 'internal'}).id
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'OQC-IN', 'code': 'OQIN', 'x_station_type': 'assembly',
+            'name': 'OQC-IN', 'code': 'OQIN',
             'x_max_test_count': 3,
         })
         cls.op_oqc = Operation.create({
-            'name': 'OQC-FINAL', 'code': 'OQFIN', 'x_station_type': 'final_test',
+            'name': 'OQC-FINAL', 'code': 'OQFIN',
             'x_max_test_count': 3,  # NG boards re-enter after rework
         })
         cls.op_out = Operation.create(
-            {'name': 'OQC-OUT', 'code': 'OQOUT', 'x_station_type': 'final_test'})
+            {'name': 'OQC-OUT', 'code': 'OQOUT'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'RT-OQC', 'code': 'RTOQC', 'x_workshop_id': cls.workshop.id,

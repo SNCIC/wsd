@@ -311,12 +311,6 @@ class SnSmtPcbBoard(models.Model):
                     'Board number %d already exists in this panel.'
                 ) % board.board_no)
 
-    @api.constrains('panel_id', 'state')
-    def _check_production_board_capacity(self):
-        productions = self.mapped('panel_id.production_id').filtered('x_has_smt_operations')
-        for production in productions:
-            production._check_smt_pcb_board_capacity(0)
-
     @api.model
     def _auto_bind_lot(self, records):
         """Automatically bind stock.lot records."""

@@ -18,9 +18,9 @@ class PieceRateTestCommon(TransactionCase):
             'name': 'PRS', 'code': 'PRS', 'workshop_id': cls.workshop.id})
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'PRS-A', 'code': 'PRSA', 'x_station_type': 'assembly'})
+            'name': 'PRS-A', 'code': 'PRSA'})
         cls.op_b = Operation.create({
-            'name': 'PRS-B', 'code': 'PRSB', 'x_station_type': 'final_test'})
+            'name': 'PRS-B', 'code': 'PRSB'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'RT-PRS', 'code': 'RTPRS',

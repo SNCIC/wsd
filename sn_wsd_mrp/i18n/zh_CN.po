@@ -224,6 +224,7 @@ msgstr "需采取行动"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__active
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_identity__active
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_workcenter_status__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__active
 msgid "Active"
 msgstr "有效"
 
@@ -372,8 +373,6 @@ msgstr "提前发料"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_meter_flow_state__aging
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__aging
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__aging
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_aging_batch__status__aging
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_meter_serial__state__aging
 msgid "Aging"
@@ -572,11 +571,10 @@ msgid "Assembled"
 msgstr "已组装"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__assembly
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__assembly
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workorder__x_meter_operation_type__assembly
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_process_section__assembly
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_route_section_stat__x_process_section__assembly
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_assembly
 msgid "Assembly"
 msgstr "装配"
 
@@ -854,12 +852,6 @@ msgid "C"
 msgstr "C"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__calibration
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__calibration
-msgid "Calibration"
-msgstr "校表/校准"
-
-#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_workorder__x_calibration_recipe
 msgid "Calibration Recipe"
 msgstr "校准方案"
@@ -993,6 +985,7 @@ msgstr "已完结（不入库）%(auto)s：%(boards)s 块板完成 T 面工艺�
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_team__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_mrp_workshop__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__code
 msgid "Code"
 msgstr "代码"
 
@@ -1068,6 +1061,7 @@ msgstr "通信测试"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_operation_history__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_serial_wip__company_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -2063,12 +2057,6 @@ msgid "Final Result"
 msgstr "最终结果"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__final_test
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__final_test
-msgid "Final Test"
-msgstr "终检/完工测试"
-
-#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_serial__final_verification_result
 msgid "Final Verification Result"
 msgstr "终检结果"
@@ -2544,10 +2532,9 @@ msgid "Insertion"
 msgstr "插件"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__inspection
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__inspection
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_process_section__inspection
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_route_section_stat__x_process_section__inspection
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_inspection
 msgid "Inspection"
 msgstr "检验"
 
@@ -3738,6 +3725,7 @@ msgstr "我的活动截止时间"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_aging_batch__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_record__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation_data_definition__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__name
 msgid "Name"
 msgstr "名称"
 
@@ -4320,12 +4308,6 @@ msgstr "工序报废：%(op)s（%(reason)s）"
 msgid "Operation that can be executed at this work center."
 msgstr "该工作中心可执行的工序。"
 
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_station_type
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_station_type
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_operation__x_station_type
-msgid "Operation Type"
-msgstr "工序类型"
 
 #. module: sn_wsd_mrp
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_process_route_operation
@@ -4603,11 +4585,10 @@ msgid "Package reference is required."
 msgstr "必须填写包装参考。"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__packaging
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__packaging
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_meter_serial_form
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_process_section__packaging
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_route_section_stat__x_process_section__packaging
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_packaging
 msgid "Packaging"
 msgstr "包装"
 
@@ -5270,12 +5251,6 @@ msgid "Program Version"
 msgstr "程序版本"
 
 #. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__programming
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__programming
-msgid "Programming"
-msgstr "烧录"
-
-#. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__bom_operation_id
 msgid "Projected BoM Operation"
 msgstr "预计物料清单工序"
@@ -5524,12 +5499,6 @@ msgstr "移除成员"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_mrp_team_member_remove_wizard_form
 msgid "Remove Team Members"
 msgstr "移除团队成员"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_routing_workcenter__x_station_type__repair
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_workcenter__x_station_type__repair
-msgid "Repair"
-msgstr "维修"
 
 #. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_online_confirm_form
@@ -6255,6 +6224,7 @@ msgstr "短信发送错误"
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__smt
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_production_stage__smt
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_route_section_stat__x_process_section__smt
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_smt
 msgid "SMT"
 msgstr "SMT"
 
@@ -6539,13 +6509,6 @@ msgstr "过站清除日志"
 msgid "Station Tracking"
 msgstr "过站管理"
 
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_routing_workcenter__x_station_type
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch_operation__station_type
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_operation__x_station_type
-#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_operation_search
-msgid "Station Type"
-msgstr "工位类型"
 
 #. module: sn_wsd_mrp
 #: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_station_wip
@@ -6823,6 +6786,7 @@ msgstr "测试结果"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_process_section__testing
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_route_section_stat__x_process_section__testing
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_testing
 msgid "Testing"
 msgstr "调试"
 
@@ -8698,3 +8662,29 @@ msgstr "制造商"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_res_users__manufacturer
 msgid "Maker of the material the partner supplies, when the goods come from a distributor rather than from the maker itself. Printed as \"Manufacturer (Supplier)\" on the incoming inspection record."
 msgstr "该供应商所供物料的制造商：当货物来自经销商而非制造商本身时填写。打印在来料检验记录的“制造商名称（供应商名称）”栏。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model,name:sn_wsd_mrp.model_sn_wsd_process_section
+msgid "Process Section"
+msgstr "工段"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_sn_wsd_process_section__code
+msgid "Stable key legacy data maps onto."
+msgstr "稳定代码 key（存量数据按此映射）。"
+
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_dip
+msgid "DIP"
+msgstr "DIP"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_board_test
+msgid "Board Test"
+msgstr "单板调试"

@@ -27,13 +27,13 @@ class TestPassHistoryLedger(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'PH-A', 'code': 'PHA', 'x_station_type': 'assembly',
+            'name': 'PH-A', 'code': 'PHA',
             'x_max_test_count': 9})
         cls.op_b = Operation.create({
-            'name': 'PH-B', 'code': 'PHB', 'x_station_type': 'final_test',
+            'name': 'PH-B', 'code': 'PHB',
             'x_max_test_count': 3})
         cls.op_c = Operation.create({
-            'name': 'PH-C', 'code': 'PHC', 'x_station_type': 'final_test',
+            'name': 'PH-C', 'code': 'PHC',
             'x_max_test_count': 3})
         cls.route.write({
             'state': 'confirmed',

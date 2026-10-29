@@ -25,13 +25,13 @@ class TestBatchPass(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'BP-A', 'code': 'BPA', 'x_station_type': 'assembly',
+            'name': 'BP-A', 'code': 'BPA',
             'x_max_test_count': 9})
         cls.op_b = Operation.create({
-            'name': 'BP-B', 'code': 'BPB', 'x_station_type': 'final_test',
+            'name': 'BP-B', 'code': 'BPB',
             'x_max_test_count': 3})
         cls.op_c = Operation.create({
-            'name': 'BP-C', 'code': 'BPC', 'x_station_type': 'final_test',
+            'name': 'BP-C', 'code': 'BPC',
             'x_max_test_count': 3})
         cls.route.write({
             'state': 'confirmed',

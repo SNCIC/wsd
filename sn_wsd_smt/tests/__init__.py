@@ -8,3 +8,4 @@ from . import test_substitute_loading
 from . import test_substitute_backflush
 from . import test_reel_end
 from . import test_material_table_line_unique
+from . import test_online_material_split

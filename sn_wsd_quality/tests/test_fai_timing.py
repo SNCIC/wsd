@@ -24,11 +24,11 @@ class TestFaiTiming(TransactionCase):
             {'name': 'LINESIDE-FAIT', 'usage': 'internal'}).id
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'FAIT-IN', 'code': 'FTIMIN', 'x_station_type': 'assembly',
+            'name': 'FAIT-IN', 'code': 'FTIMIN',
             'x_max_test_count': 3,
         })
         cls.op_out = Operation.create(
-            {'name': 'FAIT-OUT', 'code': 'FTIMOUT', 'x_station_type': 'final_test'})
+            {'name': 'FAIT-OUT', 'code': 'FTIMOUT'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'RT-FAIT', 'code': 'RTFTIM', 'x_workshop_id': cls.workshop.id,

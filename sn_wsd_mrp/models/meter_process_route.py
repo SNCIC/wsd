@@ -5,9 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 
 from .constants import (
     BOARD_SIDE_SELECTION,
-    PROCESS_SECTION_SELECTION,
     SIDE_SELECTION,
-    STATION_TYPE_SELECTION,
 )
 
 
@@ -52,15 +50,11 @@ class SnWsdOperation(models.Model):
         domain="[('company_id', '=', company_id), ('active', '=', True)]",
         help='Work centers that can execute this operation.',
     )
-    x_station_type = fields.Selection(
-        STATION_TYPE_SELECTION,
-        string='Operation Type',
-        default='assembly',
-        required=True,
-    )
-    x_process_section = fields.Selection(
-        PROCESS_SECTION_SELECTION,
+    x_process_section = fields.Many2one(
+        'sn.wsd.process.section',
         string='Process Section',
+        index=True,
+        check_company=True,
     )
     time_mode = fields.Selection(
         [('manual', 'Fixed'), ('auto', 'Computed')],
@@ -410,11 +404,10 @@ class MeterProcessRoute(models.Model):
                     '<div style="font-weight:bold;font-size:13px;color:#1a73e8;border-bottom:1px solid #e0e0e0;padding-bottom:4px;margin-bottom:6px;">'
                     '%s &middot; %s</div>'
                     '<div style="font-size:11px;color:#555;line-height:1.7;">'
-                    '工位类型: %s<br/>'
                     '手动时长: %s<br/>'
                     '前置工序: %s'
                     '</div></div>'
-                    % (op.x_step_code or '', op.name or '', op.x_station_type or '-',
+                    % (op.x_step_code or '', op.name or '',
                        op.time_cycle_manual or 0, deps)
                 )
                 parts.append('<span style="color:#4285f4;font-size:22px;font-weight:bold;">&rarr;</span>')
@@ -660,7 +653,6 @@ class MeterProcessRoute(models.Model):
                 'name': op.name,
                 'step_code': op.x_step_code,
                 'sequence': op.sequence,
-                'x_station_type': op.x_station_type,
                 'time_cycle_manual': op.time_cycle_manual,
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
@@ -690,17 +682,27 @@ class MeterProcessRoute(models.Model):
             ('company_id', 'in', [False, company.id]),
             ('active', '=', True),
         ]
-        operations = self.env['sn.wsd.operation'].search(
-            domain, order='x_process_section, code, name',
-        )
-        return [{
+        operations = self.env['sn.wsd.operation'].search(domain)
+        ordered = sorted(
+            operations,
+            key=lambda op: (
+                op.x_process_section.sequence if op.x_process_section else 999,
+                op.code or '',
+                op.name or '',
+            ))
+        return [self._palette_operation_vals(op, used=False) for op in ordered]
+
+    def _palette_operation_vals(self, op, used):
+        section = op.x_process_section
+        return {
             'id': op.id,
             'code': op.code or '',
             'name': op.name or '',
-            'x_station_type': op.x_station_type or '',
-            'x_process_section': op.x_process_section or '',
-            'used': False,
-        } for op in operations]
+            'section_id': section.id or False,
+            'section_name': section.name or '',
+            'section_sequence': section.sequence if section else 999,
+            'used': used,
+        }
 
     def get_route_operations(self):
         """Return all operations for the palette, with a 'used' flag."""
@@ -711,14 +713,15 @@ class MeterProcessRoute(models.Model):
         operations = self.env['sn.wsd.operation'].browse(
             [op['id'] for op in self.get_route_operations_for_company(self.company_id.id)]
         )
-        return [{
-            'id': op.id,
-            'code': op.code or '',
-            'name': op.name or '',
-            'x_station_type': op.x_station_type or '',
-            'x_process_section': op.x_process_section or '',
-            'used': op.id in used_op_ids,
-        } for op in operations]
+        ordered = sorted(
+            operations,
+            key=lambda op: (
+                op.x_process_section.sequence if op.x_process_section else 999,
+                op.code or '',
+                op.name or '',
+            ))
+        return [self._palette_operation_vals(op, used=op.id in used_op_ids)
+                for op in ordered]
 
     def _apply_flow_versioning(self):
         """保存即版本 core — idempotent: archiving happens only when the
@@ -1014,13 +1017,6 @@ class MeterProcessRouteOperation(models.Model):
     x_step_code = fields.Char(
         string='Route Operation Code',
         related='operation_id.code',
-        store=True,
-        readonly=True,
-        index=True,
-    )
-    x_station_type = fields.Selection(
-        related='operation_id.x_station_type',
-        string='Station Type',
         store=True,
         readonly=True,
         index=True,
@@ -1367,10 +1363,12 @@ class RouteSectionStat(models.Model):
         related='route_id.company_id',
         store=True,
     )
-    x_process_section = fields.Selection(
-        PROCESS_SECTION_SELECTION,
+    x_process_section = fields.Many2one(
+        'sn.wsd.process.section',
         string='统计段别',
         required=True,
+        index=True,
+        check_company=True,
     )
     start_operation_id = fields.Many2one(
         'sn.wsd.operation',

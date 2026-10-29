@@ -28,10 +28,9 @@ class TestProcessDocument(TransactionCase):
         Operation = cls.env['sn.wsd.operation']
         cls.op_smt = Operation.create({
             'name': 'SMT Program', 'code': 'SMTPRG',
-            'x_station_type': 'assembly',
         })
         cls.op_no_code = Operation.create({
-            'name': 'Final Check', 'x_station_type': 'final_test',
+            'name': 'Final Check',
         })
         # code 有序列默认值；无 code 是遗留路径，清空后验证 name 兜底
         cls.op_no_code.code = False

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default process sections; the post-migrate of 19.0.14.4.0 seeds
+         other companies idempotently before mapping legacy keys. -->
+    <record id="process_section_smt" model="sn.wsd.process.section">
+        <field name="name">SMT</field>
+        <field name="code">smt</field>
+        <field name="sequence">10</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_dip" model="sn.wsd.process.section">
+        <field name="name">DIP</field>
+        <field name="code">dip</field>
+        <field name="sequence">20</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_board_test" model="sn.wsd.process.section">
+        <field name="name">Board Test</field>
+        <field name="code">board_test</field>
+        <field name="sequence">30</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_assembly" model="sn.wsd.process.section">
+        <field name="name">Assembly</field>
+        <field name="code">assembly</field>
+        <field name="sequence">40</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_testing" model="sn.wsd.process.section">
+        <field name="name">Testing</field>
+        <field name="code">testing</field>
+        <field name="sequence">50</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_inspection" model="sn.wsd.process.section">
+        <field name="name">Inspection</field>
+        <field name="code">inspection</field>
+        <field name="sequence">60</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="process_section_packaging" model="sn.wsd.process.section">
+        <field name="name">Packaging</field>
+        <field name="code">packaging</field>
+        <field name="sequence">70</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+</odoo>

@@ -30,9 +30,9 @@ class TestDualSideClose(TransactionCase):
 
         Operation = cls.env['sn.wsd.operation']
         cls.op_t_in = Operation.create(
-            {'name': 'DC T IN', 'code': 'DCTIN', 'x_station_type': 'assembly'})
+            {'name': 'DC T IN', 'code': 'DCTIN'})
         cls.op_t_out = Operation.create(
-            {'name': 'DC T OUT', 'code': 'DCTOUT', 'x_station_type': 'final_test'})
+            {'name': 'DC T OUT', 'code': 'DCTOUT'})
         Route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True)
         cls.route_t = Route.create({
@@ -56,7 +56,7 @@ class TestDualSideClose(TransactionCase):
             {'route_id': cls.route_t.id, 'x_drawing_no': 'DWG-DC'})
         # 双面产品的 B 面路线也必须绑定，MO 校验才放行
         cls.op_b = Operation.create(
-            {'name': 'DC B', 'code': 'DCB', 'x_station_type': 'assembly'})
+            {'name': 'DC B', 'code': 'DCB'})
         cls.route_b = Route.create({
             'name': 'DC-RT-B', 'code': 'DCRTB',
             'x_workshop_id': cls.workshop.id,
@@ -109,7 +109,7 @@ class TestDualSideClose(TransactionCase):
 
         # 单面板产品 + 路线：非 T 面单禁用完结（不入库）的对照
         cls.op_s = Operation.create(
-            {'name': 'DC S', 'code': 'DCS', 'x_station_type': 'assembly'})
+            {'name': 'DC S', 'code': 'DCS'})
         cls.route_s = Route.create({
             'name': 'DC-RT-S', 'code': 'DCRTS',
             'x_workshop_id': cls.workshop.id,

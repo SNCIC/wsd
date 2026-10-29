@@ -27,9 +27,9 @@ class TestSubstituteRule(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'SUB-IN', 'code': 'SIN', 'x_station_type': 'assembly'})
+            'name': 'SUB-IN', 'code': 'SIN'})
         cls.op_out = Operation.create({
-            'name': 'SUB-OUT', 'code': 'SOUT', 'x_station_type': 'final_test'})
+            'name': 'SUB-OUT', 'code': 'SOUT'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

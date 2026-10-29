@@ -46,14 +46,10 @@ class TestReportOffline(TransactionCase):
             'name': 'RPO-LINE-SIDE', 'usage': 'internal',
         }).id
         Operation = cls.env['sn.wsd.operation']
-        cls.op_a = Operation.create({'name': 'RPO-A', 'code': 'RPOA',
-                                     'x_station_type': 'assembly'})
-        cls.op_b = Operation.create({'name': 'RPO-B', 'code': 'RPOB',
-                                     'x_station_type': 'assembly'})
-        cls.op_c = Operation.create({'name': 'RPO-C', 'code': 'RPOC',
-                                     'x_station_type': 'assembly'})
-        cls.op_d = Operation.create({'name': 'RPO-D', 'code': 'RPOD',
-                                     'x_station_type': 'final_test'})
+        cls.op_a = Operation.create({'name': 'RPO-A', 'code': 'RPOA'})
+        cls.op_b = Operation.create({'name': 'RPO-B', 'code': 'RPOB'})
+        cls.op_c = Operation.create({'name': 'RPO-C', 'code': 'RPOC'})
+        cls.op_d = Operation.create({'name': 'RPO-D', 'code': 'RPOD'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

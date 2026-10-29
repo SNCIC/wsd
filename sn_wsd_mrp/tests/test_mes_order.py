@@ -46,8 +46,8 @@ class TestMesOrder(TransactionCase):
         # test route two confirmed operations reachable via the legacy graph
         # (daily input and output must differ).
         Operation = cls.env['sn.wsd.operation']
-        cls.op_in = Operation.create({'name': 'OP-IN', 'code': 'IN1', 'x_station_type': 'assembly'})
-        cls.op_out = Operation.create({'name': 'OP-OUT', 'code': 'OUT1', 'x_station_type': 'final_test'})
+        cls.op_in = Operation.create({'name': 'OP-IN', 'code': 'IN1'})
+        cls.op_out = Operation.create({'name': 'OP-OUT', 'code': 'OUT1'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

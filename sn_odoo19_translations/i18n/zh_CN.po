@@ -1,6 +1,3 @@
-# Translations overlay built from the project worklists.
-# Do not edit by hand: translate the worklists and rebuild.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
@@ -902,6 +899,7 @@ msgstr "启用稀疏模式"
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_cause__active
 #: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__active
 #: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__active
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__active
 msgid "Active"
 msgstr "有效"
 
@@ -1024,12 +1022,6 @@ msgstr ""
 #: code:addons/html_editor/static/src/main/link/link_popover.xml:0
 msgid "Advanced mode"
 msgstr "高级模式"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__aging
-msgid "Aging"
-msgstr "老化"
 
 #. module: html_builder
 #. odoo-javascript
@@ -1461,8 +1453,8 @@ msgstr "数组结果未展开，因为它会覆盖数据。"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__assembly
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_production_stage__assembly
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_assembly
 msgid "Assembly"
 msgstr "装配"
 
@@ -1846,6 +1838,11 @@ msgid ""
 " a product from the history tab)."
 msgstr "检验页签当前显示的板（通过扫描或从历史页签选取产品切换）。"
 
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_board_test
+msgid "Board Test"
+msgstr "单板调试"
+
 #. module: html_builder
 #. odoo-javascript
 #: code:addons/html_builder/static/src/plugins/background_option/background_shapes_definition.js:0
@@ -1984,12 +1981,6 @@ msgstr "要结账的业务日期月份，格式为 YYYY-MM。"
 #: code:addons/sn_wsd_gantt/static/src/gantt_controller.js:0
 msgid "Bye-bye, record!"
 msgstr "记录已删除！"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__calibration
-msgid "Calibration"
-msgstr "校准"
 
 #. module: sn_wsd_device
 #: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_cal_line_import_wizard
@@ -2155,6 +2146,7 @@ msgstr "点击选择"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_meter_pack_barcode__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_document_code__code
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__code
 msgid "Code"
 msgstr "代码"
 
@@ -2279,6 +2271,7 @@ msgstr "公司"
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_cause__company_id
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order_line__company_id
 #: model:ir.model.fields,field_description:sn_wsd_wip.field_sn_wsd_wip_mes_order_report__company_id
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -4162,12 +4155,6 @@ msgstr "文件"
 msgid "File Name"
 msgstr "文件名"
 
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__final_test
-msgid "Final Test"
-msgstr "最终测试"
-
 #. module: api_doc
 #. odoo-javascript
 #: code:addons/api_doc/static/src/doc_client.xml:0
@@ -5145,7 +5132,6 @@ msgstr "插入图片、图标或视频"
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
 #. module: sn_wsd_quality
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__inspection
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample_value__inspection_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_sample__inspection_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_cell__inspection_id
@@ -6614,6 +6600,7 @@ msgstr "不适用"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_substitute_rule__name
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__name
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__name
 msgid "Name"
 msgstr "名称"
 
@@ -7317,12 +7304,6 @@ msgstr "作业"
 msgid "Operation Line Quantity"
 msgstr "工序行数量"
 
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_station_type
-msgid "Operation Type"
-msgstr "作业类型"
-
 #. module: sn_wsd_barcode
 #: model:ir.model.fields,help:sn_wsd_barcode.field_sn_smt_online_material__route_operation_id
 msgid ""
@@ -7472,6 +7453,11 @@ msgstr ""
 "覆盖：删除目标设备的全部文档，然后复制源设备的全部文档。\n"
 "跳过已存在：目标上同名的文档保留，仅复制缺失的文档。"
 
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_packaging
+msgid "Packaging"
+msgstr "包装"
+
 #. module: sn_wsd_picklight
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
 #: model:ir.model.fields.selection,name:sn_wsd_picklight.selection__sn_wsd_picklight_event__event_type__pressed
@@ -7542,12 +7528,6 @@ msgstr "包装右封口 RF"
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_top
 msgid "Pack Top"
 msgstr "包装顶部"
-
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\addons\sale\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__packaging
-msgid "Packaging"
-msgstr "包装"
 
 #. module: sn_wsd_label_links
 #: model:sn.label.template,name:sn_wsd_label_links.label_template_pallet
@@ -8056,12 +8036,6 @@ msgstr "按序列号与数量报工的生产维修管理"
 msgid "Profit or Loss Appropriation"
 msgstr "损益分配"
 
-#. module: sn_wsd_mrp
-#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__programming
-msgid "Programming"
-msgstr "编程"
-
 #. module: base
 #: model:ir.module.category,name:base.module_category_project_management
 msgid "Project Management"
@@ -8550,7 +8524,6 @@ msgstr "重命名 %(snippetTitle)s"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__repair
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
-#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_operation__x_station_type__repair
 msgid "Repair"
 msgstr "维修"
 
@@ -8912,6 +8885,11 @@ msgstr "SK 税务识别号（DIČ）"
 #: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_sms_error
 msgid "SMS Delivery error"
 msgstr "短信发送错误"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_smt
+msgid "SMT"
+msgstr "SMT"
 
 #. module: sn_wsd_smt
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
@@ -10448,6 +10426,11 @@ msgstr "仅用于终端入口上下文（哪个界面打开了该对话框）。
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
 msgid "Test"
 msgstr "测试"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_testing
+msgid "Testing"
+msgstr "调试"
 
 #. module: html_builder
 #. odoo-javascript
@@ -12455,6 +12438,21 @@ msgstr "第 2 周工作时间"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__workshop_id
 msgid "Workshop"
 msgstr "车间"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_dip
+msgid "DIP"
+msgstr "DIP"
+
+#. module: sn_wsd_mrp
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_inspection
+msgid "Inspection"
+msgstr "检验"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__sequence
+msgid "Sequence"
+msgstr "序号"
 
 #. module: html_editor
 #. odoo-javascript

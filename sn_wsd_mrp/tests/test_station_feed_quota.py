@@ -27,13 +27,13 @@ class TestStationFeedQuota(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'FQ-A', 'code': 'FQA', 'x_station_type': 'assembly',
+            'name': 'FQ-A', 'code': 'FQA',
             'x_max_test_count': 9})
         cls.op_b = Operation.create({
-            'name': 'FQ-B', 'code': 'FQB', 'x_station_type': 'final_test',
+            'name': 'FQ-B', 'code': 'FQB',
             'x_max_test_count': 3})
         cls.op_c = Operation.create({
-            'name': 'FQ-C', 'code': 'FQC', 'x_station_type': 'final_test',
+            'name': 'FQ-C', 'code': 'FQC',
             'x_max_test_count': 3})
         cls.route.write({
             'state': 'confirmed',

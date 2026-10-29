@@ -18,27 +18,8 @@ const PORT_HIT_RADIUS = 10;
 const CARD_W = 200;
 const CARD_H = 56;
 
-const STATION_LABELS = {
-    assembly: "组装", programming: "烧录", calibration: "校准", aging: "老化",
-    inspection: "检验", final_test: "终测", packaging: "包装", repair: "返修",
-};
-
-const SECTION_ORDER = ["smt", "dip", "board_test", "assembly", "testing", "inspection", "packaging"];
-const SECTION_LABELS = {
-    smt: "SMT", dip: "DIP", board_test: "单板调试", assembly: "装配",
-    testing: "调试", inspection: "检验", packaging: "包装",
-};
-
 let routeAgentEdgeRegistered = false;
 let routeAgentCardRegistered = false;
-
-// The agentFlow showcase only ships four icon themes; map station types onto them.
-function nodeThemeClass(stationType) {
-    if (stationType === "programming" || stationType === "final_test") return "o_node_theme_green";
-    if (stationType === "calibration" || stationType === "aging") return "o_node_theme_orange";
-    if (stationType === "repair") return "o_node_theme_red";
-    return "o_node_theme_blue";
-}
 
 function escapeHtml(value) {
     return String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({
@@ -60,7 +41,7 @@ export function buildRouteCardHtml(cell) {
     const badges = (startBadge || endBadge)
         ? `<div class="o_node_badges">${startBadge}${endBadge}</div>` : "";
     return [
-        `<div class="o_route_node_card ${nodeThemeClass(d.x_station_type)}${selected}" data-route-node-id="${escapeHtml(cell.id)}">`,
+        `<div class="o_route_node_card o_node_theme_blue${selected}" data-route-node-id="${escapeHtml(cell.id)}">`,
         badges,
         `<div class="o_node_header">`,
         `<div class="o_node_icon">${escapeHtml(String(code).substring(0, 4))}</div>`,
@@ -255,10 +236,17 @@ export class RouteFlowEditor extends Component {
         const usedSet = new Set(this.state.usedOpIds);
         const groups = {};
         for (const op of this.allOperations) {
-            const s = op.x_process_section || "other";
+            const s = op.section_id || "other";
             (groups[s] = groups[s] || []).push(Object.assign({}, op, { used: usedSet.has(op.id) }));
         }
-        return SECTION_ORDER.filter(s => groups[s]).map(s => ({ key: s, label: SECTION_LABELS[s] || s, ops: groups[s] }))
+        // groups ordered by the section sequence the server sends; the
+        // section list is master data, so the palette follows it
+        const sections = [...new Map(
+            this.allOperations.filter(o => o.section_id)
+                .map(o => [o.section_id, { key: o.section_id, label: o.section_name || String(o.section_id), seq: o.section_sequence ?? 999 }])
+        ).values()].sort((a, b) => a.seq - b.seq);
+        return sections.filter(s => groups[s.key])
+            .map(s => ({ key: s.key, label: s.label, ops: groups[s.key] }))
             .concat(groups.other ? [{ key: "other", label: "其他", ops: groups.other }] : []);
     }
 
@@ -267,26 +255,12 @@ export class RouteFlowEditor extends Component {
         return this.allOperations.filter(o => !usedSet.has(o.id)).length;
     }
 
-    get stationTypeLabel() {
-        if (!this.state.selected?.x_station_type) return "-";
-        return STATION_LABELS[this.state.selected.x_station_type] || this.state.selected.x_station_type;
-    }
-
     paletteIcon(op) {
         return (op.code || op.name || "OP").substring(0, 4);
     }
 
     paletteDesc(op) {
-        return STATION_LABELS[op.x_station_type] || op.x_process_section || op.code || "";
-    }
-
-    paletteThemeClass(op) {
-        const type = op.x_station_type || "";
-        if (type === "programming" || type === "final_test") return "o_palette_theme_green";
-        if (type === "calibration" || type === "aging") return "o_palette_theme_orange";
-        if (type === "repair") return "o_palette_theme_red";
-        if (type === "assembly" || type === "inspection" || type === "packaging") return "o_palette_theme_blue";
-        return "o_palette_theme_gray";
+        return op.section_name || op.code || "";
     }
 
     _createPortGroup(position) {
@@ -643,7 +617,7 @@ export class RouteFlowEditor extends Component {
         const y = existing.length ? Math.max(...existing.map(n => n.getPosition().y)) + 80 : 30;
         this._addNode(this.graph, {
             uid: "new_" + Date.now(), id: null, operation_id: op.id, name: op.name,
-            step_code: op.code, sequence: (existing.length + 1) * 10, x_station_type: op.x_station_type,
+            step_code: op.code, sequence: (existing.length + 1) * 10,
             time_cycle_manual: 60, x_allow_entry: existing.length === 0, x_allow_exit: false,
             x_allow_serial_creation: false,
         }, 30, y);
@@ -669,7 +643,7 @@ export class RouteFlowEditor extends Component {
             const d = node.getData() || {};
             this.state.selected = {
                 uid: node.id, step_code: d.step_code || "", name: d.name || "",
-                x_station_type: d.x_station_type || "", time_cycle_manual: d.time_cycle_manual || 0,
+                time_cycle_manual: d.time_cycle_manual || 0,
                 sequence: d.sequence || 100, x_allow_entry: d.x_allow_entry || false,
                 x_allow_exit: d.x_allow_exit || false,
                 x_allow_serial_creation: d.x_allow_serial_creation || false,
@@ -708,7 +682,7 @@ export class RouteFlowEditor extends Component {
         if (!this.selectedNode || !this.state.selected) return;
         const s = this.state.selected;
         this.selectedNode.setData({
-            step_code: s.step_code, name: s.name, x_station_type: s.x_station_type,
+            step_code: s.step_code, name: s.name,
             time_cycle_manual: s.time_cycle_manual, sequence: s.sequence,
             x_allow_entry: s.x_allow_entry, x_allow_exit: s.x_allow_exit, x_allow_serial_creation: s.x_allow_serial_creation,
         });

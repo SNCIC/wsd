@@ -26,9 +26,9 @@ class TestNgRepairLoop(TransactionCase):
         })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'NGLOOP-IN', 'code': 'NGLIN', 'x_station_type': 'assembly'})
+            'name': 'NGLOOP-IN', 'code': 'NGLIN'})
         cls.op_out = Operation.create({
-            'name': 'NGLOOP-OUT', 'code': 'NGLIN2', 'x_station_type': 'final_test'})
+            'name': 'NGLOOP-OUT', 'code': 'NGLIN2'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

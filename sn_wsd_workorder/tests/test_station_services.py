@@ -19,9 +19,9 @@ class TestStationServices(TransactionCase):
         })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create(
-            {'name': 'OP-IN', 'code': 'IN1', 'x_station_type': 'assembly'})
+            {'name': 'OP-IN', 'code': 'IN1'})
         cls.op_out = Operation.create(
-            {'name': 'OP-OUT', 'code': 'OUT1', 'x_station_type': 'final_test'})
+            {'name': 'OP-OUT', 'code': 'OUT1'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True,
         ).create({
@@ -188,7 +188,7 @@ class TestStationServices(TransactionCase):
         self.order.sn_station_enter('SN-T6', self.wc_in.id)
         MesOrder = self.env['sn.wsd.mes.order']
         other_op = self.env['sn.wsd.operation'].create(
-            {'name': 'OP-OTHER', 'code': 'OTH1', 'x_station_type': 'assembly'})
+            {'name': 'OP-OTHER', 'code': 'OTH1'})
         wc_other = self.env['mrp.workcenter'].create({
             'name': 'WC-OTHER', 'x_workshop_id': self.workshop.id,
             'x_production_line_id': self.line.id,

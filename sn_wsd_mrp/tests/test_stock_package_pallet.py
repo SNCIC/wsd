@@ -43,9 +43,9 @@ class TestStockPackagePallet(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'PLT-IN', 'code': 'PLTIN', 'x_station_type': 'assembly'})
+            'name': 'PLT-IN', 'code': 'PLTIN'})
         cls.op_out = Operation.create({
-            'name': 'PLT-OUT', 'code': 'PLTOUT', 'x_station_type': 'final_test'})
+            'name': 'PLT-OUT', 'code': 'PLTOUT'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

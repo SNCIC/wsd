@@ -29,9 +29,9 @@ class TestBackflushFallback(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'BFFB-IN', 'code': 'BIN', 'x_station_type': 'assembly'})
+            'name': 'BFFB-IN', 'code': 'BIN'})
         cls.op_out = Operation.create({
-            'name': 'BFFB-OUT', 'code': 'BOUT', 'x_station_type': 'final_test'})
+            'name': 'BFFB-OUT', 'code': 'BOUT'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',

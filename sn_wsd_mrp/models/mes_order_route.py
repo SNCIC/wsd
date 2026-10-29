@@ -212,7 +212,6 @@ class MesOrderRoute(models.Model):
                 'workcenter_id': workcenter_id or False,
                 'name': node.get('name'),
                 'x_step_code': node.get('step_code'),
-                'x_station_type': node.get('x_station_type'),
                 'sequence': node.get('sequence') or 100,
                 'time_cycle_manual': time_cycle,
                 'x_allow_entry': bool(node.get('x_allow_entry')),
@@ -318,7 +317,6 @@ class MesOrderRoute(models.Model):
                 'step_code': op.x_step_code,
                 'sequence': op.sequence,
                 'time_cycle_manual': op.time_cycle_manual,
-                'x_station_type': op.x_station_type,
                 'is_input': op.is_input,
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
@@ -401,9 +399,6 @@ class MesOrderRouteOperation(models.Model):
             return super().name_search('', domain=domain, operator='ilike', limit=limit)
         return super().name_search(name, domain=domain, operator=operator, limit=limit)
     x_step_code = fields.Char()
-    x_station_type = fields.Selection(
-        related='operation_id.x_station_type', store=True,
-    )
     sequence = fields.Integer(default=100)
     time_cycle_manual = fields.Float(default=60.0)
     x_canvas_x = fields.Integer(

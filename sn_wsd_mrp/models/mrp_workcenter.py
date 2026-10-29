@@ -140,14 +140,6 @@ class MrpWorkcenter(models.Model):
 class MrpRoutingWorkcenter(models.Model):
     _inherit = 'mrp.routing.workcenter'
 
-    x_station_type = fields.Selection(
-        related='x_route_operation_id.x_station_type',
-        string='Station Type',
-        store=True,
-        readonly=True,
-        index=True,
-    )
-
     @api.constrains('workcenter_id')
     def _check_workcenter_enabled(self):
         for operation in self:

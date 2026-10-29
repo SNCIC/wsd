@@ -22,9 +22,9 @@ class TestRouteGraphEdit(TransactionCase):
             sn_wsd_skip_flow_versioning=True,
         ).create({'name': 'RT-EDIT', 'code': 'RTE', 'x_workshop_id': cls.workshop.id})
         Operation = cls.env['sn.wsd.operation']
-        cls.op_a = Operation.create({'name': 'OP-PROG', 'code': 'PROG', 'x_station_type': 'programming'})
-        cls.op_b = Operation.create({'name': 'OP-AOI', 'code': 'AOI2', 'x_station_type': 'inspection'})
-        cls.op_c = Operation.create({'name': 'OP-FCT', 'code': 'FCT', 'x_station_type': 'final_test'})
+        cls.op_a = Operation.create({'name': 'OP-PROG', 'code': 'PROG'})
+        cls.op_b = Operation.create({'name': 'OP-AOI', 'code': 'AOI2'})
+        cls.op_c = Operation.create({'name': 'OP-FCT', 'code': 'FCT'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',
@@ -78,7 +78,6 @@ class TestRouteGraphEdit(TransactionCase):
             'uid': str(row.id), 'id': row.id,
             'operation_id': row.operation_id.id, 'name': row.name,
             'step_code': row.x_step_code, 'sequence': seq,
-            'x_station_type': row.x_station_type,
             'x_allow_entry': row.x_allow_entry, 'x_allow_exit': row.x_allow_exit,
             'x': 30, 'y': y,
         }
@@ -88,7 +87,6 @@ class TestRouteGraphEdit(TransactionCase):
             'uid': 'new_%s' % operation.code, 'id': None,
             'operation_id': operation.id, 'name': operation.name,
             'step_code': operation.code, 'sequence': seq,
-            'x_station_type': operation.x_station_type,
             'time_cycle_manual': 42.0,
             'x_allow_entry': False, 'x_allow_exit': False,
             'x': 30, 'y': y,

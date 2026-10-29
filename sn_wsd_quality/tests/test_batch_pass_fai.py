@@ -23,13 +23,13 @@ class TestBatchPassFaiGate(TransactionCase):
                 'x_workshop_id': cls.workshop.id})
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'BF-A', 'code': 'BFA', 'x_station_type': 'assembly',
+            'name': 'BF-A', 'code': 'BFA',
             'x_max_test_count': 9})
         cls.op_b = Operation.create({
-            'name': 'BF-B', 'code': 'BFB', 'x_station_type': 'final_test',
+            'name': 'BF-B', 'code': 'BFB',
             'x_max_test_count': 9})
         cls.op_c = Operation.create({
-            'name': 'BF-C', 'code': 'BFC', 'x_station_type': 'final_test',
+            'name': 'BF-C', 'code': 'BFC',
             'x_max_test_count': 9})
         cls.route.write({
             'state': 'confirmed',

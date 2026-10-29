@@ -26,13 +26,13 @@ class TestStationPassCount(TransactionCase):
             })
         Operation = cls.env['sn.wsd.operation']
         cls.op_a = Operation.create({
-            'name': 'PC-A', 'code': 'PCA', 'x_station_type': 'assembly',
+            'name': 'PC-A', 'code': 'PCA',
             'x_max_test_count': 9})
         cls.op_b = Operation.create({
-            'name': 'PC-B', 'code': 'PCB', 'x_station_type': 'final_test',
+            'name': 'PC-B', 'code': 'PCB',
             'x_max_test_count': 3})
         cls.op_c = Operation.create({
-            'name': 'PC-C', 'code': 'PCC', 'x_station_type': 'final_test',
+            'name': 'PC-C', 'code': 'PCC',
             'x_max_test_count': 3})
         cls.route.write({
             'state': 'confirmed',
@@ -146,6 +146,7 @@ class TestStationPassCount(TransactionCase):
     # ------------------------------------------------------------------
 
     def test_cap_counts_ok_and_ng_blocks_fourth(self):
+        # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/NG 后重扫入站成功
         order = self._make_order_online()
         wcs = self._wcs()
         sn = 'SN-PC-001'
@@ -160,6 +161,7 @@ class TestStationPassCount(TransactionCase):
             self._pass(order, wcs['b'], sn, 'ng')
 
     def test_ok_does_not_seal_mid_operation(self):
+        # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/OK 后可再次入站（非尾站）
         order = self._make_order_online()
         wcs = self._wcs()
         sn = 'SN-PC-002'
@@ -173,6 +175,7 @@ class TestStationPassCount(TransactionCase):
         self.assertEqual(len(ok_rows), 2)
 
     def test_exit_operation_capped_at_one_despite_config(self):
+        # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/OK 后仍不可重入
         order = self._make_order_online()
         wcs = self._wcs()
         sn = 'SN-PC-003'
@@ -192,6 +195,7 @@ class TestStationPassCount(TransactionCase):
     # ------------------------------------------------------------------
 
     def test_repair_cutoff_refills_counter(self):
+        # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/多 ng 与 ok 共存
         order = self._make_order_online()
         wcs = self._wcs()
         sn = 'SN-PC-004'

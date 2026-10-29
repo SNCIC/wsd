@@ -21,11 +21,11 @@ class TestMesFai(TransactionCase):
             {'name': 'LINESIDE-FAI', 'usage': 'internal'}).id
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'FAI-IN', 'code': 'FAIIN', 'x_station_type': 'assembly',
+            'name': 'FAI-IN', 'code': 'FAIIN',
             'x_max_test_count': 3,
         })
         cls.op_out = Operation.create(
-            {'name': 'FAI-OUT', 'code': 'FAIOUT', 'x_station_type': 'final_test'})
+            {'name': 'FAI-OUT', 'code': 'FAIOUT'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'RT-FAI', 'code': 'RTFAI', 'x_workshop_id': cls.workshop.id,

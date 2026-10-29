@@ -16,6 +16,7 @@ from . import scrap_reason
 from . import stock_move
 from . import stock_lot
 from . import stock_package
+from . import process_section
 from . import meter_process_route
 from . import mrp_workcenter
 from . import mrp_routing_workcenter_daily_plan

@@ -144,9 +144,6 @@
             <xpath expr="//header//button[@name='action_start']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//form" position="inside">
-                <field name="x_has_meter_operations" invisible="1"/>
-            </xpath>
             <xpath expr="//notebook" position="attributes">
                 <attribute name="class">o_sn_wsd_mrp_production_notebook</attribute>
             </xpath>
@@ -180,13 +177,13 @@
                 <attribute name="optional">hide</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[1]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or lot_producing_ids</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'lot', False) or lot_producing_ids</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[2]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or not lot_producing_ids or product_qty == 1</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'lot', False) or not lot_producing_ids or product_qty == 1</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[3]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
             </xpath>
             <!-- Work Orders (operations) page: hidden. Work orders are never
                  generated in this project (mrp.routing.workcenter

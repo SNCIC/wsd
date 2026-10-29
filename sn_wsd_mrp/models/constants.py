@@ -1,24 +1,3 @@
-PROCESS_SECTION_SELECTION = [
-    ('smt', 'SMT'),
-    ('dip', 'DIP'),
-    ('board_test', 'Board Test'),
-    ('assembly', 'Assembly'),
-    ('testing', 'Testing'),
-    ('inspection', 'Inspection'),
-    ('packaging', 'Packaging'),
-]
-
-STATION_TYPE_SELECTION = [
-    ('assembly', 'Assembly'),
-    ('programming', 'Programming'),
-    ('calibration', 'Calibration'),
-    ('inspection', 'Inspection'),
-    ('aging', 'Aging'),
-    ('final_test', 'Final Test'),
-    ('packaging', 'Packaging'),
-    ('repair', 'Repair'),
-]
-
 # 板面/生产面别：key 存库永不改，英文标签由 zh_CN.po 翻译。
 # 工艺路线（sn.wsd.process.route.x_production_side）与制令单
 # （sn.wsd.mes.order.x_side）共用同一套 key。

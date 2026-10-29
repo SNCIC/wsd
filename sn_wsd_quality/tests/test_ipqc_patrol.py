@@ -25,7 +25,7 @@ class TestIpqcPatrol(TransactionCase):
             {'name': 'LINESIDE-IPQC', 'usage': 'internal'}).id
         Operation = cls.env['sn.wsd.operation']
         cls.op_in = Operation.create({
-            'name': 'IP-IN', 'code': 'IPIN', 'x_station_type': 'assembly',
+            'name': 'IP-IN', 'code': 'IPIN',
             'x_max_test_count': 3,
         })
         cls.route = cls.env['sn.wsd.process.route'].with_context(

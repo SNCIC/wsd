@@ -25,8 +25,8 @@ class ScanPassFixture:
         cls.line = cls.env['sn.mrp.production.line'].create({
             'name': 'APIL', 'code': 'APIL', 'workshop_id': cls.workshop.id})
         Operation = cls.env['sn.wsd.operation']
-        cls.op_in = Operation.create({'name': 'API-IN', 'code': 'APIIN', 'x_station_type': 'assembly'})
-        cls.op_out = Operation.create({'name': 'API-OUT', 'code': 'APIOUT', 'x_station_type': 'final_test'})
+        cls.op_in = Operation.create({'name': 'API-IN', 'code': 'APIIN'})
+        cls.op_out = Operation.create({'name': 'API-OUT', 'code': 'APIOUT'})
         cls.route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'API-RT', 'code': 'APIRT', 'x_workshop_id': cls.workshop.id,
@@ -548,11 +548,11 @@ class TestForkRoute(ScanPassFixture, TransactionCase):
         # fork route: FA(entry) → FB ∥ FC，挂在夹具的车间/产线上
         Operation = cls.env['sn.wsd.operation']
         cls.op_fa = Operation.create(
-            {'name': 'F-A', 'code': 'FA', 'x_station_type': 'assembly'})
+            {'name': 'F-A', 'code': 'FA'})
         cls.op_fb = Operation.create(
-            {'name': 'F-B', 'code': 'FB', 'x_station_type': 'assembly'})
+            {'name': 'F-B', 'code': 'FB'})
         cls.op_fc = Operation.create(
-            {'name': 'F-C', 'code': 'FC', 'x_station_type': 'assembly'})
+            {'name': 'F-C', 'code': 'FC'})
         route = cls.env['sn.wsd.process.route'].with_context(
             sn_wsd_skip_flow_versioning=True).create({
                 'name': 'FORK-RT', 'code': 'FORKRT',

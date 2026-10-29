@@ -91,14 +91,6 @@ class MrpProduction(models.Model):
         store=True,
         readonly=True,
     )
-    x_has_smt_operations = fields.Boolean(
-        string='Has SMT Operations',
-        compute='_compute_x_operation_visibility',
-    )
-    x_has_meter_operations = fields.Boolean(
-        string='Has Meter Operations',
-        compute='_compute_x_operation_visibility',
-    )
     x_workshop_id = fields.Many2one(
         'sn.mrp.workshop',
         string='Workshop',
@@ -140,25 +132,6 @@ class MrpProduction(models.Model):
     x_need_final_verification = fields.Boolean(string='Need Final Verification', default=True)
     x_need_sealing = fields.Boolean(string='Need Sealing', default=True)
     x_need_carton_traceability = fields.Boolean(string='Need Carton Traceability', default=True)
-    x_meter_flow_state = fields.Selection(
-        [
-            ('draft', 'Draft'),
-            ('material_ready', 'Material Ready'),
-            ('pcba_done', 'PCBA Done'),
-            ('assembly_done', 'Assembly Done'),
-            ('burned', 'Burned'),
-            ('initial_calibrated', 'Initial Calibrated'),
-            ('aging', 'Aging'),
-            ('aging_done', 'Aging Done'),
-            ('verified', 'Verified'),
-            ('sealed', 'Sealed'),
-            ('packed', 'Packed'),
-            ('done', 'Done'),
-        ],
-        string='Meter Flow State',
-        default='draft',
-        tracking=True,
-    )
     x_meter_pack_record_ids = fields.One2many('sn.wsd.meter.pack.record', 'production_id', string='Pack Records')
     x_process_document_ids = fields.One2many(
         'production.process.document', 'production_id', string='Process Documents')
@@ -249,18 +222,6 @@ class MrpProduction(models.Model):
             end_times = [production.date_finished] if production.date_finished else []
             production.x_actual_start_date = fields.Date.to_date(min(start_times)) if start_times else False
             production.x_actual_finished_date = fields.Date.to_date(max(end_times)) if end_times else False
-
-    @api.depends('x_mes_order_ids.x_route_operation_ids.operation_id.x_station_type')
-    def _compute_x_operation_visibility(self):
-        smt_operation_types = {'smt', 'dip', 'reflow', 'aoi', 'ict', 'fct', 'pcb_assembly', 'pcb_repair'}
-        for production in self:
-            operation_types = set(
-                production.x_mes_order_ids.x_route_operation_ids.mapped(
-                    'operation_id.x_station_type'
-                )
-            )
-            production.x_has_smt_operations = bool(operation_types.intersection(smt_operation_types))
-            production.x_has_meter_operations = bool(operation_types.difference(smt_operation_types))
 
     @api.depends(
         'bom_id',
@@ -438,73 +399,15 @@ class MrpProduction(models.Model):
         draft_productions._check_workshop_manufacturing_locations()
         return super().action_confirm()
 
-    def _update_meter_flow_state(self):
-        state_priority = {
-            'draft': 0,
-            'material_ready': 1,
-            'pcba_done': 2,
-            'assembly_done': 3,
-            'burned': 4,
-            'initial_calibrated': 5,
-            'aging': 6,
-            'aging_done': 7,
-            'verified': 8,
-            'sealed': 9,
-            'packed': 10,
-            'done': 11,
-        }
-        operation_states = {
-            'smt': 'pcba_done',
-            'dip': 'pcba_done',
-            'reflow': 'pcba_done',
-            'aoi': 'pcba_done',
-            'ict': 'pcba_done',
-            'fct': 'pcba_done',
-            'pcb_assembly': 'pcba_done',
-            'assembly': 'assembly_done',
-            'firmware': 'burned',
-            'parameter_write': 'burned',
-            'initial_calibration': 'initial_calibrated',
-            'aging_load': 'aging',
-            'aging_unload': 'aging_done',
-            'verification': 'verified',
-            'sealing': 'sealed',
-            'packing': 'packed',
-        }
-        for production in self:
-            target_state = production.x_meter_flow_state or 'draft'
-            if production.state == 'done':
-                target_state = 'done'
-            else:
-                observed_states = []
-                if production.x_meter_pack_record_ids:
-                    observed_states.append('packed')
-                completed_operations = production.x_mes_order_ids.x_route_operation_ids.filtered(
-                    lambda operation: operation.x_ok_qty > 0 or operation.x_reported_ok_qty > 0
-                )
-                observed_states.extend(
-                    operation_states[operation.operation_id.x_station_type]
-                    for operation in completed_operations
-                    if operation.operation_id.x_station_type in operation_states
-                )
-                if observed_states:
-                    target_state = max(
-                        [target_state, *observed_states],
-                        key=lambda state: state_priority.get(state, 0),
-                    )
-            if production.x_meter_flow_state != target_state:
-                production.x_meter_flow_state = target_state
-        return True
-
     def _check_sn_uniqueness(self):
         self.ensure_one()
-        if self.x_has_meter_operations and self._get_meter_packed_serials():
+        if self._get_meter_packed_serials():
             return True
         return super()._check_sn_uniqueness()
 
     def _should_use_meter_mes_done_flow(self):
         self.ensure_one()
-        return bool(self.x_has_meter_operations and self.product_tracking != 'lot' and self._get_meter_packed_serials())
+        return bool(self.product_tracking != 'lot' and self._get_meter_packed_serials())
 
     def _smt_backfill_raw_moves(self):
         """完工倒冲回填钩子：把消耗流水的批次与净值回填到领料 move。

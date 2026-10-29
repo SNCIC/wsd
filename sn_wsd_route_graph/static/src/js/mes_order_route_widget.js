@@ -73,12 +73,17 @@ export class MesOrderRouteEditor extends Component {
         const usedSet = new Set(this.state.usedOpIds);
         const groups = {};
         for (const op of this.allOperations) {
-            const s = op.x_process_section || "other";
+            const s = op.section_id || "other";
             (groups[s] = groups[s] || []).push(Object.assign({}, op, { used: usedSet.has(op.id) }));
         }
-        const order = ["smt", "dip", "board_test", "assembly", "testing", "inspection", "packaging"];
-        const labels = { smt: "SMT", dip: "DIP", board_test: "单板调试", assembly: "装配", testing: "调试", inspection: "检验", packaging: "包装" };
-        return order.filter(s => groups[s]).map(s => ({ key: s, label: labels[s] || s, ops: groups[s] }))
+        // groups ordered by the section sequence the server sends; the
+        // section list is master data, so the palette follows it
+        const sections = [...new Map(
+            this.allOperations.filter(o => o.section_id)
+                .map(o => [o.section_id, { key: o.section_id, label: o.section_name || String(o.section_id), seq: o.section_sequence ?? 999 }])
+        ).values()].sort((a, b) => a.seq - b.seq);
+        return sections.filter(s => groups[s.key])
+            .map(s => ({ key: s.key, label: s.label, ops: groups[s.key] }))
             .concat(groups.other ? [{ key: "other", label: "其他", ops: groups.other }] : []);
     }
 
@@ -391,7 +396,7 @@ export class MesOrderRouteEditor extends Component {
         this._addNode(this.graph, {
             uid: "new_" + Date.now(), id: null, operation_id: op.id, name: op.name,
             step_code: op.code, sequence: (existing.length + 1) * 10,
-            x_station_type: op.x_station_type, time_cycle_manual: 60,
+            time_cycle_manual: 60,
             x_allow_entry: existing.length === 0, x_allow_exit: false,
         }, 30, y);
         this.state.usedOpIds = [...this.state.usedOpIds, opId];
