@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 03:14+0000\n"
-"PO-Revision-Date: 2026-10-30 03:14+0000\n"
+"POT-Creation-Date: 2026-10-30 04:40+0000\n"
+"PO-Revision-Date: 2026-10-30 04:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -159,6 +159,12 @@ msgstr "%(label)s，金额 %(currency_amount)s"
 #: code:addons/account/models/account_move.py:0
 msgid "%(label)s at %(currency_amount)s (Draft)"
 msgstr "%(label)s，金额 %(currency_amount)s（草稿）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence consignment receipts"
+msgstr "%(name)s 受托入库序列"
 
 #. module: sn_wsd_stock
 #. odoo-python
@@ -2612,6 +2618,36 @@ msgstr "连线 19"
 #: code:addons/html_builder/static/src/plugins/background_option/background_shapes_definition.js:0
 msgid "Connections 20"
 msgstr "连线 20"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__consignment_in
+msgid "Consignment Receipt"
+msgstr "受托入库"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_consignment_in_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_consignment_in_detail
+msgid "Consignment Receipt Details"
+msgstr "受托入库明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_consignment_in_type_id
+msgid "Consignment Receipt Type"
+msgstr "受托入库作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_consignment_in
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_consignment_in
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Consignment Receipts"
+msgstr "受托入库单"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+msgid "Consignor"
+msgstr "委托方"
 
 #. module: sn_wsd_consumable
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_consumable\i18n\zh_CN.po
@@ -7706,6 +7742,15 @@ msgid "Operation the patrol scheme watches (from the scheme)."
 msgstr "巡检方案监控的工序（取自方案）。"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_consignment_in_type_id
+msgid ""
+"Operation type of the consignment receipts: goods provided by the customer "
+"and stored for that customer, entering the stock without a purchase order "
+"and going through the quality control and storage operations of the "
+"reception."
+msgstr "受托入库的作业类型：由客户提供并代客户保管的货物，不通过采购订单入库，并继续走收货的质检与入库作业。"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__other_out_type_id
 msgid ""
 "Operation type of the other deliveries: goods leaving the stock without a "
@@ -7718,6 +7763,14 @@ msgid ""
 "Operation type of the other receipts: goods entering the stock without a "
 "purchase order."
 msgstr "其他入库的作业类型：不通过采购订单直接入库。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_outsourcing_issue_type_id
+msgid ""
+"Operation type of the outsourcing issues: goods sent out to a subcontractor."
+" The operation type is created by hand, so it is linked here rather than "
+"created with the warehouse."
+msgstr "外加工领料的作业类型：发往外部加工商的货物。该作业类型为手工创建，因此在此关联而不是随仓库创建。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
@@ -7898,6 +7951,22 @@ msgid ""
 "Other receipt or other delivery the transfer was created from, empty on the "
 "purchase receipts and the sales deliveries."
 msgstr "该调拨由其他入库单或其他出库单创建；采购收货与销售交货为空。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__outsourcing_issue
+msgid "Outsourcing Issue"
+msgstr "外加工领料"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_outsourcing_issue_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_outsourcing_issue_detail
+msgid "Outsourcing Issue Details"
+msgstr "外加工领料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_outsourcing_issue_type_id
+msgid "Outsourcing Issue Type"
+msgstr "外加工领料作业类型"
 
 #. module: html_builder
 #. odoo-javascript

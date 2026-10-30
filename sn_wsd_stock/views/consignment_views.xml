@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consignment receipts: goods provided by the customer and stored for
+         that customer, entering the stock without a purchase order. The
+         operation type is created with the warehouse (or on first use), and
+         the goods land on the input location of a multi-step reception, so
+         the quality control and the storage operations follow exactly as
+         they do for a purchase receipt. -->
+    <record id="view_sn_wsd_consignment_in_list" model="ir.ui.view">
+        <field name="name">stock.picking.consignment.in.list</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Consignment Receipts" create="false" delete="false"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Document No."/>
+                <field name="picking_type_id" column_invisible="1"/>
+                <field name="scheduled_date" string="Scheduled Date"
+                       options="{'show_time': False}"/>
+                <field name="date_done" string="Validation Date"
+                       options="{'show_time': False}"/>
+                <field name="partner_id" string="Consignor"/>
+                <field name="origin" string="Source Document"/>
+                <field name="location_id" string="Source Location"/>
+                <field name="location_dest_id" string="Destination Location"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="user_id" string="Responsible"
+                       widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_consignment_in" model="ir.actions.act_window">
+        <field name="name">Consignment Receipts</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_consignment_in_list"/>
+        <field name="domain">[('sn_consignment_in', '=', True)]</field>
+        <field name="context">{'sn_consignment_in_default': True}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_consignment_in"
+              name="Consignment Receipts"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_sn_wsd_consignment_in"
+              sequence="8"/>
+</odoo>

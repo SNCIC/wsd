@@ -90,29 +90,54 @@ class StockPicking(models.Model):
             else:
                 picking.sn_other_operation = False
 
+    sn_consignment_in = fields.Boolean(
+        string='Consignment Receipt',
+        compute='_compute_sn_consignment_in',
+        store=True,
+        index=True,
+        help='The transfer is a consignment receipt: goods provided by the '
+             'customer, entering the stock without a purchase order and going '
+             'through the quality control and storage operations of the '
+             'reception.',
+    )
+
+    @api.depends('picking_type_id')
+    def _compute_sn_consignment_in(self):
+        for picking in self:
+            warehouse = picking.picking_type_id.warehouse_id
+            picking.sn_consignment_in = bool(
+                warehouse
+                and picking.picking_type_id == warehouse.sn_consignment_in_type_id)
+
     @api.model
     def default_get(self, fields_list):
-        """Default the operation of the other receipt and delivery menus.
+        """Default the operation of the operation menus.
 
         The menus cannot know the operation type of the warehouse in their
         action, so they pass the kind in the context and the default type,
-        source and destination locations are read from it.
+        source and destination locations are read from it. The consignment
+        receipt menu also creates its operation type on first use: a
+        warehouse installed before the feature has none, and creating it at
+        run time keeps the module upgrade safe (the barcode module adds
+        required columns to the operation types and loads after this one).
         """
         res = super().default_get(fields_list)
-        other_operation = self.env.context.get('sn_other_operation_default')
-        if not other_operation:
-            return res
         if self.env.context.get('default_picking_type_id'):
+            return res
+        other_operation = self.env.context.get('sn_other_operation_default')
+        consignment = self.env.context.get('sn_consignment_in_default')
+        if not other_operation and not consignment:
             return res
         warehouse = self.env['stock.warehouse'].search(
             [('company_id', '=', self.env.company.id)], limit=1)
         if not warehouse:
             return res
-        picking_type = (
-            warehouse.other_in_type_id
-            if other_operation == 'other_in'
-            else warehouse.other_out_type_id
-        )
+        if consignment:
+            picking_type = warehouse._ensure_consignment_in_type()
+        elif other_operation == 'other_in':
+            picking_type = warehouse.other_in_type_id
+        else:
+            picking_type = warehouse.other_out_type_id
         if not picking_type:
             return res
         res['picking_type_id'] = picking_type.id

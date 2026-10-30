@@ -12,6 +12,7 @@ from odoo import api, fields, models
 # storage and the MES operations share the internal one.
 SN_OPERATION_KINDS = [
     ('receipt', 'Receipt'),
+    ('consignment_in', 'Consignment Receipt'),
     ('qc', 'Quality Control'),
     ('storage', 'Storage'),
     ('other_in', 'Other Receipt'),
@@ -20,6 +21,7 @@ SN_OPERATION_KINDS = [
     ('pick', 'Pick'),
     ('pack', 'Pack'),
     ('delivery', 'Delivery'),
+    ('outsourcing_issue', 'Outsourcing Issue'),
     ('internal', 'Internal Transfer'),
     ('manufacture', 'Manufacturing'),
     ('pbm', 'Picking Before Manufacturing'),
@@ -241,6 +243,8 @@ class StockMove(models.Model):
         'picking_type_id.warehouse_id.int_type_id',
         'picking_type_id.warehouse_id.other_in_type_id',
         'picking_type_id.warehouse_id.other_out_type_id',
+        'picking_type_id.warehouse_id.sn_consignment_in_type_id',
+        'picking_type_id.warehouse_id.sn_outsourcing_issue_type_id',
         'picking_type_id.warehouse_id.sn_unstored_return_type_id',
         'picking_type_id.warehouse_id.manu_type_id',
         'picking_type_id.warehouse_id.pbm_type_id',
@@ -280,6 +284,7 @@ class StockMove(models.Model):
             return False
         operation_types = (
             (warehouse.in_type_id, 'receipt'),
+            (warehouse.sn_consignment_in_type_id, 'consignment_in'),
             (warehouse.qc_type_id, 'qc'),
             (warehouse.store_type_id, 'storage'),
             (warehouse.other_in_type_id, 'other_in'),
@@ -288,6 +293,7 @@ class StockMove(models.Model):
             (warehouse.pick_type_id, 'pick'),
             (warehouse.pack_type_id, 'pack'),
             (warehouse.out_type_id, 'delivery'),
+            (warehouse.sn_outsourcing_issue_type_id, 'outsourcing_issue'),
             (warehouse.int_type_id, 'internal'),
             (warehouse.manu_type_id, 'manufacture'),
             (warehouse.pbm_type_id, 'pbm'),
