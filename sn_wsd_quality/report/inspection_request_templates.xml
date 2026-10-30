@@ -82,9 +82,14 @@
                         vertical-align: middle;
                         word-break: break-all;
                     }
+                    /* The head row stays at 5 mm: the report assets paint a
+                       background on some cells and the dot-matrix printer
+                       turns it into a grey band over the first rule. */
                     .sn-inspection-request table.items thead th {
                         padding: 1mm;
                         font-weight: 700;
+                        background: #fff !important;
+                        box-shadow: none !important;
                     }
                     /* Five rows share the band, so the table reaches the
                        bottom of the 93 mm part where the signatures sit. The
