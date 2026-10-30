@@ -71,6 +71,20 @@ def _mm(value):
     return int(round(value * _DOTS))
 
 
+def _fit_text(draw, text, font, max_width):
+    """Cut the text to the width of its column.
+
+    A dot-matrix sheet has no cell clipping: a long material name would run
+    over the next column. The surplus is dropped and marked with two dots.
+    """
+    text = text or ''
+    if draw.textlength(text, font=font) <= max_width:
+        return text
+    while text and draw.textlength(text + '..', font=font) > max_width:
+        text = text[:-1]
+    return text + '..' if text else ''
+
+
 def _draw_sheet(picking, lines):
     """Draw the sheet on a one bit canvas of 180 dpi dots."""
     width = _mm(WIDTH_MM)
@@ -121,7 +135,10 @@ def _draw_sheet(picking, lines):
     head_center = (table_top + head_bottom) // 2
     for index, (_share, name) in enumerate(COLUMNS):
         center = (columns[index] + columns[index + 1]) // 2
-        draw.text((center, head_center), name, font=body, fill=black, anchor='mm')
+        cell_width = columns[index + 1] - columns[index] - _mm(1.5)
+        draw.text((center, head_center),
+                  _fit_text(draw, name, body, cell_width), font=body,
+                  fill=black, anchor='mm')
 
     for row_index, row in enumerate(lines[:ITEM_ROWS]):
         center_y = (head_bottom + _mm(ITEM_HEIGHT_MM) * row_index
@@ -140,8 +157,10 @@ def _draw_sheet(picking, lines):
         )
         for index, value in enumerate(values):
             center = (columns[index] + columns[index + 1]) // 2
-            draw.text((center, center_y), value or '', font=body,
-                      fill=black, anchor='mm')
+            cell_width = columns[index + 1] - columns[index] - _mm(1.5)
+            draw.text((center, center_y),
+                      _fit_text(draw, value or '', body, cell_width),
+                      font=body, fill=black, anchor='mm')
 
     sign_y = _mm(84)
     draw.text((left, sign_y), '仓管签字：', font=body, fill=black, anchor='la')
