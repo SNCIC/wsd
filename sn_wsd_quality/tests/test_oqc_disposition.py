@@ -167,6 +167,24 @@ class TestOqcDisposition(TransactionCase):
             order.sn_station_leave(res['wip_id'], 'ok')
         order.sn_station_scan(self.wc_c.id, 'SN-OQCD-005')
 
+
+    def test_60_in_place_retest_clears_ng_on_done(self):
+        # in-place retest: the NG board was handled on the spot, its cells
+        # are re-judged pass; completing the inspection drops it from the
+        # NG list (d follows the cell verdicts at completion time)
+        order = self._order()
+        insp = self._ng_round(order, 'SN-OQCD-007')
+        self.assertIn('SN-OQCD-007', insp.x_oqc_ng_serial_ids.mapped('name'))
+        insp._fai_expand_result_cells()
+        # in-place retest: the inspector re-judges the NG board's cells pass
+        insp.cell_ids.filtered(
+            lambda c: c.serial_identity_id.name == 'SN-OQCD-007'
+        ).write({'manual_result': 'pass'})
+        insp.action_done()
+        self.assertNotIn('SN-OQCD-007',
+                         insp.x_oqc_ng_serial_ids.mapped('name'))
+        self.assertEqual(insp.result, 'pass')
+
     def test_50_scrap_marks_cells_na(self):
         Scrap = self.env['sn.wsd.scrap.record']
         order = self._order()

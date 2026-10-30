@@ -176,6 +176,13 @@ class MesOrderOqc(models.Model):
             # NG/报废：计入不良名单参与 d 与 Ac/Re 判定，样本名额
             # 刻意保持占用（FAI 在此剔除释放名额，OQC 不做）
             inspection.x_oqc_ng_serial_ids = [(4, serial_identity.id)]
+            # 初检 NG 落格：先铺该板矩阵再置 fail——就地复测=检验员
+            # 显式改回 pass（完成时的收敛只认"格上已无 fail"的板，
+            # 无格与 fail 格都不算处置完）
+            inspection._fai_expand_result_cells()
+            inspection.cell_ids.filtered(
+                lambda c, sn=serial_identity: c.serial_identity_id == sn
+            ).write({'manual_result': 'fail'})
         # 回流板复检落定（OK=复检合格重铺格子，NG=回到处置决策）：
         # 关闭回流凭证——凭它在重走路线时豁免"已过站/次数上限"拦截
         if serial_identity.x_rework_inspection_id == inspection.id:
@@ -257,6 +264,20 @@ class QualityInspectionOqc(models.Model):
                 lambda i: i.inspection_type == 'oqc' and i.state != 'done'
                 and i.mes_order_id
                 and i.mes_order_id.x_manage_mode != 'report'):
+            # 就地复测收敛（oqc-ng-disposition）：NG 名单中格子已无
+            # 不合格的板 = 检验员现场处理并复测通过，剔出 NG 名单——
+            # 出站 NG 只登记不良现场，最终 d 以完成时的格子判定为准
+            retested = inspection.x_oqc_ng_serial_ids.filtered(
+                lambda sn: not inspection.cell_ids.filtered(
+                    lambda c, sn=sn: c.serial_identity_id == sn
+                    and c.result == 'fail'))
+            if retested:
+                # 剔出 NG 名单并计入到检口径：初检 NG + 就地复测合格
+                # = 该板完成了检验流程（齐套守卫与留痕两全）
+                inspection.x_oqc_ng_serial_ids = [
+                    (3, sn.id) for sn in retested]
+                inspection.x_fai_arrived_serial_ids = [
+                    (4, sn.id) for sn in retested]
             arrived = len(inspection.x_fai_arrived_serial_ids
                           | inspection.x_oqc_ng_serial_ids)
             if arrived < inspection.sample_size:

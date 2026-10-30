@@ -1482,10 +1482,11 @@ class QualityInspectionLine(models.Model):
                           allowed='', lower=0.0, upper=0.0, manual=False):
         """判定口径（FAI 检验矩阵抽取）：单据级 line 与样本级 cell 共用，
         只做纯值判定；line._compute_result 的行为与抽取前完全等价。
-        仅 N/A（报废处置置值）优先于值判定；pass/fail 的人工值仍按项型
-        口径处理（pass_fail 项走 manual，其余项型按值判）。"""
-        if manual == 'na':
-            return 'na'
+        显式人工判定优先于值判定：na（报废处置）与 fail（NG 落格/
+        人工判退）对任何项型生效——pass 不优先，预填的合格值不遮蔽
+        后续改坏的测量/文本值。"""
+        if manual in ('na', 'fail'):
+            return manual
         if item_type == 'numeric':
             if float_compare(measured, lower, precision_rounding=0.0001) < 0:
                 return 'fail'
@@ -1508,11 +1509,12 @@ class QualityInspectionLine(models.Model):
                     and line.inspection_id.mes_order_id \
                     and line.inspection_id.mes_order_id.x_manage_mode != 'report':
                 # 过站 FAI/OQC 矩阵（决策 4）：行结果由结果格派生（任一格
-                # fail 即 fail），跳过原有单据级手填逻辑
+                # fail 即 fail；报废板的 na 格不拖累——口径同单据级聚合，
+                # 报废处置置 na 后其余 pass 即行 pass）
                 results = set(line.cell_ids.mapped('result'))
                 if 'fail' in results:
                     line.result = 'fail'
-                elif line.cell_ids and results == {'pass'}:
+                elif line.cell_ids and results <= {'pass', 'na'}:
                     line.result = 'pass'
                 else:
                     line.result = 'pending'
