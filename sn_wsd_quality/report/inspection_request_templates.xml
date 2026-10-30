@@ -2,17 +2,25 @@
 <odoo>
     <template id="report_inspection_request">
         <t t-call="web.html_container">
-            <!-- Page count of the continuous form (241 x 279.4 mm, three
-                 parts): the number sits in the footer, centred on the sheet,
-                 outside the body of the document. -->
-            <div class="footer">
-                <!-- The footer is rendered on its own by wkhtmltopdf: it does
-                     not inherit the styles of the sheet, so the font is set
-                     inline. -->
-                <div class="text-center"
-                     style="font-family: SimSun, serif; font-size: 8px;">
-                    <span class="page"/> / <span class="topage"/>
-                </div>
+            <!-- The head band carries the company name, the sheet name and
+                 the page count on one line. wkhtmltopdf only replaces the page
+                 counters of the header and footer, so the title lives here
+                 rather than in the body: the three parts share the same line.
+                 The band is rendered on its own and does not inherit the
+                 styles of the sheet, hence the inline styles. -->
+            <div class="header">
+                <table style="width: 100%; border-collapse: collapse; font-family: SimSun, serif; color: #111;">
+                    <tr>
+                        <td style="width: 16%;"></td>
+                        <td style="width: 66%; text-align: center; font-size: 22px; font-weight: 700; letter-spacing: 3px;">
+                            <span t-esc="docs[0].company_id.name"/>
+                            <div style="display: inline;">Inspection Request Form</div>
+                        </td>
+                        <td style="width: 18%; text-align: right; font-size: 9px; vertical-align: bottom;">
+                            <span class="page"/> / <span class="topage"/>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <t t-foreach="docs" t-as="o">
                 <t t-call="sn_wsd_quality.report_inspection_request_document"/>
@@ -26,7 +34,7 @@
         <t t-set="waived" t-value="o._sn_is_inspection_request_waived(lines)"/>
         <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
             <div class="page sn-inspection-request"
-                 style="font-family: SimSun, serif; color: #111; font-size: 9px;">
+                 style="font-family: SimSun, serif; color: #111; font-size: 10px;">
                 <style>
                     .sn-inspection-request, .sn-inspection-request table,
                     .sn-inspection-request td, .sn-inspection-request th,
@@ -34,49 +42,48 @@
                         font-family: SimSun, serif;
                     }
                     /* One request takes a 93 mm band of the A4 sheet, the
-                       height of one part of the three-part form. The band is a
-                       minimum: a transfer with more materials than the five
-                       rows of the form grows instead of being cut. */
+                       height of one part of the three-part form: the head band
+                       of the header is 12 mm and the body below it fills the
+                       remaining 81 mm. The band is a minimum: a transfer with
+                       more materials than the five rows of the form grows
+                       instead of being cut. */
                     .sn-inspection-request {
                         page-break-inside: avoid;
-                        min-height: 93mm;
+                        min-height: 81mm;
                     }
                     .sn-inspection-request table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-                    .sn-inspection-request .title {
-                        text-align: center;
-                        font-size: 22px;
-                        font-weight: 700;
-                        letter-spacing: 3px;
-                        margin: 0 0 3px;
-                    }
-                    /* The company name and the sheet name share the title
-                       line: block elements carry the translatable terms, the
-                       inline display keeps them on one line. */
-                    .sn-inspection-request .title .company,
-                    .sn-inspection-request .title .sheet {
-                        display: inline;
-                    }
                     .sn-inspection-request table.meta td {
-                        padding: 0 2px 4px;
-                        font-size: 10px;
+                        height: 6mm;
+                        padding: 0 2px;
+                        font-size: 11px;
+                        vertical-align: middle;
                     }
                     /* The rules are given in points on purpose: a 1px line
                        (0.26 mm) is below the dot size of a dot-matrix printer
                        and came out as a dotted line. 1pt keeps a continuous
                        line, even after the printer scales the page down. */
+                    .sn-inspection-request table.items {
+                        min-height: 67mm;
+                    }
                     .sn-inspection-request table.items th,
                     .sn-inspection-request table.items td {
                         border: 1pt solid #000;
-                        padding: 2px 3px;
-                        font-size: 9px;
+                        padding: 1mm;
+                        font-size: 10px;
                         vertical-align: middle;
                         word-break: break-all;
                     }
-                    .sn-inspection-request table.items th {
-                        font-weight: 400;
+                    .sn-inspection-request table.items thead th {
+                        height: 6mm;
+                        font-weight: 700;
+                    }
+                    /* Five rows share the band, so the table reaches the
+                       bottom of the 93 mm part where the signatures sit. */
+                    .sn-inspection-request table.items tbody tr {
+                        height: 12.2mm;
                     }
                     .sn-inspection-request .center { text-align: center; }
                     /* Only the item table carries rules: the supplier band
@@ -99,8 +106,9 @@
                         border: 0 none !important;
                     }
                     .sn-inspection-request table.signatures td {
-                        padding: 6px 2px 0;
-                        font-size: 10px;
+                        height: 8mm;
+                        padding: 0 2px;
+                        font-size: 11px;
                         vertical-align: middle;
                     }
                     .sn-inspection-request .waived-mark {
@@ -110,11 +118,6 @@
                         letter-spacing: 1px;
                     }
                 </style>
-
-                <div class="title">
-                    <div class="company"><span t-field="company.name"/></div>
-                    <div class="sheet">Inspection Request Sheet</div>
-                </div>
 
                 <table class="meta">
                     <tr>
