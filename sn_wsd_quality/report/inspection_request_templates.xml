@@ -33,10 +33,14 @@
                     .sn-inspection-request span {
                         font-family: SimSun, serif;
                     }
-                    /* The sheet is one part of the three-part continuous form:
-                       its height is fixed by the paper format, and nothing is
-                       pushed onto a second sheet as long as the lines fit. */
-                    .sn-inspection-request { page-break-inside: avoid; }
+                    /* One request takes a 93 mm band of the A4 sheet, the
+                       height of one part of the three-part form. The band is a
+                       minimum: a transfer with more materials than the five
+                       rows of the form grows instead of being cut. */
+                    .sn-inspection-request {
+                        page-break-inside: avoid;
+                        min-height: 93mm;
+                    }
                     .sn-inspection-request table {
                         width: 100%;
                         border-collapse: collapse;

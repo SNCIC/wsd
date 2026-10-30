@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Three-part continuous form: the sheet is 241 mm wide and 279.4 mm
-         high, cut into three equal parts, so one part is 241 x 93 mm.
+    <!-- The sheet is printed on A4 paper: the page is a standard A4, and one
+         inspection request takes a 93 mm band of it, the height of one part
+         of the three-part form. The table keeps the same five item rows as
+         the paper form, so a request never spills over its band.
 
-         wkhtmltopdf treats the page width and height options as the portrait
-         paper size and swaps them for a landscape orientation: giving it
-         241 x 93 with a portrait orientation made it rotate the sheet into a
-         93 x 241 strip (the sheet then printed sideways). The part is
-         therefore declared as the portrait size 93 x 241 and the landscape
-         orientation swaps it back into the 241 x 93 part of the form. -->
+         A standard paper size is used on purpose: the printer drivers know
+         A4, while the 241 x 93 mm custom paper is not registered on every
+         machine, and a driver without it scales the page down and crops the
+         right-hand side. -->
     <record id="paperformat_inspection_request" model="report.paperformat">
-        <field name="name">Inspection Request (241 x 93 mm)</field>
+        <field name="name">Inspection Request (A4, 93 mm band)</field>
         <field name="default" eval="False"/>
-        <field name="format">custom</field>
-        <field name="page_width">93</field>
-        <field name="page_height">241</field>
-        <field name="orientation">Landscape</field>
-        <field name="margin_top">2</field>
-        <field name="margin_bottom">6</field>
-        <field name="margin_left">2</field>
-        <field name="margin_right">2</field>
+        <field name="format">A4</field>
+        <field name="page_width" eval="False"/>
+        <field name="page_height" eval="False"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
         <field name="header_line" eval="False"/>
         <field name="header_spacing">0</field>
         <field name="dpi">96</field>
