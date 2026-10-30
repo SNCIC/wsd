@@ -15,18 +15,12 @@
                 <!-- The inspection request travels with the goods from the
                      receipt to the quality area: printed on the receipt of a
                      three-step reception, before it is validated. -->
-                <button name="%(action_report_inspection_request)d"
-                        type="action"
-                        string="Print Inspection Request"
-                        class="btn-secondary"
-                        invisible="not sn_is_reception_receipt or state == 'cancel'"
-                        groups="stock.group_stock_user"/>
-                <!-- Same sheet, but sent to the dot matrix printer as ESC/P:
-                     the printer receives the 180 dpi bitmap and prints solid
+                <!-- The sheet is sent to the dot matrix printer as ESC/P: the
+                     printer receives the 180 dpi bitmap and prints solid
                      strokes instead of the rasterised PDF. -->
                 <button name="action_print_inspection_request_prn"
                         type="object"
-                        string="Inspection Request (Dot Matrix)"
+                        string="Print Inspection Request"
                         class="btn-secondary"
                         invisible="not sn_is_reception_receipt or state == 'cancel'"
                         groups="stock.group_stock_user"/>

@@ -142,11 +142,14 @@ class StockPicking(models.Model):
         strokes as solid as the accounting software does.
         """
         self.ensure_one()
+        # The download target still opens a window in the browser, which the
+        # desktop shell blocks (and Odoo then warns about a blocked popup).
+        # Navigating to the attachment downloads it without leaving the page.
         return {
             'type': 'ir.actions.act_url',
             'url': '/sn_wsd_quality/inspection_request/prn?picking_id=%s'
                    % self.id,
-            'target': 'new',
+            'target': 'self',
         }
 
     @api.model
