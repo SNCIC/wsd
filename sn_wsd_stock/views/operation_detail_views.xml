@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Operation detail reports (Inventory > Details).
+
+         Every operation type of a warehouse has its own detail list: the
+         receipt, the quality control and the storage transfer live in
+         reception_detail_views.xml, the other operation types are listed
+         here. Each list is filtered on sn_operation_kind, the kind of
+         operation read on the operation type of the transfer: the operation
+         types carry no xmlid (they are created with the warehouse or lazily
+         by the MES module), so a report cannot filter on a fixed record.
+
+         The lists are not inherited from each other: Odoo applies every view
+         inheriting a view to that view too, so adding or removing a column in
+         a child view would change the other reports as well. The operations
+         sharing the same columns share one list instead, and each action
+         selects it explicitly. -->
+    <menuitem id="menu_sn_wsd_stock_detail"
+              name="Details"
+              parent="stock.menu_stock_root"
+              sequence="3"
+              groups="stock.group_stock_user"/>
+
+    <record id="view_sn_wsd_operation_detail_search" model="ir.ui.view">
+        <field name="name">stock.move.operation.detail.search</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Operation Details">
+                <field name="reference" string="Document No."/>
+                <field name="sn_picking_origin" string="Transfer Source"/>
+                <field name="sn_picking_partner_id" string="Contact"/>
+                <field name="product_code" string="Material Code"/>
+                <field name="product_name" string="Material Name"/>
+                <field name="material_specification" string="Material Specification"/>
+                <field name="sn_picking_date" string="Scheduled Date"/>
+                <field name="sn_validation_date" string="Validation Date"/>
+                <field name="picking_id"/>
+                <field name="picking_type_id" string="Operation Type"/>
+                <field name="sn_warehouse_id" string="Warehouse"/>
+                <field name="sn_issue_type_id" string="Issue Type"/>
+                <field name="sn_receive_type_id" string="Receipt Type"/>
+                <field name="sn_mes_order_id" string="MES Order"/>
+                <field name="product_id"/>
+                <separator/>
+                <filter name="filter_in_progress" string="In Progress"
+                        domain="[('picking_id.state', 'not in', ('done', 'cancel'))]"/>
+                <filter name="filter_done" string="Done"
+                        domain="[('picking_id.state', '=', 'done')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_document" string="Document No."
+                            context="{'group_by': 'picking_id'}"/>
+                    <filter name="group_operation_type" string="Operation Type"
+                            context="{'group_by': 'picking_type_id'}"/>
+                    <filter name="group_warehouse" string="Warehouse"
+                            context="{'group_by': 'sn_warehouse_id'}"/>
+                    <filter name="group_mes_order" string="MES Order"
+                            context="{'group_by': 'sn_mes_order_id'}"/>
+                    <filter name="group_product" string="Material"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="group_date" string="Scheduled Date"
+                            context="{'group_by': 'sn_picking_date:day'}"/>
+                    <filter name="group_validation_date" string="Validation Date"
+                            context="{'group_by': 'sn_validation_date:day'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_other_receipt_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.other.receipt.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Other Receipt Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="picking_type_id" string="Operation Type"
+                       optional="hide"/>
+                <field name="sn_warehouse_id" string="Warehouse" optional="hide"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
+                <field name="sn_picking_partner_id" string="Contact"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="sn_supplier_batch_no" optional="hide"/>
+                <field name="sn_receive_type_id" optional="show"/>
+                <field name="sn_receive_department_id" optional="show"/>
+                <field name="sn_receive_employee_id" optional="show"
+                       widget="many2one_avatar_employee"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_other_delivery_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.other.delivery.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Other Delivery Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="picking_type_id" string="Operation Type"
+                       optional="hide"/>
+                <field name="sn_warehouse_id" string="Warehouse" optional="hide"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
+                <field name="sn_picking_partner_id" string="Contact"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="sn_supplier_batch_no" optional="hide"/>
+                <field name="sn_issue_type_id" optional="show"/>
+                <field name="sn_issue_department_id" optional="show"/>
+                <field name="sn_issue_employee_id" optional="show"
+                       widget="many2one_avatar_employee"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_transfer_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.transfer.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Operation Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="picking_type_id" string="Operation Type"
+                       optional="hide"/>
+                <field name="sn_warehouse_id" string="Warehouse" optional="hide"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
+                <field name="sn_picking_partner_id" string="Contact"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="sn_supplier_batch_no" optional="hide"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_mes_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.mes.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="MES Operation Details" create="false" delete="false"
+                  js_class="sn_wsd_merged_cells_list"
+                  default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
+                <field name="picking_id" column_invisible="1"/>
+                <field name="reference" string="Document No."/>
+                <field name="picking_type_id" string="Operation Type"
+                       optional="hide"/>
+                <field name="sn_warehouse_id" string="Warehouse" optional="hide"/>
+                <field name="sn_mes_order_id" optional="show"/>
+                <field name="sn_picking_date" options="{'show_time': False}"/>
+                <field name="sn_validation_date" options="{'show_time': False}"/>
+                <field name="sn_picking_partner_id" string="Contact"
+                       optional="hide"/>
+                <field name="sn_picking_origin"/>
+                <field name="sn_picking_state" widget="badge"
+                       decoration-success="sn_picking_state == 'done'"
+                       decoration-info="sn_picking_state in ('confirmed', 'assigned')"
+                       decoration-warning="sn_picking_state == 'waiting'"
+                       decoration-danger="sn_picking_state == 'cancel'"/>
+                <field name="sn_picking_user_id" optional="hide"
+                       widget="many2one_avatar_user"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="sn_supplier_batch_no" optional="hide"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_manufacture_detail_list" model="ir.ui.view">
+        <field name="name">stock.move.manufacture.detail.list</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Manufacturing Details" create="false" delete="false"
+                  default_order="date desc, id desc">
+                <field name="sn_production_id" string="Manufacturing Order"/>
+                <field name="origin" string="Source Document"/>
+                <field name="date" string="Date" options="{'show_time': False}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="product_code"/>
+                <field name="product_name"/>
+                <field name="material_specification"/>
+                <field name="product_uom_qty"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="product_uom" groups="uom.group_uom"/>
+                <field name="sn_lot_names" optional="show"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" string="Destination Location"
+                       optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_other_receipt_detail" model="ir.actions.act_window">
+        <field name="name">Other Receipt Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_other_receipt_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'other_in')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_other_delivery_detail" model="ir.actions.act_window">
+        <field name="name">Other Delivery Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_other_delivery_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'other_out')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_vendor_return_detail" model="ir.actions.act_window">
+        <field name="name">Return to Vendor Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'vendor_return')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_pick_detail" model="ir.actions.act_window">
+        <field name="name">Pick Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'pick')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_pack_detail" model="ir.actions.act_window">
+        <field name="name">Pack Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'pack')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_delivery_detail" model="ir.actions.act_window">
+        <field name="name">Delivery Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'delivery')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_internal_detail" model="ir.actions.act_window">
+        <field name="name">Internal Transfer Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'internal')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_manufacture_detail" model="ir.actions.act_window">
+        <field name="name">Manufacturing Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_manufacture_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'manufacture')]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <record id="action_sn_wsd_pbm_detail" model="ir.actions.act_window">
+        <field name="name">Picking Before Manufacturing Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'pbm')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_sam_detail" model="ir.actions.act_window">
+        <field name="name">Stock After Manufacturing Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_transfer_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'sam')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_mes_issue_detail" model="ir.actions.act_window">
+        <field name="name">Material Issue Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_mes_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'mes_issue')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_mes_order_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_mes_return_detail" model="ir.actions.act_window">
+        <field name="name">Material Return Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_mes_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'mes_return')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_mes_order_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_mes_over_pick_detail" model="ir.actions.act_window">
+        <field name="name">Material Over-pick Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_mes_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'mes_over_pick')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_mes_order_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <record id="action_sn_wsd_mes_fg_receipt_detail" model="ir.actions.act_window">
+        <field name="name">Finished Goods Receipt Details</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sn_wsd_mes_detail_list"/>
+        <field name="search_view_id" ref="view_sn_wsd_operation_detail_search"/>
+        <field name="domain">[('sn_operation_kind', '=', 'mes_fg_receipt')]</field>
+        <field name="context">{'create': False, 'sn_merged_cells_key': 'picking_id',
+            'sn_merged_cells_fields': ['reference', 'picking_type_id', 'sn_warehouse_id', 'sn_mes_order_id', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_other_receipt_detail"
+              name="Other Receipt Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_other_receipt_detail"
+              sequence="20"/>
+    <menuitem id="menu_sn_wsd_other_delivery_detail"
+              name="Other Delivery Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_other_delivery_detail"
+              sequence="21"/>
+    <menuitem id="menu_sn_wsd_vendor_return_detail"
+              name="Return to Vendor Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_vendor_return_detail"
+              sequence="30"/>
+    <menuitem id="menu_sn_wsd_pick_detail"
+              name="Pick Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_pick_detail"
+              sequence="40"/>
+    <menuitem id="menu_sn_wsd_pack_detail"
+              name="Pack Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_pack_detail"
+              sequence="41"/>
+    <menuitem id="menu_sn_wsd_delivery_detail"
+              name="Delivery Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_delivery_detail"
+              sequence="45"/>
+    <menuitem id="menu_sn_wsd_internal_detail"
+              name="Internal Transfer Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_internal_detail"
+              sequence="50"/>
+    <menuitem id="menu_sn_wsd_manufacture_detail"
+              name="Manufacturing Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_manufacture_detail"
+              sequence="60"/>
+    <menuitem id="menu_sn_wsd_pbm_detail"
+              name="Picking Before Manufacturing Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_pbm_detail"
+              sequence="70"/>
+    <menuitem id="menu_sn_wsd_sam_detail"
+              name="Stock After Manufacturing Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_sam_detail"
+              sequence="71"/>
+    <menuitem id="menu_sn_wsd_mes_issue_detail"
+              name="Material Issue Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_mes_issue_detail"
+              sequence="80"/>
+    <menuitem id="menu_sn_wsd_mes_return_detail"
+              name="Material Return Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_mes_return_detail"
+              sequence="81"/>
+    <menuitem id="menu_sn_wsd_mes_over_pick_detail"
+              name="Material Over-pick Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_mes_over_pick_detail"
+              sequence="82"/>
+    <menuitem id="menu_sn_wsd_mes_fg_receipt_detail"
+              name="Finished Goods Receipt Details"
+              parent="menu_sn_wsd_stock_detail"
+              action="action_sn_wsd_mes_fg_receipt_detail"
+              sequence="83"/>
+</odoo>

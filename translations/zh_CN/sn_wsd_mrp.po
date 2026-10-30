@@ -207,8 +207,9 @@ msgstr "当前绑定到该 SN 的铭牌（最新的有效绑定）。"
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__sn_wsd_process_route__x_process_type__dip
+#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_dip
 msgid "DIP"
-msgstr "插件"
+msgstr "DIP"
 
 #. module: sn_wsd_mrp
 #. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
@@ -509,6 +510,7 @@ msgstr "工序代码"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__sequence
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_scrap_reason__sequence
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_production_process_doc_type__sequence
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__sequence
 msgid "Sequence"
 msgstr "序列"
 
@@ -764,14 +766,3 @@ msgstr "车间"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_wizard_form
 msgid "<strong>Excluded:</strong>"
 msgstr "<strong>已排除：</strong>"
-
-
-#. module: sn_wsd_mrp
-#: model:sn.wsd.process.section,name:sn_wsd_mrp.process_section_dip
-msgid "DIP"
-msgstr "DIP"
-
-#. module: sn_wsd_mrp
-#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_section__sequence
-msgid "Sequence"
-msgstr "序号"
