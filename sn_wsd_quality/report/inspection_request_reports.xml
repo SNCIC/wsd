@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Three-part continuous form: the sheet is 241 mm wide and 279.4 mm
-         high, cut into three equal parts, so one part is 241 x 93 mm. The
-         portrait orientation keeps the width as given: wkhtmltopdf would swap
-         the two dimensions with a landscape orientation. -->
+         high, cut into three equal parts, so one part is 241 x 93 mm.
+
+         wkhtmltopdf treats the page width and height options as the portrait
+         paper size and swaps them for a landscape orientation: giving it
+         241 x 93 with a portrait orientation made it rotate the sheet into a
+         93 x 241 strip (the sheet then printed sideways). The part is
+         therefore declared as the portrait size 93 x 241 and the landscape
+         orientation swaps it back into the 241 x 93 part of the form. -->
     <record id="paperformat_inspection_request" model="report.paperformat">
         <field name="name">Inspection Request (241 x 93 mm)</field>
         <field name="default" eval="False"/>
         <field name="format">custom</field>
-        <field name="page_width">241</field>
-        <field name="page_height">93</field>
-        <field name="orientation">Portrait</field>
+        <field name="page_width">93</field>
+        <field name="page_height">241</field>
+        <field name="orientation">Landscape</field>
         <field name="margin_top">3</field>
         <field name="margin_bottom">8</field>
         <field name="margin_left">4</field>
