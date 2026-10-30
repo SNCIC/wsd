@@ -179,6 +179,28 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertIn('at least one positive quantity', str(ctx.exception))
         self.assertFalse(self._reports(order))
 
+    def test_menu_server_action_makes_line_buttons_safe(self):
+        """菜单 server action 路径：create 后 action_reload_lines 先落库，
+        行级快捷按钮（均分等）在真实行上可调用——修复未保存向导上
+        点按钮报 wizard_id 缺失的问题。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        wizard.action_reload_lines()
+        lines = wizard.report_line_ids.filtered(
+            lambda l: l.mes_order_id == order)
+        self.assertTrue(lines)
+        self.assertTrue(lines[0].wizard_id)
+        line = lines[0]
+        line.participant_ids = [(5, 0, 0), (0, 0, {
+            'employee_id': self.emp_zhang.id, 'performance_ratio': 0.0,
+        }), (0, 0, {
+            'employee_id': self.emp_li.id, 'performance_ratio': 0.0,
+        })]
+        line.action_equal_split()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [50.0, 50.0])
+
     # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date
     # ------------------------------------------------------------------

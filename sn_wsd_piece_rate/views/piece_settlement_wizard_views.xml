@@ -136,4 +136,29 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+
+    <!-- Menu entry: create + preload the wizard server-side so the dialog
+         opens on a saved record; the per-line quick-fill buttons (Fill From
+         Team / Split Equally / Reuse Last Allocation) need real line ids,
+         on the virtual rows of an unsaved wizard they fail with "field
+         wizard_id is missing". -->
+    <record id="action_sn_wsd_daily_reporting_server" model="ir.actions.server">
+        <field name="name">Daily Reporting</field>
+        <field name="model_id"
+               ref="sn_wsd_piece_rate.model_sn_wsd_piece_settlement_generate_wizard"/>
+        <field name="state">code</field>
+        <field name="code"><![CDATA[
+wizard = env['sn.wsd.piece.settlement.generate.wizard'].create({})
+wizard.action_reload_lines()
+action_rec = env.ref('sn_wsd_piece_rate.action_sn_wsd_piece_settlement_generate')
+action = {
+    'type': 'ir.actions.act_window',
+    'name': action_rec.name,
+    'res_model': 'sn.wsd.piece.settlement.generate.wizard',
+    'res_id': wizard.id,
+    'view_mode': 'form',
+    'target': 'new',
+}
+        ]]></field>
+    </record>
 </odoo>

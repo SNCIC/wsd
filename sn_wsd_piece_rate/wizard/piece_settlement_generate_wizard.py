@@ -111,6 +111,18 @@ class PieceSettlementGenerateWizard(models.TransientModel):
                 (5, 0, 0)] + [
                 (0, 0, vals) for vals in wizard._search_report_line_vals()]
 
+    def action_reload_lines(self):
+        """Server-side twin of the onchange, called by the menu's server
+        action right after create: the wizard and its lines are persisted
+        BEFORE the dialog opens, so the per-line object buttons (Fill From
+        Team / Split Equally / Reuse Last Allocation) run on real records.
+        Object buttons on the virtual rows of an unsaved wizard fail with
+        "field wizard_id is missing" -- the client saves the line alone."""
+        for wizard in self:
+            wizard.report_line_ids = [
+                (5, 0, 0)] + [
+                (0, 0, vals) for vals in wizard._search_report_line_vals()]
+
     def _active_report_order_domain(self):
         domain = [
             ('x_manage_mode', '=', 'report'),
