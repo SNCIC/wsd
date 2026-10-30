@@ -3,41 +3,40 @@
 
 <t t-name="sn_wsd_quality.OqcInspectedList">
     <div class="o_oqc_inspected_list d-flex flex-column gap-2">
-                <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex gap-2 align-items-center">
             <input type="text" class="form-control form-control-sm"
                    style="max-width: 260px"
                    t-att-value="state.search"
-                   placeholder="Search SN... (Enter)"
+                   t-att-placeholder="labels.searchPlaceholder"
                    t-on-keydown="onSearch"
                    t-on-input="onSearchInput"/>
             <select class="form-select form-select-sm" style="max-width: 140px"
                     t-att-value="state.verdict"
                     t-on-change="onVerdictChange">
-                <option value="all">All</option>
-                <option value="ok">OK</option>
-                <option value="ng">NG</option>
-                <option value="scrap">Scrap</option>
+                <option value="all" t-esc="labels.all"/>
+                <option value="ok" t-esc="labels.ok"/>
+                <option value="ng" t-esc="labels.ng"/>
+                <option value="scrap" t-esc="labels.scrap"/>
             </select>
             <span class="small text-muted ms-auto" t-if="!state.loading">
-                <t t-out="state.total"/> record(s)
+                <t t-out="totalLabel"/>
             </span>
         </div>
 
-        <div t-if="state.loading" class="text-muted p-3">Loading...</div>
+        <div t-if="state.loading" class="text-muted p-3" t-esc="labels.loading"/>
 
-        <div t-if="!state.loading and !state.rows.length" class="text-muted p-3">
-            No inspected boards yet.
-        </div>
+        <div t-if="!state.loading and !state.rows.length" class="text-muted p-3"
+             t-esc="labels.empty"/>
 
         <div t-if="!state.loading and state.rows.length" class="table-responsive">
             <table class="table table-sm o_list_table">
                 <thead>
                     <tr class="text-start">
-                        <th>SN</th>
-                        <th>Result</th>
-                        <th>Inspected At</th>
-                        <th>Operator</th>
-                        <th>Defect Code</th>
+                        <th t-esc="labels.sn"/>
+                        <th t-esc="labels.result"/>
+                        <th t-esc="labels.inspectedAt"/>
+                        <th t-esc="labels.operator"/>
+                        <th t-esc="labels.defectCode"/>
                     </tr>
                 </thead>
                 <tbody>

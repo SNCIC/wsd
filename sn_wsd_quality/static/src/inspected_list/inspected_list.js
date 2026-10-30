@@ -24,6 +24,21 @@ export class OqcInspectedList extends Component {
 
     setup() {
         this.orm = useService("orm");
+        // all UI strings translated once here; the template reads this.labels
+        this.labels = {
+            searchPlaceholder: _t("Search SN... (Enter)"),
+            all: _t("All"),
+            ok: _t("OK"),
+            ng: _t("NG"),
+            scrap: _t("Scrap"),
+            loading: _t("Loading..."),
+            empty: _t("No inspected boards yet."),
+            sn: _t("SN"),
+            result: _t("Result"),
+            inspectedAt: _t("Inspected At"),
+            operator: _t("Operator"),
+            defectCode: _t("Defect Code"),
+        };
         this.state = useState({
             loading: true,
             rows: [],
@@ -34,6 +49,10 @@ export class OqcInspectedList extends Component {
         });
         onWillStart(() => this.load());
         onWillUpdateProps(() => this.load());
+    }
+
+    get totalLabel() {
+        return _t("%s record(s)", this.state.total);
     }
 
     get record() {
