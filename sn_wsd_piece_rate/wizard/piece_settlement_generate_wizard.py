@@ -150,11 +150,18 @@ class PieceSettlementGenerateWizard(models.TransientModel):
     def action_submit_reports(self):
         """Whole-batch validation first, then one transaction: one
         report_operation_qty per line (all five gates unchanged). Any
-        rejection rolls the whole batch back and names the line."""
+        rejection rolls the whole batch back and names the line.
+
+        The onchange preloads every reportable operation row as a
+        reference: rows the clerk never filled keep zero quantities and
+        are skipped, so an untouched row never blocks the batch."""
         self.ensure_one()
-        lines = self.report_line_ids
+        lines = self.report_line_ids.filtered(
+            lambda l: l.qty_ok or l.qty_ng or l.qty_scrap)
         if not lines:
-            raise UserError(_('Add at least one line on the To Report tab.'))
+            raise UserError(_(
+                'Enter at least one positive quantity on a line before '
+                'submitting.'))
         for index, line in enumerate(lines, start=1):
             try:
                 line._validate_for_submit()

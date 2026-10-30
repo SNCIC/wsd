@@ -153,6 +153,32 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertEqual(
             report_a.participant_ids.mapped('performance_ratio'), [45.0, 55.0])
 
+    def test_submit_skips_untouched_preloaded_lines(self):
+        """预载参照行（三数量全 0）不参与提交，不阻塞其他行。"""
+        self._rate()
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a)
+        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0, allocation=(
+            (self.emp_zhang, 100.0),))
+        self._wizard_line(wizard, order, self.op_b)
+        wizard.action_submit_reports()
+        reports = self._reports(order)
+        self.assertEqual(len(reports), 1)
+        self.assertEqual(reports.qty_ok, 10.0)
+        self.assertEqual(
+            self._op_row(order, self.op_b).x_reported_ok_qty, 0.0)
+
+    def test_submit_all_lines_zero_blocked(self):
+        """全部行都是 0 → 明确提示至少录一个数量，零落库。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a)
+        with self.assertRaises(UserError) as ctx:
+            wizard.action_submit_reports()
+        self.assertIn('at least one positive quantity', str(ctx.exception))
+        self.assertFalse(self._reports(order))
+
     # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date
     # ------------------------------------------------------------------
