@@ -125,6 +125,10 @@ class MesOrderOqc(models.Model):
         if not inspection or inspection._oqc_passed():
             # 判定通过后投入恢复整单自由放行，不再登记样本
             return
+        if inspection.x_full_inspection:
+            # 台账口径（oqc-full-lot-form）：全检下不登记样本名单
+            # （闸门走开关；判定以过站历史为准，名单不再积累万台 m2m）
+            return
         if route_operation.operation_id != inspection.scheme_id.operation_id:
             return
         if serial_identity not in inspection.x_fai_serial_ids:
@@ -158,8 +162,13 @@ class MesOrderOqc(models.Model):
         inspection = self.x_oqc_inspection_id
         if not inspection or inspection._oqc_passed():
             return
-        if serial_identity not in inspection.x_fai_serial_ids:
+        if inspection.x_full_inspection and result == 'ok':
+            # 台账口径（oqc-full-lot-form）：合格板判定 = 出站 OK（过站
+            # 历史即台账），不铺格不登到检——只有异常板才细记
             return
+        if serial_identity not in inspection.x_fai_serial_ids \
+                and not inspection.x_full_inspection:
+            return  # 台账下 NG 板不入名单也要细记（名单只在抽样登记）
         if route_operation.operation_id != inspection.scheme_id.operation_id:
             return  # 非 OQC 工序的出站不参与样本判定
         if result == 'ok':
@@ -278,14 +287,18 @@ class QualityInspectionOqc(models.Model):
                     (3, sn.id) for sn in retested]
                 inspection.x_fai_arrived_serial_ids = [
                     (4, sn.id) for sn in retested]
-            arrived = len(inspection.x_fai_arrived_serial_ids
-                          | inspection.x_oqc_ng_serial_ids)
-            if arrived < inspection.sample_size:
-                raise UserError(_(
-                    'Outgoing inspection: only %(arrived)s of %(need)s '
-                    'samples reached the outgoing operation; wait for the '
-                    'full sample set.', arrived=arrived,
-                    need=inspection.sample_size))
+            if not inspection.x_full_inspection:
+                arrived = len(inspection.x_fai_arrived_serial_ids
+                              | inspection.x_oqc_ng_serial_ids)
+                if arrived < inspection.sample_size:
+                    raise UserError(_(
+                        'Outgoing inspection: only %(arrived)s of %(need)s '
+                        'samples reached the outgoing operation; wait for '
+                        'the full sample set.', arrived=arrived,
+                        need=inspection.sample_size))
+            # 台账口径：齐套守卫不适用（样本名单不再登记，已检以过站
+            # 历史为准）；异常全处置 + 回流板守卫仍然把住收口，余量
+            # （已检 < 批量）由人决定收口时机，不硬拦
             # 回流板复检守卫（oqc-ng-disposition）：拨回工序重走的板未
             # 回到本工序重新判定前，单据不得完成——不存在"关单后无处
             # 复检"

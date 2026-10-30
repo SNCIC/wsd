@@ -35,6 +35,8 @@
             'sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.js',
             'sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.xml',
             'sn_wsd_quality/static/src/sampling_matrix/sampling_matrix.scss',
+            'sn_wsd_quality/static/src/inspected_list/inspected_list.js',
+            'sn_wsd_quality/static/src/inspected_list/inspected_list.xml',
         ],
     },
     'installable': True,

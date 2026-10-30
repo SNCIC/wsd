@@ -332,17 +332,8 @@
                                 <field name="x_fai_ok_qty"/>
                                 <field name="x_fai_ng_qty"/>
                             </group>
-                            <group string="Arrived Samples"
-                                   invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
-                                <field name="x_fai_arrived_serial_ids" nolabel="1"
-                                       widget="many2many_tags"
-                                       readonly="state == 'done'"/>
-                            </group>
-                            <group string="OQC NG Samples"
-                                   invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
-                                <field name="x_oqc_ng_serial_ids" nolabel="1"
-                                       widget="many2many_tags" readonly="1"/>
-                            </group>
+                            <!-- Arrived/NG sample tags removed (oqc-full-lot-form):
+                                 the Inspected List tab carries this information -->
                         </group>
                         <!-- 报工：缺陷行挂抽检产品区（扫不良板记录） -->
                         <separator string="Defective Products (scan)"
@@ -446,6 +437,14 @@
                                         <field name="note"/>
                                     </list>
                                 </field>
+                            </page>
+                            <!-- Inspected List (oqc-full-lot-form): paginated
+                                 server-side ledger of boards that passed the
+                                 OQC operation; the form never loads it in
+                                 full, huge lots stay fast -->
+                            <page name="oqc_inspected_list" string="Inspected List"
+                                  invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
+                                <widget name="oqc_inspected_list"/>
                             </page>
                         </notebook>
                         <separator string="Notes"/>

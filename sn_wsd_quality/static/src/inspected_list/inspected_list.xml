@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="sn_wsd_quality.OqcInspectedList">
+    <div class="o_oqc_inspected_list d-flex flex-column gap-2">
+                <div class="d-flex gap-2 align-items-center">
+            <input type="text" class="form-control form-control-sm"
+                   style="max-width: 260px"
+                   t-att-value="state.search"
+                   placeholder="Search SN... (Enter)"
+                   t-on-keydown="onSearch"
+                   t-on-input="onSearchInput"/>
+            <select class="form-select form-select-sm" style="max-width: 140px"
+                    t-att-value="state.verdict"
+                    t-on-change="onVerdictChange">
+                <option value="all">All</option>
+                <option value="ok">OK</option>
+                <option value="ng">NG</option>
+                <option value="scrap">Scrap</option>
+            </select>
+            <span class="small text-muted ms-auto" t-if="!state.loading">
+                <t t-out="state.total"/> record(s)
+            </span>
+        </div>
+
+        <div t-if="state.loading" class="text-muted p-3">Loading...</div>
+
+        <div t-if="!state.loading and !state.rows.length" class="text-muted p-3">
+            No inspected boards yet.
+        </div>
+
+        <div t-if="!state.loading and state.rows.length" class="table-responsive">
+            <table class="table table-sm o_list_table">
+                <thead>
+                    <tr class="text-start">
+                        <th>SN</th>
+                        <th>Result</th>
+                        <th>Inspected At</th>
+                        <th>Operator</th>
+                        <th>Defect Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="state.rows" t-as="row" t-key="row.id">
+                        <td t-out="row.serial_identity_id ? row.serial_identity_id[1] : ''"/>
+                        <td>
+                            <span t-attf-class="badge {{ row.result === 'ok' ? 'text-bg-success' : row.result === 'ng' ? 'text-bg-danger' : 'text-bg-secondary' }}"
+                                  t-out="verdictLabel(row.result)"/>
+                        </td>
+                        <td t-out="row.out_date or ''"/>
+                        <td t-out="row.operator_code or ''"/>
+                        <td t-out="defectCode(row)"/>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div t-if="!state.loading and state.total > 0"
+             class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-secondary" t-on-click="prev"
+                    t-att-disabled="state.page &lt;= 1">&#8249;</button>
+            <span class="small">
+                <t t-out="state.page"/> / <t t-out="pageCount"/>
+            </span>
+            <button class="btn btn-sm btn-secondary" t-on-click="next"
+                    t-att-disabled="state.page >= pageCount">&#8250;</button>
+        </div>
+    </div>
+</t>
+
+</templates>

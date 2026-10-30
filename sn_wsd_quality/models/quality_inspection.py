@@ -780,7 +780,23 @@ class QualityInspection(models.Model):
                 fail_cells = inspection.cell_ids.filtered(lambda c: c.result == 'fail')
                 ng = len(set(fail_cells.mapped('serial_identity_id').ids))
             inspection.x_fai_ng_qty = ng
-            inspection.x_fai_ok_qty = max(0, (inspection.sample_size or 0) - ng)
+            if inspection.x_full_inspection:
+                # 台账口径（oqc-full-lot-form）：合格板不铺格，合格数 =
+                # OQC 工序 OK 出站台数（过站历史），与样本量无关
+                history = inspection.mes_order_id.x_mes_route_id.operation_ids
+                oqc_op = history.filtered(
+                    lambda r: r.operation_id
+                    == inspection.scheme_id.operation_id)
+                ok = self.env['sn.wsd.serial.operation.history']\
+                    .search_count([
+                        ('mes_order_id', '=', inspection.mes_order_id.id),
+                        ('route_operation_id', 'in', oqc_op.ids),
+                        ('result', '=', 'ok'),
+                    ]) if oqc_op else 0
+                inspection.x_fai_ok_qty = ok
+            else:
+                inspection.x_fai_ok_qty = max(
+                    0, (inspection.sample_size or 0) - ng)
 
     @api.onchange('x_fai_scan')
     def _onchange_x_fai_scan(self):
