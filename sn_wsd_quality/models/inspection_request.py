@@ -76,7 +76,13 @@ class StockPicking(models.Model):
         return not scheme
 
     def _sn_get_inspection_request_lines(self):
-        """Rows of the inspection request: one per operation line of the moves."""
+        """Rows of the inspection request: one per material of the transfer.
+
+        One row per operation line would print a serial tracked receipt as
+        thousands of lines (a three-step reception carries one line per reel),
+        so the lines of a material are folded into its row and their batches
+        are listed in the batch column.
+        """
         self.ensure_one()
         lines = []
         sequence = 0
@@ -85,49 +91,48 @@ class StockPicking(models.Model):
             lambda move: move.state != 'cancel' and move.product_id
         ).sorted(lambda move: (move.sequence, move.id))
         for move in moves:
-            waived = self._sn_is_move_inspection_waived(move)
-            operation_lines = move.move_line_ids.filtered(
-                lambda line: line.quantity or line.lot_name or line.lot_id
-                or line.supplier_batch_no
-            ).sorted('id')
-            if not operation_lines:
-                sequence += 1
-                lines.append(self._sn_prepare_inspection_request_line(
-                    sequence, move, self.env['stock.move.line'],
-                    warehouse_name, waived))
-                continue
-            for operation_line in operation_lines:
-                sequence += 1
-                lines.append(self._sn_prepare_inspection_request_line(
-                    sequence, move, operation_line, warehouse_name, waived))
+            sequence += 1
+            lines.append(self._sn_prepare_inspection_request_line(
+                sequence, move, warehouse_name,
+                self._sn_is_move_inspection_waived(move)))
         return lines
 
     def _sn_prepare_inspection_request_line(
-            self, sequence, move, operation_line, warehouse_name, waived):
+            self, sequence, move, warehouse_name, waived):
         product = move.product_id
-        quantity = (
-            operation_line.quantity
-            if operation_line
-            else (move.quantity or move.product_uom_qty)
-        )
+        lot_names = []
+        for operation_line in move.move_line_ids:
+            lot_name = (
+                operation_line.supplier_batch_no
+                or operation_line.lot_name
+                or operation_line.lot_id.name
+            )
+            if lot_name and lot_name not in lot_names:
+                lot_names.append(lot_name)
+        quantity = move.quantity or move.product_uom_qty
         return {
             'sequence': sequence,
             'product_code': product.default_code or '',
             'product_name': product.name or '',
             'material_specification': product.material_specification or '',
             'weight': self._sn_format_inspection_request_number(product.weight),
-            'lot_name': (
-                operation_line.supplier_batch_no
-                or operation_line.lot_name
-                or operation_line.lot_id.name
-                or ''
-            ),
+            # The column is narrow: the first batches are printed, the count of
+            # the remaining ones tells the inspector the sheet is summarised.
+            'lot_name': self._sn_format_inspection_request_batches(lot_names),
             'uom': move.product_uom.name or '',
             'quantity': self._sn_format_inspection_request_number(quantity),
             'warehouse': warehouse_name,
             'origin': self.origin or '',
             'waived': waived,
         }
+
+    @api.model
+    def _sn_format_inspection_request_batches(self, lot_names):
+        shown = lot_names[:3]
+        text = ', '.join(shown)
+        if len(lot_names) > len(shown):
+            text = '%s (+%d)' % (text, len(lot_names) - len(shown))
+        return text
 
     @api.model
     def _sn_format_inspection_request_number(self, value):
