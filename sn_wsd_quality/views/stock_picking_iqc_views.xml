@@ -21,6 +21,15 @@
                         class="btn-secondary"
                         invisible="not sn_is_reception_receipt or state == 'cancel'"
                         groups="stock.group_stock_user"/>
+                <!-- Same sheet, but sent to the dot matrix printer as ESC/P:
+                     the printer receives the 180 dpi bitmap and prints solid
+                     strokes instead of the rasterised PDF. -->
+                <button name="action_print_inspection_request_prn"
+                        type="object"
+                        string="Inspection Request (Dot Matrix)"
+                        class="btn-secondary"
+                        invisible="not sn_is_reception_receipt or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_open_iqc_inspections"

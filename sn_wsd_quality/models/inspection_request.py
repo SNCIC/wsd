@@ -134,6 +134,21 @@ class StockPicking(models.Model):
             text = '%s (+%d)' % (text, len(lot_names) - len(shown))
         return text
 
+    def action_print_inspection_request_prn(self):
+        """Open the ESC/P file of the inspection request of the receipt.
+
+        The file is already a 180 dpi bitmap: the desktop client sends it
+        unchanged to the RAW queue of the dot matrix printer, which prints the
+        strokes as solid as the accounting software does.
+        """
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/sn_wsd_quality/inspection_request/prn?picking_id=%s'
+                   % self.id,
+            'target': 'new',
+        }
+
     @api.model
     def _sn_format_inspection_request_number(self, value):
         """Print a quantity without the trailing zeros of the float type."""
