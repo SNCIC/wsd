@@ -1,5 +1,9 @@
 from odoo import api, fields, models
 
+# Rows the item table keeps on the paper form, so a single material still
+# leaves room to add the missing ones by hand.
+MIN_INSPECTION_REQUEST_ROWS = 5
+
 
 class StockPicking(models.Model):
     """Inspection request printed on the receipt of a three-step reception.
@@ -136,3 +140,8 @@ class StockPicking(models.Model):
         self.ensure_one()
         lines = self._sn_get_inspection_request_lines() if lines is None else lines
         return bool(lines) and all(line['waived'] for line in lines)
+
+    @api.model
+    def _sn_get_inspection_request_blank_rows(self, lines):
+        """Empty rows that keep the table the height of the paper form."""
+        return range(max(0, MIN_INSPECTION_REQUEST_ROWS - len(lines)))

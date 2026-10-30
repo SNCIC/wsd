@@ -43,7 +43,7 @@
                     }
                     .sn-inspection-request .title {
                         text-align: center;
-                        font-size: 20px;
+                        font-size: 22px;
                         font-weight: 700;
                         letter-spacing: 3px;
                         margin: 0 0 3px;
@@ -56,14 +56,18 @@
                         display: inline;
                     }
                     .sn-inspection-request table.meta td {
-                        padding: 0 2px 3px;
-                        font-size: 9px;
+                        padding: 0 2px 4px;
+                        font-size: 10px;
                     }
+                    /* The rules are given in points on purpose: a 1px line
+                       (0.26 mm) is below the dot size of a dot-matrix printer
+                       and came out as a dotted line. 1pt keeps a continuous
+                       line, even after the printer scales the page down. */
                     .sn-inspection-request table.items th,
                     .sn-inspection-request table.items td {
-                        border: 1px solid #111;
-                        padding: 1px 2px;
-                        font-size: 8px;
+                        border: 1pt solid #000;
+                        padding: 2px 3px;
+                        font-size: 9px;
                         vertical-align: middle;
                         word-break: break-all;
                     }
@@ -91,14 +95,14 @@
                         border: 0 none !important;
                     }
                     .sn-inspection-request table.signatures td {
-                        padding: 5px 2px 0;
-                        font-size: 9px;
+                        padding: 6px 2px 0;
+                        font-size: 10px;
                         vertical-align: middle;
                     }
                     .sn-inspection-request .waived-mark {
-                        border: 1px solid #111;
+                        border: 1pt solid #000;
                         padding: 0 5px;
-                        font-size: 11px;
+                        font-size: 12px;
                         letter-spacing: 1px;
                     }
                 </style>
@@ -150,6 +154,21 @@
                             <td class="center"><t t-out="line['quantity']"/></td>
                             <td class="center"><t t-out="line['warehouse']"/></td>
                             <td class="center"><t t-out="line['origin']"/></td>
+                        </tr>
+                        <!-- The paper form keeps room to add the materials
+                             missing on the transfer by hand. -->
+                        <tr t-foreach="o._sn_get_inspection_request_blank_rows(lines)"
+                            t-as="blank_row">
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
+                            <td class="center">&#160;</td>
                         </tr>
                     </tbody>
                 </table>
