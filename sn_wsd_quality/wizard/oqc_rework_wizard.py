@@ -38,8 +38,7 @@ class OqcReworkWizard(models.TransientModel):
             ng = inspection.x_oqc_ng_serial_ids | inspection.cell_ids\
                 .filtered(lambda c: c.result == 'fail')\
                 .mapped('serial_identity_id')
-            wizard.serial_ids = (inspection.x_fai_serial_ids & ng)\
-                .filtered(lambda s: s.x_rework_count < 2)
+            wizard.serial_ids = inspection.x_fai_serial_ids & ng
 
     @api.depends('inspection_id')
     def _compute_route_operations(self):

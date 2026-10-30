@@ -1,8 +1,6 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-REWORK_LIMIT = 2
-
 
 class QualityInspectionDisposition(models.Model):
     """NG-board disposition actions on OQC inspections (oqc-ng-disposition):
@@ -45,10 +43,6 @@ class QualityInspectionDisposition(models.Model):
             raise ValidationError(_(
                 'SN %s carries no failed result: only NG boards can be '
                 'sent back through rework.', serial_identity.name))
-        if serial_identity.x_rework_count >= REWORK_LIMIT:
-            raise ValidationError(_(
-                'SN %s already reached the rework limit (%s): choose scrap '
-                'or concession instead.', serial_identity.name, REWORK_LIMIT))
         if not (reason or '').strip():
             raise ValidationError(_('Describe the rework reason.'))
         order = self.mes_order_id
@@ -79,9 +73,9 @@ class QualityInspectionDisposition(models.Model):
         serial_identity.x_rework_count += 1
         self.message_post(body=_(
             'Rework: SN %(sn)s pulled back to operation %(op)s '
-            '(attempt %(attempt)s/%(limit)s). Reason: %(reason)s',
+            '(attempt %(attempt)s). Reason: %(reason)s',
             sn=serial_identity.name, op=route_operation.display_label,
-            attempt=serial_identity.x_rework_count, limit=REWORK_LIMIT,
+            attempt=serial_identity.x_rework_count,
             reason=(reason or '').strip()))
         return True
 

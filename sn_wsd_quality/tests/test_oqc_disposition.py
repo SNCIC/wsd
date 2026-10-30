@@ -148,16 +148,6 @@ class TestOqcDisposition(TransactionCase):
         with self.assertRaises(UserError):
             insp.action_done()
 
-    def test_30_rework_limit(self):
-        order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-003')
-        serial = insp.x_fai_serial_ids[:1]
-        op_a_row = order.x_mes_route_id.operation_ids.filtered(
-            lambda r: r.operation_id == self.op_a)
-        serial.x_rework_count = 2
-        with self.assertRaises(ValidationError):
-            insp.action_rework_sn(serial, op_a_row, 'third try')
-
     def test_40_full_lot_switch(self):
         order = self._order()
         insp = self._ng_round(order, 'SN-OQCD-004')
