@@ -105,10 +105,12 @@ class MesOrderOqc(models.Model):
         inspection = self.x_oqc_inspection_id
         if not inspection or inspection._oqc_passed():
             return
+        if inspection.x_full_inspection:
+            return  # 判退批次整批全检：放行逐台过站逐台判定
         if route_operation.operation_id != inspection.scheme_id.operation_id:
             return  # 只在 OQC 工序的投入口限流，其余工序照常过站
         if serial_identity in inspection.x_fai_serial_ids:
-            return  # 已登记样本（复测回流）放行
+            return  # 已登记样本（复测/回流）放行
         if len(inspection.x_fai_serial_ids) >= inspection.sample_size:
             raise ValidationError(_(
                 'Outgoing inspection is in progress on MES order '
@@ -163,6 +165,10 @@ class MesOrderOqc(models.Model):
         if result == 'ok':
             if serial_identity not in inspection.x_fai_arrived_serial_ids:
                 inspection.x_fai_arrived_serial_ids = [(4, serial_identity.id)]
+            # 复检合格（回流板重过质检工序 OK）：从未处置 NG 名单剔除，
+            # 该板不再计入 d——首次 NG 记录留在过站历史（x_is_rework 行）
+            inspection.x_oqc_ng_serial_ids = [
+                (3, serial_identity.id)]
             # 到检即展开该样本 × 全部检验项的结果格（幂等，仅过站模式，
             # 已泛化到 oqc），默认全部合格，检验员只改异常格
             inspection._fai_expand_result_cells()
@@ -170,6 +176,10 @@ class MesOrderOqc(models.Model):
             # NG/报废：计入不良名单参与 d 与 Ac/Re 判定，样本名额
             # 刻意保持占用（FAI 在此剔除释放名额，OQC 不做）
             inspection.x_oqc_ng_serial_ids = [(4, serial_identity.id)]
+        # 回流板复检落定（OK=复检合格重铺格子，NG=回到处置决策）：
+        # 关闭回流凭证——凭它在重走路线时豁免"已过站/次数上限"拦截
+        if serial_identity.x_rework_inspection_id == inspection.id:
+            serial_identity.x_rework_inspection_id = False
 
     # ------------------------------------------------------------------
     # 报工模式数量收集器（决策 2）：首次合格报工建单（基数快照 0）、
@@ -255,6 +265,15 @@ class QualityInspectionOqc(models.Model):
                     'samples reached the outgoing operation; wait for the '
                     'full sample set.', arrived=arrived,
                     need=inspection.sample_size))
+            # 回流板复检守卫（oqc-ng-disposition）：拨回工序重走的板未
+            # 回到本工序重新判定前，单据不得完成——不存在"关单后无处
+            # 复检"
+            pending = inspection._oqc_rework_pending_count()
+            if pending:
+                raise UserError(_(
+                    'Outgoing inspection: %(count)s reworked board(s) have '
+                    'not come back through the inspection operation yet; '
+                    'wait for their re-judgment.', count=pending))
         # 判退不在此开新一轮（决策 3）：reject 联动（hold + 质量 issue
         # 转维修）由既有 _apply_quality_hold 在 super 链路内完成
         return super().action_done()

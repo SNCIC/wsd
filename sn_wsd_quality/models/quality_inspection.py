@@ -792,11 +792,13 @@ class QualityInspection(models.Model):
             return
         serial = self.env['sn.wsd.serial.identity'].search(
             [('name', '=', code)], limit=1)
+        # id 比较：onchange 的虚拟记录上 m2m 成员是 NewId(origin)，
+        # 与 browse 出的记录直接做 `in` 身份比较恒为 False
         if self.mes_order_id.x_manage_mode == 'report':
             if not serial:
                 raise UserError(_('Unknown serial number "%s": defective '
                                   'boards must carry a registered SN.', code))
-            if serial in self.sample_ids.serial_identity_id:
+            if serial.id in self.sample_ids.serial_identity_id.ids:
                 raise UserError(_('%s is already recorded as defective.', code))
             self.sample_ids = [Command.create({
                 'serial_identity_id': serial.id,
@@ -805,12 +807,12 @@ class QualityInspection(models.Model):
         elif self.inspection_type == 'oqc':
             # OQC 合法域 = 本轮已登记样本（x_fai_serial_ids）：单据可在
             # 板还在途时开始检验；FAI 仍要求已到检（首件必须先过站）
-            if not serial or serial not in self.x_fai_serial_ids:
+            if not serial or serial.id not in self.x_fai_serial_ids.ids:
                 raise UserError(_(
                     '"%s" is not one of this round\'s picked products.', code))
             self.x_fai_current_sn = serial.id
         else:
-            if not serial or serial not in self.x_fai_arrived_serial_ids:
+            if not serial or serial.id not in self.x_fai_arrived_serial_ids.ids:
                 raise UserError(_(
                     '"%s" is not one of this round\'s picked products '
                     '(boards must reach the first-article operation first).', code))
@@ -1479,7 +1481,11 @@ class QualityInspectionLine(models.Model):
     def _judge_item_value(self, item_type, measured=0.0, text='', expected='',
                           allowed='', lower=0.0, upper=0.0, manual=False):
         """判定口径（FAI 检验矩阵抽取）：单据级 line 与样本级 cell 共用，
-        只做纯值判定；line._compute_result 的行为与抽取前完全等价。"""
+        只做纯值判定；line._compute_result 的行为与抽取前完全等价。
+        仅 N/A（报废处置置值）优先于值判定；pass/fail 的人工值仍按项型
+        口径处理（pass_fail 项走 manual，其余项型按值判）。"""
+        if manual == 'na':
+            return 'na'
         if item_type == 'numeric':
             if float_compare(measured, lower, precision_rounding=0.0001) < 0:
                 return 'fail'

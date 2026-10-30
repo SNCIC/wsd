@@ -10,3 +10,4 @@ from . import mes_order_fai
 from . import mes_order_oqc
 from . import coding_seed
 from . import mes_order_batch_pass
+from . import oqc_disposition

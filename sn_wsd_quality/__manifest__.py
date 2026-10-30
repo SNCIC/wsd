@@ -12,6 +12,7 @@
         'data/ipqc_patrol_cron.xml',
         'security/ir.model.access.csv',
         'wizard/measure_wizard_views.xml',
+        'wizard/oqc_rework_wizard_views.xml',
         'report/iqc_inspection_templates.xml',
         'report/iqc_inspection_reports.xml',
         'report/inspection_request_templates.xml',

@@ -640,6 +640,13 @@ class SerialOperationHistory(models.Model):
     x_batch_pass_reason = fields.Selection(
         related='x_batch_pass_log_id.reason', string='Batch Pass Reason',
     )
+    x_is_rework = fields.Boolean(
+        string='Rework Pass', index=True, copy=False,
+        help='Set on pass rows written while the board carried an active '
+             'OQC rework voucher: the row is a re-walk, not first-pass '
+             'production. Reports and piece-rate ledgers can tell them '
+             'apart (station OK counts are SN-deduped anyway).',
+    )
     in_date = fields.Datetime()
     out_date = fields.Datetime(index=True)
     operator_code = fields.Char(

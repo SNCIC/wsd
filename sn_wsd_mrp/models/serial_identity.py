@@ -37,6 +37,14 @@ class SerialIdentity(models.Model):
         'sn.wsd.serial.binding', 'bound_serial_identity_id',
         string='Bound SNs',
     )
+    # 回流凭证（oqc-ng-disposition）：OQC 拨回重走时存源检验单 id
+    # （Integer 而非 m2o：本模块不依赖质量模块）。凭证在位时过站豁免
+    # "已过站/次数上限"拦截，重走的过站行打 x_is_rework 标记；板重新
+    # 通过质检工序时由 sn_wsd_quality 清零
+    x_rework_inspection_id = fields.Integer(
+        string='Rework Voucher Inspection', index=True, copy=False)
+    x_rework_count = fields.Integer(
+        string='Rework Count', default=0, copy=False)
     note = fields.Text()
 
     _name_company_uniq = models.Constraint(

@@ -897,7 +897,10 @@ class MesOrder(models.Model):
             and (not cutoff or (h.out_date and h.out_date > cutoff)))
         cap = 1 if route_operation.x_allow_exit \
             else route_operation.operation_id.x_max_test_count
-        if len(passes) >= cap:
+        # 回流凭证（oqc-ng-disposition）豁免次数上限：OQC 拨回重走的板
+        # 重进各工序（含复检的质检工序）不算复测占用——凭证在板重新
+        # 通过质检工序时关闭（sn_wsd_quality 关闭），豁免随之失效
+        if len(passes) >= cap and not serial_identity.x_rework_inspection_id:
             raise ValidationError(_(
                 'SN %(sn)s reached the pass limit (%(limit)s) of operation '
                 '%(op)s; send it to repair.',

@@ -13,3 +13,4 @@ from . import test_batch_pass_fai
 from . import test_iqc_arrival_batch
 from . import test_pass_ng_no_auto_issue
 from . import test_report_link_disabled
+from . import test_oqc_disposition

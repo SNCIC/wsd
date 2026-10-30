@@ -383,6 +383,22 @@ class SnWsdScrapRecord(models.Model):
                     'route_operation_report_id': report.id,
                 })
             record.serial_identity_id.x_quality_hold_state = 'scrapped'
+            # OQC NG-board disposition (oqc-ng-disposition): the scrapped
+            # sample board's result cells go N/A so it no longer counts as
+            # a defect in the Ac/Re verdict and cannot drag the inspection
+            # into rejection; its rework voucher, if any, is void
+            inspection = self.env['sn.wsd.quality.inspection'].search([
+                ('inspection_type', '=', 'oqc'),
+                ('state', '!=', 'done'),
+                ('mes_order_id', '=', record.mes_order_id.id),
+            ], limit=1)
+            if inspection and record.serial_identity_id in inspection.x_fai_serial_ids:
+                inspection.cell_ids.filtered(
+                    lambda c, sn=record.serial_identity_id:
+                        c.serial_identity_id == sn
+                ).write({'manual_result': 'na'})
+                if record.serial_identity_id.x_rework_inspection_id == inspection.id:
+                    record.serial_identity_id.x_rework_inspection_id = False
             if record.quality_issue_id:
                 record.quality_issue_id.write({
                     'scrap_record_id': record.id,

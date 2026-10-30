@@ -247,10 +247,14 @@ class MesOrderStationServices(models.Model):
                 ('route_operation_id', '=', op_row.id),
                 ('result', '=', 'ok'),
             ])
-            if passed:
+            if passed and not serial.x_rework_inspection_id:
                 raise ValidationError(_(
                     'SN %(sn)s already passed %(op)s of order %(order)s.',
                     sn=code, op=op_row.display_label, order=target.name))
+            # an active rework voucher (OQC disposition) lets the board
+            # re-walk operations it already passed: its pass rows are
+            # flagged x_is_rework and the voucher closes when the board
+            # leaves the inspection operation again
             blocked = target._pass_scan_blocked(serial, op_row)
             if blocked:
                 raise ValidationError(blocked)
