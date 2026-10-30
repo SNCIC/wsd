@@ -147,6 +147,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
+                'x_ratio_baseline': p.performance_ratio,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
             return (last.team_id.id or (team.id if team else False)), commands
@@ -157,6 +158,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': member.employee_id.id,
                 'performance_ratio': ratio,
+                'x_ratio_baseline': ratio,
                 'sequence': 10 * (index + 1),
             }) for index, (member, ratio) in enumerate(
                 zip(team.member_ids, ratios))]
@@ -187,27 +189,81 @@ class PieceReportWizardLine(models.TransientModel):
     def _onchange_route_operation_id_prefill(self):
         self._prefill_allocation()
 
-    # ------------------------------------------------------------------
-    # quick-fill buttons (same calibers as the settlement form)
-    # ------------------------------------------------------------------
+    @api.onchange('team_id')
+    def _onchange_team_id_fill_participants(self):
+        """Picking or switching the team re-fills the participants from its
+        members (normalized). Onchange on purpose: it must also work on the
+        virtual rows of an unsaved wizard, where object buttons cannot run."""
+        self._fill_from_team()
 
-    def action_fill_from_team(self):
+    def _fill_from_team(self):
         Settlement = self.env['sn.wsd.piece.settlement']
         for line in self:
-            if not line.team_id:
-                raise UserError(_('Select a team first.'))
+            if not line.team_id or not line.team_id.member_ids:
+                continue
             members = line.team_id.member_ids
-            if not members:
-                raise UserError(_('The team has no members.'))
             ratios = Settlement._distribute_ratios(
                 members.mapped('performance_ratio'))
             line.participant_ids = [fields.Command.clear()] + [
                 fields.Command.create({
                     'employee_id': member.employee_id.id,
                     'performance_ratio': ratio,
+                    'x_ratio_baseline': ratio,
                     'sequence': 10 * (index + 1),
                 }) for index, (member, ratio) in enumerate(
                     zip(members, ratios))]
+
+    def _rebalance_participants(self):
+        """Manual rows (ratio != baseline) keep their value, the rest share
+        the remainder proportionally to their baseline; the last row absorbs
+        the rounding remainder. Baselines are rewritten to the new values,
+        so "ratio == baseline" keeps meaning "not typed over"."""
+        for line in self:
+            rows = line.participant_ids
+            if not rows:
+                continue
+            manual = rows.filtered(
+                lambda p: abs(p.performance_ratio - p.x_ratio_baseline) > 0.0001)
+            auto = rows - manual
+            if not auto:
+                continue
+            manual_total = sum(manual.mapped('performance_ratio'))
+            remaining = 100.0 - manual_total
+            if remaining < -0.01:
+                continue  # manual rows already exceed 100%: leave as typed
+            auto_rows = list(auto)
+            weights = [p.x_ratio_baseline for p in auto_rows]
+            weight_total = sum(weights)
+            if weight_total <= 0:
+                weights = [1.0] * len(auto_rows)
+                weight_total = float(len(auto_rows))
+            for i, row in enumerate(auto_rows):
+                if i < len(auto_rows) - 1:
+                    row.performance_ratio = round(
+                        remaining * weights[i] / weight_total, 4)
+                else:
+                    row.performance_ratio = round(
+                        100.0 - manual_total - sum(
+                            p.performance_ratio for p in auto_rows[:-1]), 4)
+                row.x_ratio_baseline = row.performance_ratio
+
+    @api.onchange('participant_ids')
+    def _onchange_participant_ids_rebalance(self):
+        """Adding or removing a participant row re-splits automatically
+        (equal split by default); typed-over ratios stay locked."""
+        self._rebalance_participants()
+
+    # ------------------------------------------------------------------
+    # quick-fill buttons (same calibers as the settlement form)
+    # ------------------------------------------------------------------
+
+    def action_fill_from_team(self):
+        for line in self:
+            if not line.team_id:
+                raise UserError(_('Select a team first.'))
+            if not line.team_id.member_ids:
+                raise UserError(_('The team has no members.'))
+        self._fill_from_team()
 
     def action_equal_split(self):
         Settlement = self.env['sn.wsd.piece.settlement']
@@ -219,6 +275,7 @@ class PieceReportWizardLine(models.TransientModel):
                 [1.0] * len(participants))
             for participant, ratio in zip(participants, ratios):
                 participant.performance_ratio = ratio
+                participant.x_ratio_baseline = ratio
 
     def action_reuse_last_allocation(self):
         """Reset the allocation to the one carried by the last report of
@@ -239,6 +296,7 @@ class PieceReportWizardLine(models.TransientModel):
             line.participant_ids = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
+                'x_ratio_baseline': p.performance_ratio,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
 
@@ -288,6 +346,11 @@ class PieceReportWizardParticipant(models.TransientModel):
     performance_ratio = fields.Float(
         string='Performance Ratio', digits=(12, 4), required=True,
         default=0.0)
+    x_ratio_baseline = fields.Float(
+        string='Ratio Baseline', digits=(12, 4),
+        help='Weight used to auto-redistribute the leftover ratio: rows the '
+             'user typed over (ratio != baseline) keep their value, the rest '
+             'share the remainder proportionally to their baseline.')
 
     @api.onchange('employee_id')
     def _onchange_employee_id_default_ratio(self):
@@ -298,3 +361,4 @@ class PieceReportWizardParticipant(models.TransientModel):
             others = self.line_id.participant_ids - self
             headcount = len(others) + 1
             self.performance_ratio = round(100.0 / headcount, 4)
+            self.x_ratio_baseline = self.performance_ratio

@@ -201,6 +201,38 @@ class TestDailyWorkbench(PieceRateTestCommon):
             sorted(line.participant_ids.mapped('performance_ratio')),
             [50.0, 50.0])
 
+    def test_onchange_team_fills_and_rebalance_splits(self):
+        """快捷填充改为 onchange 后的行为（替代被移除的行级对象按钮，
+        后者在未保存向导的虚拟行上会报 wizard_id 缺失）：选班组自动带出
+        成员并归一化；删参与人行后其余按基线重分摊（等于自动均分）；
+        手改过的比例锁定不动，其余行分摊剩余。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        line = self._wizard_line(wizard, order, self.op_a, team=self.team)
+        line._fill_from_team()
+        self.assertEqual(
+            line.participant_ids.mapped('employee_id'),
+            self.team.member_ids.mapped('employee_id'))
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [20.0, 20.0, 30.0, 30.0])
+        # drop the two 20% members: the two 30% rows re-split to 50/50
+        drop = line.participant_ids.filtered(
+            lambda p: p.employee_id in (self.emp_wang, self.emp_zhao))
+        line.participant_ids = [(2, p.id) for p in drop]
+        line._rebalance_participants()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [50.0, 50.0])
+        # manual override locks a row: the other one takes the remainder
+        zhang = line.participant_ids.filtered(
+            lambda p: p.employee_id == self.emp_zhang)
+        zhang.performance_ratio = 60.0
+        line._rebalance_participants()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [40.0, 60.0])
+
     # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date
     # ------------------------------------------------------------------

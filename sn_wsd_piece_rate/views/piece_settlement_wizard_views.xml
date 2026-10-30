@@ -46,14 +46,14 @@
                                 <field name="company_id" column_invisible="1"/>
                             </list>
                             <form string="Report Line">
-                                <header>
-                                    <button name="action_fill_from_team" type="object"
-                                            string="Fill From Team" class="btn-secondary"/>
-                                    <button name="action_equal_split" type="object"
-                                            string="Split Equally" class="btn-secondary"/>
-                                    <button name="action_reuse_last_allocation" type="object"
-                                            string="Reuse Last Allocation" class="btn-secondary"/>
-                                </header>
+                                <!-- Quick fills are onchange-driven, NOT object
+                                     buttons: object buttons on the rows of an
+                                     unsaved wizard fail with "field wizard_id
+                                     is missing". Picking/switching the team
+                                     fills its members; adding/removing a
+                                     participant row re-splits automatically
+                                     (typed-over ratios stay locked); switching
+                                     the operation reuses the last allocation. -->
                                 <group>
                                     <group>
                                         <field name="mes_order_id" options="{'no_create': True}"
