@@ -44,7 +44,7 @@
                        instead of being cut. */
                     .sn-inspection-request {
                         page-break-inside: avoid;
-                        min-height: 65mm;
+                        min-height: 81mm;
                     }
                     .sn-inspection-request table {
                         width: 100%;
@@ -72,7 +72,7 @@
                        and came out as a dotted line. 1pt keeps a continuous
                        line, even after the printer scales the page down. */
                     .sn-inspection-request table.items {
-                        min-height: 43mm;
+                        min-height: 55mm;
                     }
                     .sn-inspection-request table.items th,
                     .sn-inspection-request table.items td {
@@ -174,7 +174,7 @@
                                  height of the row: wkhtmltopdf ignores a
                                  height set on the row itself and on a block
                                  element inside the cell. -->
-                            <td class="center" height="30"><t t-out="line['sequence']"/></td>
+                            <td class="center" height="40"><t t-out="line['sequence']"/></td>
                             <td class="center"><t t-out="line['product_code']"/></td>
                             <td><t t-out="line['product_name']"/></td>
                             <td><t t-out="line['material_specification']"/></td>
@@ -189,7 +189,7 @@
                              missing on the transfer by hand. -->
                         <tr t-foreach="o._sn_get_inspection_request_blank_rows(lines)"
                             t-as="blank_row">
-                            <td class="center" height="30">&#160;</td>
+                            <td class="center" height="40">&#160;</td>
                             <td class="center">&#160;</td>
                             <td>&#160;</td>
                             <td>&#160;</td>
