@@ -5,7 +5,7 @@
         <field name="model">sn.wsd.quality.oqc.rework.wizard</field>
         <field name="arch" type="xml">
             <form string="Rework Decision">
-                <field name="inspection_id"/>
+                <field name="inspection_id" invisible="1"/>
                 <field name="serial_candidate_ids" invisible="1"/>
                 <field name="route_operation_candidate_ids" invisible="1"/>
                 <group>

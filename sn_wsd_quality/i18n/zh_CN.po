@@ -318,7 +318,7 @@ msgid "Calibration"
 msgstr "校准/调校"
 
 #. module: sn_wsd_quality
-#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_wizard_form model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_oqc_rework_wizard_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -2042,6 +2042,11 @@ msgid "OQC NG Samples"
 msgstr "OQC 不良产品"
 
 #. module: sn_wsd_quality
+#: model:ir.actions.act_window,name:sn_wsd_quality.action_oqc_rework_wizard:0
+msgid "OQC Rework Decision"
+msgstr "OQC 回流决策"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_serial__x_oqc_status model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_order__x_oqc_state
 msgid "OQC Status"
 msgstr "OQC 状态"
@@ -2521,7 +2526,7 @@ msgid "Re"
 msgstr "Re"
 
 #. module: sn_wsd_quality
-#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__reason
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_skip__reason model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_oqc_rework_wizard__reason:0
 msgid "Reason"
 msgstr "原因"
 
@@ -2744,6 +2749,16 @@ msgid "Rework"
 msgstr "回流"
 
 #. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_oqc_rework_wizard_form:0
+msgid "Rework Decision"
+msgstr "回流决策"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_oqc_rework_wizard__route_operation_id:0
+msgid "Rework Operation"
+msgstr "回流工序"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_issue__root_cause model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_issue_form
 msgid "Root Cause"
 msgstr "根本原因"
@@ -2797,6 +2812,11 @@ msgstr "条码冻结"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__serial_identity_id model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze_wizard__serial_identity_id
 msgid "SN Record"
 msgstr "SN记录"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_oqc_rework_wizard__serial_ids:0
+msgid "SNs"
+msgstr "SN"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_measure_wizard_line__sample_id
@@ -3025,6 +3045,11 @@ msgstr "选择..."
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_line__item_type__selection model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_scheme_line__item_type__selection model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_inspection_item__item_type__selection
 msgid "Selection"
 msgstr "下拉选项"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_oqc_rework_wizard_form:0
+msgid "Send Back"
+msgstr "拨回"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__sequence model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__sequence model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__sequence model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__sequence
