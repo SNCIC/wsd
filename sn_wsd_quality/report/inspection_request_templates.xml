@@ -9,14 +9,17 @@
                  The band is rendered on its own and does not inherit the
                  styles of the sheet, hence the inline styles. -->
             <div class="header">
-                <table style="width: 100%; border-collapse: collapse; font-family: SimSun, serif; color: #111;">
+                <!-- The band is only as tall as the paper margin allows: no
+                     padding, no row spacing, and a title that never wraps (a
+                     wrapped title doubled the band and it covered the table). -->
+                <table style="width: 100%; border-collapse: collapse; margin: 0; font-family: SimSun, serif; color: #111;">
                     <tr>
-                        <td style="width: 16%;"></td>
-                        <td style="width: 66%; text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 3px;">
+                        <td style="width: 10%; padding: 0;"></td>
+                        <td style="width: 80%; padding: 0; text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 3px; line-height: 1.1; white-space: nowrap;">
                             <span t-esc="docs[0].company_id.name"/>
                             <div style="display: inline;">Inspection Request Form</div>
                         </td>
-                        <td style="width: 18%; text-align: right; font-size: 11px; vertical-align: bottom;">
+                        <td style="width: 10%; padding: 0; text-align: right; font-size: 11px; vertical-align: bottom;">
                             <span class="page"/> / <span class="topage"/>
                         </td>
                     </tr>
