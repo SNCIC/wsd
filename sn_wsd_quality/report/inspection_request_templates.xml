@@ -9,21 +9,13 @@
                  The band is rendered on its own and does not inherit the
                  styles of the sheet, hence the inline styles. -->
             <div class="header">
-                <!-- The band is only as tall as the paper margin allows: no
-                     padding, no row spacing, and a title that never wraps (a
-                     wrapped title doubled the band and it covered the table). -->
-                <table style="width: 100%; border-collapse: collapse; margin: 0; font-family: SimSun, serif; color: #111;">
-                    <tr>
-                        <td style="width: 10%; padding: 0;"></td>
-                        <td style="width: 80%; padding: 0; text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 3px; line-height: 1.1; white-space: nowrap;">
-                            <span t-esc="docs[0].company_id.name"/>
-                            <div style="display: inline;">Inspection Request Form</div>
-                        </td>
-                        <td style="width: 10%; padding: 0; text-align: right; font-size: 11px; vertical-align: bottom;">
-                            <span class="page"/> / <span class="topage"/>
-                        </td>
-                    </tr>
-                </table>
+                <!-- Only the page count sits here: wkhtmltopdf replaces the
+                     counters of the header and footer, and nothing else. Its
+                     26 mm band is where the title line of the sheet starts, so
+                     the number reads on the same line as the company name. -->
+                <div style="text-align: right; font-family: SimSun, serif; font-size: 11px; color: #111; padding: 0;">
+                    <span class="page"/> / <span class="topage"/>
+                </div>
             </div>
             <t t-foreach="docs" t-as="o">
                 <t t-call="sn_wsd_quality.report_inspection_request_document"/>
@@ -58,6 +50,17 @@
                         width: 100%;
                         border-collapse: collapse;
                     }
+                    /* The title shares its line with the page count of the head
+                       band: the sheet starts at the 26 mm margin. */
+                    .sn-inspection-request .sheet-title {
+                        text-align: center;
+                        font-size: 26px;
+                        font-weight: 700;
+                        letter-spacing: 3px;
+                        line-height: 1.1;
+                        white-space: nowrap;
+                        margin: 0 0 1mm;
+                    }
                     .sn-inspection-request table.meta td {
                         height: 6mm;
                         padding: 0 2px;
@@ -69,7 +72,7 @@
                        and came out as a dotted line. 1pt keeps a continuous
                        line, even after the printer scales the page down. */
                     .sn-inspection-request table.items {
-                        min-height: 53mm;
+                        min-height: 45mm;
                     }
                     .sn-inspection-request table.items th,
                     .sn-inspection-request table.items td {
@@ -125,6 +128,11 @@
                     }
                 </style>
 
+                <div class="sheet-title">
+                    <span t-field="company.name"/>
+                    <div style="display: inline;">Inspection Request Form</div>
+                </div>
+
                 <table class="meta">
                     <tr>
                         <td style="width: 40%;">Supplier:
@@ -161,7 +169,7 @@
                                  height of the row: wkhtmltopdf ignores a
                                  height set on the row itself and on a block
                                  element inside the cell. -->
-                            <td class="center" height="34"><t t-out="line['sequence']"/></td>
+                            <td class="center" height="32"><t t-out="line['sequence']"/></td>
                             <td class="center"><t t-out="line['product_code']"/></td>
                             <td><t t-out="line['product_name']"/></td>
                             <td><t t-out="line['material_specification']"/></td>
@@ -176,7 +184,7 @@
                              missing on the transfer by hand. -->
                         <tr t-foreach="o._sn_get_inspection_request_blank_rows(lines)"
                             t-as="blank_row">
-                            <td class="center" height="34">&#160;</td>
+                            <td class="center" height="32">&#160;</td>
                             <td class="center">&#160;</td>
                             <td>&#160;</td>
                             <td>&#160;</td>
