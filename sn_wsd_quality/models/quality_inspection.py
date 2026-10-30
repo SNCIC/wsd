@@ -762,7 +762,9 @@ class QualityInspection(models.Model):
         'inspection_type', 'sample_size', 'mes_order_id.x_manage_mode',
         'cell_ids.result', 'cell_ids.serial_identity_id',
         'sample_ids.result', 'sample_ids.x_line_id',
-        'x_oqc_ng_serial_ids',
+        'x_oqc_ng_serial_ids', 'x_full_inspection',
+        # 台账口径：合格数聚合过站历史，历史行落定即重算
+        'mes_order_id.x_mes_route_id.operation_ids.serial_history_ids.result',
     )
     def _compute_x_fai_counts(self):
         # 逐板检验计数（决策 5）：FAI/OQC 共用同一套字段与口径

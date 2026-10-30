@@ -313,34 +313,15 @@ class QualityInspectionOqc(models.Model):
         return super().action_done()
 
     def _apply_quality_hold(self):
-        # 判退联动（任务 3.4）：既有口径只看缺陷行/Evidence SN，过站
-        # 矩阵的不良 SN 在 NG 名单与 fail 格上——补齐 hold + issue，
-        # 复用同一查重口径（同单同 SN 只开一张 issue）
-        super()._apply_quality_hold()
-        issue_model = self.env['sn.wsd.quality.issue']
-        for inspection in self.filtered(
-                lambda i: i._oqc_station_mode()
-                and i.result in ('fail', 'reject')):
-            default_defect_code = self.env['sn.wsd.quality.defect.code'].search([
-                ('company_id', '=', inspection.company_id.id),
-            ], order='severity desc, id asc', limit=1)
-            for identity in inspection._oqc_bad_serial_ids():
-                identity.x_quality_hold_state = 'hold'
-                if default_defect_code and not issue_model.search([
-                    ('serial_identity_id', '=', identity.id),
-                    ('inspection_id', '=', inspection.id),
-                ], limit=1):
-                    issue_model.create({
-                        'serial_identity_id': identity.id,
-                        'route_operation_id': inspection.route_operation_id.id,
-                        'workcenter_id': inspection.workcenter_id.id,
-                        'defect_code_id': default_defect_code.id,
-                        'issue_source': inspection.inspection_type,
-                        'state': 'open',
-                        'detected_time': fields.Datetime.now(),
-                        'inspection_id': inspection.id,
-                        'note': inspection.name,
-                    })
+        # 判退不再自动 hold/开质量 issue（oqc-ng-disposition 口径修正）：
+        # NG 板的出路是处置动作（复测/回流/报废/让步），自动冻结会把
+        # 回流重走拦死（板带着 hold 出不了站）。维修侧需要单据时由维修
+        # 工单人工报修自建（ca463b9 方向）。super 的缺陷行口径保留给
+        # IQC 等非过站矩阵单据。
+        others = self.filtered(
+            lambda i: not (i._oqc_station_mode()
+                           and i.result in ('fail', 'reject')))
+        return super(QualityInspectionOqc, others)._apply_quality_hold()
 
     @api.depends(
         'inspection_type', 'mes_order_id.x_manage_mode',

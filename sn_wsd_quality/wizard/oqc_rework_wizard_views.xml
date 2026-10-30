@@ -10,7 +10,7 @@
                 <field name="route_operation_candidate_ids" invisible="1"/>
                 <group>
                     <group>
-                        <field name="serial_identity_id" options="{'no_create': 1}"/>
+                        <field name="serial_ids" widget="many2many_tags" options="{'no_create': 1}"/>
                         <field name="route_operation_id" options="{'no_create': 1}"/>
                     </group>
                     <group>
@@ -44,7 +44,7 @@
                 <button name="%(action_oqc_rework_wizard)d" type="action"
                         string="Rework" class="btn-secondary"
                         context="{'default_inspection_id': id}"
-                        invisible="inspection_type != 'oqc' or state == 'done'"/>
+                        invisible="inspection_type != 'oqc'"/>
                 <button name="action_start_full_inspection" type="object"
                         string="Full Lot Inspection" class="btn-secondary"
                         invisible="inspection_type != 'oqc' or x_full_inspection or result != 'reject'"/>
