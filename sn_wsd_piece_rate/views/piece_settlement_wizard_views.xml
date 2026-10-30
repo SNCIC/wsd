@@ -1,40 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- report-daily-workbench: the former "Generate From Reports" wizard
+         upgraded in place into the Daily Reporting workbench. Two tabs:
+         To Report (one transaction, per-line report_operation_qty) and
+         To Allocate (former report generation, allocation-aware). -->
     <record id="view_sn_wsd_piece_settlement_generate_wizard_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.settlement.generate.wizard.form</field>
         <field name="model">sn.wsd.piece.settlement.generate.wizard</field>
         <field name="arch" type="xml">
-            <form string="Generate From Reports">
-                <group>
-                    <group>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="mes_order_id" options="{'no_create': True}"/>
-                    </group>
-                </group>
-                <field name="report_ids">
-                    <list create="false" edit="false" delete="false">
-                        <field name="reported_at"/>
-                        <field name="mes_order_id"/>
-                        <field name="route_operation_id"/>
-                        <field name="qty_ok"/>
-                        <field name="qty_ng"/>
-                        <field name="qty_scrap"/>
-                    </list>
-                </field>
-                <footer>
-                    <button name="action_generate" type="object"
-                            string="Generate Drafts" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
+            <form string="Daily Reporting">
+                <notebook>
+                    <page string="To Report" name="to_report">
+                        <group>
+                            <group>
+                                <field name="workshop_id" options="{'no_create': True}"/>
+                                <field name="production_line_id" options="{'no_create': True}"
+                                       domain="[('workshop_id', '=', workshop_id)]"/>
+                                <field name="mes_order_id" options="{'no_create': True}"
+                                       domain="[('x_manage_mode', '=', 'report'),
+                                                ('state', 'in', ('released', 'picked', 'in_progress')),
+                                                ('x_workshop_id', '=', workshop_id),
+                                                ('production_line_id', '=', production_line_id)]"/>
+                            </group>
+                        </group>
+                        <field name="report_line_ids">
+                            <list>
+                                <field name="sequence" widget="handle"/>
+                                <field name="mes_order_id" options="{'no_create': True}"
+                                       domain="[('x_manage_mode', '=', 'report'),
+                                                ('state', 'in', ('released', 'picked', 'in_progress'))]"/>
+                                <field name="route_operation_id" options="{'no_create': True}"
+                                       domain="[('mes_order_id', '=', mes_order_id)]"/>
+                                <field name="planned_qty"/>
+                                <field name="reported_qty"/>
+                                <field name="remaining_qty"/>
+                                <field name="sequence_locked" readonly="1"/>
+                                <field name="qty_ok"/>
+                                <field name="qty_ng"/>
+                                <field name="qty_scrap"/>
+                                <field name="scrap_reason_id"
+                                       options="{'no_create': True}"/>
+                                <field name="participant_count" string="Participants"/>
+                                <field name="participant_summary"/>
+                                <field name="production_line_id" column_invisible="1"/>
+                                <field name="company_id" column_invisible="1"/>
+                            </list>
+                            <form string="Report Line">
+                                <!-- Quick fills are onchange-driven, NOT object
+                                     buttons: object buttons on the rows of an
+                                     unsaved wizard fail with "field wizard_id
+                                     is missing". Picking/switching the team
+                                     fills its members; adding/removing a
+                                     participant row re-splits automatically
+                                     (typed-over ratios stay locked); switching
+                                     the operation reuses the last allocation. -->
+                                <group>
+                                    <group>
+                                        <field name="mes_order_id" options="{'no_create': True}"
+                                               domain="[('x_manage_mode', '=', 'report'),
+                                                        ('state', 'in', ('released', 'picked', 'in_progress'))]"/>
+                                        <field name="route_operation_id" options="{'no_create': True}"
+                                               domain="[('mes_order_id', '=', mes_order_id)]"/>
+                                        <field name="team_id" options="{'no_create': True}"
+                                               domain="[('production_line_id', '=', production_line_id)]"/>
+                                    </group>
+                                    <group>
+                                        <field name="qty_ok"/>
+                                        <field name="qty_ng"/>
+                                        <field name="qty_scrap"/>
+                                        <field name="scrap_reason_id"
+                                               options="{'no_create': True}"
+                                               required="qty_scrap &gt; 0"/>
+                                        <field name="planned_qty" readonly="1"/>
+                                        <field name="reported_qty" readonly="1"/>
+                                        <field name="remaining_qty" readonly="1"/>
+                                        <field name="sequence_locked" readonly="1"/>
+                                        <field name="production_line_id" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </group>
+                                </group>
+                                <field name="participant_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="employee_id" options="{'no_create': True}"/>
+                                        <field name="employee_code"/>
+                                        <field name="performance_ratio"/>
+                                        <field name="line_id" column_invisible="1"/>
+                                        <field name="company_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </form>
+                        </field>
+                        <div class="o_form_statusbar_buttons">
+                            <button name="action_submit_reports" type="object"
+                                    string="Submit Reports" class="btn-primary"/>
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </div>
+                    </page>
+                    <page string="To Allocate" name="to_allocate">
+                        <group>
+                            <group>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="mes_order_id" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <field name="report_ids">
+                            <list create="false" edit="false" delete="false">
+                                <field name="reported_at"/>
+                                <field name="mes_order_id"/>
+                                <field name="route_operation_id"/>
+                                <field name="qty_ok"/>
+                                <field name="qty_ng"/>
+                                <field name="qty_scrap"/>
+                                <field name="participant_count" string="Participants"/>
+                                <field name="participant_summary"/>
+                                <button name="action_open_allocation" type="object"
+                                        icon="fa-users" string="Edit Allocation"/>
+                            </list>
+                        </field>
+                        <div class="o_form_statusbar_buttons">
+                            <button name="action_generate" type="object"
+                                    string="Generate Drafts" class="btn-primary"/>
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </div>
+                    </page>
+                </notebook>
             </form>
         </field>
     </record>
 
     <record id="action_sn_wsd_piece_settlement_generate" model="ir.actions.act_window">
-        <field name="name">Generate From Reports</field>
+        <field name="name">Daily Reporting</field>
         <field name="res_model">sn.wsd.piece.settlement.generate.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+    </record>
+
+    <!-- Menu entry: create + preload the wizard server-side so the dialog
+         opens on a saved record; the per-line quick-fill buttons (Fill From
+         Team / Split Equally / Reuse Last Allocation) need real line ids,
+         on the virtual rows of an unsaved wizard they fail with "field
+         wizard_id is missing". -->
+    <record id="action_sn_wsd_daily_reporting_server" model="ir.actions.server">
+        <field name="name">Daily Reporting</field>
+        <field name="model_id"
+               ref="sn_wsd_piece_rate.model_sn_wsd_piece_settlement_generate_wizard"/>
+        <field name="state">code</field>
+        <field name="code"><![CDATA[
+wizard = env['sn.wsd.piece.settlement.generate.wizard'].create({})
+wizard.action_reload_lines()
+action_rec = env.ref('sn_wsd_piece_rate.action_sn_wsd_piece_settlement_generate')
+action = {
+    'type': 'ir.actions.act_window',
+    'name': action_rec.name,
+    'res_model': 'sn.wsd.piece.settlement.generate.wizard',
+    'res_id': wizard.id,
+    'view_mode': 'form',
+    'target': 'new',
+}
+        ]]></field>
     </record>
 </odoo>

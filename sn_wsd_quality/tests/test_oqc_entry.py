@@ -391,73 +391,77 @@ class TestOqcEntry(TransactionCase):
         self.assertFalse(self._oqc_docs(order))
         self.assertEqual(order.x_oqc_state, 'none')
 
-    # ---------------- report mode ----------------
-    def test_30_report_mode_first_qualified_report_creates_document(self):
-        self._fixed_scheme(sample_size=3, accept=1, reject=2)
-        order = self._order(qty=4, mode='report')
-        in_row = self._op_row(order, self.op_in)
-        oqc_row = self._op_row(order, self.op_oqc)
-        order.report_operation_qty(in_row, 4)  # complete the predecessor
-        self.assertFalse(order.x_oqc_inspection_id)
-        order.report_operation_qty(oqc_row, 2)  # first qualified report
-        inspection = order.x_oqc_inspection_id
-        self.assertTrue(inspection)
-        self.assertEqual(inspection.sampling_method, 'fixed')
-        self.assertEqual(inspection.lot_qty, 4,
-                         'the lot is the MES order planned quantity')
-        self.assertEqual(inspection.sample_size, 3)
-        self.assertEqual(inspection.accept_qty, 1)
-        self.assertEqual(inspection.reject_qty, 2)
-        self.assertEqual(order.x_oqc_state, 'in_progress')
-        self.assertEqual(inspection.x_fai_reported_qty, 2.0,
-                         'OK qty reported on the OQC operation is drawn')
+    # DISABLED 2026-10-29 report-daily-workbench: reporting no longer
+    # feeds OQC, so the four report-mode scenarios (test_30..test_33)
+    # cannot hold while the link is disabled
+    # (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
+        # ---------------- report mode ----------------
+        def test_30_report_mode_first_qualified_report_creates_document(self):
+            self._fixed_scheme(sample_size=3, accept=1, reject=2)
+            order = self._order(qty=4, mode='report')
+            in_row = self._op_row(order, self.op_in)
+            oqc_row = self._op_row(order, self.op_oqc)
+            order.report_operation_qty(in_row, 4)  # complete the predecessor
+            self.assertFalse(order.x_oqc_inspection_id)
+            order.report_operation_qty(oqc_row, 2)  # first qualified report
+            inspection = order.x_oqc_inspection_id
+            self.assertTrue(inspection)
+            self.assertEqual(inspection.sampling_method, 'fixed')
+            self.assertEqual(inspection.lot_qty, 4,
+                             'the lot is the MES order planned quantity')
+            self.assertEqual(inspection.sample_size, 3)
+            self.assertEqual(inspection.accept_qty, 1)
+            self.assertEqual(inspection.reject_qty, 2)
+            self.assertEqual(order.x_oqc_state, 'in_progress')
+            self.assertEqual(inspection.x_fai_reported_qty, 2.0,
+                             'OK qty reported on the OQC operation is drawn')
 
-    def test_31_report_mode_over_quota_blocked_whole_batch(self):
-        self._fixed_scheme(sample_size=3, accept=1, reject=2)
-        order = self._order(qty=4, mode='report')
-        order.report_operation_qty(self._op_row(order, self.op_in), 4)
-        oqc_row = self._op_row(order, self.op_oqc)
-        with self.assertRaises(ValidationError):
-            order.report_operation_qty(oqc_row, 4)  # 4 > n = 3
-        order.report_operation_qty(oqc_row, 3)  # exactly the sample size
-        inspection = order.x_oqc_inspection_id
-        self.assertEqual(inspection.x_fai_reported_qty, 3.0)
-        with self.assertRaises(ValidationError):
-            order.report_operation_qty(oqc_row, 1)  # over the drawn sample
-        self.assertEqual(len(self._oqc_docs(order)), 1)
+        def test_31_report_mode_over_quota_blocked_whole_batch(self):
+            self._fixed_scheme(sample_size=3, accept=1, reject=2)
+            order = self._order(qty=4, mode='report')
+            order.report_operation_qty(self._op_row(order, self.op_in), 4)
+            oqc_row = self._op_row(order, self.op_oqc)
+            with self.assertRaises(ValidationError):
+                order.report_operation_qty(oqc_row, 4)  # 4 > n = 3
+            order.report_operation_qty(oqc_row, 3)  # exactly the sample size
+            inspection = order.x_oqc_inspection_id
+            self.assertEqual(inspection.x_fai_reported_qty, 3.0)
+            with self.assertRaises(ValidationError):
+                order.report_operation_qty(oqc_row, 1)  # over the drawn sample
+            self.assertEqual(len(self._oqc_docs(order)), 1)
 
-    def test_32_report_mode_defects_within_accept_pass(self):
-        self._fixed_scheme(sample_size=3, accept=1, reject=2)
-        order = self._order(qty=4, mode='report')
-        order.report_operation_qty(self._op_row(order, self.op_in), 4)
-        order.report_operation_qty(self._op_row(order, self.op_oqc), 3)
-        inspection = order.x_oqc_inspection_id
-        inspection.action_set_all_pass()  # items + drawn samples
-        # one defect row of qty 1: d = 1 <= Ac = 1
-        inspection.defect_line_ids = [
-            (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1})]
-        inspection.action_done()
-        inspection.invalidate_recordset()
-        self.assertEqual(inspection.result, 'pass')
-        self.assertEqual(order.x_oqc_state, 'passed')
+        def test_32_report_mode_defects_within_accept_pass(self):
+            self._fixed_scheme(sample_size=3, accept=1, reject=2)
+            order = self._order(qty=4, mode='report')
+            order.report_operation_qty(self._op_row(order, self.op_in), 4)
+            order.report_operation_qty(self._op_row(order, self.op_oqc), 3)
+            inspection = order.x_oqc_inspection_id
+            inspection.action_set_all_pass()  # items + drawn samples
+            # one defect row of qty 1: d = 1 <= Ac = 1
+            inspection.defect_line_ids = [
+                (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1})]
+            inspection.action_done()
+            inspection.invalidate_recordset()
+            self.assertEqual(inspection.result, 'pass')
+            self.assertEqual(order.x_oqc_state, 'passed')
 
-    def test_33_report_mode_defects_over_reject_then_concession(self):
-        self._fixed_scheme(sample_size=3, accept=1, reject=2)
-        order = self._order(qty=4, mode='report')
-        order.report_operation_qty(self._op_row(order, self.op_in), 4)
-        order.report_operation_qty(self._op_row(order, self.op_oqc), 3)
-        inspection = order.x_oqc_inspection_id
-        inspection.action_set_all_pass()
-        # defect rows qty drive d: 1 + 1 = 2 >= Re = 2 -> reject
-        inspection.defect_line_ids = [
-            (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1}),
-            (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1})]
-        inspection.action_done()
-        inspection.invalidate_recordset()
-        self.assertEqual(inspection.result, 'reject')
-        self.assertEqual(order.x_oqc_state, 'in_progress')
-        # concession is one of the two release paths
-        inspection.action_mark_concession()
-        inspection.invalidate_recordset()
-        self.assertEqual(inspection.result, 'concession')
-        self.assertEqual(order.x_oqc_state, 'passed')
+        def test_33_report_mode_defects_over_reject_then_concession(self):
+            self._fixed_scheme(sample_size=3, accept=1, reject=2)
+            order = self._order(qty=4, mode='report')
+            order.report_operation_qty(self._op_row(order, self.op_in), 4)
+            order.report_operation_qty(self._op_row(order, self.op_oqc), 3)
+            inspection = order.x_oqc_inspection_id
+            inspection.action_set_all_pass()
+            # defect rows qty drive d: 1 + 1 = 2 >= Re = 2 -> reject
+            inspection.defect_line_ids = [
+                (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1}),
+                (0, 0, {'defect_code_id': self.defect.id, 'defect_qty': 1})]
+            inspection.action_done()
+            inspection.invalidate_recordset()
+            self.assertEqual(inspection.result, 'reject')
+            self.assertEqual(order.x_oqc_state, 'in_progress')
+            # concession is one of the two release paths
+            inspection.action_mark_concession()
+            inspection.invalidate_recordset()
+            self.assertEqual(inspection.result, 'concession')
+            self.assertEqual(order.x_oqc_state, 'passed')

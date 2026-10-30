@@ -667,6 +667,85 @@ class MesOrder(models.Model):
         return self.x_mes_route_id.operation_ids.filtered(
             lambda r: route_operation in r.blocked_by_ids)
 
+    def _find_live_order_for_workcenter(self, workcenter):
+        """The online station-mode MES order running through this work center
+        (the one live order whose route carries the work center's operation)."""
+        if not workcenter or not workcenter.x_operation_id:
+            return self.env['sn.wsd.mes.order']
+        orders = self.search([
+            ('state', 'not in', ('cancelled', 'done')),
+            ('x_online_date', '!=', False),
+            ('x_manage_mode', '=', 'station'),
+        ]).filtered(lambda o: (
+            not workcenter.x_production_line_id
+            or o.production_line_id == workcenter.x_production_line_id))
+        for order in orders:
+            if order.x_mes_route_id.operation_ids.filtered(
+                    lambda r: r.operation_id == workcenter.x_operation_id):
+                return order
+        return self.env['sn.wsd.mes.order']
+
+    def serial_current_route_operations(self, serial_ids=None):
+        """{serial_identity_id: latest history row on this order}.
+
+        Strict one-scan-per-station keeps no parking rows around: a board's
+        position is simply the operation of its last pass record (an
+        in-progress row while an NG decision is still pending)."""
+        self.ensure_one()
+        History = self.env['sn.wsd.serial.operation.history']
+        domain = [('mes_order_id', '=', self.id)]
+        if serial_ids:
+            domain.append(('serial_identity_id', 'in', list(serial_ids)))
+        groups = History._read_group(
+            domain, groupby=['serial_identity_id'], aggregates=['id:max'])
+        latest = History.browse([group[1] for group in groups])
+        return {row.serial_identity_id.id: row for row in latest}
+
+    def _pass_scan_blocked(self, serial_identity, route_operation):
+        """Hook: a user-facing reason to refuse this station scan before it
+        is recorded (quality holds). Extended by sn_wsd_quality (first-article
+        gate); the base order never blocks."""
+        return False
+
+    def pass_one_station(self, serial, workcenter, result='ok',
+                         ng_defect=False, operator_code=False,
+                         scrap_reason=False):
+        """One scan = one station pass on the scanned work center.
+
+        The board enters and leaves the operation the work center runs, in
+        one transaction: the scanned station records its own verdict, nothing
+        is parked at the successor and nothing is pulled from an earlier
+        station. A board still in progress elsewhere is refused (strict
+        one-scan-per-station: an operation can never be completed without
+        being scanned). All existing gates ride on enter_station /
+        leave_station, unchanged.
+
+        Returns True when the SN left through an end operation with OK."""
+        self.ensure_one()
+        route_operation = self._resolve_route_operation(workcenter)
+        serial_identity = self._resolve_serial_identity(
+            serial, at_start=route_operation.x_allow_entry)
+        Wip = self.env['sn.wsd.serial.wip']
+        wip = Wip.search([
+            ('serial_identity_id', '=', serial_identity.id)], limit=1)
+        if wip and (wip.mes_order_id != self
+                    or wip.route_operation_id != route_operation):
+            raise ValidationError(_(
+                'SN %(sn)s is in progress at operation %(op)s of order '
+                '%(order)s; it must leave that station first.',
+                sn=serial_identity.name,
+                op=wip.route_operation_id.display_label,
+                order=wip.mes_order_id.name))
+        if not wip:
+            blocked = self._pass_scan_blocked(serial_identity, route_operation)
+            if blocked:
+                raise ValidationError(blocked)
+            self.scan_enter(serial_identity, workcenter)
+        return self.leave_station(
+            serial_identity, result, scrap_reason=scrap_reason,
+            ng_defect=ng_defect, operator_code=operator_code,
+            workcenter=workcenter)
+
     def _resolve_route_operation(self, workcenter):
         """Map a work center onto the private-route row of this order.
 
@@ -995,7 +1074,8 @@ class MesOrder(models.Model):
         return cleared_count
 
     def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
-                              qty_scrap=0.0, scrap_reason=False):
+                              qty_scrap=0.0, scrap_reason=False,
+                              participant_vals=None, team_id=False):
         """Report mode: report one batch of an operation.
 
         报工即开工（report-offline，2026-09-01 用户规则）：报工不要求
@@ -1008,7 +1088,18 @@ class MesOrder(models.Model):
         remainder -- planned minus accumulated OK and scrap. NG is a pure
         statistic (reworked boards come back as a later OK report); scrap
         consumes the quota and generates native scrap orders per BOM
-        component from the line side."""
+        component from the line side.
+
+        Optional allocation arguments (report-daily-workbench): when
+        participant_vals (a list of dicts with employee_id /
+        performance_ratio / sequence) and/or team_id are passed, they are
+        handed to the report-row hook _apply_report_allocation. The core
+        model knows nothing about allocation -- the hook is a no-op here
+        and sn_wsd_piece_rate implements it. Legacy callers (shop-floor
+        terminal, scrap, repair) keep calling without them.
+
+        Returns the newly created operation report row (report-daily-workbench;
+        previously returned None)."""
         self.ensure_one()
         if self.x_manage_mode != 'report':
             raise ValidationError(_(
@@ -1061,13 +1152,19 @@ class MesOrder(models.Model):
             if not scrap_reason:
                 raise ValidationError(_('Select a scrap reason.'))
             self._mes_scrap_components(route_operation, qty_scrap, scrap_reason)
-        Report.sudo().create({
+        report = Report.sudo().create({
             'mes_order_id': self.id,
             'route_operation_id': route_operation.id,
             'qty_ok': qty_ok,
             'qty_ng': qty_ng,
             'qty_scrap': qty_scrap,
         })
+        if participant_vals or team_id:
+            # optional allocation landing (report-daily-workbench): the
+            # hook is defined on the report model and stays a no-op until
+            # sn_wsd_piece_rate overrides it (participants + team)
+            report._apply_report_allocation(participant_vals, team_id)
+        return report
 
     def _mes_scrap_components(self, route_operation, qty_scrap, scrap_reason=False):
         """Scrap the BOM components of qty_scrap boards from the line side

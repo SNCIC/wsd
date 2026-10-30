@@ -14,5 +14,12 @@ def migrate(cr, version):
     if 'sn.wsd.stock.other.operation.type' not in env:
         return
     env['sn.wsd.stock.other.operation.type']._ensure_default_types()
+    if 'restrict_put_in_pack' not in env['stock.picking.type']._fields:
+        # the barcode module (loaded after this one) adds required columns
+        # to the operation types; creating one now would violate them, so
+        # the missing operations are created from its migration instead
+        return
     warehouses = env['stock.warehouse'].with_context(active_test=False).search([])
-    warehouses._create_or_update_sequences_and_picking_types()
+    # the core method requires a singleton: one call per warehouse
+    for warehouse in warehouses:
+        warehouse._create_or_update_sequences_and_picking_types()

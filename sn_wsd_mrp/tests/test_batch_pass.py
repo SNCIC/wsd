@@ -108,13 +108,13 @@ class TestBatchPass(TransactionCase):
             ng_defect=self.defect_code if result == 'ng' else False)
         return serial
 
-    def _park_at(self, order, wcs, sn_name, target):
-        """Walk the board with OK passes up to (excluding) ``target``,
-        then scan it into ``target`` and leave it parked there."""
+    def _walk_to(self, order, wcs, sn_name, target):
+        """Physically pass every operation before ``target`` with OK; the
+        board's last record then sits right before the target (strict
+        one-scan-per-station keeps no parking rows)."""
         serial = False
         for key in ('a', 'b', 'c'):
             if key == target:
-                serial = order.scan_enter(sn_name, wcs[key])
                 return serial
             serial = self._pass(order, wcs[key], sn_name, 'ok')
         return serial
@@ -135,69 +135,60 @@ class TestBatchPass(TransactionCase):
     # execution paths
     # ------------------------------------------------------------------
 
-    def test_pass_parked_at_target(self):
-        """停在目标工序的板：B 行补 OK 且带标记，板停靠后继 C。"""
+    def test_pass_at_target(self):
+        """板停在目标工序前（上一条记录是 A OK）：B 行补 OK 且带标记；
+        不做任何停放，C 没有任何记录。"""
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b, rop_c = self._rop(order, self.op_b), self._rop(order, self.op_c)
-        serials = [self._park_at(order, wcs, f'BP-SN-{i}', 'b') for i in range(5)]
+        serials = [self._walk_to(order, wcs, f'BP-SN-{i}', 'b') for i in range(5)]
         receipt = self._batch(order, rop_b, serials)
         self.assertEqual(receipt['passed'], 5)
         for serial in serials:
             row = self._history(serial, order, rop_b, 'ok')
             self.assertEqual(len(row), 1)
             self.assertTrue(row.x_batch_pass_log_id)
-            wip = self.env['sn.wsd.serial.wip'].search([
-                ('serial_identity_id', '=', serial.id)])
-            self.assertEqual(wip.route_operation_id, rop_c)
+            self.assertFalse(self._history(serial, order, rop_c, 'ok'))
+            self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+                ('serial_identity_id', '=', serial.id)]))
         log = self.env['sn.wsd.batch.pass.log'].browse(receipt['log_id'])
         self.assertEqual(log.serial_count, 5)
         self.assertEqual(log.reason, 'equipment_failure')
         self.assertEqual(len(log.history_ids), 5)
 
-    def test_pass_parked_upstream(self):
-        """停在上游 A 的板：内核拉过——A 行补 OK（无标记）、B 行 OK（带
-        标记）、板停靠 C，C 进站不再被 B 前驱校验拦。"""
+    def test_no_bridge_over_an_unjudged_operation(self):
+        """严格一站一扫：上一条工序还没判定（在制）时，批量过站不得越过
+        它替它补 OK——先出站，再行政过下一站。"""
         order = self._make_order_online()
         wcs = self._wcs()
-        rop_a, rop_b, rop_c = (self._rop(order, self.op_a),
-                               self._rop(order, self.op_b),
-                               self._rop(order, self.op_c))
-        serials = [self._park_at(order, wcs, f'BP-UP-{i}', 'a') for i in range(3)]
-        self._batch(order, rop_b, serials)
-        for serial in serials:
-            a_row = self._history(serial, order, rop_a, 'ok')
-            b_row = self._history(serial, order, rop_b, 'ok')
-            self.assertEqual(len(a_row), 1)
-            self.assertFalse(a_row.x_batch_pass_log_id,
-                             'the pulled upstream row is real work, '
-                             'it must stay unmarked')
-            self.assertEqual(len(b_row), 1)
-            self.assertTrue(b_row.x_batch_pass_log_id)
-            wip = self.env['sn.wsd.serial.wip'].search([
-                ('serial_identity_id', '=', serial.id)])
-            self.assertEqual(wip.route_operation_id, rop_c)
-            # parked at C and C accepts it: predecessor B has OK now
-            order.leave_station(serial, 'ok')
+        rop_a, rop_b = self._rop(order, self.op_a), self._rop(order, self.op_b)
+        serial = order.scan_enter('BP-UP-1', wcs['a'])  # fed, A unjudged
+        reason = order._batch_pass_block_reason(serial, rop_b)
+        self.assertTrue(reason)
+        self.assertIn('decision pending', reason)
+        with self.assertRaises(ValidationError):
+            with self.cr.savepoint():
+                self._batch(order, rop_b, [serial])
+        self.assertFalse(self._history(serial, order, rop_b, 'ok'))
+        # the board keeps its own state: still fed at A, nothing else written
+        wip = self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id', '=', serial.id)])
+        self.assertEqual(wip.route_operation_id, rop_a)
 
     def test_atomic_rollback(self):
         """单事务：一台失败整批回滚，无半成品状态、无日志残留。"""
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
-        sn_ok = self._park_at(order, wcs, 'BP-AT-1', 'b')
-        sn_far = self._park_at(order, wcs, 'BP-AT-2', 'c')  # past the target
+        sn_ok = self._walk_to(order, wcs, 'BP-AT-1', 'b')
+        sn_far = self._walk_to(order, wcs, 'BP-AT-2', 'c')  # past the target
         with self.assertRaises(ValidationError):
             with self.cr.savepoint():
                 self._batch(order, rop_b, [sn_ok, sn_far])
         self.assertEqual(len(self._history(sn_ok, order, rop_b, 'ok')), 0)
-        pending = self._history(sn_ok, order, rop_b, 'in_progress')
-        self.assertTrue(pending)
-        self.assertFalse(pending.x_batch_pass_log_id)
-        wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id', '=', sn_ok.id)])
-        self.assertEqual(wip.route_operation_id, rop_b,
-                         'the first board must still be parked at B')
+        # the first board keeps its A OK and nothing else
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id', '=', sn_ok.id)]))
         self.assertFalse(self.env['sn.wsd.batch.pass.log'].search([
             ('mes_order_id', '=', order.id)]), 'no log may survive a rollback')
 
@@ -222,15 +213,17 @@ class TestBatchPass(TransactionCase):
         order._batch_pass_gate_checks(rop_b)  # plain mid operation passes
 
     def test_block_reason_pass_limit(self):
-        """次数用尽的板进自动排除清单（预检同源口径）：板在上游停靠、
-        目标工序的尝试额度已用完。"""
+        """次数用尽的板进自动排除清单（预检同源口径）：目标工序的尝试
+        额度已用完，板又回到它的前一站。"""
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
         self.op_b.x_max_test_count = 1
-        serial = self._park_at(order, wcs, 'BP-LIM-1', 'b')
-        order.leave_station(serial, 'ok')  # 1 pass = cap used up
-        serial = order.scan_enter('BP-LIM-1', wcs['a'])  # parked upstream
+        serial = self._walk_to(order, wcs, 'BP-LIM-1', 'b')
+        serial = self._pass(order, wcs['b'], 'BP-LIM-1', 'ok')  # cap used up
+        # back upstream (repair-style re-entry at the start operation)
+        serial = order.scan_enter('BP-LIM-1', wcs['a'])
+        order.leave_station(serial, 'ok')
         reason = order._batch_pass_block_reason(serial, rop_b)
         self.assertTrue(reason)
         self.assertIn('pass limit', reason)
@@ -243,7 +236,7 @@ class TestBatchPass(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
-        marked = self._park_at(order, wcs, 'BP-AU-1', 'b')
+        marked = self._walk_to(order, wcs, 'BP-AU-1', 'b')
         self._batch(order, rop_b, [marked], reason='outsourcing')
         log = self.env['sn.wsd.batch.pass.log'].search(
             [('mes_order_id', '=', order.id)])
@@ -251,8 +244,8 @@ class TestBatchPass(TransactionCase):
         with self.assertRaises(AccessError):
             log.unlink()
         # a physical pass row stays unmarked and distinguishable
-        physical = self._park_at(order, wcs, 'BP-AU-2', 'b')
-        order.leave_station(physical, 'ok')
+        physical = self._walk_to(order, wcs, 'BP-AU-2', 'b')
+        self._pass(order, wcs['b'], 'BP-AU-2', 'ok')
         self.assertFalse(
             self._history(physical, order, rop_b, 'ok').x_batch_pass_log_id)
         self.assertEqual(

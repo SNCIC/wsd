@@ -103,20 +103,18 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         with self.assertRaises(ValidationError):
             self.service.scan_pass(self._payload(M_TEST_RESULT='MAYBE'))
 
-    def test_02_first_pass_feeds_and_leaves(self):
-        # spec: station-pass-history/spec/过站扫码即立历史行（在制立行）/设备 API 自动停放立行
+    def test_02_first_pass_records_only_the_scanned_station(self):
+        # strict one-scan-per-station: the report at the start operation
+        # completes THAT operation; nothing is parked at the successor
         result = self.service.scan_pass(self._payload())
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-001'),
-            ('result', '!=', 'in_progress')])
+            ('serial_identity_id.name', '=', 'SN-API-001')])
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history.route_operation_id.operation_id, self.op_in)
         self.assertEqual(history.result, 'ok')
-        # pass-history-on-enter: an OK at a non-end operation auto-parks the
-        # board at the successor -- one in-progress ledger row shows up too
-        parked = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-001'),
-            ('result', '=', 'in_progress')])
-        self.assertEqual(len(parked), 1)
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-API-001')]))
         self.assertEqual(result['panel_qty'], 1)
 
     def test_03_ng_only_scanned_board(self):
@@ -494,10 +492,9 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(test_result.defect_code_raw, 'NOPE1;NOPE2')
         self.assertFalse(test_result.defect_code_id)
 
-    def test_17_retest_at_parked_successor(self):
-        # 复测回流：板停在 X 的直接后继时，X 的设备重报 = 板被拿回 X 复测
-        # （OK 不封口、次数拦下一次进站）——撤销停放预判、回站过站，OK 后
-        # 重新停放；绝不给后继凭空记 OK（线上 FCT 复测误当到站拉进）
+    def test_17_retest_at_the_scanned_station(self):
+        # 复测 = 同一工序再报一次：OK 不封口、次数拦下一次进站；任何情况下
+        # 都不给后继工序凭空记 OK（无预置停放）
         self.op_in.x_max_test_count = 3
         self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
         result = self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
@@ -506,17 +503,14 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             ('serial_identity_id.name', '=', 'SN-API-RT1')])
         in_rows = history.filtered(
             lambda r: r.route_operation_id.operation_id == self.op_in)
-        out_rows = history.filtered(
-            lambda r: r.route_operation_id.operation_id == self.op_out)
         # 首测 + 复测：两行 OK 合法，台数按 SN 去重
         self.assertEqual(len(in_rows), 2)
         self.assertEqual(set(in_rows.mapped('result')), {'ok'})
-        # 后继只保留复测后重新生成的一条在制停放行，没有任何伪造判定
-        self.assertEqual(len(out_rows), 1)
-        self.assertEqual(out_rows.result, 'in_progress')
-        wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-API-RT1')])
-        self.assertEqual(wip.route_operation_id.operation_id, self.op_out)
+        # 后继工序没有任何记录（既无判定行也无在制行）
+        self.assertFalse(history.filtered(
+            lambda r: r.route_operation_id.operation_id == self.op_out))
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-API-RT1')]))
 
     def test_18_retest_pass_limit_not_recorded(self):
         # 次数上限拦复测（默认 1 次）：不落第二行 OK，也不给后继伪造判定
@@ -531,8 +525,20 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(len(in_rows), 1)
         self.assertEqual(in_rows.result, 'ok')
         self.assertFalse(history.filtered(
-            lambda r: r.route_operation_id.operation_id == self.op_out
-            and r.result != 'in_progress'))
+            lambda r: r.route_operation_id.operation_id == self.op_out))
+
+    def test_20_resend_with_event_id_is_idempotent(self):
+        # 设备重发（同一个 external_event_id）不重复过站：直接返回首发的
+        # 测试结果，不再落第二行、不消耗过站次数
+        payload = self._payload(M_SN='SN-API-IDEM2',
+                                external_event_id='EVT-API-1')
+        first = self.service.scan_pass(dict(payload))
+        second = self.service.scan_pass(dict(payload))
+        self.assertEqual(first['test_result_id'], second['test_result_id'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-API-IDEM2')])
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history.result, 'ok')
 
 
 @tagged('post_install', '-at_install')
@@ -818,28 +824,28 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
             ('external_event_id', '=', 'LOG-AOI-1')])
         self.assertEqual(len(results), 1)
         self.assertEqual(len(results.aoi_defect_detail_ids), 1)
-        # the resent upload must not pass the station a second time (the OK
-        # row stays single; the auto-park adds exactly one in-progress row)
+        # the resent upload must not pass the station a second time: exactly
+        # one pass row exists and no parking row is written at the successor
         history = self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id.name', '=', 'SN-AOI-IDEM')])
-        self.assertEqual(
-            len(history.filtered(lambda r: r.result != 'in_progress')), 1)
-        self.assertEqual(len(history), 2)
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history.result, 'ok')
 
-    def test_11_parked_board_stamps_device_workcenter(self):
-        # 设备上报的工作中心必须落过站台账：自动停放的占位（路线行工作
-        # 中心，此处为空）在设备出站时被真实机器覆盖
+    def test_11_each_station_stamps_its_own_device_workcenter(self):
+        # 每个工序只写自己的那一行：首扫完成首工序，第二次 AOI 报工完成
+        # 次工序并把真实机器落到该行；不再有预置停放行
         self.service.scan_pass(self._payload(M_SN='SN-AOI-WC1'))
-        parked = self.env['sn.wsd.serial.operation.history'].search([
+        self.assertFalse(self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id.name', '=', 'SN-AOI-WC1'),
-            ('result', '=', 'in_progress')])
-        self.assertEqual(parked.route_operation_id.operation_id, self.op_out)
-        self.assertFalse(parked.workcenter_id)
+            ('result', '=', 'in_progress')]))
         result = self.service.submit_aoi_result(_aoi_payload(
             productSn='SN-AOI-WC1', machineName='APIWCOUT'))
         self.assertTrue(result['ok'])
-        self.assertEqual(parked.result, 'ok')
-        self.assertEqual(parked.workcenter_id, self.wc_out)
+        row = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-AOI-WC1'),
+            ('route_operation_id.operation_id', '=', self.op_out.id)])
+        self.assertEqual(row.result, 'ok')
+        self.assertEqual(row.workcenter_id, self.wc_out)
 
     def test_12_scan_pass_channel_stamps_device_workcenter(self):
         # 同一口径作用于 scan-pass 通道（M_WORK_STATIONSN）

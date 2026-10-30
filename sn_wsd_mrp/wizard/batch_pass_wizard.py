@@ -61,24 +61,26 @@ class SnWsdBatchPassWizard(models.TransientModel):
         if not (self.mes_order_id and self.route_operation_id):
             return
         order = self.mes_order_id
-        Wip = self.env['sn.wsd.serial.wip']
-        wips = Wip.search([('mes_order_id', '=', order.id)])
+        # strict one-scan-per-station keeps no parking rows: a board sits at
+        # the operation of its latest pass record
+        current_rows = order.serial_current_route_operations()
         now = fields.Datetime.now()
         vals_list = []
-        for wip in wips:
-            if wip.route_operation_id != self.route_operation_id and \
+        for row in current_rows.values():
+            current_op = row.route_operation_id
+            if current_op != self.route_operation_id and \
                     self.route_operation_id not in \
-                    order._batch_pass_downstream_ops(wip.route_operation_id):
+                    order._batch_pass_downstream_ops(current_op):
                 continue  # already past the target: not our business
             block = order._batch_pass_block_reason(
-                wip.serial_identity_id, self.route_operation_id)
+                row.serial_identity_id, self.route_operation_id)
+            since = row.out_date or row.in_date
             park_hours = (
-                (now - wip.in_date).total_seconds() / 3600.0
-                if wip.in_date else 0.0)
+                (now - since).total_seconds() / 3600.0 if since else 0.0)
             vals_list.append({
-                'serial_identity_id': wip.serial_identity_id.id,
-                'serial_name': wip.serial_identity_id.name,
-                'current_operation_id': wip.route_operation_id.id,
+                'serial_identity_id': row.serial_identity_id.id,
+                'serial_name': row.serial_identity_id.name,
+                'current_operation_id': current_op.id,
                 'park_hours': round(park_hours, 1),
                 'block_reason': block or False,
                 'selected': not block,
@@ -103,8 +105,7 @@ class SnWsdBatchPassWizard(models.TransientModel):
                 'type': 'success',
                 'title': _('Batch Station Pass'),
                 'message': _(
-                    '%(count)s SNs passed %(op)s on %(order)s; the boards '
-                    'are parked at the next station.',
+                    '%(count)s SNs passed %(op)s on %(order)s.',
                     count=receipt['passed'], op=receipt['operation'],
                     order=receipt['order_name']),
                 'next': {'type': 'ir.actions.act_window_close'},

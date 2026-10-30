@@ -67,6 +67,29 @@ class MesOrderStationServices(models.Model):
                 ('production_line_id', '=', workcenter.x_production_line_id.id))
         live = self.search(order_domain)
         Workshop = self.env['sn.mrp.workshop']
+        # strict one-scan-per-station keeps no parking rows: a board sits at
+        # the operation of its latest pass record (in progress while an NG
+        # decision is pending). The floor counters and the "in progress
+        # here" list follow that definition, not the WIP table.
+        current_rows = {}
+        for order in live:
+            current_rows.update(order.serial_current_route_operations())
+
+        def _still_in_flow(row):
+            # finished (OK through the end operation) and scrapped boards
+            # have left the flow: not "in progress" anywhere
+            if row.result == 'scrap':
+                return False
+            return not (row.result == 'ok'
+                        and row.route_operation_id.x_allow_exit)
+
+        current_rows = {
+            serial_id: row for serial_id, row in current_rows.items()
+            if _still_in_flow(row)}
+        op_current = {}
+        for row in current_rows.values():
+            op_current[row.route_operation_id.id] = \
+                op_current.get(row.route_operation_id.id, 0) + 1
         for order in live:
             route = order.x_mes_route_id
             op = route.operation_ids.filtered(
@@ -96,7 +119,7 @@ class MesOrderStationServices(models.Model):
                 'op': {
                     'id': op.id,
                     'label': op.display_label,
-                    'wip_qty': op.x_wip_qty,
+                    'wip_qty': op_current.get(op.id, 0),
                     'entered_qty': op.x_entered_qty,
                     'ok_qty': op.x_ok_qty,
                     'ng_qty': op.x_ng_qty,
@@ -111,22 +134,36 @@ class MesOrderStationServices(models.Model):
                     'is_workorder_input': op == route.x_workorder_input_operation_id,
                 },
             })
-        wip_domain = [
-            ('route_operation_id.operation_id', '=', operation.id),
-            ('mes_order_id', 'in', live.ids),
-        ]
-        wip_total = self.env['sn.wsd.serial.wip'].search_count(wip_domain)
-        # browsing stays snappy on huge WIP backlogs (aging ovens...): cap
-        # the rendered rows, scanning never depends on the list
-        wip_rows = self.env['sn.wsd.serial.wip'].search(
-            wip_domain, order='in_date desc', limit=20)
-        payload['wip_total'] = wip_total
+        current = [
+            row for row in current_rows.values()
+            if row.route_operation_id.operation_id == operation]
+        current.sort(
+            key=lambda r: (r.out_date or r.in_date or fields.Datetime.now(),
+                           r.id), reverse=True)
+        # browsing stays snappy on huge backlogs (aging ovens...): cap the
+        # rendered rows, scanning never depends on the list
+        wip_rows = current[:20]
+        serial_ids = [row.serial_identity_id.id for row in wip_rows]
+        wip_by_serial = {}
+        if serial_ids:
+            wip_by_serial = {
+                wip.serial_identity_id.id: wip.id
+                for wip in self.env['sn.wsd.serial.wip'].search([
+                    ('serial_identity_id', 'in', serial_ids)])
+            }
+        payload['wip_total'] = len(current)
         payload['wip'] = [{
             'id': row.id,
+            # real WIP id only while the board waits for an NG decision;
+            # the leave endpoint needs it for the two-step NG flow
+            'wip_id': wip_by_serial.get(row.serial_identity_id.id, False),
             'sn': row.serial_identity_id.name,
             'order_id': row.mes_order_id.id,
             'order_name': row.mes_order_id.name,
-            'in_date': fields.Datetime.to_string(row.in_date) if row.in_date else '',
+            'result': row.result,
+            'in_date': fields.Datetime.to_string(
+                row.out_date or row.in_date) if (row.out_date or row.in_date)
+                else '',
         } for row in wip_rows]
         return payload
 
@@ -163,59 +200,20 @@ class MesOrderStationServices(models.Model):
                 'wip_id': wip.id,
                 'order_id': wip.mes_order_id.id,
             }
-        # 3) a WIP SN parked at another operation: this scan is its ARRIVAL
-        #    here -- the parked operation completes OK and the board moves
-        #    into this station's WIP (one scan per board per station)
+        # 3) a WIP SN at another operation: strict one-scan-per-station --
+        #    the board must finish (OK/NG/scrap) the station it sits at
+        #    before any other station can scan it. No arrival pull: the
+        #    scanned station records its own verdict, never the previous one.
         elsewhere = Wip.search([
             ('serial_identity_id.name', '=', code),
             ('mes_order_id.state', 'not in', ('cancelled', 'done')),
         ], limit=1)
         if elsewhere:
-            target = elsewhere.mes_order_id
-            op_row = target.x_mes_route_id.operation_ids.filtered(
-                lambda o: o.operation_id == workcenter.x_operation_id)
-            if not op_row:
-                raise ValidationError(_(
-                    'SN %(sn)s is in progress at operation %(op)s of order '
-                    '%(order)s; this work center runs no operation of that '
-                    'order.', sn=code,
-                    op=elsewhere.route_operation_id.display_label,
-                    order=target.name))
-            passed = self.env['sn.wsd.serial.operation.history'].search_count([
-                ('serial_identity_id', '=', elsewhere.serial_identity_id.id),
-                ('mes_order_id', '=', target.id),
-                ('route_operation_id', '=', op_row.id),
-                ('result', '=', 'ok'),
-            ])
-            if passed:
-                raise ValidationError(_(
-                    'SN %(sn)s already passed %(op)s of order %(order)s.',
-                    sn=code, op=op_row.display_label, order=target.name))
-            # the parked operation hands the board over with OK; the enter
-            # below validates reachability against the fresh history row.
-            # Cache the fields first -- leave_station unlinks the WIP row,
-            # and stale record reads would raise MissingError.
-            serial_rec = elsewhere.serial_identity_id
-            held = target.must_hold_for_fai(serial_rec, op_row)
-            target.leave_station(serial_rec, 'ok')
-            # 首件保持：出站 OK 已把到位登记落库；检验未判定时下一工序
-            # 不得接板——板停在途，判定通过后再扫即接走（不得 raise 回滚
-            # 到位登记）
-            if held:
-                return {
-                    'action': 'entered',
-                    'order_id': target.id,
-                    'data': self.sn_station_floor_data(workcenter_id),
-                    'message': target.fai_hold_message(serial_rec, held),
-                }
-            target.scan_enter(code, workcenter)
-            if op_row.x_allow_exit:
-                return self._leave_action(code, target)
-            return {
-                'action': 'entered',
-                'order_id': target.id,
-                'data': self.sn_station_floor_data(workcenter_id),
-            }
+            raise ValidationError(_(
+                'SN %(sn)s is in progress at operation %(op)s of order '
+                '%(order)s; it must leave that station first.',
+                sn=code, op=elsewhere.route_operation_id.display_label,
+                order=elsewhere.mes_order_id.name))
         # 4) no WIP row anywhere: new SN feeding (start operations only)
         #    or an in-flow SN in transit (e.g. after a device report at a
         #    fork) being picked up by this station
@@ -253,19 +251,14 @@ class MesOrderStationServices(models.Model):
                 raise ValidationError(_(
                     'SN %(sn)s already passed %(op)s of order %(order)s.',
                     sn=code, op=op_row.display_label, order=target.name))
-            # 首件保持：样本在途且首件未判定 → 下道工序不得接板
-            held = target.must_hold_for_fai(serial, op_row)
-            if held:
-                raise ValidationError(target.fai_hold_message(serial, held))
-            # transit pickup: the upstream op is already OK in the history
+            blocked = target._pass_scan_blocked(serial, op_row)
+            if blocked:
+                raise ValidationError(blocked)
+            # one scan = one station pass: enter here, the caller completes
+            # this very station with its OK/NG/scrap mode (no parking at the
+            # successor, no pull from an earlier station)
             target.scan_enter(code, workcenter)
-            if op_row.x_allow_exit:
-                return self._leave_action(code, target)
-            return {
-                'action': 'entered',
-                'order_id': target.id,
-                'data': self.sn_station_floor_data(workcenter_id),
-            }
+            return self._leave_action(code, target)
         if op_row and not op_row.x_allow_entry:
             raise ValidationError(_(
                 'Feeding happens at a start operation only: this work '
@@ -273,11 +266,7 @@ class MesOrderStationServices(models.Model):
                 'station to feed SN %(sn)s.',
                 op=op_row.display_label, order=target.name, sn=code))
         target.scan_enter(code, workcenter)
-        return {
-            'action': 'entered',
-            'order_id': target.id,
-            'data': self.sn_station_floor_data(workcenter_id),
-        }
+        return self._leave_action(code, target)
 
     def _leave_action(self, code, target):
         """WIP row of `code` on `target` as the leave payload for the
@@ -297,11 +286,9 @@ class MesOrderStationServices(models.Model):
     def sn_station_scan_leave(self, workcenter_id, code):
         """PDA station-pass scan: same one-scan kernel as the terminal.
 
-        Returns ``{'wip_id', 'order_id', 'leave'}``: ``leave=True`` means
-        the station must complete the board now with its OK/NG/scrap mode
-        (end operation, or NG/scrap on a parked board); ``leave=False``
-        means the scan merely parked the board here (feeding or arrival
-        pull) and the caller must NOT call sn_station_leave."""
+        Returns ``{'wip_id', 'order_id', 'leave'}``: a successful scan always
+        leaves the board in progress at the scanned station, so the caller
+        completes this very station with its OK/NG/scrap mode."""
         result = self.sn_station_scan(workcenter_id, code, False)
         if result.get('action') == 'leave':
             return {
@@ -309,36 +296,13 @@ class MesOrderStationServices(models.Model):
                 'order_id': result['order_id'],
                 'leave': True,
             }
-        # entered / select_order: nothing to leave -- surface the parked
-        # WIP row (if any) so the caller can refresh its counters
-        wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', (code or '').strip()),
-            ('route_operation_id.operation_id', '=',
-             self.env['mrp.workcenter'].browse(workcenter_id).x_operation_id.id),
-            ('mes_order_id.state', 'not in', ('cancelled', 'done')),
-        ], limit=1)
+        # select_order: the scan switched the terminal order, nothing to
+        # complete (an unknown SN raises before reaching this branch)
         return {
-            'wip_id': wip.id if wip else False,
-            'order_id': wip.mes_order_id.id if wip else False,
+            'wip_id': False,
+            'order_id': result.get('order_id') or False,
             'leave': False,
         }
-
-    def _find_live_order_for_workcenter(self, workcenter):
-        """The online station-mode MES order running through this work center."""
-        if not workcenter or not workcenter.x_operation_id:
-            return self.env['sn.wsd.mes.order']
-        orders = self.search([
-            ('state', 'not in', ('cancelled', 'done')),
-            ('x_online_date', '!=', False),
-            ('x_manage_mode', '=', 'station'),
-        ]).filtered(lambda o: (
-            not workcenter.x_production_line_id
-            or o.production_line_id == workcenter.x_production_line_id))
-        for order in orders:
-            if order.x_mes_route_id.operation_ids.filtered(
-                    lambda r: r.operation_id == workcenter.x_operation_id):
-                return order
-        return self.env['sn.wsd.mes.order']
 
     @api.model
     def sn_station_clear(self, workcenter_id, code, order_id=False):
@@ -405,21 +369,13 @@ class MesOrderStationServices(models.Model):
     @api.model
     def sn_station_leave(self, wip_id, result, scrap_reason_id=False,
                          ng_defect_code_id=False):
-        """Terminal exit: act on one WIP row, keyed by its own work center."""
+        """Terminal exit: act on one WIP row, keyed by its own work center.
+
+        Strict one-scan-per-station: every operation completes on its own
+        scan, so OK is accepted on any operation (end or mid-route)."""
         wip = self.env['sn.wsd.serial.wip'].browse(wip_id)
         # capture before leave_station unlinks the WIP row
         workcenter_id = wip.workcenter_id.id or False
-        if result == 'ok' and not wip.route_operation_id.x_allow_exit:
-            # one-scan kernel: a mid-route station completes its boards when
-            # the NEXT station scans them (arrival pull); an OK scan on a
-            # board still parked here would write the OK prematurely
-            raise ValidationError(_(
-                'SN %(sn)s is parked at %(op)s of order %(order)s (not the '
-                'end operation): it flows on when the next station scans '
-                'it. Use NG or scrap here if this station rejects it.',
-                sn=wip.serial_identity_id.name,
-                op=wip.route_operation_id.display_label,
-                order=wip.mes_order_id.name))
         reason = self.env['sn.wsd.scrap.reason'].browse(
             int(scrap_reason_id) if scrap_reason_id else False)
         defect = self.env['sn.wsd.quality.defect.code'].browse(

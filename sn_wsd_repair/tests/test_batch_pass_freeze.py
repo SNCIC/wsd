@@ -81,7 +81,8 @@ class TestBatchPassFreeze(TransactionCase):
             'name': 'WC-FZA', 'x_workshop_id': self.workshop.id,
             'x_operation_id': self.op_a.id,
             'x_production_line_id': self.line.id})
-        serial = order.scan_enter('FZ-SN-1', wc_a)  # parked at A
+        serial = order.scan_enter('FZ-SN-1', wc_a)
+        order.leave_station(serial, 'ok')  # A judged; the board sits before B
         rop_b = order.x_route_operation_ids.filtered(
             lambda r: r.operation_id == self.op_b)
         self.assertFalse(order._batch_pass_block_reason(serial, rop_b))

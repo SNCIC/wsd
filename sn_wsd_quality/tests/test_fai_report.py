@@ -1,3 +1,8 @@
+# DISABLED 2026-10-29 report-daily-workbench: the FAI report-mode collector
+# (report_operation_qty override + gate helpers in models/mes_order_fai.py)
+# is disabled, so this whole file is disabled with it. The import line is
+# commented out in tests/__init__.py; restore both together.
+# (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase, tagged

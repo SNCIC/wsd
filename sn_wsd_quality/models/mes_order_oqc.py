@@ -175,33 +175,38 @@ class MesOrderOqc(models.Model):
     # 报工模式数量收集器（决策 2）：首次合格报工建单（基数快照 0）、
     # 超额整笔拦（上限 = AQL 样本量 n）；NG/报废报工不占名额
     # ------------------------------------------------------------------
-    def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
-                             qty_scrap=0.0, scrap_reason=False):
-        self.ensure_one()
-        self._oqc_gate_report(route_operation, qty_ok)
-        return super().report_operation_qty(
-            route_operation, qty_ok, qty_ng=qty_ng, qty_scrap=qty_scrap,
-            scrap_reason=scrap_reason)
-
-    def _oqc_gate_report(self, route_operation, qty_ok):
-        self.ensure_one()
-        if self.x_manage_mode != 'report' or qty_ok <= 0:
-            return  # 纯 NG/报废报工：调机记账，不占样本名额（同 FAI）
-        inspection = self.x_oqc_inspection_id
-        if not inspection:
-            # 无单先建：报工模式同样触发（基数快照 0 = 从头累计），
-            # 再按同一额度口径校验本笔
-            inspection = self._oqc_maybe_open_round(route_operation)
-        if not inspection or inspection._oqc_passed():
-            return
-        if route_operation.operation_id != inspection.scheme_id.operation_id:
-            return  # 只拦 OQC 工序的报工
-        remaining = inspection.sample_size - inspection.x_fai_reported_qty
-        if qty_ok > remaining + 0.0001:
-            raise ValidationError(_(
-                'Outgoing inspection is in progress on MES order '
-                '%(order)s: report at most %(remaining)s OK unit(s) in '
-                'this batch.', order=self.name, remaining=max(remaining, 0.0)))
+    # DISABLED 2026-10-29 report-daily-workbench: reporting no longer feeds
+    # OQC (no sampling document, no AQL snapshot, no throttle on qualified
+    # reports) while the daily workbench change is live; the station paths
+    # (_oqc_register_sample / _oqc_gate_feeding) are untouched
+    # (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
+    # def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
+    #                          qty_scrap=0.0, scrap_reason=False):
+    #     self.ensure_one()
+    #     self._oqc_gate_report(route_operation, qty_ok)
+    #     return super().report_operation_qty(
+    #         route_operation, qty_ok, qty_ng=qty_ng, qty_scrap=qty_scrap,
+    #         scrap_reason=scrap_reason)
+    #
+    # def _oqc_gate_report(self, route_operation, qty_ok):
+    #     self.ensure_one()
+    #     if self.x_manage_mode != 'report' or qty_ok <= 0:
+    #         return  # 纯 NG/报废报工：调机记账，不占样本名额（同 FAI）
+    #     inspection = self.x_oqc_inspection_id
+    #     if not inspection:
+    #         # 无单先建：报工模式同样触发（基数快照 0 = 从头累计），
+    #         # 再按同一额度口径校验本笔
+    #         inspection = self._oqc_maybe_open_round(route_operation)
+    #     if not inspection or inspection._oqc_passed():
+    #         return
+    #     if route_operation.operation_id != inspection.scheme_id.operation_id:
+    #         return  # 只拦 OQC 工序的报工
+    #     remaining = inspection.sample_size - inspection.x_fai_reported_qty
+    #     if qty_ok > remaining + 0.0001:
+    #         raise ValidationError(_(
+    #             'Outgoing inspection is in progress on MES order '
+    #             '%(order)s: report at most %(remaining)s OK unit(s) in '
+    #             'this batch.', order=self.name, remaining=max(remaining, 0.0)))
 
     # ------------------------------------------------------------------
     # 可见性：出厂检验单入口（视图徽标/按钮由 batch 4 接线）

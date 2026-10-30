@@ -10,4 +10,6 @@ def migrate(cr, version):
     """
     env = api.Environment(cr, SUPERUSER_ID, {})
     warehouses = env['stock.warehouse'].with_context(active_test=False).search([])
-    warehouses._create_or_update_sequences_and_picking_types()
+    # the core method requires a singleton: one call per warehouse
+    for warehouse in warehouses:
+        warehouse._create_or_update_sequences_and_picking_types()

@@ -580,8 +580,12 @@ class SnWsdRepairOrder(models.Model):
             }
             record.with_context(allow_repair_order_write=True).write(vals)
             record._ensure_quality_issue()
-            if record.repair_mode == 'qty':
-                record._register_qty_rework_report()
+            # DISABLED 2026-10-29 report-daily-workbench: reporting a qty
+            # repair no longer backfills a qty_ng operation report row; the
+            # _register_qty_rework_report method is kept for restoration
+            # (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
+            # if record.repair_mode == 'qty':
+            #     record._register_qty_rework_report()
         return True
 
     def action_start_repair(self):
