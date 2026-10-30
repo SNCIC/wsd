@@ -301,59 +301,63 @@ class MesOrderFai(models.Model):
     # ------------------------------------------------------------------
     # 报工模式数量收集器（add-mes-fai-report）：闸在 super 前、齐套在后
     # ------------------------------------------------------------------
-    def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
-                             qty_scrap=0.0, scrap_reason=False):
-        self.ensure_one()
-        self._fai_gate_report(route_operation, qty_ok)
-        res = super().report_operation_qty(
-            route_operation, qty_ok, qty_ng=qty_ng, qty_scrap=qty_scrap,
-            scrap_reason=scrap_reason)
-        self._fai_report_ready_notify(route_operation, qty_ok)
-        return res
-
-    def _fai_gate_report(self, route_operation, qty_ok):
-        self.ensure_one()
-        if self.x_manage_mode != 'report' or qty_ok <= 0:
-            return  # 纯 NG/报废报工：调机记账，不占样本名额
-        inspection = self.x_fai_inspection_id
-        if not inspection or inspection.state == 'done':
-            # 建单延迟到首件工序首次合格报工（oqc-entry-trigger）：先开轮，
-            # 本轮基数快照自然为 0，当次报工即计入已报首件台数
-            self._fai_maybe_open_round(route_operation)
-            inspection = self.x_fai_inspection_id
-            if not inspection or inspection.state == 'done':
-                return
-        if route_operation.operation_id != inspection.scheme_id.operation_id:
-            return  # D1：只拦首件工序的报工
-        remaining = inspection.sample_size - inspection.x_fai_reported_qty
-        if qty_ok > remaining + 0.0001:
-            raise ValidationError(_(
-                'First article confirmation is in progress on MES order '
-                '%(order)s: report at most %(remaining)s OK unit(s) in '
-                'this batch.', order=self.name, remaining=max(remaining, 0.0)))
-
-    def _fai_report_ready_notify(self, route_operation, qty_ok):
-        self.ensure_one()
-        if self.x_manage_mode != 'report' or qty_ok <= 0:
-            return
-        inspection = self.x_fai_inspection_id
-        if not inspection or inspection.state != 'open':
-            return
-        if route_operation.operation_id != inspection.scheme_id.operation_id:
-            return
-        if inspection.x_fai_reported_qty < inspection.sample_size:
-            return
-        if inspection.activity_ids.filtered(
-                lambda a: a.summary == 'First article samples ready'):
-            return
-        inspection.activity_schedule(
-            'mail.mail_activity_data_todo',
-            user_id=self._fai_activity_user(inspection).id,
-            summary=_('First article samples ready'),
-            note=_('%(count)s first-article units were reported on '
-                   '%(order)s; inspection can start.',
-                   count=inspection.sample_size, order=self.name),
-        )
+    # DISABLED 2026-10-29 report-daily-workbench: reporting no longer feeds
+    # FAI (no round creation, no sample-size throttle on qualified reports)
+    # while the daily workbench change is live; the station paths above are
+    # untouched (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
+    # def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
+    #                          qty_scrap=0.0, scrap_reason=False):
+    #     self.ensure_one()
+    #     self._fai_gate_report(route_operation, qty_ok)
+    #     res = super().report_operation_qty(
+    #         route_operation, qty_ok, qty_ng=qty_ng, qty_scrap=qty_scrap,
+    #         scrap_reason=scrap_reason)
+    #     self._fai_report_ready_notify(route_operation, qty_ok)
+    #     return res
+    #
+    # def _fai_gate_report(self, route_operation, qty_ok):
+    #     self.ensure_one()
+    #     if self.x_manage_mode != 'report' or qty_ok <= 0:
+    #         return  # 纯 NG/报废报工：调机记账，不占样本名额
+    #     inspection = self.x_fai_inspection_id
+    #     if not inspection or inspection.state == 'done':
+    #         # 建单延迟到首件工序首次合格报工（oqc-entry-trigger）：先开轮，
+    #         # 本轮基数快照自然为 0，当次报工即计入已报首件台数
+    #         self._fai_maybe_open_round(route_operation)
+    #         inspection = self.x_fai_inspection_id
+    #         if not inspection or inspection.state == 'done':
+    #             return
+    #     if route_operation.operation_id != inspection.scheme_id.operation_id:
+    #         return  # D1：只拦首件工序的报工
+    #     remaining = inspection.sample_size - inspection.x_fai_reported_qty
+    #     if qty_ok > remaining + 0.0001:
+    #         raise ValidationError(_(
+    #             'First article confirmation is in progress on MES order '
+    #             '%(order)s: report at most %(remaining)s OK unit(s) in '
+    #             'this batch.', order=self.name, remaining=max(remaining, 0.0)))
+    #
+    # def _fai_report_ready_notify(self, route_operation, qty_ok):
+    #     self.ensure_one()
+    #     if self.x_manage_mode != 'report' or qty_ok <= 0:
+    #         return
+    #     inspection = self.x_fai_inspection_id
+    #     if not inspection or inspection.state != 'open':
+    #         return
+    #     if route_operation.operation_id != inspection.scheme_id.operation_id:
+    #         return
+    #     if inspection.x_fai_reported_qty < inspection.sample_size:
+    #         return
+    #     if inspection.activity_ids.filtered(
+    #             lambda a: a.summary == 'First article samples ready'):
+    #         return
+    #     inspection.activity_schedule(
+    #         'mail.mail_activity_data_todo',
+    #         user_id=self._fai_activity_user(inspection).id,
+    #         summary=_('First article samples ready'),
+    #         note=_('%(count)s first-article units were reported on '
+    #                '%(order)s; inspection can start.',
+    #                count=inspection.sample_size, order=self.name),
+    #     )
 
     # ------------------------------------------------------------------
     # 可见性：首件检验单入口

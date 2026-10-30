@@ -761,3 +761,12 @@ class MesOperationReport(models.Model):
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
+
+    def _apply_report_allocation(self, participant_vals, team_id):
+        """Extension point for the optional allocation arguments of
+        report_operation_qty (report-daily-workbench). The core model has
+        no notion of people allocation, so this is deliberately a no-op;
+        sn_wsd_piece_rate overrides it to persist the team and participant
+        rows on this report."""
+        self.ensure_one()
+        return None

@@ -184,17 +184,20 @@ class TestMesFai(TransactionCase):
         self.assertEqual(len(order.x_fai_inspection_ids), 2)
         self.assertEqual(inspection1.state, 'done')
 
-    def test_13_report_mode_arms_too(self):
-        # add-mes-fai-report: both modes share the state machine; a report
-        # order opens its round on the first qualified report
-        # (quantity collector details live in test_fai_report)
-        order = self._order(mode='report')
-        self.assertEqual(order.x_fai_state, 'none')
-        order.report_operation_qty(self._op_row(order, self.op_in), 1)
-        self.assertEqual(order.x_fai_state, 'in_progress')
-        self.assertEqual(order.x_fai_round, 1)
-        self.assertEqual(order.x_fai_inspection_id.sample_size, 2)
-        self.assertEqual(order.x_fai_sample_count, 1)
+    # DISABLED 2026-10-29 report-daily-workbench: reporting no longer opens a
+    # FAI round, so this report-mode scenario cannot hold while the link is
+    # disabled (restore: wsd-doc/openspec/changes/report-daily-workbench/design.md sec.5)
+    # def test_13_report_mode_arms_too(self):
+    #     # add-mes-fai-report: both modes share the state machine; a report
+    #     # order opens its round on the first qualified report
+    #     # (quantity collector details live in test_fai_report)
+    #     order = self._order(mode='report')
+    #     self.assertEqual(order.x_fai_state, 'none')
+    #     order.report_operation_qty(self._op_row(order, self.op_in), 1)
+    #     self.assertEqual(order.x_fai_state, 'in_progress')
+    #     self.assertEqual(order.x_fai_round, 1)
+    #     self.assertEqual(order.x_fai_inspection_id.sample_size, 2)
+    #     self.assertEqual(order.x_fai_sample_count, 1)
 
     # ---------------- R2 样本收集与投入限流 ----------------
     def test_20_sample_registration_and_gate(self):

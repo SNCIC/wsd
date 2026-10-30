@@ -12,11 +12,13 @@ class TestProgressiveRatioRebalance(PieceRateTestCommon):
 
     def _draft_with_team(self):
         self._rate()
-        report = self._make_report(self.order, self.op_a, 100.0)
+        # report-daily-workbench: report-sourced settlements mirror the
+        # report allocation and are read-only on the settlement side, so
+        # the rebalance suite now runs on a plain draft (station / manual
+        # path) without an operation_report_id reference.
         settlement = self.env['sn.wsd.piece.settlement'].create({
             'mes_order_id': self.order.id,
             'route_operation_id': self._op_a_row(self.order).id,
-            'operation_report_id': report.id,
             'qty_ok': 100.0,
         })
         settlement._resolve_rate_price()

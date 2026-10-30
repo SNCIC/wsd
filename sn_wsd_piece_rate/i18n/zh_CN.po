@@ -6,20 +6,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 00:00+0000\n"
-"PO-Revision-Date: 2026-09-04 00:00+0000\n"
+"POT-Creation-Date: 2026-10-30 01:45+0000\n"
+"PO-Revision-Date: 2026-10-30 01:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+msgid "%(count)s operation report(s) submitted."
+msgstr "已提交 %(count)s 笔报工。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_piece_rate_sn_wsd_piece_rate_uniq
 msgid "A piece rate already exists for this product and operation."
 msgstr "该产品与工序的计件单价已存在。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid ""
+"A piece rate is configured for product %(product)s on operation "
+"%(operation)s: select the participants who produced this batch."
+msgstr "产品 %(product)s 的工序 %(operation)s 已配置计件单价：请选择本批的参与人。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
@@ -34,6 +47,11 @@ msgid "A station-mode settlement must cover at least one serial."
 msgstr "过站模式的结算单至少要覆盖一台表 SN。"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__reported_qty
+msgid "Accumulated OK + scrap already reported at this operation."
+msgstr "本工序已报的合格+报废累计数量。"
+
+#. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__acknowledge_drafts
 msgid "Acknowledge Remaining Drafts"
 msgstr "知晓并保留剩余草稿"
@@ -44,6 +62,17 @@ msgid "Action"
 msgstr "动作"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__mes_order_id
+msgid "Active report-mode MES order (released / picked / in progress)."
+msgstr "活跃的报工模式制令单（已下达/已领料/生产中）。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+msgid "Add at least one line on the To Report tab."
+msgstr "请在“待报工”页签至少添加一行。"
+
+#. module: sn_wsd_piece_rate
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
 msgid "Add at least one participant before confirming."
@@ -51,7 +80,9 @@ msgstr "确认前请至少添加一名参与人。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
 msgid "Add participants first."
 msgstr "请先添加参与人。"
 
@@ -63,13 +94,27 @@ msgstr "分摊金额"
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__allocated_total
 msgid "Allocated Total"
-msgstr "分摊合计"
+msgstr "金额"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_summary
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_summary
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_search_piece
+msgid "Allocation"
+msgstr "人员分配"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__amount
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__allocated_total
 msgid "Amount"
 msgstr "金额"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_rate__price
+msgid ""
+"Amount paid to the crew for one OK unit of this product at this operation. "
+"Settlements store a snapshot: later changes only affect newly created "
+"settlements."
+msgstr "该产品该工序每台合格品支付给班组的金额。计件单保存快照：后续调价只影响新单。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__date
@@ -83,10 +128,26 @@ msgid "Business Month"
 msgstr "业务月"
 
 #. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__period
+msgid "Business-date month (YYYY-MM) the close applies to."
+msgstr "关账适用的业务月份（YYYY-MM）。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__period
+msgid "Business-date month to close, formatted YYYY-MM."
+msgstr "要关账的业务月份，格式 YYYY-MM。"
+
+#. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Cancel"
 msgstr "取消"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__acknowledge_drafts
+msgid ""
+"Check to confirm you are aware unsettled drafts stay in the closed period."
+msgstr "勾选确认您知晓未结算草稿将留在已关账的月份中。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_close_log__action__close
@@ -105,10 +166,19 @@ msgid "Close Period"
 msgstr "关账"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_summary
+msgid "Compact view of the participants and their ratios."
+msgstr "参与人与绩效比的摘要展示。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__company_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__company_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__company_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__company_id
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -134,10 +204,6 @@ msgstr "已确认"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__serial_identity_ids
-msgid "Covered Serials"
-msgstr "覆盖表 SN"
-
-#. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
 msgid "Covered Serials"
 msgstr "覆盖表 SN"
@@ -153,26 +219,75 @@ msgid "Create your first piece settlement"
 msgstr "创建第一张计件结算单"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_uid
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__create_uid
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_uid
 msgid "Created by"
 msgstr "创建人"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_date
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_date
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__create_date
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__create_date
 msgid "Created on"
 msgstr "创建时间"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__currency_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__currency_id
 msgid "Currency"
 msgstr "币种"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+#: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_settlement_generate
+#: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_generate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Daily Reporting"
+msgstr "日报工"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_piece_report_wizard_line
+msgid "Daily Reporting Wizard Line"
+msgstr "日报工向导行"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_piece_report_wizard_participant
+msgid "Daily Reporting Wizard Participant"
+msgstr "日报工向导参与人"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__display_label
+msgid "Display Label"
+msgstr "显示名称"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__display_name
+msgid "Display Name"
+msgstr "显示名称"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__draft
@@ -180,16 +295,34 @@ msgid "Draft"
 msgstr "草稿"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__employee_id
-msgid "Employee"
-msgstr "员工"
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__draft_count
+msgid "Draft settlements in the period when the event was logged."
+msgstr "记录事件时该月份剩余的草稿数。"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Edit Allocation"
+msgstr "编辑分配"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__employee_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__employee_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__employee_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Employee"
 msgstr "员工"
 
 #. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid ""
+"Employee %(employee)s appears twice in the allocation of product %(product)s"
+" on operation %(operation)s."
+msgstr "员工 %(employee)s 在产品 %(product)s 工序 %(operation)s 的分配中出现两次。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__employee_code
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__employee_code
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__employee_code
 msgid "Employee Code"
 msgstr "工号"
@@ -206,9 +339,21 @@ msgid "Executed At"
 msgstr "执行时间"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Fill From Team"
 msgstr "从班组带出"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__production_line_id
+msgid "Filter the To Report tab by production line."
+msgstr "按产线筛选“待报工”页签。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__workshop_id
+msgid "Filter the To Report tab by workshop."
+msgstr "按车间筛选“待报工”页签。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__date_from
@@ -219,17 +364,6 @@ msgstr "从"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Generate Drafts"
 msgstr "生成草稿"
-
-#. module: sn_wsd_piece_rate
-#: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_settlement_generate
-#: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_generate
-msgid "Generate From Reports"
-msgstr "从报工生成"
-
-#. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
-msgid "Generate From Reports"
-msgstr "从报工生成"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_piece_settlement_generate_wizard
@@ -243,20 +377,111 @@ msgid "Generated Settlements"
 msgstr "已生成结算单"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_uid
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_uid
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "Group By"
+msgstr "分组"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled_label
+msgid "Human-readable badge for the piece-settled column."
+msgstr "计件占用列的人读徽章。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_order__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__employee_code
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__employee_code
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__employee_code
+msgid "ID used for employee identification."
+msgstr "用于员工身份识别的 ID。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__write_uid
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_uid
 msgid "Last Updated by"
 msgstr "最后更新人"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_date
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_date
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__write_date
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__write_date
 msgid "Last Updated on"
 msgstr "最后更新时间"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__date
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__settlement_date
+msgid ""
+"Ledger month and monthly closing follow this date, not the creation date "
+"(late settlements are back-dated)."
+msgstr "台账月份与月度关账以该日期为准，而非创建日期（晚开单可补录业务日期）。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__line_id
+msgid "Line"
+msgstr "行"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+msgid ""
+"Line %(index)s (order %(order)s, operation %(op)s) was rejected: %(reason)s"
+msgstr "第 %(index)s 行（制令单 %(order)s，工序 %(op)s）被拒绝：%(reason)s"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+msgid "Line %(index)s (order %(order)s, operation %(op)s): %(reason)s"
+msgstr "第 %(index)s 行（制令单 %(order)s，工序 %(op)s）：%(reason)s"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_mes_operation_report
+msgid "MES Operation Report"
+msgstr "MES 工序报工"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_mes_operation_report_participant
+msgid "MES Operation Report Participant"
+msgstr "报工行参与人"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__mes_order_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__mes_order_id
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model,name:sn_wsd_piece_rate.model_sn_wsd_mes_order
+msgid "MES Production Order"
+msgstr "制令单"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__manage_mode
@@ -269,25 +494,24 @@ msgstr "管理方式"
 msgid "Material Specification"
 msgstr "物料规格"
 
-
-#. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__mes_order_id
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__mes_order_id
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__mes_order_id
-msgid "MES Order"
-msgstr "制令单"
-
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__month_closed
 msgid "Month Closed"
 msgstr "月份已关账"
 
 #. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/piece_close.py:0
 #: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_close_log
 #: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_close_log
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form
 msgid "Monthly Closing"
 msgstr "月度关账"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_ng
+msgid "NG Quantity"
+msgstr "NG 数量"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
@@ -310,23 +534,38 @@ msgstr "产品 %(product)s 在工序 %(operation)s 未配置计件单价，请�
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "No previous allocation exists for this operation."
+msgstr "该工序没有历史分配可沿用。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
 msgid "No unsettled OK quantity at this operation yet."
 msgstr "该工序当前没有未结算的 OK 台数。"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_ok
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__qty_ok
 msgid "OK Quantity"
 msgstr "OK 数量"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__route_operation_id
+msgid "One operation of the private route of the selected order."
+msgstr "所选制令单私有路线上的一道工序。"
+
+#. module: sn_wsd_piece_rate
 #: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_rate
-msgid "One rate per product and operation: the crew is paid this amount for each OK unit."
+msgid ""
+"One rate per product and operation: the crew is paid this amount for each OK"
+" unit."
 msgstr "一个产品×工序一条单价：每 OK 一台，班组获得该金额。"
 
 #. module: sn_wsd_piece_rate
 #: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_settlement
-msgid "One settlement pays one chunk of OK production to the crew that produced it."
+msgid ""
+"One settlement pays one chunk of OK production to the crew that produced it."
 msgstr "一张结算单把一块 OK 产量结算给生产它的班组。"
 
 #. module: sn_wsd_piece_rate
@@ -354,17 +593,15 @@ msgid "Only report-mode settlements can reference an operation report."
 msgstr "只有报工模式的计件单才能引用报工行。"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__operation_id
-msgid "Operation"
-msgstr "工序"
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__report_ids
+msgid "Only reports without a non-void settlement can be selected."
+msgstr "只能选择没有未作废计件单的报工行。"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__route_operation_id
-msgid "Operation"
-msgstr "工序"
-
-#. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Operation"
 msgstr "工序"
@@ -375,24 +612,41 @@ msgid "Operation (Dict)"
 msgstr "工序（字典）"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__operation_report_id
 #. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__operation_report_id
 msgid "Operation Report"
 msgstr "报工记录"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__participant_ids
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_count
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_count
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__participant_count
-msgid "Participants"
+msgid "Participant Count"
 msgstr "参与人"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_ids
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_ids
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__participant_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_list_piece
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Participants"
 msgstr "参与人"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_ids
+msgid ""
+"People who produced this batch, with their performance ratios. Copied as-is "
+"into the piece settlement draft."
+msgstr "本批的参与人与绩效比，计件草稿按此原样复制。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__performance_ratio
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__performance_ratio
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__performance_ratio
 msgid "Performance Ratio"
 msgstr "绩效比"
@@ -438,10 +692,6 @@ msgstr "计件结算参与人"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_rate
-msgid "Piece Rates"
-msgstr "计件单价"
-
-#. module: sn_wsd_piece_rate
 #: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_rate
 msgid "Piece Rates"
 msgstr "计件单价"
@@ -458,18 +708,21 @@ msgstr "计件已结算（标识）"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.actions.act_window,name:sn_wsd_piece_rate.action_sn_wsd_piece_settlement
-msgid "Piece Settlements"
-msgstr "计件结算单"
-
-#. module: sn_wsd_piece_rate
-#: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_settlement
-msgid "Piece Settlements"
-msgstr "计件结算单"
-
-#. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__piece_settlement_ids
+#: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_settlement
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
 msgid "Piece Settlements"
 msgstr "计件结算单"
+
+#. module: sn_wsd_piece_rate
+#: model:res.groups,name:sn_wsd_piece_rate.group_piece_rate_manager
+msgid "Piece-rate Manager"
+msgstr "计件管理员"
+
+#. module: sn_wsd_piece_rate
+#: model:res.groups,name:sn_wsd_piece_rate.group_piece_rate_user
+msgid "Piece-rate User"
+msgstr "计件用户"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.ui.menu,name:sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root
@@ -477,9 +730,26 @@ msgid "Piece-rate Wages"
 msgstr "计件工资"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__price
-msgid "Price per Unit"
-msgstr "单价（元/台）"
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__remaining_qty
+msgid "Plan Remainder"
+msgstr "可报额度"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__planned_qty
+msgid "Planned Quantity"
+msgstr "计划数量"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__remaining_qty
+msgid ""
+"Planned minus accumulated OK + scrap: the room left for this batch (NG does "
+"not consume it)."
+msgstr "计划量减去已报合格+报废：本批可用的余量（NG 不占额）。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__planned_qty
+msgid "Planned quantity of the MES order."
+msgstr "制令单的计划数量。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__price
@@ -487,21 +757,22 @@ msgid "Price Snapshot"
 msgstr "单价快照"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__product_id
-msgid "Product"
-msgstr "产品"
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__price
+msgid "Price per Unit"
+msgstr "单价（元/台）"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__product_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__product_id
 msgid "Product"
 msgstr "产品"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__production_line_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__production_line_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__production_line_id
-msgid "Production Line"
-msgstr "产线"
-
-#. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Production Line"
 msgstr "产线"
@@ -538,11 +809,42 @@ msgid "Reopen Period"
 msgstr "重开期间"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__report_id
+msgid "Report"
+msgstr "报工行"
+
+#. module: sn_wsd_piece_rate
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
-msgid ""
-"Report %(report)s is already settled by %(settlement)s."
+msgid "Report %(report)s is already settled by %(settlement)s."
 msgstr "报工行 %(report)s 已被计件单 %(settlement)s 结算。"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Report Line"
+msgstr "报工行"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Report at least one positive quantity."
+msgstr "至少报一个大于零的数量。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__reported_qty
+msgid "Reported Quantity"
+msgstr "已报数量"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Reported quantities cannot be negative."
+msgstr "报工数量不能为负数。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__scrap_reason_id
+msgid "Required whenever the scrap quantity is positive."
+msgstr "报废数量大于零时必填。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
@@ -551,8 +853,57 @@ msgid "Resolve the piece rate before confirming."
 msgstr "确认前请先解析计件单价。"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Reuse Last Allocation"
+msgstr "沿用上次分配"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_ng
+msgid ""
+"Reworkable defects of this batch. Pure statistic: it does not consume the "
+"plan quota."
+msgstr "本批的可返修不良。纯统计：不占计划额度。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__serial_identity_ids
+msgid ""
+"SNs whose first OK pass at this operation is paid by this settlement "
+"(station mode). Voiding releases them."
+msgstr "过站模式下由本计件单支付首过合格台数的 SN。作废即释放。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_scrap
+msgid "Scrap Quantity"
+msgstr "报废数量"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__scrap_reason_id
+msgid "Scrap Reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_piece_rate
 #. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Select a MES order and an operation first."
+msgstr "请先选择制令单和工序。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Select a MES order and an operation on every line."
+msgstr "每一行都要选择制令单和工序。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Select a scrap reason when the scrap quantity is positive."
+msgstr "报废数量大于零时必须选择报废原因。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
 msgid "Select a team first."
 msgstr "请先选择班组。"
 
@@ -563,28 +914,29 @@ msgid "Select at least one report to settle."
 msgstr "请至少选择一笔要结算的报工行。"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__sequence
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__sequence
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__sequence
 msgid "Sequence"
 msgstr "序号"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__sequence_locked
+msgid "Sequence Locked"
+msgstr "顺序锁"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_search_piece
 msgid "Settled"
 msgstr "已计件"
 
 #. module: sn_wsd_piece_rate
-#. odoo-python
-#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
-msgid "Settled"
-msgstr "已计件"
-
-#. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
-msgid "Settlement"
-msgstr "结算单"
-
-#. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__settlement_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Settlement"
 msgstr "结算单"
 
@@ -614,9 +966,29 @@ msgid "Some serials are already covered by another settlement."
 msgstr "部分表 SN 已被其他结算单覆盖。"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "Split Equally"
 msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__unsettled_qty
+msgid ""
+"Station mode: SN count with a first OK pass at this operation not yet "
+"covered by any non-void settlement."
+msgstr "过站模式：本工序首次合格但尚未被任何未作废计件单覆盖的 SN 数。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__manage_mode
+msgid ""
+"Station: SNs enter/leave each operation one by one.\n"
+"Report: operations are reported by quantity, no SN tracking.\n"
+"Locked once the order goes online."
+msgstr ""
+"过站：SN 逐台进出各工序。\n"
+"报工：按数量报工，无 SN 追踪。\n"
+"上线后锁定。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__state
@@ -624,19 +996,44 @@ msgid "Status"
 msgstr "状态"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Submit Reports"
+msgstr "提交报工"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__allocated_total
+msgid ""
+"Sum of allocated amounts. May be a few cents below the settlement amount: "
+"rounding remainders are dropped."
+msgstr "分配合计。可能比计件金额少几分：舍入尾差不补。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__ratio_total
+msgid "Sum of participant performance ratios; must be 100%."
+msgstr "参与人绩效比合计；必须为 100%。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__team_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__team_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__team_id
 msgid "Team"
 msgstr "班组"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_piece_settlement_participant_participant_unique
-msgid "The employee is already a participant of this settlement."
-msgstr "该员工已是本结算单的参与人。"
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__team_id
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__team_id
+msgid ""
+"Team used to pre-fill participants and their performance ratios (normalized "
+"over the participating subset)."
+msgstr "用于带出参与人及其绩效比的班组（按参与子集归一化）。"
 
 #. module: sn_wsd_piece_rate
-#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_participant_ledger
-msgid "The ledger aggregates allocated amounts per employee. Only confirmed, non-void settlements count."
-msgstr "台账按员工汇总分摊金额，只统计已确认且未作废的结算单。"
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__team_id
+msgid ""
+"Team used to pre-fill participants and their performance ratios (normalized "
+"over the participating subset). Drafting base only: the allocation truth is "
+"the participant rows."
+msgstr "用于带出参与人及其绩效比的班组（按参与子集归一化）。仅作带出底稿：分配以参与人子行为准。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
@@ -657,18 +1054,61 @@ msgid "The OK quantity must equal the referenced report quantity."
 msgstr "OK 数量必须与引用的报工行数量一致。"
 
 #. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid ""
+"The allocation of the report on order %(order)s / operation %(operation)s is"
+" frozen: settlement %(settlement)s is confirmed. Void the settlement, edit "
+"the allocation and generate it again."
+msgstr "制令单 %(order)s 工序 %(operation)s 报工行的人员分配已冻结：计件单 %(settlement)s 已确认。请先作废该计件单，再修改分配并重新生成。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__month_closed
+msgid ""
+"The business-date month is closed: no new settlements, no confirming, no "
+"voiding until a manager reopens it."
+msgstr "业务月份已关账：管理员重开前不能新增、确认或作废计件单。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_mes_operation_report_participant_report_partici_f4b7cafd
+msgid "The employee is already a participant of this report."
+msgstr "该员工已是本报工行的参与人。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_piece_settlement_participant_participant_unique
+msgid "The employee is already a participant of this settlement."
+msgstr "该员工已是本结算单的参与人。"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_participant_ledger
+msgid ""
+"The ledger aggregates allocated amounts per employee. Only confirmed, non-"
+"void settlements count."
+msgstr "台账按员工汇总分摊金额，只统计已确认且未作废的结算单。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid ""
+"The participant ratio total of product %(product)s on operation "
+"%(operation)s must be 100%% (currently %(total)s%%)."
+msgstr "产品 %(product)s 工序 %(operation)s 的参与人比例合计必须为 100%%（当前 %(total)s%%）。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_mes_operation_report_participant_report_partici_c6bc2a16
 #: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_piece_settlement_participant_participant_ratio_range
 msgid "The performance ratio must be between 0 and 100."
 msgstr "绩效比必须在 0 到 100 之间。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
-#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
-#: code:addons/sn_wsd_piece_rate/models/piece_close.py:0
-msgid "The period must be formatted YYYY-MM."
-msgstr "期间格式必须为 YYYY-MM。"
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "The performance ratio of %(employee)s must be between 0 and 100."
+msgstr "%(employee)s 的绩效比必须在 0 到 100 之间。"
 
 #. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/piece_close.py:0
 #: model:ir.model.constraint,message:sn_wsd_piece_rate.constraint_sn_wsd_piece_close_log_period_format
 msgid "The period must be formatted YYYY-MM."
 msgstr "期间格式必须为 YYYY-MM。"
@@ -697,7 +1137,9 @@ msgstr "本次结算数量（%(qty)s）超过未结算台数（%(available)s）�
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
 msgid "The team has no members."
 msgstr "该班组没有成员。"
 
@@ -708,15 +1150,15 @@ msgid "The total performance ratio of participants must be 100%."
 msgstr "参与人绩效比合计必须为 100%。"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+msgid "This Month"
+msgstr "本月"
+
+#. module: sn_wsd_piece_rate
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
 msgid "This action is only for station-mode settlements."
 msgstr "该操作仅适用于过站模式的结算单。"
-
-#. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
-msgid "This Month"
-msgstr "本月"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__date_to
@@ -725,12 +1167,56 @@ msgstr "到"
 
 #. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_search_piece
-msgid "Unsettled"
-msgstr "未计件"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "To Allocate"
+msgstr "待分配"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__report_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "To Report"
+msgstr "待报工"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_list
+msgid "Total Amount"
+msgstr "金额合计"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_list
+msgid "Total OK"
+msgstr "合格合计"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled
+msgid "True when a non-void piece settlement references this report."
+msgstr "存在未作废计件单引用本报工行时为真。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__sequence_locked
+msgid ""
+"True when the predecessors have no more quantity to unlock this operation: "
+"an OK/scrap report would be rejected by the sequence lock."
+msgstr "前置工序已无更多数量解锁本工序时为真：合格/报废报工将被顺序锁拒绝。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__price
+msgid ""
+"Unit price resolved from the rate table when the settlement was sourced. "
+"Later rate changes do not affect it."
+msgstr "开单时从单价表解析的快照单价。后续调价不影响本单。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_scrap
+msgid "Unrecoverable loss of this batch. Consumes the plan quota."
+msgstr "本批的不可修复报废。消耗计划额度。"
 
 #. module: sn_wsd_piece_rate
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_search_piece
 msgid "Unsettled"
 msgstr "未计件"
 
@@ -750,12 +1236,8 @@ msgid "User"
 msgstr "操作人"
 
 #. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
-msgid "Void"
-msgstr "作废"
-
-#. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__void
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
 msgid "Void"
 msgstr "已作废"
 
@@ -770,11 +1252,33 @@ msgid "Voided On"
 msgstr "作废时间"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__x_ratio_baseline
+msgid ""
+"Weight used to auto-redistribute the leftover ratio: rows the user typed "
+"over (ratio != baseline) keep their value, the rest share the remainder "
+"proportionally to their baseline."
+msgstr "自动重分剩余比例所用的权重：手改过的行（值≠基线）保持不动，其余按基线权重分摊。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
 msgid "Workshop"
 msgstr "车间"
 
 #. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
-msgid "Workshop"
-msgstr "车间"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form
+msgid "YYYY-MM"
+msgstr "YYYY-MM"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
+msgid "id"
+msgstr "id"

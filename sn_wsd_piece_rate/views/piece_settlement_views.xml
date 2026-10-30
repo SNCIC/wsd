@@ -37,10 +37,10 @@
                             invisible="state == 'draft' or state == 'void' or month_closed"/>
                     <button name="action_fill_from_team" type="object"
                             string="Fill From Team" class="btn-secondary"
-                            invisible="state != 'draft'"/>
+                            invisible="state != 'draft' or operation_report_id"/>
                     <button name="action_equal_split" type="object"
                             string="Split Equally" class="btn-secondary"
-                            invisible="state != 'draft'"/>
+                            invisible="state != 'draft' or operation_report_id"/>
                     <button name="action_compute_from_station" type="object"
                             string="Compute From Station Passes" class="btn-primary"
                             invisible="state != 'draft' or manage_mode != 'station'"/>
@@ -95,12 +95,16 @@
                     </group>
                     <notebook>
                         <page string="Participants" name="participants">
+                            <!-- report-daily-workbench: participants of a
+                                 report-sourced settlement are copied from
+                                 the report allocation and read-only here;
+                                 edit the allocation on the report row -->
                             <field name="participant_ids"
                                    widget="sn_wsd_x2many_multi_add"
                                    options="{'multi_add_model': 'hr.employee',
                                              'multi_add_field': 'employee_id',
                                              'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}"
-                                   readonly="state != 'draft'">
+                                   readonly="state != 'draft' or operation_report_id">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="employee_id"

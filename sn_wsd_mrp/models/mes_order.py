@@ -1074,7 +1074,8 @@ class MesOrder(models.Model):
         return cleared_count
 
     def report_operation_qty(self, route_operation, qty_ok, qty_ng=0.0,
-                              qty_scrap=0.0, scrap_reason=False):
+                              qty_scrap=0.0, scrap_reason=False,
+                              participant_vals=None, team_id=False):
         """Report mode: report one batch of an operation.
 
         报工即开工（report-offline，2026-09-01 用户规则）：报工不要求
@@ -1087,7 +1088,18 @@ class MesOrder(models.Model):
         remainder -- planned minus accumulated OK and scrap. NG is a pure
         statistic (reworked boards come back as a later OK report); scrap
         consumes the quota and generates native scrap orders per BOM
-        component from the line side."""
+        component from the line side.
+
+        Optional allocation arguments (report-daily-workbench): when
+        participant_vals (a list of dicts with employee_id /
+        performance_ratio / sequence) and/or team_id are passed, they are
+        handed to the report-row hook _apply_report_allocation. The core
+        model knows nothing about allocation -- the hook is a no-op here
+        and sn_wsd_piece_rate implements it. Legacy callers (shop-floor
+        terminal, scrap, repair) keep calling without them.
+
+        Returns the newly created operation report row (report-daily-workbench;
+        previously returned None)."""
         self.ensure_one()
         if self.x_manage_mode != 'report':
             raise ValidationError(_(
@@ -1140,13 +1152,19 @@ class MesOrder(models.Model):
             if not scrap_reason:
                 raise ValidationError(_('Select a scrap reason.'))
             self._mes_scrap_components(route_operation, qty_scrap, scrap_reason)
-        Report.sudo().create({
+        report = Report.sudo().create({
             'mes_order_id': self.id,
             'route_operation_id': route_operation.id,
             'qty_ok': qty_ok,
             'qty_ng': qty_ng,
             'qty_scrap': qty_scrap,
         })
+        if participant_vals or team_id:
+            # optional allocation landing (report-daily-workbench): the
+            # hook is defined on the report model and stays a no-op until
+            # sn_wsd_piece_rate overrides it (participants + team)
+            report._apply_report_allocation(participant_vals, team_id)
+        return report
 
     def _mes_scrap_components(self, route_operation, qty_scrap, scrap_reason=False):
         """Scrap the BOM components of qty_scrap boards from the line side
