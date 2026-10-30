@@ -43,8 +43,8 @@
                     <tr t-foreach="state.rows" t-as="row" t-key="row.id">
                         <td t-out="row.serial_identity_id ? row.serial_identity_id[1] : ''"/>
                         <td>
-                            <span t-attf-class="badge {{ row.result === 'ok' ? 'text-bg-success' : row.result === 'ng' ? 'text-bg-danger' : 'text-bg-secondary' }}"
-                                  t-out="verdictLabel(row.result)"/>
+                            <span t-attf-class="badge {{ displayVerdict(row) === 'ok' || displayVerdict(row) === 'retested' ? 'text-bg-success' : displayVerdict(row) === 'ng' ? 'text-bg-danger' : 'text-bg-secondary' }}"
+                                  t-out="verdictLabel(displayVerdict(row))"/>
                         </td>
                         <td t-out="row.out_date or ''"/>
                         <td t-out="row.operator_code or ''"/>

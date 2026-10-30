@@ -112,7 +112,13 @@ export class OqcInspectedList extends Component {
         ];
         const extra = this.buildDomain().slice(2);
         const domain = [...base, ...extra];
-        const [total, rows] = await Promise.all([
+        // the doc's own cell verdicts: an NG board re-judged pass on the doc
+        // (in-place retest) leaves no new pass history -- merge the cell
+        // verdict into the display so the ledger shows the final verdict.
+        // Ledger mode keeps cells only for defective boards: tiny payload.
+        const cellRead = this.orm.silent.read(
+            "sn.wsd.quality.inspection", [resId], ["cell_ids"]);
+        const [total, rows, cells] = await Promise.all([
             this.orm.silent.searchCount("sn.wsd.serial.operation.history", domain),
             this.orm.silent.searchRead(
                 "sn.wsd.serial.operation.history", domain,
@@ -120,10 +126,39 @@ export class OqcInspectedList extends Component {
                  "defect_code_id"],
                 { order: "out_date desc, id desc",
                   limit: PAGE_SIZE, offset: (this.state.page - 1) * PAGE_SIZE }),
+            cellRead,
         ]);
+        const cellIds = cells[0]?.cell_ids || [];
+        let cellVerdicts = {};
+        if (cellIds.length) {
+            const cellRows = await this.orm.silent.searchRead(
+                "sn.wsd.quality.inspection.cell",
+                [["id", "in", cellIds],
+                 ["inspection_id", "=", resId]],
+                ["serial_identity_id", "result"]);
+            for (const row of cellRows) {
+                const snId = row.serial_identity_id[0];
+                if (row.result === "fail") {
+                    cellVerdicts[snId] = "ng";
+                } else if (!cellVerdicts[snId]) {
+                    cellVerdicts[snId] = row.result === "pass" ? "pass" : cellVerdicts[snId];
+                }
+            }
+        }
+        this.cellVerdicts = cellVerdicts;
         this.state.total = total;
         this.state.rows = rows;
         this.state.loading = false;
+    }
+
+    /** merged display verdict: an in-place retest flips an NG history row */
+    displayVerdict(row) {
+        const snId = row.serial_identity_id ? row.serial_identity_id[0] : false;
+        const cell = snId ? this.cellVerdicts[snId] : undefined;
+        if (row.result === "ng" && cell === "pass") {
+            return "retested";
+        }
+        return row.result;
     }
 
     onSearchInput(ev) {
@@ -163,6 +198,9 @@ export class OqcInspectedList extends Component {
     }
 
     verdictLabel(result) {
+        if (result === "retested") {
+            return _t("Retested OK");
+        }
         return RESULT_LABELS[result] || result;
     }
 
