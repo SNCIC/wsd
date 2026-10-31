@@ -168,13 +168,20 @@ class MesOrderStationServices(models.Model):
         return payload
 
     @api.model
-    def sn_station_scan(self, workcenter_id, code, order_id=False):
+    def sn_station_scan(self, workcenter_id, code, order_id=False,
+                        one_shot_ok=False):
         """One scan box for the whole terminal.
 
         Routing: order barcode -> switch the current order; WIP SN at this
         station's operation -> return its row for the leave action; a WIP SN
         elsewhere -> hard hint; anything else -> feed the currently
-        selected order (start stations only, all binding rules apply)."""
+        selected order (start stations only, all binding rules apply).
+
+        With ``one_shot_ok`` the OK verdict rides on the same call: the
+        scan enters and leaves through the device-API kernel
+        ``pass_one_station`` in one transaction, so a client dropping
+        between two RPCs can never strand a board in progress. NG and
+        scrap keep their two-step flow (defect code / reason dialog)."""
         workcenter = self.env['mrp.workcenter'].browse(workcenter_id)
         code = (code or '').strip()
         if not code:
@@ -195,6 +202,8 @@ class MesOrderStationServices(models.Model):
             ('mes_order_id.state', 'not in', ('cancelled', 'done')),
         ], limit=1)
         if wip:
+            if one_shot_ok:
+                return self._one_shot_pass(wip.mes_order_id, code, workcenter)
             return {
                 'action': 'leave',
                 'wip_id': wip.id,
@@ -258,6 +267,8 @@ class MesOrderStationServices(models.Model):
             blocked = target._pass_scan_blocked(serial, op_row)
             if blocked:
                 raise ValidationError(blocked)
+            if one_shot_ok:
+                return self._one_shot_pass(target, code, workcenter)
             # one scan = one station pass: enter here, the caller completes
             # this very station with its OK/NG/scrap mode (no parking at the
             # successor, no pull from an earlier station)
@@ -269,8 +280,21 @@ class MesOrderStationServices(models.Model):
                 'center runs %(op)s of order %(order)s. Switch to a start '
                 'station to feed SN %(sn)s.',
                 op=op_row.display_label, order=target.name, sn=code))
+        if one_shot_ok:
+            return self._one_shot_pass(target, code, workcenter)
         target.scan_enter(code, workcenter)
         return self._leave_action(code, target)
+
+    def _one_shot_pass(self, target, code, workcenter):
+        """One-scan OK through the same kernel as the device API: enter +
+        leave in a single transaction, refreshed floor payload back."""
+        finished = target.pass_one_station(code, workcenter, result='ok')
+        return {
+            'action': 'passed',
+            'order_id': target.id,
+            'finished': finished,
+            'data': self.sn_station_floor_data(workcenter.id),
+        }
 
     def _leave_action(self, code, target):
         """WIP row of `code` on `target` as the leave payload for the

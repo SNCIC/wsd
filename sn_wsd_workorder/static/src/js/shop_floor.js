@@ -411,6 +411,10 @@ export class SnWsdShopFloor extends Component {
         try {
             const result = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_scan", [
                 station.workcenterId, code, station.selectedOrderId || false,
+                // OK mode: the scan itself passes the station through the
+                // same one-shot kernel as the device API (enter + leave in
+                // one transaction); NG/scrap keep their two-step flow
+                station.mode === "ok",
             ]);
             if (result.action === "select_order" || result.action === "entered") {
                 if (result.data) {
@@ -420,14 +424,20 @@ export class SnWsdShopFloor extends Component {
                 if (result.action === "entered") {
                     this.notification.add(this.labels.snEntered, { type: "success" });
                 }
+            } else if (result.action === "passed") {
+                // one-shot OK: the kernel entered and left the station in
+                // the scan's own transaction, nothing is left pending
+                station.selectedOrderId = result.order_id;
+                this.applyStationData(result.data);
+                this.notification.add(this.labels.snLeftOk, { type: "success" });
+                if (result.finished) {
+                    this.notification.add(this.labels.snFlowFinished, { type: "success" });
+                }
             } else if (result.action === "leave") {
                 station.selectedOrderId = result.order_id;
                 station.scan = "";
                 this.focusScanInput();
-                const mode = station.mode;
-                if (mode === "ok") {
-                    await this.leaveStationWip({ id: result.wip_id }, "ok");
-                } else if (mode === "ng") {
+                if (station.mode === "ng") {
                     // two-step NG: hold the WIP row and wait for the defect
                     // code scan before actually leaving the station
                     this.setNgPending(result.wip_id, code);

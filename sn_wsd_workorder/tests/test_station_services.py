@@ -306,3 +306,59 @@ class TestStationServices(TransactionCase):
         self.assertTrue(scraps)
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
             ('serial_identity_id.name', '=', 'SN-T8')]))
+
+    def test_10_one_shot_ok_scan_passes_in_one_call(self):
+        """One-shot OK scan = device-API kernel in one call: the scan enters
+        and leaves in a single transaction, so no pending WIP row and no
+        stranded in_progress history row can survive a dropped client."""
+        MesOrder = self.env['sn.wsd.mes.order']
+        payload = MesOrder.sn_station_scan(
+            self.wc_in.id, 'SN-T10', False, one_shot_ok=True)
+        self.assertEqual(payload['action'], 'passed')
+        self.assertEqual(payload['order_id'], self.order.id)
+        self.assertFalse(payload['finished'])
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-T10')])
+        self.assertEqual(history.route_operation_id.operation_id, self.op_in)
+        self.assertEqual(history.result, 'ok')
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-T10')]))
+        # the exit station takes the board over with its own one-shot scan
+        payload = MesOrder.sn_station_scan(
+            self.wc_out.id, 'SN-T10', False, one_shot_ok=True)
+        self.assertTrue(payload['finished'])
+        self.assertEqual(payload['data']['wip'], [])
+        self.assertEqual(payload['data']['orders'][0]['op']['ok_qty'], 1)
+
+    def test_11_one_shot_scan_completes_pending_wip(self):
+        """A board waiting on this station's verdict (e.g. NG pending) is
+        completed by a one-shot OK scan instead of relying on a second
+        leave call that a dropped client would strand."""
+        MesOrder = self.env['sn.wsd.mes.order']
+        data = self.order.sn_station_enter('SN-T11', self.wc_in.id)
+        self.assertTrue(data['wip'][0]['wip_id'])
+        payload = MesOrder.sn_station_scan(
+            self.wc_in.id, 'SN-T11', False, one_shot_ok=True)
+        self.assertEqual(payload['action'], 'passed')
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id.name', '=', 'SN-T11')])
+        self.assertEqual(history.result, 'ok')
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search([
+            ('serial_identity_id.name', '=', 'SN-T11')]))
+
+    def test_12_one_shot_scan_keeps_strict_gates(self):
+        """One-shot rides the same gates: a board in progress at another
+        operation is refused, and a duplicate scan of an already-passed
+        station keeps the terminal refusal (rework voucher territory)."""
+        MesOrder = self.env['sn.wsd.mes.order']
+        self.order.sn_station_enter('SN-T12', self.wc_in.id)
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_scan(
+                self.wc_out.id, 'SN-T12', False, one_shot_ok=True)
+        MesOrder.sn_station_leave(
+            self.env['sn.wsd.serial.wip'].search([
+                ('serial_identity_id.name', '=', 'SN-T12')], limit=1).id,
+            'ok')
+        with self.assertRaises(ValidationError):
+            MesOrder.sn_station_scan(
+                self.wc_in.id, 'SN-T12', False, one_shot_ok=True)
