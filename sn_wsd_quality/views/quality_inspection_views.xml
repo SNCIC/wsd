@@ -341,7 +341,10 @@
                     <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_set_all_pass" type="object" string="Set All Pass" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_done" type="object" string="Finish" class="btn-primary" invisible="state not in ['open', 'in_progress']"/>
-                    <button name="action_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
+                    <!-- 未结异常的动作不因 state=done 隐藏（oqc-disposition-closure
+                         7.2）：done 且仍有待处置板时让步入口保留，提交侧自动重开
+                         原单并记录旧批结论；无待处置板的 done 单照旧隐藏 -->
+                    <button name="action_concession" type="object" string="Concession" invisible="inspection_type not in ['iqc', 'oqc'] or (state == 'done' and x_oqc_pending_qty == 0)"/>
                     <button name="action_open_full_close_wizard" type="object" string="Close with Quantity Gap" invisible="not x_full_inspection or state == 'done' or inspection_type != 'oqc'"/>
                     <button name="%(action_report_iqc_inspection)d" type="action" string="Inspection Record" invisible="inspection_type != 'iqc'"/>
                     <button name="%(action_report_fai_inspection)d" type="action" string="First Article Sheet" invisible="inspection_type != 'fai'"/>
