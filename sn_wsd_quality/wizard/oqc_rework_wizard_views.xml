@@ -47,7 +47,7 @@
                         invisible="inspection_type != 'oqc'"/>
                 <button name="action_start_full_inspection" type="object"
                         string="Full Lot Inspection" class="btn-secondary"
-                        invisible="inspection_type != 'oqc' or x_full_inspection or result != 'reject'"/>
+                        invisible="inspection_type != 'oqc' or x_full_inspection or result not in ('fail', 'reject')"/>
                 <field name="x_full_inspection" invisible="1"/>
             </xpath>
         </field>

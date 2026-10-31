@@ -1094,6 +1094,11 @@ msgid "Full Inspection"
 msgstr "全检"
 
 #. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_quality_inspection_form_oqc_disposition:0
+msgid "Full Lot Inspection"
+msgstr "整批全检"
+
+#. module: sn_wsd_quality
 #. odoo-python
 #: code:addons/sn_wsd_quality/models/quality_inspection_measure.py:0
 msgid "GB/T 2828.1 normal inspection, single sampling: level %(level)s, AQL %(aql)s, AC %(ac)s, Re %(re)s"
