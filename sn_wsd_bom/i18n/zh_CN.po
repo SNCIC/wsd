@@ -522,6 +522,13 @@ msgid "Skipped existing"
 msgstr "已跳过"
 
 #. module: sn_wsd_bom
+#. odoo-javascript
+#: code:addons/sn_wsd_bom/static/src/components/bom_overview_table/mrp_bom_overview_table.xml:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_bom.report_mrp_bom_inherit_sn_wsd_bom
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_bom
 #: model:ir.model.fields,field_description:sn_wsd_bom.field_sn_bom_import_log__state
 msgid "State"
 msgstr "状态"

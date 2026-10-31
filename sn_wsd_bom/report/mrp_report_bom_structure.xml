@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Material specification column of the BoM overview PDF export. The
+         screen report is rendered by the OWL components instead. -->
+    <template id="report_mrp_bom_inherit_sn_wsd_bom" inherit_id="mrp.report_mrp_bom">
+        <xpath expr="//th[@name='th_mrp_bom_h']" position="after">
+            <th t-if="data['has_specifications']">Specification</th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom']" position="after">
+            <td t-if="data['has_specifications']">
+                <span t-esc="data['material_specification']"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_f']" position="after">
+            <td t-if="data['has_specifications']"/>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_byproducts_f']" position="after">
+            <td t-if="data['has_specifications']"/>
+        </xpath>
+    </template>
+
+    <template id="report_mrp_bom_pdf_line_inherit_sn_wsd_bom" inherit_id="mrp.report_mrp_bom_pdf_line">
+        <xpath expr="//td[@name='td_mrp_code']" position="after">
+            <td t-if="data['has_specifications']">
+                <span t-esc="l.get('material_specification', '')"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
