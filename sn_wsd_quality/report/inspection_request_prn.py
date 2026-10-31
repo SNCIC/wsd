@@ -181,26 +181,41 @@ def _draw_sheet(picking, lines):
 
 
 def _escp_bytes(image):
-    """Encode the one bit sheet with ESC * 24 dot double density bands."""
+    """Encode the one bit sheet with ESC * 24 dot double density bands.
+
+    Two details decide whether a dot-matrix printer prints the whole sheet:
+
+    * a whole band of the 200 mm width is 4.2 kB, more than the line buffer of
+      the printer, so the band is sent in chunks of 192 dots, each one placed
+      with the ESC $ absolute position command;
+    * the paper is fed with ESC J (24/180 inch) after every band instead of a
+      newline, whose default spacing (1/6 inch) stretched the sheet.
+    """
     width, height = image.size
     pixels = image.load()
+    chunk = 192                   # dots per ESC * command (576 bytes)
     out = bytearray()
-    out += b'\x1b@'            # reset the printer
-    out += b'\x1b3\x18'        # line spacing: 24/180 inch
+    out += b'\x1b@'               # reset the printer
     for top in range(0, height, 24):
-        data = bytearray()
-        for x in range(width):
-            group = [0, 0, 0]
-            for bit in range(24):
-                y = top + bit
-                if y < height and pixels[x, y] == 0:
-                    group[bit // 8] |= 1 << (7 - bit % 8)
-            data += bytes(group)
-        out += b'\x1b*' + bytes([33])
-        out += len(data).to_bytes(2, 'little')
-        out += bytes(data)
-        out += b'\r\n'
-    out += b'\x0c'             # form feed
+        out += b'\r'              # back to the left margin
+        for start in range(0, width, chunk):
+            end = min(start + chunk, width)
+            # ESC $ positions in 1/60 inch; one dot at 180 dpi is 1/3 of it.
+            position = int(round(start * 60 / DPI))
+            out += b'\x1b$' + position.to_bytes(2, 'little')
+            data = bytearray()
+            for x in range(start, end):
+                group = [0, 0, 0]
+                for bit in range(24):
+                    y = top + bit
+                    if y < height and pixels[x, y] == 0:
+                        group[bit // 8] |= 1 << (7 - bit % 8)
+                data += bytes(group)
+            out += b'\x1b*' + bytes([33])
+            out += len(data).to_bytes(2, 'little')
+            out += bytes(data)
+        out += b'\x1bJ' + bytes([24])   # feed the band: 24/180 inch
+    out += b'\r\n'
     return bytes(out)
 
 
