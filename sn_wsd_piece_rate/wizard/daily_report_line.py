@@ -5,12 +5,14 @@ ACTIVE_REPORT_STATES = ('released', 'picked', 'in_progress')
 
 
 class PieceReportWizardLine(models.TransientModel):
-    """日报工·待报工页签的行（report-daily-workbench）。
+    """日报工的行（report-daily-workbench；report-daily-price-inline 单页签）。
 
     一行 = 一个活跃报工单（report 模式、released/picked/in_progress）
     私有路线上的一道工序：录 OK/NG/报废三数量、报废原因、班组与参与人，
-    展示 计划量/已报/可报额度 与顺序锁状态。提交由向导的
-    action_submit_reports 在一个事务内逐行调 report_operation_qty。
+    展示 计划量/已报/可报额度 与顺序锁状态。单价前置（report-daily-price-inline）：
+    已配价只读展示（piece_price），未配价行上现填（x_new_price），提交时建入
+    单价主数据。提交由向导的 action_submit_reports 在一个事务内逐行调
+    report_operation_qty。
     """
     _name = 'sn.wsd.piece.report.wizard.line'
     _description = 'Daily Reporting Wizard Line'
@@ -45,6 +47,17 @@ class PieceReportWizardLine(models.TransientModel):
         'sn.wsd.scrap.reason', string='Scrap Reason',
         domain="[('company_id', '=', company_id)]",
         help='Required whenever the scrap quantity is positive.')
+    piece_price = fields.Float(
+        string='Unit Price', digits=(12, 5), compute='_compute_piece_price',
+        help='Price configured in the rate table for (company, product, '
+             'operation). Zero means unconfigured: type the price on the '
+             'line, it is created into the rate table at submit.')
+    x_new_price = fields.Float(
+        string='New Unit Price', digits=(12, 5),
+        help='Price typed on the spot when no rate is configured yet: it is '
+             'created into the rate table when the batch is submitted, so '
+             'this batch and the next ones are priced. Ignored when a rate '
+             'already exists (maintain changes in the configuration menu).')
     team_id = fields.Many2one(
         'sn.mrp.team', string='Team',
         check_company=True,
@@ -74,6 +87,25 @@ class PieceReportWizardLine(models.TransientModel):
              'sequence lock.')
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id')
+
+    @api.depends('company_id', 'mes_order_id.product_id',
+                 'route_operation_id.operation_id')
+    def _compute_piece_price(self):
+        """Price of the rate master for (company, product, operation);
+        0.0 = unconfigured (the rate constraint enforces price > 0)."""
+        Rate = self.env['sn.wsd.piece.rate'].sudo()
+        for line in self:
+            price = 0.0
+            if line.company_id and line.mes_order_id.product_id \
+                    and line.route_operation_id.operation_id:
+                rate = Rate.search([
+                    ('company_id', '=', line.company_id.id),
+                    ('product_id', '=', line.mes_order_id.product_id.id),
+                    ('operation_id', '=',
+                     line.route_operation_id.operation_id.id),
+                ], limit=1)
+                price = rate.price or 0.0
+            line.piece_price = price
 
     @api.depends('participant_ids.employee_id', 'participant_ids.performance_ratio')
     def _compute_participants(self):
@@ -316,13 +348,26 @@ class PieceReportWizardLine(models.TransientModel):
         if self.qty_scrap > 0 and not self.scrap_reason_id:
             raise ValidationError(_(
                 'Select a scrap reason when the scrap quantity is positive.'))
+        # report-daily-price-inline: an OK line must be priced -- from the
+        # rate table or typed on the spot (created at submit). Pure NG/scrap
+        # lines generate no piece settlement and stay out of scope.
+        if self.qty_ok > 0 and self.piece_price <= 0 and self.x_new_price <= 0:
+            raise ValidationError(_(
+                'No piece rate is configured for product %(product)s on '
+                'operation %(operation)s: enter the unit price on the line '
+                'before submitting.', product=self.mes_order_id.product_id
+                .display_name,
+                operation=self.route_operation_id.display_label))
+        # enforce=True: participants are checked for every OK line, whether
+        # the price comes from the rate table or is being typed right now
         self.env['sn.wsd.mes.operation.report']._check_allocation_required(
             self.mes_order_id.company_id,
             self.mes_order_id.product_id,
             self.route_operation_id.operation_id,
             self.qty_ok,
             [(p.employee_id, p.performance_ratio)
-             for p in self.participant_ids])
+             for p in self.participant_ids],
+            enforce=True)
 
 
 class PieceReportWizardParticipant(models.TransientModel):

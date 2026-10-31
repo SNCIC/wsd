@@ -1284,3 +1284,46 @@ msgstr "YYYY-MM"
 #: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
 msgid "id"
 msgstr "id"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__piece_price
+msgid "Unit Price"
+msgstr "单价"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__x_new_price
+msgid "New Unit Price"
+msgstr "现填单价"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__piece_price
+msgid "Price configured in the rate table for (company, product, operation). Zero means unconfigured: type the price on the line, it is created into the rate table at submit."
+msgstr "单价表中该（公司, 产品, 工序）已配置的单价。为零表示未配置：在行上现填单价，提交时建入单价表。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__x_new_price
+msgid "Price typed on the spot when no rate is configured yet: it is created into the rate table when the batch is submitted, so this batch and the next ones are priced. Ignored when a rate already exists (maintain changes in the configuration menu)."
+msgstr "未配置单价时现场填写的单价：整批提交时建入单价表，本批及后续报工均按此计价。已配置单价时忽略此值（调价请走配置菜单）。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "No piece rate is configured for product %(product)s on operation %(operation)s: enter the unit price on the line before submitting."
+msgstr "产品 %(product)s 的工序 %(operation)s 尚未配置计件单价：请先在行上填写单价再提交。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Product %(product)s on operation %(operation)s will be paid by piece rate: select the participants who produced this batch."
+msgstr "产品 %(product)s 的工序 %(operation)s 按计件计酬：请选择本批的参与人。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Every selected report already has a non-void piece settlement."
+msgstr "所选报工行均已存在未作废的计件单。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.actions.server,name:sn_wsd_piece_rate.action_sn_wsd_report_generate_settlement
+msgid "Generate Piece Settlements"
+msgstr "生成计件草稿"

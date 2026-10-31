@@ -22,7 +22,7 @@ class TestDailyWorkbench(PieceRateTestCommon):
 
     def _wizard_line(self, wizard, order, operation, qty_ok=0.0,
                      qty_ng=0.0, qty_scrap=0.0, scrap_reason=None,
-                     team=None, allocation=()):
+                     team=None, allocation=(), new_price=0.0):
         line_model = self.env['sn.wsd.piece.report.wizard.line']
         return line_model.create({
             'wizard_id': wizard.id,
@@ -33,6 +33,7 @@ class TestDailyWorkbench(PieceRateTestCommon):
             'qty_scrap': qty_scrap,
             'scrap_reason_id': scrap_reason.id if scrap_reason else False,
             'team_id': team.id if team else False,
+            'x_new_price': new_price,
             'participant_ids': [
                 (0, 0, {'employee_id': employee.id,
                         'performance_ratio': ratio})
@@ -73,18 +74,29 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertIn('must be 100%', str(ctx.exception))
         self.assertFalse(self._reports(order))
 
-    def test_submit_without_rate_passes_without_allocation(self):
-        """无单价不强制：只录数量成功，行标待结算、不生成草稿。"""
+    def test_submit_without_rate_blocked_until_price_typed(self):
+        """未配单价且未现填 → 整批拦截，零落库（不再产生待分配积压）。"""
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
-        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0)
-        wizard.action_submit_reports()
-        report = self._reports(order)
-        self.assertEqual(len(report), 1)
-        self.assertFalse(report.participant_ids)
-        self.assertFalse(report.piece_settlement_ids)
-        self.assertFalse(report.x_piece_settled)
-        self.assertEqual(report.x_piece_settled_label, 'Unsettled')
+        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0, allocation=(
+            (self.emp_zhang, 100.0),))
+        with self.assertRaises(ValidationError) as ctx:
+            wizard.action_submit_reports()
+        self.assertIn('enter the unit price', str(ctx.exception))
+        self.assertFalse(self._reports(order))
+        self.assertFalse(self.env['sn.wsd.piece.rate'].search([
+            ('product_id', '=', order.product_id.id)]))
+
+    def test_submit_typed_price_requires_participants(self):
+        """未配单价但现填了价：参与人同口径强制（enforce，独立文案）。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0,
+                          new_price=0.25)
+        with self.assertRaises(ValidationError) as ctx:
+            wizard.action_submit_reports()
+        self.assertIn('select the participants', str(ctx.exception))
+        self.assertFalse(self._reports(order))
 
     def test_submit_pure_ng_line_skips_allocation_check(self):
         """qty_ok=0 的纯 NG 行不强制分配（未配单价亦同）。"""
@@ -134,6 +146,7 @@ class TestDailyWorkbench(PieceRateTestCommon):
     def test_submit_multiple_lines_all_pass(self):
         """一次提交多行：各工序落行、带各自分配、计数器随报更新。"""
         self._rate()
+        self._rate(operation=self.op_b)
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
         self._wizard_line(wizard, order, self.op_a, qty_ok=60.0, allocation=(
@@ -284,7 +297,8 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertFalse(report.x_piece_settled)
 
     def test_terminal_call_without_allocation_stays_backlog(self):
-        """终端式直调（不传分配）向后兼容：返回新报工行、不建草稿、行待分配。"""
+        """终端式直调（不传分配）向后兼容：返回新报工行、不建草稿、
+        行留台账「未结算」，走台账批量生成通道补结算。"""
         self._rate()
         order = self._order_with_pick(qty=100)
         report = order.report_operation_qty(
@@ -293,10 +307,125 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertEqual(report.qty_ok, 5.0)
         self.assertFalse(report.participant_ids)
         self.assertFalse(report.piece_settlement_ids)
-        # the row surfaces on the To Allocate tab
+        self.assertFalse(report.x_piece_settled)
+
+    # ------------------------------------------------------------------
+    # typed price: rate master creation at submit (report-daily-price-inline)
+    # ------------------------------------------------------------------
+
+    def test_submit_new_price_creates_rate_and_draft(self):
+        """现填单价：提交建入主数据 + 草稿按现填价计 + 下次行上只读带出。"""
+        order = self._order_with_pick(qty=100)
         wizard = self._wizard()
-        wizard._onchange_filters_load_reports()
-        self.assertIn(report, wizard.report_ids)
+        self._wizard_line(wizard, order, self.op_a, qty_ok=100.0, allocation=(
+            (self.emp_zhang, 45.0), (self.emp_li, 55.0)), new_price=0.25)
+        wizard.action_submit_reports()
+        rate = self.env['sn.wsd.piece.rate'].search([
+            ('company_id', '=', self.env.company.id),
+            ('product_id', '=', order.product_id.id),
+            ('operation_id', '=', self.op_a.id),
+        ])
+        self.assertEqual(len(rate), 1)
+        self.assertAlmostEqual(rate.price, 0.25)
+        report = self._reports(order)
+        settlement = report.piece_settlement_ids
+        self.assertEqual(len(settlement), 1)
+        self.assertAlmostEqual(settlement.price, 0.25)
+        self.assertAlmostEqual(settlement.amount, 25.0)
+        self.assertTrue(report.x_piece_settled)
+        # the next wizard line resolves the new rate read-only
+        line = self.env['sn.wsd.piece.report.wizard.line'].create({
+            'wizard_id': self._wizard().id,
+            'mes_order_id': order.id,
+            'route_operation_id': self._op_a_row(order).id,
+        })
+        self.assertAlmostEqual(line.piece_price, 0.25)
+
+    def test_submit_new_price_two_lines_single_rate(self):
+        """同批两行同（产品, 工序）都未配价：只建一张价，两笔草稿同价。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a, qty_ok=60.0, allocation=(
+            (self.emp_zhang, 100.0),), new_price=0.25)
+        self._wizard_line(wizard, order, self.op_a, qty_ok=40.0, allocation=(
+            (self.emp_li, 100.0),), new_price=0.40)
+        wizard.action_submit_reports()
+        rate = self.env['sn.wsd.piece.rate'].search([
+            ('product_id', '=', order.product_id.id),
+            ('operation_id', '=', self.op_a.id),
+        ])
+        self.assertEqual(len(rate), 1)
+        self.assertAlmostEqual(rate.price, 0.25)  # first line wins
+        prices = self._reports(order).mapped(
+            lambda r: r.piece_settlement_ids.price)
+        self.assertEqual(prices, [0.25, 0.25])
+
+    def test_submit_existing_rate_ignores_typed_price(self):
+        """已配价行上现填的价被忽略：主数据不动，草稿按主数据价计。"""
+        self._rate(price=0.3)
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0, allocation=(
+            (self.emp_zhang, 100.0),), new_price=0.9)
+        wizard.action_submit_reports()
+        rate = self.env['sn.wsd.piece.rate'].search([
+            ('product_id', '=', order.product_id.id),
+            ('operation_id', '=', self.op_a.id),
+        ])
+        self.assertAlmostEqual(rate.price, 0.3)
+        settlement = self._reports(order).piece_settlement_ids
+        self.assertAlmostEqual(settlement.price, 0.3)
+        self.assertAlmostEqual(settlement.amount, 3.0)
+
+    def test_submit_month_closed_with_new_price_creates_rate_only(self):
+        """关账月现填价：单价主数据照建，草稿不开、行留台账未结算。"""
+        order = self._order_with_pick(qty=100)
+        self.env['sn.wsd.piece.close.log'].create({
+            'company_id': self.env.company.id,
+            'period': self.env['sn.wsd.piece.close.log']._period_of(
+                fields.Date.today()),
+            'action': 'close',
+        })
+        wizard = self._wizard()
+        self._wizard_line(wizard, order, self.op_a, qty_ok=10.0, allocation=(
+            (self.emp_zhang, 100.0),), new_price=0.2)
+        wizard.action_submit_reports()  # no error raised
+        rate = self.env['sn.wsd.piece.rate'].search([
+            ('product_id', '=', order.product_id.id),
+            ('operation_id', '=', self.op_a.id),
+        ])
+        self.assertAlmostEqual(rate.price, 0.2)
+        report = self._reports(order)
+        self.assertFalse(report.piece_settlement_ids)
+        self.assertFalse(report.x_piece_settled)
+
+    # ------------------------------------------------------------------
+    # ledger batch generation (former To-Allocate tab)
+    # ------------------------------------------------------------------
+
+    def test_ledger_generate_settlement_team_default(self):
+        """台账批量生成：无分配的终端行 → 班组默认参与人带出、单价解析。"""
+        self._rate(price=0.3)
+        order = self._order_with_pick(qty=100)
+        report = order.report_operation_qty(
+            self._op_a_row(order), 5.0)  # terminal-style, no allocation
+        result = report.action_generate_piece_settlement()
+        self.assertEqual(result['res_model'], 'sn.wsd.piece.settlement')
+        settlement = report.piece_settlement_ids
+        self.assertEqual(len(settlement), 1)
+        self.assertAlmostEqual(settlement.price, 0.3)
+        self.assertAlmostEqual(settlement.qty_ok, 5.0)
+        # the order's line has exactly one active team -> members normalized
+        self.assertEqual(settlement.team_id, self.team)
+        self.assertEqual(
+            sorted(settlement.participant_ids.mapped('performance_ratio')),
+            [20.0, 20.0, 30.0, 30.0])
+        self.assertTrue(report.x_piece_settled)
+        # regenerating the now-settled row is clearly rejected
+        with self.assertRaises(UserError) as ctx:
+            report.action_generate_piece_settlement()
+        self.assertIn('already has a non-void piece settlement',
+                      str(ctx.exception))
 
     # ------------------------------------------------------------------
     # edit window: frozen after confirm, synced while draft
@@ -345,7 +474,7 @@ class TestDailyWorkbench(PieceRateTestCommon):
             settlement.participant_ids.mapped('amount'), [12.0, 16.5])
 
     def test_void_then_regenerate_copies_latest_allocation(self):
-        """作废释放后补生成：新草稿复制最新分配，作废单留痕不变。"""
+        """作废释放后补生成（台账通道）：新草稿复制最新分配，作废单留痕不变。"""
         self._rate(price=0.3)
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
@@ -359,9 +488,7 @@ class TestDailyWorkbench(PieceRateTestCommon):
         # the allocation was corrected after the void
         report.participant_ids[0].performance_ratio = 40.0
         report.participant_ids[1].performance_ratio = 60.0
-        wizard2 = self._wizard()
-        wizard2.report_ids = [(6, 0, report.ids)]
-        wizard2.action_generate()
+        report.action_generate_piece_settlement()
         reborn = report.piece_settlement_ids.filtered(
             lambda s: s.state != 'void')
         self.assertEqual(len(reborn), 1)

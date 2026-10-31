@@ -1,34 +1,24 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from odoo import Command
-
 
 class PieceSettlementGenerateWizard(models.TransientModel):
-    """日报工工作台（report-daily-workbench，原「从报工生成计件」原地升级）。
+    """日报工工作台（report-daily-workbench，原「从报工生成计件」原地升级；
+    report-daily-price-inline 简化为单页签）。
 
-    两个页签：
-    - 待报工（report_line_ids）：活跃报工单私有路线上的工序行，录
-      OK/NG/报废与人员分配，action_submit_reports 在一个事务内逐行调
-      report_operation_qty（五道闸原样），任一行被拦整批不落库并指明
-      行与原因；提交后尽力自动生成计件草稿。
-    - 待分配（report_ids）：现有未结算报工行（含车间终端报的）批量
-      生成计件草稿；有分配的报工行原样复制，无分配的走班组默认参与人。
+    单页签「待报工」（report_line_ids）：活跃报工单私有路线上的工序行，录
+    OK/NG/报废、人员分配与单价（已配价只读、未配价现填即建主数据），
+    action_submit_reports 在一个事务内逐行调 report_operation_qty（五道闸
+    原样），任一行被拦整批不落库并指明行与原因；提交后尽力自动生成计件
+    草稿。原「待分配」页签已删：残留（关账月/终端行/作废重开）改在报工
+    台账列表勾选后批量生成（sn.wsd.mes.operation.report
+    .action_generate_piece_settlement）。
     """
     _name = 'sn.wsd.piece.settlement.generate.wizard'
     _description = 'Generate Piece Settlements from Reports'
 
-    date_from = fields.Date(string='From')
-    date_to = fields.Date(string='To')
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order', string='MES Order')
-    report_ids = fields.Many2many(
-        'sn.wsd.mes.operation.report',
-        'sn_wsd_piece_generate_wizard_report_rel',
-        'wizard_id', 'report_id',
-        string='Unsettled Reports',
-        domain=[('x_piece_settled', '=', False)],
-        help='Only reports without a non-void settlement can be selected.')
     workshop_id = fields.Many2one(
         'sn.mrp.workshop', string='Workshop',
         help='Filter the To Report tab by workshop.')
@@ -39,66 +29,6 @@ class PieceSettlementGenerateWizard(models.TransientModel):
     report_line_ids = fields.One2many(
         'sn.wsd.piece.report.wizard.line', 'wizard_id',
         string='To Report')
-
-    # ------------------------------------------------------------------
-    # To Allocate tab (existing caliber, allocation-aware generation)
-    # ------------------------------------------------------------------
-
-    @api.onchange('date_from', 'date_to', 'mes_order_id')
-    def _onchange_filters_load_reports(self):
-        for wizard in self:
-            wizard.report_ids = [(6, 0, wizard._search_unsettled_reports().ids)]
-
-    def _search_unsettled_reports(self):
-        self.ensure_one()
-        domain = [('x_piece_settled', '=', False)]
-        if self.mes_order_id:
-            domain.append(('mes_order_id', '=', self.mes_order_id.id))
-        if self.date_from:
-            domain.append(('reported_at', '>=', f'{self.date_from} 00:00:00'))
-        if self.date_to:
-            domain.append(('reported_at', '<=', f'{self.date_to} 23:59:59'))
-        return self.env['sn.wsd.mes.operation.report'].search(
-            domain, order='reported_at desc')
-
-    def action_generate(self):
-        self.ensure_one()
-        if not self.report_ids:
-            raise UserError(_('Select at least one report to settle.'))
-        Settlement = self.env['sn.wsd.piece.settlement']
-        settlements = Settlement
-        for report in self.report_ids:
-            settlement = Settlement.create({
-                'mes_order_id': report.mes_order_id.id,
-                'route_operation_id': report.route_operation_id.id,
-                'operation_report_id': report.id,
-                'qty_ok': report.qty_ok,
-                'date': report.reported_at.date() if report.reported_at
-                else fields.Date.context_today(self),
-            })
-            settlement._resolve_rate_price()
-            if report.participant_ids:
-                # 报工行带分配：参与人/比例原样复制，结算侧只读
-                settlement.write({
-                    'team_id': report.team_id.id,
-                    'participant_ids': [Command.clear()] + [
-                        Command.create({
-                            'employee_id': p.employee_id.id,
-                            'performance_ratio': p.performance_ratio,
-                            'x_ratio_baseline': p.performance_ratio,
-                            'sequence': p.sequence,
-                        }) for p in report.participant_ids.sorted('sequence')],
-                })
-            else:
-                settlement._default_team_and_participants()
-            settlements |= settlement
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Generated Settlements'),
-            'res_model': 'sn.wsd.piece.settlement',
-            'domain': [('id', 'in', settlements.ids)],
-            'view_mode': 'list,form',
-        }
 
     # ------------------------------------------------------------------
     # To Report tab (daily reporting entry)
@@ -159,8 +89,36 @@ class PieceSettlementGenerateWizard(models.TransientModel):
                 })
         return vals_list
 
+    def _ensure_piece_rates(self, lines):
+        """report-daily-price-inline: create the typed prices into the rate
+        master (company / product / operation), get-or-create so several
+        lines of the same tuple share one row and an existing rate always
+        wins over a typed value. Runs in the submit transaction, before
+        report_operation_qty: the auto-draft hook then resolves the price
+        of the very row just created."""
+        Rate = self.env['sn.wsd.piece.rate'].sudo()
+        for line in lines:
+            if line.qty_ok <= 0 or line.piece_price > 0 \
+                    or line.x_new_price <= 0:
+                continue
+            existing = Rate.search([
+                ('company_id', '=', line.company_id.id),
+                ('product_id', '=', line.mes_order_id.product_id.id),
+                ('operation_id', '=',
+                 line.route_operation_id.operation_id.id),
+            ], limit=1)
+            if not existing:
+                Rate.create({
+                    'company_id': line.company_id.id,
+                    'product_id': line.mes_order_id.product_id.id,
+                    'operation_id':
+                        line.route_operation_id.operation_id.id,
+                    'price': line.x_new_price,
+                })
+
     def action_submit_reports(self):
-        """Whole-batch validation first, then one transaction: one
+        """Whole-batch validation first (price + allocation + quantities),
+        then typed prices land in the rate table, then one transaction: one
         report_operation_qty per line (all five gates unchanged). Any
         rejection rolls the whole batch back and names the line.
 
@@ -184,6 +142,7 @@ class PieceSettlementGenerateWizard(models.TransientModel):
                     order=line.mes_order_id.name,
                     op=line.route_operation_id.display_label,
                     reason=str(exc))) from exc
+        self._ensure_piece_rates(lines)
         created = self.env['sn.wsd.mes.operation.report']
         for index, line in enumerate(lines, start=1):
             try:
