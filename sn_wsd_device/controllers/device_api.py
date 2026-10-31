@@ -1,9 +1,10 @@
 import json
-from datetime import datetime, timezone
 
 from odoo import http
 from odoo.fields import Command
 from odoo.http import request
+
+from ..device_time import parse_device_datetime
 
 # Limits guarding the public endpoints against malformed payloads.
 MAX_ZONES = 100
@@ -89,12 +90,9 @@ class DeviceDataController(http.Controller):
         if not raw or not isinstance(raw, str):
             return None
         try:
-            dt = datetime.fromisoformat(raw)
+            return parse_device_datetime(raw)
         except ValueError:
             return None
-        if dt.tzinfo:
-            dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
-        return dt
 
     @staticmethod
     def _error(code, message):

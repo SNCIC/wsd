@@ -1,7 +1,7 @@
 import re
-from datetime import datetime, timezone
 
 from odoo import _, api, models
+from odoo.addons.sn_wsd_device.device_time import parse_device_datetime
 from odoo.exceptions import AccessDenied, ValidationError
 
 RESULT_PASS = 'ok'
@@ -149,15 +149,14 @@ class SnWsdApiService(models.AbstractModel):
 
     @api.model
     def _parse_iso_datetime(self, value, field_name):
-        """ISO 8601 device timestamp -> naive UTC datetime."""
+        """ISO 8601 device timestamp -> naive UTC datetime (an offset-less
+        value is read as the device wall-clock time, see
+        `sn_wsd_device.device_time`)."""
         try:
-            parsed = datetime.fromisoformat(str(value).strip())
+            return parse_device_datetime(value)
         except (TypeError, ValueError):
             raise ApiBadRequest(
                 _('Invalid %s: expected ISO 8601 datetime.', field_name))
-        if parsed.tzinfo:
-            parsed = parsed.astimezone(timezone.utc).replace(tzinfo=None)
-        return parsed
 
     def _resolve_employee(self, code):
         code = (code or '').strip()
