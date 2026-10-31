@@ -24,7 +24,7 @@
                     </group>
                 </group>
                 <field name="report_line_ids">
-                    <list>
+                    <list editable="bottom">
                         <field name="sequence" widget="handle"/>
                         <field name="mes_order_id" options="{'no_create': True}"
                                domain="[('x_manage_mode', '=', 'report'),
