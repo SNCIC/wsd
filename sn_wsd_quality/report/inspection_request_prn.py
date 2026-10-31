@@ -3,9 +3,9 @@
 The PDF reports are rasterised by the printer driver at a low resolution, and
 the Chinese strokes come out dotted. A dot-matrix printer prints the sheet
 better when it receives the dots to put on the paper: the sheet is drawn here
-on a 180 dpi grid (the resolution of the printer), thresholded to one bit per
-dot and emitted with the ESC * 24-dot double-density command, which every
-Epson compatible printer (Deli, Epson LQ, ...) understands.
+on a 180 dpi grid, thresholded to one bit per dot and emitted with the ESC *
+24-dot graphics command in 120 x 180 dpi mode. The horizontal bitmap is
+resampled to the installed LQ-630KII's native 120 dpi graphics density.
 
 The desktop client feeds the dot matrix printer through its RAW queue, so
 nothing is scaled or resampled again between this file and the paper.
@@ -17,8 +17,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 _logger = logging.getLogger(__name__)
 
-# The printer works at 180 x 180 dpi: one millimetre is 7.09 dots.
+# Raster drawing uses 180 dpi; output is reduced horizontally to 120 dpi.
 DPI = 180
+HORIZONTAL_DPI = 120
 _DOTS = DPI / 25.4
 
 # One part of the three-part continuous form, minus the side margins of the
@@ -181,20 +182,23 @@ def _draw_sheet(picking, lines):
 
 
 def _escp_bytes(image):
-    """Encode the one bit sheet with ESC * 24 dot double density bands.
+    """Encode the sheet with 24-pin, 120 x 180 dpi ESC/P graphics.
 
     Two details decide whether a dot-matrix printer prints the whole sheet:
 
-    * a whole band of the 200 mm width is 4.2 kB, more than the line buffer of
-      the printer, so the band is sent in chunks of 192 dots, each one placed
-      with the ESC $ absolute position command;
-    * the 24 dot triple density mode (ESC * 38) is the one that prints at
-      180 dpi, the grid of the sheet. Mode 33 is 120 dpi: it stretched the
-      sheet to 300 mm and the printer dropped the right part;
+    * the 200 mm image is reduced to 120 dpi horizontally and sent in 192-dot
+      chunks, each one placed with the ESC $ absolute position command;
+    * the installed LQ-630KII uses 120 x 180 dpi for graphics; mode 33 matches
+      that density. Each 24-pin column is three bytes, while the command
+      length is the number of columns;
     * the paper is fed with the line spacing set by ESC 3 (24/180 inch) and a
-      newline. ESC J 24 was not usable: its argument 0x18 is the CAN control
-      code and the printer cancelled the rest of the job.
+      newline. The final partial band advances only its remaining dots, so
+      the paper feed matches the 93 mm form band without an extra line feed.
     """
+    width = int(round(image.width * HORIZONTAL_DPI / DPI))
+    image = image.resize(
+        (width, image.height), Image.Resampling.LANCZOS
+    ).convert('1', dither=Image.Dither.NONE)
     width, height = image.size
     pixels = image.load()
     chunk = 192                   # dots per ESC * command (576 bytes)
@@ -205,8 +209,8 @@ def _escp_bytes(image):
         out += b'\r'              # back to the left margin
         for start in range(0, width, chunk):
             end = min(start + chunk, width)
-            # ESC $ positions in 1/60 inch; one dot at 180 dpi is 1/3 of it.
-            position = int(round(start * 60 / DPI))
+            # ESC $ positions in 1/60 inch; one 120 dpi dot is half a unit.
+            position = int(round(start * 60 / HORIZONTAL_DPI))
             out += b'\x1b$' + position.to_bytes(2, 'little')
             data = bytearray()
             for x in range(start, end):
@@ -216,11 +220,14 @@ def _escp_bytes(image):
                     if y < height and pixels[x, y] == 0:
                         group[bit // 8] |= 1 << (7 - bit % 8)
                 data += bytes(group)
-            out += b'\x1b*' + bytes([38])
-            out += len(data).to_bytes(2, 'little')
+            out += b'\x1b*' + bytes([33])
+            out += (end - start).to_bytes(2, 'little')
             out += bytes(data)
-        out += b'\n'              # feed the band: 24/180 inch
-    out += b'\r\n'
+        feed_dots = min(24, height - top)
+        if feed_dots < 24:
+            out += b'\x1b3' + bytes([feed_dots])
+        out += b'\n'              # feed this band's dots at 1/180 inch each
+    out += b'\r'                  # return to the left margin without feeding
     return bytes(out)
 
 

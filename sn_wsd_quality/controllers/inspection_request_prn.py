@@ -12,13 +12,13 @@ class InspectionRequestPrn(http.Controller):
         """ESC/P file of the inspection request, for the RAW printer queue.
 
         The desktop client downloads this file and sends it unchanged to the
-        dot matrix printer: the sheet is already a 180 dpi bitmap, so the
+        dot matrix printer: the sheet is already rasterised at 120 x 180 dpi, so the
         printer driver has nothing left to rasterise.
         """
-        picking = request.env['stock.picking'].browse(int(picking_id))
-        picking.check_access_rights('read')
-        if not picking.exists():
+        picking = request.env['stock.picking'].browse(int(picking_id)).exists()
+        if not picking:
             raise request.not_found()
+        picking.check_access('read')
         data = render_inspection_request(picking)
         filename = 'Inspection-Request-%s.prn' % (
             (picking.name or str(picking.id)).replace('/', '-'))
