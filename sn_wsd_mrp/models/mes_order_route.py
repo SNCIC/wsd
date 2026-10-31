@@ -580,6 +580,11 @@ class MesOrderRouteOperation(models.Model):
         cutoff = self.env.context.get('sn_wsd_pass_cutoff')
         if cutoff:
             domain.append(('out_date', '>', cutoff))
+        # 返工截断水位（oqc-disposition-closure 任务 5.3）：只认发起时刻
+        # 之后新落的历史行——秒级同秒的时间戳分不开旧 OK 与重走
+        watermark = self.env.context.get('sn_wsd_pass_cutoff_min_id')
+        if watermark:
+            domain.append(('id', '>', watermark))
         return self.env['sn.wsd.serial.operation.history'].search(domain).mapped('route_operation_id')
 
     def _reachable_operations(self, mes_order, serial_identity=None):

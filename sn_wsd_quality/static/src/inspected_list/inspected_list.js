@@ -6,17 +6,32 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
 const PAGE_SIZE = 80;
-const RESULT_LABELS = {
+
+const VERDICT_LABELS = {
     ok: _t("OK"),
     ng: _t("NG"),
     scrap: _t("Scrap"),
+    retested: _t("Retested OK"),
+    concession: _t("Concession"),
+};
+
+const DISPOSITION_LABELS = {
+    pending: _t("Awaiting Disposition"),
+    reworking: _t("Reworking"),
+    awaiting_reinspection: _t("Awaiting Re-inspection"),
+    retest_passed: _t("Retest Passed"),
+    scrapped: _t("Scrapped"),
+    concession: _t("Concession Accepted"),
 };
 
 /**
- * Inspected List (oqc-full-lot-form): paginated ledger of the boards that
- * passed this inspection's OQC operation. Server-side paging through the
- * pass history -- the form never loads the full list, so huge lots stay
- * fast. Read-only.
+ * Inspected List (oqc-full-lot-form / oqc-disposition-closure task 7.3):
+ * paginated ledger of the boards that passed this inspection's OQC
+ * operation. The whole page (rows, total and per-verdict counts) comes
+ * from the server method oqc_ledger_page: the final verdict per SN is
+ * derived server-side from the latest pass + disposition state, so the
+ * browser never loads the full cell set or event list, huge lots stay
+ * fast and the filter matches what is displayed. Read-only.
  */
 export class OqcInspectedList extends Component {
     static template = "sn_wsd_quality.OqcInspectedList";
@@ -24,6 +39,7 @@ export class OqcInspectedList extends Component {
 
     setup() {
         this.orm = useService("orm");
+        this.action = useService("action");
         // all UI strings translated once here; the template reads this.labels
         this.labels = {
             searchPlaceholder: _t("Search SN... (Enter)"),
@@ -35,15 +51,19 @@ export class OqcInspectedList extends Component {
             empty: _t("No inspected boards yet."),
             sn: _t("SN"),
             result: _t("Result"),
+            disposition: _t("Disposition"),
             inspectedAt: _t("Inspected At"),
             operator: _t("Operator"),
             defectCode: _t("Defect Code"),
+            passes: _t("Passes"),
         };
         this.state = useState({
             loading: true,
             rows: [],
             total: 0,
+            counts: { ok: 0, ng: 0, scrap: 0 },
             page: 1,
+            pageCount: 1,
             search: "",
             verdict: "all",
         });
@@ -55,110 +75,38 @@ export class OqcInspectedList extends Component {
         return _t("%s record(s)", this.state.total);
     }
 
-    get record() {
-        return this.props.record;
-    }
-
-    get orderId() {
-        return this.record.data.mes_order_id?.[0] || false;
-    }
-
-    get routeOperationIds() {
-        // the OQC operation rows of this order's route
-        return null; // computed in load() from the inspection's scheme op
-    }
-
-    buildDomain() {
-        const domain = [
-            ["mes_order_id", "=", this.orderId],
-            ["result", "in", ["ok", "ng", "scrap"]],
-        ];
-        if (this.state.search.trim()) {
-            domain.push(["serial_identity_id.name", "ilike", this.state.search.trim()]);
-        }
-        if (this.state.verdict !== "all") {
-            domain.push(["result", "=", this.state.verdict]);
-        }
-        return domain;
+    get countsLabel() {
+        const counts = this.state.counts || {};
+        return _t("OK %(ok)s / NG %(ng)s / Scrap %(scrap)s", {
+            ok: counts.ok || 0,
+            ng: counts.ng || 0,
+            scrap: counts.scrap || 0,
+        });
     }
 
     async load() {
         // read the doc ourselves: hidden form fields carry no value in the
         // record (invisible groups are not read), so never trust record.data
-        const resId = this.record.resId;
+        const resId = this.props.record.resId;
         if (!resId) {
             this.state.rows = [];
             this.state.total = 0;
             this.state.loading = false;
             return;
         }
-        const docs = await this.orm.silent.read(
-            "sn.wsd.quality.inspection", [resId],
-            ["mes_order_id", "route_operation_id"]);
-        const orderId = docs[0]?.mes_order_id?.[0] || false;
-        // the inspection's own route_operation_id IS the OQC operation row
-        const routeOpId = docs[0]?.route_operation_id?.[0] || false;
-        if (!orderId || !routeOpId) {
-            this.state.rows = [];
-            this.state.total = 0;
-            this.state.loading = false;
-            return;
-        }
         this.state.loading = true;
-        const base = [
-            ["mes_order_id", "=", orderId],
-            ["route_operation_id", "=", routeOpId],
-            ["result", "in", ["ok", "ng", "scrap"]],
-        ];
-        const extra = this.buildDomain().slice(2);
-        const domain = [...base, ...extra];
-        // the doc's own cell verdicts: an NG board re-judged pass on the doc
-        // (in-place retest) leaves no new pass history -- merge the cell
-        // verdict into the display so the ledger shows the final verdict.
-        // Ledger mode keeps cells only for defective boards: tiny payload.
-        const cellRead = this.orm.silent.read(
-            "sn.wsd.quality.inspection", [resId], ["cell_ids"]);
-        const [total, rows, cells] = await Promise.all([
-            this.orm.silent.searchCount("sn.wsd.serial.operation.history", domain),
-            this.orm.silent.searchRead(
-                "sn.wsd.serial.operation.history", domain,
-                ["serial_identity_id", "result", "out_date", "operator_code",
-                 "defect_code_id"],
-                { order: "out_date desc, id desc",
-                  limit: PAGE_SIZE, offset: (this.state.page - 1) * PAGE_SIZE }),
-            cellRead,
-        ]);
-        const cellIds = cells[0]?.cell_ids || [];
-        let cellVerdicts = {};
-        if (cellIds.length) {
-            const cellRows = await this.orm.silent.searchRead(
-                "sn.wsd.quality.inspection.cell",
-                [["id", "in", cellIds],
-                 ["inspection_id", "=", resId]],
-                ["serial_identity_id", "result"]);
-            for (const row of cellRows) {
-                const snId = row.serial_identity_id[0];
-                if (row.result === "fail") {
-                    cellVerdicts[snId] = "ng";
-                } else if (!cellVerdicts[snId]) {
-                    cellVerdicts[snId] = row.result === "pass" ? "pass" : cellVerdicts[snId];
-                }
-            }
-        }
-        this.cellVerdicts = cellVerdicts;
-        this.state.total = total;
-        this.state.rows = rows;
+        const result = await this.orm.silent.call(
+            "sn.wsd.quality.inspection",
+            "oqc_ledger_page",
+            [resId, this.state.verdict, this.state.page, PAGE_SIZE,
+             this.state.search.trim()],
+        );
+        this.state.rows = result.rows || [];
+        this.state.total = result.total || 0;
+        this.state.counts = result.counts || { ok: 0, ng: 0, scrap: 0 };
+        this.state.pageCount = result.page_count || 1;
+        this.state.page = result.page || 1;
         this.state.loading = false;
-    }
-
-    /** merged display verdict: an in-place retest flips an NG history row */
-    displayVerdict(row) {
-        const snId = row.serial_identity_id ? row.serial_identity_id[0] : false;
-        const cell = snId ? this.cellVerdicts[snId] : undefined;
-        if (row.result === "ng" && cell === "pass") {
-            return "retested";
-        }
-        return row.result;
     }
 
     onSearchInput(ev) {
@@ -179,10 +127,6 @@ export class OqcInspectedList extends Component {
         this.load();
     }
 
-    get pageCount() {
-        return Math.max(1, Math.ceil(this.state.total / PAGE_SIZE));
-    }
-
     prev() {
         if (this.state.page > 1) {
             this.state.page -= 1;
@@ -191,21 +135,46 @@ export class OqcInspectedList extends Component {
     }
 
     next() {
-        if (this.state.page < this.pageCount) {
+        if (this.state.page < this.state.pageCount) {
             this.state.page += 1;
             this.load();
         }
     }
 
-    verdictLabel(result) {
-        if (result === "retested") {
-            return _t("Retested OK");
+    verdictLabel(verdict) {
+        return VERDICT_LABELS[verdict] || verdict;
+    }
+
+    dispositionLabel(state) {
+        return state ? DISPOSITION_LABELS[state] || state : "";
+    }
+
+    verdictClass(verdict) {
+        if (verdict === "ok" || verdict === "retested" || verdict === "concession") {
+            return "text-bg-success";
         }
-        return RESULT_LABELS[result] || result;
+        if (verdict === "ng") {
+            return "text-bg-danger";
+        }
+        return "text-bg-secondary";
     }
 
     defectCode(row) {
-        return row.defect_code_id ? row.defect_code_id[1] : "";
+        return row.defect_code || "";
+    }
+
+    /** raw station passes of one board: the original pass-record entry */
+    openStationHistory(row) {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: this.labels.sn + " - " + (row.serial_name || ""),
+            res_model: "sn.wsd.serial.operation.history",
+            view_mode: "list",
+            domain: [
+                ["serial_identity_id", "=", row.serial_id],
+                ["mes_order_id", "=", this.props.record.data.mes_order_id?.[0]],
+            ],
+        });
     }
 }
 

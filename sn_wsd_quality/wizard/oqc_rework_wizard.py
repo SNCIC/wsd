@@ -46,8 +46,10 @@ class OqcReworkWizard(models.TransientModel):
             .filtered(lambda c: c.result == 'fail')\
             .mapped('serial_identity_id')
         self.serial_candidate_ids = inspection.x_fai_serial_ids & ng
+        # 合法目标只列 OQC 工序的图祖先（任务 5.2）：下游/本站/旁支
+        # 不可选；服务端 action_rework_sn 会再校验一次
         self.route_operation_candidate_ids = \
-            inspection.mes_order_id.x_mes_route_id.operation_ids
+            inspection._oqc_rework_target_candidates()
 
     def action_apply(self):
         self.ensure_one()

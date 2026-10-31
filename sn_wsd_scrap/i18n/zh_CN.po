@@ -103,11 +103,11 @@ msgstr "创建时间"
 
 #. module: sn_wsd_scrap
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__display_name
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_workorder__display_name
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_meter_serial__display_name
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__display_name
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_oqc_disposition_event__display_name
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_reason__display_name
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__display_name
 msgid "Display Name"
 msgstr "显示名称"
 
@@ -155,11 +155,11 @@ msgstr "指示异常活动的图标。"
 
 #. module: sn_wsd_scrap
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__id
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_workorder__id
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_meter_serial__id
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__id
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_oqc_disposition_event__id
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_reason__id
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__id
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__id
 msgid "ID"
 msgstr "ID"
 
@@ -258,7 +258,6 @@ msgstr "新建"
 #. module: sn_wsd_scrap
 #. odoo-python
 #: code:addons/sn_wsd_scrap/models/sn_wsd_scrap.py:0
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_workorder_form_sn_wsd_scrap
 msgid "New Scrap Record"
 msgstr "新建报废记录"
 
@@ -324,9 +323,6 @@ msgid "Only scrapped records can be restored."
 msgstr "只有已报废的记录才能被恢复。"
 
 #. module: sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_production_form_sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_workorder_form_sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_meter_serial_form_sn_wsd_scrap
 #: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_quality_issue_form_sn_wsd_scrap
 msgid "Open Scrap Records"
 msgstr "打开报废记录"
@@ -516,9 +512,7 @@ msgid "Resume Work Order"
 msgstr "续流工单"
 
 #. module: sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_production_form_sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_workorder_form_sn_wsd_scrap
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_meter_serial_form_sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__scrap
 msgid "Scrap"
 msgstr "报废"
 
@@ -528,7 +522,7 @@ msgid "Scrap Analysis"
 msgstr "报废分析"
 
 #. module: sn_wsd_scrap
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__workorder_id
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__route_operation_id
 msgid "Scrap Operation"
 msgstr "报废作业"
 
@@ -543,14 +537,12 @@ msgid "Scrap Product SN"
 msgstr "报废产品序列号"
 
 #. module: sn_wsd_scrap
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__x_scrap_qty_total
 #: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_mrp_production_list_sn_wsd_scrap
 msgid "Scrap Qty"
 msgstr "报废数量"
 
 #. module: sn_wsd_scrap
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__x_scrap_qty_total
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_workorder__x_scrap_qty_total
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__scrap_qty
 msgid "Scrap Quantity"
 msgstr "报废数量"
@@ -572,20 +564,24 @@ msgid "Scrap Reason Codes"
 msgstr "报废原因代码"
 
 #. module: sn_wsd_scrap
+#: model:ir.actions.act_window,name:sn_wsd_scrap.action_sn_wsd_scrap_reason
 #: model:ir.ui.menu,name:sn_wsd_scrap.menu_sn_wsd_scrap_reason
 msgid "Scrap Reason Codes"
 msgstr "报废原因代码"
 
 #. module: sn_wsd_scrap
+#. odoo-python
+#: code:addons/sn_wsd_scrap/models/oqc_disposition_link.py:0
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__scrap_record_id
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_oqc_disposition_event__scrap_record_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_quality_oqc_disposition_event_list_scrap
 msgid "Scrap Record"
 msgstr "报废记录"
 
 #. module: sn_wsd_scrap
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__x_scrap_record_count
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_workorder__x_scrap_record_count
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_meter_serial__scrap_record_count
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__scrap_record_count
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__scrap_record_count
 msgid "Scrap Record Count"
 msgstr "报废记录计数"
 
@@ -594,21 +590,26 @@ msgstr "报废记录计数"
 #: code:addons/sn_wsd_scrap/models/sn_wsd_scrap.py:0
 #: model:ir.actions.act_window,name:sn_wsd_scrap.action_sn_wsd_scrap_record
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__x_scrap_record_ids
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_workorder__x_scrap_record_ids
-#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_meter_serial__scrap_record_ids
 #: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__scrap_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__scrap_record_ids
 #: model:ir.ui.menu,name:sn_wsd_scrap.menu_sn_wsd_scrap_record
-#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_meter_serial_form_sn_wsd_scrap
 #: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_quality_issue_form_sn_wsd_scrap
 #: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_scrap_record_search
 msgid "Scrap Records"
 msgstr "报废记录"
 
 #. module: sn_wsd_scrap
+#. odoo-python
+#: code:addons/sn_wsd_scrap/models/sn_wsd_scrap.py:0
+#: model:ir.actions.act_window,name:sn_wsd_scrap.action_sn_wsd_scrap_record
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_mrp_production__x_scrap_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_quality_issue__scrap_record_ids
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__scrap_record_ids
 #: model:ir.ui.menu,name:sn_wsd_scrap.menu_sn_wsd_scrap_record
+#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_quality_issue_form_sn_wsd_scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_scrap_record_search
 msgid "Scrap Records"
 msgstr "报废记录"
-
 
 #. module: sn_wsd_scrap
 #. odoo-python
@@ -639,6 +640,7 @@ msgid "Scrap User"
 msgstr "报废人员"
 
 #. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__scrapped
 #: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__state__scrapped
 #: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_scrap_record_search
 msgid "Scrapped"
@@ -793,3 +795,82 @@ msgstr "工单"
 #: code:addons/sn_wsd_scrap/models/sn_wsd_scrap.py:0
 msgid "workorder_id"
 msgstr "workorder_id"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__blocked
+msgid "Blocked"
+msgstr "已阻断"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__hold
+msgid "Hold"
+msgstr "暂存"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_scrap_record_search
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_scrap
+#: model:ir.model,name:sn_wsd_scrap.model_sn_wsd_serial_identity
+msgid "Physical Serial Identity"
+msgstr "物理序列号身份"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__previous_route_operation_id
+msgid "Previous Route Operation"
+msgstr "原工序"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__hold
+msgid "Quality Hold"
+msgstr "质量保留"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__released
+msgid "Released"
+msgstr "已下达"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__resume_route_operation_id
+msgid "Resume Route Operation"
+msgstr "恢复工序"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__route_operation_report_id
+msgid "Route Operation Report"
+msgstr "工序报工"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__serial_identity_id
+msgid "Scrap SN"
+msgstr "报废条码"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,help:sn_wsd_scrap.field_sn_wsd_quality_oqc_disposition_event__scrap_record_id
+msgid ""
+"Scrap record behind a scrap / scrap-restore event; opens the stock scrap and"
+" its reason from the disposition history."
+msgstr "报废/报废撤销事件背后的报废单；从处置历史可直接打开库存报废及其原因。"
+
+#. module: sn_wsd_scrap
+#: model:ir.model,name:sn_wsd_scrap.model_sn_wsd_quality_oqc_disposition_event
+msgid "WSD OQC Disposition Event"
+msgstr "WSD OQC 处置事件"
+
+#. module: sn_wsd_scrap
+#. odoo-python
+#: code:addons/sn_wsd_scrap/models/sn_wsd_scrap.py:0
+msgid "serial_identity_id"
+msgstr "条码ID"

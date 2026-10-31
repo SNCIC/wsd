@@ -306,7 +306,7 @@
         <field name="arch" type="xml">
             <list decoration-danger="result in ('fail', 'reject')" decoration-success="result == 'pass'" decoration-warning="result == 'partial'">
                 <header>
-                    <button name="action_batch_set_pass" type="object" string="设置合格"/>
+                    <button name="action_batch_set_pass" type="object" string="Set All Pass"/>
                 </header>
                 <field name="name"/>
                 <field name="inspection_type"/>
@@ -341,7 +341,8 @@
                     <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_set_all_pass" type="object" string="Set All Pass" invisible="state not in ['open', 'in_progress']"/>
                     <button name="action_done" type="object" string="Finish" class="btn-primary" invisible="state not in ['open', 'in_progress']"/>
-                    <button name="action_mark_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
+                    <button name="action_concession" type="object" string="Concession" invisible="state == 'done' or inspection_type not in ['iqc', 'oqc']"/>
+                    <button name="action_open_full_close_wizard" type="object" string="Close with Quantity Gap" invisible="not x_full_inspection or state == 'done' or inspection_type != 'oqc'"/>
                     <button name="%(action_report_iqc_inspection)d" type="action" string="Inspection Record" invisible="inspection_type != 'iqc'"/>
                     <button name="%(action_report_fai_inspection)d" type="action" string="First Article Sheet" invisible="inspection_type != 'fai'"/>
                     <button name="action_reset_open" type="object" string="Reset" invisible="state not in ['done', 'overdue', 'skipped']"/>

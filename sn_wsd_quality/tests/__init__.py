@@ -14,3 +14,11 @@ from . import test_iqc_arrival_batch
 from . import test_pass_ng_no_auto_issue
 from . import test_report_link_disabled
 from . import test_oqc_disposition
+from . import test_oqc_disposition_events
+from . import test_oqc_release_judgment
+from . import test_oqc_receipt_gate
+from . import test_oqc_full_lot_closure
+from . import test_oqc_retest_wizard
+from . import test_oqc_rework_route
+from . import test_oqc_scrap_link
+from . import test_oqc_current_panel

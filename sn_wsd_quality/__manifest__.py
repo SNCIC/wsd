@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Quality',
-    'version': '19.0.5.4.0',
+    'version': '19.0.6.5.1',
     'summary': 'Quality management for WSD meter manufacturing',
     'depends': [
         'sn_wsd_api', 'mail', 'sn_wsd_mrp', 'sn_wsd_code_rule', 'sn_wsd_stock',
@@ -11,8 +11,12 @@
         'data/code_rule_seeds.xml',
         'data/ipqc_patrol_cron.xml',
         'security/ir.model.access.csv',
+        'security/oqc_event_rules.xml',
         'wizard/measure_wizard_views.xml',
         'wizard/oqc_rework_wizard_views.xml',
+        'wizard/oqc_concession_wizard_views.xml',
+        'wizard/oqc_full_close_wizard_views.xml',
+        'wizard/oqc_retest_wizard_views.xml',
         'report/iqc_inspection_templates.xml',
         'report/iqc_inspection_reports.xml',
         'report/inspection_request_templates.xml',
@@ -26,6 +30,7 @@
         'wizard/serial_freeze_wizard_views.xml',
         'views/quality_inspection_views.xml',
         'views/mes_order_fai_views.xml',
+        'views/oqc_disposition_event_views.xml',
         'views/stock_picking_iqc_views.xml',
         'views/internal_serial_quality_views.xml',
         'views/menu_views.xml',

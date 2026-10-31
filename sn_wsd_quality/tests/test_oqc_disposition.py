@@ -115,11 +115,23 @@ class TestOqcDisposition(TransactionCase):
         insp.action_rework_sn(serial, op_a_row, 'defect at A')
         self.assertEqual(serial.x_rework_inspection_id, insp.id)
         self.assertEqual(serial.x_rework_count, 1)
+        # the rework authorization lands a rework_start event: the board
+        # walks its disposition states (oqc-disposition-closure task 2.2)
+        event = self.env['sn.wsd.quality.oqc.disposition.event'].search([
+            ('inspection_id', '=', insp.id),
+            ('serial_identity_id', '=', serial.id)], order='id desc',
+            limit=1)
+        self.assertEqual(event.action, 'rework_start')
+        self.assertEqual(event.state_after, 'reworking')
+        # arming creates the voucher only: no fabricated WIP or history
+        # row -- the board waits for a real scan at the target station
+        # (oqc-disposition-closure task 5.2)
         wip = self.env['sn.wsd.serial.wip'].search([
             ('serial_identity_id', '=', serial.id),
             ('mes_order_id', '=', order.id)])
-        self.assertEqual(wip.route_operation_id, op_a_row)
-        # re-walk: A OK again (already-passed exempt), then C again
+        self.assertFalse(wip)
+        self.assertEqual(serial.x_rework_operation_id, op_a_row)
+        # re-walk: the real scan at A admits via the voucher, then C again
         res = order.sn_station_scan(self.wc_a.id, 'SN-OQCD-001')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
@@ -130,23 +142,55 @@ class TestOqcDisposition(TransactionCase):
         res = order.sn_station_scan(self.wc_c.id, 'SN-OQCD-001')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
-        self.assertFalse(serial.x_rework_inspection_id,
-                         'the voucher closes when the board re-passes op C')
+        # the voucher survives the OK return: it clears only on the
+        # explicit retest confirmation (oqc-disposition-closure task 5.4,
+        # see TestOqcReworkRoute.test_03)
+        self.assertEqual(serial.x_rework_inspection_id, insp.id)
+        # back at OQC with OK = awaiting re-inspection, not closed: the
+        # batch verdict may complete ("passed, disposition pending") but
+        # the release stays closed until the re-judgment is confirmed
+        insp.invalidate_recordset()
+        self.assertEqual(
+            insp._oqc_current_dispositions(serial)[serial.id]['state'],
+            'awaiting_reinspection')
+        insp.action_done()
+        insp.invalidate_recordset()
+        self.assertEqual(insp.state, 'done')
+        self.assertFalse(insp.x_oqc_release_ready)
+        # re-judged pass on every cell + explicit retest confirmation (the
+        # batch-3 wizard calls the same private service entry)
         insp.cell_ids.filtered(
             lambda c: c.serial_identity_id == serial
         ).write({'manual_result': 'pass'})
+        insp._oqc_append_events([{
+            'serial_identity_id': serial.id,
+            'action': 'retest',
+            'state_before': 'awaiting_reinspection',
+            'state_after': 'retest_passed',
+            'reason': 'Retest confirmed after rework.',
+            'defect_code_id': self.defect.id,
+            'source_key': 'test-retest-%s-%s' % (insp.id, serial.id),
+        }])
         insp.action_done()
+        insp.invalidate_recordset()
         self.assertEqual(insp.result, 'pass')
+        self.assertTrue(insp.x_oqc_release_ready)
 
     def test_20_done_guard_blocks_while_reworking(self):
+        # Batch verdict vs release are separate (oqc-disposition-closure
+        # task 5.5): a reworking board no longer refuses the batch verdict
+        # -- the doc closes as "batch passed, disposition pending" and the
+        # release gate keeps blocking until the board is re-inspected.
         order = self._order()
         insp = self._ng_round(order, 'SN-OQCD-002')
         serial = insp.x_fai_serial_ids[:1]
         op_a_row = order.x_mes_route_id.operation_ids.filtered(
             lambda r: r.operation_id == self.op_a)
         insp.action_rework_sn(serial, op_a_row, 'defect at A')
-        with self.assertRaises(UserError):
-            insp.action_done()
+        insp.action_done()
+        self.assertEqual(insp.state, 'done')
+        self.assertFalse(insp.x_oqc_release_ready)
+        self.assertFalse(insp._oqc_passed())
 
     def test_40_full_lot_switch(self):
         order = self._order()
@@ -168,22 +212,45 @@ class TestOqcDisposition(TransactionCase):
         order.sn_station_scan(self.wc_c.id, 'SN-OQCD-005')
 
 
-    def test_60_in_place_retest_clears_ng_on_done(self):
-        # in-place retest: the NG board was handled on the spot, its cells
-        # are re-judged pass; completing the inspection drops it from the
-        # NG list (d follows the cell verdicts at completion time)
+    def test_60_in_place_retest_needs_explicit_confirmation(self):
+        # oqc-disposition-closure task 2.2 replaces the old "no failing
+        # cell left = cleared" convergence: re-judging the cells pass never
+        # closes a disposition by itself. d follows the disposition states,
+        # the explicit retest event (batch-3 wizard entry) closes the board.
         order = self._order()
         insp = self._ng_round(order, 'SN-OQCD-007')
+        serial = insp.x_fai_serial_ids[:1]
         self.assertIn('SN-OQCD-007', insp.x_oqc_ng_serial_ids.mapped('name'))
-        insp._fai_expand_result_cells()
-        # in-place retest: the inspector re-judges the NG board's cells pass
+        # the inspector re-judges the NG board's cells pass on the spot
         insp.cell_ids.filtered(
             lambda c: c.serial_identity_id.name == 'SN-OQCD-007'
         ).write({'manual_result': 'pass'})
+        # the batch completes with its verdict (d = 1 >= Re = 1 -> reject)
+        # and the board stays on the NG list awaiting disposition
         insp.action_done()
-        self.assertNotIn('SN-OQCD-007',
-                         insp.x_oqc_ng_serial_ids.mapped('name'))
+        insp.invalidate_recordset()
+        self.assertEqual(insp.result, 'reject')
+        self.assertIn('SN-OQCD-007',
+                      insp.x_oqc_ng_serial_ids.mapped('name'))
+        self.assertFalse(insp.x_oqc_release_ready)
+        # explicit confirmation on the reopened document: d recomputes and
+        # the re-completion re-judges pass on the same AQL snapshot
+        insp._oqc_reopen_for_disposition()
+        insp._oqc_append_events([{
+            'serial_identity_id': serial.id,
+            'action': 'retest',
+            'state_before': 'pending',
+            'state_after': 'retest_passed',
+            'reason': 'Retest confirmed.',
+            'defect_code_id': self.defect.id,
+            'source_key': 'test-retest-%s-%s' % (insp.id, serial.id),
+        }])
+        insp.invalidate_recordset()
+        self.assertEqual(insp.sample_defect_qty, 0)
+        insp.action_done()
+        insp.invalidate_recordset()
         self.assertEqual(insp.result, 'pass')
+        self.assertTrue(insp.x_oqc_release_ready)
 
     def test_50_scrap_marks_cells_na(self):
         Scrap = self.env['sn.wsd.scrap.record']

@@ -19,7 +19,7 @@
                 <option value="scrap" t-esc="labels.scrap"/>
             </select>
             <span class="small text-muted ms-auto" t-if="!state.loading">
-                <t t-out="totalLabel"/>
+                <t t-out="countsLabel"/> · <t t-out="totalLabel"/>
             </span>
         </div>
 
@@ -34,21 +34,33 @@
                     <tr class="text-start">
                         <th t-esc="labels.sn"/>
                         <th t-esc="labels.result"/>
+                        <th t-esc="labels.disposition"/>
                         <th t-esc="labels.inspectedAt"/>
                         <th t-esc="labels.operator"/>
                         <th t-esc="labels.defectCode"/>
+                        <th/>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr t-foreach="state.rows" t-as="row" t-key="row.id">
-                        <td t-out="row.serial_identity_id ? row.serial_identity_id[1] : ''"/>
+                    <tr t-foreach="state.rows" t-as="row" t-key="row.serial_id">
+                        <td t-out="row.serial_name or ''"/>
                         <td>
-                            <span t-attf-class="badge {{ displayVerdict(row) === 'ok' || displayVerdict(row) === 'retested' ? 'text-bg-success' : displayVerdict(row) === 'ng' ? 'text-bg-danger' : 'text-bg-secondary' }}"
-                                  t-out="verdictLabel(displayVerdict(row))"/>
+                            <span t-attf-class="badge {{ verdictClass(row.verdict) }}"
+                                  t-out="verdictLabel(row.verdict)"/>
+                        </td>
+                        <td>
+                            <span t-if="row.disposition_state"
+                                  class="badge text-bg-info"
+                                  t-out="dispositionLabel(row.disposition_state)"/>
                         </td>
                         <td t-out="row.out_date or ''"/>
                         <td t-out="row.operator_code or ''"/>
                         <td t-out="defectCode(row)"/>
+                        <td>
+                            <button class="btn btn-sm btn-link py-0"
+                                    t-on-click="() => this.openStationHistory(row)"
+                                    t-esc="labels.passes"/>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -59,10 +71,10 @@
             <button class="btn btn-sm btn-secondary" t-on-click="prev"
                     t-att-disabled="state.page &lt;= 1">&#8249;</button>
             <span class="small">
-                <t t-out="state.page"/> / <t t-out="pageCount"/>
+                <t t-out="state.page"/> / <t t-out="state.pageCount"/>
             </span>
             <button class="btn btn-sm btn-secondary" t-on-click="next"
-                    t-att-disabled="state.page >= pageCount">&#8250;</button>
+                    t-att-disabled="state.page >= state.pageCount">&#8250;</button>
         </div>
     </div>
 </t>

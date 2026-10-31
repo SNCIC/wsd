@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_oqc_retest_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.oqc.retest.wizard.form</field>
+        <field name="model">sn.wsd.quality.oqc.retest.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Board Retest">
+                <group>
+                    <group>
+                        <field name="inspection_id" invisible="1"/>
+                        <field name="serial_identity_id"/>
+                        <field name="defect_code_id"/>
+                        <field name="reason" placeholder="Why this board is retested and what was done..."/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <!-- column_invisible 只能引用父记录字段（列级表达式
+                             上下文没有行字段，裸引 item_type 会 Owl 崩溃——
+                             2026-10-31 浏览器实走发现）。行类型逐行不同，
+                             数值/文本/判定三列全部常显，检验员按行类型填
+                             对应列，item_code/item_type 列做指引 -->
+                        <field name="line_id" column_invisible="1"/>
+                        <field name="item_code" readonly="1"/>
+                        <field name="item_type" readonly="1"/>
+                        <field name="lower_limit" readonly="1"/>
+                        <field name="upper_limit" readonly="1"/>
+                        <field name="measured_value"/>
+                        <field name="text_value"/>
+                        <field name="manual_result"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_apply" type="object" string="Confirm Retest" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

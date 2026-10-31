@@ -682,7 +682,10 @@ class QualityInspection(models.Model):
     )
     def _compute_result(self):
         super()._compute_result()
-        for inspection in self.filtered(lambda record: record.inspection_type in ('iqc', 'oqc') and record.state == 'done'):
+        # 让步结论在 done 期间粘住（与基础实现的 guard 同口径）：让步是
+        # 明确决策不是 d 的函数,重开后按当前结果重判
+        # (oqc-disposition-closure 任务 2.3)
+        for inspection in self.filtered(lambda record: record.inspection_type in ('iqc', 'oqc') and record.state == 'done' and record.result != 'concession'):
             defect_qty = inspection.sample_defect_qty if inspection.sample_ids else inspection.defect_qty
             if defect_qty >= inspection.reject_qty:
                 inspection.result = 'reject'
@@ -830,7 +833,11 @@ class QualityInspection(models.Model):
             missing = inspection.line_ids.filtered(lambda line: line.required and line.result == 'pending')
             if missing:
                 raise UserError(_('Complete all required inspection items before finishing the inspection.'))
-            if inspection.inspection_type in ('iqc', 'oqc') and inspection.sample_checked_qty < inspection.sample_size:
+            # Full-lot OQC keeps no sample ledger (boards are judged one
+            # by one at the station): the n-sample gate does not apply
+            # there. Quantity closure is governed by the full-lot gap
+            # confirmation (oqc-disposition-closure task 3.3), not by n.
+            if inspection.inspection_type in ('iqc', 'oqc')                     and not inspection.x_full_inspection                     and inspection.sample_checked_qty < inspection.sample_size:
                 raise UserError(_('Complete all required samples before finishing the inspection.'))
             if inspection.inspection_type == 'oqc' and inspection.defect_line_ids.filtered(lambda line: not line.defect_code_id):
                 raise UserError(_('Defect code is required on every OQC defect line.'))

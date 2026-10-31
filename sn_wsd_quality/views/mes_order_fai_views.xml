@@ -186,7 +186,7 @@
                             <page name="fai_inspect" string="Inspection">
                                 <!-- 过站：扫码切换当前板，检验清单只显示当前板 -->
                                 <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
-                                    <field name="x_fai_current_sn" readonly="1"
+                                    <field name="x_fai_current_sn" readonly="1" force_save="1"
                                            options="{'no_create': 1}"/>
                                     <field name="x_fai_serial_ids" widget="many2many_tags"
                                            readonly="1" options="{'no_create': 1}"/>
@@ -335,6 +335,57 @@
                             <!-- Arrived/NG sample tags removed (oqc-full-lot-form):
                                  the Inspected List tab carries this information -->
                         </group>
+                        <!-- 当前板集中处理区（oqc-disposition-closure 决策 5，
+                             任务 7.2）：扫码/清单选中当前板后原地处置——
+                             复测/返工/报废；整批让步仍是顶部入口。IQC/FAI/
+                             IPQC 不进入本区（外层 oqc_sections 已按
+                             inspection_type 隐藏，处理区再绑定制令单与过站
+                             模式）。state == 'done' 且有待处置板时按钮仍可
+                             用：提交侧服务自动重开原单。 -->
+                        <separator string="Current Board Disposition"
+                                   invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report' or not x_fai_current_sn"/>
+                        <group name="oqc_current_board_disposition"
+                               invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report' or not x_fai_current_sn">
+                            <group>
+                                <field name="x_oqc_current_state" widget="badge"
+                                       decoration-warning="x_oqc_current_state in ('pending', 'reworking', 'awaiting_reinspection')"
+                                       decoration-success="x_oqc_current_state in ('retest_passed', 'concession')"
+                                       decoration-danger="x_oqc_current_state == 'scrapped'"
+                                       string="Disposition"/>
+                                <field name="x_oqc_current_defect_code_id"/>
+                                <field name="x_oqc_current_rework_count"/>
+                                <field name="x_oqc_current_freeze_state" widget="badge"
+                                       decoration-danger="x_oqc_current_freeze_state == 'frozen'"/>
+                                <field name="x_oqc_current_state_info" colspan="2"
+                                       readonly="1" nolabel="1"/>
+                            </group>
+                            <group>
+                                <div class="d-flex flex-wrap gap-2"
+                                     invisible="not x_fai_current_sn">
+                                    <button name="action_oqc_retest_current_sn"
+                                            type="object" string="Confirm Retest"
+                                            class="btn-primary"/>
+                                    <button name="action_oqc_rework_current_sn"
+                                            type="object" string="Send Back to Rework"
+                                            class="btn-secondary"/>
+                                    <button name="action_oqc_scrap_current_sn"
+                                            type="object" string="Scrap"
+                                            class="btn-secondary"
+                                            invisible="not x_oqc_scrap_available"/>
+                                </div>
+                                <field name="x_oqc_scrap_available" invisible="1"/>
+                                <div class="badge text-bg-warning"
+                                     invisible="x_oqc_scrap_available">
+                                    <field name="x_oqc_scrap_hint" readonly="1"
+                                           nolabel="1"/>
+                                </div>
+                                <div class="text-muted">
+                                    Batch actions (the Concession button on top)
+                                    affect every board awaiting disposition,
+                                    not only the current board.
+                                </div>
+                            </group>
+                        </group>
                         <!-- 报工：缺陷行挂抽检产品区（扫不良板记录） -->
                         <separator string="Defective Products (scan)"
                                    invisible="not mes_order_id or mes_order_id.x_manage_mode != 'report'"/>
@@ -353,7 +404,7 @@
                             <page name="oqc_inspect" string="Inspection">
                                 <!-- 过站：扫码切换当前板，检验清单只显示当前板 -->
                                 <group invisible="not mes_order_id or mes_order_id.x_manage_mode == 'report'">
-                                    <field name="x_fai_current_sn" readonly="1"
+                                    <field name="x_fai_current_sn" readonly="1" force_save="1"
                                            options="{'no_create': 1}"/>
                                     <field name="x_fai_serial_ids" widget="many2many_tags"
                                            readonly="1" options="{'no_create': 1}"/>
@@ -454,6 +505,27 @@
                 <xpath expr="//page[@name='scope']/.." position="attributes">
                     <attribute name="invisible">inspection_type in ('ipqc', 'fai', 'oqc')</attribute>
                 </xpath>
+        </field>
+    </record>
+
+    <!-- 处置历史入口（oqc-disposition-closure 任务 7.3）：统计按钮打开
+         事件列表（act_window 服务端分页，domain 按本单过滤）；计数用
+         search_count 计算，表单不嵌 one2many 全量加载事件。IQC/FAI/IPQC
+         不出现（绑定 inspection_type 与 mes_order_id）。 -->
+    <record id="view_sn_wsd_quality_inspection_form_oqc_panel" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.inspection.form.oqc.panel.sn.wsd.quality</field>
+        <field name="model">sn.wsd.quality.inspection</field>
+        <field name="inherit_id" ref="view_sn_wsd_quality_inspection_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_open_oqc_disposition_events"
+                        icon="fa-history"
+                        invisible="inspection_type != 'oqc' or not mes_order_id">
+                    <field name="x_oqc_disposition_event_count" widget="statinfo"
+                           string="Dispositions"/>
+                </button>
+            </xpath>
         </field>
     </record>
 </odoo>

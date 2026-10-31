@@ -328,8 +328,21 @@ class TestOqcEntry(TransactionCase):
         inspection.action_done()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'reject')
-        # disposition decision: concession releases the whole order
-        inspection.action_mark_concession()
+        # the one-click mark is refused for station-mode OQC: concessions
+        # need the reason + scope wizard (oqc-disposition-closure task 2.3)
+        with self.assertRaises(UserError):
+            inspection.action_mark_concession()
+        # disposition decision: the batch concession wizard accepts the
+        # pending board with a reason and releases the whole order
+        Wizard = self.env['sn.wsd.quality.oqc.concession.wizard']
+        defaults = Wizard.with_context(
+            default_inspection_id=inspection.id).default_get([
+                'company_id', 'inspection_id', 'reason', 'scope_serial_ids',
+                'hard_block_reasons', 'expected_versions'])
+        self.assertEqual(defaults['scope_serial_ids'],
+                         [(6, 0, sorted(s1.ids))])
+        Wizard.create(dict(
+            defaults, reason='Customer accepted the defect.')).action_apply()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'concession')
         self.assertEqual(inspection.state, 'done')
@@ -365,6 +378,18 @@ class TestOqcEntry(TransactionCase):
              inspection.reject_qty), (2, 0, 1),
             'recheck re-judges on the same AQL snapshot')
         cell.write({'measured_value': 15.0})  # rework back in range
+        # re-judging the cell never closes a disposition by itself
+        # (oqc-disposition-closure task 2.2): the explicit retest
+        # confirmation (batch-3 wizard entry) is what releases the board
+        inspection._oqc_append_events([{
+            'serial_identity_id': s1.id,
+            'action': 'retest',
+            'state_before': 'pending',
+            'state_after': 'retest_passed',
+            'reason': 'Retest confirmed after correction.',
+            'defect_code_id': self.defect.id,
+            'source_key': 'test-retest-%s-%s' % (inspection.id, s1.id),
+        }])
         inspection.action_done()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'pass')

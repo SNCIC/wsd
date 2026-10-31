@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================================================================
+         OQC 处置事件的报废单跳转（oqc-disposition-closure 任务 7.3）：
+         scrap_record_id 字段由本模块扩展声明（quality 不引用未安装的
+         comodel），跳转按钮也在这里追加——quality 侧视图保持零 scrap
+         引用，未安装本模块时事件列表照常工作。
+         ================================================================== -->
+    <record id="view_sn_wsd_quality_oqc_disposition_event_list_scrap" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.oqc.disposition.event.list.scrap.sn.wsd.scrap</field>
+        <field name="model">sn.wsd.quality.oqc.disposition.event</field>
+        <field name="inherit_id" ref="sn_wsd_quality.view_sn_wsd_quality_oqc_disposition_event_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_station_history']" position="after">
+                <button name="action_open_scrap_record" type="object"
+                        string="Scrap Record" icon="fa-trash-o"
+                        invisible="not scrap_record_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

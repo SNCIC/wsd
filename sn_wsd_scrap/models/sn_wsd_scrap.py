@@ -383,22 +383,58 @@ class SnWsdScrapRecord(models.Model):
                     'route_operation_report_id': report.id,
                 })
             record.serial_identity_id.x_quality_hold_state = 'scrapped'
-            # OQC NG-board disposition (oqc-ng-disposition): the scrapped
-            # sample board's result cells go N/A so it no longer counts as
-            # a defect in the Ac/Re verdict and cannot drag the inspection
-            # into rejection; its rework voucher, if any, is void
+            # OQC disposition closure (oqc-disposition-closure task 6.3):
+            # every KNOWN abnormal board of this order's OQC closes as
+            # scrapped -- not just the original sample list (full-lot new
+            # NG boards included, done documents included). Cells go N/A
+            # (the board leaves the Ac/Re defect count), the rework voucher
+            # is voided and an append-only scrap event lands on the
+            # inspection. Closure eligibility (defect identity, freeze,
+            # scrapped state) is enforced by the shared quality service.
             inspection = self.env['sn.wsd.quality.inspection'].search([
                 ('inspection_type', '=', 'oqc'),
-                ('state', '!=', 'done'),
                 ('mes_order_id', '=', record.mes_order_id.id),
-            ], limit=1)
-            if inspection and record.serial_identity_id in inspection.x_fai_serial_ids:
-                inspection.cell_ids.filtered(
-                    lambda c, sn=record.serial_identity_id:
-                        c.serial_identity_id == sn
+            ], order='id desc', limit=1)
+            serial = record.serial_identity_id
+            if inspection and inspection._oqc_station_mode() \
+                    and serial in inspection._oqc_known_serials():
+                inspection._oqc_check_action('scrap', serial)
+                inspection._oqc_lock(serial)
+                info = inspection._oqc_current_dispositions(serial).get(
+                    serial.id) or {}
+                inspection.cell_ids.with_context(
+                    sn_wsd_oqc_cell_silent=True).filtered(
+                    lambda c, sn=serial: c.serial_identity_id == sn
                 ).write({'manual_result': 'na'})
-                if record.serial_identity_id.x_rework_inspection_id == inspection.id:
-                    record.serial_identity_id.x_rework_inspection_id = False
+                chain_defect = self.env[
+                    'sn.wsd.quality.oqc.disposition.event'].search([
+                        ('inspection_id', '=', inspection.id),
+                        ('serial_identity_id', '=', serial.id),
+                        ('defect_code_id', '!=', False)],
+                        order='id desc', limit=1)
+                inspection._oqc_append_events([{
+                    'serial_identity_id': serial.id,
+                    'action': 'scrap',
+                    'state_before': info.get('state'),
+                    'state_after': 'scrapped',
+                    'attempt_no': serial.x_rework_count or 0,
+                    'reason': 'Scrap confirmed (%s).'
+                              % (record.scrap_reason_id.name or record.name),
+                    'defect_code_id': chain_defect.defect_code_id.id,
+                    'before_snapshot': dict(inspection._oqc_batch_snapshot(),
+                                            source='scrap'),
+                    'after_snapshot': dict(
+                        inspection._oqc_batch_snapshot(),
+                        **inspection._oqc_cell_snapshot(serial)),
+                    'route_operation_id': record.route_operation_id.id,
+                    'source_key': 'oqc-scrap-%s-%s-%s' % (
+                        inspection.id, serial.id, record.id),
+                    'scrap_record_id': record.id,
+                }])
+                if serial.x_rework_inspection_id == inspection.id:
+                    serial.x_rework_inspection_id = False
+                    serial.x_rework_operation_id = False
+                    serial.x_rework_event_id_value = 0
             if record.quality_issue_id:
                 record.quality_issue_id.write({
                     'scrap_record_id': record.id,
@@ -417,6 +453,45 @@ class SnWsdScrapRecord(models.Model):
             move._action_done()
             record.serial_identity_id.x_quality_hold_state = (
                 record.previous_quality_hold_state or 'released')
+            # OQC disposition restore (oqc-disposition-closure task 6.3):
+            # the board re-enters the disposition loop as pending, its
+            # cells become re-judgeable; the scrap fact itself stays in the
+            # append-only history and the batch release re-closes
+            inspection = self.env['sn.wsd.quality.inspection'].search([
+                ('inspection_type', '=', 'oqc'),
+                ('mes_order_id', '=', record.mes_order_id.id),
+            ], order='id desc', limit=1)
+            serial = record.serial_identity_id
+            if inspection and inspection._oqc_station_mode() \
+                    and serial in inspection._oqc_known_serials():
+                info = inspection._oqc_current_dispositions(serial).get(
+                    serial.id) or {}
+                if info.get('state') == 'scrapped':
+                    inspection._oqc_lock(serial)
+                    inspection.cell_ids.with_context(
+                        sn_wsd_oqc_cell_silent=True).filtered(
+                        lambda c, sn=serial: c.serial_identity_id == sn
+                    ).write({'manual_result': 'pending'})
+                    inspection._oqc_append_events([{
+                        'serial_identity_id': serial.id,
+                        'action': 'scrap_restore',
+                        'state_before': 'scrapped',
+                        'state_after': 'pending',
+                        'attempt_no': serial.x_rework_count or 0,
+                        'reason': 'Scrap restored: the board is back to '
+                                  'disposition; the scrap fact stays in '
+                                  'history.',
+                        'before_snapshot': dict(
+                            inspection._oqc_batch_snapshot(),
+                            source='scrap_restore'),
+                        'after_snapshot': dict(
+                            inspection._oqc_batch_snapshot(),
+                            **inspection._oqc_cell_snapshot(serial)),
+                        'route_operation_id': record.route_operation_id.id,
+                        'source_key': 'oqc-scrap-restore-%s-%s-%s' % (
+                            inspection.id, serial.id, record.id),
+                        'scrap_record_id': record.id,
+                    }])
             if record.quality_issue_id:
                 record.quality_issue_id.write({
                     'state': record.previous_issue_state or 'analysis',
