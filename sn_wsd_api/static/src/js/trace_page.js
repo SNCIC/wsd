@@ -133,7 +133,15 @@ export class SnTracePage extends Component {
                             fields: { display_name: {} },
                         },
                         workcenter_id: {
-                            fields: { display_name: {} },
+                            fields: {
+                                display_name: {},
+                                x_production_line_id: {
+                                    fields: { display_name: {} },
+                                },
+                                x_workshop_id: {
+                                    fields: { display_name: {} },
+                                },
+                            },
                         },
                         mes_order_id: {
                             fields: {
@@ -353,8 +361,9 @@ export class SnTracePage extends Component {
             const opCode = sep > 0 ? opLabel.slice(0, sep) : opLabel;
             const opName = sep > 0 ? opLabel.slice(sep + 3) : "";
             const test = testByOp[routeOp.id];
+            const workcenter = h.workcenter_id || {};
             // per-row order context (nested web_search_read spec): the
-            // row's own order line/production/product
+            // row's own order/production/product
             const order = h.mes_order_id || {};
             const production = order.production_id || {};
             const product = production.product_id || {};
@@ -362,10 +371,12 @@ export class SnTracePage extends Component {
                 seq: idx + 1,
                 opCode,
                 opName,
-                workcenter: h.workcenter_id ?
-                    h.workcenter_id.display_name : "",
-                line: order.production_line_id ?
-                    order.production_line_id.display_name : "",
+                workcenter: workcenter.display_name || "",
+                // line column carries the workcenter's own production
+                // line, falling back to its workshop for workshop-only
+                // workcenters
+                line: (workcenter.x_production_line_id || {}).display_name ||
+                    (workcenter.x_workshop_id || {}).display_name || "",
                 flag: RESULT_LABELS[h.result] || h.result,
                 isNg: h.result === "ng",
                 orderName: order.name || "",
