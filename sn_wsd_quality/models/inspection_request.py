@@ -1,12 +1,4 @@
-import os
-
-from odoo import _, api, fields, models
-
-from ..report.inspection_request_prn import (
-    PRINTER_NAME,
-    render_inspection_request,
-    send_inspection_request_to_printer,
-)
+from odoo import api, fields, models
 
 # Rows the item table keeps on the paper form, so a single material still
 # leaves room to add the missing ones by hand.
@@ -143,26 +135,8 @@ class StockPicking(models.Model):
         return text
 
     def action_print_inspection_request_prn(self):
-        """Print directly on Windows or download ESC/P on other hosts."""
+        """Download the ESC/P stream for the SNERP desktop print bridge."""
         self.ensure_one()
-        if os.name == 'nt':
-            self.check_access('read')
-            document_name = 'Inspection Request - %s' % (
-                (self.name or str(self.id)).replace('/', '-'))
-            job_id = send_inspection_request_to_printer(
-                render_inspection_request(self), document_name)
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'message': _(
-                        "Inspection request sent to printer '%s' as job %s.",
-                        PRINTER_NAME, job_id),
-                    'type': 'success',
-                    'sticky': False,
-                },
-            }
-
         return {
             'type': 'ir.actions.act_url',
             'url': '/sn_wsd_quality/inspection_request/prn?picking_id=%s'

@@ -7,16 +7,11 @@ on a 180 dpi grid, thresholded to one bit per dot and emitted with the ESC *
 24-dot graphics command in 120 x 180 dpi mode. The horizontal bitmap is
 resampled to the installed LQ-630KII's native 120 dpi graphics density.
 
-On Windows, Odoo sends these bytes directly to the configured RAW queue. On
-other hosts, the route serves the file for a local print bridge.
+SNERP sends these bytes directly to the configured Windows RAW queue.
 """
-import ctypes
 import logging
 import os
-from ctypes import wintypes
 
-from odoo import _
-from odoo.exceptions import UserError
 from PIL import Image, ImageDraw, ImageFont
 
 _logger = logging.getLogger(__name__)
@@ -25,8 +20,6 @@ _logger = logging.getLogger(__name__)
 DPI = 180
 HORIZONTAL_DPI = 120
 _DOTS = DPI / 25.4
-PRINTER_NAME = os.environ.get(
-    'SN_WSD_QUALITY_PRINTER_NAME', 'EPSON LQ-630KII')
 
 # One part of the three-part continuous form, minus the side margins of the
 # printer (about 20 mm of the 241 mm sheet are not printable).
@@ -242,84 +235,3 @@ def render_inspection_request(picking):
     picking.ensure_one()
     lines = picking._sn_get_inspection_request_lines()
     return _escp_bytes(_draw_sheet(picking, lines))
-
-
-def send_inspection_request_to_printer(data, document_name):
-    """Send ESC/P data directly to the configured Windows RAW queue."""
-    try:
-        winspool = ctypes.WinDLL('winspool.drv', use_last_error=True)
-        open_printer = winspool.OpenPrinterW
-        open_printer.argtypes = [
-            wintypes.LPCWSTR, ctypes.POINTER(wintypes.HANDLE), ctypes.c_void_p]
-        open_printer.restype = wintypes.BOOL
-        start_doc = winspool.StartDocPrinterW
-        start_doc.argtypes = [
-            wintypes.HANDLE, wintypes.DWORD, ctypes.c_void_p]
-        start_doc.restype = wintypes.DWORD
-        start_page = winspool.StartPagePrinter
-        start_page.argtypes = [wintypes.HANDLE]
-        start_page.restype = wintypes.BOOL
-        write_printer = winspool.WritePrinter
-        write_printer.argtypes = [
-            wintypes.HANDLE, ctypes.c_void_p, wintypes.DWORD,
-            ctypes.POINTER(wintypes.DWORD)]
-        write_printer.restype = wintypes.BOOL
-        end_page = winspool.EndPagePrinter
-        end_page.argtypes = [wintypes.HANDLE]
-        end_page.restype = wintypes.BOOL
-        end_doc = winspool.EndDocPrinter
-        end_doc.argtypes = [wintypes.HANDLE]
-        end_doc.restype = wintypes.BOOL
-        abort_printer = winspool.AbortPrinter
-        abort_printer.argtypes = [wintypes.HANDLE]
-        abort_printer.restype = wintypes.BOOL
-        close_printer = winspool.ClosePrinter
-        close_printer.argtypes = [wintypes.HANDLE]
-        close_printer.restype = wintypes.BOOL
-
-        class DocInfo1(ctypes.Structure):
-            _fields_ = [
-                ('pDocName', wintypes.LPWSTR),
-                ('pOutputFile', wintypes.LPWSTR),
-                ('pDatatype', wintypes.LPWSTR),
-            ]
-
-        handle = wintypes.HANDLE()
-        document_started = False
-        if not open_printer(PRINTER_NAME, ctypes.byref(handle), None):
-            raise ctypes.WinError(ctypes.get_last_error())
-        try:
-            doc_info = DocInfo1(document_name, None, 'RAW')
-            job_id = start_doc(handle, 1, ctypes.byref(doc_info))
-            if not job_id:
-                raise ctypes.WinError(ctypes.get_last_error())
-            document_started = True
-            if not start_page(handle):
-                raise ctypes.WinError(ctypes.get_last_error())
-            buffer = ctypes.create_string_buffer(data)
-            written = wintypes.DWORD()
-            if not write_printer(
-                    handle, buffer, len(data), ctypes.byref(written)):
-                raise ctypes.WinError(ctypes.get_last_error())
-            if written.value != len(data):
-                raise RuntimeError(
-                    'The printer accepted %s of %s bytes.'
-                    % (written.value, len(data)))
-            if not end_page(handle):
-                raise ctypes.WinError(ctypes.get_last_error())
-            if not end_doc(handle):
-                raise ctypes.WinError(ctypes.get_last_error())
-            document_started = False
-            return job_id
-        except Exception:
-            if document_started and not abort_printer(handle):
-                _logger.error('Could not abort incomplete printer job')
-            raise
-        finally:
-            if not close_printer(handle):
-                _logger.warning('Could not close printer handle for %s',
-                                PRINTER_NAME)
-    except Exception as exc:
-        raise UserError(_(
-            "Unable to send the inspection request to printer '%s': %s",
-            PRINTER_NAME, exc)) from exc

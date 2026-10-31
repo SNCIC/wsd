@@ -9,10 +9,10 @@ class InspectionRequestPrn(http.Controller):
     @http.route('/sn_wsd_quality/inspection_request/prn',
                 type='http', auth='user', methods=['GET'], csrf=False)
     def inspection_request_prn(self, picking_id, **kwargs):
-        """ESC/P attachment for a local or external RAW printer bridge.
+        """ESC/P attachment for the SNERP RAW printer bridge.
 
-        The Windows button action prints directly; this route remains the
-        file-download fallback on other Odoo hosts.
+        SNERP intercepts the download and sends it unchanged to the selected
+        dot-matrix printer queue.
         """
         picking = request.env['stock.picking'].browse(int(picking_id)).exists()
         if not picking:
