@@ -9,11 +9,10 @@ class InspectionRequestPrn(http.Controller):
     @http.route('/sn_wsd_quality/inspection_request/prn',
                 type='http', auth='user', methods=['GET'], csrf=False)
     def inspection_request_prn(self, picking_id, **kwargs):
-        """ESC/P file of the inspection request, for the RAW printer queue.
+        """ESC/P attachment for a local or external RAW printer bridge.
 
-        The desktop client downloads this file and sends it unchanged to the
-        dot matrix printer: the sheet is already rasterised at 120 x 180 dpi, so the
-        printer driver has nothing left to rasterise.
+        The Windows button action prints directly; this route remains the
+        file-download fallback on other Odoo hosts.
         """
         picking = request.env['stock.picking'].browse(int(picking_id)).exists()
         if not picking:

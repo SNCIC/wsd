@@ -1,4 +1,12 @@
-from odoo import api, fields, models
+import os
+
+from odoo import _, api, fields, models
+
+from ..report.inspection_request_prn import (
+    PRINTER_NAME,
+    render_inspection_request,
+    send_inspection_request_to_printer,
+)
 
 # Rows the item table keeps on the paper form, so a single material still
 # leaves room to add the missing ones by hand.
@@ -135,16 +143,26 @@ class StockPicking(models.Model):
         return text
 
     def action_print_inspection_request_prn(self):
-        """Open the ESC/P file of the inspection request of the receipt.
-
-        The file is already a 180 dpi bitmap: the desktop client sends it
-        unchanged to the RAW queue of the dot matrix printer, which prints the
-        strokes as solid as the accounting software does.
-        """
+        """Print directly on Windows or download ESC/P on other hosts."""
         self.ensure_one()
-        # The download target still opens a window in the browser, which the
-        # desktop shell blocks (and Odoo then warns about a blocked popup).
-        # Navigating to the attachment downloads it without leaving the page.
+        if os.name == 'nt':
+            self.check_access('read')
+            document_name = 'Inspection Request - %s' % (
+                (self.name or str(self.id)).replace('/', '-'))
+            job_id = send_inspection_request_to_printer(
+                render_inspection_request(self), document_name)
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _(
+                        "Inspection request sent to printer '%s' as job %s.",
+                        PRINTER_NAME, job_id),
+                    'type': 'success',
+                    'sticky': False,
+                },
+            }
+
         return {
             'type': 'ir.actions.act_url',
             'url': '/sn_wsd_quality/inspection_request/prn?picking_id=%s'

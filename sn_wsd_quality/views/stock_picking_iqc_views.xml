@@ -15,9 +15,8 @@
                 <!-- The inspection request travels with the goods from the
                      receipt to the quality area: printed on the receipt of a
                      three-step reception, before it is validated. -->
-                <!-- The sheet is sent to the dot matrix printer as ESC/P: the
-                     printer receives the 180 dpi bitmap and prints solid
-                     strokes instead of the rasterised PDF. -->
+                <!-- The Windows action sends the ESC/P stream directly to the
+                     configured RAW queue instead of only downloading a file. -->
                 <button name="action_print_inspection_request_prn"
                         type="object"
                         string="Print Inspection Request"

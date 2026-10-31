@@ -3584,6 +3584,18 @@ msgid "Purchase Order"
 msgstr "采购订单号"
 
 #. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/models/inspection_request.py:0
+msgid "Inspection request sent to printer '%s' as job %s."
+msgstr "送检单已发送到打印机“%s”，打印任务号：%s。"
+
+#. module: sn_wsd_quality
+#. odoo-python
+#: code:addons/sn_wsd_quality/report/inspection_request_prn.py:0
+msgid "Unable to send the inspection request to printer '%s': %s"
+msgstr "无法将送检单发送到打印机“%s”：%s"
+
+#. module: sn_wsd_quality
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.report_inspection_request_document
 msgid "Warehouse Keeper:"
 msgstr "仓管签字："
