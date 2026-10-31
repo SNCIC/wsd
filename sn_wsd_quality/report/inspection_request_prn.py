@@ -188,14 +188,19 @@ def _escp_bytes(image):
     * a whole band of the 200 mm width is 4.2 kB, more than the line buffer of
       the printer, so the band is sent in chunks of 192 dots, each one placed
       with the ESC $ absolute position command;
-    * the paper is fed with ESC J (24/180 inch) after every band instead of a
-      newline, whose default spacing (1/6 inch) stretched the sheet.
+    * the 24 dot triple density mode (ESC * 38) is the one that prints at
+      180 dpi, the grid of the sheet. Mode 33 is 120 dpi: it stretched the
+      sheet to 300 mm and the printer dropped the right part;
+    * the paper is fed with the line spacing set by ESC 3 (24/180 inch) and a
+      newline. ESC J 24 was not usable: its argument 0x18 is the CAN control
+      code and the printer cancelled the rest of the job.
     """
     width, height = image.size
     pixels = image.load()
     chunk = 192                   # dots per ESC * command (576 bytes)
     out = bytearray()
     out += b'\x1b@'               # reset the printer
+    out += b'\x1b3\x18'           # line spacing: 24/180 inch
     for top in range(0, height, 24):
         out += b'\r'              # back to the left margin
         for start in range(0, width, chunk):
@@ -211,10 +216,10 @@ def _escp_bytes(image):
                     if y < height and pixels[x, y] == 0:
                         group[bit // 8] |= 1 << (7 - bit % 8)
                 data += bytes(group)
-            out += b'\x1b*' + bytes([33])
+            out += b'\x1b*' + bytes([38])
             out += len(data).to_bytes(2, 'little')
             out += bytes(data)
-        out += b'\x1bJ' + bytes([24])   # feed the band: 24/180 inch
+        out += b'\n'              # feed the band: 24/180 inch
     out += b'\r\n'
     return bytes(out)
 
