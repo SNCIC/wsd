@@ -2,16 +2,16 @@
 <odoo>
     <!-- report-daily-workbench: the former "Generate From Reports" wizard
          upgraded in place into the Daily Reporting workbench.
-         report-daily-price-inline: single To Report tab; the price is
-         shown read-only when configured and typed on the spot otherwise
-         (created into the rate table at submit); the former To Allocate
-         tab moved to the Operation Reports list as a batch action.
-         2026-11-01 master/detail: the list edits quantities and price
-         inline (an editable x2m list cannot open row dialogs by design);
-         the row Edit button selects the line edited in the detail panel
-         below (team + participants with EXPLICIT ratio locks: locked rows
-         keep their ratio, the rest equally splits the remainder; only the
-         lock toggle / Equal Split / Fill From Team actions re-split). -->
+         report-daily-price-inline: single tab, price typed on the spot
+         when unconfigured (created into the rate table at submit); the
+         former To Allocate tab moved to the Operation Reports list.
+         2026-11-01 master/detail, readonly selector edition (user pick):
+         the list is a pure selector (readonly + no_open, the operation
+         name is the link that picks the line); EVERYTHING is recorded in
+         the detail panel below (quantities, price, team, participants
+         with EXPLICIT ratio locks: locked rows keep their ratio, the
+         rest equally splits the remainder; only the lock toggle / Equal
+         Split / Fill From Team actions re-split). -->
     <record id="view_sn_wsd_piece_settlement_generate_wizard_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.settlement.generate.wizard.form</field>
         <field name="model">sn.wsd.piece.settlement.generate.wizard</field>
@@ -19,7 +19,7 @@
             <form string="Daily Reporting">
                 <!-- statusbar buttons: a form <footer> only renders inside
                      dialogs, and a full page has no auto footer, so there
-                     is exactly one submit affordance -->
+                     is exactly one submit affordance at the top -->
                 <div class="o_form_statusbar_buttons">
                     <button name="action_submit_reports" type="object"
                             string="Submit Reports" class="btn-primary"/>
@@ -37,14 +37,15 @@
                     </group>
                 </group>
                 <field name="report_line_ids">
-                    <list editable="bottom">
-                        <field name="sequence" widget="handle"/>
+                    <list create="false" edit="false" delete="false"
+                          no_open="true">
+                        <field name="sequence" widget="handle" column_invisible="1"/>
                         <field name="mes_order_id" readonly="1"
                                options="{'no_create': True}"/>
-                        <!-- narrow row-selector column: editable lists
-                             cannot render a field as button text (tried:
-                             empty button + duplicate column), so the
-                             pencil is the only shape Odoo gives us here -->
+                        <!-- row selector: picks the line recorded in the
+                             panel below (Odoo 19 cannot render a field as
+                             button text in any list mode, so the pencil is
+                             the shape it gives us) -->
                         <button name="action_select_line" type="object"
                                 icon="oi-pencil" string="Edit Line"/>
                         <field name="route_operation_id" readonly="1"
@@ -53,32 +54,28 @@
                         <field name="reported_qty"/>
                         <field name="remaining_qty"/>
                         <field name="sequence_locked" readonly="1"/>
-                        <field name="qty_ok"/>
-                        <field name="qty_ng"/>
-                        <field name="qty_scrap"/>
-                        <field name="scrap_reason_id"
-                               options="{'no_create': True}"/>
-                        <!-- unit price: configured rate is read-only; a
-                             missing one is typed here and created into the
-                             rate table at submit (existing rate always
-                             wins); pure NG/scrap lines hide both cells -->
-                        <field name="piece_price" readonly="1"
-                               invisible="piece_price &lt;= 0"/>
-                        <field name="x_new_price"
-                               invisible="piece_price &gt; 0 or qty_ok &lt;= 0"/>
+                        <field name="piece_price" readonly="1"/>
                         <field name="participant_summary"/>
                         <field name="production_line_id" column_invisible="1"/>
                         <field name="workshop_id" column_invisible="1"/>
                         <field name="company_id" column_invisible="1"/>
                     </list>
                 </field>
-                <!-- detail panel of the line selected above: workshop and
-                     line show as context, the crew is edited here -->
+                <div invisible="active_line_id" class="text-muted p-2">
+                    Click an operation above to record its batch below.
+                </div>
+                <!-- recording panel of the selected line -->
                 <group name="line_editor" string="Editing Line"
                        invisible="not active_line_id">
                     <group>
                         <field name="active_line_id" readonly="1"
                                options="{'no_create': True}"/>
+                        <field name="active_line_qty_ok"/>
+                        <field name="active_line_qty_ng"/>
+                        <field name="active_line_qty_scrap"/>
+                        <field name="active_line_scrap_reason_id"
+                               options="{'no_create': True}"
+                               required="active_line_qty_scrap &gt; 0"/>
                     </group>
                     <group>
                         <field name="active_line_team_id"
@@ -89,6 +86,12 @@
                         <button name="action_active_equal_split"
                                 type="object" string="Equal Split"
                                 class="btn-secondary"/>
+                        <field name="active_line_piece_price"
+                               invisible="active_line_piece_price &lt;= 0"/>
+                        <field name="active_line_new_price"
+                               invisible="active_line_piece_price &gt; 0"
+                               required="active_line_piece_price == 0"/>
+                        <field name="active_line_ratio_total" readonly="1"/>
                     </group>
                     <field name="active_line_participant_ids"
                            widget="sn_wsd_x2many_multi_add"
@@ -107,7 +110,7 @@
                     </field>
                 </group>
                 <!-- second submit affordance at the very bottom, next to
-                     where the clerk finishes editing the crew -->
+                     where the clerk finishes recording -->
                 <div>
                     <button name="action_submit_reports" type="object"
                             string="Submit Reports" class="btn-primary"/>
@@ -124,7 +127,7 @@
 
     <!-- Menu entry: create + preload the wizard server-side (target
          current, full page) so the lines are real records before the
-         page renders and inline cell edits autosave. -->
+         page renders. -->
     <record id="action_sn_wsd_daily_reporting_server" model="ir.actions.server">
         <field name="name">Daily Reporting</field>
         <field name="model_id"

@@ -32,11 +32,31 @@ class PieceSettlementGenerateWizard(models.TransientModel):
     active_line_id = fields.Many2one(
         'sn.wsd.piece.report.wizard.line', string='Editing Line',
         ondelete='cascade',
-        help='Line selected by the row Edit button: the detail panel below '
-             'edits its team and participants (with explicit ratio locks).')
+        help='Line selected by clicking its operation in the list: the '
+             'detail panel below records everything (quantities, price, '
+             'team, participants with explicit ratio locks).')
     active_line_team_id = fields.Many2one(
         'sn.mrp.team', related='active_line_id.team_id', readonly=False,
         string='Team')
+    active_line_qty_ok = fields.Float(
+        related='active_line_id.qty_ok', readonly=False,
+        string='OK Quantity')
+    active_line_qty_ng = fields.Float(
+        related='active_line_id.qty_ng', readonly=False,
+        string='NG Quantity')
+    active_line_qty_scrap = fields.Float(
+        related='active_line_id.qty_scrap', readonly=False,
+        string='Scrap Quantity')
+    active_line_scrap_reason_id = fields.Many2one(
+        'sn.wsd.scrap.reason', related='active_line_id.scrap_reason_id',
+        readonly=False, string='Scrap Reason')
+    active_line_piece_price = fields.Float(
+        related='active_line_id.piece_price', string='Unit Price')
+    active_line_new_price = fields.Float(
+        related='active_line_id.x_new_price', readonly=False,
+        string='New Unit Price')
+    active_line_ratio_total = fields.Float(
+        related='active_line_id.ratio_total', string='Ratio Total')
     active_line_participant_ids = fields.One2many(
         related='active_line_id.participant_ids', readonly=False,
         string='Participants')
