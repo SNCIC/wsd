@@ -29,6 +29,17 @@ class PieceSettlementGenerateWizard(models.TransientModel):
     report_line_ids = fields.One2many(
         'sn.wsd.piece.report.wizard.line', 'wizard_id',
         string='To Report')
+    active_line_id = fields.Many2one(
+        'sn.wsd.piece.report.wizard.line', string='Editing Line',
+        ondelete='cascade',
+        help='Line selected by the row Edit button: the detail panel below '
+             'edits its team and participants (with explicit ratio locks).')
+    active_line_team_id = fields.Many2one(
+        'sn.mrp.team', related='active_line_id.team_id', readonly=False,
+        string='Team')
+    active_line_participant_ids = fields.One2many(
+        related='active_line_id.participant_ids', readonly=False,
+        string='Participants')
 
     @api.depends_context('lang')
     def _compute_display_name(self):
@@ -123,45 +134,23 @@ class PieceSettlementGenerateWizard(models.TransientModel):
                     'price': line.x_new_price,
                 })
 
-    def _sync_participant_crews(self, lines):
-        """Reconcile the participant rows with the crew tags saved on each
-        line before reporting: the tags column is the clerk's edit surface
-        in the list, the rows follow. When the crew matches the selected
-        team the member ratios apply (normalized); otherwise removed
-        employees drop their row, added ones get an equal share, then
-        _rebalance_participants normalizes the ratios keeping typed-over
-        rows locked. Runs at submit because inline cell edits only land
-        when the form saves (the object button saves it first)."""
-        Participant = self.env['sn.wsd.piece.report.wizard.participant']
-        for line in lines:
-            wanted = line.participant_employee_ids
-            team = line.team_id
-            if team and team.member_ids and set(wanted.ids) == set(
-                    team.member_ids.employee_id.ids):
-                line._fill_from_team()
-                continue
-            if set(wanted.ids) == set(
-                    line.participant_ids.employee_id.ids):
-                continue
-            line.participant_ids.filtered(
-                lambda p: p.employee_id not in wanted).unlink()
-            missing = wanted - line.participant_ids.employee_id
-            if missing:
-                share = round(100.0 / max(len(wanted), 1), 4)
-                Participant.create([{
-                    'line_id': line.id,
-                    'employee_id': employee.id,
-                    'performance_ratio': share,
-                    'x_ratio_baseline': share,
-                } for employee in missing])
-                line._rebalance_participants()
+    def action_active_fill_from_team(self):
+        """Detail panel button: fill the selected line's participants from
+        its team (member ratios normalized, locks cleared)."""
+        self.ensure_one()
+        self.active_line_id.action_fill_from_team()
+
+    def action_active_equal_split(self):
+        """Detail panel button: equal split of the selected line's
+        participants, locks cleared."""
+        self.ensure_one()
+        self.active_line_id.action_equal_split()
 
     def action_submit_reports(self):
-        """Whole-batch validation first (crew sync, price + allocation +
-        quantities), then typed prices land in the rate table, then one
-        transaction: one report_operation_qty per line (all five gates
-        unchanged). Any rejection rolls the whole batch back and names
-        the line.
+        """Whole-batch validation first (price + allocation + quantities),
+        then typed prices land in the rate table, then one transaction:
+        one report_operation_qty per line (all five gates unchanged). Any
+        rejection rolls the whole batch back and names the line.
 
         The onchange preloads every reportable operation row as a
         reference: rows the clerk never filled keep zero quantities and
@@ -173,7 +162,6 @@ class PieceSettlementGenerateWizard(models.TransientModel):
             raise UserError(_(
                 'Enter at least one positive quantity on a line before '
                 'submitting.'))
-        self._sync_participant_crews(lines)
         for index, line in enumerate(lines, start=1):
             try:
                 line._validate_for_submit()

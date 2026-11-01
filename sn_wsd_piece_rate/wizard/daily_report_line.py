@@ -70,15 +70,9 @@ class PieceReportWizardLine(models.TransientModel):
     participant_ids = fields.One2many(
         'sn.wsd.piece.report.wizard.participant', 'line_id',
         string='Participants')
-    participant_employee_ids = fields.Many2many(
-        'hr.employee', 'sn_wsd_piece_wiz_line_participant_emp_rel',
-        'line_id', 'employee_id', string='Participants',
-        help='Tag-style quick edit of the crew directly in the list: '
-             'adding or removing an employee adds or removes the matching '
-             'participant row and the ratios re-split automatically '
-             '(typed-over rows stay locked, the rest shares the remainder). '
-             'Mirrored onto the participant rows on load (create) and '
-             'through the field onchange on edit.')
+    ratio_total = fields.Float(
+        string='Ratio Total', compute='_compute_participants',
+        help='Sum of the participant ratios; must reach 100% at submit.')
     participant_count = fields.Integer(compute='_compute_participants')
     participant_summary = fields.Char(
         string='Allocation', compute='_compute_participants')
@@ -119,58 +113,25 @@ class PieceReportWizardLine(models.TransientModel):
                 price = rate.price or 0.0
             line.piece_price = price
 
-    @api.onchange('participant_employee_ids')
-    def _onchange_participant_employees(self):
-        """Tag-style crew editing: map the employee tags onto participant
-        rows. When the crew matches the selected team the member ratios
-        apply (normalized, same caliber as the submit-side sync);
-        otherwise removed employees drop their row, added ones get a
-        provisional equal share and the chained participant_ids onchange
-        re-splits the ratios keeping typed-over rows locked."""
-        wanted = self.participant_employee_ids
-        team = self.team_id
-        if team and team.member_ids and set(wanted.ids) == set(
-                team.member_ids.employee_id.ids):
-            self._fill_from_team()
-            return
-        existing = self.participant_ids
-        removed = existing.filtered(
-            lambda p: p.employee_id not in wanted)
-        new_employees = wanted - existing.mapped('employee_id')
-        if not removed and not new_employees:
-            return
-        share = round(100.0 / max(len(wanted), 1), 4)
-        self.participant_ids = \
-            [(3, row.id, 0) for row in removed] + [
-                (0, 0, {
-                    'employee_id': employee.id,
-                    'performance_ratio': share,
-                    'x_ratio_baseline': share,
-                }) for employee in new_employees]
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """Server-side load path (menu server action / onchange prefill):
-        derive the employee tags from the participant commands so the
-        tags column shows the crew without a client round-trip."""
-        for vals in vals_list:
-            if vals.get('participant_ids') \
-                    and not vals.get('participant_employee_ids'):
-                employees = list(dict.fromkeys(
-                    command[2]['employee_id']
-                    for command in vals['participant_ids']
-                    if command[0] == 0 and command[2].get('employee_id')))
-                vals['participant_employee_ids'] = [(6, 0, employees)]
-        return super().create(vals_list)
-
     @api.depends('participant_ids.employee_id',
                  'participant_ids.performance_ratio')
     def _compute_participants(self):
         for line in self:
             line.participant_count = len(line.participant_ids)
+            line.ratio_total = sum(
+                line.participant_ids.mapped('performance_ratio'))
             line.participant_summary = ' / '.join(
                 f'{p.employee_id.name} {p.performance_ratio:g}%'
                 for p in line.participant_ids.sorted('sequence'))
+
+    @api.depends_context('lang')
+    def _compute_display_name(self):
+        """The detail panel header shows 'order / operation' instead of a
+        raw 'model,id'."""
+        for line in self:
+            line.display_name = ' / '.join(filter(None, [
+                line.mes_order_id.name,
+                line.route_operation_id.display_label]))
 
     @api.depends('mes_order_id.planned_qty',
                  'route_operation_id.x_reported_ok_qty',
@@ -236,7 +197,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
-                'x_ratio_baseline': p.performance_ratio,
+                'x_ratio_locked': False,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
             return (last.team_id.id or (team.id if team else False)), commands
@@ -247,7 +208,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': member.employee_id.id,
                 'performance_ratio': ratio,
-                'x_ratio_baseline': ratio,
+                'x_ratio_locked': False,
                 'sequence': 10 * (index + 1),
             }) for index, (member, ratio) in enumerate(
                 zip(team.member_ids, ratios))]
@@ -281,13 +242,10 @@ class PieceReportWizardLine(models.TransientModel):
     @api.onchange('team_id')
     def _onchange_team_id_fill_participants(self):
         """Picking or switching the team re-fills the participants from its
-        members (normalized). Onchange on purpose: it must also work on the
-        virtual rows of an unsaved wizard, where object buttons cannot run.
-        The employee tags follow along so the quick-edit column and the
-        rows never disagree (the submit-side crew sync treats the tags as
-        the truth)."""
+        members (normalized, locks cleared). Onchange on purpose: it must
+        also work on the virtual rows of an unsaved wizard, where object
+        buttons cannot run."""
         self._fill_from_team()
-        self.participant_employee_ids = self.participant_ids.employee_id
 
     def _fill_from_team(self):
         Settlement = self.env['sn.wsd.piece.settlement']
@@ -301,54 +259,50 @@ class PieceReportWizardLine(models.TransientModel):
                 fields.Command.create({
                     'employee_id': member.employee_id.id,
                     'performance_ratio': ratio,
-                    'x_ratio_baseline': ratio,
+                    'x_ratio_locked': False,
                     'sequence': 10 * (index + 1),
                 }) for index, (member, ratio) in enumerate(
                     zip(members, ratios))]
 
     def _rebalance_participants(self):
-        """Manual rows (ratio != baseline) keep their value, the rest share
-        the remainder proportionally to their baseline; the last row absorbs
-        the rounding remainder. Baselines are rewritten to the new values,
-        so "ratio == baseline" keeps meaning "not typed over"."""
+        """Explicit-lock rebalance (user decision 2026-11-01): locked rows
+        keep their typed ratio; the remaining rows EQUALLY split the rest
+        (the last one absorbs the rounding remainder). No automatic
+        rebalance on typing or on row add/remove -- redistribution happens
+        only on explicit actions: lock toggle, Equal Split, Fill From
+        Team."""
         for line in self:
             rows = line.participant_ids
             if not rows:
                 continue
-            manual = rows.filtered(
-                lambda p: abs(p.performance_ratio - p.x_ratio_baseline) > 0.0001)
-            auto = rows - manual
+            locked = rows.filtered('x_ratio_locked')
+            auto = rows - locked
             if not auto:
                 continue
-            manual_total = sum(manual.mapped('performance_ratio'))
-            remaining = 100.0 - manual_total
+            locked_total = sum(locked.mapped('performance_ratio'))
+            remaining = 100.0 - locked_total
             if remaining < -0.01:
-                continue  # manual rows already exceed 100%: leave as typed
+                continue  # locked rows already exceed 100%: leave as typed
+            remaining = max(remaining, 0.0)
             auto_rows = list(auto)
-            weights = [p.x_ratio_baseline for p in auto_rows]
-            weight_total = sum(weights)
-            if weight_total <= 0:
-                weights = [1.0] * len(auto_rows)
-                weight_total = float(len(auto_rows))
+            share = round(remaining / len(auto_rows), 4)
             for i, row in enumerate(auto_rows):
                 if i < len(auto_rows) - 1:
-                    row.performance_ratio = round(
-                        remaining * weights[i] / weight_total, 4)
+                    row.performance_ratio = share
                 else:
                     row.performance_ratio = round(
-                        100.0 - manual_total - sum(
-                            p.performance_ratio for p in auto_rows[:-1]), 4)
-                row.x_ratio_baseline = row.performance_ratio
-
-    @api.onchange('participant_ids')
-    def _onchange_participant_ids_rebalance(self):
-        """Adding or removing a participant row re-splits automatically
-        (equal split by default); typed-over ratios stay locked."""
-        self._rebalance_participants()
+                        100.0 - locked_total - share * (len(auto_rows) - 1),
+                        4)
 
     # ------------------------------------------------------------------
     # quick-fill buttons (same calibers as the settlement form)
     # ------------------------------------------------------------------
+
+    def action_select_line(self):
+        """Row button of the wizard list: mark this line as the one edited
+        in the detail panel below."""
+        for line in self:
+            line.wizard_id.active_line_id = line
 
     def action_fill_from_team(self):
         for line in self:
@@ -366,9 +320,9 @@ class PieceReportWizardLine(models.TransientModel):
                 raise UserError(_('Add participants first.'))
             ratios = Settlement._distribute_ratios(
                 [1.0] * len(participants))
+            participants.write({'x_ratio_locked': False})
             for participant, ratio in zip(participants, ratios):
                 participant.performance_ratio = ratio
-                participant.x_ratio_baseline = ratio
 
     def action_reuse_last_allocation(self):
         """Reset the allocation to the one carried by the last report of
@@ -389,7 +343,7 @@ class PieceReportWizardLine(models.TransientModel):
             line.participant_ids = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
-                'x_ratio_baseline': p.performance_ratio,
+                'x_ratio_locked': False,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
 
@@ -452,11 +406,12 @@ class PieceReportWizardParticipant(models.TransientModel):
     performance_ratio = fields.Float(
         string='Performance Ratio', digits=(12, 4), required=True,
         default=0.0)
-    x_ratio_baseline = fields.Float(
-        string='Ratio Baseline', digits=(12, 4),
-        help='Weight used to auto-redistribute the leftover ratio: rows the '
-             'user typed over (ratio != baseline) keep their value, the rest '
-             'share the remainder proportionally to their baseline.')
+    x_ratio_locked = fields.Boolean(
+        string='Ratio Locked',
+        help='Explicit lock (user decision 2026-11-01): locked rows keep '
+             'their ratio when the rest is redistributed -- toggling a '
+             'lock, Equal Split and Fill From Team are the only actions '
+             'that re-split; typing or adding/removing rows never does.')
 
     @api.onchange('employee_id')
     def _onchange_employee_id_default_ratio(self):
@@ -467,4 +422,9 @@ class PieceReportWizardParticipant(models.TransientModel):
             others = self.line_id.participant_ids - self
             headcount = len(others) + 1
             self.performance_ratio = round(100.0 / headcount, 4)
-            self.x_ratio_baseline = self.performance_ratio
+
+    @api.onchange('x_ratio_locked')
+    def _onchange_ratio_locked_rebalance(self):
+        """Toggling a lock redistributes the unlocked rows (equal split of
+        the remainder)."""
+        self.line_id._rebalance_participants()

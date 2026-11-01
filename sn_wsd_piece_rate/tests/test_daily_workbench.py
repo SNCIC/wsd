@@ -214,11 +214,9 @@ class TestDailyWorkbench(PieceRateTestCommon):
             sorted(line.participant_ids.mapped('performance_ratio')),
             [50.0, 50.0])
 
-    def test_onchange_team_fills_and_rebalance_splits(self):
-        """快捷填充改为 onchange 后的行为（替代被移除的行级对象按钮，
-        后者在未保存向导的虚拟行上会报 wizard_id 缺失）：选班组自动带出
-        成员并归一化；删参与人行后其余按基线重分摊（等于自动均分）；
-        手改过的比例锁定不动，其余行分摊剩余。"""
+    def test_onchange_team_fills_and_lock_rebalance(self):
+        """显式锁定口径（2026-11-01 用户定稿方案2）：选班组带出成员并归一化
+        （锁定全清）；锁定某行后其余行均分剩余；均分按钮全员均分并清锁。"""
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
         line = self._wizard_line(wizard, order, self.op_a, team=self.team)
@@ -229,52 +227,45 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertEqual(
             sorted(line.participant_ids.mapped('performance_ratio')),
             [20.0, 20.0, 30.0, 30.0])
-        # drop the two 20% members: the two 30% rows re-split to 50/50
-        drop = line.participant_ids.filtered(
-            lambda p: p.employee_id in (self.emp_wang, self.emp_zhao))
-        line.participant_ids = [(2, p.id) for p in drop]
-        line._rebalance_participants()
-        self.assertEqual(
-            sorted(line.participant_ids.mapped('performance_ratio')),
-            [50.0, 50.0])
-        # manual override locks a row: the other one takes the remainder
+        self.assertFalse(any(line.participant_ids.mapped('x_ratio_locked')))
+        # lock one 30% row at 60%: the three unlocked rows equally split 40
         zhang = line.participant_ids.filtered(
             lambda p: p.employee_id == self.emp_zhang)
         zhang.performance_ratio = 60.0
+        zhang.x_ratio_locked = True
         line._rebalance_participants()
         self.assertEqual(
             sorted(line.participant_ids.mapped('performance_ratio')),
-            [40.0, 60.0])
+            [13.3333, 13.3333, 13.3334, 60.0])
+        # equal split button: everyone equal again, locks cleared
+        line.action_equal_split()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [25.0, 25.0, 25.0, 25.0])
+        self.assertFalse(any(line.participant_ids.mapped('x_ratio_locked')))
 
-    def test_participant_tags_quick_edit(self):
-        """标签快编列（report-daily-price-inline）：载入时标签=参与人；
-        提交前 _sync_participant_crews 以标签为准重算参与人行并重摊。"""
+    def test_ratio_total_compute_and_lock_toggle(self):
+        """编辑区合计随比例变化；锁定行不改、其余均分（toggle onchange 的
+        服务端口径与 _rebalance_participants 一致）。"""
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
         line = self._wizard_line(wizard, order, self.op_a, allocation=(
-            (self.emp_zhang, 40.0), (self.emp_li, 30.0),
-            (self.emp_wang, 30.0)))
-        # load path: create derives the tags from the participant commands
-        self.assertEqual(
-            line.participant_employee_ids,
-            self.emp_zhang + self.emp_li + self.emp_wang)
-        # quick edit through the tags: drop li, add zhao
-        line.participant_employee_ids = [
-            (6, 0, (self.emp_zhang | self.emp_wang | self.emp_zhao).ids)]
-        wizard._sync_participant_crews(line)
-        self.assertEqual(
-            line.participant_ids.mapped('employee_id'),
-            self.emp_zhang + self.emp_wang + self.emp_zhao)
-        ratios = line.participant_ids.mapped('performance_ratio')
-        self.assertAlmostEqual(sum(ratios), 100.0, places=2)
-        # rebalance splits by baseline weight: 40 and 30 keep their 4:3
+            (self.emp_zhang, 50.0), (self.emp_li, 50.0)))
+        self.assertAlmostEqual(line.ratio_total, 100.0)
+        wang = self.env['sn.wsd.piece.report.wizard.participant'].create({
+            'line_id': line.id, 'employee_id': self.emp_wang.id,
+            'performance_ratio': 33.3333,
+        })
+        self.assertAlmostEqual(line.ratio_total, 133.3333, places=3)
+        # lock zhang at 50: li and wang equally split the remaining 50
         zhang = line.participant_ids.filtered(
             lambda p: p.employee_id == self.emp_zhang)
-        wang = line.participant_ids.filtered(
-            lambda p: p.employee_id == self.emp_wang)
-        self.assertAlmostEqual(
-            zhang.performance_ratio / wang.performance_ratio,
-            40.0 / 30.0, places=2)
+        zhang.x_ratio_locked = True
+        line._rebalance_participants()
+        self.assertAlmostEqual(line.ratio_total, 100.0)
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [25.0, 25.0, 50.0])
 
     # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date

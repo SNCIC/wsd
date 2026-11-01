@@ -1334,3 +1334,39 @@ msgstr "生成计件草稿"
 #: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
 msgid "Tag-style quick edit of the crew directly in the list: adding or removing an employee adds or removes the matching participant row and the ratios re-split automatically (typed-over rows stay locked, the rest shares the remainder). Mirrored onto the participant rows on load (create) and through the field onchange on edit."
 msgstr "列表里直接快编班组人员的标签列：加/减一名员工即加/删对应参与人行，比例自动重摊（手改过的锁定，其余分摊剩余）。载入时（create）与编辑时（onchange）自动同步到参与人行。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__x_ratio_locked
+msgid "Ratio Locked"
+msgstr "锁定比例"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__x_ratio_locked
+msgid "Explicit lock (user decision 2026-11-01): locked rows keep their ratio when the rest is redistributed -- toggling a lock, Equal Split and Fill From Team are the only actions that re-split; typing or adding/removing rows never does."
+msgstr "显式锁定（2026-11-01 用户定稿）：锁定的行在重分配时保持比例不变——只有锁定开关、均分、从班组带出会触发重分配；手输比例、增删行不会自动改任何值。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_id
+msgid "Editing Line"
+msgstr "正在编辑行"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_id
+msgid "Line selected by the row Edit button: the detail panel below edits its team and participants (with explicit ratio locks)."
+msgstr "由行上编辑按钮选中的行：下方编辑区编辑其班组与参与人（比例显式锁定）。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Equal Split"
+msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Equal Split"
+msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Edit Line"
+msgstr "编辑行"

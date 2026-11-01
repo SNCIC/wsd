@@ -6,9 +6,12 @@
          shown read-only when configured and typed on the spot otherwise
          (created into the rate table at submit); the former To Allocate
          tab moved to the Operation Reports list as a batch action.
-         Everything is edited inline in the list (editable bottom): an
-         editable x2m list cannot open row dialogs by design, so the crew
-         is quick-edited through the participant tags column. -->
+         2026-11-01 master/detail: the list edits quantities and price
+         inline (an editable x2m list cannot open row dialogs by design);
+         the row Edit button selects the line edited in the detail panel
+         below (team + participants with EXPLICIT ratio locks: locked rows
+         keep their ratio, the rest equally splits the remainder; only the
+         lock toggle / Equal Split / Fill From Team actions re-split). -->
     <record id="view_sn_wsd_piece_settlement_generate_wizard_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.settlement.generate.wizard.form</field>
         <field name="model">sn.wsd.piece.settlement.generate.wizard</field>
@@ -35,14 +38,12 @@
                 </group>
                 <field name="report_line_ids">
                     <list editable="bottom">
+                        <button name="action_select_line" type="object"
+                                icon="oi-pencil" string="Edit Line"/>
                         <field name="sequence" widget="handle"/>
                         <field name="mes_order_id" readonly="1"
                                options="{'no_create': True}"/>
                         <field name="route_operation_id" readonly="1"
-                               options="{'no_create': True}"/>
-                        <field name="workshop_id" readonly="1"
-                               options="{'no_create': True}"/>
-                        <field name="production_line_id" readonly="1"
                                options="{'no_create': True}"/>
                         <field name="planned_qty" optional="hide"/>
                         <field name="reported_qty"/>
@@ -61,20 +62,46 @@
                                invisible="piece_price &lt;= 0"/>
                         <field name="x_new_price"
                                invisible="piece_price &gt; 0 or qty_ok &lt;= 0"/>
-                        <!-- crew quick edit: pick the team to (re)fill its
-                             members, or adjust people with the tags;
-                             ratios re-split automatically either way -->
-                        <field name="team_id" options="{'no_create': True}"
-                               domain="[('production_line_id', '=', production_line_id)]"/>
-                        <field name="participant_employee_ids"
-                               widget="many2many_tags"
-                               options="{'no_create': True}"
-                               domain="['|', ('company_id', '=', False),
-                                        ('company_id', '=', company_id)]"/>
                         <field name="participant_summary"/>
+                        <field name="production_line_id" column_invisible="1"/>
+                        <field name="workshop_id" column_invisible="1"/>
                         <field name="company_id" column_invisible="1"/>
                     </list>
                 </field>
+                <!-- detail panel of the line selected above: workshop and
+                     line show as context, the crew is edited here -->
+                <group name="line_editor" string="Editing Line"
+                       invisible="not active_line_id">
+                    <group>
+                        <field name="active_line_id" readonly="1"
+                               options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="active_line_team_id"
+                               options="{'no_create': True}"/>
+                        <button name="action_active_fill_from_team"
+                                type="object" string="Fill From Team"
+                                class="btn-secondary"/>
+                        <button name="action_active_equal_split"
+                                type="object" string="Equal Split"
+                                class="btn-secondary"/>
+                    </group>
+                    <field name="active_line_participant_ids"
+                           widget="sn_wsd_x2many_multi_add"
+                           options="{'multi_add_model': 'hr.employee',
+                                     'multi_add_field': 'employee_id',
+                                     'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}">
+                        <list editable="bottom" create="true">
+                            <field name="sequence" widget="handle"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="employee_code"/>
+                            <field name="performance_ratio"/>
+                            <field name="x_ratio_locked" widget="boolean_toggle"/>
+                            <field name="line_id" column_invisible="1"/>
+                            <field name="company_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </group>
             </form>
         </field>
     </record>
