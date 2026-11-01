@@ -182,6 +182,26 @@ class PieceSettlementGenerateWizard(models.TransientModel):
             raise UserError(_(
                 'Enter at least one positive quantity on a line before '
                 'submitting.'))
+        count = self._submit_report_lines(lines)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'type': 'success',
+                'title': _('Daily Reporting'),
+                'message': _(
+                    '%(count)s operation report(s) submitted.',
+                    count=count),
+                'next': {'type': 'ir.actions.act_window_close'},
+            },
+        }
+
+    def _submit_report_lines(self, lines):
+        """Shared submit core (form button + OWL workbench): whole-batch
+        validation, typed prices into the rate table, then one
+        transaction of report_operation_qty per line. Returns the number
+        of landed operation reports; raises with the offending line."""
+        lines = lines.filtered(lambda l: l.qty_ok or l.qty_ng or l.qty_scrap)
         for index, line in enumerate(lines, start=1):
             try:
                 line._validate_for_submit()
@@ -213,15 +233,102 @@ class PieceSettlementGenerateWizard(models.TransientModel):
                     order=line.mes_order_id.name,
                     op=line.route_operation_id.display_label,
                     reason=str(exc))) from exc
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'type': 'success',
-                'title': _('Daily Reporting'),
-                'message': _(
-                    '%(count)s operation report(s) submitted.',
-                    count=len(created)),
-                'next': {'type': 'ir.actions.act_window_close'},
-            },
-        }
+        return len(created)
+
+    # ------------------------------------------------------------------
+    # OWL workbench API (2026-11-01): payload in, payload out -- all
+    # editing lives in the client; every gate stays server-side
+    # ------------------------------------------------------------------
+
+    @api.model
+    def get_workbench_data(self, workshop_id=False,
+                           production_line_id=False, mes_order_id=False):
+        """Snapshot for the OWL workbench: one editable dict per active
+        report-mode operation (progress, price, prefilled crew) plus the
+        pickers (teams with member weights, scrap reasons). Built on real
+        transient lines so every compute (quota, sequence lock, price,
+        prefill) is the exact same code path as the form."""
+        wizard = self.create({
+            'workshop_id': workshop_id or False,
+            'production_line_id': production_line_id or False,
+            'mes_order_id': mes_order_id or False,
+        })
+        wizard.action_reload_lines()
+        lines = []
+        for line in wizard.report_line_ids:
+            lines.append({
+                'mes_order_id': line.mes_order_id.id,
+                'order_name': line.mes_order_id.name,
+                'workshop': line.workshop_id.name or '',
+                'production_line': line.production_line_id.name or '',
+                'route_operation_id': line.route_operation_id.id,
+                'operation': line.route_operation_id.display_label,
+                'planned_qty': line.planned_qty,
+                'reported_qty': line.reported_qty,
+                'remaining_qty': line.remaining_qty,
+                'sequence_locked': line.sequence_locked,
+                'piece_price': line.piece_price,
+                'team_id': line.team_id.id or False,
+                'team_name': line.team_id.name or '',
+                'qty_ok': 0.0,
+                'qty_ng': 0.0,
+                'qty_scrap': 0.0,
+                'scrap_reason_id': False,
+                'x_new_price': 0.0,
+                'participants': [{
+                    'employee_id': p.employee_id.id,
+                    'employee_name': p.employee_id.name,
+                    'employee_code': p.employee_code or '',
+                    'performance_ratio': p.performance_ratio,
+                    'x_ratio_locked': False,
+                } for p in line.participant_ids.sorted('sequence')],
+            })
+        Team = self.env['sn.mrp.team']
+        teams = [{
+            'id': team.id,
+            'name': team.name,
+            'line_id': team.production_line_id.id or False,
+            'members': [{
+                'employee_id': m.employee_id.id,
+                'employee_name': m.employee_id.name,
+                'employee_code': m.employee_code or '',
+                'weight': m.performance_ratio,
+            } for m in team.member_ids],
+        } for team in Team.search([('active', '=', True)])]
+        reasons = [{
+            'id': reason.id,
+            'name': reason.name,
+        } for reason in self.env['sn.wsd.scrap.reason'].search([])]
+        return {'lines': lines, 'teams': teams, 'scrap_reasons': reasons}
+
+    @api.model
+    def submit_workbench(self, lines_payload):
+        """Submit the OWL workbench batch: materialize the client edits as
+        transient lines and run the shared submit core (validation, rate
+        creation, five gates, auto piece drafts)."""
+        if not lines_payload:
+            raise UserError(_('Nothing to submit.'))
+        Line = self.env['sn.wsd.piece.report.wizard.line']
+        wizard = self.create({})
+        vals_list = []
+        for payload in lines_payload:
+            vals_list.append({
+                'wizard_id': wizard.id,
+                'mes_order_id': payload['mes_order_id'],
+                'route_operation_id': payload['route_operation_id'],
+                'qty_ok': payload.get('qty_ok') or 0.0,
+                'qty_ng': payload.get('qty_ng') or 0.0,
+                'qty_scrap': payload.get('qty_scrap') or 0.0,
+                'scrap_reason_id': payload.get('scrap_reason_id') or False,
+                'x_new_price': payload.get('x_new_price') or 0.0,
+                'team_id': payload.get('team_id') or False,
+                'participant_ids': [(0, 0, {
+                    'employee_id': p['employee_id'],
+                    'performance_ratio': p['performance_ratio'],
+                    'x_ratio_locked': bool(p.get('x_ratio_locked')),
+                    'sequence': 10 * (index + 1),
+                }) for index, p in enumerate(payload.get('participants')
+                                             or [])],
+            })
+        lines = Line.create(vals_list)
+        return wizard._submit_report_lines(lines)

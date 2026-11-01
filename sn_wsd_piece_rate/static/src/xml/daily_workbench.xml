@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_piece_rate.DailyWorkbench">
+        <div class="o_drw container-fluid p-3">
+            <div class="o_drw_header d-flex align-items-center gap-3 flex-wrap mb-3">
+                <h5 class="mb-0 fw-bold" t-esc="labels.title"/>
+                <div class="o_drw_filters d-flex gap-2 flex-wrap">
+                    <select class="form-select form-select-sm" t-att-value="state.filters.workshop"
+                            t-on-change="ev => { state.filters.workshop = ev.target.value; this.onFilterChange(); }">
+                        <option value="" t-esc="labels.workshop"/>
+                        <t t-foreach="state.workshops" t-as="w" t-key="w.name">
+                            <option t-att-value="w.name" t-esc="w.name"/>
+                        </t>
+                    </select>
+                    <select class="form-select form-select-sm" t-att-value="state.filters.line"
+                            t-on-change="ev => { state.filters.line = ev.target.value; this.onFilterChange(); }">
+                        <option value="" t-esc="labels.productionLine"/>
+                        <t t-foreach="state.linesList" t-as="pl" t-key="pl.name">
+                            <option t-att-value="pl.name" t-esc="pl.name"/>
+                        </t>
+                    </select>
+                    <select class="form-select form-select-sm" t-att-value="state.filters.order"
+                            t-on-change="ev => { state.filters.order = ev.target.value; this.onFilterChange(); }">
+                        <option value="" t-esc="labels.mesOrder"/>
+                        <t t-foreach="state.ordersList" t-as="o" t-key="o.id">
+                            <option t-att-value="o.id" t-esc="o.name"/>
+                        </t>
+                    </select>
+                </div>
+                <div class="ms-auto d-flex gap-2 align-items-center">
+                    <button class="btn btn-primary" t-esc="labels.submit"
+                            t-att-disabled="state.submitting"
+                            t-on-click="submit"/>
+                </div>
+            </div>
+
+            <div t-if="state.error" class="alert alert-danger" role="alert"
+                 t-esc="state.error"/>
+
+            <div t-if="state.loading" class="text-center text-muted p-4">
+                <span class="oi oi-loading oi-2x" aria-hidden="true"/>
+            </div>
+
+            <t t-elif="state.lines.length">
+                <div class="o_drw_table table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-2">
+                        <thead>
+                            <tr class="text-muted">
+                                <th t-esc="labels.mesOrder"/>
+                                <th t-esc="labels.operation"/>
+                                <th t-esc="labels.reported"/>
+                                <th t-esc="labels.remaining"/>
+                                <th t-esc="labels.locked"/>
+                                <th t-esc="labels.unitPrice"/>
+                                <th t-esc="labels.allocation"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.lines" t-as="line" t-key="line.route_operation_id">
+                                <tr t-att-class="line.route_operation_id === state.selectedId ? 'o_drw_selected table-active' : ''"
+                                    t-on-click="() => this.selectLine(line)">
+                                    <td t-esc="line.order_name"/>
+                                    <td>
+                                        <a href="#" t-on-click.prevent="() => this.selectLine(line)"
+                                           t-esc="line.operation"/>
+                                    </td>
+                                    <td t-esc="line.reported_qty"/>
+                                    <td t-esc="line.remaining_qty"/>
+                                    <td>
+                                        <span t-if="line.sequence_locked" class="badge text-bg-secondary"
+                                              t-esc="labels.locked"/>
+                                        <t t-else="">—</t>
+                                    </td>
+                                    <td>
+                                        <span t-if="line.piece_price > 0" t-esc="line.piece_price"/>
+                                        <t t-else="">—</t>
+                                    </td>
+                                    <td class="o_drw_summary">
+                                        <t t-foreach="line.participants" t-as="p" t-key="p.employee_id">
+                                            <span class="badge text-bg-light border" t-esc="p.employee_name + ' ' + p.performance_ratio + '%'"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-if="!selectedLine" class="text-muted p-2"
+                     t-esc="labels.pickLineHint"/>
+
+                <div t-if="selectedLine" class="o_drw_panel card mt-2">
+                    <div class="card-header d-flex flex-wrap gap-3 align-items-center">
+                        <strong t-esc="selectedLine.order_name + ' / ' + selectedLine.operation"/>
+                        <span class="text-muted" t-esc="selectedLine.workshop + ' · ' + selectedLine.production_line"/>
+                        <span t-if="selectedLine.piece_price > 0" class="ms-auto">
+                                            <t t-esc="labels.unitPrice"/>:
+                                            <strong t-esc="selectedLine.piece_price"/>
+                                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label" t-esc="labels.qtyOk"/>
+                                <input type="number" min="0" step="any" class="form-control"
+                                       t-att-value="selectedLine.qty_ok"
+                                       t-on-input="ev => this.setQty(selectedLine, 'qty_ok', ev)"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" t-esc="labels.qtyNg"/>
+                                <input type="number" min="0" step="any" class="form-control"
+                                       t-att-value="selectedLine.qty_ng"
+                                       t-on-input="ev => this.setQty(selectedLine, 'qty_ng', ev)"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" t-esc="labels.qtyScrap"/>
+                                <input type="number" min="0" step="any" class="form-control"
+                                       t-att-value="selectedLine.qty_scrap"
+                                       t-on-input="ev => this.setQty(selectedLine, 'qty_scrap', ev)"/>
+                            </div>
+                            <div class="col-md-3" t-if="selectedLine.qty_scrap > 0">
+                                <label class="form-label" t-esc="labels.scrapReason"/>
+                                <select class="form-select"
+                                        t-on-change="ev => { selectedLine.scrap_reason_id = Number(ev.target.value) || false; }">
+                                    <option value=""/>
+                                    <t t-foreach="state.scrapReasons" t-as="r" t-key="r.id">
+                                        <option t-att-value="r.id"
+                                                t-att-selected="selectedLine.scrap_reason_id === r.id ? 'selected' : undefined"
+                                                t-esc="r.name"/>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-3" t-if="selectedLine.piece_price &lt;= 0">
+                                <label class="form-label" t-esc="labels.newUnitPrice"/>
+                                <input type="number" min="0" step="any" class="form-control"
+                                       t-att-value="selectedLine.x_new_price"
+                                       t-on-input="ev => this.setPrice(selectedLine, ev)"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" t-esc="labels.team"/>
+                                <select class="form-select"
+                                        t-on-change="ev => this.onTeamChange(selectedLine, ev)">
+                                    <option value=""/>
+                                    <t t-foreach="state.teams" t-as="tm" t-key="tm.id">
+                                        <option t-att-value="tm.id"
+                                                t-att-selected="selectedLine.team_id === tm.id ? 'selected' : undefined"
+                                                t-esc="tm.name"/>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end gap-2">
+                                <button class="btn btn-secondary btn-sm"
+                                        t-on-click="() => this.fillFromTeam(selectedLine)"
+                                        t-esc="labels.fillFromTeam"/>
+                                <button class="btn btn-secondary btn-sm"
+                                        t-on-click="() => this.equalSplit(selectedLine)"
+                                        t-esc="labels.equalSplit"/>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <strong t-esc="labels.participants"/>
+                                <span t-att-class="ratioTotal(selectedLine) > 100.01 ? 'badge text-bg-danger' : 'badge text-bg-light border'">
+                                                    <t t-esc="labels.ratioTotal"/>:
+                                                    <t t-esc="ratioTotal(selectedLine)"/>%
+                                                </span>
+                            </div>
+                            <table class="table table-sm align-middle mb-1">
+                                <thead>
+                                    <tr class="text-muted">
+                                        <th t-esc="labels.employee"/>
+                                        <th t-esc="labels.employeeCode"/>
+                                        <th t-esc="labels.ratio"/>
+                                        <th t-esc="labels.ratioLocked"/>
+                                        <th/>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="selectedLine.participants" t-as="p" t-key="p.employee_id">
+                                        <tr>
+                                            <td t-esc="p.employee_name"/>
+                                            <td t-esc="p.employee_code"/>
+                                            <td style="width: 12rem;">
+                                                <input type="number" min="0" max="100" step="any"
+                                                       class="form-control form-control-sm"
+                                                       t-att-value="p.performance_ratio"
+                                                       t-on-change="ev => this.onRatioInput(selectedLine, p, ev)"/>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           t-att-checked="p.x_ratio_locked ? 'checked' : undefined"
+                                                           t-on-change="() => this.toggleLock(selectedLine, p)"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-link text-danger"
+                                                        t-on-click="() => this.removeParticipant(selectedLine, p)">✕</button>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="position-relative" style="max-width: 22rem;">
+                                <input class="form-control form-control-sm"
+                                       t-att-placeholder="labels.addParticipant"
+                                       t-att-value="state.addTerm"
+                                       t-on-input="ev => this.onAddTerm(selectedLine, ev)"/>
+                                <ul t-if="state.addSuggestions.length"
+                                    class="o_drw_suggestions list-group position-absolute w-100 shadow">
+                                    <t t-foreach="state.addSuggestions" t-as="s" t-key="s.id">
+                                        <li class="list-group-item list-group-item-action"
+                                            t-on-click="() => this.addParticipant(selectedLine, s)"
+                                            t-esc="s.name"/>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button class="btn btn-primary" t-esc="labels.submit"
+                            t-att-disabled="state.submitting"
+                            t-on-click="submit"/>
+                </div>
+            </t>
+
+            <div t-else="" class="text-muted p-4" t-esc="labels.noLines"/>
+        </div>
+    </t>
+</templates>

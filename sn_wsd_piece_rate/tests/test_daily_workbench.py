@@ -299,6 +299,51 @@ class TestDailyWorkbench(PieceRateTestCommon):
             [25.0, 25.0, 50.0])
 
     # ------------------------------------------------------------------
+    # OWL workbench API: payload in, payload out (all gates server-side)
+    # ------------------------------------------------------------------
+
+    def test_workbench_data_and_submit(self):
+        """OWL 工作台链路：get_workbench_data 带出进度/单价/预填参与人；
+        submit_workbench 用客户端载荷走同一提交核心（闸/建价/草稿）。"""
+        self._rate(price=0.3)
+        order = self._order_with_pick(qty=100)
+        Wizard = self.env['sn.wsd.piece.settlement.generate.wizard']
+        data = Wizard.get_workbench_data()
+        mine = [l for l in data['lines'] if l['mes_order_id'] == order.id]
+        self.assertEqual(len(mine), 2)  # one per route operation
+        line = next(l for l in mine
+                    if l['route_operation_id'] == self._op_a_row(order).id)
+        self.assertAlmostEqual(line['piece_price'], 0.3)
+        self.assertEqual(line['planned_qty'], 100.0)
+        self.assertIn('team_id', line)
+        self.assertTrue(any(t['members'] for t in data['teams']))
+        count = Wizard.submit_workbench([{
+            'mes_order_id': order.id,
+            'route_operation_id': line['route_operation_id'],
+            'qty_ok': 10.0,
+            'qty_ng': 0.0,
+            'qty_scrap': 0.0,
+            'scrap_reason_id': False,
+            'x_new_price': 0.0,
+            'team_id': False,
+            'participants': [{
+                'employee_id': self.emp_zhang.id,
+                'performance_ratio': 100.0,
+                'x_ratio_locked': False,
+            }],
+        }])
+        self.assertEqual(count, 1)
+        report = self._reports(order)
+        self.assertEqual(report.qty_ok, 10.0)
+        self.assertEqual(
+            report.participant_ids.mapped('performance_ratio'), [100.0])
+        settlement = report.piece_settlement_ids
+        self.assertAlmostEqual(settlement.price, 0.3)
+        self.assertAlmostEqual(settlement.amount, 3.0)
+        with self.assertRaises(UserError):
+            Wizard.submit_workbench([])
+
+    # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date
     # ------------------------------------------------------------------
 
