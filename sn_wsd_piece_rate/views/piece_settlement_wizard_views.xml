@@ -29,8 +29,8 @@
                         <field name="mes_order_id" options="{'no_create': True}"
                                domain="[('x_manage_mode', '=', 'report'),
                                         ('state', 'in', ('released', 'picked', 'in_progress')),
-                                        ('x_workshop_id', '=', workshop_id),
-                                        ('production_line_id', '=', production_line_id)]"/>
+                                        ('x_workshop_id', '=?', workshop_id),
+                                        ('production_line_id', '=?', production_line_id)]"/>
                     </group>
                 </group>
                 <field name="report_line_ids">
@@ -39,6 +39,10 @@
                         <field name="mes_order_id" readonly="1"
                                options="{'no_create': True}"/>
                         <field name="route_operation_id" readonly="1"
+                               options="{'no_create': True}"/>
+                        <field name="workshop_id" readonly="1"
+                               options="{'no_create': True}"/>
+                        <field name="production_line_id" readonly="1"
                                options="{'no_create': True}"/>
                         <field name="planned_qty" optional="hide"/>
                         <field name="reported_qty"/>
@@ -57,16 +61,17 @@
                                invisible="piece_price &lt;= 0"/>
                         <field name="x_new_price"
                                invisible="piece_price &gt; 0 or qty_ok &lt;= 0"/>
-                        <!-- crew quick edit: tags add/remove employees,
-                             ratios re-split automatically; the summary
-                             column shows the resulting ratios -->
+                        <!-- crew quick edit: pick the team to (re)fill its
+                             members, or adjust people with the tags;
+                             ratios re-split automatically either way -->
+                        <field name="team_id" options="{'no_create': True}"
+                               domain="[('production_line_id', '=', production_line_id)]"/>
                         <field name="participant_employee_ids"
                                widget="many2many_tags"
                                options="{'no_create': True}"
                                domain="['|', ('company_id', '=', False),
                                         ('company_id', '=', company_id)]"/>
                         <field name="participant_summary"/>
-                        <field name="production_line_id" column_invisible="1"/>
                         <field name="company_id" column_invisible="1"/>
                     </list>
                 </field>

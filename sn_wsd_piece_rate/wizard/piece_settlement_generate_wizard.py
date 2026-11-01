@@ -30,6 +30,13 @@ class PieceSettlementGenerateWizard(models.TransientModel):
         'sn.wsd.piece.report.wizard.line', 'wizard_id',
         string='To Report')
 
+    @api.depends_context('lang')
+    def _compute_display_name(self):
+        """Breadcrumbs otherwise show the raw 'model,id' -- a transient
+        wizard has no name field of its own."""
+        for wizard in self:
+            wizard.display_name = _('Daily Reporting')
+
     # ------------------------------------------------------------------
     # To Report tab (daily reporting entry)
     # ------------------------------------------------------------------
@@ -119,13 +126,22 @@ class PieceSettlementGenerateWizard(models.TransientModel):
     def _sync_participant_crews(self, lines):
         """Reconcile the participant rows with the crew tags saved on each
         line before reporting: the tags column is the clerk's edit surface
-        in the list, the rows follow (removed employees drop their row,
-        added ones get an equal share, then _rebalance_participants
-        normalizes the ratios keeping typed-over rows locked)."""
+        in the list, the rows follow. When the crew matches the selected
+        team the member ratios apply (normalized); otherwise removed
+        employees drop their row, added ones get an equal share, then
+        _rebalance_participants normalizes the ratios keeping typed-over
+        rows locked. Runs at submit because inline cell edits only land
+        when the form saves (the object button saves it first)."""
         Participant = self.env['sn.wsd.piece.report.wizard.participant']
         for line in lines:
             wanted = line.participant_employee_ids
-            if wanted == line.participant_ids.employee_id:
+            team = line.team_id
+            if team and team.member_ids and set(wanted.ids) == set(
+                    team.member_ids.employee_id.ids):
+                line._fill_from_team()
+                continue
+            if set(wanted.ids) == set(
+                    line.participant_ids.employee_id.ids):
                 continue
             line.participant_ids.filtered(
                 lambda p: p.employee_id not in wanted).unlink()

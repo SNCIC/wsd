@@ -630,6 +630,7 @@ msgstr "参与人"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_ids
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_ids
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__participant_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
@@ -1268,6 +1269,7 @@ msgstr "向导"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__workshop_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search

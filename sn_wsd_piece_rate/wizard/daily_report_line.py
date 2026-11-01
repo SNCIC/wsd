@@ -35,6 +35,9 @@ class PieceReportWizardLine(models.TransientModel):
     production_line_id = fields.Many2one(
         'sn.mrp.production.line', string='Production Line',
         related='mes_order_id.production_line_id')
+    workshop_id = fields.Many2one(
+        'sn.mrp.workshop', string='Workshop',
+        related='production_line_id.workshop_id')
     qty_ok = fields.Float(string='OK Quantity')
     qty_ng = fields.Float(
         string='NG Quantity',
@@ -119,11 +122,17 @@ class PieceReportWizardLine(models.TransientModel):
     @api.onchange('participant_employee_ids')
     def _onchange_participant_employees(self):
         """Tag-style crew editing: map the employee tags onto participant
-        rows. Removed employees drop their row, added ones get a
-        provisional equal share; the chained participant_ids onchange
-        (_onchange_participant_ids_rebalance) re-splits the ratios,
-        keeping typed-over rows locked."""
+        rows. When the crew matches the selected team the member ratios
+        apply (normalized, same caliber as the submit-side sync);
+        otherwise removed employees drop their row, added ones get a
+        provisional equal share and the chained participant_ids onchange
+        re-splits the ratios keeping typed-over rows locked."""
         wanted = self.participant_employee_ids
+        team = self.team_id
+        if team and team.member_ids and set(wanted.ids) == set(
+                team.member_ids.employee_id.ids):
+            self._fill_from_team()
+            return
         existing = self.participant_ids
         removed = existing.filtered(
             lambda p: p.employee_id not in wanted)
@@ -273,8 +282,12 @@ class PieceReportWizardLine(models.TransientModel):
     def _onchange_team_id_fill_participants(self):
         """Picking or switching the team re-fills the participants from its
         members (normalized). Onchange on purpose: it must also work on the
-        virtual rows of an unsaved wizard, where object buttons cannot run."""
+        virtual rows of an unsaved wizard, where object buttons cannot run.
+        The employee tags follow along so the quick-edit column and the
+        rows never disagree (the submit-side crew sync treats the tags as
+        the truth)."""
         self._fill_from_team()
+        self.participant_employee_ids = self.participant_ids.employee_id
 
     def _fill_from_team(self):
         Settlement = self.env['sn.wsd.piece.settlement']
