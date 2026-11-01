@@ -286,13 +286,13 @@ class PieceReportWizardLine(models.TransientModel):
             remaining = max(remaining, 0.0)
             auto_rows = list(auto)
             share = round(remaining / len(auto_rows), 4)
+            # write through the skip flag: rows land one by one on their
+            # way to a total that sums to (at most) 100
             for i, row in enumerate(auto_rows):
-                if i < len(auto_rows) - 1:
-                    row.performance_ratio = share
-                else:
-                    row.performance_ratio = round(
-                        100.0 - locked_total - share * (len(auto_rows) - 1),
-                        4)
+                row.with_context(sn_wsd_skip_ratio_check=True).write(
+                    {'performance_ratio': share if i < len(auto_rows) - 1
+                     else round(100.0 - locked_total
+                                - share * (len(auto_rows) - 1), 4)})
 
     # ------------------------------------------------------------------
     # quick-fill buttons (same calibers as the settlement form)
@@ -322,7 +322,11 @@ class PieceReportWizardLine(models.TransientModel):
                 [1.0] * len(participants))
             participants.write({'x_ratio_locked': False})
             for participant, ratio in zip(participants, ratios):
-                participant.performance_ratio = ratio
+                # skip flag: rows land one by one on their way to an
+                # equal split summing to exactly 100
+                participant.with_context(
+                    sn_wsd_skip_ratio_check=True).write(
+                    {'performance_ratio': ratio})
 
     def action_reuse_last_allocation(self):
         """Reset the allocation to the one carried by the last report of
@@ -412,6 +416,28 @@ class PieceReportWizardParticipant(models.TransientModel):
              'their ratio when the rest is redistributed -- toggling a '
              'lock, Equal Split and Fill From Team are the only actions '
              'that re-split; typing or adding/removing rows never does.')
+
+    @api.constrains('performance_ratio')
+    def _check_ratio_total(self):
+        """Immediate guard (user request 2026-11-01): a typed ratio must
+        stay within 0-100 and the line total may never exceed 100% --
+        no waiting for the submit gate. Redistribution helpers set the
+        context flag because they write rows one by one on their way to
+        an end state that sums to (at most) 100."""
+        if self.env.context.get('sn_wsd_skip_ratio_check'):
+            return
+        for participant in self:
+            ratio = participant.performance_ratio
+            if ratio < 0 or ratio > 100:
+                raise ValidationError(_(
+                    'The performance ratio of %(employee)s must be between '
+                    '0 and 100.', employee=participant.employee_id.name))
+            line = participant.line_id
+            total = sum(line.participant_ids.mapped('performance_ratio'))
+            if total > 100 + 0.01:
+                raise ValidationError(_(
+                    'The ratio total of this batch cannot exceed 100%% '
+                    '(currently %(total)s%%).', total=round(total, 4)))
 
     @api.onchange('employee_id')
     def _onchange_employee_id_default_ratio(self):

@@ -216,7 +216,9 @@ class TestDailyWorkbench(PieceRateTestCommon):
 
     def test_onchange_team_fills_and_lock_rebalance(self):
         """显式锁定口径（2026-11-01 用户定稿方案2）：选班组带出成员并归一化
-        （锁定全清）；锁定某行后其余行均分剩余；均分按钮全员均分并清锁。"""
+        （锁定全清）；锁定某行后其余行均分剩余；均分按钮全员均分并清锁。
+        手输超过 100 的值被即时约束拦下（test_ratio_total_cannot_exceed_100），
+        故大值场景用 skip 标记模拟锁定前的过渡态。"""
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
         line = self._wizard_line(wizard, order, self.op_a, team=self.team)
@@ -231,8 +233,8 @@ class TestDailyWorkbench(PieceRateTestCommon):
         # lock one 30% row at 60%: the three unlocked rows equally split 40
         zhang = line.participant_ids.filtered(
             lambda p: p.employee_id == self.emp_zhang)
-        zhang.performance_ratio = 60.0
-        zhang.x_ratio_locked = True
+        zhang.with_context(sn_wsd_skip_ratio_check=True).write(
+            {'performance_ratio': 60.0, 'x_ratio_locked': True})
         line._rebalance_participants()
         self.assertEqual(
             sorted(line.participant_ids.mapped('performance_ratio')),
@@ -244,20 +246,49 @@ class TestDailyWorkbench(PieceRateTestCommon):
             [25.0, 25.0, 25.0, 25.0])
         self.assertFalse(any(line.participant_ids.mapped('x_ratio_locked')))
 
+    def test_ratio_total_cannot_exceed_100(self):
+        """即时约束（2026-11-01）：单行 0–100、行合计 ≤100，保存即拦，
+        不用等提交；重分配路径（均分/锁定重摊）不受中间态影响。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        line = self._wizard_line(wizard, order, self.op_a, allocation=(
+            (self.emp_zhang, 60.0), (self.emp_li, 40.0)))
+        with self.assertRaises(ValidationError) as ctx:
+            line.participant_ids[1].performance_ratio = 50.0  # 60+50=110
+        self.assertIn('cannot exceed 100', str(ctx.exception))
+        with self.assertRaises(ValidationError):
+            line.participant_ids[1].performance_ratio = -5.0
+        # rebalance paths still work through the intermediate states
+        line.participant_ids[1].with_context(
+            sn_wsd_skip_ratio_check=True).performance_ratio = 40.0
+        line.action_equal_split()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [50.0, 50.0])
+        line.participant_ids[0].x_ratio_locked = True
+        line._rebalance_participants()
+        self.assertEqual(
+            sorted(line.participant_ids.mapped('performance_ratio')),
+            [50.0, 50.0])
+
     def test_ratio_total_compute_and_lock_toggle(self):
-        """编辑区合计随比例变化；锁定行不改、其余均分（toggle onchange 的
-        服务端口径与 _rebalance_participants 一致）。"""
+        """即时约束下新增行只能带来 ≤100 的值；锁定行保持、其余均分。"""
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
         line = self._wizard_line(wizard, order, self.op_a, allocation=(
             (self.emp_zhang, 50.0), (self.emp_li, 50.0)))
         self.assertAlmostEqual(line.ratio_total, 100.0)
-        wang = self.env['sn.wsd.piece.report.wizard.participant'].create({
+        # a new row pushing the total over 100 is blocked at create
+        with self.assertRaises(ValidationError):
+            self.env['sn.wsd.piece.report.wizard.participant'].create({
+                'line_id': line.id, 'employee_id': self.emp_wang.id,
+                'performance_ratio': 33.3333,
+            })
+        # add wang within the budget, then lock zhang: li and wang split 50
+        self.env['sn.wsd.piece.report.wizard.participant'].create({
             'line_id': line.id, 'employee_id': self.emp_wang.id,
-            'performance_ratio': 33.3333,
+            'performance_ratio': 0.0,
         })
-        self.assertAlmostEqual(line.ratio_total, 133.3333, places=3)
-        # lock zhang at 50: li and wang equally split the remaining 50
         zhang = line.participant_ids.filtered(
             lambda p: p.employee_id == self.emp_zhang)
         zhang.x_ratio_locked = True
