@@ -38,11 +38,15 @@
                 </group>
                 <field name="report_line_ids">
                     <list editable="bottom">
-                        <button name="action_select_line" type="object"
-                                icon="oi-pencil" string="Edit Line"/>
                         <field name="sequence" widget="handle"/>
                         <field name="mes_order_id" readonly="1"
                                options="{'no_create': True}"/>
+                        <!-- narrow row-selector column: editable lists
+                             cannot render a field as button text (tried:
+                             empty button + duplicate column), so the
+                             pencil is the only shape Odoo gives us here -->
+                        <button name="action_select_line" type="object"
+                                icon="oi-pencil" string="Edit Line"/>
                         <field name="route_operation_id" readonly="1"
                                options="{'no_create': True}"/>
                         <field name="planned_qty" optional="hide"/>
@@ -102,6 +106,12 @@
                         </list>
                     </field>
                 </group>
+                <!-- second submit affordance at the very bottom, next to
+                     where the clerk finishes editing the crew -->
+                <div>
+                    <button name="action_submit_reports" type="object"
+                            string="Submit Reports" class="btn-primary"/>
+                </div>
             </form>
         </field>
     </record>
