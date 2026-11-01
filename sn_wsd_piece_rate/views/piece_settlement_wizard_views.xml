@@ -108,11 +108,15 @@
                         </field>
                     </form>
                 </field>
-                <div class="o_form_statusbar_buttons">
+                <!-- footer buttons replace the auto-generated Save/Discard
+                     of an editable form in a dialog: a transient wizard has
+                     nothing meaningful to "save" (line edits autosave the
+                     persisted wizard), the only actions are submit/cancel -->
+                <footer>
                     <button name="action_submit_reports" type="object"
                             string="Submit Reports" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </div>
+                </footer>
             </form>
         </field>
     </record>
