@@ -1327,3 +1327,8 @@ msgstr "所选报工行均已存在未作废的计件单。"
 #: model:ir.actions.server,name:sn_wsd_piece_rate.action_sn_wsd_report_generate_settlement
 msgid "Generate Piece Settlements"
 msgstr "生成计件草稿"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
+msgid "Tag-style quick edit of the crew directly in the list: adding or removing an employee adds or removes the matching participant row and the ratios re-split automatically (typed-over rows stay locked, the rest shares the remainder). Mirrored onto the participant rows on load (create) and through the field onchange on edit."
+msgstr "列表里直接快编班组人员的标签列：加/减一名员工即加/删对应参与人行，比例自动重摊（手改过的锁定，其余分摊剩余）。载入时（create）与编辑时（onchange）自动同步到参与人行。"

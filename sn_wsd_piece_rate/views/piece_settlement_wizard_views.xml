@@ -5,12 +5,22 @@
          report-daily-price-inline: single To Report tab; the price is
          shown read-only when configured and typed on the spot otherwise
          (created into the rate table at submit); the former To Allocate
-         tab moved to the Operation Reports list as a batch action. -->
+         tab moved to the Operation Reports list as a batch action.
+         Everything is edited inline in the list (editable bottom): an
+         editable x2m list cannot open row dialogs by design, so the crew
+         is quick-edited through the participant tags column. -->
     <record id="view_sn_wsd_piece_settlement_generate_wizard_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.settlement.generate.wizard.form</field>
         <field name="model">sn.wsd.piece.settlement.generate.wizard</field>
         <field name="arch" type="xml">
             <form string="Daily Reporting">
+                <!-- statusbar buttons: a form <footer> only renders inside
+                     dialogs, and a full page has no auto footer, so there
+                     is exactly one submit affordance -->
+                <div class="o_form_statusbar_buttons">
+                    <button name="action_submit_reports" type="object"
+                            string="Submit Reports" class="btn-primary"/>
+                </div>
                 <group>
                     <group>
                         <field name="workshop_id" options="{'no_create': True}"/>
@@ -26,12 +36,11 @@
                 <field name="report_line_ids">
                     <list editable="bottom">
                         <field name="sequence" widget="handle"/>
-                        <field name="mes_order_id" options="{'no_create': True}"
-                               domain="[('x_manage_mode', '=', 'report'),
-                                        ('state', 'in', ('released', 'picked', 'in_progress'))]"/>
-                        <field name="route_operation_id" options="{'no_create': True}"
-                               domain="[('mes_order_id', '=', mes_order_id)]"/>
-                        <field name="planned_qty"/>
+                        <field name="mes_order_id" readonly="1"
+                               options="{'no_create': True}"/>
+                        <field name="route_operation_id" readonly="1"
+                               options="{'no_create': True}"/>
+                        <field name="planned_qty" optional="hide"/>
                         <field name="reported_qty"/>
                         <field name="remaining_qty"/>
                         <field name="sequence_locked" readonly="1"/>
@@ -48,75 +57,19 @@
                                invisible="piece_price &lt;= 0"/>
                         <field name="x_new_price"
                                invisible="piece_price &gt; 0 or qty_ok &lt;= 0"/>
-                        <field name="participant_count" string="Participants"/>
+                        <!-- crew quick edit: tags add/remove employees,
+                             ratios re-split automatically; the summary
+                             column shows the resulting ratios -->
+                        <field name="participant_employee_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               domain="['|', ('company_id', '=', False),
+                                        ('company_id', '=', company_id)]"/>
                         <field name="participant_summary"/>
                         <field name="production_line_id" column_invisible="1"/>
                         <field name="company_id" column_invisible="1"/>
                     </list>
-                    <form string="Report Line">
-                        <!-- Quick fills are onchange-driven, NOT object
-                             buttons: object buttons on the rows of an
-                             unsaved wizard fail with "field wizard_id
-                             is missing". Picking/switching the team
-                             fills its members; adding/removing a
-                             participant row re-splits automatically
-                             (typed-over ratios stay locked); switching
-                             the operation reuses the last allocation. -->
-                        <group>
-                            <group>
-                                <field name="mes_order_id" options="{'no_create': True}"
-                                       domain="[('x_manage_mode', '=', 'report'),
-                                                ('state', 'in', ('released', 'picked', 'in_progress'))]"/>
-                                <field name="route_operation_id" options="{'no_create': True}"
-                                       domain="[('mes_order_id', '=', mes_order_id)]"/>
-                                <field name="team_id" options="{'no_create': True}"
-                                       domain="[('production_line_id', '=', production_line_id)]"/>
-                            </group>
-                            <group>
-                                <field name="qty_ok"/>
-                                <field name="qty_ng"/>
-                                <field name="qty_scrap"/>
-                                <field name="scrap_reason_id"
-                                       options="{'no_create': True}"
-                                       required="qty_scrap &gt; 0"/>
-                                <field name="piece_price" readonly="1"
-                                       invisible="piece_price &lt;= 0"/>
-                                <field name="x_new_price"
-                                       invisible="piece_price &gt; 0 or qty_ok &lt;= 0"
-                                       required="piece_price == 0 and qty_ok &gt; 0"/>
-                                <field name="planned_qty" readonly="1"/>
-                                <field name="reported_qty" readonly="1"/>
-                                <field name="remaining_qty" readonly="1"/>
-                                <field name="sequence_locked" readonly="1"/>
-                                <field name="production_line_id" invisible="1"/>
-                                <field name="company_id" invisible="1"/>
-                            </group>
-                        </group>
-                        <field name="participant_ids"
-                               widget="sn_wsd_x2many_multi_add"
-                               options="{'multi_add_model': 'hr.employee',
-                                         'multi_add_field': 'employee_id',
-                                         'multi_add_domain': '[(&quot;company_id&quot;, &quot;=&quot;, company_id)]'}">
-                            <list editable="bottom">
-                                <field name="sequence" widget="handle"/>
-                                <field name="employee_id" options="{'no_create': True}"/>
-                                <field name="employee_code"/>
-                                <field name="performance_ratio"/>
-                                <field name="line_id" column_invisible="1"/>
-                                <field name="company_id" column_invisible="1"/>
-                            </list>
-                        </field>
-                    </form>
                 </field>
-                <!-- footer buttons replace the auto-generated Save/Discard
-                     of an editable form in a dialog: a transient wizard has
-                     nothing meaningful to "save" (line edits autosave the
-                     persisted wizard), the only actions are submit/cancel -->
-                <footer>
-                    <button name="action_submit_reports" type="object"
-                            string="Submit Reports" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
             </form>
         </field>
     </record>
@@ -125,14 +78,11 @@
         <field name="name">Daily Reporting</field>
         <field name="res_model">sn.wsd.piece.settlement.generate.wizard</field>
         <field name="view_mode">form</field>
-        <field name="target">new</field>
     </record>
 
-    <!-- Menu entry: create + preload the wizard server-side so the dialog
-         opens on a saved record; the per-line quick-fill buttons (Fill From
-         Team / Split Equally / Reuse Last Allocation) need real line ids,
-         on the virtual rows of an unsaved wizard they fail with "field
-         wizard_id is missing". -->
+    <!-- Menu entry: create + preload the wizard server-side (target
+         current, full page) so the lines are real records before the
+         page renders and inline cell edits autosave. -->
     <record id="action_sn_wsd_daily_reporting_server" model="ir.actions.server">
         <field name="name">Daily Reporting</field>
         <field name="model_id"
@@ -148,7 +98,7 @@ action = {
     'res_model': 'sn.wsd.piece.settlement.generate.wizard',
     'res_id': wizard.id,
     'view_mode': 'form',
-    'target': 'new',
+    'target': 'current',
 }
         ]]></field>
     </record>

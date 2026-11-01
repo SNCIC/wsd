@@ -67,6 +67,15 @@ class PieceReportWizardLine(models.TransientModel):
     participant_ids = fields.One2many(
         'sn.wsd.piece.report.wizard.participant', 'line_id',
         string='Participants')
+    participant_employee_ids = fields.Many2many(
+        'hr.employee', 'sn_wsd_piece_wiz_line_participant_emp_rel',
+        'line_id', 'employee_id', string='Participants',
+        help='Tag-style quick edit of the crew directly in the list: '
+             'adding or removing an employee adds or removes the matching '
+             'participant row and the ratios re-split automatically '
+             '(typed-over rows stay locked, the rest shares the remainder). '
+             'Mirrored onto the participant rows on load (create) and '
+             'through the field onchange on edit.')
     participant_count = fields.Integer(compute='_compute_participants')
     participant_summary = fields.Char(
         string='Allocation', compute='_compute_participants')
@@ -107,7 +116,46 @@ class PieceReportWizardLine(models.TransientModel):
                 price = rate.price or 0.0
             line.piece_price = price
 
-    @api.depends('participant_ids.employee_id', 'participant_ids.performance_ratio')
+    @api.onchange('participant_employee_ids')
+    def _onchange_participant_employees(self):
+        """Tag-style crew editing: map the employee tags onto participant
+        rows. Removed employees drop their row, added ones get a
+        provisional equal share; the chained participant_ids onchange
+        (_onchange_participant_ids_rebalance) re-splits the ratios,
+        keeping typed-over rows locked."""
+        wanted = self.participant_employee_ids
+        existing = self.participant_ids
+        removed = existing.filtered(
+            lambda p: p.employee_id not in wanted)
+        new_employees = wanted - existing.mapped('employee_id')
+        if not removed and not new_employees:
+            return
+        share = round(100.0 / max(len(wanted), 1), 4)
+        self.participant_ids = \
+            [(3, row.id, 0) for row in removed] + [
+                (0, 0, {
+                    'employee_id': employee.id,
+                    'performance_ratio': share,
+                    'x_ratio_baseline': share,
+                }) for employee in new_employees]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Server-side load path (menu server action / onchange prefill):
+        derive the employee tags from the participant commands so the
+        tags column shows the crew without a client round-trip."""
+        for vals in vals_list:
+            if vals.get('participant_ids') \
+                    and not vals.get('participant_employee_ids'):
+                employees = list(dict.fromkeys(
+                    command[2]['employee_id']
+                    for command in vals['participant_ids']
+                    if command[0] == 0 and command[2].get('employee_id')))
+                vals['participant_employee_ids'] = [(6, 0, employees)]
+        return super().create(vals_list)
+
+    @api.depends('participant_ids.employee_id',
+                 'participant_ids.performance_ratio')
     def _compute_participants(self):
         for line in self:
             line.participant_count = len(line.participant_ids)

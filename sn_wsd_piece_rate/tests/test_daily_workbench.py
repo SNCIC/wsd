@@ -246,6 +246,36 @@ class TestDailyWorkbench(PieceRateTestCommon):
             sorted(line.participant_ids.mapped('performance_ratio')),
             [40.0, 60.0])
 
+    def test_participant_tags_quick_edit(self):
+        """标签快编列（report-daily-price-inline）：载入时标签=参与人；
+        提交前 _sync_participant_crews 以标签为准重算参与人行并重摊。"""
+        order = self._order_with_pick(qty=100)
+        wizard = self._wizard()
+        line = self._wizard_line(wizard, order, self.op_a, allocation=(
+            (self.emp_zhang, 40.0), (self.emp_li, 30.0),
+            (self.emp_wang, 30.0)))
+        # load path: create derives the tags from the participant commands
+        self.assertEqual(
+            line.participant_employee_ids,
+            self.emp_zhang + self.emp_li + self.emp_wang)
+        # quick edit through the tags: drop li, add zhao
+        line.participant_employee_ids = [
+            (6, 0, (self.emp_zhang | self.emp_wang | self.emp_zhao).ids)]
+        wizard._sync_participant_crews(line)
+        self.assertEqual(
+            line.participant_ids.mapped('employee_id'),
+            self.emp_zhang + self.emp_wang + self.emp_zhao)
+        ratios = line.participant_ids.mapped('performance_ratio')
+        self.assertAlmostEqual(sum(ratios), 100.0, places=2)
+        # rebalance splits by baseline weight: 40 and 30 keep their 4:3
+        zhang = line.participant_ids.filtered(
+            lambda p: p.employee_id == self.emp_zhang)
+        wang = line.participant_ids.filtered(
+            lambda p: p.employee_id == self.emp_wang)
+        self.assertAlmostEqual(
+            zhang.performance_ratio / wang.performance_ratio,
+            40.0 / 30.0, places=2)
+
     # ------------------------------------------------------------------
     # auto draft: copy allocation, snapshot price, business date
     # ------------------------------------------------------------------
