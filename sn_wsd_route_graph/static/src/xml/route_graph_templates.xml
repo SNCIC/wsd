@@ -28,7 +28,6 @@
                                  t-att-title="op.name || op.code"
                                  t-on-click="onPaletteClick"
                                  t-att-data-op-id="op.id">
-                                <div class="o_palette_icon" t-esc="paletteIcon(op)"/>
                                 <div class="o_palette_name" t-esc="op.name || op.code"/>
                             </div>
                         </t>
