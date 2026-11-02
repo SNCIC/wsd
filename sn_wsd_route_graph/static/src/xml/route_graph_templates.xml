@@ -15,8 +15,8 @@
                 <span class="o_route_flow_hint">画布：拖拽平移 · Ctrl+滚轮缩放 · 流程图改动随页面"保存"生效：流程结构变化自动升版，仅调整位置或改其他字段不升版</span>
             </div>
             <div class="o_route_flow_shell">
-                <!-- Left: operation palette -->
-                <div class="o_route_flow_palette">
+                <!-- Left: operation palette (width drag-resizable via the handle on its right) -->
+                <div class="o_route_flow_palette" t-att-style="'width:' + state.paletteWidth + 'px'">
                     <div class="o_route_flow_palette_header">
                         可用工序 <span class="text-muted" t-esc="paletteAvailableCount"/>
                     </div>
@@ -25,6 +25,7 @@
                             <div class="o_palette_group_title" t-esc="group.label"/>
                             <div t-foreach="group.ops" t-as="op" t-key="op.id"
                                  t-att-class="'o_palette_card' + (op.used ? ' o_used' : '')"
+                                 t-att-title="op.name || op.code"
                                  t-on-click="onPaletteClick"
                                  t-att-data-op-id="op.id">
                                 <div class="o_palette_icon" t-esc="paletteIcon(op)"/>
@@ -36,6 +37,8 @@
                         </div>
                     </div>
                 </div>
+                <div class="o_palette_resizer" title="拖动调整宽度，双击复位"
+                     t-on-mousedown="onPaletteResizeStart" t-on-dblclick="onPaletteResetWidth"/>
 
                 <!-- Center: graph canvas -->
                 <div class="o_route_flow_canvas">
@@ -86,7 +89,8 @@
                 <span class="o_mes_route_hint" t-if="!state.editable">制令单已关闭，工艺只读 · 画布：拖拽平移 · Ctrl+滚轮缩放</span>
             </div>
             <div class="o_mes_route_shell">
-                <div class="o_mes_route_palette" t-if="state.editable">
+                <div class="o_mes_route_palette" t-if="state.editable"
+                     t-att-style="'width:' + state.paletteWidth + 'px'">
                     <div class="o_mes_route_palette_header">
                         可用工序 <span class="text-muted" t-esc="paletteAvailableCount"/>
                     </div>
@@ -95,6 +99,7 @@
                             <div class="o_palette_group_title" t-esc="group.label"/>
                             <div t-foreach="group.ops" t-as="op" t-key="op.id"
                                  t-att-class="'o_palette_card' + (op.used ? ' o_used' : '')"
+                                 t-att-title="op.name || op.code"
                                  t-on-click="onPaletteClick"
                                  t-att-data-op-id="op.id">
                                 <div class="o_palette_name" t-esc="op.name || op.code"/>
@@ -102,6 +107,8 @@
                         </t>
                     </div>
                 </div>
+                <div class="o_palette_resizer" t-if="state.editable" title="拖动调整宽度，双击复位"
+                     t-on-mousedown="onPaletteResizeStart" t-on-dblclick="onPaletteResetWidth"/>
                 <div class="o_mes_route_canvas">
                     <div t-ref="container" style="width:100%;height:100%;"/>
                 </div>

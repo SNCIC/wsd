@@ -2,7 +2,7 @@
 import { Component, onMounted, useRef, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { buildRouteCardHtml } from "./route_flow_widget.js";
+import { buildRouteCardHtml, readPaletteWidth, resetPaletteWidth, startPaletteResize } from "./route_flow_widget.js";
 
 /**
  * MES-order private route editor — the order's own copy of the common flow.
@@ -55,6 +55,7 @@ export class MesOrderRouteEditor extends Component {
             selected: null,
             usedOpIds: [],
             paletteVersion: 0,
+            paletteWidth: readPaletteWidth(150),
             editable: false,
             saving: false,
             dirty: false,
@@ -107,8 +108,12 @@ export class MesOrderRouteEditor extends Component {
             ".o_mes_route_shell { position: relative; display: flex; height: 520px; }",
             ".o_mes_route_palette { width: 150px; flex-shrink: 0; border-right: 1px solid #dfe3e8; background: #fff; display: flex; flex-direction: column; }",
             ".o_mes_route_palette_header { padding: 10px 12px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #dfe3e8; }",
-            ".o_mes_route_palette_body { flex: 1; overflow-y: auto; padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }",
+            ".o_mes_route_palette_body { flex: 1; overflow-y: auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; align-content: start; }",
             ".o_mes_route_palette .o_palette_group_title { grid-column: 1 / -1; margin: 4px 0 6px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; }",
+            /* Drag handle between palette and canvas: drag to resize, dblclick resets */
+            ".o_palette_resizer { flex: 0 0 8px; width: 8px; cursor: col-resize; background: transparent; z-index: 6; }",
+            ".o_palette_resizer:hover, .o_palette_resizer.o_resizing { background: #5f95ff; }",
+            "body.o_palette_resizing { cursor: col-resize; user-select: none; }",
             ".o_mes_route_canvas { flex: 1; min-width: 0; }",
             ".o_route_flow_panel { position: absolute; top: 10px; right: 10px; bottom: 10px; width: 248px; background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.16); padding: 14px; overflow-y: auto; box-sizing: border-box; z-index: 5; }",
             ".o_prop_head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #dfe3e8; }",
@@ -129,7 +134,7 @@ export class MesOrderRouteEditor extends Component {
             /* self-sufficient copies of the palette/card styles (the common
                editor/viewer may not be mounted on this page) */
             ".o_palette_group_title { grid-column: 1 / -1; margin: 4px 0 6px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; letter-spacing: 0.02em; }",
-            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; height: 56px; margin: 0; padding: 6px 4px; border: 1px solid #5f95ff; border-radius: 8px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
+            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; min-height: 56px; margin: 0; padding: 6px 4px; border: 1px solid #5f95ff; border-radius: 8px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
             ".o_palette_card.o_used { opacity: 0.48; cursor: not-allowed; }",
             ".o_palette_card .o_palette_name { width: 100%; font-size: 12px; font-weight: 600; color: #141414; line-height: 14px; text-align: center; word-break: break-word; overflow: hidden; }",
             ".o_route_node_card { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; box-sizing: border-box; padding: 8px; background: #fff; gap: 6px; }",
@@ -392,6 +397,11 @@ export class MesOrderRouteEditor extends Component {
         setTimeout(apply, 200);
         setTimeout(apply, 1000);
     }
+
+    // -- Palette width: shared drag handle (persisted by route_flow_widget) --
+    onPaletteResizeStart(ev) { startPaletteResize(this, ev); }
+
+    onPaletteResetWidth() { resetPaletteWidth(this, 150); }
 
     onPaletteClick(ev) {
         if (!this.graph || !this.state.editable) return;
