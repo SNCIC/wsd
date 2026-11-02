@@ -99,6 +99,23 @@ class EipValueMapping(models.Model):
         help='Project name (test detail items) or zone name (device '
              'zone packets) to match.')
     active = fields.Boolean(default=True, index=True)
+    operation_ids = fields.Many2many(
+        'sn.wsd.operation',
+        string='Operations',
+        compute='_compute_operation_ids',
+        help='Operations mapped to this interface code (from the EIP '
+             'operation code mapping) -- shown beside the code so the '
+             'target station is visible while maintaining value keys.')
+
+    @api.depends('info_type_code', 'company_id')
+    def _compute_operation_ids(self):
+        OpMapping = self.env['sn.wsd.eip.operation.mapping']
+        for mapping in self:
+            op_maps = OpMapping.search([
+                ('info_code', '=', mapping.info_type_code),
+                ('company_id', 'in', [mapping.company_id.id, False]),
+            ])
+            mapping.operation_ids = op_maps.operation_id
 
     _mapping_uniq = models.Constraint(
         'unique(company_id, info_type_code, eip_field, source_key)',
