@@ -9,6 +9,7 @@
         'security/company_rules.xml',
         'views/reflow_data_views.xml',
         'views/wave_data_views.xml',
+        'views/aging_data_views.xml',
         'views/device_doc_views.xml',
 
         'views/equipment_config_views.xml',

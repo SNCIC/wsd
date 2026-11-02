@@ -1,0 +1,683 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_eip
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 08:24+0000\n"
+"PO-Revision-Date: 2026-11-02 08:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_value_mapping.py:0
+msgid "%(code)s is not a station-collectable EIP interface code."
+msgstr "%(code)s 不是过站可采集的 EIP 接口编码。"
+
+#. module: sn_wsd_eip
+#. odoo-python
+#: code:addons/sn_wsd_eip/models/eip_value_mapping.py:0
+msgid "%(field)s does not belong to interface %(code)s."
+msgstr "%(field)s 不属于接口 %(code)s。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__active
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__actual_value
+msgid "Actual Value"
+msgstr "实测值"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__line_type__aging_point
+msgid "Aging Point"
+msgstr "老化温度点"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__agingroom_temperature
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__agingroom_temperature
+msgid "Aging Room Temperature (C)"
+msgstr "老化室温度（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__point_time
+msgid "Aging points only: collect time."
+msgstr "仅老化点：采集时间。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__allowable_error
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__allowable_error
+msgid "Allowable Error"
+msgstr "允许误差"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_operation_mapping_form
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__asset_management_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__asset_management_no
+msgid "Asset Management No"
+msgstr "资产管理编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__average_error
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__average_error
+msgid "Average Error"
+msgstr "平均误差"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__average_error_type
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__average_error_type
+msgid "Average Error Type"
+msgstr "平均误差类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__current_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__current_value
+msgid "Battery Current (uA)"
+msgstr "电池电流（μA）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_duration
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__check_duration
+msgid "Check Duration (s)"
+msgstr "检测时长（秒）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_time
+msgid "Check Time"
+msgstr "检验时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__conclusion
+msgid "Conclusion"
+msgstr "检测结论"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__constant_temperature_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__constant_temperature_zone
+msgid "Constant Temperature Zone (C)"
+msgstr "恒温区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__cooling_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__cooling_zone
+msgid "Cooling Zone (C)"
+msgstr "冷却区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_time
+msgid "Create Time"
+msgstr "创建时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__delivered
+msgid "Delivered"
+msgstr "已交付"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__device_no
+msgid "Device No"
+msgstr "设备编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__source_kind__device_zone
+msgid "Device Zone Packet"
+msgstr "设备温区包"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_result_id
+msgid "Device report this row was enriched from (report channel)."
+msgstr "该行补挂数据来源的设备报文（报文通道）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__check_time
+msgid "EIP CHECK_TIME: the pass leave time."
+msgstr "EIP CHECK_TIME：出站时间。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__conclusion
+msgid "EIP CONCLUSION: 0 pass, 1 fail."
+msgstr "EIP CONCLUSION：0 合格，1 不合格。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__create_time
+msgid "EIP CREATE_TIME: when the row entered the MES."
+msgstr "EIP CREATE_TIME：入 MES 的时间。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pass_record_line
+msgid "EIP Collection Record Line"
+msgstr "EIP 数采记录明细"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__device_no
+msgid ""
+"EIP DEVICE_NO: device chain -- report device code, else the work-center "
+"equipment code, else the work-center code."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__eip_field
+msgid "EIP Field"
+msgstr "EIP 字段"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__info_type_code
+msgid "EIP INFO_TYPE_CODE, from the operation code mapping."
+msgstr "EIP INFO_TYPE_CODE，取自工序编码映射。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__info_type_code
+msgid "EIP Info Type Code"
+msgstr "EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__model_code
+msgid ""
+"EIP MODEL_CODE: product specification, falling back to the drawing number."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_operation_mapping
+msgid "EIP Operation Code Mapping"
+msgstr "EIP 工序编码映射"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_operation_mapping
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_operation_mapping
+msgid "EIP Operation Codes"
+msgstr "EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__pcb_code
+msgid ""
+"EIP PCB_CODE: the SN itself (empty for 1011, the aging interface has no "
+"board identity)."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
+msgid "EIP PRODUCTION_ORDER_ID: manufacturing order name snapshot."
+msgstr "EIP PRODUCTION_ORDER_ID：制造订单号快照。"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_pass_record
+msgid "EIP Station Pass Collection Record"
+msgstr "EIP 过站数采记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
+msgid "EIP TEST_CODE: unique per inspection (\"<info code>-<history id>\")."
+msgstr "EIP TEST_CODE：每次检验唯一（\\"<工序编码>-<历史行ID>\\"）。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_name
+msgid "EIP TEST_NAME: the operation name."
+msgstr "EIP TEST_NAME：工序名称。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__upload_time
+msgid ""
+"EIP UPLOAD_TIME: stamped when the collection system takes the row (pull "
+"endpoint, separate project)."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_eip_value_mapping
+msgid "EIP Value Extraction Mapping"
+msgstr "EIP 取值映射"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
+msgid "EIP WORK_ORDER_CODE: MES order name snapshot."
+msgstr "EIP WORK_ORDER_CODE：制令单号快照。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__equipment_id
+msgid "Equipment"
+msgstr "设备"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
+msgid ""
+"INFO_TYPE_CODE of the electricity-meter EIP spec v2.0: 1001 AOI, 1002 "
+"withstand voltage, 1003 FCT, 1004 daily timing error, 1005 battery current, "
+"1006 basic error, 1007 basic error detail, 1008 parameter setting, 1009 "
+"reflow, 1010 wave soldering, 1011 high-temp aging."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__info_type_code
+msgid "Info Type Code"
+msgstr "工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__info_type_code
+msgid ""
+"Interface the mapped EIP field belongs to (see the operation code mapping "
+"for the code list)."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__item_result
+msgid "Item Result"
+msgstr "单项结果"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__leakage_current
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__leakage_current
+msgid "Leakage Current (mA)"
+msgstr "漏电流（mA）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__line_type
+msgid "Line Type"
+msgstr "行类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__line_ids
+msgid "Lines"
+msgstr "明细行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__lower_limit
+msgid "Lower Limit"
+msgstr "下限"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__mes_order_id
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_id
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_operation_mapping
+msgid ""
+"Map an operation to its EIP interface code (1001..1011);\n"
+"                station passes on mapped operations are collected."
+msgstr ""
+"把工序映射到 EIP 接口编码（1001..1011）；\n"
+"                配码工序的过站将被采集。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__model_code
+msgid "Model Code"
+msgstr "规格型号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ng
+msgid "NG"
+msgstr "NG"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__nameplate_code
+msgid "Nameplate Code"
+msgstr "局编号/铭牌号"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_operation_mapping
+msgid "No EIP operation code yet"
+msgstr "暂无 EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__note
+msgid "Note"
+msgstr "备注"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ok
+msgid "OK"
+msgstr "OK"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__operation_id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__operation_id
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__pcb_code
+msgid "PCB Code"
+msgstr "电路板编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__history_id
+msgid "Pass History"
+msgstr "过站历史"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record__state__pending
+msgid "Pending"
+msgstr "待拉取"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__state
+msgid ""
+"Pending: waiting for the collection system to pull it. Delivered: taken by "
+"the collection system, frozen -- no value extraction runs on a delivered "
+"row."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__plant_code
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__plant_code
+msgid "Plant Code"
+msgstr "厂内编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__point_time
+msgid "Point Time"
+msgstr "点位时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__preheating_area
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__preheating_area
+msgid "Preheating Area (C)"
+msgstr "预热区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_order_no
+msgid "Production Order No"
+msgstr "生产订单编号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__project_name
+msgid "Project Name"
+msgstr "项目名"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_key
+msgid ""
+"Project name (test detail items) or zone name (device zone packets) to "
+"match."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__raw_line
+msgid "Raw Line"
+msgstr "原始行"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__real_error
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__real_error
+msgid "Real Error"
+msgstr "实际误差"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__record_id
+msgid "Record"
+msgstr "记录"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__equipment_id
+msgid ""
+"Report device (M_DEVICE_SN) when known, else the equipment maintained on the"
+" work center."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__route_operation_id
+msgid "Route Operation"
+msgstr "工序实例"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__serial_identity_id
+msgid "SN"
+msgstr "SN"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__sn_name
+msgid "SN (snapshot)"
+msgstr "SN（快照）"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_serial_operation_history
+msgid "SN Operation History"
+msgstr "SN 过站历史"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__values_extracted
+msgid "Set once a configured extraction pass ran on this row."
+msgstr "该行执行过配置化提取后置位。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__software_version
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__software_version
+msgid "Software Version"
+msgstr "软件备案号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_key
+msgid "Source Key"
+msgstr "来源键"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_kind
+msgid "Source Kind"
+msgstr "来源类型"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__standard_value
+msgid "Source pending decision; left empty for now."
+msgstr "来源待定，暂留空。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__standard_value
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__standard_value
+msgid "Standard Value (C)"
+msgstr "标准温度（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__standard_version
+msgid "Standard Version"
+msgstr "规范版本号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__state
+msgid "State"
+msgstr "状态"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__table_address
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__table_address
+msgid "Table Address"
+msgstr "表地址"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__table_no
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__table_no
+msgid "Table No"
+msgstr "表号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__eip_field
+msgid "Target value column of the collection row."
+msgstr "数采行的目标取值列。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
+msgid "Test Code"
+msgstr "检验流水号"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__line_type__test_detail
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__source_kind__detail_item
+msgid "Test Detail Item"
+msgstr "测试明细项"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__source_kind
+msgid ""
+"Test Detail Item: match sn.wsd.mes.test.result.detail by project name "
+"(device payload items). Device Zone Packet: match reflow/wave zone names in "
+"the nearest packet."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_name
+msgid "Test Name"
+msgstr "试验名称"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_result_id
+msgid "Test Result"
+msgstr "测试结果"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__testing_voltage
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__testing_voltage
+msgid "Testing Voltage (V)"
+msgstr "试验电压（V）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_value_mapping_mapping_uniq
+msgid "The interface field already has this source mapping."
+msgstr "该接口字段已存在此来源映射。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_operation_mapping_operation_uniq
+msgid "The operation already has an EIP code mapping."
+msgstr "该工序已有 EIP 编码映射。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__history_id
+msgid ""
+"The station-pass ledger row this collection row was born from; unique anchor"
+" (clear-pass keeps the row, drops the anchor)."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.constraint,message:sn_wsd_eip.constraint_sn_wsd_eip_pass_record_history_uniq
+msgid "This station-pass row is already collected."
+msgstr "该过站历史行已采集。"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__upload_time
+msgid "Upload Time"
+msgstr "交付时间"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__upper_limit
+msgid "Upper Limit"
+msgstr "上限"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__values_extracted
+msgid "Values Extracted"
+msgstr "已执行提取"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__warming_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__warming_zone
+msgid "Warming Zone (C)"
+msgstr "升温区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__welding_zone
+#: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_value_mapping__eip_field__welding_zone
+msgid "Welding Zone (C)"
+msgstr "焊接区（℃）"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__agingroom_temperature
+msgid ""
+"Window average for a quick glance; the pull endpoint ships one data row per "
+"point from the aging lines."
+msgstr ""
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__workcenter_id
+msgid "Work Center"
+msgstr "工位"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
+msgid "Work Order No"
+msgstr "工单编号"

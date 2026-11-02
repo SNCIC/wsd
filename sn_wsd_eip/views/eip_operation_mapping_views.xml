@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eip_operation_mapping_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.operation.mapping.list</field>
+        <field name="model">sn.wsd.eip.operation.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="info_code"/>
+                <field name="operation_id"/>
+                <field name="note" optional="hide"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_operation_mapping_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.operation.mapping.form</field>
+        <field name="model">sn.wsd.eip.operation.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active == False"/>
+                    <div class="oe_title">
+                        <h1><field name="info_code" placeholder="1009"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="operation_id"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_operation_mapping_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.operation.mapping.search</field>
+        <field name="model">sn.wsd.eip.operation.mapping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="info_code"/>
+                <field name="operation_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_operation_mapping" model="ir.actions.act_window">
+        <field name="name">EIP Operation Codes</field>
+        <field name="res_model">sn.wsd.eip.operation.mapping</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No EIP operation code yet
+            </p>
+            <p>
+                Map an operation to its EIP interface code (1001..1011);
+                station passes on mapped operations are collected.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_operation_mapping"
+              name="EIP Operation Codes"
+              parent="sn_wsd_mrp.menu_sn_mrp_base_config"
+              action="action_eip_operation_mapping"
+              sequence="20"/>
+
+</odoo>
