@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 04:40+0000\n"
-"PO-Revision-Date: 2026-10-30 04:40+0000\n"
+"POT-Creation-Date: 2026-11-02 02:17+0000\n"
+"PO-Revision-Date: 2026-11-02 02:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -1474,11 +1474,13 @@ msgstr "应用栏文字颜色"
 #. module: sn_wsd_drawing_material
 #. module: sn_wsd_exception
 #. module: sn_wsd_mrp
+#. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_drawing_material.view_sn_wsd_drawing_material_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_serial_identity_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
 msgid "Archived"
 msgstr "已归档"
 
@@ -3421,6 +3423,9 @@ msgstr "可使用 ZPL / CPCL-JSON 渲染的可设计标签模板"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Destination Location"
 msgstr "目的位置"
 
@@ -3780,6 +3785,9 @@ msgstr "单据编码规则"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Document No."
 msgstr "单据号"
 
@@ -3791,6 +3799,7 @@ msgstr "单据已关闭。"
 
 #. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
 msgid "Done"
 msgstr "已完成"
 
@@ -4748,6 +4757,11 @@ msgstr "一般 II"
 msgid "General III"
 msgstr "一般 III"
 
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Generate Internal Batches"
+msgstr "生成内部批次"
+
 #. module: mrp
 #: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
 msgid "Generate Lot"
@@ -5306,6 +5320,7 @@ msgstr "无法排到过去的日期。"
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_route_operation__x_wip_qty
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_mes_order_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "In Progress"
 msgstr "进行中"
 
@@ -5641,18 +5656,22 @@ msgstr "出库库位"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_type_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Issue Type"
 msgstr "领料类型"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_department_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_department_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Issuing Department"
 msgstr "领料部门"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_employee_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Issuing Employee"
 msgstr "领料人"
 
@@ -6563,8 +6582,11 @@ msgstr "群发邮件模板：“%(name)s”（ID：%(record_id)s）"
 
 #. module: sn_wsd_api
 #. from po: d:\odoo\odoo19wsd\addons\resource\i18n\zh_CN.po
+#. module: sn_wsd_stock
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__material
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 msgid "Material"
 msgstr "物料"
 
@@ -7250,6 +7272,7 @@ msgstr "注意：只能导入数据模块（.xml 文件、i18n 文件和静态�
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_cause__note
 #: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_cause_form
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_form
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
 msgid "Notes"
 msgstr "通知"
@@ -7879,6 +7902,7 @@ msgstr "有机线条"
 #: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_delivery
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 #: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
 msgid "Other Deliveries"
 msgstr "其他出库单"
 
@@ -7942,6 +7966,7 @@ msgstr "其他出入库类型"
 #: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_receipt
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
 #: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
 msgid "Other Receipts"
 msgstr "其他入库单"
 
@@ -8517,6 +8542,18 @@ msgstr "主色深色"
 msgid "Primary Light Color"
 msgstr "主色浅色"
 
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_issue_labels
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_issue_labels
+msgid "Print Issue Material Labels"
+msgstr "打印领料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_finished_labels
+msgid "Print Material Labels"
+msgstr "打印物料标签"
+
 #. module: base
 #: model:ir.module.module,summary:base.module_sn_wsd_label_links
 msgid "Print-label entry points and seed templates for business models"
@@ -8943,6 +8980,8 @@ msgstr "入库库位"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_type_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
 msgid "Receipt Type"
 msgstr "入库类型"
 
@@ -8972,12 +9011,14 @@ msgstr "收货数量"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_department_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_department_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
 msgid "Receiving Department"
 msgstr "入库部门"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_employee_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
 msgid "Receiving Employee"
 msgstr "入库人"
 
@@ -9369,6 +9410,9 @@ msgstr "响应"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Responsible"
 msgstr "负责人"
 
@@ -9460,6 +9504,11 @@ msgstr "退货明细"
 #: code:addons/web/static/src/views/fields/password/password_field.js:0
 msgid "Reveal value"
 msgstr "显示值"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Revoke Internal Batches"
+msgstr "撤销内部批次"
 
 #. module: api_doc
 #. odoo-javascript
@@ -9965,6 +10014,9 @@ msgstr "排班类型"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Scheduled Date"
 msgstr "计划日期"
 
@@ -10554,6 +10606,7 @@ msgstr "圆角声呐"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
 msgid "Source Document"
 msgstr "来源单据"
 
@@ -10570,6 +10623,7 @@ msgstr "来源 ID"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
 msgid "Source Location"
 msgstr "源位置"
 
@@ -10782,8 +10836,11 @@ msgstr ""
 
 #. module: sn_wsd_exception
 #. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#. module: sn_wsd_stock
 #. module: sn_wsd_tooling
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
 msgid "Status"
 msgstr "状态"
@@ -12711,6 +12768,9 @@ msgstr "VATEX-FR-CGI295 - 依据《法国税法总法典》（CGI；General tax 
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
 msgid "Validation Date"
 msgstr "验证日期"
 
