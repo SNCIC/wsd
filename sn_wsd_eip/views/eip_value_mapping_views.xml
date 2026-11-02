@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eip_value_mapping_list" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.value.mapping.list</field>
+        <field name="model">sn.wsd.eip.value.mapping</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="info_type_code" string="Info Type Code"/>
+                <field name="eip_field"/>
+                <field name="source_kind"/>
+                <field name="source_key"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eip_value_mapping_form" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.value.mapping.form</field>
+        <field name="model">sn.wsd.eip.value.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active == False"/>
+                    <group>
+                        <group>
+                            <field name="info_type_code" string="Info Type Code"/>
+                            <field name="eip_field"/>
+                        </group>
+                        <group>
+                            <field name="source_kind"/>
+                            <field name="source_key"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eip_value_mapping_search" model="ir.ui.view">
+        <field name="name">sn.wsd.eip.value.mapping.search</field>
+        <field name="model">sn.wsd.eip.value.mapping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="info_type_code" string="Info Type Code"/>
+                <field name="eip_field"/>
+                <field name="source_key"/>
+                <filter string="Test Detail Items" name="filter_detail"
+                        domain="[('source_kind', '=', 'detail_item')]"/>
+                <filter string="Device Zone Packets" name="filter_zone"
+                        domain="[('source_kind', '=', 'device_zone')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eip_value_mapping" model="ir.actions.act_window">
+        <field name="name">EIP Value Mappings</field>
+        <field name="res_model">sn.wsd.eip.value.mapping</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No EIP value mapping yet
+            </p>
+            <p>
+                Map EIP value fields to their source: test detail items by
+                project name, or device zone packet names. Mappings are
+                maintained later, once the on-site names are settled;
+                values backfill automatically afterwards.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_eip_value_mapping"
+              name="EIP Value Mappings"
+              parent="sn_wsd_mrp.menu_sn_mrp_base_config"
+              action="action_eip_value_mapping"
+              sequence="21"/>
+
+</odoo>

@@ -7,6 +7,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/eip_operation_mapping_views.xml',
+        'views/eip_value_mapping_views.xml',
+        'data/cron_eip.xml',
     ],
     'installable': True,
     'application': False,

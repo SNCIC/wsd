@@ -5,7 +5,7 @@ The row is born in the same transaction as the pass verdict backfill
 fields verbatim. Value columns are filled by three extraction buckets:
 
 * bucket 1 -- test detail items by project name (value mapping,
-  filled at the test-result backfill phase, batch 2);
+  filled at the test-result backfill phase);
 * bucket 2 -- device zone packets (reflow/wave), nearest packet before
   the pass, zone-name mapping, max per field / min for cooling;
 * bucket 3 -- aging-room temperature points inside the pass enter/leave
@@ -15,12 +15,17 @@ State machine: pending (default) -> delivered (taken by the collection
 system, frozen afterwards). The pull endpoint is a separate project.
 """
 import logging
+from datetime import timedelta
 
 from odoo import api, fields, models
+from odoo import Command
 
 _logger = logging.getLogger(__name__)
 
 AGING_INFO_CODE = '1011'
+
+# the backfill cron re-runs the extractor on pending rows of this window
+BACKFILL_WINDOW_HOURS = 24
 
 # EIP info code -> zone-packet model (bucket 2)
 ZONE_PACKET_MODELS = {
@@ -235,13 +240,68 @@ class EipPassRecord(models.Model):
         records._apply_value_extraction()
 
     # ------------------------------------------------------------------
+    # enrichment (phase 2 -- report channel backfill)
+    # ------------------------------------------------------------------
+    def _enrich_from_test_result(self, test_results):
+        """Backfill rows from freshly ingested reports. Two entry points
+        share this method: test-result create (link + device refresh)
+        and detail create (the report's last write -- re-extract). An
+        already-linked row is only re-extracted; an unlinked row is
+        matched by same SN + same route operation, latest first, and
+        the report device wins over the work-center chain."""
+        records = self
+        for result in test_results:
+            row = self.search([
+                ('test_result_id', '=', result.id),
+                ('company_id', '=', result.company_id.id),
+            ], limit=1)
+            if not row:
+                if not result.serial_identity_id \
+                        or not result.route_operation_id:
+                    continue
+                row = self.search([
+                    ('serial_identity_id', '=',
+                     result.serial_identity_id.id),
+                    ('route_operation_id', '=',
+                     result.route_operation_id.id),
+                    ('test_result_id', '=', False),
+                    ('company_id', '=', result.company_id.id),
+                ], order='id desc', limit=1)
+                if not row:
+                    continue
+                vals = {'test_result_id': result.id}
+                if result.equipment_id:
+                    vals['equipment_id'] = result.equipment_id.id
+                    vals['device_no'] = (
+                        result.equipment_id.code or row.device_no)
+                row.write(vals)
+            records |= row
+            # detail snapshot once (the report is immutable)
+            if result.detail_ids and not row.line_ids.filtered(
+                    lambda line: line.line_type == 'test_detail'):
+                row.line_ids = [Command.create({
+                    'line_type': 'test_detail',
+                    'sequence': detail.sequence,
+                    'project_name': detail.project_name,
+                    'lower_limit': detail.lower_limit,
+                    'upper_limit': detail.upper_limit,
+                    'actual_value': detail.actual_value,
+                    'item_result': detail.result,
+                    'raw_line': detail.raw_line,
+                }) for detail in result.detail_ids]
+        records._apply_value_extraction()
+
+    # ------------------------------------------------------------------
     # extraction (single entry point for capture / backfill / cron)
     # ------------------------------------------------------------------
     def _apply_value_extraction(self):
         """Run every extraction bucket on ``self``. Each bucket is
         individually tolerant: an error is logged, never raised --
-        collection must not disturb the pass flow. Batch 2 adds the
-        test-detail bucket here."""
+        collection must not disturb the pass flow."""
+        try:
+            self._extract_test_details()
+        except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
+            _logger.warning('EIP detail extraction failed: %s', exc)
         try:
             self._extract_device_zones()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
@@ -250,6 +310,36 @@ class EipPassRecord(models.Model):
             self._extract_aging_points()
         except Exception as exc:  # noqa: BLE001 -- deliberate tolerance
             _logger.warning('EIP aging extraction failed: %s', exc)
+
+    def _extract_test_details(self):
+        """Bucket 1: map test detail items of the row's own report by
+        project name onto EIP fields. Fill-empty only -- the source is
+        the immutable report this row is linked to, recomputation has no
+        gain; the first mapping that matches a project name wins."""
+        Mapping = self.env['sn.wsd.eip.value.mapping']
+        for record in self:
+            if record.state == 'delivered':
+                continue
+            result = record.test_result_id
+            if not result:
+                continue
+            mappings = Mapping.search([
+                ('info_type_code', '=', record.info_type_code),
+                ('source_kind', '=', 'detail_item'),
+                ('company_id', 'in', [record.company_id.id, False]),
+            ])
+            if not mappings:
+                continue
+            values = {}
+            for mapping in mappings:
+                if mapping.eip_field in values:
+                    continue
+                detail = result.detail_ids.filtered(
+                    lambda item: item.project_name == mapping.source_key)[:1]
+                if detail:
+                    values[mapping.eip_field] = detail.actual_value
+            if record._fill_empty_values(values):
+                record.values_extracted = True
 
     def _extract_device_zones(self):
         """Bucket 2: for reflow (1009) / wave (1010) rows, take the
@@ -333,14 +423,38 @@ class EipPassRecord(models.Model):
 
     def _fill_empty_values(self, values):
         """Fill-only-empty writer: existing values are never overwritten
-        (bucket 1/2 semantics). Returns True when something was filled."""
+        (bucket 1 semantics). Values are coerced to the column type;
+        an unparsable number is skipped, never an error. Returns True
+        when something was filled."""
         vals = {}
         for fname, value in values.items():
-            if fname in self._fields and not self[fname]:
+            field = self._fields.get(fname)
+            if not field or self[fname]:
+                continue
+            if field.type == 'float':
+                try:
+                    vals[fname] = float(str(value).strip())
+                except (TypeError, ValueError):
+                    continue
+            else:
                 vals[fname] = value
         if vals:
             self.write(vals)
         return bool(vals)
+
+    @api.model
+    def _cron_backfill_pending_values(self):
+        """Hourly backfill: re-run the extractor on recent pending rows.
+        The one and only path for late packets/points and for rows
+        created before a value mapping was configured. Idempotent by the
+        bucket guards (2 recompute, 3 rebuild, 1 fill-empty; delivered
+        frozen)."""
+        since = fields.Datetime.now() - timedelta(hours=BACKFILL_WINDOW_HOURS)
+        rows = self.search([
+            ('state', '=', 'pending'),
+            ('create_time', '>=', since),
+        ])
+        rows._apply_value_extraction()
 
 
 class EipPassRecordLine(models.Model):

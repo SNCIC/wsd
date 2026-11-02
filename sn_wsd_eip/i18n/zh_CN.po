@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:24+0000\n"
-"PO-Revision-Date: 2026-11-02 08:24+0000\n"
+"POT-Creation-Date: 2026-11-02 08:56+0000\n"
+"PO-Revision-Date: 2026-11-02 08:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -62,6 +62,7 @@ msgstr "允许误差"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_operation_mapping_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_form
 msgid "Archived"
 msgstr "已归档"
 
@@ -162,6 +163,11 @@ msgid "Device Zone Packet"
 msgstr "设备温区包"
 
 #. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_search
+msgid "Device Zone Packets"
+msgstr "设备温区包"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_result_id
 msgid "Device report this row was enriched from (report channel)."
 msgstr "该行补挂数据来源的设备报文（报文通道）。"
@@ -171,6 +177,8 @@ msgstr "该行补挂数据来源的设备报文（报文通道）。"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__display_name
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__display_name
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__display_name
 msgid "Display Name"
 msgstr "显示名称"
@@ -255,7 +263,7 @@ msgstr "EIP 过站数采记录"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_code
 msgid "EIP TEST_CODE: unique per inspection (\"<info code>-<history id>\")."
-msgstr "EIP TEST_CODE：每次检验唯一（\\"<工序编码>-<历史行ID>\\"）。"
+msgstr "EIP TEST_CODE：每次检验唯一（\\\"<工序编码>-<历史行ID>\\\"）。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_name
@@ -275,9 +283,20 @@ msgid "EIP Value Extraction Mapping"
 msgstr "EIP 取值映射"
 
 #. module: sn_wsd_eip
+#: model:ir.actions.act_window,name:sn_wsd_eip.action_eip_value_mapping
+#: model:ir.ui.menu,name:sn_wsd_eip.menu_eip_value_mapping
+msgid "EIP Value Mappings"
+msgstr "EIP 取值映射"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_pass_record__work_order_no
 msgid "EIP WORK_ORDER_CODE: MES order name snapshot."
 msgstr "EIP WORK_ORDER_CODE：制令单号快照。"
+
+#. module: sn_wsd_eip
+#: model:ir.actions.server,name:sn_wsd_eip.ir_cron_eip_value_backfill_ir_actions_server
+msgid "EIP: backfill pending collection values"
+msgstr "EIP：补采待拉取数值"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__equipment_id
@@ -289,6 +308,8 @@ msgstr "设备"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record_line__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result__id
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
 msgid "ID"
 msgstr "ID"
@@ -304,6 +325,9 @@ msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__info_type_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_search
 msgid "Info Type Code"
 msgstr "工序编码"
 
@@ -362,9 +386,30 @@ msgid "MES Order"
 msgstr "制令单"
 
 #. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_mes_test_result
+msgid "MES Test Result"
+msgstr "MES测试结果"
+
+#. module: sn_wsd_eip
+#: model:ir.model,name:sn_wsd_eip.model_sn_wsd_mes_test_result_detail
+msgid "MES Test Result Detail Item"
+msgstr "MES测试结果明细项"
+
+#. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__production_id
 msgid "Manufacturing Order"
 msgstr "制造订单"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_value_mapping
+msgid ""
+"Map EIP value fields to their source: test detail items by\n"
+"                project name, or device zone packet names. Mappings are\n"
+"                maintained later, once the on-site names are settled;\n"
+"                values backfill automatically afterwards."
+msgstr ""
+"把 EIP 数值字段映射到来源：按项目名取测试明细项，或设备温区包的\n"
+"                温区名。映射待现场名称确定后维护，数值随后自动补采。"
 
 #. module: sn_wsd_eip
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_operation_mapping
@@ -395,6 +440,11 @@ msgstr "局编号/铭牌号"
 #: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_operation_mapping
 msgid "No EIP operation code yet"
 msgstr "暂无 EIP 工序编码"
+
+#. module: sn_wsd_eip
+#: model_terms:ir.actions.act_window,help:sn_wsd_eip.action_eip_value_mapping
+msgid "No EIP value mapping yet"
+msgstr "暂无 EIP 取值映射"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__note
@@ -599,6 +649,11 @@ msgid ""
 "(device payload items). Device Zone Packet: match reflow/wave zone names in "
 "the nearest packet."
 msgstr ""
+
+#. module: sn_wsd_eip
+#: model_terms:ir.ui.view,arch_db:sn_wsd_eip.view_eip_value_mapping_search
+msgid "Test Detail Items"
+msgstr "测试明细项"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__test_name

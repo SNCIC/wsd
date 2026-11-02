@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_eip_value_backfill" model="ir.cron">
+        <field name="name">EIP: backfill pending collection values</field>
+        <field name="model_id" ref="model_sn_wsd_eip_pass_record"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_backfill_pending_values()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>
