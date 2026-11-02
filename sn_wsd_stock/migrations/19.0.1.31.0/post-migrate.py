@@ -36,33 +36,46 @@ def migrate(cr, version):
     usage location. Every other inventory operation of the system, and the
     inventory adjustment of the products, goes through the inventory
     adjustment location of the company: the two operations are repointed there
-    through the standard warehouse hook, and the dedicated locations they no
-    longer use are removed when they carry nothing.
+    and the dedicated locations they no longer use are removed when they carry
+    nothing.
+
+    The operation types are updated in place and never created here: a
+    database upgrading from the version that introduced them may not carry
+    them yet, because the barcode module adds required columns to the
+    operation types and is loaded after this module. That module's own
+    migration creates them, on the inventory adjustment location. The
+    locations are written directly for the same reason: the standard warehouse
+    hook creates the missing operation types.
     """
     env = api.Environment(cr, SUPERUSER_ID, {})
     PickingType = env['stock.picking.type'].with_context(active_test=False)
     Location = env['stock.location'].with_context(active_test=False)
     warehouses = env['stock.warehouse'].with_context(active_test=False).search([])
+    customer_location = env.ref('stock.stock_location_customers')
+    supplier_location = env.ref('stock.stock_location_suppliers')
     dedicated = Location
     for warehouse in warehouses:
-        for field_name in (
-                'sn_inventory_loss_type_id',
-                'sn_inventory_gain_type_id'):
-            picking_type = warehouse[field_name]
-            if picking_type:
-                dedicated |= (
-                    picking_type.default_location_src_id
-                    | picking_type.default_location_dest_id)
-    for warehouse in warehouses:
-        picking_type_values = (
-            warehouse._create_or_update_sequences_and_picking_types())
-        if picking_type_values:
-            warehouse.write(picking_type_values)
-    adjustment_locations = Location
-    for warehouse in warehouses:
-        adjustment_locations |= warehouse._get_inventory_adjustment_location()
+        adjustment_location = warehouse._get_inventory_adjustment_location()
+        loss_type = warehouse.sn_inventory_loss_type_id
+        gain_type = warehouse.sn_inventory_gain_type_id
+        for picking_type in loss_type | gain_type:
+            dedicated |= (
+                picking_type.default_location_src_id
+                | picking_type.default_location_dest_id)
+        if loss_type:
+            loss_type.write({
+                'default_location_src_id': warehouse.lot_stock_id.id,
+                'default_location_dest_id': (
+                    adjustment_location or customer_location).id,
+            })
+        if gain_type:
+            gain_type.write({
+                'default_location_src_id': (
+                    adjustment_location or supplier_location).id,
+                'default_location_dest_id': warehouse.lot_stock_id.id,
+            })
     names = _load_location_names()
-    for location in dedicated - adjustment_locations:
+    for location in dedicated:
         if location.usage != 'inventory' or location.name not in names:
             continue
         used = (
