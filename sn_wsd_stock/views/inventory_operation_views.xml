@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inventory losses and inventory gains: transfers of their own operation
+         type, taking the goods out of the stock (loss) or bringing them in
+         (gain) without a sales or a purchase order. The difference goes
+         through the virtual location of the operation type, so its valuation
+         account is the account booking the loss or the gain. The menus open
+         the standard transfer form, so the operations keep the confirm,
+         assign, validate and batch flow of every transfer. -->
+    <record id="view_sn_wsd_inventory_loss_list" model="ir.ui.view">
+        <field name="name">stock.picking.inventory.loss.list</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Inventory Losses" create="false" delete="false"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Document No."/>
+                <field name="picking_type_id" column_invisible="1"/>
+                <field name="scheduled_date" string="Scheduled Date"
+                       options="{'show_time': False}"/>
+                <field name="date_done" string="Validation Date"
+                       options="{'show_time': False}"/>
+                <field name="location_id" string="Source Location"/>
+                <field name="location_dest_id" string="Destination Location"/>
+                <field name="origin" string="Source Document"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="user_id" string="Responsible"
+                       widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_inventory_gain_list" model="ir.ui.view">
+        <field name="name">stock.picking.inventory.gain.list</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Inventory Gains" create="false" delete="false"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" string="Document No."/>
+                <field name="picking_type_id" column_invisible="1"/>
+                <field name="scheduled_date" string="Scheduled Date"
+                       options="{'show_time': False}"/>
+                <field name="date_done" string="Validation Date"
+                       options="{'show_time': False}"/>
+                <field name="location_id" string="Source Location"/>
+                <field name="location_dest_id" string="Destination Location"/>
+                <field name="origin" string="Source Document"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state in ('confirmed', 'assigned')"
+                       decoration-warning="state == 'waiting'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="user_id" string="Responsible"
+                       widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_inventory_loss" model="ir.actions.act_window">
+        <field name="name">Inventory Losses</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_inventory_loss_list"/>
+        <field name="domain">[('sn_inventory_operation', '=', 'loss')]</field>
+        <field name="context">{'sn_inventory_operation_default': 'loss'}</field>
+    </record>
+
+    <record id="action_sn_wsd_inventory_gain" model="ir.actions.act_window">
+        <field name="name">Inventory Gains</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_wsd_inventory_gain_list"/>
+        <field name="domain">[('sn_inventory_operation', '=', 'gain')]</field>
+        <field name="context">{'sn_inventory_operation_default': 'gain'}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_inventory_loss"
+              name="Inventory Losses"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_sn_wsd_inventory_loss"
+              sequence="9"/>
+    <menuitem id="menu_sn_wsd_inventory_gain"
+              name="Inventory Gains"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_sn_wsd_inventory_gain"
+              sequence="10"/>
+
+    <!-- The transfers menus of Odoo read the code of the operation type, and
+         the inventory losses and gains share the delivery and receipt codes:
+         they are kept out of the standard deliveries and receipts lists, where
+         they would look like sales and purchase documents, and stay on their
+         own menus. The other operations keep their behaviour. -->
+    <record id="view_picking_internal_search_inventory_operation"
+            model="ir.ui.view">
+        <field name="name">stock.picking.internal.search.inventory.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <filter name="reception" position="attributes">
+                <attribute name="domain">[('picking_type_code', '=', 'incoming'), ('sn_inventory_operation', '=', False)]</attribute>
+            </filter>
+            <filter name="delivery" position="attributes">
+                <attribute name="domain">[('picking_type_code', '=', 'outgoing'), ('sn_inventory_operation', '=', False)]</attribute>
+            </filter>
+        </field>
+    </record>
+</odoo>

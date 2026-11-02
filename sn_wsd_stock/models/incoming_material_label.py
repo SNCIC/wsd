@@ -59,10 +59,19 @@ class StockPicking(models.Model):
         with a three-step reception the storage transfer (quality -> stock)
         enforces it, otherwise the receipt does. Material labels may however be
         generated earlier, on the receipt itself.
+
+        The inventory loss and the inventory gain are incoming and outgoing
+        operations like the others, but they correct the stock on the batches
+        already carrying it: they receive nothing, so they neither require nor
+        generate the internal batches of a reception.
         """
         self.ensure_one()
         picking_type = self.picking_type_id
         warehouse = picking_type.warehouse_id
+        if warehouse and picking_type in (
+                warehouse.sn_inventory_loss_type_id,
+                warehouse.sn_inventory_gain_type_id):
+            return False
         store_type = warehouse.store_type_id if warehouse else False
         if store_type and store_type.active:
             return picking_type == store_type

@@ -109,6 +109,57 @@ class StockPicking(models.Model):
                 warehouse
                 and picking.picking_type_id == warehouse.sn_consignment_in_type_id)
 
+    sn_inventory_operation = fields.Selection(
+        selection=[
+            ('loss', 'Inventory Loss'),
+            ('gain', 'Inventory Gain'),
+        ],
+        string='Inventory Operation',
+        compute='_compute_sn_inventory_operation',
+        store=True,
+        index=True,
+        help='Inventory loss or inventory gain the transfer was created from, '
+             'empty on the receipts, the deliveries and the other transfers.',
+    )
+
+    @api.depends('picking_type_id')
+    def _compute_sn_inventory_operation(self):
+        for picking in self:
+            picking.sn_inventory_operation = (
+                picking._get_sn_inventory_operation_kind())
+
+    def _get_sn_inventory_operation_kind(self):
+        """Return the inventory operation this transfer belongs to, if any."""
+        self.ensure_one()
+        picking_type = self.picking_type_id
+        warehouse = picking_type.warehouse_id
+        if not warehouse:
+            return False
+        if picking_type == warehouse.sn_inventory_loss_type_id:
+            return 'loss'
+        if picking_type == warehouse.sn_inventory_gain_type_id:
+            return 'gain'
+        return False
+
+    sn_inventory_location_id = fields.Many2one(
+        'stock.location',
+        string='Valuation Location',
+        compute='_compute_sn_inventory_location_id',
+        help='Virtual location the difference of the inventory operation goes '
+             'through, read from the operation type. Its valuation account is '
+             'the one booking the loss or the gain.',
+    )
+
+    @api.depends('sn_inventory_operation', 'location_id', 'location_dest_id')
+    def _compute_sn_inventory_location_id(self):
+        for picking in self:
+            if picking.sn_inventory_operation == 'loss':
+                picking.sn_inventory_location_id = picking.location_dest_id
+            elif picking.sn_inventory_operation == 'gain':
+                picking.sn_inventory_location_id = picking.location_id
+            else:
+                picking.sn_inventory_location_id = False
+
     @api.model
     def default_get(self, fields_list):
         """Default the operation of the operation menus.
@@ -116,23 +167,29 @@ class StockPicking(models.Model):
         The menus cannot know the operation type of the warehouse in their
         action, so they pass the kind in the context and the default type,
         source and destination locations are read from it. The consignment
-        receipt menu also creates its operation type on first use: a
-        warehouse installed before the feature has none, and creating it at
-        run time keeps the module upgrade safe (the barcode module adds
-        required columns to the operation types and loads after this one).
+        receipt, inventory loss and inventory gain menus also create their
+        operation type on first use: a warehouse installed before the feature
+        has none, and creating it at run time keeps the module upgrade safe
+        (the barcode module adds required columns to the operation types and
+        loads after this one).
         """
         res = super().default_get(fields_list)
         if self.env.context.get('default_picking_type_id'):
             return res
         other_operation = self.env.context.get('sn_other_operation_default')
         consignment = self.env.context.get('sn_consignment_in_default')
-        if not other_operation and not consignment:
+        inventory_operation = self.env.context.get(
+            'sn_inventory_operation_default')
+        if not other_operation and not consignment and not inventory_operation:
             return res
         warehouse = self.env['stock.warehouse'].search(
             [('company_id', '=', self.env.company.id)], limit=1)
         if not warehouse:
             return res
-        if consignment:
+        if inventory_operation:
+            picking_type = warehouse._ensure_inventory_operation_type(
+                inventory_operation)
+        elif consignment:
             picking_type = warehouse._ensure_consignment_in_type()
         elif other_operation == 'other_in':
             picking_type = warehouse.other_in_type_id

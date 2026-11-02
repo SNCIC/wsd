@@ -187,10 +187,10 @@
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('o_td_label')][label[@for='partner_id']]"
                    position="attributes">
-                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+                <attribute name="invisible">sn_other_operation == 'other_out' or bool(sn_inventory_operation)</attribute>
             </xpath>
             <xpath expr="//group/field[@name='partner_id']" position="attributes">
-                <attribute name="invisible">sn_other_operation == 'other_out'</attribute>
+                <attribute name="invisible">sn_other_operation == 'other_out' or bool(sn_inventory_operation)</attribute>
             </xpath>
             <xpath expr="//group/field[@name='partner_id']" position="after">
                 <field name="sn_other_operation" invisible="1"/>
@@ -214,6 +214,24 @@
                        domain="[('department_id', '=', sn_receive_department_id)] if sn_receive_department_id else []"/>
                 <field name="sn_receive_location_id"
                        invisible="sn_other_operation != 'other_in'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inventory losses and inventory gains: the operation and the virtual
+         location its difference goes through. The location is shown read only
+         on both documents: it is the one selecting the stock valuation account
+         of the operation, and the standard form hides the source of an
+         incoming transfer as well as the destination of an outgoing one. -->
+    <record id="view_picking_form_inventory_operation" model="ir.ui.view">
+        <field name="name">stock.picking.form.inventory.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='partner_id']" position="after">
+                <field name="sn_inventory_operation" invisible="1"/>
+                <field name="sn_inventory_location_id"
+                       invisible="not sn_inventory_operation"/>
             </xpath>
         </field>
     </record>

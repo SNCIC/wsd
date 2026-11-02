@@ -1480,3 +1480,117 @@ msgstr "其他出库"
 #: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_in
 msgid "Other Receipt"
 msgstr "其他入库"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence inventory gains"
+msgstr "%(name)s 盘盈单序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence inventory losses"
+msgstr "%(name)s 盘亏单序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_location.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__gain
+msgid "Inventory Gain"
+msgstr "盘盈"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_gain_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_gain_detail
+msgid "Inventory Gain Details"
+msgstr "盘盈明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_inventory_gain_type_id
+msgid "Inventory Gain Type"
+msgstr "盘盈作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_gain
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_gain
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Inventory Gains"
+msgstr "盘盈单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_location.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__loss
+msgid "Inventory Loss"
+msgstr "盘亏"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_loss_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_loss_detail
+msgid "Inventory Loss Details"
+msgstr "盘亏明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_inventory_loss_type_id
+msgid "Inventory Loss Type"
+msgstr "盘亏作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_loss
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_loss
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+msgid "Inventory Losses"
+msgstr "盘亏单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid "Inventory Operation"
+msgstr "盘点作业"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Inventory Operation Details"
+msgstr "盘点作业明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_inventory_gain_type_id
+msgid ""
+"Operation type of the inventory gains: goods entering the stock from the "
+"inventory gain location, whose valuation account books the gain of the "
+"difference."
+msgstr ""
+"盘盈作业类型：物料从盘盈虚拟库位进入库存，该库位的存货计价科目即为盘盈收益科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_inventory_loss_type_id
+msgid ""
+"Operation type of the inventory losses: goods leaving the stock on the "
+"inventory loss location, whose valuation account books the loss of the "
+"difference."
+msgstr ""
+"盘亏作业类型：物料从库存出到盘亏虚拟库位，该库位的存货计价科目即为盘亏损失科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid ""
+"Inventory loss or inventory gain the transfer was created from, empty on the "
+"receipts, the deliveries and the other transfers."
+msgstr "单据所属的盘亏或盘盈，收货、发货及其他调拨为空。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_inventory_location_id
+msgid "Valuation Location"
+msgstr "记账库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_location_id
+msgid ""
+"Virtual location the difference of the inventory operation goes through, "
+"read from the operation type. Its valuation account is the one booking the "
+"loss or the gain."
+msgstr "盘点作业差异经过的虚拟库位，取自作业类型；该库位的存货计价科目用于盘亏或盘盈记账。"
