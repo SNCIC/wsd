@@ -174,3 +174,89 @@ class Equipment(models.Model):
             if duplicate:
                 raise ValidationError(_(
                     "Equipment code must be unique: %s", record.code))
+
+    # ------------------------------------------------------------------
+    # station-pass gate (device-pass-gate change)
+    # ------------------------------------------------------------------
+    @api.model
+    def resolve_for_pass(self, code):
+        """Resolve an equipment code reported by a station pass, in the
+        current company. Unknown codes are a HARD rejection (no tolerant
+        fallback): the ledger must be maintained before a device may
+        report with a code (user rule 2026-11-02)."""
+        code = (code or '').strip()
+        equipment = self.search([
+            ('code', '=', code),
+            ('company_id', '=', self.env.company.id),
+        ], limit=1) if code else self
+        if not equipment:
+            raise ValidationError(_(
+                'Equipment %s does not exist in the equipment ledger; '
+                'maintain the ledger before reporting with this code.',
+                code))
+        return equipment
+
+    def _pass_gate_block_reason(self, now):
+        """Why this equipment may not produce a pass right now, or False.
+
+        Status gate: only equipment in use may produce passes. Overdue
+        gate: spot-check / maintenance due and not done (see
+        _pass_gate_overdue_reason)."""
+        self.ensure_one()
+        if self.equipment_status != 'enabled':
+            return _(
+                'Equipment %(equipment)s is %(status)s, not in use; it '
+                'cannot produce passes.',
+                equipment=self.code,
+                status=dict(self._fields['equipment_status'].selection).get(
+                    self.equipment_status, self.equipment_status))
+        return self._pass_gate_overdue_reason(now)
+
+    def _pass_gate_overdue_reason(self, now):
+        """Spot-check / maintenance overdue gate (date-based rule).
+
+        No cron / task dependency (a missing task must never blind the
+        gate): the very same due rule the task generators use
+        (plan._is_equipment_due_today) is evaluated directly against the
+        equipment's last execution stamp. A due plan blocks only after
+        its domain's daily trigger time has passed -- the night shift
+        before the trigger is exempt (user rule 2026-11-02: nobody runs
+        spot checks at midnight). A device that already executed today
+        never blocks; equipment covered by no active plan is not managed
+        (no control). Trigger times are independent per domain
+        (spot check 08:00 / maintenance 08:30 defaults) and reuse the
+        generators' tz-aware parsing."""
+        self.ensure_one()
+        if not self.equipment_type_id:
+            return False
+        today = now.date()
+        for kind, plan_model, last_field, log_model in (
+            (_('spot check'), 'sn.wsd.device.check.plan',
+             'last_spot_check_date', 'sn.wsd.device.check.generation.log'),
+            (_('maintenance'), 'sn.wsd.device.maint.plan',
+             'last_maintenance_date', 'sn.wsd.device.maint.generation.log'),
+        ):
+            plan = self.env[plan_model].search([
+                ('equipment_type_id', '=', self.equipment_type_id.id),
+                ('active', '=', True),
+            ], limit=1)
+            if not plan:
+                continue
+            last = self[last_field]
+            if last and last.date() == today:
+                continue  # already executed today: satisfied
+            if not plan._is_equipment_due_today(self, today):
+                continue
+            # night-shift exemption: due only binds past the trigger time
+            if now < self.env[log_model]._parameter_trigger_datetime(now):
+                continue
+            return _(
+                'Equipment %(equipment)s is overdue for its %(kind)s (plan '
+                'of equipment type %(type)s, cycle %(cycle)s, last '
+                'execution %(last)s); complete it before passing stations.',
+                equipment=self.code, kind=kind,
+                type=self.equipment_type_id.display_name,
+                cycle=dict(plan._fields['cycle_type'].selection).get(
+                    plan.cycle_type, plan.cycle_type),
+                last=last.date() if last else _('never'))
+        return False

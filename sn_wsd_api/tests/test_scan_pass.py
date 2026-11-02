@@ -68,6 +68,12 @@ class ScanPassFixture:
         cls.defect2 = cls.env['sn.wsd.quality.defect.code'].create({
             'name': 'API Defect 2', 'code': 'APID2',
             'category': 'other', 'severity': 'minor'})
+        # device ledger entry behind M_DEVICE_SN='DEV-01' (device-pass-gate:
+        # unknown codes are a hard rejection, so the wide-payload test
+        # needs a maintained ledger row)
+        cls.equipment = cls.env['sn.wsd.device.equipment'].create({
+            'code': 'DEV-01', 'name': 'API Test Device',
+            'company_id': cls.company.id, 'equipment_status': 'enabled'})
         cls.service = cls.env['sn.wsd.api.service']
 
     def _payload(self, **kw):
@@ -102,6 +108,86 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             self.service.scan_pass(self._payload(M_WORK_STATIONSN='NOPE'))
         with self.assertRaises(ValidationError):
             self.service.scan_pass(self._payload(M_TEST_RESULT='MAYBE'))
+
+    # ------------------------------------------------------------------
+    # device-pass-gate: existence / status / ledger link / idempotency
+    # ------------------------------------------------------------------
+    def test_device_gate_unknown_code_hard_rejects(self):
+        """spec: 设备码存在性硬拦——查不到即 422，过站零落库。"""
+        with self.assertRaises(ValidationError):
+            self.service.scan_pass(self._payload(
+                M_SN='SN-GATE-404', M_DEVICE_SN='GHOST-DEV'))
+        self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
+            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+        self.assertFalse(self.env['sn.wsd.serial.wip'].search(
+            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+        self.assertFalse(self.env['sn.wsd.mes.test.result'].search(
+            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+
+    def test_device_gate_status_blocks(self):
+        """spec: 状态闸门——维修/封存/报废设备不得产出过站。"""
+        for status in ('repair', 'sealed', 'scrapped'):
+            self.equipment.equipment_status = status
+            with self.assertRaises(ValidationError):
+                self.service.scan_pass(self._payload(
+                    M_SN='SN-GATE-%s' % status, M_DEVICE_SN='DEV-01'))
+            self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
+                [('serial_identity_id.name', '=', 'SN-GATE-%s' % status)]))
+        self.equipment.equipment_status = 'enabled'
+
+    def test_device_gate_links_equipment_ledger(self):
+        """spec: 测试结果挂接台账——equipment_id m2o 不再恒空。"""
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-GATE-LINK', M_DEVICE_SN='DEV-01'))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.equipment_id, self.equipment)
+        self.assertEqual(test_result.equipment_sn, 'DEV-01')
+
+    def test_device_gate_idempotent_resend_skips_revalidation(self):
+        """spec: 幂等重发不重复校验——设备事后转维修中不影响历史事件重发。"""
+        result = self.service.scan_pass(self._payload(
+            M_SN='SN-GATE-IDEM', M_DEVICE_SN='DEV-01',
+            external_event_id='EVT-GATE-1'))
+        self.assertTrue(result['ok'])
+        self.equipment.equipment_status = 'repair'
+        replay = self.service.scan_pass(self._payload(
+            M_SN='SN-GATE-IDEM', M_DEVICE_SN='DEV-01',
+            external_event_id='EVT-GATE-1'))
+        self.assertTrue(replay['ok'])
+        self.assertEqual(replay['test_result_id'], result['test_result_id'])
+        # exactly one pass row: the resend was short-circuited
+        self.assertEqual(len(self.env['sn.wsd.serial.operation.history'].search(
+            [('serial_identity_id.name', '=', 'SN-GATE-IDEM')])), 1)
+        self.equipment.equipment_status = 'enabled'
+
+    def test_device_gate_overdue_blocks_and_recovers(self):
+        """spec: 点检逾期拦（过了触发时刻）；补做点检后同设备恢复过站。"""
+        from datetime import datetime
+        from odoo.tests import freeze_time
+        self.env['ir.config_parameter'].sudo().set_param(
+            'equipment_inspection_trigger_time', '08:00')
+        eq_type = self.env['sn.wsd.device.equipment.type'].create({
+            'name': 'API Gate Type', 'code': 'APIGATE'})
+        self.equipment.equipment_type_id = eq_type
+        self.env['sn.wsd.device.check.plan'].create({
+            'equipment_type_id': eq_type.id,
+            'cycle_type': 'weekly', 'start_date': datetime(2026, 10, 1).date(),
+        })
+        self.equipment.last_spot_check_date = datetime(2026, 10, 26, 9, 0)
+        with freeze_time('2026-11-02 09:00:00'):
+            # 7 days since the last weekly check, past the 08:00 trigger
+            with self.assertRaises(ValidationError):
+                self.service.scan_pass(self._payload(
+                    M_SN='SN-GATE-OVERDUE', M_DEVICE_SN='DEV-01'))
+            self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
+                [('serial_identity_id.name', '=', 'SN-GATE-OVERDUE')]))
+            # the morning crew runs the spot check -> the gate reopens
+            self.equipment.last_spot_check_date = datetime(2026, 11, 2, 8, 30)
+            result = self.service.scan_pass(self._payload(
+                M_SN='SN-GATE-OVERDUE', M_DEVICE_SN='DEV-01'))
+        self.assertTrue(result['ok'])
 
     def test_02_first_pass_records_only_the_scanned_station(self):
         # strict one-scan-per-station: the report at the start operation

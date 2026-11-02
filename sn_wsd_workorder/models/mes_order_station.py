@@ -311,18 +311,34 @@ class MesOrderStationServices(models.Model):
         }
 
     @api.model
-    def sn_station_scan_leave(self, workcenter_id, code):
+    def sn_station_scan_leave(self, workcenter_id, code, one_shot_ok=False):
         """PDA station-pass scan: same one-scan kernel as the terminal.
 
-        Returns ``{'wip_id', 'order_id', 'leave'}``: a successful scan always
-        leaves the board in progress at the scanned station, so the caller
-        completes this very station with its OK/NG/scrap mode."""
-        result = self.sn_station_scan(workcenter_id, code, False)
+        With ``one_shot_ok`` the OK verdict rides on the same call (the
+        device-API kernel ``pass_one_station``, one transaction), so a
+        client dropping between two RPCs can never strand a board in
+        progress -- exactly like the terminal's OK mode. NG and scrap keep
+        their two-step flow (defect code / reason dialog).
+
+        Returns ``{'wip_id', 'order_id', 'leave', 'passed'}``: without
+        one-shot a successful scan leaves the board in progress at the
+        scanned station and the caller completes this very station with
+        its OK/NG/scrap mode; with one-shot ``passed`` is True and nothing
+        is left pending."""
+        result = self.sn_station_scan(workcenter_id, code, False, one_shot_ok)
+        if result.get('action') == 'passed':
+            return {
+                'wip_id': False,
+                'order_id': result['order_id'],
+                'leave': False,
+                'passed': True,
+            }
         if result.get('action') == 'leave':
             return {
                 'wip_id': result['wip_id'],
                 'order_id': result['order_id'],
                 'leave': True,
+                'passed': False,
             }
         # select_order: the scan switched the terminal order, nothing to
         # complete (an unknown SN raises before reaching this branch)
@@ -330,6 +346,7 @@ class MesOrderStationServices(models.Model):
             'wip_id': False,
             'order_id': result.get('order_id') or False,
             'leave': False,
+            'passed': False,
         }
 
     @api.model

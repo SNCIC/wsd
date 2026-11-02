@@ -207,6 +207,14 @@ class MesOrderRoute(models.Model):
                     workcenter_id = common_op.workcenter_id.id
                 elif current and current.workcenter_id:
                     workcenter_id = current.workcenter_id.id
+            # canvas payloads carry the layout; sync graphs / older payloads
+            # may omit it -- keep the stored position per axis instead of
+            # resetting it to the origin
+            canvas_vals = {}
+            if node.get('x') is not None:
+                canvas_vals['x_canvas_x'] = node['x']
+            if node.get('y') is not None:
+                canvas_vals['x_canvas_y'] = node['y']
             vals = {
                 'operation_id': op_id,
                 'workcenter_id': workcenter_id or False,
@@ -219,10 +227,19 @@ class MesOrderRoute(models.Model):
                 'x_allow_serial_creation': bool(allow_serial_creation),
                 'x_allow_skip_with_override': bool(allow_skip_with_override),
                 'is_input': bool(node.get('x_allow_entry')),
-                'x_canvas_x': node.get('x'),
-                'x_canvas_y': node.get('y'),
+                'x_canvas_x': canvas_vals.get(
+                    'x_canvas_x', current.x_canvas_x if current else 0),
+                'x_canvas_y': canvas_vals.get(
+                    'x_canvas_y', current.x_canvas_y if current else 0),
             }
             if current and current in frozen:
+                # The freeze protects business fields (operation, edges,
+                # flags, counters); the canvas layout is pure UI -- keep
+                # persisting the dragged position so an in-production order
+                # keeps its arrangement after save (layout drags are the
+                # one edit allowed on a frozen node).
+                if canvas_vals:
+                    current.write(canvas_vals)
                 continue
             if current:
                 current.write(vals)

@@ -16,7 +16,8 @@ const MODES = [
 ];
 
 // Station passing (everyone): pick a work center, pick a sticky result
-// mode, scan in-progress SNs. OK leaves in one scan; NG holds the WIP row
+// mode, scan in-progress SNs. OK leaves in one scan (one-shot kernel, one
+// transaction, same as the terminal / device API); NG holds the WIP row
 // client-side and waits for the defect-code scan (two-step, like the shop
 // floor terminal); scrap opens the mandatory reason list. Exit-only by
 // design: feeding and order switching stay on the shop floor terminal.
@@ -354,7 +355,20 @@ export class StationPassAction extends Component {
         }
         const hit = await this.orm.silent.call(
             "sn.wsd.mes.order", "sn_station_scan_leave",
-            [this.state.selectedWorkcenterId, code]);
+            [this.state.selectedWorkcenterId, code,
+             // OK mode: the scan itself passes the station through the
+             // same one-shot kernel as the terminal / device API (enter +
+             // leave in one transaction); NG/scrap keep their two-step flow
+             this.state.mode === "ok"]);
+        if (hit.passed) {
+            // one-shot OK: the kernel entered and left the station in the
+            // scan's own transaction, nothing is left pending
+            this._setResult(
+                _t("SN %s passed %s.", code, this.state.operationLabel || ""),
+                "success");
+            await this._refreshCounts();
+            return;
+        }
         if (!hit.leave) {
             // one-scan kernel: the scan parked the board at this station
             // (feeding or arrival pull) -- no completion happens here

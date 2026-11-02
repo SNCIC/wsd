@@ -18,6 +18,56 @@ const PORT_HIT_RADIUS = 10;
 const CARD_W = 200;
 const CARD_H = 56;
 
+// Palette width is user-adjustable (drag the handle between palette and
+// canvas) and remembered in localStorage — shared by the common route editor
+// and the MES order editor so the preference follows the user.
+const PALETTE_WIDTH_KEY = "o_route_flow_palette_w";
+const PALETTE_WIDTH_MIN = 120;
+const PALETTE_WIDTH_MAX = 480;
+
+export function readPaletteWidth(fallback) {
+    try {
+        const w = parseInt(localStorage.getItem(PALETTE_WIDTH_KEY), 10);
+        return Number.isFinite(w)
+            ? Math.max(PALETTE_WIDTH_MIN, Math.min(PALETTE_WIDTH_MAX, w))
+            : fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+
+// Column-resize drag: live width while moving, persisted on release.
+// Bind to the resizer handle's mousedown; the component only needs a
+// reactive `state.paletteWidth`. `resetPaletteWidth` backs the dblclick.
+export function startPaletteResize(comp, ev) {
+    ev.preventDefault();
+    const startX = ev.clientX;
+    const startWidth = comp.state.paletteWidth;
+    const resizer = ev.currentTarget;
+    resizer.classList.add("o_resizing");
+    document.body.classList.add("o_palette_resizing");
+    const onMove = (e) => {
+        comp.state.paletteWidth = Math.max(
+            PALETTE_WIDTH_MIN,
+            Math.min(PALETTE_WIDTH_MAX, startWidth + (e.clientX - startX)),
+        );
+    };
+    const onUp = () => {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+        resizer.classList.remove("o_resizing");
+        document.body.classList.remove("o_palette_resizing");
+        try { localStorage.setItem(PALETTE_WIDTH_KEY, String(comp.state.paletteWidth)); } catch (e) {}
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+}
+
+export function resetPaletteWidth(comp, fallback) {
+    comp.state.paletteWidth = fallback;
+    try { localStorage.removeItem(PALETTE_WIDTH_KEY); } catch (e) {}
+}
+
 let routeAgentEdgeRegistered = false;
 let routeAgentCardRegistered = false;
 
@@ -82,6 +132,7 @@ export class RouteFlowEditor extends Component {
             selected: null,
             usedOpIds: [],
             paletteVersion: 0,
+            paletteWidth: readPaletteWidth(160),
         });
         this._injectStyles();
         onMounted(() => this._build());
@@ -176,17 +227,16 @@ export class RouteFlowEditor extends Component {
             ".o_route_flow_shell { position: relative; display: flex; gap: 0; height: 640px; border: 1px solid #dfe3e8; background: #fff; overflow: hidden; }",
             ".o_route_flow_palette { width: 160px; flex-shrink: 0; border-right: 1px solid #dfe3e8; background: #fff; display: flex; flex-direction: column; height: 100%; }",
             ".o_route_flow_palette_header { padding: 10px 14px; font-size: 13px; font-weight: 600; color: #141414; border-bottom: 1px solid #dfe3e8; background: #fff; }",
-            ".o_route_flow_palette_body { flex: 1; overflow-y: auto; padding: 10px 12px; background: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }",
-            ".o_palette_group_title { grid-column: 1 / -1; margin: 4px 0 6px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; letter-spacing: 0.02em; }",
-            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; height: 56px; margin: 0; padding: 6px 4px; border: 1px solid #5f95ff; border-radius: 8px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
+            ".o_route_flow_palette_body { flex: 1; overflow-y: auto; padding: 8px 10px; background: #fff; display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; align-content: start; }",
+            ".o_palette_group_title { grid-column: 1 / -1; margin: 3px 0 4px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; letter-spacing: 0.02em; }",
+            /* Compact name-only cards: no icon, 2 text lines, tighter spacing */
+            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 40px; margin: 0; padding: 4px 3px; border: 1px solid #5f95ff; border-radius: 6px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
+            /* Drag handle between palette and canvas: drag to resize, dblclick resets */
+            ".o_palette_resizer { flex: 0 0 8px; width: 8px; cursor: col-resize; background: transparent; z-index: 6; }",
+            ".o_palette_resizer:hover, .o_palette_resizer.o_resizing { background: #5f95ff; }",
+            "body.o_palette_resizing { cursor: col-resize; user-select: none; }",
             ".o_palette_card.o_used { opacity: 0.48; cursor: not-allowed; }",
-            ".o_palette_card .o_palette_icon { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }",
-            ".o_palette_card .o_palette_name { width: 100%; font-size: 12px; font-weight: 600; color: #141414; line-height: 14px; text-align: center; word-break: break-word; overflow: hidden; }",
-            ".o_palette_theme_blue .o_palette_icon { background: #f0f5ff; color: #1d39c4; }",
-            ".o_palette_theme_green .o_palette_icon { background: #e6fffb; color: #08979c; }",
-            ".o_palette_theme_orange .o_palette_icon { background: #fff7e6; color: #fa8c16; }",
-            ".o_palette_theme_red .o_palette_icon { background: #fff1f0; color: #cf1322; }",
-            ".o_palette_theme_gray .o_palette_icon { background: #f5f5f5; color: #595959; }",
+            ".o_palette_card .o_palette_name { width: 100%; font-size: 12px; font-weight: 600; color: #141414; line-height: 14px; text-align: center; word-break: break-word; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }",
             ".o_route_flow_canvas { flex: 1; min-width: 0; height: 100%; background: #fff; }",
             ".o_route_flow_panel { position: absolute; top: 10px; right: 10px; bottom: 10px; width: 248px; background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.16); padding: 14px; overflow-y: auto; box-sizing: border-box; z-index: 5; animation: o_panel_slide 0.18s ease; }",
             "@keyframes o_panel_slide { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }",
@@ -253,14 +303,6 @@ export class RouteFlowEditor extends Component {
     get paletteAvailableCount() {
         const usedSet = new Set(this.state.usedOpIds);
         return this.allOperations.filter(o => !usedSet.has(o.id)).length;
-    }
-
-    paletteIcon(op) {
-        return (op.code || op.name || "OP").substring(0, 4);
-    }
-
-    paletteDesc(op) {
-        return op.section_name || op.code || "";
     }
 
     _createPortGroup(position) {
@@ -606,6 +648,10 @@ export class RouteFlowEditor extends Component {
     }
 
     // -- Palette --
+    onPaletteResizeStart(ev) { startPaletteResize(this, ev); }
+
+    onPaletteResetWidth() { resetPaletteWidth(this, 160); }
+
     onPaletteClick(ev) {
         if (!this.graph) return;
         const opId = parseInt(ev.currentTarget.getAttribute("data-op-id"), 10);
