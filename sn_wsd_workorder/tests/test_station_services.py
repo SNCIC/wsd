@@ -124,6 +124,35 @@ class TestStationServices(TransactionCase):
         with self.assertRaises(ValidationError):
             self.order.sn_station_enter('SN-T2', self.wc_in.id)
 
+    def test_03_scan_leave_one_shot_ok_single_transaction(self):
+        """PDA OK verdict rides on the scan call itself (one-shot kernel,
+        same as the terminal / device API): enter + leave in one
+        transaction, no WIP row stranded between two RPCs."""
+        MesOrder = self.env['sn.wsd.mes.order']
+        History = self.env['sn.wsd.serial.operation.history']
+        Wip = self.env['sn.wsd.serial.wip']
+        # fresh SN: feeding + station pass in the scan's own transaction
+        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-T3', True)
+        self.assertTrue(hit['passed'])
+        self.assertFalse(hit['wip_id'])
+        self.assertEqual(
+            History.search([('serial_identity_id.name', '=', 'SN-T3')]).result,
+            'ok')
+        self.assertFalse(Wip.search([('serial_identity_id.name', '=', 'SN-T3')]))
+        # a board stranded in progress (client dropped mid legacy flow) is
+        # completed by the one-shot scan of its own station
+        self.order.sn_station_enter('SN-T3B', self.wc_in.id)
+        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-T3B', True)
+        self.assertTrue(hit['passed'])
+        self.assertFalse(Wip.search([
+            ('serial_identity_id.name', '=', 'SN-T3B')]))
+        # without the flag the legacy two-step shape is preserved
+        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T3')
+        self.assertTrue(hit['leave'])
+        self.assertFalse(hit['passed'])
+        self.assertTrue(hit['wip_id'])
+        MesOrder.sn_station_leave(hit['wip_id'], 'ok')
+
     def test_09_floor_in_progress_follows_the_last_record(self):
         """在制口径=每块板最后一条记录：A 判 OK 后仍算 A 的在制（没有开着
         的 WIP 行）；板到 B 进站后 A=0、B=1；B 出站完成后两边都不再显示。"""
