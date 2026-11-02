@@ -5,6 +5,7 @@
     'category': 'Manufacturing/Manufacturing',
     'depends': ['stock', 'sn_wsd_field'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/code_rule_views.xml',
     ],

@@ -5,6 +5,7 @@
     'depends': ['mail', 'sn_wsd_mrp', 'sn_wsd_code_rule'],
     'data': [
         'security/exception_security.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence.xml',
         'data/code_rule_seeds.xml',

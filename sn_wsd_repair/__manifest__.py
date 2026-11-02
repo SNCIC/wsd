@@ -6,6 +6,7 @@
     'data': [
         'data/ir_sequence.xml',
         'data/code_rule_seeds.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/sn_wsd_repair_views.xml',
         'views/repair_pending_views.xml',

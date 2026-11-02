@@ -10,6 +10,7 @@
         'data/ir_sequence.xml',
         'data/code_rule_seeds.xml',
         'data/ipqc_patrol_cron.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'security/oqc_event_rules.xml',
         'wizard/measure_wizard_views.xml',

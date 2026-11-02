@@ -4,6 +4,7 @@
     'summary': 'MSD material control for electric meter manufacturing',
     'depends': ['stock', 'mrp', 'sn_wsd_mrp', 'sn_wsd_smt'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/msd_level_views.xml',
         'views/msd_control_rule_views.xml',

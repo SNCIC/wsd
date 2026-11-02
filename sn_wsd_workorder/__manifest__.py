@@ -6,6 +6,7 @@
     'depends': ['sn_wsd_mrp', 'barcodes', 'sn_wsd_device', 'sn_wsd_exception', 'sn_wsd_quality'],
     'data': [
         'security/security_groups.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/mrp_workcenter_views.xml',
         'views/mrp_production_views.xml',

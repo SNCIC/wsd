@@ -4,6 +4,7 @@
     'summary': 'MES device test-result ingestion (legacy flows removed; API rewrite planned)',
     'depends': ['sn_wsd_mrp', 'sn_wsd_device', 'sn_wsd_smt', 'sn_wsd_tooling', 'sn_wsd_consumable'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/api_request_log_views.xml',
         'views/api_data_tables.xml',

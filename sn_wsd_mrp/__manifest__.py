@@ -9,6 +9,7 @@
         'data/stock_package_type.xml',
         'data/scrap_reason_data.xml',
         'security/mes_security.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/menu_section_views.xml',
         'wizard/mrp_team_member_wizard_views.xml',

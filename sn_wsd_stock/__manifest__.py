@@ -5,6 +5,7 @@
     'category': 'Supply Chain/Inventory',
     'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp', 'sn_wsd_label', 'sn_wsd_list', 'sn_wsd_material'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence.xml',
         'data/label_template_incoming.xml',

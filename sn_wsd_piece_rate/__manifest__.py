@@ -6,6 +6,7 @@
     'depends': ['sn_wsd_mrp'],
     'data': [
         'security/piece_rate_security.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence.xml',
         'views/piece_rate_views.xml',

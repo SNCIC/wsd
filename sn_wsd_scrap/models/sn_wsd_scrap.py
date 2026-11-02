@@ -3,7 +3,9 @@ from odoo.exceptions import UserError, ValidationError
 
 
 class SnWsdScrapReason(models.Model):
-    _name = 'sn.wsd.scrap.reason'
+    # The model itself is declared by sn_wsd_mrp (the lowest common
+    # dependency of every module that references a scrap reason).
+    _inherit = 'sn.wsd.scrap.reason'
     _description = 'SN WSD Scrap Reason'
     _order = 'code, id'
     _check_company_auto = True
