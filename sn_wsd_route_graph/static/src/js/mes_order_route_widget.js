@@ -9,7 +9,8 @@ import { buildRouteCardHtml } from "./route_flow_widget.js";
  *
  * Same canvas interactions as the common editor (palette / drag / connect /
  * delete) with order-specific rules:
- * - nodes with execution records (frozen_ids) are locked (no edit/delete);
+ * - nodes with execution records (frozen_ids) are locked (no edit/delete;
+ *   layout drags stay allowed and persist through the freeze);
  * - node colors reflect execution progress (station: wip/done/ng;
  *   report: done/partial);
  * - saving calls the order's action_save_route_graph (private tables only,
@@ -225,7 +226,14 @@ export class MesOrderRouteEditor extends Component {
                     validateConnection({ targetMagnet }) { return !!targetMagnet; },
                 },
                 interacting: this.state.editable ? {
-                    nodeMovable: { validateNode: (node) => this._isEditableNode(node) },
+                    // Layout drags are allowed for every node (frozen
+                    // included): the position is pure UI and the server
+                    // keeps persisting it. Business edits (delete/connect/
+                    // flags) stay locked per node. NOTE: X6 evaluates this
+                    // value as boolean | (graph, view) => boolean -- an
+                    // object like {validateNode: fn} is truthy-but-opaque
+                    // and silently never calls the validator.
+                    nodeMovable: true,
                     edgeMovable: false,
                     magnetConnectable: this.state.editable,
                 } : false,

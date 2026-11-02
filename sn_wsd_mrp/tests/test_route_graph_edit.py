@@ -170,3 +170,45 @@ class TestRouteGraphEdit(TransactionCase):
                          'stored manual duration must survive a canvas save')
         self.assertEqual(row_b.time_cycle_manual, 42.0,
                          'new palette nodes carry their submitted duration')
+
+    def test_frozen_row_saves_layout_but_keeps_business_fields(self):
+        """拖拽布局保存：已过站工序业务字段冻结不动，画布坐标照常落库。
+
+        线上 bug：拖好位置点保存后复位——冻结行被整行 continue，坐标从未
+        写入，前端把 (0,0) 当"从未摆放"回退默认列。"""
+        order = self._make_order()
+        row_a, row_c = self._row(order, self.op_a), self._row(order, self.op_c)
+        self._freeze(order, row_a)
+
+        order.action_save_route_graph({
+            'nodes': [
+                dict(self._node(row_a, 99, 30), x=210, y=140, name='HACK'),
+                self._node(row_c, 20, 210),
+            ],
+            'edges': [{'source': str(row_a.id), 'target': str(row_c.id)}],
+        })
+
+        row_a = self._row(order, self.op_a)
+        self.assertEqual((row_a.x_canvas_x, row_a.x_canvas_y), (210, 140),
+                         'a frozen row must still persist its dragged layout')
+        self.assertNotEqual(row_a.name, 'HACK',
+                            'business fields stay frozen')
+        self.assertEqual(row_a.sequence, 10,
+                         'business fields stay frozen')
+
+        # payload without coordinates keeps the stored layout per axis
+        # (sync graphs / older payloads), frozen and editable rows alike
+        order.action_save_route_graph({
+            'nodes': [
+                {k: v for k, v in self._node(row_a, 10, 30).items()
+                 if k not in ('x', 'y')},
+                {k: v for k, v in self._node(row_c, 20, 210).items()
+                 if k not in ('x', 'y')},
+            ],
+            'edges': [{'source': str(row_a.id), 'target': str(row_c.id)}],
+        })
+        row_a, row_c = self._row(order, self.op_a), self._row(order, self.op_c)
+        self.assertEqual((row_a.x_canvas_x, row_a.x_canvas_y), (210, 140),
+                         'missing axes must keep the stored layout (frozen)')
+        self.assertEqual((row_c.x_canvas_x, row_c.x_canvas_y), (30, 210),
+                         'missing axes must keep the stored layout (editable)')
