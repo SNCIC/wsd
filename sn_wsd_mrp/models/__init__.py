@@ -8,6 +8,7 @@ from . import meter_pack
 from . import mrp_production
 from . import mrp_production_mes
 from . import mes_order
+from . import mes_order_pass_gate
 from . import mes_order_route
 from . import clear_pass_log
 from . import batch_pass_log

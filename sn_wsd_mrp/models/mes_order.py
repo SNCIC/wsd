@@ -709,7 +709,7 @@ class MesOrder(models.Model):
 
     def pass_one_station(self, serial, workcenter, result='ok',
                          ng_defect=False, operator_code=False,
-                         scrap_reason=False):
+                         scrap_reason=False, equipment_code=False):
         """One scan = one station pass on the scanned work center.
 
         The board enters and leaves the operation the work center runs, in
@@ -719,6 +719,12 @@ class MesOrder(models.Model):
         one-scan-per-station: an operation can never be completed without
         being scanned). All existing gates ride on enter_station /
         leave_station, unchanged.
+
+        ``equipment_code`` is an extension hook consumed by sn_wsd_device
+        (device-pass-gate): when a caller carries an equipment code -- today
+        only the device API does -- the device gate validates it (ledger
+        existence, status, spot-check/maintenance due). Channels that
+        report no code skip the gate entirely; the base kernel ignores it.
 
         Returns True when the SN left through an end operation with OK."""
         self.ensure_one()

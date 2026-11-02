@@ -1099,6 +1099,51 @@ msgid "Equipment code must be unique: %s"
 msgstr "设备编码必须唯一:%s"
 
 #. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid ""
+"Equipment %s does not exist in the equipment ledger; maintain the ledger "
+"before reporting with this code."
+msgstr "设备 %s 在设备台账中不存在；请先维护台账再使用该编码上报。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid ""
+"Equipment %(equipment)s is %(status)s, not in use; it cannot produce "
+"passes."
+msgstr "设备 %(equipment)s 当前为%(status)s，非在用状态，不得产出过站。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid ""
+"Equipment %(equipment)s is overdue for its %(kind)s (plan of equipment "
+"type %(type)s, cycle %(cycle)s, last execution %(last)s); complete it "
+"before passing stations."
+msgstr ""
+"设备 %(equipment)s 的%(kind)s已逾期（类型 %(type)s 的计划、周期%(cycle)s、"
+"上次执行 %(last)s）；请先完成后再过站。"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid "never"
+msgstr "从未执行"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid "spot check"
+msgstr "点检"
+
+#. module: sn_wsd_device
+#. odoo-python
+#: code:addons/sn_wsd_device/models/equipment.py:0
+msgid "maintenance"
+msgstr "保养"
+
+#. module: sn_wsd_device
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_equipment_form
 msgid "Equipment name"
 msgstr ""

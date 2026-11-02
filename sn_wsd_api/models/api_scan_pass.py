@@ -260,14 +260,17 @@ class SnWsdApiService(models.AbstractModel):
     # ------------------------------------------------------------------
     # station kernel orchestration (one report = one station pass)
     # ------------------------------------------------------------------
-    def _pass_station(self, identity, workcenter, result, defect, employee):
+    def _pass_station(self, identity, workcenter, result, defect, employee,
+                      equipment_code=False):
         """One device report = one station pass on the reporting work center.
 
         Strict one-scan-per-station: the reporting station records its own
         verdict; nothing is parked at the successor and nothing is pulled
         from an earlier station. The order comes from the SN's latest pass
         record (the device contract carries no work order), a brand-new SN
-        binds to the live order running through the work center."""
+        binds to the live order running through the work center.
+        ``equipment_code`` (M_DEVICE_SN) rides into the kernel where the
+        device gate validates it (device-pass-gate)."""
         operator_code = (
             employee.barcode
             or (employee.user_id.login if employee.user_id else False))
@@ -283,7 +286,8 @@ class SnWsdApiService(models.AbstractModel):
             mes_order = history.mes_order_id or self._find_live_order(workcenter)
         finished = mes_order.pass_one_station(
             identity, workcenter, result, ng_defect=defect,
-            operator_code=operator_code)
+            operator_code=operator_code,
+            equipment_code=equipment_code or False)
         return finished, mes_order
 
     # ------------------------------------------------------------------
@@ -436,9 +440,20 @@ class SnWsdApiService(models.AbstractModel):
             defect = self._match_defect_codes(
                 payload.get('M_STR2') or 'TEST1', tolerant=True)[:1]
         # 拼版扇出停用（2026-09-12）：单板过站，见上方方法注释
+        # 设备闸门（device-pass-gate）：M_DEVICE_SN 有值才校验（内核内
+        # resolve_for_pass 硬拦未知码），解析结果回填测试结果 equipment_id
+        equipment_code = (payload.get('M_DEVICE_SN') or '').strip()
         finished, mes_order = self._pass_station(
-            identity, workcenter, result, defect, employee)
+            identity, workcenter, result, defect, employee,
+            equipment_code=equipment_code)
         route_operation = self._route_operation(mes_order, workcenter)
+        equipment_id = False
+        if equipment_code:
+            # the gate just resolved this code in the same transaction;
+            # resolving again only links the ledger row to the test result
+            equipment_id = self.env[
+                'sn.wsd.device.equipment'].resolve_for_pass(
+                    equipment_code).id
         # test result for the scanned board only (station pass already
         # cleared the WIP row, so the order context is passed explicitly)
         result_info = self.env['sn.wsd.mes.test.result'].ingest_meter_test_result(
@@ -449,6 +464,7 @@ class SnWsdApiService(models.AbstractModel):
             payload=payload,
             mes_order_id=mes_order.id,
             route_operation_id=route_operation.id,
+            equipment_id=equipment_id,
         )
         test_result = self.env['sn.wsd.mes.test.result'].browse(
             result_info['test_result_id']).exists()
