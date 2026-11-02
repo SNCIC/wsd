@@ -1494,8 +1494,6 @@ msgid "%(name)s Sequence inventory losses"
 msgstr "%(name)s 盘亏单序列"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/models/stock_location.py:0
 #: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__gain
 msgid "Inventory Gain"
 msgstr "盘盈"
@@ -1521,8 +1519,6 @@ msgid "Inventory Gains"
 msgstr "盘盈单"
 
 #. module: sn_wsd_stock
-#. odoo-python
-#: code:addons/sn_wsd_stock/models/stock_location.py:0
 #: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__loss
 msgid "Inventory Loss"
 msgstr "盘亏"

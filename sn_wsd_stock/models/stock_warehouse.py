@@ -184,34 +184,33 @@ class StockWarehouse(models.Model):
             warehouse.write(values)
         return self.sn_consignment_in_type_id
 
-    def _get_inventory_operation_location(self, kind):
-        """Virtual location the inventory loss or gain operation ends on."""
-        self.ensure_one()
-        return self.env['stock.location']._sn_get_inventory_operation_location(
-            kind, self.company_id)
-
     def _get_inventory_operation_create_values(self, kind):
         """Values of the inventory loss and inventory gain operations.
 
         A loss takes the goods out of the stock and a gain brings them in, so
         they use the outgoing and the incoming codes and mirror each other.
-        Both end on their own inventory usage location: the valuation account
-        of that location is the loss or gain account of the accounting entry,
-        which is what differs from the inventory adjustment operation.
+        Both take the inventory adjustment location as their external end, the
+        way the other receipts and deliveries do: the difference goes through
+        the same virtual location as the inventory adjustment of the products,
+        whose valuation account books the loss or the gain.
         """
         self.ensure_one()
-        location = self._get_inventory_operation_location(kind)
+        adjustment_location = self._get_inventory_adjustment_location()
         if kind == 'loss':
             name = _('Inventory Losses')
             code = 'outgoing'
             sequence_code = 'IVL'
             src_location = self.lot_stock_id
-            dest_location = location
+            dest_location = (
+                adjustment_location
+                or self.env.ref('stock.stock_location_customers'))
         else:
             name = _('Inventory Gains')
             code = 'incoming'
             sequence_code = 'IVG'
-            src_location = location
+            src_location = (
+                adjustment_location
+                or self.env.ref('stock.stock_location_suppliers'))
             dest_location = self.lot_stock_id
         return {
             'name': name,
@@ -286,12 +285,14 @@ class StockWarehouse(models.Model):
             'active': self.active,
             'default_location_src_id': self.lot_stock_id.id,
             'default_location_dest_id': (
-                self._get_inventory_operation_location('loss')).id,
+                adjustment_location
+                or self.env.ref('stock.stock_location_customers')).id,
         }
         values['sn_inventory_gain_type_id'] = {
             'active': self.active,
             'default_location_src_id': (
-                self._get_inventory_operation_location('gain')).id,
+                adjustment_location
+                or self.env.ref('stock.stock_location_suppliers')).id,
             'default_location_dest_id': self.lot_stock_id.id,
         }
         return values

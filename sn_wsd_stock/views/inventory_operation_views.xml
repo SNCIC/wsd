@@ -3,15 +3,17 @@
     <!-- Inventory losses and inventory gains: transfers of their own operation
          type, taking the goods out of the stock (loss) or bringing them in
          (gain) without a sales or a purchase order. The difference goes
-         through the virtual location of the operation type, so its valuation
-         account is the account booking the loss or the gain. The menus open
-         the standard transfer form, so the operations keep the confirm,
-         assign, validate and batch flow of every transfer. -->
+         through the inventory adjustment location, like the other receipts and
+         deliveries and like the inventory adjustment of the products, so its
+         valuation account is the account booking the loss or the gain. The
+         menus open the standard transfer form, so the operations keep the
+         confirm, assign, validate and batch flow of every transfer, and the
+         list creates the documents from there. -->
     <record id="view_sn_wsd_inventory_loss_list" model="ir.ui.view">
         <field name="name">stock.picking.inventory.loss.list</field>
         <field name="model">stock.picking</field>
         <field name="arch" type="xml">
-            <list string="Inventory Losses" create="false" delete="false"
+            <list string="Inventory Losses"
                   decoration-muted="state == 'cancel'">
                 <field name="name" string="Document No."/>
                 <field name="picking_type_id" column_invisible="1"/>
@@ -38,7 +40,7 @@
         <field name="name">stock.picking.inventory.gain.list</field>
         <field name="model">stock.picking</field>
         <field name="arch" type="xml">
-            <list string="Inventory Gains" create="false" delete="false"
+            <list string="Inventory Gains"
                   decoration-muted="state == 'cancel'">
                 <field name="name" string="Document No."/>
                 <field name="picking_type_id" column_invisible="1"/>
