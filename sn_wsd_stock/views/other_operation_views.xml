@@ -4,12 +4,13 @@
          type, entering or leaving the stock through the inventory adjustment
          location, without a purchase or a sales order. The menus open the
          standard transfer form, so the operations keep the confirm, assign,
-         validate and batch flow of every transfer. -->
+         validate and batch flow of every transfer, and the list creates the
+         documents from there. -->
     <record id="view_sn_wsd_other_receipt_list" model="ir.ui.view">
         <field name="name">stock.picking.other.receipt.list</field>
         <field name="model">stock.picking</field>
         <field name="arch" type="xml">
-            <list string="Other Receipts" create="false" delete="false"
+            <list string="Other Receipts" delete="false"
                   decoration-muted="state == 'cancel'">
                 <field name="name" string="Document No."/>
                 <field name="picking_type_id" column_invisible="1"/>
@@ -41,7 +42,7 @@
         <field name="name">stock.picking.other.delivery.list</field>
         <field name="model">stock.picking</field>
         <field name="arch" type="xml">
-            <list string="Other Deliveries" create="false" delete="false"
+            <list string="Other Deliveries" delete="false"
                   decoration-muted="state == 'cancel'">
                 <field name="name" string="Document No."/>
                 <field name="picking_type_id" column_invisible="1"/>

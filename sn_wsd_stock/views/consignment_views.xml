@@ -10,7 +10,7 @@
         <field name="name">stock.picking.consignment.in.list</field>
         <field name="model">stock.picking</field>
         <field name="arch" type="xml">
-            <list string="Consignment Receipts" create="false" delete="false"
+            <list string="Consignment Receipts" delete="false"
                   decoration-muted="state == 'cancel'">
                 <field name="name" string="Document No."/>
                 <field name="picking_type_id" column_invisible="1"/>
