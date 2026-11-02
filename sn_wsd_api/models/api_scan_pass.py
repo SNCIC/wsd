@@ -88,20 +88,40 @@ class SnWsdApiService(models.AbstractModel):
             raise ApiNotFound(_('Organization %s does not exist.', code))
         return company
 
-    def _match_defect_code(self, raw):
-        """Dictionary lookup for a raw defect identifier (code first, then
-        name), inside the current company."""
-        raw = (raw or '').strip()
+    def _find_defect_code(self, *candidates):
+        """Best-effort dictionary link for raw defect identifiers.
+
+        Candidates are tried in order, each one by code first and then by
+        name, inside the current company (shared rows carrying no company
+        also match). Nothing found -> empty recordset: device channels never
+        block on the dictionary (2026-11-02 user rule), the upload still
+        lands and the verbatim text survives in the mirror columns / AOI
+        detail rows for a later manual backfill.
+        """
         DefectCode = self.env['sn.wsd.quality.defect.code']
-        defect = DefectCode.search([
-            ('code', '=ilike', raw),
-            ('company_id', '=', self.env.company.id),
-        ], limit=1) or DefectCode.search([
-            ('name', '=ilike', raw),
-            ('company_id', '=', self.env.company.id),
-        ], limit=1)
+        company_ids = [self.env.company.id, False]
+        for raw in candidates:
+            raw = (raw or '').strip()
+            if not raw:
+                continue
+            defect = DefectCode.search([
+                ('code', '=ilike', raw),
+                ('company_id', 'in', company_ids),
+            ], limit=1) or DefectCode.search([
+                ('name', '=ilike', raw),
+                ('company_id', 'in', company_ids),
+            ], limit=1)
+            if defect:
+                return defect
+        return DefectCode
+
+    def _match_defect_code(self, raw):
+        """Strict single-code lookup, kept for channels that require a
+        maintained dictionary row (the terminal's manual NG flow)."""
+        defect = self._find_defect_code(raw)
         if not defect:
-            raise ApiNotFound(_('Defect code %s does not exist.', raw))
+            raise ApiNotFound(
+                _('Defect code %s does not exist.', (raw or '').strip()))
         return defect
 
     def _match_defect_codes(self, raw, tolerant=False):
@@ -110,11 +130,12 @@ class SnWsdApiService(models.AbstractModel):
         same rule as the AOI first-confirmed-defect).
 
         Strict mode rejects the report when any code is unknown. Tolerant
-        mode (scan-pass, 2026-10-27 user rule) skips unknown codes -- the
-        device dictionary may lag the shop floor, blocking the upload
-        stops the line; the NG ledger row lands without a dictionary code
-        and staff backfills it later. The verbatim list always survives in
-        the test-result defect_code_raw mirror column either way."""
+        mode is what every device channel uses (scan-pass since 2026-10-27,
+        AOI since 2026-11-02): unknown codes are skipped, the dictionary may
+        lag the shop floor and blocking the upload stops the line. The NG
+        ledger row lands without a dictionary code, staff backfills it
+        later, and the verbatim list always survives in the test-result
+        defect_code_raw mirror column."""
         defects = self.env['sn.wsd.quality.defect.code']
         for part in split_defect_codes(raw):
             try:
@@ -509,13 +530,20 @@ class SnWsdApiService(models.AbstractModel):
     # AOI endpoint (/api/v1/aoi/results)
     # ------------------------------------------------------------------
     def _aoi_primary_defect(self, details):
-        """NG primary defect: dictionary lookup of the defectCode of the
-        first confirmed defect line."""
+        """NG primary defect: best-effort link of the first confirmed defect
+        line (its defectCode, then its defectName).
+
+        Never rejects the upload (2026-11-02 user rule: no defect-code
+        validation on device channels): an unmaintained code -- or a report
+        carrying no confirmed line at all -- simply leaves the header empty.
+        Every detail line still lands verbatim on the AOI detail rows, so
+        staff can backfill the code afterwards.
+        """
         for detail in details:
             if (detail.get('confirmedResult') or '').strip() == AOI_CONFIRMED_DEFECT:
-                return self._match_defect_code(detail.get('defectCode'))
-        raise ApiUnprocessable(
-            _('NG result requires a confirmed defect detail.'))
+                return self._find_defect_code(
+                    detail.get('defectCode'), detail.get('defectName'))
+        return self.env['sn.wsd.quality.defect.code']
 
     @api.model
     def submit_aoi_result(self, payload):
@@ -550,6 +578,10 @@ class SnWsdApiService(models.AbstractModel):
                 origin_type='external')
         defect = False
         if result == RESULT_FAIL:
+            # 不良代码不校验（2026-11-02 用户口径）：字典缺口不再拒收。
+            # 能解析的主码照链、解析不到留空；同时豁免终端"NG 必须带
+            # 缺陷码"的人机闸，AOI 明细逐字落库供人工事后补码。
+            self = self.with_context(sn_wsd_ng_defect_pending=True)
             defect = self._aoi_primary_defect(details)
 
         # idempotency gate BEFORE the station pass: a resent upload must not
