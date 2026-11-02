@@ -1,12 +1,13 @@
 {
     'name': 'SN WSD Scrap',
-    'version': '19.0.4.0.0',
+    'version': '19.0.4.1.1',
     'summary': 'Scrap record management for SN-based manufacturing',
     'depends': ['mrp', 'stock', 'mail', 'sn_wsd_mrp', 'sn_wsd_quality', 'sn_wsd_report'],
     'data': [
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
         'views/sn_wsd_scrap_views.xml',
+        'views/oqc_disposition_event_views.xml',
         'views/mrp_production_views.xml',
         'views/meter_quality_views.xml',
         'views/menu_views.xml',

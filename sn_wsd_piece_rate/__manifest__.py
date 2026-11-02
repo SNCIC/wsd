@@ -16,6 +16,13 @@
         'views/piece_ledger_views.xml',
         'views/menu_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_piece_rate/static/src/js/daily_workbench.js',
+            'sn_wsd_piece_rate/static/src/scss/daily_workbench.scss',
+            'sn_wsd_piece_rate/static/src/xml/daily_workbench.xml',
+        ],
+    },
     'installable': True,
     'application': False,
     'author': 'SNCIC',

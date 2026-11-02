@@ -1,0 +1,30 @@
+.o_drw {
+    .o_drw_table {
+        table {
+            cursor: pointer;
+            thead th {
+                font-size: 0.8rem;
+                text-transform: uppercase;
+            }
+        }
+        .o_drw_selected td {
+            background-color: rgba(var(--oe-primary-intensity, 80, 90, 190), 0.08);
+        }
+        .o_drw_summary {
+            max-width: 26rem;
+            .badge {
+                margin-right: 0.25rem;
+                font-weight: normal;
+            }
+        }
+    }
+    .o_drw_panel {
+        .form-label {
+            font-size: 0.8rem;
+            margin-bottom: 0.15rem;
+        }
+    }
+    .o_drw_suggestions {
+        z-index: 1000;
+    }
+}

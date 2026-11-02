@@ -303,12 +303,14 @@ class TestOqcEntry(TransactionCase):
         self.assertEqual(inspection.result, 'reject')
         self.assertNotEqual(order.x_oqc_state, 'passed',
                             'reject keeps the gate armed')
-        # bad serial on hold + quality issue to repair
-        self.assertEqual(s1.x_quality_hold_state, 'hold')
+        # rejection no longer auto-holds/opens quality issues
+        # (oqc-ng-disposition): disposition paths (retest/rework/scrap)
+        # must stay open, repair reports its own issues manually
+        self.assertNotEqual(s1.x_quality_hold_state, 'hold')
         issue = self.env['sn.wsd.quality.issue'].search([
             ('inspection_id', '=', inspection.id),
             ('serial_identity_id', '=', s1.id)])
-        self.assertEqual(len(issue), 1)
+        self.assertEqual(len(issue), 0)
         # no second OQC document (one order, one document, no re-draws)
         self.assertEqual(len(self._oqc_docs(order)), 1)
         # the gate still blocks new boards after the reject
@@ -326,8 +328,21 @@ class TestOqcEntry(TransactionCase):
         inspection.action_done()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'reject')
-        # disposition decision: concession releases the whole order
-        inspection.action_mark_concession()
+        # the one-click mark is refused for station-mode OQC: concessions
+        # need the reason + scope wizard (oqc-disposition-closure task 2.3)
+        with self.assertRaises(UserError):
+            inspection.action_mark_concession()
+        # disposition decision: the batch concession wizard accepts the
+        # pending board with a reason and releases the whole order
+        Wizard = self.env['sn.wsd.quality.oqc.concession.wizard']
+        defaults = Wizard.with_context(
+            default_inspection_id=inspection.id).default_get([
+                'company_id', 'inspection_id', 'reason', 'scope_serial_ids',
+                'hard_block_reasons', 'expected_versions'])
+        self.assertEqual(defaults['scope_serial_ids'],
+                         [(6, 0, sorted(s1.ids))])
+        Wizard.create(dict(
+            defaults, reason='Customer accepted the defect.')).action_apply()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'concession')
         self.assertEqual(inspection.state, 'done')
@@ -351,10 +366,10 @@ class TestOqcEntry(TransactionCase):
         inspection.action_done()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'reject')
-        self.assertEqual(s1.x_quality_hold_state, 'hold')
+        self.assertNotEqual(s1.x_quality_hold_state, 'hold')
         Issue = self.env['sn.wsd.quality.issue']
         self.assertEqual(Issue.search_count(
-            [('inspection_id', '=', inspection.id)]), 1)
+            [('inspection_id', '=', inspection.id)]), 0)
         # reopen for recheck: the archived matrix stays editable
         inspection.action_reset_open()
         self.assertEqual(inspection.state, 'open')
@@ -363,13 +378,25 @@ class TestOqcEntry(TransactionCase):
              inspection.reject_qty), (2, 0, 1),
             'recheck re-judges on the same AQL snapshot')
         cell.write({'measured_value': 15.0})  # rework back in range
+        # re-judging the cell never closes a disposition by itself
+        # (oqc-disposition-closure task 2.2): the explicit retest
+        # confirmation (batch-3 wizard entry) is what releases the board
+        inspection._oqc_append_events([{
+            'serial_identity_id': s1.id,
+            'action': 'retest',
+            'state_before': 'pending',
+            'state_after': 'retest_passed',
+            'reason': 'Retest confirmed after correction.',
+            'defect_code_id': self.defect.id,
+            'source_key': 'test-retest-%s-%s' % (inspection.id, s1.id),
+        }])
         inspection.action_done()
         inspection.invalidate_recordset()
         self.assertEqual(inspection.result, 'pass')
         self.assertEqual(order.x_oqc_state, 'passed')
-        # no duplicate issue from the second done, and the gate is open
+        # no issue ever opened under the no-auto-issue policy, gate is open
         self.assertEqual(Issue.search_count(
-            [('inspection_id', '=', inspection.id)]), 1)
+            [('inspection_id', '=', inspection.id)]), 0)
         serial3 = self._prepare(order, 'SN-OQC-803')
         order.scan_enter(serial3.name, self.wc_oqc)
 

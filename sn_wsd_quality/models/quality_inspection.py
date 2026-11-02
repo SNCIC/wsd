@@ -5,6 +5,8 @@ from odoo import Command, api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare
 
+from .oqc_disposition_event import OQC_DISPOSITION_CLOSED_STATES
+
 
 _logger = logging.getLogger(__name__)
 
@@ -762,7 +764,11 @@ class QualityInspection(models.Model):
         'inspection_type', 'sample_size', 'mes_order_id.x_manage_mode',
         'cell_ids.result', 'cell_ids.serial_identity_id',
         'sample_ids.result', 'sample_ids.x_line_id',
-        'x_oqc_ng_serial_ids',
+        'x_oqc_ng_serial_ids', 'x_full_inspection',
+        # 处置结案（retest/scrap/concession 事件）改变当前有效不良集
+        'x_oqc_disposition_event_ids',
+        # 台账口径：合格数聚合过站历史，历史行落定即重算
+        'mes_order_id.x_mes_route_id.operation_ids.serial_history_ids.result',
     )
     def _compute_x_fai_counts(self):
         # 逐板检验计数（决策 5）：FAI/OQC 共用同一套字段与口径
@@ -780,7 +786,23 @@ class QualityInspection(models.Model):
                 fail_cells = inspection.cell_ids.filtered(lambda c: c.result == 'fail')
                 ng = len(set(fail_cells.mapped('serial_identity_id').ids))
             inspection.x_fai_ng_qty = ng
-            inspection.x_fai_ok_qty = max(0, (inspection.sample_size or 0) - ng)
+            if inspection.x_full_inspection:
+                # 台账口径（oqc-full-lot-form）：合格板不铺格，合格数 =
+                # OQC 工序 OK 出站台数（过站历史），与样本量无关
+                history = inspection.mes_order_id.x_mes_route_id.operation_ids
+                oqc_op = history.filtered(
+                    lambda r: r.operation_id
+                    == inspection.scheme_id.operation_id)
+                ok = self.env['sn.wsd.serial.operation.history']\
+                    .search_count([
+                        ('mes_order_id', '=', inspection.mes_order_id.id),
+                        ('route_operation_id', 'in', oqc_op.ids),
+                        ('result', '=', 'ok'),
+                    ]) if oqc_op else 0
+                inspection.x_fai_ok_qty = ok
+            else:
+                inspection.x_fai_ok_qty = max(
+                    0, (inspection.sample_size or 0) - ng)
 
     @api.onchange('x_fai_scan')
     def _onchange_x_fai_scan(self):
@@ -792,25 +814,36 @@ class QualityInspection(models.Model):
             return
         serial = self.env['sn.wsd.serial.identity'].search(
             [('name', '=', code)], limit=1)
+        # id 比较：onchange 的虚拟记录上 m2m 成员是 NewId(origin)，
+        # 与 browse 出的记录直接做 `in` 身份比较恒为 False
         if self.mes_order_id.x_manage_mode == 'report':
             if not serial:
                 raise UserError(_('Unknown serial number "%s": defective '
                                   'boards must carry a registered SN.', code))
-            if serial in self.sample_ids.serial_identity_id:
+            if serial.id in self.sample_ids.serial_identity_id.ids:
                 raise UserError(_('%s is already recorded as defective.', code))
             self.sample_ids = [Command.create({
                 'serial_identity_id': serial.id,
                 'result': 'fail',
             })]
         elif self.inspection_type == 'oqc':
-            # OQC 合法域 = 本轮已登记样本（x_fai_serial_ids）：单据可在
-            # 板还在途时开始检验；FAI 仍要求已到检（首件必须先过站）
-            if not serial or serial not in self.x_fai_serial_ids:
+            # OQC 合法域（oqc-disposition-closure 任务 7.2）：过站矩阵单 =
+            # 本单原抽样板 ∪ 本单已登记异常板（_oqc_known_serials）——
+            # 全检新 NG 不加名单即可扫入集中处置；其余（报工/手工单）仍
+            # 只认本轮样本。非法 SN（其他制令单/未登记/跨公司）同一句
+            # 拒绝文案，不泄露范围外信息，也不改当前选择
+            origin = self._origin
+            if origin and origin._oqc_station_mode():
+                legal = origin._oqc_known_serials()
+            else:
+                legal = self.x_fai_serial_ids
+            if not serial or serial.id not in legal.ids:
                 raise UserError(_(
-                    '"%s" is not one of this round\'s picked products.', code))
+                    'SN %s is not part of inspection %s.', code,
+                    origin.name if origin else self.name or ''))
             self.x_fai_current_sn = serial.id
         else:
-            if not serial or serial not in self.x_fai_arrived_serial_ids:
+            if not serial or serial.id not in self.x_fai_arrived_serial_ids.ids:
                 raise UserError(_(
                     '"%s" is not one of this round\'s picked products '
                     '(boards must reach the first-article operation first).', code))
@@ -828,11 +861,24 @@ class QualityInspection(models.Model):
         )
 
     def _oqc_bad_serial_ids(self):
-        """OQC 不良样本口径（决策 3）：存在 fail 结果格的样本 SN，
-        并上 NG/报废出站名单（去重）。NG 板占名额不补位，d 以此为准。"""
+        """OQC 当前有效不良集（oqc-disposition-closure 任务 2.2 d 重算
+        口径）：NG 名单 ∪ fail 格 ∪ 带 SN 缺陷行 ∪ 本站 NG/报废过站事实，
+        去掉最新处置状态已结（retest_passed/scrapped/concession）的 SN；
+        无事件的 NG 事实保守留在集内。同板多源只计 1（集合去重）；首次
+        事实与历次判定由处置事件历史保留，此处只回答"当前还有效吗"。"""
         self.ensure_one()
-        fail_cells = self.cell_ids.filtered(lambda c: c.result == 'fail')
-        return fail_cells.mapped('serial_identity_id') | self.x_oqc_ng_serial_ids
+        serials = self.x_oqc_ng_serial_ids
+        serials |= self.cell_ids.filtered(
+            lambda c: c.result == 'fail').mapped('serial_identity_id')
+        serials |= self.defect_line_ids.mapped('serial_identity_id')
+        serials |= self._oqc_ng_fact_serials()
+        if serials:
+            dispositions = self._oqc_current_dispositions(serials)
+            closed = {sid for sid, info in dispositions.items()
+                      if info.get('state') in OQC_DISPOSITION_CLOSED_STATES}
+            serials = serials.filtered(
+                lambda s: s.id not in closed)
+        return serials
 
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
@@ -883,17 +929,20 @@ class QualityInspection(models.Model):
                     inspection.result = 'pass'
 
     @api.depends('line_ids.result', 'defect_line_ids.defect_qty',
+                 'defect_line_ids.serial_identity_id',
                  'cell_ids.result', 'cell_ids.serial_identity_id',
-                 'x_oqc_ng_serial_ids')
+                 'x_oqc_ng_serial_ids', 'x_oqc_disposition_event_ids')
     def _compute_inspection_counts(self):
         for inspection in self:
             inspection.inspected_qty = len(inspection.line_ids.filtered(lambda line: line.result not in ('pending', 'na')))
             if inspection._oqc_station_mode():
-                # OQC 过站矩阵：d = 缺陷行数量合计 + 不良样本 SN 去重台数
-                # （fail 格的 SN ∪ NG 出站名单，决策 3）；报工模式保持
+                # OQC 过站矩阵（任务 2.2）：d = 当前有效不良 SN 去重台数
+                # （NG 名单/fail 格/带 SN 缺陷行/NG 事实，已结处置剔除，
+                # 同板多源只计 1）+ 无 SN 缺陷行的数量合计；报工模式保持
                 # 现状口径（缺陷行 + fail 项目行）
                 inspection.defect_qty = sum(
-                    inspection.defect_line_ids.mapped('defect_qty')
+                    line.defect_qty for line in inspection.defect_line_ids
+                    if not line.serial_identity_id
                 ) + len(inspection._oqc_bad_serial_ids())
             else:
                 inspection.defect_qty = sum(inspection.defect_line_ids.mapped('defect_qty')) + len(
@@ -1200,8 +1249,11 @@ class QualityInspection(models.Model):
             if cell_values:
                 cells = Cell.create(cell_values)
                 # 检验项默认都是 OK：展开即预填合格值（数值=区间中值/
-                # 文本=期望值/判定式=manual pass），检验员只改异常格
-                cells._set_pass_values()
+                # 文本=期望值/判定式=manual pass），检验员只改异常格。
+                # 静音通用格钩子（oqc-disposition-closure 任务 1.5）：
+                # 程序化铺格不是人工编辑，不落 result_edit 事件
+                cells.with_context(
+                    sn_wsd_oqc_cell_silent=True)._set_pass_values()
         return True
 
     @api.model
@@ -1479,7 +1531,12 @@ class QualityInspectionLine(models.Model):
     def _judge_item_value(self, item_type, measured=0.0, text='', expected='',
                           allowed='', lower=0.0, upper=0.0, manual=False):
         """判定口径（FAI 检验矩阵抽取）：单据级 line 与样本级 cell 共用，
-        只做纯值判定；line._compute_result 的行为与抽取前完全等价。"""
+        只做纯值判定；line._compute_result 的行为与抽取前完全等价。
+        显式人工判定优先于值判定：na（报废处置）与 fail（NG 落格/
+        人工判退）对任何项型生效——pass 不优先，预填的合格值不遮蔽
+        后续改坏的测量/文本值。"""
+        if manual in ('na', 'fail'):
+            return manual
         if item_type == 'numeric':
             if float_compare(measured, lower, precision_rounding=0.0001) < 0:
                 return 'fail'
@@ -1502,11 +1559,12 @@ class QualityInspectionLine(models.Model):
                     and line.inspection_id.mes_order_id \
                     and line.inspection_id.mes_order_id.x_manage_mode != 'report':
                 # 过站 FAI/OQC 矩阵（决策 4）：行结果由结果格派生（任一格
-                # fail 即 fail），跳过原有单据级手填逻辑
+                # fail 即 fail；报废板的 na 格不拖累——口径同单据级聚合，
+                # 报废处置置 na 后其余 pass 即行 pass）
                 results = set(line.cell_ids.mapped('result'))
                 if 'fail' in results:
                     line.result = 'fail'
-                elif line.cell_ids and results == {'pass'}:
+                elif line.cell_ids and results <= {'pass', 'na'}:
                     line.result = 'pass'
                 else:
                     line.result = 'pending'

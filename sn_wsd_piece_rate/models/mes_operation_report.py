@@ -1,6 +1,8 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
+from odoo import Command
+
 
 class MesOperationReport(models.Model):
     """piece-rate 扩展：报工行的计件占用状态 + 人员分配（唯一事实）。
@@ -114,12 +116,15 @@ class MesOperationReport(models.Model):
 
     @api.model
     def _check_allocation_required(self, company, product, operation,
-                                   qty_ok, participants):
+                                   qty_ok, participants, enforce=False):
         """Daily-reporting submit guard: when a piece rate is configured
         for (company, product, operation) and qty_ok > 0, the line must
         carry at least one participant and the ratios must total 100%
         (+/- 0.01). No rate configured (or a pure NG/scrap line) → not
-        enforced. participants is an iterable of (employee, ratio)."""
+        enforced, unless enforce=True (report-daily-price-inline: the
+        daily-reporting submit types the price on the spot, so the check
+        runs even while no rate row exists yet). participants is an
+        iterable of (employee, ratio)."""
         if not company or not product or not operation or qty_ok <= 0:
             return
         rate = self.env['sn.wsd.piece.rate'].sudo().search([
@@ -128,13 +133,20 @@ class MesOperationReport(models.Model):
             ('operation_id', '=', operation.id),
         ], limit=1)
         if not rate:
-            return
+            if not enforce:
+                return
         participants = list(participants)
         if not participants:
+            if rate:
+                raise ValidationError(_(
+                    'A piece rate is configured for product %(product)s on '
+                    'operation %(operation)s: select the participants who '
+                    'produced this batch.', product=product.display_name,
+                    operation=operation.display_name))
             raise ValidationError(_(
-                'A piece rate is configured for product %(product)s on '
-                'operation %(operation)s: select the participants who '
-                'produced this batch.', product=product.display_name,
+                'Product %(product)s on operation %(operation)s will be '
+                'paid by piece rate: select the participants who produced '
+                'this batch.', product=product.display_name,
                 operation=operation.display_name))
         seen = set()
         total = 0.0
@@ -255,6 +267,58 @@ class MesOperationReport(models.Model):
                     }) for p in report.participant_ids.sorted('sequence')],
             })
             settlement._resolve_rate_price()
+
+    # ------------------------------------------------------------------
+    # ledger batch generation (former To-Allocate tab, report-daily-
+    # price-inline moved it onto the Operation Reports list)
+    # ------------------------------------------------------------------
+
+    def action_generate_piece_settlement(self):
+        """Generate settlement drafts for the selected unsettled reports
+        (closed-month rows reopened, terminal rows, void-and-regenerate
+        fix-ups). Caliber unchanged from the former wizard tab: reports
+        carrying an allocation are copied as-is, the others fall back to
+        the team defaults; an unconfigured rate hard-blocks with the
+        standard maintain-first message."""
+        eligible = self.filtered(lambda r: not r.x_piece_settled)
+        if not eligible:
+            raise UserError(_(
+                'Every selected report already has a non-void piece '
+                'settlement.'))
+        Settlement = self.env['sn.wsd.piece.settlement']
+        settlements = Settlement
+        for report in eligible:
+            settlement = Settlement.create({
+                'mes_order_id': report.mes_order_id.id,
+                'route_operation_id': report.route_operation_id.id,
+                'operation_report_id': report.id,
+                'qty_ok': report.qty_ok,
+                'date': report.reported_at.date() if report.reported_at
+                else fields.Date.context_today(report),
+            })
+            settlement._resolve_rate_price()
+            if report.participant_ids:
+                # 报工行带分配：参与人/比例原样复制，结算侧只读
+                settlement.write({
+                    'team_id': report.team_id.id,
+                    'participant_ids': [Command.clear()] + [
+                        Command.create({
+                            'employee_id': p.employee_id.id,
+                            'performance_ratio': p.performance_ratio,
+                            'x_ratio_baseline': p.performance_ratio,
+                            'sequence': p.sequence,
+                        }) for p in report.participant_ids.sorted('sequence')],
+                })
+            else:
+                settlement._default_team_and_participants()
+            settlements |= settlement
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Generated Settlements'),
+            'res_model': 'sn.wsd.piece.settlement',
+            'domain': [('id', 'in', settlements.ids)],
+            'view_mode': 'list,form',
+        }
 
     # ------------------------------------------------------------------
     # allocation quick-fill (to-allocate tab / report ledger form)

@@ -5,12 +5,14 @@ ACTIVE_REPORT_STATES = ('released', 'picked', 'in_progress')
 
 
 class PieceReportWizardLine(models.TransientModel):
-    """日报工·待报工页签的行（report-daily-workbench）。
+    """日报工的行（report-daily-workbench；report-daily-price-inline 单页签）。
 
     一行 = 一个活跃报工单（report 模式、released/picked/in_progress）
     私有路线上的一道工序：录 OK/NG/报废三数量、报废原因、班组与参与人，
-    展示 计划量/已报/可报额度 与顺序锁状态。提交由向导的
-    action_submit_reports 在一个事务内逐行调 report_operation_qty。
+    展示 计划量/已报/可报额度 与顺序锁状态。单价前置（report-daily-price-inline）：
+    已配价只读展示（piece_price），未配价行上现填（x_new_price），提交时建入
+    单价主数据。提交由向导的 action_submit_reports 在一个事务内逐行调
+    report_operation_qty。
     """
     _name = 'sn.wsd.piece.report.wizard.line'
     _description = 'Daily Reporting Wizard Line'
@@ -33,6 +35,9 @@ class PieceReportWizardLine(models.TransientModel):
     production_line_id = fields.Many2one(
         'sn.mrp.production.line', string='Production Line',
         related='mes_order_id.production_line_id')
+    workshop_id = fields.Many2one(
+        'sn.mrp.workshop', string='Workshop',
+        related='production_line_id.workshop_id')
     qty_ok = fields.Float(string='OK Quantity')
     qty_ng = fields.Float(
         string='NG Quantity',
@@ -45,6 +50,17 @@ class PieceReportWizardLine(models.TransientModel):
         'sn.wsd.scrap.reason', string='Scrap Reason',
         domain="[('company_id', '=', company_id)]",
         help='Required whenever the scrap quantity is positive.')
+    piece_price = fields.Float(
+        string='Unit Price', digits=(12, 5), compute='_compute_piece_price',
+        help='Price configured in the rate table for (company, product, '
+             'operation). Zero means unconfigured: type the price on the '
+             'line, it is created into the rate table at submit.')
+    x_new_price = fields.Float(
+        string='New Unit Price', digits=(12, 5),
+        help='Price typed on the spot when no rate is configured yet: it is '
+             'created into the rate table when the batch is submitted, so '
+             'this batch and the next ones are priced. Ignored when a rate '
+             'already exists (maintain changes in the configuration menu).')
     team_id = fields.Many2one(
         'sn.mrp.team', string='Team',
         check_company=True,
@@ -54,6 +70,9 @@ class PieceReportWizardLine(models.TransientModel):
     participant_ids = fields.One2many(
         'sn.wsd.piece.report.wizard.participant', 'line_id',
         string='Participants')
+    ratio_total = fields.Float(
+        string='Ratio Total', compute='_compute_participants',
+        help='Sum of the participant ratios; must reach 100% at submit.')
     participant_count = fields.Integer(compute='_compute_participants')
     participant_summary = fields.Char(
         string='Allocation', compute='_compute_participants')
@@ -75,13 +94,44 @@ class PieceReportWizardLine(models.TransientModel):
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id')
 
-    @api.depends('participant_ids.employee_id', 'participant_ids.performance_ratio')
+    @api.depends('company_id', 'mes_order_id.product_id',
+                 'route_operation_id.operation_id')
+    def _compute_piece_price(self):
+        """Price of the rate master for (company, product, operation);
+        0.0 = unconfigured (the rate constraint enforces price > 0)."""
+        Rate = self.env['sn.wsd.piece.rate'].sudo()
+        for line in self:
+            price = 0.0
+            if line.company_id and line.mes_order_id.product_id \
+                    and line.route_operation_id.operation_id:
+                rate = Rate.search([
+                    ('company_id', '=', line.company_id.id),
+                    ('product_id', '=', line.mes_order_id.product_id.id),
+                    ('operation_id', '=',
+                     line.route_operation_id.operation_id.id),
+                ], limit=1)
+                price = rate.price or 0.0
+            line.piece_price = price
+
+    @api.depends('participant_ids.employee_id',
+                 'participant_ids.performance_ratio')
     def _compute_participants(self):
         for line in self:
             line.participant_count = len(line.participant_ids)
+            line.ratio_total = sum(
+                line.participant_ids.mapped('performance_ratio'))
             line.participant_summary = ' / '.join(
                 f'{p.employee_id.name} {p.performance_ratio:g}%'
                 for p in line.participant_ids.sorted('sequence'))
+
+    @api.depends_context('lang')
+    def _compute_display_name(self):
+        """The detail panel header shows 'order / operation' instead of a
+        raw 'model,id'."""
+        for line in self:
+            line.display_name = ' / '.join(filter(None, [
+                line.mes_order_id.name,
+                line.route_operation_id.display_label]))
 
     @api.depends('mes_order_id.planned_qty',
                  'route_operation_id.x_reported_ok_qty',
@@ -147,7 +197,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
-                'x_ratio_baseline': p.performance_ratio,
+                'x_ratio_locked': False,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
             return (last.team_id.id or (team.id if team else False)), commands
@@ -158,7 +208,7 @@ class PieceReportWizardLine(models.TransientModel):
             commands = [(0, 0, {
                 'employee_id': member.employee_id.id,
                 'performance_ratio': ratio,
-                'x_ratio_baseline': ratio,
+                'x_ratio_locked': False,
                 'sequence': 10 * (index + 1),
             }) for index, (member, ratio) in enumerate(
                 zip(team.member_ids, ratios))]
@@ -192,8 +242,9 @@ class PieceReportWizardLine(models.TransientModel):
     @api.onchange('team_id')
     def _onchange_team_id_fill_participants(self):
         """Picking or switching the team re-fills the participants from its
-        members (normalized). Onchange on purpose: it must also work on the
-        virtual rows of an unsaved wizard, where object buttons cannot run."""
+        members (normalized, locks cleared). Onchange on purpose: it must
+        also work on the virtual rows of an unsaved wizard, where object
+        buttons cannot run."""
         self._fill_from_team()
 
     def _fill_from_team(self):
@@ -208,54 +259,50 @@ class PieceReportWizardLine(models.TransientModel):
                 fields.Command.create({
                     'employee_id': member.employee_id.id,
                     'performance_ratio': ratio,
-                    'x_ratio_baseline': ratio,
+                    'x_ratio_locked': False,
                     'sequence': 10 * (index + 1),
                 }) for index, (member, ratio) in enumerate(
                     zip(members, ratios))]
 
     def _rebalance_participants(self):
-        """Manual rows (ratio != baseline) keep their value, the rest share
-        the remainder proportionally to their baseline; the last row absorbs
-        the rounding remainder. Baselines are rewritten to the new values,
-        so "ratio == baseline" keeps meaning "not typed over"."""
+        """Explicit-lock rebalance (user decision 2026-11-01): locked rows
+        keep their typed ratio; the remaining rows EQUALLY split the rest
+        (the last one absorbs the rounding remainder). No automatic
+        rebalance on typing or on row add/remove -- redistribution happens
+        only on explicit actions: lock toggle, Equal Split, Fill From
+        Team."""
         for line in self:
             rows = line.participant_ids
             if not rows:
                 continue
-            manual = rows.filtered(
-                lambda p: abs(p.performance_ratio - p.x_ratio_baseline) > 0.0001)
-            auto = rows - manual
+            locked = rows.filtered('x_ratio_locked')
+            auto = rows - locked
             if not auto:
                 continue
-            manual_total = sum(manual.mapped('performance_ratio'))
-            remaining = 100.0 - manual_total
+            locked_total = sum(locked.mapped('performance_ratio'))
+            remaining = 100.0 - locked_total
             if remaining < -0.01:
-                continue  # manual rows already exceed 100%: leave as typed
+                continue  # locked rows already exceed 100%: leave as typed
+            remaining = max(remaining, 0.0)
             auto_rows = list(auto)
-            weights = [p.x_ratio_baseline for p in auto_rows]
-            weight_total = sum(weights)
-            if weight_total <= 0:
-                weights = [1.0] * len(auto_rows)
-                weight_total = float(len(auto_rows))
+            share = round(remaining / len(auto_rows), 4)
+            # write through the skip flag: rows land one by one on their
+            # way to a total that sums to (at most) 100
             for i, row in enumerate(auto_rows):
-                if i < len(auto_rows) - 1:
-                    row.performance_ratio = round(
-                        remaining * weights[i] / weight_total, 4)
-                else:
-                    row.performance_ratio = round(
-                        100.0 - manual_total - sum(
-                            p.performance_ratio for p in auto_rows[:-1]), 4)
-                row.x_ratio_baseline = row.performance_ratio
-
-    @api.onchange('participant_ids')
-    def _onchange_participant_ids_rebalance(self):
-        """Adding or removing a participant row re-splits automatically
-        (equal split by default); typed-over ratios stay locked."""
-        self._rebalance_participants()
+                row.with_context(sn_wsd_skip_ratio_check=True).write(
+                    {'performance_ratio': share if i < len(auto_rows) - 1
+                     else round(100.0 - locked_total
+                                - share * (len(auto_rows) - 1), 4)})
 
     # ------------------------------------------------------------------
     # quick-fill buttons (same calibers as the settlement form)
     # ------------------------------------------------------------------
+
+    def action_select_line(self):
+        """Row button of the wizard list: mark this line as the one edited
+        in the detail panel below."""
+        for line in self:
+            line.wizard_id.active_line_id = line
 
     def action_fill_from_team(self):
         for line in self:
@@ -273,9 +320,13 @@ class PieceReportWizardLine(models.TransientModel):
                 raise UserError(_('Add participants first.'))
             ratios = Settlement._distribute_ratios(
                 [1.0] * len(participants))
+            participants.write({'x_ratio_locked': False})
             for participant, ratio in zip(participants, ratios):
-                participant.performance_ratio = ratio
-                participant.x_ratio_baseline = ratio
+                # skip flag: rows land one by one on their way to an
+                # equal split summing to exactly 100
+                participant.with_context(
+                    sn_wsd_skip_ratio_check=True).write(
+                    {'performance_ratio': ratio})
 
     def action_reuse_last_allocation(self):
         """Reset the allocation to the one carried by the last report of
@@ -296,7 +347,7 @@ class PieceReportWizardLine(models.TransientModel):
             line.participant_ids = [(0, 0, {
                 'employee_id': p.employee_id.id,
                 'performance_ratio': p.performance_ratio,
-                'x_ratio_baseline': p.performance_ratio,
+                'x_ratio_locked': False,
                 'sequence': p.sequence,
             }) for p in last.participant_ids.sorted('sequence')]
 
@@ -316,13 +367,26 @@ class PieceReportWizardLine(models.TransientModel):
         if self.qty_scrap > 0 and not self.scrap_reason_id:
             raise ValidationError(_(
                 'Select a scrap reason when the scrap quantity is positive.'))
+        # report-daily-price-inline: an OK line must be priced -- from the
+        # rate table or typed on the spot (created at submit). Pure NG/scrap
+        # lines generate no piece settlement and stay out of scope.
+        if self.qty_ok > 0 and self.piece_price <= 0 and self.x_new_price <= 0:
+            raise ValidationError(_(
+                'No piece rate is configured for product %(product)s on '
+                'operation %(operation)s: enter the unit price on the line '
+                'before submitting.', product=self.mes_order_id.product_id
+                .display_name,
+                operation=self.route_operation_id.display_label))
+        # enforce=True: participants are checked for every OK line, whether
+        # the price comes from the rate table or is being typed right now
         self.env['sn.wsd.mes.operation.report']._check_allocation_required(
             self.mes_order_id.company_id,
             self.mes_order_id.product_id,
             self.route_operation_id.operation_id,
             self.qty_ok,
             [(p.employee_id, p.performance_ratio)
-             for p in self.participant_ids])
+             for p in self.participant_ids],
+            enforce=True)
 
 
 class PieceReportWizardParticipant(models.TransientModel):
@@ -346,11 +410,34 @@ class PieceReportWizardParticipant(models.TransientModel):
     performance_ratio = fields.Float(
         string='Performance Ratio', digits=(12, 4), required=True,
         default=0.0)
-    x_ratio_baseline = fields.Float(
-        string='Ratio Baseline', digits=(12, 4),
-        help='Weight used to auto-redistribute the leftover ratio: rows the '
-             'user typed over (ratio != baseline) keep their value, the rest '
-             'share the remainder proportionally to their baseline.')
+    x_ratio_locked = fields.Boolean(
+        string='Ratio Locked',
+        help='Explicit lock (user decision 2026-11-01): locked rows keep '
+             'their ratio when the rest is redistributed -- toggling a '
+             'lock, Equal Split and Fill From Team are the only actions '
+             'that re-split; typing or adding/removing rows never does.')
+
+    @api.constrains('performance_ratio')
+    def _check_ratio_total(self):
+        """Immediate guard (user request 2026-11-01): a typed ratio must
+        stay within 0-100 and the line total may never exceed 100% --
+        no waiting for the submit gate. Redistribution helpers set the
+        context flag because they write rows one by one on their way to
+        an end state that sums to (at most) 100."""
+        if self.env.context.get('sn_wsd_skip_ratio_check'):
+            return
+        for participant in self:
+            ratio = participant.performance_ratio
+            if ratio < 0 or ratio > 100:
+                raise ValidationError(_(
+                    'The performance ratio of %(employee)s must be between '
+                    '0 and 100.', employee=participant.employee_id.name))
+            line = participant.line_id
+            total = sum(line.participant_ids.mapped('performance_ratio'))
+            if total > 100 + 0.01:
+                raise ValidationError(_(
+                    'The ratio total of this batch cannot exceed 100%% '
+                    '(currently %(total)s%%).', total=round(total, 4)))
 
     @api.onchange('employee_id')
     def _onchange_employee_id_default_ratio(self):
@@ -361,4 +448,9 @@ class PieceReportWizardParticipant(models.TransientModel):
             others = self.line_id.participant_ids - self
             headcount = len(others) + 1
             self.performance_ratio = round(100.0 / headcount, 4)
-            self.x_ratio_baseline = self.performance_ratio
+
+    @api.onchange('x_ratio_locked')
+    def _onchange_ratio_locked_rebalance(self):
+        """Toggling a lock redistributes the unlocked rows (equal split of
+        the remainder)."""
+        self.line_id._rebalance_participants()

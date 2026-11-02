@@ -580,6 +580,11 @@ class MesOrderRouteOperation(models.Model):
         cutoff = self.env.context.get('sn_wsd_pass_cutoff')
         if cutoff:
             domain.append(('out_date', '>', cutoff))
+        # 返工截断水位（oqc-disposition-closure 任务 5.3）：只认发起时刻
+        # 之后新落的历史行——秒级同秒的时间戳分不开旧 OK 与重走
+        watermark = self.env.context.get('sn_wsd_pass_cutoff_min_id')
+        if watermark:
+            domain.append(('id', '>', watermark))
         return self.env['sn.wsd.serial.operation.history'].search(domain).mapped('route_operation_id')
 
     def _reachable_operations(self, mes_order, serial_identity=None):
@@ -639,6 +644,13 @@ class SerialOperationHistory(models.Model):
     )
     x_batch_pass_reason = fields.Selection(
         related='x_batch_pass_log_id.reason', string='Batch Pass Reason',
+    )
+    x_is_rework = fields.Boolean(
+        string='Rework Pass', index=True, copy=False,
+        help='Set on pass rows written while the board carried an active '
+             'OQC rework voucher: the row is a re-walk, not first-pass '
+             'production. Reports and piece-rate ledgers can tell them '
+             'apart (station OK counts are SN-deduped anyway).',
     )
     in_date = fields.Datetime()
     out_date = fields.Datetime(index=True)

@@ -1,4 +1,4 @@
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 
 from .common_piece_rate import PieceRateTestCommon
@@ -7,7 +7,8 @@ from .common_piece_rate import PieceRateTestCommon
 @tagged('post_install', '-at_install')
 class TestReportSource(PieceRateTestCommon):
     """piece-rate 批次3：报工模式数量来源——报工行 1:1 占用（草稿即占用、
-    作废释放）、批量生成向导。"""
+    作废释放）、台账批量生成（report-daily-price-inline：原向导「待分配」
+    页签搬到报工台账列表）。"""
 
     def test_report_settled_once(self):
         """一笔报工行只能被一张未作废计件单引用；草稿即占用。"""
@@ -52,19 +53,15 @@ class TestReportSource(PieceRateTestCommon):
         })
         self.assertTrue(reborn.operation_report_id)
 
-    def test_generate_wizard(self):
-        """向导筛选未结算报工行批量生成草稿：带出数量/业务日期/快照/默认参与人。"""
+    def test_ledger_batch_generate(self):
+        """台账勾选未结算报工行批量生成草稿：带出数量/快照/默认参与人。"""
         self._rate()
         reports = [
             self._make_report(self.order, self.op_a, 100.0),
             self._make_report(self.order, self.op_a, 400.0),
             self._make_report(self.order, self.op_b, 200.0),
         ]
-        wizard = self.env['sn.wsd.piece.settlement.generate.wizard'].create({
-            'mes_order_id': self.order.id,
-            'report_ids': [(6, 0, reports[0].ids + reports[1].ids)],
-        })
-        action = wizard.action_generate()
+        action = (reports[0] + reports[1]).action_generate_piece_settlement()
         domain_ids = [d[2] for d in action['domain'] if d[0] == 'id'][0]
         settlements = self.env['sn.wsd.piece.settlement'].browse(domain_ids)
         self.assertEqual(len(settlements), 2)
@@ -78,12 +75,15 @@ class TestReportSource(PieceRateTestCommon):
                 settlement.participant_ids.mapped('performance_ratio'),
                 [30.0, 30.0, 20.0, 20.0])
             self.assertEqual(settlement.state, 'draft')
-        # 已占用的两笔报工行不再出现在未结算列表
-        wizard2 = self.env['sn.wsd.piece.settlement.generate.wizard'].create({
-            'mes_order_id': self.order.id,
-        })
-        wizard2._onchange_filters_load_reports()
-        self.assertEqual(wizard2.report_ids.ids, reports[2].ids)
+        # 已占用的两笔报工行不再出现在未结算过滤器
+        Report = self.env['sn.wsd.mes.operation.report']
+        unsettled = Report.search([
+            ('mes_order_id', '=', self.order.id),
+            ('x_piece_settled', '=', False)])
+        self.assertEqual(unsettled.ids, reports[2].ids)
+        # 对已结算行重复生成 → 明确拦截
+        with self.assertRaises(UserError):
+            (reports[0] + reports[1]).action_generate_piece_settlement()
 
     def test_source_consistency(self):
         """确认前源校验：报工模式必须有报工行、数量必须一致、

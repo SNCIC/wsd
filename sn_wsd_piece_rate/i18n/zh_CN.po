@@ -512,6 +512,7 @@ msgstr "月度关账"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_ng
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_qty_ng
 msgid "NG Quantity"
 msgstr "NG 数量"
 
@@ -549,6 +550,7 @@ msgstr "该工序当前没有未结算的 OK 台数。"
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_ok
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__qty_ok
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_qty_ok
 msgid "OK Quantity"
 msgstr "OK 数量"
 
@@ -630,6 +632,7 @@ msgstr "参与人"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_ids
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_ids
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__participant_ids
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
@@ -786,6 +789,7 @@ msgstr "基线比例"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__ratio_total
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_ratio_total
 msgid "Ratio Total"
 msgstr "比例合计"
 
@@ -875,11 +879,13 @@ msgstr "过站模式下由本计件单支付首过合格台数的 SN。作废即
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__qty_scrap
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_qty_scrap
 msgid "Scrap Quantity"
 msgstr "报废数量"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__scrap_reason_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_scrap_reason_id
 msgid "Scrap Reason"
 msgstr "报废原因"
 
@@ -1018,6 +1024,7 @@ msgstr "参与人绩效比合计；必须为 100%。"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__team_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__team_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__team_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_team_id
 msgid "Team"
 msgstr "班组"
 
@@ -1268,6 +1275,7 @@ msgstr "向导"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__workshop_id
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__workshop_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
@@ -1284,3 +1292,286 @@ msgstr "YYYY-MM"
 #: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
 msgid "id"
 msgstr "id"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__piece_price
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_piece_price
+msgid "Unit Price"
+msgstr "单价"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__x_new_price
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_new_price
+msgid "New Unit Price"
+msgstr "现填单价"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__piece_price
+msgid "Price configured in the rate table for (company, product, operation). Zero means unconfigured: type the price on the line, it is created into the rate table at submit."
+msgstr "单价表中该（公司, 产品, 工序）已配置的单价。为零表示未配置：在行上现填单价，提交时建入单价表。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__x_new_price
+msgid "Price typed on the spot when no rate is configured yet: it is created into the rate table when the batch is submitted, so this batch and the next ones are priced. Ignored when a rate already exists (maintain changes in the configuration menu)."
+msgstr "未配置单价时现场填写的单价：整批提交时建入单价表，本批及后续报工均按此计价。已配置单价时忽略此值（调价请走配置菜单）。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "No piece rate is configured for product %(product)s on operation %(operation)s: enter the unit price on the line before submitting."
+msgstr "产品 %(product)s 的工序 %(operation)s 尚未配置计件单价：请先在行上填写单价再提交。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Product %(product)s on operation %(operation)s will be paid by piece rate: select the participants who produced this batch."
+msgstr "产品 %(product)s 的工序 %(operation)s 按计件计酬：请选择本批的参与人。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/mes_operation_report.py:0
+msgid "Every selected report already has a non-void piece settlement."
+msgstr "所选报工行均已存在未作废的计件单。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.actions.server,name:sn_wsd_piece_rate.action_sn_wsd_report_generate_settlement
+msgid "Generate Piece Settlements"
+msgstr "生成计件草稿"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
+msgid "Tag-style quick edit of the crew directly in the list: adding or removing an employee adds or removes the matching participant row and the ratios re-split automatically (typed-over rows stay locked, the rest shares the remainder). Mirrored onto the participant rows on load (create) and through the field onchange on edit."
+msgstr "列表里直接快编班组人员的标签列：加/减一名员工即加/删对应参与人行，比例自动重摊（手改过的锁定，其余分摊剩余）。载入时（create）与编辑时（onchange）自动同步到参与人行。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__x_ratio_locked
+msgid "Ratio Locked"
+msgstr "锁定比例"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_participant__x_ratio_locked
+msgid "Explicit lock (user decision 2026-11-01): locked rows keep their ratio when the rest is redistributed -- toggling a lock, Equal Split and Fill From Team are the only actions that re-split; typing or adding/removing rows never does."
+msgstr "显式锁定（2026-11-01 用户定稿）：锁定的行在重分配时保持比例不变——只有锁定开关、均分、从班组带出会触发重分配；手输比例、增删行不会自动改任何值。"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_id
+msgid "Editing Line"
+msgstr "正在编辑行"
+
+#. module: sn_wsd_piece_rate
+#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_id
+msgid "Line selected by the row Edit button: the detail panel below edits its team and participants (with explicit ratio locks)."
+msgstr "由行上编辑按钮选中的行：下方编辑区编辑其班组与参与人（比例显式锁定）。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/wizard/daily_report_line.py:0
+msgid "Equal Split"
+msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Equal Split"
+msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Edit Line"
+msgstr "编辑行"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
+msgid "Click an operation above to record its batch below."
+msgstr "点击上方列表中的工序，在下方录入该工序的本批报工。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Daily Reporting"
+msgstr "日报工"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Submit Reports"
+msgstr "提交报工"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Workshop"
+msgstr "车间"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Production Line"
+msgstr "产线"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Reported"
+msgstr "已报数量"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Remaining"
+msgstr "可报额度"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Sequence Locked"
+msgstr "顺序锁"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Unit Price"
+msgstr "单价"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "New Unit Price"
+msgstr "现填单价"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Allocation"
+msgstr "人员分配"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "OK Quantity"
+msgstr "OK 数量"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "NG Quantity"
+msgstr "NG 数量"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Scrap Quantity"
+msgstr "报废数量"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Scrap Reason"
+msgstr "报废原因"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Team"
+msgstr "班组"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Fill From Team"
+msgstr "从班组带出"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Equal Split"
+msgstr "均分"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Participants"
+msgstr "参与人"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Employee"
+msgstr "员工"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Employee Code"
+msgstr "工号"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Performance Ratio"
+msgstr "绩效比"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Ratio Locked"
+msgstr "锁定比例"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Ratio Total"
+msgstr "比例合计"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Add participant..."
+msgstr "输入姓名添加参与人…"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Click a row to record its batch below."
+msgstr "点击上方列表中的工序，在下方录入该工序的本批报工。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "No active report-mode orders match the filters."
+msgstr "筛选条件下没有活跃的报工模式制令单。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Ratio capped: the total cannot exceed 100%."
+msgstr "已按上限截断：比例合计不能超过 100%。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Enter at least one positive quantity."
+msgstr "至少录一个大于零的数量。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "%s operation report(s) submitted."
+msgstr "已提交 %s 笔报工。"
+
+#. module: sn_wsd_piece_rate
+#. odoo-javascript
+#: code:addons/sn_wsd_piece_rate/static/src/js/daily_workbench.js:0
+msgid "Nothing to submit."
+msgstr "没有可提交的内容。"

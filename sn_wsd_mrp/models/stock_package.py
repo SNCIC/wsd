@@ -366,6 +366,10 @@ class CartonPalletBindingLog(models.Model):
                     entry['cartons'] |= carton
 
         receipts = []
+        # 质量门禁钩子（oqc-disposition-closure 决策 4）：倒冲循环开始前
+        # 对全部制令单预检查，任一未放行整批拒绝（本模块不依赖 quality，
+        # 空实现由 sn_wsd_quality 覆写）
+        self._check_receipt_release(order_map)
         for order, entry in order_map.items():
             # 产出归产出（进箱）、入账归入账（开单）：收货是产后动作，
             # 与产线在线无关（与 action_complete 同口径）；完结/未投产
@@ -407,3 +411,11 @@ class CartonPalletBindingLog(models.Model):
             })
         return {'ok': True, 'receipts': receipts,
                 'pallet_nos': pallets.mapped('name')}
+
+    def _check_receipt_release(self, order_map):
+        """Quality gate hook (oqc-disposition-closure decision 4): called
+        after the order map is aggregated, before the backflush loop.
+        No-op here -- sn_wsd_quality overrides it to refuse the whole
+        pallet batch when any order is not released by its OQC
+        inspection. Kept in this module so it does not depend on quality."""
+        return True
