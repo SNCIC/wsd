@@ -141,7 +141,8 @@
         </field>
     </record>
 
-    <menuitem id="menu_sn_intercompany_root" name="Inter-Company" sequence="86"/>
+    <menuitem id="menu_sn_intercompany_root" name="Inter-Company" sequence="86"
+              web_icon="sn_wsd_inter_company,static/description/icon.png"/>
     <menuitem id="menu_sn_intercompany_agreement" name="Trade Agreements"
               parent="menu_sn_intercompany_root"
               action="action_sn_intercompany_agreement" sequence="10"/>
