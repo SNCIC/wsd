@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_intercompany_agreement_list" model="ir.ui.view">
+        <field name="name">sn.intercompany.agreement.list</field>
+        <field name="model">sn.intercompany.agreement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_a_id"/>
+                <field name="company_b_id"/>
+                <field name="a_sells_to_b" widget="boolean_toggle"/>
+                <field name="b_sells_to_a" widget="boolean_toggle"/>
+                <field name="link_level"/>
+                <field name="doc_scope"/>
+                <field name="open_issue_count" string="Open Issues"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'running'"
+                       decoration-warning="state == 'suspended'"
+                       decoration-muted="state in ('draft', 'closed')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_agreement_form" model="ir.ui.view">
+        <field name="name">sn.intercompany.agreement.form</field>
+        <field name="model">sn.intercompany.agreement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" string="Start" type="object"
+                            class="btn-primary" invisible="state == 'running'"/>
+                    <button name="action_suspend" string="Suspend" type="object"
+                            invisible="state != 'running'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state in ('draft',)"/>
+                    <button name="action_close" string="Close" type="object"
+                            invisible="state == 'closed'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,running,suspended,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sync_log" type="object"
+                                class="oe_stat_button" icon="fa-history">
+                            <field name="sync_log_count" widget="statinfo" string="Logs"/>
+                        </button>
+                        <button name="action_view_issues" type="object"
+                                class="oe_stat_button" icon="fa-exclamation-triangle">
+                            <field name="open_issue_count" widget="statinfo" string="Issues"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. A - B trade agreement"/></h1>
+                    </div>
+                    <group>
+                        <group string="Companies">
+                            <field name="company_a_id"/>
+                            <field name="company_b_id"/>
+                            <field name="a_sells_to_b"/>
+                            <field name="b_sells_to_a"/>
+                        </group>
+                        <group string="Synchronization">
+                            <field name="link_level"/>
+                            <field name="doc_scope"/>
+                            <field name="auto_state"/>
+                            <field name="conflict_policy"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Prices">
+                            <field name="price_policy"/>
+                            <field name="markup_percent"
+                                   invisible="price_policy != 'cost_markup'"/>
+                        </group>
+                        <group string="Defaults">
+                            <field name="sync_user_id" options="{'no_create_edit': True}"/>
+                            <field name="warehouse_a_id"
+                                   domain="[('company_id', '=', company_a_id)]"
+                                   invisible="not b_sells_to_a"/>
+                            <field name="warehouse_b_id"
+                                   domain="[('company_id', '=', company_b_id)]"
+                                   invisible="not a_sells_to_b"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Mapping" name="product_mapping">
+                            <field name="product_map_ids">
+                                <list editable="bottom">
+                                    <field name="direction"/>
+                                    <field name="source_product_tmpl_id"/>
+                                    <field name="target_product_tmpl_id"/>
+                                    <field name="uom_ratio"/>
+                                    <field name="price_factor"/>
+                                    <field name="active"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Terms" name="terms">
+                            <field name="note" placeholder="Commercial terms of the agreement"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_agreement_search" model="ir.ui.view">
+        <field name="name">sn.intercompany.agreement.search</field>
+        <field name="model">sn.intercompany.agreement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="company_a_id"/>
+                <field name="company_b_id"/>
+                <filter name="filter_running" string="Running"
+                        domain="[('state', '=', 'running')]"/>
+                <filter name="filter_archived" string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_company_a" string="Company A"
+                            context="{'group_by': 'company_a_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_intercompany_agreement" model="ir.actions.act_window">
+        <field name="name">Trade Agreements</field>
+        <field name="res_model">sn.intercompany.agreement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a trade agreement</p>
+            <p>An agreement tells which company may sell to which other company,
+                and how far the two documents follow each other.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_intercompany_root" name="Inter-Company" sequence="86"/>
+    <menuitem id="menu_sn_intercompany_agreement" name="Trade Agreements"
+              parent="menu_sn_intercompany_root"
+              action="action_sn_intercompany_agreement" sequence="10"/>
+</odoo>

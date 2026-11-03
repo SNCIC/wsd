@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_intercompany_sync_issue_list" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.issue.list</field>
+        <field name="model">sn.intercompany.sync.issue</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="issue_type" widget="badge"
+                       decoration-danger="issue_type in ('conflict', 'diverged', 'system')"
+                       decoration-warning="issue_type in ('state', 'missing')"/>
+                <field name="agreement_id"/>
+                <field name="source_ref"/>
+                <field name="target_ref"/>
+                <field name="retry_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'open'"
+                       decoration-success="state == 'resolved'"
+                       decoration-muted="state == 'ignored'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_sync_issue_form" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.issue.form</field>
+        <field name="model">sn.intercompany.sync.issue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_retry" string="Replay Synchronization"
+                            type="object" class="btn-primary"
+                            invisible="state != 'open'"/>
+                    <button name="action_resolve" string="Mark as Handled"
+                            type="object" invisible="state != 'open'"/>
+                    <button name="action_ignore" string="Ignore"
+                            type="object" invisible="state != 'open'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="open,resolved,ignored"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_source" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                string="Source Document"/>
+                        <button name="action_open_target" type="object"
+                                class="oe_stat_button" icon="fa-file-text"
+                                string="Counterpart Document"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="issue_type"/>
+                            <field name="agreement_id"/>
+                            <field name="direction"/>
+                        </group>
+                        <group>
+                            <field name="source_ref"/>
+                            <field name="target_ref"/>
+                            <field name="retry_count"/>
+                            <field name="last_retry"/>
+                        </group>
+                    </group>
+                    <group string="Reason">
+                        <field name="message" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Resolution">
+                        <field name="resolved_user_id"/>
+                        <field name="resolved_date"/>
+                        <field name="note" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_sync_issue_search" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.issue.search</field>
+        <field name="model">sn.intercompany.sync.issue</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_ref"/>
+                <field name="target_ref"/>
+                <field name="agreement_id"/>
+                <filter name="filter_open" string="To Handle"
+                        domain="[('state', '=', 'open')]"/>
+                <filter name="filter_conflict" string="Conflicts"
+                        domain="[('issue_type', '=', 'conflict')]"/>
+                <group>
+                    <filter name="group_type" string="Issue Type"
+                            context="{'group_by': 'issue_type'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_intercompany_sync_issue" model="ir.actions.act_window">
+        <field name="name">Synchronization Issues</field>
+        <field name="res_model">sn.intercompany.sync.issue</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_open': 1}</field>
+    </record>
+
+    <menuitem id="menu_sn_intercompany_sync_issue" name="Synchronization Issues"
+              parent="menu_sn_intercompany_root"
+              action="action_sn_intercompany_sync_issue" sequence="40"/>
+</odoo>

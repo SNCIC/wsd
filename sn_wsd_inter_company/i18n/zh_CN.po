@@ -1,0 +1,1704 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_inter_company
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+msgid "%(company)s Invoice: %(entry)s"
+msgstr "%(company)s 发票：%(entry)s"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "%(counterpart)s is still open while %(source)s was cancelled."
+msgstr "%(source)s 已取消，但 %(counterpart)s 仍未关闭。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_mixin.py:0
+msgid "%(document)s cannot replay its inter-company synchronization."
+msgstr "%(document)s 无法重放跨公司同步。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "%(source)s of company %(company)s was cancelled; review %(target)s."
+msgstr "公司 %(company)s 的 %(source)s 已取消，请检查 %(target)s。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"%(source)s was modified but %(target)s is %(state)s and cannot follow "
+"automatically."
+msgstr "%(source)s 已修改，但 %(target)s 当前为 %(state)s，无法自动跟随。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"%(target)s was modified by the other company; the changes of %(source)s were"
+" not applied."
+msgstr "%(target)s 已被对方公司修改，%(source)s 的变更未应用。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.constraint,message:sn_wsd_inter_company.constraint_sn_intercompany_product_map_product_map_uniq
+msgid "A product mapping already exists for this agreement and direction."
+msgstr "该协议与此方向下已存在相同的产品映射。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_account_move_send
+msgid "Account Move Send"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_log_search
+msgid "Action"
+msgstr "操作"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_needaction
+msgid "Action Needed"
+msgstr "需要处理"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__active
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__active
+msgid "Active"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__agreement_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_order_form_intercompany
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_purchase_order_form_intercompany
+msgid "Agreement"
+msgstr "协议"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.constraint,message:sn_wsd_inter_company.constraint_sn_intercompany_agreement_agreement_company_pair_uniq
+msgid "An agreement already exists between these two companies."
+msgstr "这两家公司之间已存在协议。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "An agreement needs two different companies."
+msgstr "协议需要两家不同的公司。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.actions.act_window,help:sn_wsd_inter_company.action_sn_intercompany_agreement
+msgid ""
+"An agreement tells which company may sell to which other company,\n"
+"                and how far the two documents follow each other."
+msgstr "协议规定哪家公司可以向哪家公司销售，以及双方单据的联动程度。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Archived"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__auto_generated
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__auto_generated
+msgid "Auto Generated Document"
+msgstr "自动生成的单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__auto_generated
+msgid "Auto Generated Purchase Order"
+msgstr "自动生成的采购订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__auto_generated
+msgid "Auto Generated Sales Order"
+msgstr "自动生成的销售订单"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "Automatically generated from %(origin)s of company %(company)s."
+msgstr "由 %(company)s 的 %(origin)s 自动生成。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_document_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_document_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_company_form_inter_company
+msgid "Automation"
+msgstr "自动化"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__direction__both
+msgid "Both Directions"
+msgstr "双向"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "Both companies modified %(source)s and %(target)s."
+msgstr "双方都修改了 %(source)s 与 %(target)s。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__action__cancel
+msgid "Cancel"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid ""
+"Cancelled document %(source)s still has an open counterpart %(counterpart)s."
+msgstr "已取消的 %(source)s 仍有未关闭的对方单据 %(counterpart)s。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"Cannot delete %(source)s: its counterpart %(target)s is %(state)s. Cancel it"
+" in the other company first."
+msgstr "无法删除 %(source)s：其对方单据 %(target)s 当前为 %(state)s，请先在对方公司取消。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+msgid ""
+"Cannot delete %(source)s: its counterpart %(target)s is %(state)s. Reset it "
+"to draft in the other company first."
+msgstr "无法删除 %(source)s：其对方单据 %(target)s 当前为 %(state)s，请先在对方公司重置为草稿。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__diff
+msgid "Changes"
+msgstr "变更内容"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Close"
+msgstr "关闭"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__state__closed
+msgid "Closed"
+msgstr "已关闭"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Commercial terms of the agreement"
+msgstr "协议的商务条款"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_res_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Companies"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__company_a_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_search
+msgid "Company A"
+msgstr "公司 A"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__a_sells_to_b
+msgid "Company A Sells to Company B"
+msgstr "公司 A 向公司 B 销售"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "Company A must be the company with the lowest id."
+msgstr "公司 A 必须是 id 较小的公司。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_direction__a_to_b
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_direction__a_to_b
+msgid "Company A to Company B"
+msgstr "公司 A 到公司 B"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__company_b_id
+msgid "Company B"
+msgstr "公司 B"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__b_sells_to_a
+msgid "Company B Sells to Company A"
+msgstr "公司 B 向公司 A 销售"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_direction__b_to_a
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_direction__b_to_a
+msgid "Company B to Company A"
+msgstr "公司 B 到公司 A"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__config
+msgid "Configuration"
+msgstr "配置"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid ""
+"Configure a warehouse for %(company)s to deliver the orders it gets from the"
+" other companies."
+msgstr "请为 %(company)s 配置仓库，用于交付其他公司向它下的订单。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"Configure a warehouse for %(company)s to receive the orders it gets from the"
+" other companies."
+msgstr "请为 %(company)s 配置仓库，用于接收其他公司向它下的订单。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+msgid ""
+"Configure the purchase journal used by the inter-company rules of "
+"%(company)s before posting an invoice that targets it."
+msgstr "在过账以 %(company)s 为对象的发票前，请先配置该公司跨公司规则使用的采购日记账。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__conflict_policy
+msgid "Conflict Policy"
+msgstr "冲突策略"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__conflict
+msgid "Conflicting Changes"
+msgstr "变更冲突"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "Conflicting changes, manual resolution."
+msgstr "变更冲突，需人工处理。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_search
+msgid "Conflicts"
+msgstr "冲突"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__action__check
+msgid "Consistency Check"
+msgstr "一致性检查"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__price_policy__copy
+msgid "Copy the Source Price"
+msgstr "复制源单价格"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Counterpart Document"
+msgstr "对方单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__action__create
+msgid "Create"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__sync_user_id
+msgid "Create Documents As"
+msgstr "创建单据的身份"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__link_level__create_only
+msgid "Create Only"
+msgstr "仅创建"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__link_level
+msgid ""
+"Create Only: the counterpart document is generated once. Create and Update: "
+"later changes of the source document are pushed to the counterpart document."
+" Create, Update and Cancel: cancelling the source document also cancels or "
+"flags the counterpart document."
+msgstr "仅创建：对方单据只生成一次。创建并更新：源单后续变更会推送到对方单据。创建、更新并取消：取消源单时会同时取消或标记对方单据。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.actions.act_window,help:sn_wsd_inter_company.action_sn_intercompany_agreement
+msgid "Create a trade agreement"
+msgstr "创建交易协议"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__link_level__create_update
+msgid "Create and Update"
+msgstr "创建并更新"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_user_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_user_id
+msgid "Create as"
+msgstr "创建人"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.res_config_settings_view_form
+msgid ""
+"Create the matching documents in the other company when you sell or buy "
+"between your companies."
+msgstr "在公司之间销售或采购时，自动在对方公司创建对应单据。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__link_level__create_update_cancel
+msgid "Create, Update and Cancel"
+msgstr "创建、更新并取消"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__create_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__create_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__create_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_bank_statement_line__auto_invoice_id
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_move__auto_invoice_id
+msgid ""
+"Customer invoice or credit note of the other company this document was "
+"generated from."
+msgstr "生成此单据所依据的对方公司客户发票或红字发票。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_log_list
+msgid "Date"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Defaults"
+msgstr "默认值"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__action__delete
+msgid "Delete"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__detail
+msgid "Detail"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__direction
+msgid "Direction"
+msgstr "方向"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move_send__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__display_name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__diverged
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__diverged
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__diverged
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__diverged
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__diverged
+msgid "Diverged"
+msgstr "已分叉"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__diverged
+msgid "Diverged Documents"
+msgstr "单据分叉"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__state
+msgid "Document State"
+msgstr "单据状态"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_company_form_inter_company
+msgid "Documents"
+msgstr "单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__doc_scope
+msgid "Documents in Scope"
+msgstr "单据范围"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__res_company__intercompany_document_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__auto_state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__duration_ms
+msgid "Duration (ms)"
+msgstr "耗时（毫秒）"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__date_end
+msgid "End Date"
+msgstr "结束日期"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__result__failed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_log_search
+msgid "Failed"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_root_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_move__intercompany_root_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_purchase_order__intercompany_root_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sale_order__intercompany_root_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_root_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_stock_picking__intercompany_root_ref
+msgid ""
+"First document of the trade chain, used to never generate a document twice "
+"for the same chain."
+msgstr "交易链的首张单据，用于避免同一链条重复生成单据。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_generate_bills_refund
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_bills_refund
+msgid "Generate Bills and Refunds"
+msgstr "生成供应商账单和退款单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_generate_purchase_orders
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_purchase_orders
+msgid "Generate Purchase Orders"
+msgstr "生成采购订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_generate_sales_orders
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_sales_orders
+msgid "Generate Sales Orders"
+msgstr "生成销售订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_state
+msgid "Generated Documents"
+msgstr "生成单据状态"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_source_ref
+msgid "Generated From"
+msgstr "来源单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__resolved_user_id
+msgid "Handled By"
+msgstr "处理人"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__resolved_date
+msgid "Handled On"
+msgstr "处理时间"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__has_message
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move_line__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move_send__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__id
+msgid "ID"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__message_needaction
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_error
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_error
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Ignore"
+msgstr "忽略"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__state__ignored
+msgid "Ignored"
+msgstr "已忽略"
+
+#. module: sn_wsd_inter_company
+#: model:ir.module.category,name:sn_wsd_inter_company.module_category_inter_company
+#: model:ir.ui.menu,name:sn_wsd_inter_company.menu_sn_intercompany_root
+#: model:res.groups.privilege,name:sn_wsd_inter_company.privilege_sn_intercompany
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_order_form_intercompany
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_purchase_order_form_intercompany
+msgid "Inter-Company"
+msgstr "跨公司"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_agreement_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_agreement_id
+msgid "Inter-Company Agreement"
+msgstr "跨公司协议"
+
+#. module: sn_wsd_inter_company
+#: model:res.groups,name:sn_wsd_inter_company.group_sn_intercompany_manager
+msgid "Inter-Company Manager"
+msgstr "跨公司管理员"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sn_intercompany_product_map
+msgid "Inter-Company Product Mapping"
+msgstr "跨公司产品映射"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sn_intercompany_sync_issue
+msgid "Inter-Company Synchronization Issue"
+msgstr "跨公司同步异常"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sn_intercompany_sync_log
+msgid "Inter-Company Synchronization Log"
+msgstr "跨公司同步日志"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sn_intercompany_sync_mixin
+msgid "Inter-Company Synchronization Mixin"
+msgstr "跨公司同步混入"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sn_intercompany_agreement
+msgid "Inter-Company Trade Agreement"
+msgstr "跨公司交易协议"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_company_form_inter_company
+msgid "Inter-Company Transactions"
+msgstr "跨公司交易"
+
+#. module: sn_wsd_inter_company
+#: model:ir.actions.server,name:sn_wsd_inter_company.ir_cron_intercompany_consistency_ir_actions_server
+msgid "Inter-Company: check document consistency"
+msgstr "跨公司：检查单据一致性"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__data
+msgid "Invalid Data"
+msgstr "数据不合法"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__issue_count
+msgid "Issue Count"
+msgstr "异常数量"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__issue_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_search
+msgid "Issue Type"
+msgstr "异常类型"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Issues"
+msgstr "异常"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__last_retry
+msgid "Last Retry"
+msgstr "上次重试"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__write_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__write_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__write_date
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_sync_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_move__intercompany_sync_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_purchase_order__intercompany_sync_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sale_order__intercompany_sync_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_sync_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_stock_picking__intercompany_sync_state
+msgid "Last known state of the link with the document of the other company."
+msgstr "与对方公司单据链接的最近状态。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__conflict_policy__manual
+msgid "Leave the Decision to a User"
+msgstr "由用户决定"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Logs"
+msgstr "日志"
+
+#. module: sn_wsd_inter_company
+#: model:res.groups,comment:sn_wsd_inter_company.group_sn_intercompany_manager
+msgid ""
+"Maintains the trade agreements, the product mappings\n"
+"            and the synchronization issues."
+msgstr "维护交易协议、产品映射与同步异常。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_form
+msgid "Mapping"
+msgstr "映射"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Mark as Handled"
+msgstr "标记为已处理"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__markup_percent
+msgid "Markup (%)"
+msgstr "加成（%）"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_issue.py:0
+msgid "Missing"
+msgstr "缺失"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__missing
+msgid "Missing Counterpart"
+msgstr "对方单据缺失"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__name
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__name
+msgid "Name"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_source_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_move__intercompany_source_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_purchase_order__intercompany_source_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sale_order__intercompany_source_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_source_ref
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_stock_picking__intercompany_source_ref
+msgid "Name of the document this one was generated from."
+msgstr "生成此单据的源单据名称。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "No counterpart document exists for %(source)s."
+msgstr "%(source)s 没有对应的对方单据。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_skip_reason
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_skip_reason
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_skip_reason
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_skip_reason
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_skip_reason
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_skip_reason
+msgid "Not Synchronized Because"
+msgstr "未同步原因"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__note
+msgid "Note"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__open_issue_count
+msgid "Open Issue Count"
+msgstr "未处理异常数"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_list
+msgid "Open Issues"
+msgstr "未处理异常"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_receipt_type_id
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_receipt_type_id
+msgid ""
+"Operation type set on the receipts generated for this company by the inter-"
+"company rules."
+msgstr "跨公司规则为此公司生成的收货单所使用的作业类型。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__doc_scope__so_po_invoice
+msgid "Orders and Invoices"
+msgstr "订单与发票"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__doc_scope__so_po_invoice_stock
+msgid "Orders, Invoices and Transfers"
+msgstr "订单、发票与调拨"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__price_factor
+msgid "Price Factor"
+msgstr "价格系数"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__price_policy
+msgid "Price Policy"
+msgstr "价格策略"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Prices"
+msgstr "价格"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__product_map_count
+msgid "Product Map Count"
+msgstr "产品映射数量"
+
+#. module: sn_wsd_inter_company
+#: model:ir.actions.act_window,name:sn_wsd_inter_company.action_sn_intercompany_product_map
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__product_map_ids
+#: model:ir.ui.menu,name:sn_wsd_inter_company.menu_sn_intercompany_product_map
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Product Mapping"
+msgstr "产品映射"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__target_product_tmpl_id
+msgid ""
+"Product used on the documents of the other company. Leave empty to copy the "
+"source product as a text line."
+msgstr "对方公司单据上使用的产品；留空则把源产品复制为文本行。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_form
+msgid "Products"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_purchase_journal_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_purchase_journal_id
+msgid "Purchase Journal"
+msgstr "采购日记账"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_purchase_order
+msgid "Purchase Order"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_purchase_journal_id
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_purchase_journal_id
+msgid ""
+"Purchase journal of the vendor bills generated by the inter-company rules."
+msgstr "跨公司规则生成的供应商账单所使用的采购日记账。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sale_order__auto_purchase_order_id
+msgid ""
+"Purchase order of the other company this sales order was generated from."
+msgstr "生成此销售订单所依据的对方公司采购订单。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "Quantities differ from %(source)s."
+msgstr "数量与 %(source)s 不一致。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__uom_ratio
+msgid ""
+"Quantity of the source line is multiplied by this ratio before it is written"
+" on the target line."
+msgstr "写入目标行前，源行数量乘以该比例。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Reason"
+msgstr "原因"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_receipt_type_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_receipt_type_id
+msgid "Receipt Operation Type"
+msgstr "收货作业类型"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__price_policy__pricelist
+msgid "Recompute with the Target Price List"
+msgstr "按目标公司价目表重算"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Replay Synchronization"
+msgstr "重放同步"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_issue.py:0
+msgid "Replayed by %(user)s."
+msgstr "由 %(user)s 重放。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Reset to Draft"
+msgstr "重置为草稿"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Resolution"
+msgstr "处理结果"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__note
+msgid "Resolution Note"
+msgstr "处理说明"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__state__resolved
+msgid "Resolved"
+msgstr "已解决"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_user_id
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_user_id
+msgid ""
+"Responsible user for the creation of the documents triggered by the inter-"
+"company rules."
+msgstr "跨公司规则触发创建单据时使用的责任用户。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_log_search
+msgid "Result"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__retry_count
+msgid "Retry Count"
+msgstr "重试次数"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__state__running
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_search
+msgid "Running"
+msgstr "运行中"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__doc_scope__so_po
+msgid "Sale and Purchase Orders"
+msgstr "销售与采购订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_sale_order_line
+msgid "Sales Order Line"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_purchase_order__auto_sale_order_id
+msgid ""
+"Sales order of the other company this purchase order was generated from."
+msgstr "生成此采购订单所依据的对方公司销售订单。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "Set both companies first."
+msgstr "请先设置两家公司。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_bank_statement_line__auto_generated
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_account_move__auto_generated
+msgid "Set on the bills created by the inter-company rules."
+msgstr "标记由跨公司规则创建的账单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_purchase_order__auto_generated
+msgid "Set on the purchase orders created by the inter-company rules."
+msgstr "标记由跨公司规则创建的采购订单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sale_order__auto_generated
+msgid "Set on the sales orders created by the inter-company rules."
+msgstr "标记由跨公司规则创建的销售订单。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid ""
+"Set the user used to create the inter-company documents of %(company)s "
+"before approving an order that targets it."
+msgstr "在批准以 %(company)s 为对象的订单前，请先设置用于创建该公司跨公司单据的用户。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"Set the user used to create the inter-company documents of %(company)s "
+"before confirming an order that targets it."
+msgstr "在确认以 %(company)s 为对象的订单前，请先设置用于创建该公司跨公司单据的用户。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+msgid ""
+"Set the user used to create the inter-company documents of %(company)s "
+"before posting an invoice that targets it."
+msgstr "在过账以 %(company)s 为对象的发票前，请先设置用于创建该公司跨公司单据的用户。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_mixin.py:0
+msgid ""
+"Set the user used to create the inter-company documents of %(company)s."
+msgstr "请设置用于创建 %(company)s 跨公司单据的用户。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__result__skipped
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_log_search
+msgid "Skipped"
+msgstr "已跳过"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__snapshot
+msgid "Snapshot"
+msgstr "快照"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__source_cancelled
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__source_cancelled
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__source_cancelled
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__source_cancelled
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__source_cancelled
+msgid "Source Cancelled"
+msgstr "源单已取消"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__source_deleted
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__source_deleted
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__source_deleted
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__source_deleted
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__source_deleted
+msgid "Source Deleted"
+msgstr "源单已删除"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__source_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__source_ref
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_form
+msgid "Source Document"
+msgstr "源单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__source_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__source_id
+msgid "Source Id"
+msgstr "源 ID"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__auto_invoice_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__auto_invoice_id
+msgid "Source Invoice"
+msgstr "源发票"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__source_model
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__source_model
+msgid "Source Model"
+msgstr "源模型"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__source_product_tmpl_id
+msgid "Source Product"
+msgstr "源产品"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__auto_purchase_order_id
+msgid "Source Purchase Order"
+msgstr "源采购订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order_line__auto_purchase_order_line_id
+msgid "Source Purchase Order Line"
+msgstr "源采购订单行"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__auto_sale_order_id
+msgid "Source Sales Order"
+msgstr "源销售订单"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order_line__auto_sale_order_line_id
+msgid "Source Sales Order Line"
+msgstr "源销售订单行"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__source_updated
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__source_updated
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__source_updated
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__source_updated
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__source_updated
+msgid "Source Updated"
+msgstr "源单已更新"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Start"
+msgstr "启动"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__date_start
+msgid "Start Date"
+msgstr "开始日期"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__state
+msgid "State"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_document_state
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_document_state
+msgid "State of the documents generated by the inter-company rules."
+msgstr "跨公司规则生成的单据状态。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_state
+msgid "State of the documents generated by this agreement."
+msgstr "本协议生成的单据状态。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_search
+msgid "Status"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__result__success
+msgid "Success"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Suspend"
+msgstr "暂停"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__state__suspended
+msgid "Suspended"
+msgstr "已暂停"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__sync_log_count
+msgid "Sync Log Count"
+msgstr "同步日志数量"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_sync_state
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_sync_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Synchronization"
+msgstr "同步状态"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__sync_failed
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__sync_failed
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__sync_failed
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__sync_failed
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__sync_failed
+msgid "Synchronization Failed"
+msgstr "同步失败"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+#: model:ir.actions.act_window,name:sn_wsd_inter_company.action_sn_intercompany_sync_issue
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__issue_ids
+#: model:ir.ui.menu,name:sn_wsd_inter_company.menu_sn_intercompany_sync_issue
+msgid "Synchronization Issues"
+msgstr "同步异常"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__link_level
+msgid "Synchronization Level"
+msgstr "同步级别"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+#: model:ir.actions.act_window,name:sn_wsd_inter_company.action_sn_intercompany_sync_log
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__sync_log_ids
+#: model:ir.ui.menu,name:sn_wsd_inter_company.menu_sn_intercompany_sync_log
+msgid "Synchronization Log"
+msgstr "同步日志"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_version
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_version
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_version
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_version
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_version
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_version
+msgid "Synchronization Version"
+msgstr "同步版本"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_sync_delivery_receipt
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_sync_delivery_receipt
+msgid "Synchronize Deliveries to Receipts"
+msgstr "发货单与收货单同步"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__account_move__intercompany_sync_state__synced
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__purchase_order__intercompany_sync_state__synced
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sale_order__intercompany_sync_state__synced
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_mixin__intercompany_sync_state__synced
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__stock_picking__intercompany_sync_state__synced
+msgid "Synchronized"
+msgstr "已同步"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__issue_type__system
+msgid "System Error"
+msgstr "系统错误"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__price_policy__cost_markup
+msgid "Target Cost plus Markup"
+msgstr "目标成本加成"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__target_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__target_ref
+msgid "Target Document"
+msgstr "目标单据"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__target_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__target_id
+msgid "Target Id"
+msgstr "目标 ID"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__target_model
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__target_model
+msgid "Target Model"
+msgstr "目标模型"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__target_product_tmpl_id
+msgid "Target Product"
+msgstr "目标产品"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Terms"
+msgstr "条款"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__conflict_policy__source_wins
+msgid "The Modified Document Wins"
+msgstr "被修改的单据优先"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__conflict_policy__latest_wins
+msgid "The Most Recently Modified Wins"
+msgstr "最后修改的优先"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "The agreement does not allow %(company)s to sell to %(target)s."
+msgstr "协议不允许 %(company)s 向 %(target)s 销售。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+msgid "The agreement does not cover the invoices of %(company)s."
+msgstr "协议未覆盖 %(company)s 的发票。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "The agreement only generates documents."
+msgstr "协议仅生成单据，不更新。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/account_move.py:0
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_mixin.py:0
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "The counterpart company of %(document)s cannot be found."
+msgstr "找不到 %(document)s 的对方公司。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "The counterpart document is more recent."
+msgstr "对方单据更晚修改。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "The counterpart document is not draft."
+msgstr "对方单据不是草稿。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid "The counterpart document is not editable."
+msgstr "对方单据不可编辑。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "The end date of %(agreement)s cannot precede its start date."
+msgstr "%(agreement)s 的结束日期不能早于开始日期。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid ""
+"The inter-company user of %(company)s cannot create purchase orders. Grant "
+"it the purchase rights or pick another user."
+msgstr "%(company)s 的跨公司用户无创建采购订单的权限，请授予采购权限或改用其他用户。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid ""
+"The inter-company user of %(company)s cannot create sales orders. Grant it "
+"the sales rights or pick another user."
+msgstr "%(company)s 的跨公司用户无创建销售订单的权限，请授予销售权限或改用其他用户。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "The markup of %(agreement)s cannot be lower than -100%%."
+msgstr "%(agreement)s 的加成不能低于 -100%%。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "The quantities of %(counterpart)s differ from %(source)s."
+msgstr "%(counterpart)s 的数量与 %(source)s 不一致。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+msgid ""
+"The sales order cannot be generated from %(origin)s because the price list "
+"of %(partner)s is in %(pricelist_currency)s while the purchase order is in "
+"%(order_currency)s."
+msgstr "无法根据 %(origin)s 生成销售订单：%(partner)s 的价目表币种为 %(pricelist_currency)s，而采购订单币种为 %(order_currency)s。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_issue.py:0
+msgid "The source document of %(issue)s no longer exists."
+msgstr "%(issue)s 的源单据已不存在。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_issue.py:0
+msgid "This issue has no document to open."
+msgstr "该异常没有可打开的单据。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_issue__state__open
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_sync_issue_search
+msgid "To Handle"
+msgstr "待处理"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_order_form_intercompany
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_purchase_order_form_intercompany
+msgid "Traceability"
+msgstr "溯源"
+
+#. module: sn_wsd_inter_company
+#: model:ir.actions.act_window,name:sn_wsd_inter_company.action_sn_intercompany_agreement
+#: model:ir.ui.menu,name:sn_wsd_inter_company.menu_sn_intercompany_agreement
+msgid "Trade Agreements"
+msgstr "交易协议"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_root_ref
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_root_ref
+msgid "Trade Chain"
+msgstr "交易链"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_bank_statement_line__intercompany_direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_account_move__intercompany_direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_purchase_order__intercompany_direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sale_order__intercompany_direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_mixin__intercompany_direction
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_stock_picking__intercompany_direction
+msgid "Trade Direction"
+msgstr "交易方向"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__uom_ratio
+msgid "Unit Ratio"
+msgstr "单位比例"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__price_factor
+msgid "Unit price of the source line is multiplied by this factor."
+msgstr "源行单价乘以该系数。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_issue.py:0
+msgid "Unknown"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_sync_log__action__update
+msgid "Update"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/purchase_order.py:0
+#: code:addons/sn_wsd_inter_company/models/sale_order.py:0
+msgid "Updated from %(source)s."
+msgstr "已根据 %(source)s 更新。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_log__user_id
+msgid "User"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__sync_user_id
+msgid "User the generated documents are created with."
+msgstr "生成单据所使用的用户。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__res_company__intercompany_document_state__posted
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_agreement__auto_state__posted
+msgid "Validated"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_log__snapshot
+msgid ""
+"Values written on the target document, used to detect that the other company"
+" modified it meanwhile."
+msgstr "写入目标单据的值，用于检测对方公司期间的修改。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_company__intercompany_warehouse_id
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_res_config_settings__intercompany_warehouse_id
+msgid "Warehouse"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__warehouse_a_id
+msgid "Warehouse of Company A"
+msgstr "公司 A 的仓库"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__warehouse_b_id
+msgid "Warehouse of Company B"
+msgstr "公司 B 的仓库"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_warehouse_id
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_warehouse_id
+msgid ""
+"Warehouse set on the sales orders generated for this company by the inter-"
+"company rules."
+msgstr "跨公司规则为此公司生成的销售订单所使用的仓库。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_sync_issue__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_sync_issue__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__conflict_policy
+msgid ""
+"What to do when both companies modified the same field of the two linked "
+"documents."
+msgstr "两家公司同时修改关联单据同一字段时的处理方式。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_generate_sales_orders
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_sales_orders
+msgid ""
+"When another company confirms a purchase order with this company as vendor, "
+"the matching sales order is created in this company."
+msgstr "当其他公司确认以本公司为供应商的采购订单时，在本公司创建对应销售订单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_generate_purchase_orders
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_purchase_orders
+msgid ""
+"When another company confirms a sales order with this company as customer, "
+"the matching purchase order is created in this company."
+msgstr "当其他公司确认以本公司为客户的销售订单时，在本公司创建对应采购订单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_generate_bills_refund
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_generate_bills_refund
+msgid ""
+"When another company posts a customer invoice or a customer credit note with"
+" this company as customer, the matching vendor bill or refund is created in "
+"the purchase journal of this company."
+msgstr "当其他公司过账以本公司为客户的发票或红字发票时，在本公司的采购日记账中创建对应账单或退款单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__a_sells_to_b
+msgid ""
+"When set, a confirmed sale order of company A generates the matching "
+"purchase order in company B."
+msgstr "勾选后，公司 A 确认的销售订单会在公司 B 生成对应采购订单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__b_sells_to_a
+msgid ""
+"When set, a confirmed sale order of company B generates the matching "
+"purchase order in company A."
+msgstr "勾选后，公司 B 确认的销售订单会在公司 A 生成对应采购订单。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_company__intercompany_sync_delivery_receipt
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_res_config_settings__intercompany_sync_delivery_receipt
+msgid ""
+"When the delivery of another company is validated, the matching receipt of "
+"this company is filled with the same quantities, lots and serial numbers."
+msgstr "当其他公司的发货单校验后，本公司对应的收货单会按相同数量和批次/序列号自动填写。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "agreement_id"
+msgstr ""
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "e.g. A - B trade agreement"
+msgstr "例如：A - B 交易协议"
