@@ -15,7 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-
 #. module: sn_wsd_device
 #. odoo-python
 #: code:addons/sn_wsd_device/models/doc_sync_wizard.py:0
@@ -2959,7 +2958,7 @@ msgstr ""
 #: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_reflow_record__collect_time
 #: model:ir.model.fields,help:sn_wsd_device.field_sn_wsd_device_wave_record__collect_time
 msgid "Timestamp reported by the device (stored as UTC)."
-msgstr ""
+msgstr "设备上报的时间戳（以 UTC 存储）。"
 
 #. module: sn_wsd_device
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_knowledge_form
@@ -3956,7 +3955,6 @@ msgstr "第 %(row)s 行：班次“%(value)s”无效。"
 msgid "Row %(row)s: invalid number \"%(value)s\"."
 msgstr "第 %(row)s 行：数值“%(value)s”无效。"
 
-
 #. module: sn_wsd_device
 #. odoo-python
 #: code:addons/sn_wsd_device/models/device_service.py:0
@@ -4023,7 +4021,6 @@ msgstr "未知的故障等级。"
 msgid "Pending initial handling (reported from PDA)."
 msgstr "待现场初步处理（PDA 报修）。"
 
-
 #. module: sn_wsd_device
 msgid "Repair Order Coding"
 msgstr "设备维修单编码"
@@ -4047,3 +4044,29 @@ msgstr "知识库编码"
 #. module: sn_wsd_device
 msgid "OEE Record Coding"
 msgstr "OEE 记录编码"
+
+
+#. module: sn_wsd_device
+#: model:ir.actions.act_window,name:sn_wsd_device.action_aging_data
+#: model:ir.ui.menu,name:sn_wsd_device.menu_device_aging_data
+msgid "Aging Data Collection"
+msgstr "老化数据采集"
+
+#. module: sn_wsd_device
+#: model:ir.model,name:sn_wsd_device.model_sn_wsd_device_aging_record
+msgid "Aging Room Temperature Record"
+msgstr "老化室温度记录"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_aging_data
+msgid "No aging data yet"
+msgstr "暂无老化数据"
+
+#. module: sn_wsd_device
+#: model_terms:ir.actions.act_window,help:sn_wsd_device.action_aging_data
+msgid ""
+"Records appear automatically when aging-room devices push\n"
+"                temperature points to POST /api/device/aging."
+msgstr ""
+"老化设备向 POST /api/device/aging 推送温度点后，\n"
+"                记录自动生成。"
