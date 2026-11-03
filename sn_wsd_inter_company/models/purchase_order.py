@@ -263,6 +263,10 @@ class PurchaseOrder(models.Model):
             ))
         return super().unlink()
 
+    def _sn_seller_company(self, counterpart):
+        """The vendor sells, not the company issuing the purchase order."""
+        return counterpart
+
     def _sn_counterpart(self):
         self.ensure_one()
         counterpart = self.auto_sale_order_id

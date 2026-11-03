@@ -92,13 +92,22 @@ class SnIntercompanySyncMixin(models.AbstractModel):
             self.company_id, counterpart)
         if not agreement:
             return agreement, False, counterpart
-        direction = agreement._direction_from(self.company_id)
+        direction = agreement._direction_from(self._sn_seller_company(counterpart))
         if not direction \
                 or not agreement._is_direction_enabled(direction) \
                 or not agreement._valid_today() \
                 or not agreement._covers(target_model):
             return agreement, False, counterpart
         return agreement, direction, counterpart
+
+    def _sn_seller_company(self, counterpart):
+        """Company selling in this document.
+
+        A sale order, a customer invoice or a delivery is issued by the
+        selling company itself; a purchase order is issued by the buying
+        company, so the vendor is the seller and drives the direction.
+        """
+        return self.company_id
 
     def _sn_link_level(self):
         self.ensure_one()
