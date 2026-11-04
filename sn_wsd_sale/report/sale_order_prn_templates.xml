@@ -51,7 +51,7 @@
                            shows grows instead of being cut. */
                         .sn-sale-order-prn {
                             page-break-inside: avoid;
-                            min-height: 126mm;
+                            min-height: 122mm;
                         }
                         .sn-sale-order-prn table {
                             width: 100%;
@@ -67,9 +67,14 @@
                             padding-top: 0.5mm;
                             margin: 0;
                         }
+                        /* The head band keeps its height whatever the logo
+                           is: it is what the item table starts from, and a
+                           taller band pushed the signature line onto the next
+                           form of the continuous paper. */
                         .sn-sale-order-prn table.head td {
                             border: 0 none !important;
-                            padding: 0 0 1mm;
+                            padding: 0;
+                            height: 13mm;
                             vertical-align: middle;
                         }
                         .sn-sale-order-prn table.meta td {
@@ -105,14 +110,14 @@
                            first column: wkhtmltopdf ignores a height set on a
                            table row and on a block inside the cell. */
                         .sn-sale-order-prn table.items tbody td {
-                            height: 40px;
+                            height: 38px;
                         }
                         .sn-sale-order-prn .center { text-align: center; }
                         .sn-sale-order-prn .right { text-align: right; }
                         .sn-sale-order-prn .total-label { font-weight: 700; }
                         .sn-sale-order-prn table.foot td {
                             border: 0 none !important;
-                            padding: 1mm 2px 0;
+                            padding: 0.5mm 2px 0;
                             font-size: 12px;
                         }
                     </style>
@@ -121,7 +126,7 @@
                         <tr>
                             <td style="width: 30%;">
                                 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                     style="max-width: 200px; max-height: 58px;"/>
+                                     style="max-width: 180px; max-height: 46px;"/>
                                 <span t-else="" style="font-size: 18px; font-weight: 700;"
                                       t-out="company.name"/>
                             </td>
