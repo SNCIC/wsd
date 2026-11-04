@@ -167,14 +167,53 @@ def _clean(value):
 def _fit_text(draw, text, font, max_width):
     """Cut the text to the width of its column.
 
-    A dot-matrix sheet has no cell clipping: a long material name would run
-    over the next column. The surplus is dropped and marked with two dots.
+    Used by the head row only: a header has to stay on its line, and a dot
+    matrix printer has no cell clipping, so the surplus of a long header is
+    dropped.
     """
     if draw.textlength(text, font=font) <= max_width:
         return text
     while text and draw.textlength(text + '..', font=font) > max_width:
         text = text[:-1]
     return text + '..' if text else ''
+
+
+def _wrap_text(draw, text, font, max_width, max_lines):
+    """Split the value of a cell into the lines the row height gives.
+
+    The values of the item table are wrapped on their characters rather than
+    cut: the name of a material is what the warehouse reads on the sheet, and
+    two short lines keep it whole where one cut line used to lose its tail.
+    """
+    text = _clean(text)
+    if not text:
+        return []
+    lines = []
+    current = ''
+    for char in text:
+        candidate = current + char
+        if current and draw.textlength(candidate, font=font) > max_width:
+            lines.append(current)
+            if len(lines) == max_lines:
+                return lines
+            current = char
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    return lines
+
+
+def _draw_cell(draw, text, font, center, max_width, max_lines):
+    """Draw the value of a cell, wrapped and centred on the cell."""
+    lines = _wrap_text(draw, text, font, max_width, max_lines)
+    if not lines:
+        return
+    step = int(round(font.size * 1.2))
+    top = center[1] - (len(lines) - 1) * step // 2
+    for index, line in enumerate(lines):
+        draw.text((center[0], top + index * step),
+                  line, font=font, fill=INK, anchor='mm')
 
 
 def _column_bounds(left, right):
@@ -250,6 +289,10 @@ def _draw_sheet(picking, lines, page, page_count, waived):
                   _fit_text(draw, name, head_font, column_widths[index]),
                   font=head_font, fill=INK, anchor='mm')
 
+    # Lines a cell of the item table holds: the row height divided by the
+    # spacing of the body font.
+    item_lines = max(1, _mm(ITEM_HEIGHT_MM) // int(round(body.size * 1.2)))
+
     for row_index, row in enumerate(lines[:ITEM_ROWS]):
         center_y = (head_bottom + _mm(ITEM_HEIGHT_MM) * row_index
                     + _mm(ITEM_HEIGHT_MM) // 2)
@@ -267,9 +310,8 @@ def _draw_sheet(picking, lines, page, page_count, waived):
         )
         for index, value in enumerate(values):
             center = (columns[index] + columns[index + 1]) // 2
-            draw.text((center, center_y),
-                      _fit_text(draw, _clean(value), body, column_widths[index]),
-                      font=body, fill=INK, anchor='mm')
+            _draw_cell(draw, value, body, (center, center_y),
+                       column_widths[index], item_lines)
 
     sign_y = _mm(SIGNATURE_MM)
     signature_left, inspector_left, prepared_left, reviewer_left = (
