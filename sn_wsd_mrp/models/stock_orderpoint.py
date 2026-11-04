@@ -87,7 +87,13 @@ class StockWarehouseOrderpoint(models.Model):
 
         Move = self.env['stock.move'].with_context(active_test=False)
         Quant = self.env['stock.quant'].with_context(active_test=False)
-        domain_quant, domain_move_in_loc, domain_move_out_loc = all_product_ids._get_domain_locations_new(all_replenish_location_ids.ids)
+        # The domain has to reach the workshop stores as well: otherwise their
+        # moves and quants are never read and the scope below is applied to
+        # records that were already filtered out.
+        scope_location_ids = all_replenish_location_ids
+        for stores in stores_by_location.values():
+            scope_location_ids |= stores
+        domain_quant, domain_move_in_loc, domain_move_out_loc = all_product_ids._get_domain_locations_new(scope_location_ids.ids)
         domain_state = Domain('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))
         domain_product = Domain('product_id', 'in', all_product_ids.ids)
 
@@ -215,3 +221,27 @@ class StockWarehouseOrderpoint(models.Model):
                 store_product = product.with_context(**{**context, 'location': store.id})
                 orderpoint.qty_on_hand += store_product.qty_available
                 orderpoint.qty_forecast += store_product.virtual_available
+
+    def _get_qty_to_order(self, qty_in_progress_by_orderpoint=None):
+        """Native quantity to order, with the workshop stores in the visibility forecast."""
+        self.ensure_one()
+        stores = self._orderpoint_workshop_stores().get(self.location_id.id)
+        if not stores:
+            return super()._get_qty_to_order(qty_in_progress_by_orderpoint)
+        qty_to_order = 0.0
+        qty_in_progress_by_orderpoint = qty_in_progress_by_orderpoint or {}
+        qty_in_progress = qty_in_progress_by_orderpoint.get(self.id)
+        if qty_in_progress is None:
+            qty_in_progress = self._quantity_in_progress()[self.id]
+        rounding = self.product_uom.rounding
+        if float_compare(self.qty_forecast, self.product_min_qty, precision_rounding=rounding) < 0:
+            product_context = self._get_product_context()
+            qty_forecast_with_visibility = self.product_id.with_context(
+                product_context).read(['virtual_available'])[0]['virtual_available'] + qty_in_progress
+            for store in stores:
+                qty_forecast_with_visibility += self.product_id.with_context(
+                    **{**product_context, 'location': store.id},
+                ).read(['virtual_available'])[0]['virtual_available']
+            qty_to_order = max(self.product_min_qty, self.product_max_qty) - qty_forecast_with_visibility
+            qty_to_order = self._get_multiple_rounded_qty(qty_to_order)
+        return qty_to_order
