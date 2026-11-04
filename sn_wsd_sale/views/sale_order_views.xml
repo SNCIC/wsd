@@ -23,10 +23,11 @@
         </field>
     </record>
 
-    <!-- Dot-matrix sheet of the order: the preview shows the 241 x 140 mm form
-         in the browser, the ESC/P button hands the raw dots to the printer
-         bridge of SNERP. Both sit next to the standard print menu, which
-         carries the PDF rendering of the same sheet. -->
+    <!-- Dot-matrix sheet of the order: the single button of the header opens
+         the preview of the 241 x 140 mm form, and the Print button of that
+         preview renders the same report as a PDF. The ESC/P stream of the
+         printer bridge is handed out from the list, where a whole selection is
+         printed in one job. -->
     <record id="view_sale_order_form_prn_buttons" model="ir.ui.view">
         <field name="name">sale.order.form.prn.buttons</field>
         <field name="model">sale.order</field>
@@ -36,8 +37,6 @@
             <xpath expr="//header" position="inside">
                 <button name="action_sale_order_prn_preview" type="object"
                         string="Preview Order Sheet" invisible="state == 'cancel'"/>
-                <button name="action_print_sale_order_prn" type="object"
-                        string="Print Order Sheet (ESC/P)" invisible="state == 'cancel'"/>
             </xpath>
             <xpath expr="//field[@name='client_order_ref']" position="after">
                 <field name="sn_summary"/>
@@ -48,7 +47,14 @@
     <!-- Batch printing from the list: the buttons of the list header hand the
          selection to the two sheets of the order, the PDF rendering and the
          ESC/P stream of the printer bridge. The action of the ESC/P stream is
-         a server action, so the selection is what the bridge receives. -->
+         a server action, so the selection is what the bridge receives.
+
+         No `display` attribute on purpose: the value defaults to "selection"
+         (web/static/src/views/utils.js, processButton), so the control panel
+         places the buttons in the selection box and they appear only once rows
+         are selected, the same behaviour as the "Create Invoices" button of
+         the standard order list. `display="always"` would leave them on the
+         bar with nothing to print. -->
     <record id="action_print_sale_order_prn" model="ir.actions.server">
         <field name="name">Print Order Sheets (ESC/P)</field>
         <field name="model_id" ref="sale.model_sale_order"/>
@@ -66,11 +72,9 @@
         <field name="arch" type="xml">
             <xpath expr="//list/header" position="inside">
                 <button name="%(sn_wsd_sale.action_report_sale_order_prn)d"
-                        type="action" string="Print Order Sheets"
-                        display="always"/>
+                        type="action" string="Print Order Sheets"/>
                 <button name="%(sn_wsd_sale.action_print_sale_order_prn)d"
-                        type="action" string="Print Order Sheets (ESC/P)"
-                        display="always"/>
+                        type="action" string="Print Order Sheets (ESC/P)"/>
             </xpath>
         </field>
     </record>

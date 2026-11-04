@@ -2,9 +2,9 @@
 <odoo>
     <!-- Contract page of the sale order: the template the contract is printed
          with, the data the paper form carries (number, signing date and
-         place) and the PDFs already filed on the order. The two buttons render
-         the contract in the browser or file it as a PDF, next to the standard
-         print menu which carries the same report. -->
+         place) and the PDFs already filed on the order. The button of the
+         header only opens the preview; the PDF is produced from its Print
+         button, which runs the same report as a download. -->
     <record id="view_sale_order_form_contract" model="ir.ui.view">
         <field name="name">sale.order.form.contract</field>
         <field name="model">sale.order</field>
@@ -14,8 +14,6 @@
             <xpath expr="//header" position="inside">
                 <button name="action_contract_preview" type="object"
                         string="Preview Contract" invisible="state == 'cancel'"/>
-                <button name="action_generate_contract_pdf" type="object"
-                        string="Generate Contract PDF" invisible="state == 'cancel'"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Contract" name="contract">

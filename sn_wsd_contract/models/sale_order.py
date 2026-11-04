@@ -201,15 +201,12 @@ class SaleOrder(models.Model):
             'sn_wsd_contract.action_report_sale_contract_preview'
         ).report_action(self, config=False)
 
-    def action_contract_pdf(self):
-        """Download the contract as a PDF."""
-        self.ensure_one()
-        return self.env.ref(
-            'sn_wsd_contract.action_report_sale_contract'
-        ).report_action(self, config=False)
-
     def action_generate_contract_pdf(self):
-        """Render the contract once and file the PDF on the order."""
+        """Render the contract once and file the PDF on the order.
+
+        Not on the form: the contract is printed from the Print button of its
+        preview. An automation files the signed copy by calling this method.
+        """
         self.ensure_one()
         report = self.env.ref('sn_wsd_contract.action_report_sale_contract')
         content, _content_type = report._render_qweb_pdf(report, self.ids)

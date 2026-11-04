@@ -91,13 +91,6 @@ class SaleOrder(models.Model):
             'sn_wsd_sale.action_report_sale_order_prn_preview'
         ).report_action(self, config=False)
 
-    def action_sale_order_prn_pdf(self):
-        """Render the dot-matrix sheet as a PDF of the 241 x 140 mm form."""
-        self.ensure_one()
-        return self.env.ref(
-            'sn_wsd_sale.action_report_sale_order_prn'
-        ).report_action(self, config=False)
-
     def action_print_sale_order_prn(self):
         """Download the ESC/P stream of the selection for the print bridge.
 
