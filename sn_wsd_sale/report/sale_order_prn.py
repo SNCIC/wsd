@@ -378,18 +378,37 @@ def _band_bytes(dots, height):
     return bytes(out)
 
 
+def _orders_bytes(orders):
+    """ESC/P graphics of the bands of `orders`, one form per band.
+
+    One band per seven lines: the form is a continuous form, so a longer order
+    continues on the next band instead of losing its last lines, and the first
+    band of the next order starts on the perforation below it.
+    """
+    out = bytearray()
+    for order in orders:
+        bands = order._sn_get_dot_matrix_pages()
+        for page, rows in enumerate(bands, start=1):
+            dots, height = _dot_matrix(_draw_band(
+                order, rows, page == len(bands), page, len(bands)))
+            out += _band_bytes(dots, height)
+    return bytes(out)
+
+
 def render_sale_order(order):
     """ESC/P bytes of the dot-matrix sheet of a sale order."""
     order.ensure_one()
-    # One band per seven lines: the form is a continuous form, so a longer
-    # order continues on the next band instead of losing its last lines.
-    bands = order._sn_get_dot_matrix_pages()
-    out = bytearray(RESET)
-    for page, rows in enumerate(bands, start=1):
-        dots, height = _dot_matrix(_draw_band(
-            order, rows, page == len(bands), page, len(bands)))
-        out += _band_bytes(dots, height)
-    # The printer keeps the line spacing between jobs: hand the default back.
-    out += LINE_SPACING_RESET
-    out += CARRIAGE_RETURN
-    return bytes(out)
+    return render_sale_orders(order)
+
+
+def render_sale_orders(orders):
+    """ESC/P bytes of the sheets of `orders`, one form per band.
+
+    Every band feeds the 140 mm of its form, so the sheets of a selection come
+    out as one print job, each order starting on the perforation of its own
+    band.
+    """
+    return (bytes(RESET) + _orders_bytes(orders)
+            # The printer keeps the line spacing between jobs: hand the
+            # default back.
+            + LINE_SPACING_RESET + CARRIAGE_RETURN)

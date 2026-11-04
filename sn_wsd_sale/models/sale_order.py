@@ -99,10 +99,15 @@ class SaleOrder(models.Model):
         ).report_action(self, config=False)
 
     def action_print_sale_order_prn(self):
-        """Download the ESC/P stream for the SNERP desktop print bridge."""
-        self.ensure_one()
+        """Download the ESC/P stream of the selection for the print bridge.
+
+        The whole selection goes to the bridge in one file: the sheet of every
+        order takes its 140 mm band of the continuous form, so the batch is
+        printed in one job.
+        """
         return {
             'type': 'ir.actions.act_url',
-            'url': '/sn_wsd_sale/sale_order/prn?order_id=%s' % self.id,
+            'url': '/sn_wsd_sale/sale_order/prn?order_ids=%s' % ','.join(
+                str(order_id) for order_id in self.ids),
             'target': 'self',
         }

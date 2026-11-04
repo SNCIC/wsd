@@ -73,9 +73,9 @@
                 <table class="plain table-borderless o_ignore_layout_styling"
                        style="border: 0 !important; outline: 0 !important;">
                     <tr>
-                        <td style="width: 26%;">
+                        <td style="width: 30%;">
                             <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                 style="max-width: 150px; max-height: 48px;"/>
+                                 style="max-width: 230px; max-height: 72px;"/>
                             <span t-else="" style="font-size: 20px; font-weight: 700;"
                                   t-out="company.name"/>
                         </td>

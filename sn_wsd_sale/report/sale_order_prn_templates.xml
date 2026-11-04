@@ -9,13 +9,20 @@
         <t t-call="web.html_container">
             <meta charset="utf-8"/>
             <t t-foreach="docs" t-as="o">
-                <t t-call="sn_wsd_sale.report_sale_order_prn_document"/>
+                <t t-call="sn_wsd_sale.report_sale_order_prn_document">
+                    <!-- Every band asks for the break that starts the next one,
+                         except the last band of the last order: a batch of
+                         orders printed from the list then starts each order on
+                         its own form instead of stacking them on one page. -->
+                    <t t-set="last_document" t-value="o_last"/>
+                </t>
             </t>
         </t>
     </template>
 
     <template id="report_sale_order_prn_document">
         <t t-set="company" t-value="o.company_id"/>
+        <t t-set="is_last_document" t-value="last_document"/>
         <t t-set="bands" t-value="o._sn_get_dot_matrix_pages()"/>
         <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
             <t t-foreach="bands" t-as="band">
@@ -23,7 +30,7 @@
                      after a page block: every band but the last asks for the
                      break, so a long order continues on the next form. -->
                 <div class="page sn-sale-order-prn"
-                     t-att-style="'font-family: SimSun, serif; color: #111; font-size: 12px;' + ('' if band_last else ' page-break-after: always;')">
+                     t-att-style="'font-family: SimSun, serif; color: #111; font-size: 12px;' + ('' if band_last and is_last_document else ' page-break-after: always;')">
                     <style t-if="band_first">
                         .sn-sale-order-prn, .sn-sale-order-prn table,
                         .sn-sale-order-prn td, .sn-sale-order-prn th,
@@ -105,9 +112,9 @@
 
                     <table class="head">
                         <tr>
-                            <td style="width: 26%;">
+                            <td style="width: 30%;">
                                 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                                     style="max-width: 150px; max-height: 42px;"/>
+                                     style="max-width: 200px; max-height: 58px;"/>
                                 <span t-else="" style="font-size: 18px; font-weight: 700;"
                                       t-out="company.name"/>
                             </td>

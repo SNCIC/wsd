@@ -45,6 +45,36 @@
         </field>
     </record>
 
+    <!-- Batch printing from the list: the buttons of the list header hand the
+         selection to the two sheets of the order, the PDF rendering and the
+         ESC/P stream of the printer bridge. The action of the ESC/P stream is
+         a server action, so the selection is what the bridge receives. -->
+    <record id="action_print_sale_order_prn" model="ir.actions.server">
+        <field name="name">Print Order Sheets (ESC/P)</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_sale_order_prn()</field>
+    </record>
+
+    <record id="view_sale_order_list_prn_buttons" model="ir.ui.view">
+        <field name="name">sale.order.list.prn.buttons</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="priority">92</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list/header" position="inside">
+                <button name="%(sn_wsd_sale.action_report_sale_order_prn)d"
+                        type="action" string="Print Order Sheets"
+                        display="always"/>
+                <button name="%(sn_wsd_sale.action_print_sale_order_prn)d"
+                        type="action" string="Print Order Sheets (ESC/P)"
+                        display="always"/>
+            </xpath>
+        </field>
+    </record>
+
     <!-- Delivery date in the order header, next to the order date: the date is
          read while the order is written, not on the other information page.
          The field kept on that page is only hidden, so that the fields the
