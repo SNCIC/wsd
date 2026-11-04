@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One 140 mm band of the 241 mm continuous form: the width of the paper
+         is the one of the inspection request of the quality module (unchanged),
+         the height of the band is the 14 cm of the sale order form.
+
+         A custom paper size is used here on purpose, unlike the inspection
+         request which stays on A4: the height of the band is what the customer
+         asked for, and wkhtmltopdf hands a custom size to the printer by its
+         page width and page height options. The printer queue must know the
+         paper as well, otherwise its driver scales the page down and crops
+         it.
+
+         The side margins keep the printed content at 201 mm, the printable
+         width the dot-matrix printer leaves on a 241 mm sheet. -->
+    <record id="paperformat_sale_order_prn" model="report.paperformat">
+        <field name="name">Sale Order (241 x 140 mm)</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_width">241</field>
+        <field name="page_height">140</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">6</field>
+        <field name="margin_bottom">4</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+        <!-- Margins come from the paper format: with css_margins the report
+             stylesheet would add its own padding on top of the 6 mm of the
+             paper and push the title onto the item table. -->
+        <field name="css_margins" eval="False"/>
+    </record>
+
+    <record id="action_report_sale_order_prn" model="ir.actions.report">
+        <field name="name">Sale Order (Dot Matrix)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sn_wsd_sale.report_sale_order_prn</field>
+        <field name="report_file">sn_wsd_sale.report_sale_order_prn</field>
+        <field name="paperformat_id" ref="sn_wsd_sale.paperformat_sale_order_prn"/>
+        <field name="print_report_name">'Sale Order - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <!-- Same sheet, rendered in the browser only: the preview action of the
+         order form, so the layout is checked before the paper is used. -->
+    <record id="action_report_sale_order_prn_preview" model="ir.actions.report">
+        <field name="name">Sale Order (Dot Matrix) Preview</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">sn_wsd_sale.report_sale_order_prn</field>
+        <field name="report_file">sn_wsd_sale.report_sale_order_prn</field>
+        <field name="paperformat_id" ref="sn_wsd_sale.paperformat_sale_order_prn"/>
+        <field name="print_report_name">'Sale Order - %s' % (object.name)</field>
+    </record>
+</odoo>

@@ -14,6 +14,34 @@
             <xpath expr="//field[@name='order_line']//form//field[@name='name']" position="after">
                 <field name="note"/>
             </xpath>
+            <xpath expr="//field[@name='order_line']//list/field[@name='note']" position="after">
+                <field name="sn_delivery_date" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//field[@name='note']" position="after">
+                <field name="sn_delivery_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Dot-matrix sheet of the order: the preview shows the 241 x 140 mm form
+         in the browser, the ESC/P button hands the raw dots to the printer
+         bridge of SNERP. Both sit next to the standard print menu, which
+         carries the PDF rendering of the same sheet. -->
+    <record id="view_sale_order_form_prn_buttons" model="ir.ui.view">
+        <field name="name">sale.order.form.prn.buttons</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">92</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_sale_order_prn_preview" type="object"
+                        string="Preview Order Sheet" invisible="state == 'cancel'"/>
+                <button name="action_print_sale_order_prn" type="object"
+                        string="Print Order Sheet (ESC/P)" invisible="state == 'cancel'"/>
+            </xpath>
+            <xpath expr="//field[@name='client_order_ref']" position="after">
+                <field name="sn_summary"/>
+            </xpath>
         </field>
     </record>
 
