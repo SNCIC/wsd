@@ -107,4 +107,23 @@
             </xpath>
         </field>
     </record>
+
+    <!-- The customer of a sales order is a customer: the dropdown of the
+         partner field only lists the partners flagged as customers, and the
+         contacts of a customer company (their own rank stays at 0, the rank is
+         held by the commercial entity). A partner that is only a supplier can
+         no longer be picked as the customer of an order, which is what the
+         partner records imported from the account need: the same company is
+         numbered once in the customer file and once in the vendor file. -->
+    <record id="view_sale_order_form_customer_domain" model="ir.ui.view">
+        <field name="name">sale.order.form.customer.domain</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">95</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id'][@widget='res_partner_many2one']" position="attributes">
+                <attribute name="domain">['|', ('customer_rank', '&gt;', 0), ('commercial_partner_id.customer_rank', '&gt;', 0)]</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -111,4 +111,22 @@
             </xpath>
         </field>
     </record>
+
+    <!-- The vendor of a purchase order is a supplier: the dropdown of the
+         partner field only lists the partners flagged as suppliers, and the
+         contacts of a supplier company (their own rank stays at 0, the rank is
+         held by the commercial entity). A partner that is only a customer can no
+         longer be picked as the vendor of an order, which is what the partner
+         records imported from the account need: the same company is numbered
+         once in the customer file and once in the vendor file. -->
+    <record id="purchase_order_form_vendor_domain" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.domain</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id'][@widget='res_partner_many2one']" position="attributes">
+                <attribute name="domain">['|', ('supplier_rank', '&gt;', 0), ('commercial_partner_id.supplier_rank', '&gt;', 0)]</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

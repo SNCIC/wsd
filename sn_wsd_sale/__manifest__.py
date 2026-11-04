@@ -1,7 +1,7 @@
 {
     'name': 'SN WSD Sale',
-    'version': '19.0.1.8.0',
-    'summary': 'Sales order detail and dot-matrix order sheet',
+    'version': '19.0.1.9.0',
+    'summary': 'Sales order detail, dot-matrix order sheet and customer-only customer field',
     'category': 'Sales/Sales',
     'depends': [
         'sale',
