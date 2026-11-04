@@ -3,6 +3,7 @@ from odoo.exceptions import UserError
 
 
 MTO_ROUTE_XMLID = 'stock.route_warehouse0_mto'
+MANUFACTURE_ROUTE_XMLID = 'mrp.route_warehouse0_manufacture'
 PRODUCTION_LOCATION_XMLID = 'stock.stock_location_production'
 
 
@@ -119,32 +120,30 @@ class SnMrpWorkshop(models.Model):
         return location
 
     def _sync_line_side_rule(self, route, source, destination, picking_type,
-                             warehouse, company, name):
-        """Create or refresh one MTO pull rule of the workshop store."""
+                             warehouse, company, name, action='pull',
+                             location_dest_from_rule=True):
+        """Create or refresh one derived rule of the workshop store."""
         StockRule = self.env['stock.rule'].sudo()
-        rule = StockRule.search([
+        domain = [
             ('route_id', '=', route.id),
-            ('location_src_id', '=', source.id),
+            ('location_src_id', '=', source.id if source else False),
             ('location_dest_id', '=', destination.id),
             ('warehouse_id', '=', warehouse.id),
-        ], limit=1)
+        ]
+        rule = StockRule.search(domain, limit=1)
         values = {
             'name': name,
-            'action': 'pull',
+            'action': action,
             'route_id': route.id,
-            'location_src_id': source.id,
+            'location_src_id': source.id if source else False,
             'location_dest_id': destination.id,
             'picking_type_id': picking_type.id,
             'warehouse_id': warehouse.id,
             'company_id': company.id,
             'procure_method': 'make_to_order',
             'auto': 'manual',
-            # The generated move must land on the rule destination: without
-            # this flag the move takes the operation type destination instead
-            # (stock -> stock for an internal transfer, stock -> stock for a
-            # manufacture), so the material would never reach the workshop
-            # store and the demand would stay unmet.
-            'location_dest_from_rule': True,
+            'location_dest_from_rule': location_dest_from_rule,
+            'x_workshop_store_rule': True,
         }
         # sn_wsd_stock extends stock.rule with a required weekend policy whose
         # column carries no SQL default; a rule created outside its views has
@@ -158,36 +157,69 @@ class SnMrpWorkshop(models.Model):
             rule = StockRule.create(values)
         return rule
 
-    def _ensure_line_side_replenishment(self):
-        """Make every workshop store a self-contained replenishment point.
+    def _store_is_inside_stock(self, stock_location):
+        """True when the workshop store still hangs under the warehouse stock."""
+        locations = self.component_location_id
+        if not locations or not stock_location:
+            return False
+        if stock_location in locations:
+            return True
+        return bool(stock_location.parent_path) and any(
+            location.parent_path.startswith(stock_location.parent_path)
+            for location in locations
+        )
 
-        Two pull rules on the MTO route close the chain:
-          * line-side -> production: the component demand of the workshop MO
-            is flagged "trigger another rule" instead of "take from stock";
-          * warehouse stock -> line-side: that demand is then supplied from
-            stock, which in turn keeps triggering the existing manufacture /
-            buy rules of the warehouse stock location (child MO, purchase).
+    def _drop_workshop_store_rules(self):
+        """Remove the rules derived for these workshop stores."""
+        locations = self.component_location_id
+        if not locations:
+            return
+        rules = self.env['stock.rule'].sudo().search([
+            ('x_workshop_store_rule', '=', True),
+            '|',
+            ('location_src_id', 'in', locations.ids),
+            ('location_dest_id', 'in', locations.ids),
+        ])
+        rules.unlink()
+
+    def _ensure_line_side_replenishment(self):
+        """Keep the sub-level BOM manufacturable whatever the store tree is.
+
+        Manufacturing consumes the components *from* the workshop store. When
+        the store hangs under the warehouse stock location, the native
+        stock -> production MTO rule and the manufacture rule already close the
+        chain: the child order is produced into stock and the requisition flow
+        moves the material to the line. Nothing is derived then, and a rule
+        left over from a former tree is dropped.
+
+        When the store hangs directly under the warehouse (a workshop store,
+        not a storage sub-location) the component demand never walks up to the
+        stock location, the component move silently falls back to "take from
+        stock" and no child manufacturing order is created. Two rules restore
+        the chain:
+          * MTO pull store -> production: the component demand of the workshop
+            order triggers a rule instead of consuming blindly;
+          * Manufacture into the store: that demand manufactures the
+            component. The child order receives into the operation type
+            destination (warehouse stock), which keeps the requisition flow the
+            only material carrier towards the line.
         """
         mto_route = self.env.ref(MTO_ROUTE_XMLID, raise_if_not_found=False)
-        if not mto_route:
+        manufacture_route = self.env.ref(MANUFACTURE_ROUTE_XMLID, raise_if_not_found=False)
+        if not mto_route or not manufacture_route:
             return
         for workshop in self:
             location = workshop.component_location_id
-            if not location:
-                continue
             warehouse = location.warehouse_id
             company = workshop.company_id or location.company_id
-            if not warehouse or not company:
-                continue
-            stock_location = warehouse.lot_stock_id
-            if not stock_location or stock_location == location:
+            if not location or not warehouse or not company:
+                workshop._drop_workshop_store_rules()
                 continue
             production_location = workshop._line_side_production_location(company)
-            if not production_location:
-                continue
             manu_type = warehouse.manu_type_id
-            int_type = warehouse.int_type_id or manu_type
-            if not manu_type or not int_type:
+            if workshop._store_is_inside_stock(warehouse.lot_stock_id) \
+                    or not production_location or not manu_type:
+                workshop._drop_workshop_store_rules()
                 continue
             workshop._sync_line_side_rule(
                 mto_route, location, production_location, manu_type,
@@ -198,12 +230,13 @@ class SnMrpWorkshop(models.Model):
                   production=production_location.name),
             )
             workshop._sync_line_side_rule(
-                mto_route, stock_location, location, int_type,
+                manufacture_route, False, location, manu_type,
                 warehouse, company,
-                _('%(warehouse)s: %(stock)s → %(location)s (MTO)',
+                _('%(warehouse)s: %(location)s (Production)',
                   warehouse=warehouse.code or warehouse.name,
-                  stock=stock_location.name,
                   location=location.name),
+                action='manufacture',
+                location_dest_from_rule=False,
             )
 
 
