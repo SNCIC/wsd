@@ -7,19 +7,21 @@ to one bit per dot and emitted with the ESC * 24-dot graphics command in
 120 x 180 dpi mode, the graphics density of the installed LQ-630KII. The same
 approach is used by the inspection request of the quality module.
 
-The sheet is one 140 mm band of the 241 mm continuous form: the width of the
-paper is the one of the inspection request, the height of the band is the 14 cm
-of the sale order form. Three details decide whether the printer prints the
-whole band:
+The sheet is one 135 mm band of the 241 mm continuous form: the width of the
+paper is the one of the inspection request, the height of the band is the
+13.5 cm of the sale order form. The pitch of the band is the pitch of the
+paper: a band that feeds more than the form pushes every following sheet lower,
+which is what a batch of orders shows first. Three details decide whether the
+printer prints the whole band:
 
-* a 140 mm band of the 200 mm width is graphics larger than the line buffer of
+* a 135 mm band of the 200 mm width is graphics larger than the line buffer of
   the printer, so each 24-dot line is sent in chunks of 192 dots, every one
   placed with the ESC $ absolute position command;
 * the paper is fed by the line spacing set with ESC 3 (24/180 inch) and a
   newline. ESC J is not usable on this printer: its argument 0x18 is the CAN
   control code and cancels the rest of the job;
 * the last line of a band is fed by its remaining dots only, so the paper
-  keeps the 140 mm pitch of the form.
+  keeps the pitch of the form.
 
 The printer does not use the whole band: measured on the installed LQ-630KII it
 starts about 6 mm below the perforation and stops about 13 mm above the next
@@ -57,27 +59,29 @@ GRAPHICS_24_DOT = b'\x1b*!'    # ESC * mode 33: 24-dot graphics, 120 x 180 dpi
 
 # One band of the continuous form, minus the side margins of the printer (about
 # 20 mm of the 241 mm sheet are not printable).
-BAND_MM = 140
+BAND_MM = 135
 WIDTH_MM = 200
 CONTENT_LEFT_MM = 5
 CONTENT_RIGHT_MM = 195
 
-# The printer does not print every one of the 140 mm of a band: it starts about
+# The printer does not print every one of the 135 mm of a band: it starts about
 # 6 mm below the perforation and stops about 13 mm above the next one, so the
 # sheet is drawn in the top PRINTABLE_MM of the band and the rest stays blank.
-PRINTABLE_MM = 121
+PRINTABLE_MM = 116
 
 # Bands of the sheet, in millimetres from the top of the form. The template
 # keeps no top margin of its own: the printer already leaves 6 mm, and the whole
-# sheet has to end above PRINTABLE_MM.
+# sheet has to end above PRINTABLE_MM. The item rows give 70 mm and the total
+# row 8.5 mm, which leaves the signature line at 111.5 mm, inside the band the
+# printer reaches.
 TITLE_MM = 2
 META_MM = 12
 SUMMARY_MM = 19
 TABLE_TOP_MM = 25
 HEAD_HEIGHT_MM = 6
-ITEM_HEIGHT_MM = 10.5
-TOTAL_HEIGHT_MM = 9
-SIGNATURE_MM = 116
+ITEM_HEIGHT_MM = 10
+TOTAL_HEIGHT_MM = 8.5
+SIGNATURE_MM = 111.5
 CELL_PADDING_MM = 1.5
 META_DATE_MM = 105
 META_NUMBER_MM = 150
@@ -237,7 +241,7 @@ def _header_font(draw, column_widths, labels):
 
 
 def _draw_band(order, rows, is_last, page, page_count):
-    """Draw one 140 mm band of the sheet on the drawing grid."""
+    """Draw one 135 mm band of the sheet on the drawing grid."""
     translate = order.env._
     width = _mm(WIDTH_MM)
     image = Image.new('L', (width, _mm(BAND_MM)), PAPER)
@@ -446,9 +450,9 @@ def render_sale_order(order):
 def render_sale_orders(orders):
     """ESC/P bytes of the sheets of `orders`, one form per band.
 
-    Every band feeds the 140 mm of its form, so the sheets of a selection come
-    out as one print job, each order starting on the perforation of its own
-    band.
+    Every band feeds the pitch of the form, 135 mm, so the sheets of a
+    selection come out as one print job, each order starting on the perforation
+    of its own band and keeping it however long the batch is.
     """
     return (bytes(RESET) + _orders_bytes(orders)
             # The printer keeps the line spacing between jobs: hand the

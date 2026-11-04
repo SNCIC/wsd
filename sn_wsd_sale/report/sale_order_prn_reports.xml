@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- One 140 mm band of the 241 mm continuous form: the width of the paper
+    <!-- One 135 mm band of the 241 mm continuous form: the width of the paper
          is the one of the inspection request of the quality module (unchanged),
-         the height of the band is the 14 cm of the sale order form.
+         the height of the band is the 13.5 cm of the sale order form. The page
+         follows the pitch of the paper: a page taller than the form pushes the
+         next one lower on every sheet of a batch.
 
          A custom paper size is used here on purpose, unlike the inspection
          request which stays on A4: the height of the band is what the customer
@@ -14,11 +16,11 @@
          The side margins keep the printed content at 201 mm, the printable
          width the dot-matrix printer leaves on a 241 mm sheet. -->
     <record id="paperformat_sale_order_prn" model="report.paperformat">
-        <field name="name">Sale Order (241 x 140 mm)</field>
+        <field name="name">Sale Order (241 x 135 mm)</field>
         <field name="default" eval="False"/>
         <field name="format">custom</field>
         <field name="page_width">241</field>
-        <field name="page_height">140</field>
+        <field name="page_height">135</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">6</field>
         <field name="margin_bottom">4</field>

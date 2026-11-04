@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- The dot-matrix sheet of the sale order: one 140 mm band of the 241 mm
+    <!-- The dot-matrix sheet of the sale order: one 135 mm band of the 241 mm
          continuous form per page, the width of the paper unchanged and the
          height of the band raised from the 93 mm of the inspection request to
-         140 mm. The rules and the fonts follow the inspection request of the
-         quality module, which is printed on the same printer. -->
+         the 13.5 cm of the sale order form. The rules and the fonts follow the
+         inspection request of the quality module, which is printed on the same
+         printer. -->
     <template id="report_sale_order_prn">
         <t t-call="web.html_container">
             <meta charset="utf-8"/>
@@ -44,14 +45,17 @@
                             font-family: SimSun, 'Songti SC', 'Noto Serif CJK SC',
                                 'Source Han Serif SC', serif;
                         }
-                        /* One order takes a 140 mm band of the continuous
+                        /* One order takes a 135 mm band of the continuous
                            form: 6 mm of top margin and 4 mm of bottom margin
                            come from the paper format, the band itself stays a
                            minimum so a band with more rows than the sheet
-                           shows grows instead of being cut. */
+                           shows grows instead of being cut. The page must not
+                           be taller than the form: the printer feeds a whole
+                           page per order, and the surplus pushes the following
+                           sheets lower. */
                         .sn-sale-order-prn {
                             page-break-inside: avoid;
-                            min-height: 122mm;
+                            min-height: 118mm;
                         }
                         .sn-sale-order-prn table {
                             width: 100%;
