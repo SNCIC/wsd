@@ -30,12 +30,19 @@
                      after a page block: every band but the last asks for the
                      break, so a long order continues on the next form. -->
                 <div class="page sn-sale-order-prn"
-                     t-att-style="'font-family: SimSun, serif; color: #111; font-size: 12px;' + ('' if band_last and is_last_document else ' page-break-after: always;')">
+                     t-att-style="'color: #111; font-size: 12px;' + ('' if band_last and is_last_document else ' page-break-after: always;')">
                     <style t-if="band_first">
+                        /* The font stack names the simplified faces one by one:
+                           a bare "serif" falls back to a traditional or a
+                           Japanese face where the ideographic comma and full
+                           stop sit in the middle of the box instead of its left
+                           corner, and where 门 has no glyph of its own. */
                         .sn-sale-order-prn, .sn-sale-order-prn table,
                         .sn-sale-order-prn td, .sn-sale-order-prn th,
-                        .sn-sale-order-prn span {
-                            font-family: SimSun, serif;
+                        .sn-sale-order-prn span, .sn-sale-order-prn div,
+                        .sn-sale-order-prn b {
+                            font-family: SimSun, 'Songti SC', 'Noto Serif CJK SC',
+                                'Source Han Serif SC', serif;
                         }
                         /* One order takes a 140 mm band of the continuous
                            form: 6 mm of top margin and 4 mm of bottom margin
