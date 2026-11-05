@@ -44,6 +44,12 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <!-- Draft routes carry an explicit release entry: the flow is
+                         archived as the live version without touching the canvas
+                         (a plain save only versions when the flow json is
+                         actually written). -->
+                    <button name="action_publish" type="object" string="Publish"
+                            class="btn-primary" invisible="state != 'draft'"/>
                     <!-- 保存/取消 button bar in the standard form header (edit mode
                          only): 保存 = standard record save (flow change => new version
                          server-side), 取消 = discard everything, canvas reverts with

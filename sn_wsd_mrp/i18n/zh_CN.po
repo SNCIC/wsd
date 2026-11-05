@@ -108,6 +108,12 @@ msgid "A meter pallet cannot be placed inside another package."
 msgstr "电表托盘不能放入其他包装内。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "A route cannot be released without a flow graph."
+msgstr "没有流程图的工艺路线不能发布。"
+
+#. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_process_route_drawing_route_drawing_uniq
 msgid "A route cannot bind the same drawing number twice."
 msgstr "一条工艺路线不能重复绑定同一个图号。"
@@ -5317,6 +5323,11 @@ msgid "Protocol Version"
 msgstr "协议版本"
 
 #. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_form
+msgid "Publish"
+msgstr "发布"
+
+#. module: sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_mes_orders
 msgid "Purchase Orders"
 msgstr "采购订单"
@@ -7112,6 +7123,12 @@ msgstr "生产线必须属于所选车间。"
 #: code:addons/sn_wsd_mrp/wizard/mes_return_wizard.py:0
 msgid "The returned quantity must be a positive whole number of units."
 msgstr "退还数量必须是正整数（台）。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/meter_process_route.py:0
+msgid "The route is already released."
+msgstr "该工艺路线已发布。"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.constraint,message:sn_wsd_mrp.constraint_sn_wsd_serial_binding_binding_uniq

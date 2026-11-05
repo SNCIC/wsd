@@ -794,6 +794,26 @@ class MeterProcessRoute(models.Model):
             })
         return {'upgraded': flow_changed, 'version': self.version}
 
+    def action_publish(self):
+        """Release the draft route: its flow becomes the live version.
+
+        Same pipeline as a form save carrying a flow change (保存即版本), so
+        the flow is archived as a new version and the route turns confirmed.
+        The explicit entry spares the user from touching the canvas just to
+        get a copied (or imported) draft route live.
+        """
+        for route in self:
+            if route.state == 'cancelled':
+                raise UserError(_(
+                    'A cancelled route is read-only. Reset it to draft first.'))
+            if route.state == 'confirmed':
+                raise UserError(_('The route is already released.'))
+            if not route._flow_graph()['nodes']:
+                raise UserError(_(
+                    'A route cannot be released without a flow graph.'))
+            route._apply_flow_versioning()
+        return True
+
     def save_route_graph(self, graph):
         """Persist the flow graph {nodes, edges} as JSON — 保存即版本.
 
