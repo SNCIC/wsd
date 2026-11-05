@@ -18,7 +18,9 @@
         <field name="model">product.category</field>
         <field name="inherit_id" ref="product.product_category_list_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='display_name']" position="after">
+            <!-- Anchor on the list itself: the core list carries a single name
+                 field on some revisions and display_name on others. -->
+            <xpath expr="//list" position="inside">
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
             </xpath>
         </field>
@@ -29,10 +31,8 @@
         <field name="model">product.category</field>
         <field name="inherit_id" ref="product.product_category_search_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='parent_id']" position="after">
-                <field name="company_id" groups="base.group_multi_company"/>
-            </xpath>
             <xpath expr="//search" position="inside">
+                <field name="company_id" groups="base.group_multi_company"/>
                 <filter name="group_company" string="Company"
                         context="{'group_by': 'company_id'}"
                         groups="base.group_multi_company"/>
