@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Contract',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'summary': 'Contract templates and the sales contract report',
     'category': 'Sales/Sales',
     'depends': [

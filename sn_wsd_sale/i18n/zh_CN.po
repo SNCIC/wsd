@@ -123,6 +123,16 @@ msgid "Summary"
 msgstr "摘要"
 
 #. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order__sn_supply_order_number
+msgid "Supply Order Number"
+msgstr "供货单号"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order__sn_asset_number
+msgid "Asset Number"
+msgstr "资产号"
+
+#. module: sn_wsd_sale
 #. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__sn_delivery_date
 #: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document

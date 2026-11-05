@@ -126,4 +126,33 @@
             </xpath>
         </field>
     </record>
+
+    <!-- References the customer gives for the order: searched and listed next
+         to the customer reference of the standard module, so that an order is
+         found from the number of the papers the customer sent. -->
+    <record id="view_sale_order_list_customer_references" model="ir.ui.view">
+        <field name="name">sale.order.list.customer.references</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="priority">94</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='client_order_ref']" position="after">
+                <field name="sn_supply_order_number" optional="hide"/>
+                <field name="sn_asset_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_customer_references" model="ir.ui.view">
+        <field name="name">sale.order.list.select.customer.references</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="priority">94</field>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='name'][@filter_domain]" position="after">
+                <field name="sn_supply_order_number"/>
+                <field name="sn_asset_number"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
