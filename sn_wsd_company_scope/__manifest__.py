@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Company Scope',
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.0.2',
     'summary': 'Company scoping for master data that Odoo keeps global',
     'description': """
 Company scoping for master data that Odoo keeps global
@@ -19,8 +19,8 @@ Behaviour
 ---------
 * ``company_id`` on ``product.category`` (empty = shared by every company).
 * A subcategory must belong to the same company as its parent.
-* ``product.template.categ_id`` gains ``check_company``, so a product cannot be
-  linked to a category of another company.
+* A company-owned product cannot use another company's category (a shared
+  product, without company, may use any of them).
 * A global record rule hides the categories of the other companies.
 * A new category inherits the company of its parent, or the current company.
 
