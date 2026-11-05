@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.OrderFlowScreenAction">
+        <Layout className="'o_sn_wsd_order_flow_action'">
+            <t t-set-slot="default">
+                <div class="o_sn_wsd_big_screen o_flow_screen" t-att-class="state.loading ? 'o_is_loading' : ''">
+                    <div class="o_screen_shell">
+                        <header class="o_screen_header">
+                            <div class="o_header_wing o_header_wing_left">
+                                <span/><span/><span/>
+                            </div>
+                            <div class="o_header_title">
+                                <div class="o_header_title_inner">
+                                    <h1>订单全流程大屏</h1>
+                                </div>
+                            </div>
+                            <div class="o_header_wing o_header_wing_right">
+                                <span/><span/><span/>
+                            </div>
+                        </header>
+
+                        <div class="o_flow_toolbar">
+                            <div class="o_flow_order_picker">
+                                <label>订单</label>
+                                <select t-on-change="switchOrder">
+                                    <option t-foreach="orderOptions" t-as="opt"
+                                            t-key="opt.id" t-att-value="opt.id"
+                                            t-att-selected="opt.id === state.data.current_order_id">
+                                        <t t-esc="opt.name + ' · ' + opt.partner + ' · ' + opt.qty + '台'"/>
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="o_flow_toolbar_right">
+                                <span class="o_flow_clock"><t t-esc="summary.today_date"/> <t t-esc="currentTime"/></span>
+                                <button class="o_flow_btn" t-on-click="manualRefresh"
+                                        t-att-disabled="state.refreshing">刷新</button>
+                                <button class="o_flow_btn" t-att-class="state.autoRefresh ? 'o_is_on' : ''"
+                                        t-on-click="toggleAutoRefresh">
+                                    自动 <t t-esc="state.autoRefresh ? state.countdown : '关'"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 指标条 -->
+                        <div class="o_flow_summary_strip">
+                            <div class="o_strip_item">
+                                <strong><t t-esc="formatNumber(summary.order_count)"/></strong>
+                                <span>销售订单</span>
+                            </div>
+                            <div class="o_strip_item">
+                                <strong><t t-esc="formatNumber(summary.in_production)"/></strong>
+                                <span>在产订单</span>
+                            </div>
+                            <div class="o_strip_item">
+                                <strong><t t-esc="formatNumber(summary.done_output)"/></strong>
+                                <span>当前订单产出</span>
+                            </div>
+                            <div class="o_strip_item">
+                                <strong><t t-esc="formatNumber(summary.wip_qty)"/></strong>
+                                <span>在制台数</span>
+                            </div>
+                            <div class="o_strip_item">
+                                <strong><t t-esc="formatNumber(summary.shipped_qty)"/></strong>
+                                <span>累计发货</span>
+                            </div>
+                        </div>
+
+                        <main class="o_flow_grid">
+                            <!-- 左列：订单档案 + 工序明细 -->
+                            <section class="o_flow_col o_flow_col_left">
+                                <div class="o_tech_panel o_flow_order_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>订单档案</span>
+                                        <small>SALES ORDER PROFILE</small>
+                                    </div>
+                                    <div class="o_order_profile">
+                                        <div class="o_profile_row o_profile_head">
+                                            <strong><t t-esc="orderInfo.name"/></strong>
+                                            <em><t t-esc="orderInfo.state"/></em>
+                                        </div>
+                                        <div class="o_profile_row"><label>客户</label><span><t t-esc="orderInfo.partner"/></span></div>
+                                        <div class="o_profile_row"><label>产品</label><span><t t-esc="orderInfo.product"/></span></div>
+                                        <div class="o_profile_row"><label>数量</label><span><t t-esc="orderInfo.qty"/> 台</span></div>
+                                        <div class="o_profile_row"><label>金额</label><span>¥<t t-esc="orderInfo.amount"/></span></div>
+                                        <div class="o_profile_row"><label>下单时间</label><span><t t-esc="orderInfo.date_order"/></span></div>
+                                        <div class="o_profile_row"><label>生产制令</label><span><t t-esc="orderInfo.mo_name"/> · <t t-esc="orderInfo.mo_state"/></span></div>
+                                        <div class="o_profile_row"><label>产线</label><span><t t-esc="orderInfo.line"/></span></div>
+                                        <div class="o_profile_row"><label>计划日期</label><span><t t-esc="orderInfo.plan_date"/></span></div>
+                                        <div class="o_progress_wrap">
+                                            <div class="o_progress_head">
+                                                <span>总进度</span>
+                                                <strong><t t-esc="orderInfo.output_qty"/> / <t t-esc="orderInfo.planned_qty"/></strong>
+                                                <em><t t-esc="orderInfo.progress_rate"/>%</em>
+                                            </div>
+                                            <div class="o_progress_bar">
+                                                <div class="o_progress_fill"
+                                                     t-att-style="'width:' + (orderInfo.progress_rate or 0) + '%'"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_flow_station_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>工序流转</span>
+                                        <small>STATION FLOW</small>
+                                    </div>
+                                    <div class="o_station_rows">
+                                        <div t-foreach="stations" t-as="st" t-key="st.step_code"
+                                             class="o_station_row" t-att-class="stationStatusClass(st.status)">
+                                            <div class="o_st_code">
+                                                <span><t t-esc="st.step_code"/></span>
+                                                <em><t t-esc="st.workcenter"/></em>
+                                            </div>
+                                            <div class="o_st_name"><t t-esc="st.name"/></div>
+                                            <div class="o_st_bar">
+                                                <div class="o_st_bar_fill" t-att-style="'width:' + progressWidth(st.passed, st.qty_total)"/>
+                                                <div class="o_st_bar_wip" t-att-style="'width:' + progressWidth(st.wip, st.qty_total)"/>
+                                            </div>
+                                            <div class="o_st_nums">
+                                                <strong><t t-esc="formatNumber(st.passed)"/></strong>
+                                                <span t-if="st.wip">WIP <t t-esc="formatNumber(st.wip)"/></span>
+                                                <span t-if="st.ng" class="o_ng">NG <t t-esc="formatNumber(st.ng)"/></span>
+                                                <em><t t-esc="st.time"/></em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- 中列：全流程时间轴 + SN 追踪 -->
+                            <section class="o_flow_col o_flow_col_center">
+                                <div class="o_tech_panel o_flow_timeline_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>订单全流程 · 接单到发货</span>
+                                        <small>ORDER JOURNEY</small>
+                                    </div>
+                                    <div class="o_timeline_wrap">
+                                        <div class="o_timeline_track">
+                                            <t t-foreach="nodes" t-as="node" t-key="node.key">
+                                                <div class="o_tl_node" t-att-class="nodeClass(node.status)">
+                                                    <div class="o_tl_dot">
+                                                        <span class="o_tl_dot_inner"/>
+                                                    </div>
+                                                    <div class="o_tl_label"><t t-esc="node.label"/></div>
+                                                    <div class="o_tl_title" t-esc="node.title"/>
+                                                    <div class="o_tl_time"><t t-esc="node.time"/></div>
+                                                    <div class="o_tl_qty"><t t-esc="node.qty"/></div>
+                                                    <div class="o_tl_detail" t-if="node.detail"><t t-esc="node.detail"/></div>
+                                                </div>
+                                                <div t-if="!node_last" class="o_tl_link"
+                                                     t-att-class="(lineDone(node_index) ? 'o_link_done ' : '') + (nodes[node_index + 1].status === 'done' ? 'o_link_done' : 'o_link_idle')"/>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_flow_trace_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>SN 实时追踪</span>
+                                        <small>SERIAL TRACE</small>
+                                    </div>
+                                    <div class="o_trace_table">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>时间</th><th>序列号</th><th>工序</th><th>工位</th><th>结果</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr t-foreach="traces" t-as="tr" t-key="tr.time + tr.serial_no + tr.station"
+                                                    t-att-class="rowClass(tr.status)">
+                                                    <td><t t-esc="tr.time"/></td>
+                                                    <td class="o_sn_cell"><t t-esc="tr.serial_no"/></td>
+                                                    <td><t t-esc="tr.operation"/></td>
+                                                    <td><t t-esc="tr.station"/></td>
+                                                    <td><span class="o_result_tag" t-esc="tr.result_label"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- 右列：质量 + 测试流 -->
+                            <section class="o_flow_col o_flow_col_right">
+                                <div class="o_tech_panel o_flow_quality_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>质量检测</span>
+                                        <small>QUALITY</small>
+                                    </div>
+                                    <div class="o_quality_body">
+                                        <div class="o_gauge_wrap">
+                                            <canvas t-ref="gaugeCanvas"/>
+                                            <div class="o_gauge_center">
+                                                <strong t-esc="(nodes.find(n => n.key === 'test') || {}).title || '0%'"/>
+                                                <span>直通率</span>
+                                            </div>
+                                        </div>
+                                        <div class="o_quality_stats">
+                                            <t t-foreach="tests.slice(0, 5)" t-as="t" t-key="t.time + t.serial_no">
+                                                <div class="o_quality_row" t-att-class="rowClass(t.status)">
+                                                    <span class="o_q_time"><t t-esc="t.time"/></span>
+                                                    <span class="o_q_sn"><t t-esc="t.serial_no"/></span>
+                                                    <em class="o_result_tag" t-esc="t.result_label"/>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel o_flow_station_chart_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>工序产出分布</span>
+                                        <small>OUTPUT BY STATION</small>
+                                    </div>
+                                    <div class="o_chart_wrap">
+                                        <canvas t-ref="stationCanvas"/>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>
