@@ -18,8 +18,22 @@ class ProductCategory(models.Model):
         string='Company',
         index=True,
         ondelete='restrict',
+        default=lambda self: self._sn_default_company(),
         help='Leave empty to share the category with every company.',
     )
+
+    @api.model
+    def _sn_default_company(self):
+        """Default a new category to its parent's company, else to the current one.
+
+        Without a default a category created from the form would stay shared and
+        show up in every company, which defeats the isolation exactly where a
+        user creates data by hand.
+        """
+        parent = self.parent_id
+        if parent:
+            return parent.company_id
+        return self.env.company
 
     @api.constrains('company_id', 'parent_id')
     def _check_company_matches_parent(self):

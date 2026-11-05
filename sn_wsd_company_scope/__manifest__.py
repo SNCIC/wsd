@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Company Scope',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'Company scoping for master data that Odoo keeps global',
     'description': """
 Company scoping for master data that Odoo keeps global
@@ -22,6 +22,7 @@ Behaviour
 * ``product.template.categ_id`` gains ``check_company``, so a product cannot be
   linked to a category of another company.
 * A global record rule hides the categories of the other companies.
+* A new category inherits the company of its parent, or the current company.
 
 The categories that already exist are assigned to a company by the install
 hook: everything under the domestic root goes to the first company, everything
