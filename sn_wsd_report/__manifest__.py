@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Report',
-    'version': '19.0.3.2.0',
+    'version': '19.0.3.3.0',
     'summary': 'Reporting extensions for SN WSD manufacturing',
     'depends': ['sn_wsd_api', 'sn_wsd_quality'],
     'data': [

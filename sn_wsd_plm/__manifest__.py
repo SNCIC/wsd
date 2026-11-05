@@ -19,6 +19,7 @@ SN WSD Product Lifecycle Management
 """,
     'data': [
         'security/mrp_plm.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'data/mrp_data.xml',
         'views/mrp_bom_views.xml',

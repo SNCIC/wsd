@@ -5,14 +5,6 @@ def _table_exists(cr, table_name):
     return cr.fetchone()[0]
 
 
-def _column_exists(cr, table_name, column_name):
-    cr.execute(
-        "SELECT EXISTS (SELECT 1 FROM information_schema.columns "
-        "WHERE table_name = %s AND column_name = %s)",
-        (table_name, column_name))
-    return cr.fetchone()[0]
-
-
 def _column_type(cr, table_name, column_name):
     cr.execute(
         "SELECT data_type FROM information_schema.columns "
@@ -35,19 +27,23 @@ def migrate(cr, version):
     the post-migrate step then no-ops."""
     if _table_exists(cr, 'sn_wsd_operation') and \
             _column_type(cr, 'sn_wsd_operation', 'x_process_section') == 'character varying':
-        cr.execute("""
-            CREATE TABLE tmp_ps_migration_operation AS
-            SELECT id, x_process_section
-              FROM sn_wsd_operation
-             WHERE x_process_section IS NOT NULL
-        """)
+        # Idempotent: an interrupted upgrade may have run this script already,
+        # and the stashed rows must survive until post-migrate consumes them.
+        if not _table_exists(cr, 'tmp_ps_migration_operation'):
+            cr.execute("""
+                CREATE TABLE tmp_ps_migration_operation AS
+                SELECT id, x_process_section
+                  FROM sn_wsd_operation
+                 WHERE x_process_section IS NOT NULL
+            """)
         # NULLs cast cleanly to integer during the ORM column conversion
         cr.execute(
             'UPDATE sn_wsd_operation SET x_process_section = NULL '
             'WHERE x_process_section IS NOT NULL')
     if _table_exists(cr, 'sn_wsd_route_section_stat') and \
             _column_type(cr, 'sn_wsd_route_section_stat', 'x_process_section') == 'character varying':
-        cr.execute(
-            'CREATE TABLE tmp_ps_migration_stat AS '
-            'SELECT * FROM sn_wsd_route_section_stat')
+        if not _table_exists(cr, 'tmp_ps_migration_stat'):
+            cr.execute(
+                'CREATE TABLE tmp_ps_migration_stat AS '
+                'SELECT * FROM sn_wsd_route_section_stat')
         cr.execute('DELETE FROM sn_wsd_route_section_stat')

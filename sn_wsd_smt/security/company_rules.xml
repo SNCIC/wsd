@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_sn_smt_cart_company" model="ir.rule">
+            <field name="name">SMT Material Cart Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_cart"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_cart_line_company" model="ir.rule">
+            <field name="name">SMT Cart Feeder Line Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_cart_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_config_company" model="ir.rule">
+            <field name="name">SMT Configuration Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_feeder_company" model="ir.rule">
+            <field name="name">SMT Feeder Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_feeder"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_feeder_channel_company" model="ir.rule">
+            <field name="name">SMT Feeder Channel Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_feeder_channel"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_feeder_maintenance_company" model="ir.rule">
+            <field name="name">SMT Feeder Maintenance Record Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_feeder_maintenance"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_feeder_repair_company" model="ir.rule">
+            <field name="name">SMT Feeder Repair Record Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_feeder_repair"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_feeder_scrap_company" model="ir.rule">
+            <field name="name">SMT Feeder Scrap Record Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_feeder_scrap"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_material_consumption_company" model="ir.rule">
+            <field name="name">SMT Material Consumption by Product Serial Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_material_consumption"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_material_log_company" model="ir.rule">
+            <field name="name">SMT Material Log Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_material_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_material_table_company" model="ir.rule">
+            <field name="name">SMT Material Table Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_material_table"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_material_table_detail_company" model="ir.rule">
+            <field name="name">SMT Material Table Detail Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_material_table_detail"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_material_table_line_company" model="ir.rule">
+            <field name="name">SMT Material Table Production Line Link Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_material_table_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_online_material_company" model="ir.rule">
+            <field name="name">SMT Online Material Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_online_material"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_pcb_board_company" model="ir.rule">
+            <field name="name">SMT PCB Board Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_pcb_board"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_smt_pcb_panel_company" model="ir.rule">
+            <field name="name">SMT PCB Panel Multi-company</field>
+            <field name="model_id" ref="model_sn_smt_pcb_panel"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_intercompany_product_map_list" model="ir.ui.view">
+        <field name="name">sn.intercompany.product.map.list</field>
+        <field name="model">sn.intercompany.product.map</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="agreement_id"/>
+                <field name="direction"/>
+                <field name="source_product_tmpl_id"/>
+                <field name="target_product_tmpl_id"/>
+                <field name="uom_ratio"/>
+                <field name="price_factor"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_product_map_form" model="ir.ui.view">
+        <field name="name">sn.intercompany.product.map.form</field>
+        <field name="model">sn.intercompany.product.map</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Mapping">
+                            <field name="agreement_id"/>
+                            <field name="direction"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Products">
+                            <field name="source_product_tmpl_id"/>
+                            <field name="target_product_tmpl_id"/>
+                            <field name="uom_ratio"/>
+                            <field name="price_factor"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_product_map_search" model="ir.ui.view">
+        <field name="name">sn.intercompany.product.map.search</field>
+        <field name="model">sn.intercompany.product.map</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="agreement_id"/>
+                <field name="source_product_tmpl_id"/>
+                <field name="target_product_tmpl_id"/>
+                <filter name="filter_archived" string="Archived"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_intercompany_product_map" model="ir.actions.act_window">
+        <field name="name">Product Mapping</field>
+        <field name="res_model">sn.intercompany.product.map</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_intercompany_product_map" name="Product Mapping"
+              parent="menu_sn_intercompany_root"
+              action="action_sn_intercompany_product_map" sequence="20"/>
+</odoo>

@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Three-part continuous form: the sheet is 241 mm wide and 279.4 mm
-         high, cut into three equal parts, so one part is 241 x 93 mm. The
-         portrait orientation keeps the width as given: wkhtmltopdf would swap
-         the two dimensions with a landscape orientation. -->
+    <!-- The sheet is printed on A4 paper: the page is a standard A4, and one
+         inspection request takes a 93 mm band of it, the height of one part
+         of the three-part form. The table keeps the same five item rows as
+         the paper form, so a request never spills over its band.
+
+         A standard paper size is used on purpose: the printer drivers know
+         A4, while the 241 x 93 mm custom paper is not registered on every
+         machine, and a driver without it scales the page down and crops the
+         right-hand side. -->
     <record id="paperformat_inspection_request" model="report.paperformat">
-        <field name="name">Inspection Request (241 x 93 mm)</field>
+        <field name="name">Inspection Request (A4, 93 mm band)</field>
         <field name="default" eval="False"/>
-        <field name="format">custom</field>
-        <field name="page_width">241</field>
-        <field name="page_height">93</field>
+        <field name="format">A4</field>
+        <field name="page_width" eval="False"/>
+        <field name="page_height" eval="False"/>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">3</field>
-        <field name="margin_bottom">8</field>
-        <field name="margin_left">4</field>
-        <field name="margin_right">4</field>
+        <field name="margin_top">6</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
         <field name="header_line" eval="False"/>
         <field name="header_spacing">0</field>
         <field name="dpi">96</field>
-        <field name="css_margins" eval="True"/>
+        <!-- Margins come from the paper format. With css_margins the report
+             stylesheet adds a 11 mm padding to the header and a side padding
+             to the body, which pushed the head band down onto the item table
+             (the report carries a custom header; the incoming inspection
+             record, which has none, keeps css_margins). -->
+        <field name="css_margins" eval="False"/>
     </record>
 
     <!-- Printed from the receipt form only: no binding on the model, so the

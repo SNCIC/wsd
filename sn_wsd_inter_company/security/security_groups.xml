@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_inter_company" model="ir.module.category">
+        <field name="name">Inter-Company</field>
+        <field name="sequence">96</field>
+    </record>
+
+    <record id="privilege_sn_intercompany" model="res.groups.privilege">
+        <field name="name">Inter-Company</field>
+        <field name="sequence">96</field>
+        <field name="category_id" ref="module_category_inter_company"/>
+    </record>
+
+    <record id="group_sn_intercompany_manager" model="res.groups">
+        <field name="name">Inter-Company Manager</field>
+        <field name="privilege_id" ref="privilege_sn_intercompany"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Maintains the trade agreements, the product mappings
+            and the synchronization issues.</field>
+    </record>
+</odoo>

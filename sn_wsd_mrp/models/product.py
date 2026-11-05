@@ -59,6 +59,11 @@ class ProductTemplate(models.Model):
         string='Material Specification',
         tracking=True,
     )
+    mnemonic_code = fields.Char(
+        string='Mnemonic Code',
+        tracking=True,
+        help='Short code used to recognise the material at a glance.',
+    )
     brand_id = fields.Many2one(
         comodel_name='sn.wsd.brand',
         string='Brand',
@@ -208,6 +213,11 @@ class ProductProduct(models.Model):
 
     material_specification = fields.Char(
         related='product_tmpl_id.material_specification',
+        store=True,
+        readonly=False,
+    )
+    mnemonic_code = fields.Char(
+        related='product_tmpl_id.mnemonic_code',
         store=True,
         readonly=False,
     )

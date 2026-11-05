@@ -194,17 +194,14 @@ class MesTestResultBase(models.Model):
         from odoo.addons.sn_wsd_api.models.api_scan_pass import split_defect_codes
         raw_defect = (payload.get('M_STR2') or '').strip()
         if raw_defect and result == 'ng' and 'defect_code_id' in self._fields:
-            # link the quality dictionary when installed (terminal NG flow
-            # uses the same field); devices may report several ';'
-            # separated codes -- the first links, same primary rule as the
-            # station-pass gate, the verbatim list stays in defect_code_raw
-            primary = split_defect_codes(raw_defect)[0]
-            defect = self.env['sn.wsd.quality.defect.code'].search([
-                '|', ('code', '=ilike', primary),
-                ('name', '=ilike', primary),
-                ('company_id', 'in', [company.id, False]),
-            ], limit=1)
-            vals['defect_code_id'] = defect.id
+            # Same resolver as the device channels (code first, name as a
+            # fallback, company or shared rows): the first resolvable part
+            # links, unknown parts are dropped without rejecting the
+            # upload, and the verbatim list stays in defect_code_raw.
+            service = self.env['sn.wsd.api.service'].with_company(company)
+            defect = service._find_defect_code(
+                *split_defect_codes(raw_defect))
+            vals['defect_code_id'] = defect.id if defect else False
         record = self.create(vals)
         self.env['sn.wsd.mes.test.result.detail'].create_from_test_result(
             record, payload.get('M_TEST_DETAIL'))

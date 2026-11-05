@@ -6,6 +6,7 @@
     'depends': ['mail', 'sn_wsd_field'],
     'data': [
         'security/label_security.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'security/label_rules.xml',
         'views/label_template_views.xml',

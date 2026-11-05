@@ -5,6 +5,7 @@
     'depends': ['mrp', 'stock', 'mail', 'sn_wsd_mrp', 'sn_wsd_quality', 'sn_wsd_report'],
     'data': [
         'data/ir_sequence.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/sn_wsd_scrap_views.xml',
         'views/oqc_disposition_event_views.xml',

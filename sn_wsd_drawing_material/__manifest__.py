@@ -10,6 +10,7 @@
         'bus',
     ],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/drawing_material_views.xml',
         'views/menu_views.xml',

@@ -196,19 +196,22 @@
             'sn_merged_cells_fields': ['reference', 'sn_picking_date', 'sn_validation_date', 'sn_picking_partner_id', 'sn_picking_origin', 'sn_picking_state', 'sn_picking_user_id']}</field>
     </record>
 
+    <!-- The three reception reports are part of the operation detail menu
+         (Inventory > Details), together with the detail reports of every
+         other operation type: see operation_detail_views.xml. -->
     <menuitem id="menu_sn_wsd_receipt_detail"
               name="Receipt Details"
-              parent="stock.menu_warehouse_report"
+              parent="menu_sn_wsd_stock_detail"
               action="action_sn_wsd_receipt_detail"
-              sequence="20"/>
+              sequence="10"/>
     <menuitem id="menu_sn_wsd_quality_detail"
               name="Quality Control Details"
-              parent="stock.menu_warehouse_report"
+              parent="menu_sn_wsd_stock_detail"
               action="action_sn_wsd_quality_detail"
-              sequence="21"/>
+              sequence="11"/>
     <menuitem id="menu_sn_wsd_storage_detail"
               name="Storage Details"
-              parent="stock.menu_warehouse_report"
+              parent="menu_sn_wsd_stock_detail"
               action="action_sn_wsd_storage_detail"
-              sequence="22"/>
+              sequence="12"/>
 </odoo>

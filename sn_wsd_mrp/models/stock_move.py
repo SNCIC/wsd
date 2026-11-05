@@ -10,6 +10,25 @@ class StockMove(models.Model):
         digits='Product Unit',
     )
 
+    def _adjust_procure_method(self, picking_type_code=False):
+        res = super()._adjust_procure_method(picking_type_code)
+        # A workshop store component without any bill of materials has nothing
+        # to manufacture: the store demand would find no replenishment rule and
+        # confirming the order would fail. Keep it on "take from stock", which
+        # is what used to happen before the store rules existed.
+        for move in self:
+            if not move.raw_material_production_id or move.procure_method != 'make_to_order':
+                continue
+            rule = move.rule_id
+            if not rule or not rule.x_workshop_store_rule or rule.action != 'pull':
+                continue
+            boms = move.product_id.bom_ids.filtered(
+                lambda bom: bom.active and bom.type == 'normal')
+            if not boms:
+                move.procure_method = 'make_to_stock'
+                move.rule_id = False
+        return res
+
     @api.depends(
         'quantity',
         'state',

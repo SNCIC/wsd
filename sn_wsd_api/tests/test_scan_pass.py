@@ -855,19 +855,38 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, self.defect)
 
-    def test_03_ng_without_confirmed_rejected(self):
-        with self.assertRaises(ValidationError) as ctx:
-            self.service.submit_aoi_result(_aoi_payload(
-                stationResult='NG', productSn='SN-AOI-NG2',
-                defectDetails=[_aoi_defect(confirmed='误报')]))
-        self.assertIn('confirmed defect', str(ctx.exception))
+    def test_03_ng_without_confirmed_defect_allowed(self):
+        # 不良代码不校验（2026-11-02 用户口径）：没有确认不良行也照收，
+        # 只是主码为空，明细逐字落库
+        result = self.service.submit_aoi_result(_aoi_payload(
+            stationResult='NG', productSn='SN-AOI-NG2',
+            defectDetails=[_aoi_defect(confirmed='误报')]))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.result, 'ng')
+        self.assertFalse(test_result.defect_code_id)
+        self.assertEqual(len(test_result.aoi_defect_detail_ids), 1)
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id', '=', test_result.serial_identity_id.id)])
+        self.assertEqual(history.result, 'ng')
+        self.assertFalse(history.defect_code_id)
 
-    def test_04_ng_unknown_defect_code_rejected(self):
-        with self.assertRaises(ValidationError) as ctx:
-            self.service.submit_aoi_result(_aoi_payload(
-                stationResult='NG', productSn='SN-AOI-NG3',
-                defectDetails=[_aoi_defect(confirmed='确认不良', code='NOPE')]))
-        self.assertIn('Defect code NOPE', str(ctx.exception))
+    def test_04_ng_unknown_defect_code_not_linked(self):
+        # 字典里没有的码不再拒收：主码留空待人工补，明细原文照存
+        result = self.service.submit_aoi_result(_aoi_payload(
+            stationResult='NG', productSn='SN-AOI-NG3',
+            defectDetails=[_aoi_defect(confirmed='确认不良', code='NOPE')]))
+        self.assertTrue(result['ok'])
+        test_result = self.env['sn.wsd.mes.test.result'].browse(
+            result['test_result_id'])
+        self.assertEqual(test_result.result, 'ng')
+        self.assertFalse(test_result.defect_code_id)
+        self.assertEqual(test_result.aoi_defect_detail_ids.defect_code, 'NOPE')
+        history = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id', '=', test_result.serial_identity_id.id)])
+        self.assertEqual(history.result, 'ng')
+        self.assertFalse(history.defect_code_id)
 
     def test_05_missing_required_fields(self):
         with self.assertRaises(ValidationError) as ctx:
@@ -1011,12 +1030,13 @@ class TestAoiResultsHttp(ScanPassFixture, HttpCase):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json()['message'],
                          'Missing required field: stationInfo')
-        # NG without a confirmed defect -> graded business rejection
+        # NG without a confirmed defect is accepted: device channels do not
+        # validate defect codes (2026-11-02 rule)
         res = self._post(json.dumps(_aoi_payload(
             productSn='SN-AOI-HTTP-NG', stationResult='NG',
             defectDetails=[_aoi_defect(confirmed='误报')])))
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(res.json()['code'], 422)
+        self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.json()['message'], 'success')
 
 
 @tagged('post_install', '-at_install')

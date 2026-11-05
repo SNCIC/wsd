@@ -53,6 +53,14 @@ class StockPicking(models.Model):
         picking_type = self.picking_type_id
         if self.state == 'cancel' or not picking_type:
             return False
+        warehouse = picking_type.warehouse_id
+        if warehouse and picking_type in (
+                warehouse.sn_inventory_loss_type_id,
+                warehouse.sn_inventory_gain_type_id):
+            # The inventory loss and gain documents correct a counting
+            # difference: they do not issue material for an order, so the
+            # issue label of an operation has nothing to describe.
+            return False
         return (
             picking_type.code in ISSUE_LABEL_PICKING_TYPE_CODES
             or (picking_type.sequence_code or '')

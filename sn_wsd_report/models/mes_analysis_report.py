@@ -19,7 +19,11 @@ class SnWsdMesDashboardService(models.AbstractModel):
 
         today_histories = histories.filtered(
             lambda rec: rec.out_date and rec.out_date.date() == today)
-        today_tests = tests.filtered(lambda rec: rec.test_time and rec.test_time.date() == today)
+        # test_time is stored in UTC: compare its local date with context_today()
+        # so tests done between 00:00 and 08:00 local time stay in today
+        today_tests = tests.filtered(
+            lambda rec: rec.test_time
+            and fields.Datetime.context_timestamp(self, rec.test_time).date() == today)
         station_rows = {}
         for history in today_histories:
             station_code = history.workcenter_id.code or '-'

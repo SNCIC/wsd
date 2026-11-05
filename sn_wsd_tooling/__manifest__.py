@@ -4,6 +4,7 @@
     'summary': 'Tooling types, templates, tooling lifecycle, and PDA service',
     'depends': ['mrp', 'stock', 'mail', 'sn_wsd_smt', 'sn_wsd_code_rule'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/tooling_views.xml',
         'data/code_rule_seeds.xml',

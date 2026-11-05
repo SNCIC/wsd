@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_sn_wsd_drawing_material_company" model="ir.rule">
+            <field name="name">Drawing Material Relation Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_drawing_material"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_drawing_material_line_company" model="ir.rule">
+            <field name="name">Drawing Material Relation Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_drawing_material_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_esop_acknowledge_company" model="ir.rule">
+            <field name="name">ESOP Document Acknowledgement Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_esop_acknowledge"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_esop_document_company" model="ir.rule">
+            <field name="name">ESOP Document Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_esop_document"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

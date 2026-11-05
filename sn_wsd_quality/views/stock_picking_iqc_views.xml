@@ -15,8 +15,10 @@
                 <!-- The inspection request travels with the goods from the
                      receipt to the quality area: printed on the receipt of a
                      three-step reception, before it is validated. -->
-                <button name="%(action_report_inspection_request)d"
-                        type="action"
+                <!-- SNERP intercepts the ESC/P download and sends it to the
+                     configured dot-matrix RAW queue. -->
+                <button name="action_print_inspection_request_prn"
+                        type="object"
                         string="Print Inspection Request"
                         class="btn-secondary"
                         invisible="not sn_is_reception_receipt or state == 'cancel'"

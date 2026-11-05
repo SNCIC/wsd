@@ -1,0 +1,476 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-04 00:00+0000\n"
+"PO-Revision-Date: 2026-11-04 00:00+0000\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__code
+msgid "Code"
+msgstr "编码"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__contract_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Contract Type"
+msgstr "合同类型"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields.selection,name:sn_wsd_contract.selection__sn_contract_template__contract_type__sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Sales Contract"
+msgstr "销售合同"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields.selection,name:sn_wsd_contract.selection__sn_contract_template__contract_type__purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Purchase Contract"
+msgstr "采购合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Sales Contracts"
+msgstr "销售合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Purchase Contracts"
+msgstr "采购合同"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__title
+msgid "Document Title"
+msgstr "单据标题"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__intro
+msgid "Introduction"
+msgstr "引言"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__clause_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_form
+msgid "Clauses"
+msgstr "条款"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__clause_count
+msgid "Clause Count"
+msgstr "条款数量"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__show_tax_rate
+msgid "Print the Tax Rate Column"
+msgstr "打印税率列"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__show_tax_excluded_price
+msgid "Print the Untaxed Unit Price Column"
+msgstr "打印不含税单价列"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__paperformat_id
+msgid "Paper Format"
+msgstr "纸张格式"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__is_default
+msgid "Default Template"
+msgstr "默认模板"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__sequence
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template_clause__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template_clause__template_id
+msgid "Template"
+msgstr "模板"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template_clause__name
+msgid "Heading"
+msgstr "标题"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sn_contract_template_clause__content
+msgid "Content"
+msgstr "内容"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__contract_template_id
+msgid "Contract Template"
+msgstr "合同模板"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__contract_number
+msgid "Contract Number"
+msgstr "合同编号"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__signing_date
+msgid "Signing Date"
+msgstr "签订日期"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__signing_location
+msgid "Signing Location"
+msgstr "签订地点"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__contract_attachment_ids
+msgid "Contract Attachments"
+msgstr "合同附件"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__has_contract_attachment
+msgid "Contract Attached"
+msgstr "已附合同"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__amount_total_chinese
+msgid "Total Amount in Chinese"
+msgstr "合计金额（大写）"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__amount_untaxed_chinese
+msgid "Untaxed Amount in Chinese"
+msgstr "不含税金额（大写）"
+
+#. module: sn_wsd_contract
+#: model:ir.model.fields,field_description:sn_wsd_contract.field_sale_order__amount_tax_chinese
+msgid "Tax Amount in Chinese"
+msgstr "税额（大写）"
+
+#. module: sn_wsd_contract
+#: model:ir.actions.report,name:sn_wsd_contract.action_report_sale_contract
+#: model:sn.contract.template,title:sn_wsd_contract.contract_template_sale_default
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Sales Contract"
+msgstr "销售合同"
+
+#. module: sn_wsd_contract
+#: model:ir.actions.report,name:sn_wsd_contract.action_report_sale_contract_preview
+msgid "Sales Contract Preview"
+msgstr "销售合同预览"
+
+#. module: sn_wsd_contract
+#: model:ir.actions.act_window,name:sn_wsd_contract.action_sn_contract_template
+#: model:ir.ui.menu,name:sn_wsd_contract.menu_sn_contract_template
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.action_sn_contract_template
+msgid "Contract Templates"
+msgstr "合同模板"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sale_order_form_contract
+msgid "Preview Contract"
+msgstr "预览合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sale_order_form_contract
+msgid "Contract"
+msgstr "合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sale_order_form_contract
+msgid "Contract Details"
+msgstr "合同信息"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sale_order_form_contract
+msgid "Contract PDFs"
+msgstr "合同文件"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sale_order_form_contract
+msgid "Printed as the order number when empty"
+msgstr "留空则打印订单号"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_form
+msgid "Wording"
+msgstr "文字内容"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_form
+msgid "e.g. Default Sales Contract"
+msgstr "例：默认销售合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_form
+msgid "e.g. Sales Contract"
+msgstr "例：销售合同"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_form
+msgid "Paragraph printed above the item table"
+msgstr "打印在明细表上方的说明文字"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.view_sn_contract_template_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.action_sn_contract_template
+msgid "Create a contract template"
+msgstr "创建合同模板"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template,name:sn_wsd_contract.contract_template_sale_default
+msgid "Default Sales Contract"
+msgstr "默认销售合同"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template,intro:sn_wsd_contract.contract_template_sale_default
+msgid "Both parties, on the principle of equality, mutual benefit, consideration and agreement, hereby agree on the sale and purchase of the products described below."
+msgstr "供需双方本着“平等互利、等价有偿、协商一致”的原则，现就有关产品的销售和采购，达成如下协议。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_other_requirements
+msgid "Other Product Requirements"
+msgstr "产品其他要求："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_delivery_date
+msgid "2. Delivery Date"
+msgstr "二、交货日期："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_delivery_date
+msgid "Within ____ days after this contract takes effect. For a customer on an agreed payment term the contract takes effect on the signing date; for any other customer it takes effect on the day the supplier receives the down payment agreed in this contract."
+msgstr "合同生效后 ____ 天交货。（若需方为协议付款客户，本合同签订之日立即生效；若需方为非协议付款客户，本合同在供方收到合同约定的预付款后当日生效。）"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_technical_requirements
+msgid "3. Technical Requirements"
+msgstr "三、技术要求："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_technical_requirements
+msgid "Inspected against national and industry standards. Where special requirements apply, the technical agreement signed by the two parties is followed."
+msgstr "按国家标准、行业标准验收。如有特殊要求，按照供需双方签订的技术协议验收。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_delivery_method
+msgid "4. Delivery Method"
+msgstr "四、交货方式："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_delivery_method
+msgid "Courier / Logistics / Delivered to the door by the supplier / Collected by the buyer."
+msgstr "□快递／□物流／□供方送货上门／□需方自提。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_acceptance
+msgid "5. Acceptance"
+msgstr "五、验收方式："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_acceptance
+msgid "The buyer inspects the products within 3 days of delivery and returns the delivery note signed and stamped to the supplier. A delivery note not returned within 3 days counts as acceptance. Damage caused in transport is claimed to the supplier within 3 days and the supplier answers within 3 days; the supplier bears no risk of transport damage claimed later. The VAT invoice is issued in the month of a successful inspection."
+msgstr "货到3天内需方应对产品进行验收，验收无误后应签字、盖章后回传供方发货通知单。若收到产品3日内未回传发货通知单即视为默认收货。如果运输造成的破损请需方在3日内向供方提出；供方应在3日内给予回复。逾期供方不承担任何运输造成的风险。验收无误后，增值税发票在当月开具。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_payment_term
+msgid "6. Payment Term"
+msgstr "六、付款方式："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_payment_term
+msgid "Monthly settlement / Full payment before delivery / Down payment of ______ yuan, the balance paid before delivery. The bank and the account of the supplier are the ones written in the party block above."
+msgstr "□月结／□全款（款到发货）／□预付款 ______ 元，余款付清后发货。供方开户行及账号见合同双方信息。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_transport_cost
+msgid "7. Transport Cost"
+msgstr "七、运输费用："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_transport_cost
+msgid "Borne by the supplier / Borne by the buyer, ______ yuan (charged as the carrier actually bills)."
+msgstr "□供方承担／□需方承担 ______ 元（以运输公司实际收费为准）。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_quality_warranty
+msgid "8. Quality Warranty"
+msgstr "八、质量保证："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_quality_warranty
+msgid "18 months counted from the day the products leave the factory. A product beyond the warranty period is not returned or exchanged. Within the warranty period the supplier bears the transport cost of a quality problem caused by process design or material defects; the buyer bears the transport and repair cost of a return that is not a quality problem, of a specially customised product and of stock returned by the buyer. A labelled product is not returned or exchanged for a non-quality reason."
+msgstr "自货物出厂之日起计算，本产品保修18个月。超出质保期限的产品不得退换。在质保期内，因工艺设计、材料缺陷造成的质量问题，由供方承担运输费用；非质量问题、特殊定制产品及因需方库存积压造成的退货，由需方承担运输费用及维修等费用。贴牌产品非质量问题不得退换。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_breach_of_contract
+msgid "9. Breach of Contract"
+msgstr "九、违约责任："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_breach_of_contract
+msgid "A dispute over this contract is settled by the two parties in good time; where no settlement is reached, the case is filed with the people court of the place where the supplier is located."
+msgstr "执行本合同发生纠纷，当事人双方应当及时协商解决，协商不成时，向供方所在地人民法院提起诉讼。"
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,name:sn_wsd_contract.clause_sale_validity
+msgid "10. Validity"
+msgstr "十、其他约定："
+
+#. module: sn_wsd_contract
+#: model:sn.contract.template.clause,content:sn_wsd_contract.clause_sale_validity
+msgid "A fax or a scan confirmed by the two parties is legally valid. A hand-written entry must not be altered twice, otherwise it is void."
+msgstr "经供需双方确认后的传真、扫描件均合法有效，手工填写处不得二次涂改，否则视为无效。"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Signing Date:"
+msgstr "签订日期："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Signing Place:"
+msgstr "签订地点："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Contract No.:"
+msgstr "合同号："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Supplier:"
+msgstr "供方："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Customer:"
+msgstr "需方："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Address:"
+msgstr "地址："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Phone:"
+msgstr "电话："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Email:"
+msgstr "邮箱："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Bank:"
+msgstr "开户行："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Account:"
+msgstr "账号："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "1. Sales Product Details"
+msgstr "一、甲方向乙方销售产品的明细表"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Product Name"
+msgstr "产品名称"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Specification"
+msgstr "产品规格"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Unit Price (excl. tax)"
+msgstr "单价（不含税）"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Tax Rate"
+msgstr "税率"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Unit Price (incl. tax)"
+msgstr "单价（含税）"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Amount (incl. tax)"
+msgstr "金额（含税）"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Untaxed Amount"
+msgstr "不含税"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Tax Amount"
+msgstr "税额"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Total Amount (incl. tax)"
+msgstr "含税金额"
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Authorized Representative:"
+msgstr "委托代理人："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_contract
+#: model_terms:ir.ui.view,arch_db:sn_wsd_contract.report_sale_contract_document
+msgid "(Seal)"
+msgstr "（章）"

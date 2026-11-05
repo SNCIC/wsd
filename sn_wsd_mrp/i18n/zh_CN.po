@@ -3178,6 +3178,13 @@ msgid "Members"
 msgstr "成员"
 
 #. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_product__mnemonic_code
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_product_template__mnemonic_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_only_form_mnemonic_code
+msgid "Mnemonic Code"
+msgstr "助记码"
+
+#. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "MES close without receipt %(order)s"

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_contract_template_list" model="ir.ui.view">
+        <field name="name">sn.contract.template.list</field>
+        <field name="model">sn.contract.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="contract_type"/>
+                <field name="clause_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="is_default"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_contract_template_form" model="ir.ui.view">
+        <field name="name">sn.contract.template.form</field>
+        <field name="model">sn.contract.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Default Sales Contract"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="contract_type"/>
+                            <field name="is_default"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="paperformat_id"/>
+                            <field name="show_tax_excluded_price"/>
+                            <field name="show_tax_rate"/>
+                            <field name="clause_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Wording" name="wording">
+                            <group>
+                                <field name="title" placeholder="e.g. Sales Contract"/>
+                                <field name="intro" placeholder="Paragraph printed above the item table"/>
+                            </group>
+                        </page>
+                        <!-- The number of a clause is part of its heading: a
+                             clause is inserted or renumbered by editing the
+                             heading, which is how a contract template is
+                             maintained. -->
+                        <page string="Clauses" name="clauses">
+                            <field name="clause_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="content"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_contract_template_search" model="ir.ui.view">
+        <field name="name">sn.contract.template.search</field>
+        <field name="model">sn.contract.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <filter name="filter_sale" string="Sales Contracts"
+                        domain="[('contract_type', '=', 'sale')]"/>
+                <filter name="filter_purchase" string="Purchase Contracts"
+                        domain="[('contract_type', '=', 'purchase')]"/>
+                <separator/>
+                <filter name="filter_inactive" string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_by_type" string="Contract Type"
+                            context="{'group_by': 'contract_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_contract_template" model="ir.actions.act_window">
+        <field name="name">Contract Templates</field>
+        <field name="res_model">sn.contract.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_contract_template_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a contract template</p>
+            <p>The template carries the wording of a contract: the title, the
+               introduction and the numbered clauses printed on the sheet. The
+               data of the document (parties, item table, totals) is filled by
+               the report itself.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sn_contract_template"
+              name="Contract Templates"
+              parent="sale.menu_sale_config"
+              action="action_sn_contract_template"
+              sequence="30"/>
+</odoo>

@@ -11,6 +11,7 @@ services. It records outbound commands, device callbacks, and sensor readings.
     'data': [
         'data/sequence.xml',
         'security/security.xml',
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/picklight_views.xml',
         'views/stock_picking_type_views.xml',

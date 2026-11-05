@@ -43,6 +43,18 @@
         </field>
     </record>
 
+    <!-- Mnemonic code right below the material code of the product form. -->
+    <record id="view_product_template_only_form_mnemonic_code" model="ir.ui.view">
+        <field name="name">product.template.only.form.mnemonic.code</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="after">
+                <field name="mnemonic_code"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_product_template_list_material_info" model="ir.ui.view">
         <field name="name">product.template.list.material.info</field>
         <field name="model">product.template</field>
@@ -59,6 +71,7 @@
             </xpath>
             <xpath expr="//field[@name='name']" position="after">
                 <field name="material_specification" optional="show"/>
+                <field name="mnemonic_code" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="brand_id" optional="show"/>
@@ -99,6 +112,7 @@
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="material_specification" optional="show" readonly="1"/>
+                <field name="mnemonic_code" optional="show" readonly="1"/>
                 <field name="brand_id" optional="show" readonly="1"/>
                 <field name="abc_class" optional="hide" readonly="1"/>
                 <field name="rated_current" optional="hide" readonly="1"/>

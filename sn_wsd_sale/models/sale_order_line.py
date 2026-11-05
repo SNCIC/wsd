@@ -25,3 +25,17 @@ class SaleOrderLine(models.Model):
         string='Note',
         help='Remark written on the line, printed after the amounts.',
     )
+    sn_delivery_date = fields.Date(
+        string='Delivery Date',
+        copy=True,
+        help='Date printed in the delivery date column of the dot-matrix '
+             'order sheet. Left empty, the order commitment date is printed.',
+    )
+
+    def _sn_get_dot_matrix_delivery_date(self):
+        """Delivery date of the line as the sheet prints it (YYYY-MM-DD)."""
+        self.ensure_one()
+        delivery_date = (self.sn_delivery_date
+                         or fields.Date.to_date(self.order_id.commitment_date)
+                         or fields.Date.to_date(self.order_id.date_order))
+        return delivery_date.strftime('%Y-%m-%d') if delivery_date else ''

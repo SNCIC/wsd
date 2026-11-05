@@ -14,7 +14,9 @@ from . import clear_pass_log
 from . import batch_pass_log
 from . import mes_order_batch_pass
 from . import scrap_reason
+from . import stock_rule
 from . import stock_move
+from . import stock_orderpoint
 from . import stock_lot
 from . import stock_package
 from . import process_section

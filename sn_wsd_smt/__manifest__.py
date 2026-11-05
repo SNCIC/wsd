@@ -4,6 +4,7 @@
     'summary': 'SMT material table and online loading management',
     'depends': ['mrp', 'sn_wsd_mrp', 'sn_wsd_stock', 'web'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/sn_smt_config_views.xml',
         'wizard/sn_smt_material_query_wizard_views.xml',

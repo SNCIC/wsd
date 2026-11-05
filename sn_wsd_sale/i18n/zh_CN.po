@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 00:00+0000\n"
-"PO-Revision-Date: 2026-10-28 00:00+0000\n"
+"PO-Revision-Date: 2026-11-04 00:00+0000\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,12 +12,18 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_sale
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__product_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
 msgid "Product Code"
 msgstr "产品编码"
 
 #. module: sn_wsd_sale
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__product_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
 msgid "Product Name"
 msgstr "产品名称"
 
@@ -110,3 +116,133 @@ msgstr "销售人员"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sn_sale_detail_search
 msgid "Status"
 msgstr "状态"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order__sn_summary
+msgid "Summary"
+msgstr "摘要"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__sn_delivery_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Delivery Date"
+msgstr "交货日期"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sale_order_form_prn_buttons
+msgid "Preview Order Sheet"
+msgstr "预览订单"
+
+#. module: sn_wsd_sale
+#: model:ir.actions.server,name:sn_wsd_sale.action_print_sale_order_prn
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sale_order_list_prn_buttons
+msgid "Print Order Sheets (ESC/P)"
+msgstr "打印选中订单（针式）"
+
+#. module: sn_wsd_sale
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_sale_order_list_prn_buttons
+msgid "Print Order Sheets"
+msgstr "打印选中订单"
+
+#. module: sn_wsd_sale
+#: model:ir.actions.report,name:sn_wsd_sale.action_report_sale_order_prn
+msgid "Sale Order (Dot Matrix)"
+msgstr "销售订单（针式）"
+
+#. module: sn_wsd_sale
+#: model:ir.actions.report,name:sn_wsd_sale.action_report_sale_order_prn_preview
+msgid "Sale Order (Dot Matrix) Preview"
+msgstr "销售订单（针式）预览"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Sales Order"
+msgstr "销售订单"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Customer:"
+msgstr "客户："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Business Date:"
+msgstr "业务日期："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Order No.:"
+msgstr "单号："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Summary:"
+msgstr "摘要："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Specification"
+msgstr "产品规格"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Total Quantity"
+msgstr "合计"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Prepared by:"
+msgstr "制单人："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Salesperson:"
+msgstr "业务员："

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_sale_contract">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_contract.report_sale_contract_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_sale_contract_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="supplier" t-value="company.partner_id"/>
+        <t t-set="customer" t-value="o.partner_id"/>
+        <t t-set="contract_template" t-value="o._get_contract_template()"/>
+        <t t-set="supplier_bank" t-value="o._contract_first_bank(supplier)"/>
+        <t t-set="customer_bank" t-value="o._contract_first_bank(customer)"/>
+        <t t-set="signing_date" t-value="o.signing_date or o.date_order"/>
+        <!-- Columns of the item table: the two price columns of the purchase
+             contract become three here (untaxed price, tax rate, taxed price)
+             and each of them can be switched off on the template. -->
+        <t t-set="column_count"
+           t-value="7 + (1 if contract_template.show_tax_excluded_price else 0) + (1 if contract_template.show_tax_rate else 0)"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <!-- The font stack names the simplified faces one by one: a bare
+                 "serif" falls back to a traditional or a Japanese face on a
+                 machine without SimSun, and those put the ideographic comma
+                 and full stop in the middle of the box instead of the left
+                 corner, and carry no glyph for characters like 门. -->
+            <div class="page sn-sale-contract"
+                 style="font-family: SimSun, 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif; color: #111; font-size: 12px;">
+                <style>
+                    .sn-sale-contract h1 { margin: 0 0 8px; text-align: center; font-size: 28px; letter-spacing: 10px; }
+                    .sn-sale-contract, .sn-sale-contract table, .sn-sale-contract td,
+                    .sn-sale-contract th, .sn-sale-contract span, .sn-sale-contract b,
+                    .sn-sale-contract div {
+                        font-family: SimSun, 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif;
+                    }
+                    .sn-sale-contract table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+                    .sn-sale-contract td, .sn-sale-contract th { padding: 4px 5px; vertical-align: middle; }
+                    /* Only the item table carries rules: the head, the party
+                       block and the signature block sit on the sheet without
+                       borders. The report assets add their own cell rules, so
+                       the border is switched off on every level of those
+                       tables. */
+                    .sn-sale-contract table.plain,
+                    .sn-sale-contract table.plain thead,
+                    .sn-sale-contract table.plain tbody,
+                    .sn-sale-contract table.plain tr,
+                    .sn-sale-contract table.plain td,
+                    .sn-sale-contract table.plain th {
+                        border: 0 none !important;
+                        outline: 0 !important;
+                        box-shadow: none !important;
+                    }
+                    .sn-sale-contract .plain td { padding: 2px 4px; }
+                    .sn-sale-contract .product-table,
+                    .sn-sale-contract .product-table td,
+                    .sn-sale-contract .product-table th {
+                        border: 1px solid #111;
+                    }
+                    .sn-sale-contract .product-table td,
+                    .sn-sale-contract .product-table th {
+                        padding: 5px 6px;
+                    }
+                    .sn-sale-contract .label { font-weight: 700; white-space: nowrap; }
+                    .sn-sale-contract .party-name { font-weight: 700; }
+                    .sn-sale-contract .total-label { font-weight: 700; white-space: nowrap; }
+                    .sn-sale-contract .signature div { line-height: 1.9; }
+                    .sn-sale-contract .section-title { margin: 6px 0 2px; font-weight: 700; font-size: 13px; }
+                    .sn-sale-contract .terms { margin: 2px 0; line-height: 1.45; white-space: pre-line; }
+                    .sn-sale-contract .amount { text-align: right; white-space: nowrap; }
+                    .sn-sale-contract .center { text-align: center; }
+                    .sn-sale-contract .signature { height: 70px; vertical-align: top; }
+                    .sn-sale-contract .small { font-size: 11px; }
+                </style>
+
+                <table class="plain table-borderless o_ignore_layout_styling"
+                       style="border: 0 !important; outline: 0 !important;">
+                    <tr>
+                        <td style="width: 30%;">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                 style="max-width: 230px; max-height: 72px;"/>
+                            <span t-else="" style="font-size: 20px; font-weight: 700;"
+                                  t-out="company.name"/>
+                        </td>
+                        <td><h1 t-out="contract_template.title or 'Sales Contract'"/></td>
+                        <td style="width: 26%;"/>
+                    </tr>
+                </table>
+
+                <!-- The labels are plain text of the cell rather than a span
+                     of their own: the translation of a cell wrapped in an
+                     inline element is exported with the markup around it,
+                     which makes the translation file unreadable. -->
+                <table class="plain table-borderless o_ignore_layout_styling">
+                    <tr>
+                        <td style="width: 30%;">Signing Date:
+                            <span t-out="o._format_contract_date(signing_date)"/>
+                        </td>
+                        <td style="width: 25%; text-align: left;">Signing Place:
+                            <span t-out="o.signing_location or ''"/>
+                        </td>
+                        <td style="width: 45%;">Contract No.:
+                            <span t-out="o.contract_number or o.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Supplier:
+                            <span class="party-name" t-out="supplier.name"/></td>
+                        <td/>
+                        <td>Customer:
+                            <span class="party-name" t-out="customer.name"/></td>
+                    </tr>
+                    <tr>
+                        <td>Address:
+                            <span t-out="o._get_contract_address(supplier)"/></td>
+                        <td/>
+                        <td>Address:
+                            <span t-out="o._get_contract_address(customer)"/></td>
+                    </tr>
+                    <tr>
+                        <td>Phone:
+                            <span t-out="supplier.phone or ''"/></td>
+                        <td/>
+                        <td>Phone:
+                            <span t-out="customer.phone or ''"/></td>
+                    </tr>
+                    <!-- Odoo 19 dropped the fax field of the contact: the
+                         line of the paper form carries the e-mail instead. -->
+                    <tr>
+                        <td>Email:
+                            <span t-out="supplier.email or ''"/></td>
+                        <td/>
+                        <td>Email:
+                            <span t-out="customer.email or ''"/></td>
+                    </tr>
+                    <tr>
+                        <td>Bank:
+                            <span t-out="supplier_bank.bank_id.name if supplier_bank else ''"/></td>
+                        <td/>
+                        <td>Bank:
+                            <span t-out="customer_bank.bank_id.name if customer_bank else ''"/></td>
+                    </tr>
+                    <tr>
+                        <td>Account:
+                            <span t-out="supplier_bank.acc_number if supplier_bank else ''"/></td>
+                        <td/>
+                        <td>Account:
+                            <span t-out="customer_bank.acc_number if customer_bank else ''"/></td>
+                    </tr>
+                </table>
+
+                <div class="terms" t-out="contract_template.intro or ''"/>
+
+                <div class="section-title">1. Sales Product Details</div>
+                <table class="product-table">
+                    <thead>
+                        <tr class="center">
+                            <th style="width: 6%;">No.</th>
+                            <th style="width: 20%;">Product Name</th>
+                            <th style="width: 20%;">Specification</th>
+                            <th style="width: 6%;">Unit</th>
+                            <th style="width: 8%;">Quantity</th>
+                            <th t-if="contract_template.show_tax_excluded_price"
+                                style="width: 12%;">Unit Price (excl. tax)</th>
+                            <th t-if="contract_template.show_tax_rate"
+                                style="width: 8%;">Tax Rate</th>
+                            <th style="width: 12%;">Unit Price (incl. tax)</th>
+                            <th style="width: 12%;">Amount (incl. tax)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o._get_contract_lines()" t-as="line">
+                            <td class="center"><t t-out="line_index + 1"/></td>
+                            <td><t t-out="line.product_name or line.name or ''"/></td>
+                            <td><t t-out="line.material_specification or ''"/></td>
+                            <td class="center"><t t-out="line.product_uom_id.name or ''"/></td>
+                            <td class="amount"><t t-out="o._format_contract_quantity(line.product_uom_qty)"/></td>
+                            <td t-if="contract_template.show_tax_excluded_price" class="amount">
+                                <t t-out="o._format_contract_unit_price(o._contract_unit_price_tax_excluded(line))"/>
+                            </td>
+                            <td t-if="contract_template.show_tax_rate" class="center">
+                                <t t-out="o._contract_tax_rates(line)"/>
+                            </td>
+                            <td class="amount">
+                                <t t-out="o._format_contract_unit_price(o._contract_unit_price_tax_included(line))"/>
+                            </td>
+                            <td class="amount"><t t-out="o._format_contract_amount(line.price_total)"/></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="total-label">Untaxed Amount</td>
+                            <td t-att-colspan="column_count - 3">
+                                <span t-out="o.amount_untaxed_chinese"/>
+                            </td>
+                            <td class="amount"><span t-out="o._format_contract_yuan(o.amount_untaxed)"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="total-label">Tax Amount</td>
+                            <td t-att-colspan="column_count - 3">
+                                <span t-out="o.amount_tax_chinese"/>
+                            </td>
+                            <td class="amount"><span t-out="o._format_contract_yuan(o.amount_tax)"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="total-label">Total Amount (incl. tax)</td>
+                            <td t-att-colspan="column_count - 3">
+                                <span t-out="o.amount_total_chinese"/>
+                            </td>
+                            <td class="amount"><span t-out="o._format_contract_total(o.amount_total)"/></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- The wording of the contract comes from its template: the
+                     terms are edited in the form, not in this file. -->
+                <t t-foreach="contract_template.clause_ids" t-as="clause">
+                    <div class="section-title" t-out="clause.name"/>
+                    <div t-if="clause.content" class="terms" t-out="clause.content"/>
+                </t>
+
+                <table class="plain table-borderless o_ignore_layout_styling"
+                       style="margin-top: 10px; border: 0 !important; outline: 0 !important;">
+                    <tr>
+                        <td class="signature" style="width: 50%;">
+                            <div>Supplier:
+                                <span class="party-name" t-out="supplier.name"/></div>
+                            <div>(Seal)</div>
+                            <div>Authorized Representative:</div>
+                            <div>Date:</div>
+                        </td>
+                        <td class="signature" style="width: 50%;">
+                            <div>Customer:
+                                <span class="party-name" t-out="customer.name"/></div>
+                            <div>(Seal)</div>
+                            <div>Authorized Representative:</div>
+                            <div>Date:</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+</odoo>

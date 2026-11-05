@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_intercompany" model="ir.ui.view">
+        <field name="name">sale.order.form.intercompany</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Inter-Company" name="intercompany"
+                      groups="sn_wsd_inter_company.group_sn_intercompany_manager">
+                    <group>
+                        <group string="Agreement">
+                            <field name="intercompany_agreement_id" readonly="1"/>
+                            <field name="intercompany_direction" readonly="1"/>
+                            <field name="intercompany_sync_state" readonly="1"/>
+                            <field name="intercompany_version" readonly="1"/>
+                        </group>
+                        <group string="Traceability">
+                            <field name="auto_generated" readonly="1"/>
+                            <field name="auto_purchase_order_id" readonly="1"/>
+                            <field name="intercompany_source_ref" readonly="1"/>
+                            <field name="intercompany_root_ref" readonly="1"/>
+                            <field name="intercompany_skip_reason" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
