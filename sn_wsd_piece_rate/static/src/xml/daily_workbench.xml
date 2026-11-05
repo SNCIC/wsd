@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="sn_wsd_piece_rate.DailyWorkbench">
         <div class="o_drw container-fluid p-3">
-            <div class="o_drw_header d-flex align-items-center gap-3 flex-wrap mb-3">
+            <div class="o_drw_header d-flex align-items-center gap-2 mb-2">
                 <h5 class="mb-0 fw-bold" t-esc="labels.title"/>
                 <div class="o_drw_filters d-flex gap-2 flex-wrap align-items-center">
                     <label class="form-label mb-0 text-nowrap text-muted small"

@@ -10,9 +10,26 @@
 
     .o_drw_header {
         flex: 0 0 auto;
+        // one compact row: title + labelled filters + submit
+        flex-wrap: nowrap;
+
+        .form-label {
+            margin-bottom: 0;
+        }
+
+        // bootstrap's .form-select is width:100%, which blows every picker
+        // up to full row width and stacks them -- size to content instead
+        .o_drw_filters {
+            flex-wrap: nowrap;
+
+            .form-select,
+            .form-control {
+                width: auto;
+            }
+        }
 
         .o_drw_order_search {
-            min-width: 13rem;
+            min-width: 10rem;
         }
     }
 
