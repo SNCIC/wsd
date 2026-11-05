@@ -1,23 +1,29 @@
 .o_drw {
-    // Client actions render inside .o_action (overflow: hidden): the
-    // workbench itself must fill the height and scroll internally, or
-    // anything past the viewport (table rows + detail panel + submit)
-    // is clipped with no way to reach it.
+    // Client actions render inside .o_action (overflow: hidden). Layout:
+    // header / scrolling table region / detail panel pinned below. With
+    // many order rows only the table region scrolls -- the detail panel
+    // and the submit buttons stay reachable without page scrolling.
     height: 100%;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .o_drw_header {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background-color: var(--bs-body-bg, #fff);
-        padding-bottom: 0.5rem;
+        flex: 0 0 auto;
     }
 
     .o_drw_table {
+        flex: 1 1 auto;
+        min-height: 30%;
+        overflow: auto;
+
         table {
             cursor: pointer;
             thead th {
+                position: sticky;
+                top: 0;
+                z-index: 5;
+                background-color: var(--bs-body-bg, #fff);
                 font-size: 0.8rem;
                 text-transform: uppercase;
             }
@@ -33,12 +39,18 @@
             }
         }
     }
+
     .o_drw_panel {
+        flex: 0 0 auto;
+        max-height: 55%;
+        overflow-y: auto;
+
         .form-label {
             font-size: 0.8rem;
             margin-bottom: 0.15rem;
         }
     }
+
     .o_drw_suggestions {
         z-index: 1000;
     }
