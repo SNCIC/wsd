@@ -321,7 +321,7 @@ export class DailyWorkbench extends Component {
         }
         const results = await this.orm.silent.call(
             "hr.employee", "name_search", [this.state.addTerm], {
-                args: [], limit: 8,
+                limit: 8,
             });
         this.state.addSuggestions = results.map(([id, name]) => ({
             id, name,
