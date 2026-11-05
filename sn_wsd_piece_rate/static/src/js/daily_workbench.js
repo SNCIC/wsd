@@ -53,6 +53,8 @@ export class DailyWorkbench extends Component {
             workshop: _t("Workshop"),
             productionLine: _t("Production Line"),
             mesOrder: _t("MES Order"),
+            all: _t("All"),
+            searchPlaceholder: _t("Type to search..."),
             operation: _t("Operation"),
             reported: _t("Reported"),
             remaining: _t("Remaining"),
