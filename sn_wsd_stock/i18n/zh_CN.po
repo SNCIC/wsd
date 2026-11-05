@@ -1,4 +1,4 @@
-﻿# Translation of Odoo Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* sn_wsd_stock
 #
@@ -14,6 +14,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence return to vendor"
+msgstr "%(name)s 未入库退货序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence vendor return"
+msgstr "%(name)s 退回供应商序列"
 
 #. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_form
@@ -55,6 +67,12 @@ msgid "A reel lot name must end with a hyphen followed by digits."
 msgstr "料盘批次名称必须以连字符跟数字结尾。"
 
 #. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "A supplier reference code is required to generate material labels."
+msgstr "生成物料标签前必须填写供应商参考编号。"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_needaction
 msgid "Action Needed"
 msgstr "需要采取行动"
@@ -80,9 +98,21 @@ msgid "Activity Type Icon"
 msgstr "活动类型图标"
 
 #. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/issue_material_label.py:0
+msgid "An issue material label can only be printed for a tracked non-reel material line with an issued quantity."
+msgstr "仅可为已实际出料、非电子料盘的批次跟踪明细打印领料标签。"
+
+#. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
 msgid "Apply Reel Split"
 msgstr "应用料盘拆分"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__arrival_batch_no
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_quant__arrival_batch_no
+msgid "Arrival Batch"
+msgstr "到货批次"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_attachment_count
@@ -95,12 +125,34 @@ msgid "Available Source Lot"
 msgstr "可用来源批次"
 
 #. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_batch
+msgid "Batch"
+msgstr "批次"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_generate_reel_lots
 msgid "Can Generate Reel Lots"
 msgstr "可生成料盘批次"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__x_can_print_issue_material_label
+msgid "Can Print Issue Material Label"
+msgstr "可打印领料标签"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_print_issue_material_labels
+msgid "Can Print Issue Material Labels"
+msgstr "可打印领料标签"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Can Print Material Labels"
+msgstr "可打印物料标签"
+
+#. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_incoming_material_label_wizard_form
 msgid "Cancel"
 msgstr "取消"
 
@@ -120,6 +172,7 @@ msgstr "生成料盘批次前请先取消“已捡货”状态。"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__company_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__company_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__company_id
 msgid "Company"
 msgstr "公司"
 
@@ -181,6 +234,18 @@ msgstr "显示名称"
 
 #. module: sn_wsd_stock
 #. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Enter a quantity per label greater than zero for every line before generating material labels."
+msgstr "生成物料标签前，请为每条明细填写大于零的每张标签数量。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Enter a supplier batch for every line before generating material labels."
+msgstr "生成物料标签前，请为每条明细填写供应商批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
 #: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
 msgid ""
 "Every reel destination must be an internal location below the transfer "
@@ -209,9 +274,45 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr "Font Awesome 图标，例如 fa-tasks"
 
 #. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_incoming_material_label_wizard_form
+msgid "Generate and Print"
+msgstr "生成并打印"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_incoming_material_label_wizard_form
+msgid "Generate and Print Material Labels"
+msgstr "生成并打印物料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Generate Internal Batches"
+msgstr "生成内部批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Generate internal batches before printing material labels."
+msgstr "请先生成内部批次，再打印物料标签。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Generate internal batches from the move details before printing material labels."
+msgstr "请先在移动明细中生成内部批次，再打印物料标签。"
+
+#. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
 msgid "Generate Lines"
 msgstr "生成明细"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Generate material labels before validating tracked products: %(products)s"
+msgstr "追踪产品验证前请先生成物料标签：%(products)s"
 
 #. module: sn_wsd_stock
 #: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split_wizard_line
@@ -246,6 +347,16 @@ msgid "Has Message"
 msgstr "有消息"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "用于指示异常活动的图标。"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__id
@@ -256,16 +367,6 @@ msgstr "有消息"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_traceability_report__id
 msgid "ID"
 msgstr "ID"
-
-#. module: sn_wsd_stock
-#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
-msgid "Icon"
-msgstr "图标"
-
-#. module: sn_wsd_stock
-#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__activity_exception_icon
-msgid "Icon to indicate an exception activity."
-msgstr "用于指示异常活动的图标。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__message_needaction
@@ -279,9 +380,68 @@ msgid "If checked, some messages have a delivery error."
 msgstr "如果勾选，某些消息存在发送错误。"
 
 #. module: sn_wsd_stock
+#: model:sn.label.template,name:sn_wsd_stock.label_template_incoming_material
+msgid "Incoming Material Label"
+msgstr "来料物料标签"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.report,name:sn_wsd_stock.action_report_incoming_material_label_zpl
+msgid "Incoming Material Labels (ZPL)"
+msgstr "来料物料标签（ZPL）"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__initial_quantity
+msgid "Initial Quantity"
+msgstr "初始数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__internal_lot_name
+msgid "Internal Batch"
+msgstr "内部批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Internal batches can only be revoked on an open storage operation."
+msgstr "只能在未完成的储存作业上撤销内部批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Internal batches have already been generated for this move."
+msgstr "此移动已生成内部批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Internal batches that were already printed or consumed cannot be revoked: %s"
+msgstr "已打印或已消耗的内部批次不能撤销：%s"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_is_follower
 msgid "Is Follower"
 msgstr "是关注者"
+
+#. module: sn_wsd_stock
+#: model:sn.label.template,name:sn_wsd_stock.label_template_issue_material
+msgid "Issue Material Label"
+msgstr "领料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.actions.report,name:sn_wsd_stock.action_report_issue_material_label_zpl
+msgid "Issue Material Labels (ZPL)"
+msgstr "领料标签（ZPL）"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__label_print_count
+msgid "Label Print Count"
+msgstr "标签打印次数"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "Label quantities must be greater than zero."
+msgstr "标签数量必须大于零。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__write_uid
@@ -300,6 +460,16 @@ msgid "Last Updated on"
 msgstr "最后更新时间"
 
 #. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_location
+msgid "Location"
+msgstr "库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move_line__material_label_location
+msgid "Location printed on the material label: the final path segment of the operation destination (the line side for an issue, the rack for a receipt)."
+msgstr "打印在物料标签上的库位：取作业目标位置的最后一段路径（领料为线边，收货为货架）。"
+
+#. module: sn_wsd_stock
 #: model:ir.model,name:sn_wsd_stock.model_sn_lot_reel_split
 msgid "Lot Reel Split"
 msgstr "批次料盘拆分"
@@ -313,6 +483,65 @@ msgstr "批次料盘拆分明细"
 #: model:ir.model,name:sn_wsd_stock.model_stock_lot
 msgid "Lot/Serial"
 msgstr "批次/序列号"
+
+#. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_material_code
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_label_location
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_label_location
+msgid "Material Label Location"
+msgstr "物料标签库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_label_printed
+msgid "Material Label Printed"
+msgstr "物料标签已打印"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid ""
+"Material labels are only available on completion receipts linked to an MES"
+" order."
+msgstr "物料标签仅适用于关联制令单的完工收货单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "Material labels can only be generated for active incoming lot moves."
+msgstr "只有有效的按批次追踪入库明细才能生成物料标签。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "Material labels can only be printed for active receipts."
+msgstr "只有有效的入库单才能打印物料标签。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard__line_ids
+msgid "Material Lines"
+msgstr "物料明细"
+
+#. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_material_name
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_sn_base
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_sn_base
+msgid "Material SN Base"
+msgstr "物料 SN 基础号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__material_sn_suffix
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_sn_suffix
+msgid "Material SN Suffix"
+msgstr "物料 SN 后缀"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_error
@@ -345,6 +574,41 @@ msgid "Next Activity Type"
 msgstr "下一活动类型"
 
 #. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/incoming_material_label.py:0
+msgid "No material lots were selected for label printing."
+msgstr "未选择要打印标签的物料批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__none
+msgid "No Weekend Exclusion"
+msgstr "不排除周末"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Not Stored Return Type"
+msgstr "未入库退货作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/issue_material_label.py:0
+msgid "Nothing to print: no tracked non-reel material operation with an issued quantity was selected."
+msgstr "无可打印内容：所选明细中没有已实际出料、非电子料盘的批次跟踪明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid "Nothing to print: no tracked product on this receipt."
+msgstr "无可打印内容：这张收货单上没有批次追踪产品。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/issue_material_label.py:0
+msgid "Nothing to print: this operation has no tracked non-reel material line with an issued quantity."
+msgstr "无可打印内容：本单据没有已实际出料、非电子料盘的批次跟踪明细。"
+
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_needaction_counter
 msgid "Number of Actions"
 msgstr "操作数量"
@@ -365,10 +629,57 @@ msgid "Number of messages with delivery error"
 msgstr "发送错误的消息数量"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__official_batch_no
+msgid "Official Batch"
+msgstr "官方批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__existing_lot_id
+msgid "Official Lot"
+msgstr "官方批次"
+
+#. module: sn_wsd_stock
 #. odoo-python
 #: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
 msgid "Only products tracked by lots can be split into reel lots."
 msgstr "只有按批次追溯的物料才能拆分为料盘批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__move_line_id
+msgid "Operation Line"
+msgstr "操作明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return goods to the vendor before they are stored, "
+"i.e. before the internal batches are generated."
+msgstr "用于在货物入库前（即内部批次生成前）退回供应商的作业类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return received goods to the vendor, either "
+"before they are stored (no batch yet) or after (the stored batch is "
+"reused)."
+msgstr "用于将已收货货物退回供应商的作业类型：可在入库前（尚无批次）或入库后（沿用已入库批次）使用。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_issue_labels
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_issue_labels
+msgid "Print Issue Material Labels"
+msgstr "打印领料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_reel_split
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_finished_labels
+msgid "Print Material Labels"
+msgstr "打印物料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Print Material Labels"
+msgstr "打印物料标签"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__reel_split_role__produce
@@ -378,8 +689,23 @@ msgstr "产出料盘批次"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__product_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__product_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__product_id
 msgid "Product"
 msgstr "物料"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/finished_goods_sn.py:0
+msgid ""
+"Product %(product)s must have an internal reference to generate its "
+"material SN."
+msgstr "产品 %(product)s 必须填写内部参考（料号）才能生成物料SN。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "Product %(product)s must have an internal reference."
+msgstr "物料 %(product)s 必须填写内部参考号。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__source_move_id
@@ -389,8 +715,26 @@ msgstr "物料移动"
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__quantity
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__quantity
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__quantity
 msgid "Quantity"
 msgstr "数量"
+
+#. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_quantity
+msgid "Quantity Label"
+msgstr "数量"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard_line__quantity_per_label
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__quantity_per_label
+msgid "Quantity per Label"
+msgstr "每张标签数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "Quantity per label cannot exceed the total quantity."
+msgstr "每张标签数量不能超过总数量。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__quantity_per_reel
@@ -409,11 +753,30 @@ msgid "Ratings"
 msgstr "点评"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard__picking_id
+msgid "Receipt"
+msgstr "入库单"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__lot_id
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__lot_name
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__is_reel_lot
 msgid "Reel Lot"
 msgstr "料盘批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid ""
+"Reel lot generation does not support packaged or owner-restricted source "
+"stock. Unpack it first."
+msgstr "料盘批次生成不支持带包装或有所有者限制的来源库存，请先拆包。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
+msgid "Reel lot names must be unique."
+msgstr "料盘批次名称必须唯一。"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__lot_prefix
@@ -428,6 +791,14 @@ msgstr "料盘批前缀"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_production_lot_form_reel_split
 msgid "Reel Lots"
 msgstr "料盘批次"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_picking.py:0
+msgid ""
+"Reel lots can only be generated on an active storage transfer for lot-"
+"tracked products."
+msgstr "只有在针对按批次追溯物料的有效入库/上架调拨单上，才能生成料盘批次。"
 
 #. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
@@ -472,25 +843,26 @@ msgstr "料盘拆分"
 
 #. module: sn_wsd_stock
 #. odoo-python
-#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
-msgid ""
-"Reel lot generation does not support packaged or owner-restricted source "
-"stock. Unpack it first."
-msgstr "料盘批次生成不支持带包装或有所有者限制的来源库存，请先拆包。"
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor"
+msgstr "退回供应商"
 
 #. module: sn_wsd_stock
 #. odoo-python
-#: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
-msgid "Reel lot names must be unique."
-msgstr "料盘批次名称必须唯一。"
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor (Not Stored)"
+msgstr "退回供应商（未入库）"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Vendor Return Type"
+msgstr "供应商退货作业类型"
 
 #. module: sn_wsd_stock
 #. odoo-python
-#: code:addons/sn_wsd_stock/models/stock_picking.py:0
-msgid ""
-"Reel lots can only be generated on an active storage transfer for lot-"
-"tracked products."
-msgstr "只有在针对按批次追溯物料的有效入库/上架调拨单上，才能生成料盘批次。"
+#: code:addons/sn_wsd_stock/models/lot_reel_split.py:0
+msgid "reel_split_id"
+msgstr "reel_split_id"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__name
@@ -509,13 +881,24 @@ msgid "Responsible User"
 msgstr "责任用户"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "短信发送错误"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Revoke Internal Batches"
+msgstr "撤销内部批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__weekend
+msgid "Saturday and Sunday Off"
+msgstr "周六、周日休息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__saturday
+msgid "Saturday Off"
+msgstr "周六休息"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_line__sequence
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__sequence
 msgid "Sequence"
 msgstr "序号"
 
@@ -523,6 +906,11 @@ msgstr "序号"
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard__sequence_padding
 msgid "Sequence Digits"
 msgstr "序号位数"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
 
 #. module: sn_wsd_stock
 #: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_lot_reel_split_wizard_form
@@ -549,6 +937,21 @@ msgstr "来源批次"
 msgid ""
 "Source lot %(lot)s has only %(quantity)s %(uom)s available in %(location)s."
 msgstr "来源批次 %(lot)s 在位置 %(location)s 中仅有 %(quantity)s %(uom)s 可用。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__source_move_line_id
+msgid "Source Operation Line"
+msgstr "来源操作明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__source_picking_id
+msgid "Source Receipt"
+msgstr "来源入库单"
+
+#. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_specification
+msgid "Specification"
+msgstr "规格型号"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__user_id
@@ -611,6 +1014,37 @@ msgid "Storage Transfer"
 msgstr "入库调拨"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__sunday
+msgid "Sunday Off"
+msgstr "周日休息"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__supplier_name
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard__partner_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move_line__supplier_batch_no
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__supplier_batch_no
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_quant__supplier_batch_no
+#: model_terms:ir.ui.view,arch_db:stock.view_production_lot_form
+#: model_terms:ir.ui.view,arch_db:stock.view_stock_quant_tree_editable
+msgid "Supplier Batch"
+msgstr "供应商批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__supplier_code
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_incoming_material_label_wizard__supplier_code
+msgid "Supplier Code"
+msgstr "供应商编码"
+
+#. module: sn_wsd_stock
+#: model:sn.label.element,fixed_text:sn_wsd_stock.label_element_incoming_title_supplier
+msgid "Supplier Label"
+msgstr "供应商"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,help:sn_wsd_stock.field_stock_lot__parent_lot_id
 msgid "Supplier or source lot from which this reel lot was generated."
 msgstr "生成此料盘批次供应商批次或来源批次。"
@@ -627,6 +1061,30 @@ msgstr "目的位置必须是调拨目的位置下属的内部位置。"
 #: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
 msgid "The following reel lot names already exist: %s"
 msgstr "以下料盘批次名称已存在：%s"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "The material label of %s was already printed: the quantity can no longer be changed."
+msgstr "物料标签 %s 已打印，不能再修改数量。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "The material serial sequence is not configured."
+msgstr "物料序列号序列未配置。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "The material SN already exists: %s"
+msgstr "物料 SN 已存在：%s"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "The operation lines carry a lot that was not generated by the material label flow: %s"
+msgstr "作业明细已带批次，且该批次不是由物料标签流程生成的：%s"
 
 #. module: sn_wsd_stock
 #: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_quantity_per_reel_positive
@@ -650,6 +1108,12 @@ msgstr "料盘数量必须大于零。"
 #: model:ir.model.constraint,message:sn_wsd_stock.constraint_sn_lot_reel_split_line_split_sequence_unique
 msgid "The reel sequence must be unique within a split."
 msgstr "料盘序号在同一拆分单中必须唯一。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "The selected material lot does not belong to this receipt."
+msgstr "选定的物料批次不属于此入库单。"
 
 #. module: sn_wsd_stock
 #. odoo-python
@@ -700,10 +1164,51 @@ msgstr "料盘数量之和必须等于拆分总数量。"
 
 #. module: sn_wsd_stock
 #. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "The supplier batch cannot contain the $ character."
+msgstr "批次号不能包含 $ 字符。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "The supplier must have a reference code before printing labels."
+msgstr "打印标签前，供应商必须填写参考编号。"
+
+#. module: sn_wsd_stock
+#. odoo-python
 #: code:addons/sn_wsd_stock/wizard/lot_reel_split_wizard.py:0
 msgid ""
 "The transfer operation type is not configured as a receipt storage step."
 msgstr "该调拨作业类型未配置为收货入库步骤。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "There are no internal batches to revoke on this move."
+msgstr "此移动没有可撤销的内部批次。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid "There are no material lines to generate."
+msgstr "没有可生成内部批次的物料明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "There are no material lines to print."
+msgstr "没有可打印的物料明细。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/wizard/incoming_material_label_wizard.py:0
+msgid "There are no material lots to print."
+msgstr "没有可打印的物料批次。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "This removes the internal batches generated on this operation so the split can be redone. Continue?"
+msgstr "此操作会删除本作业已生成的内部批次，以便重新拆分。是否继续？"
 
 #. module: sn_wsd_stock
 #. odoo-python
@@ -733,14 +1238,24 @@ msgid "Unit"
 msgstr "单位"
 
 #. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通历史"
+
+#. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split__website_message_ids
 msgid "Website Messages"
 msgstr "网站消息"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields,help:sn_wsd_stock.field_sn_lot_reel_split__website_message_ids
-msgid "Website communication history"
-msgstr "网站沟通历史"
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_rule__weekend_policy
+msgid "Weekend days excluded when applying this rule lead time."
+msgstr "应用此规则的提前期时排除的周末休息日。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_rule__weekend_policy
+msgid "Weekend Policy"
+msgstr "周末休息策略"
 
 #. module: sn_wsd_stock
 #: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_lot_reel_split_wizard_line__wizard_id
@@ -749,36 +1264,329 @@ msgstr "向导"
 
 #. module: sn_wsd_stock
 #. odoo-python
-#: code:addons/sn_wsd_stock/models/lot_reel_split.py:0
-msgid "reel_split_id"
-msgstr "reel_split_id"
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Other Deliveries"
+msgstr "其他出库单"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_rule__weekend_policy
-msgid "Weekend Policy"
-msgstr "周末休息策略"
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Other Receipts"
+msgstr "其他入库单"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__none
-msgid "No Weekend Exclusion"
-msgstr "不排除周末"
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other deliveries"
+msgstr "%(name)s 其他出库单序列"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__sunday
-msgid "Sunday Off"
-msgstr "周日休息"
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other receipts"
+msgstr "%(name)s 其他入库单序列"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__saturday
-msgid "Saturday Off"
-msgstr "周六休息"
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+msgid "Issuing Department"
+msgstr "领料部门"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_rule__weekend_policy__weekend
-msgid "Saturday and Sunday Off"
-msgstr "周六、周日休息"
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+msgid "Issuing Employee"
+msgstr "领料人"
 
 #. module: sn_wsd_stock
-#: model:ir.model.fields,help:sn_wsd_stock.field_stock_rule__weekend_policy
-msgid "Weekend days excluded when applying this rule lead time."
-msgstr "应用此规则的提前期时排除的周末休息日。"
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+msgid "Issue Type"
+msgstr "领料类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Issue Location"
+msgstr "出库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+msgid "Receiving Department"
+msgstr "入库部门"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+msgid "Receiving Employee"
+msgstr "入库人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+msgid "Receipt Type"
+msgstr "入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Receipt Location"
+msgstr "入库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+msgid "Department taking the goods out of the stock."
+msgstr "从库存领用物料的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+msgid "Employee taking the goods out of the stock, filtered on the issuing department."
+msgstr "从库存领用物料的员工，按领料部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+msgid "Type of the other delivery. It selects the virtual location the goods leave to, hence the stock valuation account of the operation."
+msgstr "其他出库单的类型。它决定物料出库的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Virtual location the goods leave to, read from the issue type."
+msgstr "物料出库的虚拟库位，取自领料类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+msgid "Department the goods enter the stock for."
+msgstr "物料入库归属的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+msgid "Employee bringing the goods into the stock, filtered on the receiving department."
+msgstr "将物料入库的员工，按入库部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+msgid "Type of the other receipt. It selects the virtual location the goods come from, hence the stock valuation account of the operation."
+msgstr "其他入库单的类型。它决定物料入库来源的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Virtual location the goods come from, read from the receipt type."
+msgstr "物料入库来源的虚拟库位，取自入库类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_wsd_stock_other_operation_type
+msgid "Other Receipt and Delivery Type"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Applies To"
+msgstr "适用范围"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid "Virtual Location"
+msgstr "虚拟库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__code
+msgid "Code"
+msgstr "编码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__note
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__both
+msgid "Both"
+msgstr "两者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Direction of the other operations this type may be selected on."
+msgstr "该类型可用于的其他出入库方向。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid "Virtual location the goods leave to (other delivery) or come from (other receipt). Its stock valuation account is the one used by the accounting entries of the operation."
+msgstr "其他出库时物料出库、其他入库时物料来源的虚拟库位。该库位上的存货计价科目即该业务会计凭证使用的科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__company_id
+msgid "Company the type and its virtual location belong to."
+msgstr "该类型及其虚拟库位所属的公司。"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_stock_other_operation_type
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_stock_other_operation_type
+msgid "Other Operation Types"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select an issue type on the other delivery %s before validating it."
+msgstr "验证其他出库单 %s 前请先选择领料类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select a receipt type on the other receipt %s before validating it."
+msgstr "验证其他入库单 %s 前请先选择入库类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other delivery."
+msgstr "类型 %s 不能用于其他出库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other receipt."
+msgstr "类型 %s 不能用于其他入库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The issuing employee %(employee)s does not belong to the department %(department)s."
+msgstr "领料人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The receiving employee %(employee)s does not belong to the department %(department)s."
+msgstr "入库人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/sn_wsd_stock_other_operation_type.py:0
+msgid "The type code must be unique."
+msgstr "类型编码必须唯一。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__active
+msgid "Active"
+msgstr "启用"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_out
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_out
+msgid "Other Delivery"
+msgstr "其他出库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_in
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_in
+msgid "Other Receipt"
+msgstr "其他入库"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence inventory gains"
+msgstr "%(name)s 盘盈单序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence inventory losses"
+msgstr "%(name)s 盘亏单序列"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__gain
+msgid "Inventory Gain"
+msgstr "盘盈"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_gain_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_gain_detail
+msgid "Inventory Gain Details"
+msgstr "盘盈明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_inventory_gain_type_id
+msgid "Inventory Gain Type"
+msgstr "盘盈作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_gain
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_gain
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Inventory Gains"
+msgstr "盘盈单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_inventory_operation__loss
+msgid "Inventory Loss"
+msgstr "盘亏"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_loss_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_loss_detail
+msgid "Inventory Loss Details"
+msgstr "盘亏明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_inventory_loss_type_id
+msgid "Inventory Loss Type"
+msgstr "盘亏作业类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_inventory_loss
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_inventory_loss
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+msgid "Inventory Losses"
+msgstr "盘亏单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid "Inventory Operation"
+msgstr "盘点作业"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Inventory Operation Details"
+msgstr "盘点作业明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_inventory_gain_type_id
+msgid ""
+"Operation type of the inventory gains: goods entering the stock from the "
+"inventory gain location, whose valuation account books the gain of the "
+"difference."
+msgstr ""
+"盘盈作业类型：物料从盘盈虚拟库位进入库存，该库位的存货计价科目即为盘盈收益科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_inventory_loss_type_id
+msgid ""
+"Operation type of the inventory losses: goods leaving the stock on the "
+"inventory loss location, whose valuation account books the loss of the "
+"difference."
+msgstr ""
+"盘亏作业类型：物料从库存出到盘亏虚拟库位，该库位的存货计价科目即为盘亏损失科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid ""
+"Inventory loss or inventory gain the transfer was created from, empty on the "
+"receipts, the deliveries and the other transfers."
+msgstr "单据所属的盘亏或盘盈，收货、发货及其他调拨为空。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_inventory_location_id
+msgid "Valuation Location"
+msgstr "记账库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_location_id
+msgid ""
+"Virtual location the difference of the inventory operation goes through, "
+"read from the operation type. Its valuation account is the one booking the "
+"loss or the gain."
+msgstr "盘点作业差异经过的虚拟库位，取自作业类型；该库位的存货计价科目用于盘亏或盘盈记账。"

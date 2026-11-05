@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_batch_pass_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.batch.pass.wizard.form</field>
+        <field name="model">sn.wsd.batch.pass.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Station Pass">
+                <field name="eligible_count" invisible="1"/>
+                <field name="excluded_count" invisible="1"/>
+                <div class="alert alert-warning" role="alert"
+                     colspan="2"
+                     invisible="excluded_count == 0">
+                    <strong>Excluded:</strong>
+                    <field name="excluded_summary" readonly="1" class="fw-bold d-inline"/>
+                </div>
+                <group>
+                    <group>
+                        <field name="mes_order_id" readonly="1" options="{'no_open': True}"/>
+                        <field name="route_operation_id" options="{'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                        <field name="note" placeholder="e.g. coater pump failure, ECN reference..."/>
+                    </group>
+                </group>
+                <separator string="In-Progress SNs"/>
+                <field name="line_ids" nolabel="1">
+                    <list create="0" edit="0" delete="0" editable="bottom">
+                        <field name="serial_identity_id" column_invisible="1"/>
+                        <field name="selected" widget="boolean_toggle"
+                               readonly="block_reason"/>
+                        <field name="serial_name" readonly="1"/>
+                        <field name="current_operation_id" readonly="1" options="{'no_open': True}"/>
+                        <field name="park_hours" readonly="1" widget="float_time"/>
+                        <field name="block_reason" readonly="1"
+                               decoration-danger="block_reason"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_batch_pass_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Station Pass</field>
+        <field name="res_model">sn.wsd.batch.pass.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

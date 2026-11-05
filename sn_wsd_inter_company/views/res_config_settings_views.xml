@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sn.wsd.inter.company</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='inter_company']" position="replace">
+                <setting id="inter_company" string="Inter-Company Transactions"
+                         company_dependent="1"
+                         groups="base.group_multi_company"
+                         help="Create the matching documents in the other company when you sell or buy between your companies.">
+                    <div class="content-group" name="sn_inter_company_rules">
+                        <div class="row">
+                            <label for="intercompany_generate_sales_orders" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_generate_sales_orders"/>
+                        </div>
+                        <div class="row">
+                            <label for="intercompany_generate_purchase_orders" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_generate_purchase_orders"/>
+                        </div>
+                        <div class="row">
+                            <label for="intercompany_generate_bills_refund" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_generate_bills_refund"/>
+                        </div>
+                        <div class="row mt8">
+                            <label for="intercompany_user_id" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_user_id" options="{'no_create_edit': True}"/>
+                        </div>
+                        <div class="row" invisible="not intercompany_generate_bills_refund">
+                            <label for="intercompany_purchase_journal_id" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_purchase_journal_id"
+                                   options="{'no_create_edit': True}"
+                                   required="intercompany_generate_bills_refund"/>
+                        </div>
+                        <div class="row" invisible="not intercompany_generate_sales_orders and not intercompany_generate_purchase_orders">
+                            <label for="intercompany_document_state" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_document_state" widget="radio" class="w-auto"/>
+                        </div>
+                        <div class="row" invisible="not intercompany_generate_sales_orders and not intercompany_generate_purchase_orders">
+                            <label for="intercompany_warehouse_id" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_warehouse_id"
+                                   options="{'no_create_edit': True}"/>
+                        </div>
+                        <div class="row" invisible="not intercompany_generate_purchase_orders">
+                            <label for="intercompany_receipt_type_id" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_receipt_type_id"
+                                   options="{'no_create_edit': True}"/>
+                        </div>
+                        <div class="row" invisible="not intercompany_generate_sales_orders and not intercompany_generate_purchase_orders">
+                            <label for="intercompany_sync_delivery_receipt" class="col-lg-6 o_light_label"/>
+                            <field name="intercompany_sync_delivery_receipt"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

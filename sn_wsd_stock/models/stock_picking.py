@@ -1,48 +1,205 @@
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 
 class StockPicking(models.Model):
+    """Keep the delivery address editable, and say so when it changes late.
+
+    The address of a transfer (``partner_id``: delivery address on a delivery,
+    receive-from on a receipt, contact on an internal transfer) is opened up
+    in every state, so an address forgotten before validation can still be
+    corrected. A change made on a done or cancelled transfer is posted on the
+    chatter: the document no longer matches what was signed, delivered or
+    invoiced, and the note keeps that visible.
+    """
+
     _inherit = 'stock.picking'
 
-    can_generate_reel_lots = fields.Boolean(compute='_compute_can_generate_reel_lots')
-    reel_split_ids = fields.One2many('sn.lot.reel.split', 'picking_id', string='Reel Splits', readonly=True)
-    reel_split_count = fields.Integer(compute='_compute_reel_split_count')
+    def _get_unstored_return_picking_type(self):
+        """Return operation used to send received goods back to the vendor.
 
-    @api.depends('state', 'picking_type_id', 'move_ids.product_id.tracking')
-    def _compute_can_generate_reel_lots(self):
-        store_type_ids = set(self.env['stock.warehouse'].search([
-            ('reception_steps', 'in', ('two_steps', 'three_steps')),
-            ('store_type_id', '!=', False),
-        ]).store_type_id.ids)
-        for picking in self:
-            picking.can_generate_reel_lots = bool(
-                picking.state not in ('draft', 'done', 'cancel')
-                and picking.picking_type_id.id in store_type_ids
-                and any(move.product_id.tracking == 'lot' for move in picking.move_ids)
-            )
-
-    @api.depends('reel_split_ids')
-    def _compute_reel_split_count(self):
-        for picking in self:
-            picking.reel_split_count = len(picking.reel_split_ids)
-
-    def action_open_reel_split_wizard(self):
+        With a multi-step reception the goods go through the receipt, the
+        quality control and the storage transfers. All three are returned
+        through the dedicated vendor return operation: its lot options are
+        disabled, so the goods not stored yet leave without a batch, while the
+        goods already stored keep their batch, brought on the move line by the
+        reservation, and the stock is decreased on that batch. A one-step
+        reception creates the lots itself, so its return keeps the standard
+        delivery operation.
+        """
         self.ensure_one()
-        if not self.can_generate_reel_lots:
-            raise UserError(_('Reel lots can only be generated on an active storage transfer for lot-tracked products.'))
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Generate Reel Lots'),
-            'res_model': 'sn.lot.reel.split.wizard',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': {'default_picking_id': self.id},
-        }
+        warehouse = self.picking_type_id.warehouse_id
+        if not warehouse or warehouse.reception_steps == 'one_step':
+            return self.env['stock.picking.type']
+        reception_types = (
+            warehouse.in_type_id | warehouse.qc_type_id
+            | warehouse.store_type_id)
+        if self.picking_type_id not in reception_types:
+            return self.env['stock.picking.type']
+        return warehouse._ensure_unstored_return_type()
 
-    def action_view_reel_splits(self):
+    def _get_vendor_return_location(self):
+        """Vendor location the returned goods are sent back to."""
         self.ensure_one()
-        action = self.env['ir.actions.actions']._for_xml_id('sn_wsd_stock.action_lot_reel_split')
-        action['domain'] = [('picking_id', '=', self.id)]
-        action['context'] = {'default_picking_id': self.id}
-        return action
+        supplier_location = self.partner_id.with_company(
+            self.company_id).property_stock_supplier
+        if supplier_location and supplier_location.usage == 'supplier':
+            return supplier_location
+        return self.env.ref('stock.stock_location_suppliers')
+
+    def write(self, vals):
+        if 'partner_id' not in vals or self.env.context.get(
+                'sn_skip_picking_partner_audit'):
+            return super().write(vals)
+        late = self.filtered(lambda picking: picking.state in ('done', 'cancel'))
+        previous = {picking.id: picking.partner_id.display_name for picking in late}
+        result = super().write(vals)
+        for picking in late:
+            new_name = picking.partner_id.display_name or self.env._('None')
+            if previous[picking.id] != new_name:
+                picking.message_post(body=self.env._(
+                    'Contact changed after validation by %(user)s: '
+                    '%(old)s -> %(new)s',
+                    user=self.env.user.display_name,
+                    old=previous[picking.id] or self.env._('None'),
+                    new=new_name,
+                ))
+        return result
+
+    sn_other_operation = fields.Selection(
+        selection=[
+            ('other_in', 'Other Receipt'),
+            ('other_out', 'Other Delivery'),
+        ],
+        string='Other Operation',
+        compute='_compute_sn_other_operation',
+        store=True,
+        index=True,
+        help='Other receipt or other delivery the transfer was created from, '
+             'empty on the purchase receipts and the sales deliveries.',
+    )
+
+    @api.depends('picking_type_id')
+    def _compute_sn_other_operation(self):
+        for picking in self:
+            picking_type = picking.picking_type_id
+            warehouse = picking_type.warehouse_id
+            if warehouse and picking_type == warehouse.other_in_type_id:
+                picking.sn_other_operation = 'other_in'
+            elif warehouse and picking_type == warehouse.other_out_type_id:
+                picking.sn_other_operation = 'other_out'
+            else:
+                picking.sn_other_operation = False
+
+    sn_consignment_in = fields.Boolean(
+        string='Consignment Receipt',
+        compute='_compute_sn_consignment_in',
+        store=True,
+        index=True,
+        help='The transfer is a consignment receipt: goods provided by the '
+             'customer, entering the stock without a purchase order and going '
+             'through the quality control and storage operations of the '
+             'reception.',
+    )
+
+    @api.depends('picking_type_id')
+    def _compute_sn_consignment_in(self):
+        for picking in self:
+            warehouse = picking.picking_type_id.warehouse_id
+            picking.sn_consignment_in = bool(
+                warehouse
+                and picking.picking_type_id == warehouse.sn_consignment_in_type_id)
+
+    sn_inventory_operation = fields.Selection(
+        selection=[
+            ('loss', 'Inventory Loss'),
+            ('gain', 'Inventory Gain'),
+        ],
+        string='Inventory Operation',
+        compute='_compute_sn_inventory_operation',
+        store=True,
+        index=True,
+        help='Inventory loss or inventory gain the transfer was created from, '
+             'empty on the receipts, the deliveries and the other transfers.',
+    )
+
+    @api.depends('picking_type_id')
+    def _compute_sn_inventory_operation(self):
+        for picking in self:
+            picking.sn_inventory_operation = (
+                picking._get_sn_inventory_operation_kind())
+
+    def _get_sn_inventory_operation_kind(self):
+        """Return the inventory operation this transfer belongs to, if any."""
+        self.ensure_one()
+        picking_type = self.picking_type_id
+        warehouse = picking_type.warehouse_id
+        if not warehouse:
+            return False
+        if picking_type == warehouse.sn_inventory_loss_type_id:
+            return 'loss'
+        if picking_type == warehouse.sn_inventory_gain_type_id:
+            return 'gain'
+        return False
+
+    sn_inventory_location_id = fields.Many2one(
+        'stock.location',
+        string='Valuation Location',
+        compute='_compute_sn_inventory_location_id',
+        help='Virtual location the difference of the inventory operation goes '
+             'through, read from the operation type. Its valuation account is '
+             'the one booking the loss or the gain.',
+    )
+
+    @api.depends('sn_inventory_operation', 'location_id', 'location_dest_id')
+    def _compute_sn_inventory_location_id(self):
+        for picking in self:
+            if picking.sn_inventory_operation == 'loss':
+                picking.sn_inventory_location_id = picking.location_dest_id
+            elif picking.sn_inventory_operation == 'gain':
+                picking.sn_inventory_location_id = picking.location_id
+            else:
+                picking.sn_inventory_location_id = False
+
+    @api.model
+    def default_get(self, fields_list):
+        """Default the operation of the operation menus.
+
+        The menus cannot know the operation type of the warehouse in their
+        action, so they pass the kind in the context and the default type,
+        source and destination locations are read from it. The consignment
+        receipt, inventory loss and inventory gain menus also create their
+        operation type on first use: a warehouse installed before the feature
+        has none, and creating it at run time keeps the module upgrade safe
+        (the barcode module adds required columns to the operation types and
+        loads after this one).
+        """
+        res = super().default_get(fields_list)
+        if self.env.context.get('default_picking_type_id'):
+            return res
+        other_operation = self.env.context.get('sn_other_operation_default')
+        consignment = self.env.context.get('sn_consignment_in_default')
+        inventory_operation = self.env.context.get(
+            'sn_inventory_operation_default')
+        if not other_operation and not consignment and not inventory_operation:
+            return res
+        warehouse = self.env['stock.warehouse'].search(
+            [('company_id', '=', self.env.company.id)], limit=1)
+        if not warehouse:
+            return res
+        if inventory_operation:
+            picking_type = warehouse._ensure_inventory_operation_type(
+                inventory_operation)
+        elif consignment:
+            picking_type = warehouse._ensure_consignment_in_type()
+        elif other_operation == 'other_in':
+            picking_type = warehouse.other_in_type_id
+        else:
+            picking_type = warehouse.other_out_type_id
+        if not picking_type:
+            return res
+        res['picking_type_id'] = picking_type.id
+        if 'location_id' in fields_list:
+            res['location_id'] = picking_type.default_location_src_id.id
+        if 'location_dest_id' in fields_list:
+            res['location_dest_id'] = picking_type.default_location_dest_id.id
+        return res

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_oqc_full_close_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quality.oqc.full.close.wizard.form</field>
+        <field name="model">sn.wsd.quality.oqc.full.close.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Close Full-Lot Inspection with Quantity Gap">
+                <group>
+                    <group>
+                        <field name="inspection_id" invisible="1"/>
+                        <field name="inspected_qty"/>
+                        <field name="lot_qty"/>
+                        <field name="gap_qty"/>
+                    </group>
+                    <group>
+                        <field name="reason" placeholder="Why the lot closes with fewer inspected boards than planned..."/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_apply" type="object" string="Confirm Gap and Close" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_oqc_full_close_wizard" model="ir.actions.act_window">
+        <field name="name">Close Full-Lot Inspection with Quantity Gap</field>
+        <field name="res_model">sn.wsd.quality.oqc.full.close.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

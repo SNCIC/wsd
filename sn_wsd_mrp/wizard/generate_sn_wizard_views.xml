@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_generate_sn_wizard_form" model="ir.ui.view">
+        <field name="name">sn.wsd.generate.sn.wizard.form</field>
+        <field name="model">sn.wsd.generate.sn.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate SNs">
+                <group>
+                    <field name="mes_order_id" invisible="1"/>
+                    <field name="quantity"/>
+                </group>
+                <footer>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_sn_wsd_generate_sn_wizard" model="ir.actions.act_window">
+        <field name="name">Generate SNs</field>
+        <field name="res_model">sn.wsd.generate.sn.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

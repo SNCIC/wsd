@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_fai_inspection">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_quality.report_fai_inspection_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_fai_inspection_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="order" t-value="o.mes_order_id"/>
+        <t t-set="production" t-value="(order.production_id if order else o.production_id)"/>
+        <t t-set="operation" t-value="o.operation_id or o.scheme_id.operation_id"/>
+        <t t-set="production_line" t-value="o.production_line_id or (order.production_line_id if order else o.production_line_id)"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <div class="page sn-fai-record"
+                 style="font-family: SimSun, serif; color: #111; font-size: 12px;">
+                <style>
+                    .sn-fai-record, .sn-fai-record table, .sn-fai-record td,
+                    .sn-fai-record th, .sn-fai-record span, .sn-fai-record b {
+                        font-family: SimSun, serif;
+                    }
+                    .sn-fai-record table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+                    .sn-fai-record td, .sn-fai-record th { padding: 3px 5px; vertical-align: middle; }
+                    /* The band with the logo and the sheet title stays plain: only
+                       the form blocks of the paper sheet carry rules. */
+                    .sn-fai-record table.head,
+                    .sn-fai-record table.head td,
+                    .sn-fai-record table.signs,
+                    .sn-fai-record table.signs td,
+                    .sn-fai-record table.signs tr {
+                        border: 0 none !important;
+                    }
+                    .sn-fai-record .logo { height: 40px; }
+                    .sn-fai-record .center { text-align: center; }
+                    .sn-fai-record .right { text-align: right; }
+                    .sn-fai-record .title {
+                        display: inline-block;
+                        font-size: 20px;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        border-bottom: 1px solid #111;
+                        padding: 0 12px 3px;
+                    }
+                    .sn-fai-record table.info td,
+                    .sn-fai-record table.items td,
+                    .sn-fai-record table.items th {
+                        border: 1px solid #111;
+                    }
+                    .sn-fai-record table.info { margin-top: 8px; }
+                    .sn-fai-record table.info td { height: 26px; }
+                    .sn-fai-record table.info td.label { white-space: nowrap; }
+                    /* The two blocks read as one grid: the shared line between
+                       them is drawn once. */
+                    .sn-fai-record table.items { margin-top: -1px; }
+                    .sn-fai-record table.items th { text-align: center; font-weight: 700; }
+                    .sn-fai-record table.items tr { page-break-inside: avoid; }
+                    .sn-fai-record table.items td.seq,
+                    .sn-fai-record table.items td.item { text-align: center; }
+                    .sn-fai-record table.items td.content {
+                        text-align: left;
+                        white-space: pre-line;
+                        line-height: 1.45;
+                    }
+                    .sn-fai-record table.items td.result { white-space: nowrap; }
+                    .sn-fai-record table.items td.result div { line-height: 1.7; }
+                    .sn-fai-record table.signs { margin-top: 14px; }
+                </style>
+
+                <table class="plain head">
+                    <tr>
+                        <td style="width: 24%;">
+                            <img t-if="company.logo"
+                                 t-att-src="image_data_uri(company.logo)"
+                                 class="logo"/>
+                        </td>
+                        <td class="center">
+                            <div class="title"><t t-if="operation"><span t-out="operation.name"/></t>Process First Article Confirmation Sheet</div>
+                        </td>
+                        <td style="width: 24%;"/>
+                    </tr>
+                </table>
+
+                <table class="info">
+                    <tr>
+                        <td class="label" style="width: 12%;">Work Order No.:</td>
+                        <td style="width: 21%;"><span t-out="(order.name if order else '') or ''"/></td>
+                        <td class="label" style="width: 12%;">Product Name:</td>
+                        <td style="width: 22%;"><span t-out="o.product_id.name if o.product_id else ''"/></td>
+                        <td class="label" style="width: 12%;">Customer:</td>
+                        <td style="width: 21%;"><span t-out="order.x_partner_id.name if order and order.x_partner_id else ''"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Batch Qty:</td>
+                        <td><span t-out="('%g' % production.product_qty) if production else ''"/></td>
+                        <td class="label">Model / Specification:</td>
+                        <td><span t-out="o.material_specification or ''"/></td>
+                        <td class="label">Production Line:</td>
+                        <td><span t-out="production_line.name or ''"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Daily Plan Qty:</td>
+                        <td><span t-out="('%g' % order.planned_qty) if order else ''"/></td>
+                        <td class="label">Others:</td>
+                        <td/>
+                        <td class="label">Production Date:</td>
+                        <td><span t-out="order.date_plan.strftime('%Y/%m/%d') if order and order.date_plan else ''"/></td>
+                    </tr>
+                </table>
+
+                <table class="items">
+                    <thead>
+                        <tr>
+                            <th style="width: 6%;">No.</th>
+                            <th style="width: 16%;">Item</th>
+                            <th style="width: 48%;">Content</th>
+                            <th style="width: 15%;">Result</th>
+                            <th style="width: 15%;">Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.line_ids" t-as="o_line">
+                            <td class="seq"><span t-out="o_line_index + 1"/></td>
+                            <td class="item"><span t-out="o_line.name"/></td>
+                            <td class="content">
+                                <t t-if="o_line.instruction">
+                                    <span t-out="o_line.instruction"/>
+                                </t>
+                                <t t-elif="o_line.item_type == 'numeric'">
+                                    <span t-out="o_line._get_report_requirement()"/>
+                                </t>
+                                <t t-else="">
+                                    <span t-out="o_line.expected_value or ''"/>
+                                </t>
+                            </td>
+                            <td class="result">
+                                <div>Qualified<t t-if="o_line.result == 'pass'">&#9745;</t><t t-else="">&#9744;</t></div>
+                                <div>Unqualified<t t-if="o_line.result in ['fail', 'partial']">&#9745;</t><t t-else="">&#9744;</t></div>
+                            </td>
+                            <td class="remark"/>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="plain signs">
+                    <tr>
+                        <td style="width: 34%;">Operator Confirmation:</td>
+                        <td class="center" style="width: 33%;">Inspector Confirmation:<span t-out="o.inspector_id.name if o.inspector_id else ''"/></td>
+                        <td class="right" style="width: 33%;">Supervisor Confirmation:<span t-out="o.x_reviewer_id.name if o.x_reviewer_id else ''"/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+</odoo>

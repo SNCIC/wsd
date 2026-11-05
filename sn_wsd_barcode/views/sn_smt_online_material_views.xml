@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 在线料表列表补制具/辅料个体列：tooling_id/consumable_info_id 字段
+         定义在 sn_wsd_barcode（制具/辅料桥接），不能进 sn_wsd_smt 基础视图，
+         故以继承视图加列（与物料日志视图同模式）。 -->
+    <record id="view_sn_smt_online_material_list_equipment" model="ir.ui.view">
+        <field name="name">sn.smt.online.material.list.equipment</field>
+        <field name="model">sn.smt.online.material</field>
+        <field name="inherit_id" ref="sn_wsd_smt.view_sn_smt_online_material_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='loaded_material_lot_id']" position="after">
+                <field name="tooling_id" optional="show"/>
+                <field name="consumable_info_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 关键信息搜索：制令单 / 产品料号 / 主料料号（动作未绑搜索视图，
+         本视图作为模型默认搜索视图被拾取） -->
+    <record id="view_sn_smt_online_material_search" model="ir.ui.view">
+        <field name="name">sn.smt.online.material.search</field>
+        <field name="model">sn.smt.online.material</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mes_order_id"/>
+                <field name="model_code"/>
+                <field name="required_item_code"/>
+            </search>
+        </field>
+    </record>
+</odoo>

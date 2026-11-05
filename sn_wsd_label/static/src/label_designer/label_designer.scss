@@ -1,0 +1,89 @@
+.o_label_designer {
+    .o_label_designer_canvas {
+        min-height: 60px;
+        background-color: #fff;
+        overflow: hidden;
+
+        .o_label_designer_bg {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+            user-select: none;
+        }
+    }
+
+    .o_label_designer_element {
+        border: 1px dashed rgba(52, 73, 94, 0.55);
+        cursor: grab;
+        touch-action: none;
+
+        &.o_selected {
+            border: 1px solid #30537a;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+        }
+
+        &.o_readonly {
+            cursor: default;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .o_label_designer_tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 10px;
+            font-weight: 400;
+            transform: translateY(-100%);
+            pointer-events: none;
+        }
+
+        .o_label_designer_handle {
+            right: -6px;
+            bottom: -6px;
+            width: 10px;
+            height: 10px;
+            background: #30537a;
+            border: 1px solid #fff;
+            border-radius: 2px;
+            cursor: nwse-resize;
+            touch-action: none;
+        }
+    }
+}
+
+.o_label_designer {
+    .o_label_designer_body {
+        .o_label_designer_canvas_wrap {
+            overflow: auto;
+            max-height: 560px;
+        }
+
+        .o_label_designer_panel {
+            width: 280px;
+            padding: 8px 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background: #f8f9fa;
+
+            .form-select-sm,
+            .form-control-sm {
+                width: 100%;
+            }
+
+            .col-form-label-sm {
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+body.o_label_designer_dragging {
+    user-select: none;
+    cursor: grabbing;
+}

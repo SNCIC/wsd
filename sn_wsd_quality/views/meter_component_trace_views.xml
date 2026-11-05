@@ -6,12 +6,13 @@
         <field name="arch" type="xml">
             <list create="0">
                 <field name="event_time"/>
-                <field name="internal_serial_id"/>
+                <field name="serial_identity_id"/>
                 <field name="mes_order_id"/>
                 <field name="component_type"/>
                 <field name="event_type"/>
                 <field name="state"/>
                 <field name="component_product_id"/>
+                <field name="material_specification" optional="show"/>
                 <field name="component_lot_id"/>
                 <field name="component_sn"/>
                 <field name="component_batch_no"/>
@@ -32,8 +33,8 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="internal_serial_id"/>
-                            <field name="internal_serial_id"/>
+                            <field name="serial_identity_id"/>
+                            <field name="serial_identity_id"/>
                             <field name="production_id"/>
                             <field name="mes_order_id"/>
                             <field name="route_operation_id"/>
@@ -50,6 +51,7 @@
                     <group>
                         <group>
                             <field name="component_product_id"/>
+                            <field name="material_specification"/>
                             <field name="component_lot_id"/>
                             <field name="component_sn"/>
                             <field name="component_batch_no"/>

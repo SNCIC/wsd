@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_bom_list_material_specification" model="ir.ui.view">
+        <field name="name">mrp.bom.list.material.specification</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='product_tmpl_id']" position="after">
+                <field name="material_specification" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_quant_inventory_list_material_specification" model="ir.ui.view">
+        <field name="name">stock.quant.inventory.list.editable.material.specification</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='product_id']" position="after">
+                <field name="material_specification" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_stock_list_material_specification" model="ir.ui.view">
+        <field name="name">product.product.stock.list.material.specification</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='display_name']" position="after">
+                <field name="material_specification" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_quant_list_material_specification" model="ir.ui.view">
+        <field name="name">stock.quant.list.editable.material.specification</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='product_id']" position="after">
+                <field name="material_specification" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

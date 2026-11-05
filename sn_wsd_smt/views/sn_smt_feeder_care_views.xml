@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Feeder lifecycle action wizard (report repair / complete repair / scrap) -->
+    <record id="view_sn_smt_feeder_action_wizard_form" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.action.wizard.form</field>
+        <field name="model">sn.smt.feeder.action.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Feeder Action">
+                <group>
+                    <field name="action" readonly="1"/>
+                    <field name="feeder_id" readonly="1"/>
+                </group>
+                <group>
+                    <field name="fault_desc" invisible="action != 'report_repair'" required="action == 'report_repair'"/>
+                    <field name="result" invisible="action != 'complete_repair'"/>
+                    <field name="reason" invisible="action != 'scrap'"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_feeder_action_wizard" model="ir.actions.act_window">
+        <field name="name">Feeder Action</field>
+        <field name="res_model">sn.smt.feeder.action.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Pending care: feeders whose care state is not ok -->
+    <record id="view_sn_smt_feeder_pending_care_list" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.pending.care.list</field>
+        <field name="model">sn.smt.feeder</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="care_state == 'remind'"
+                  decoration-danger="care_state in ('maintain_due', 'usage_expired')"
+                  decoration-muted="status == 'scrapped'"
+                  create="0">
+                <field name="feeder_sn"/>
+                <field name="feeder_spec"/>
+                <field name="channel_type" widget="badge"
+                       decoration-info="channel_type in ('single', 'dual', 'triple')"/>
+                <field name="status" widget="badge"
+                       decoration-success="status in ('normal', 'in_use')"
+                       decoration-warning="status == 'in_repair'"
+                       decoration-danger="status == 'scrapped'"/>
+                <field name="care_state" widget="badge"
+                       decoration-warning="care_state == 'remind'"
+                       decoration-danger="care_state in ('maintain_due', 'usage_expired')"/>
+                <field name="usage_count"/>
+                <field name="last_maintenance_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_feeder_pending_care" model="ir.actions.act_window">
+        <field name="name">Pending Care</field>
+        <field name="res_model">sn.smt.feeder</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('care_state', '!=', 'ok')]</field>
+    </record>
+
+    <!-- Repair records -->
+    <record id="view_sn_smt_feeder_repair_list" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.repair.list</field>
+        <field name="model">sn.smt.feeder.repair</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="feeder_id"/>
+                <field name="fault_desc"/>
+                <field name="reported_by"/>
+                <field name="reported_at"/>
+                <field name="done_at" optional="show"/>
+                <field name="result" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_smt_feeder_repair_form" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.repair.form</field>
+        <field name="model">sn.smt.feeder.repair</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="feeder_id"/>
+                            <field name="reported_by"/>
+                            <field name="reported_at"/>
+                            <field name="done_at"/>
+                        </group>
+                        <group>
+                            <field name="fault_desc"/>
+                            <field name="result"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_feeder_repair" model="ir.actions.act_window">
+        <field name="name">Repair Records</field>
+        <field name="res_model">sn.smt.feeder.repair</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Scrap records -->
+    <record id="view_sn_smt_feeder_scrap_list" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.scrap.list</field>
+        <field name="model">sn.smt.feeder.scrap</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="feeder_id"/>
+                <field name="trigger"/>
+                <field name="reason" optional="show"/>
+                <field name="scrapped_by"/>
+                <field name="scrapped_at"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_feeder_scrap" model="ir.actions.act_window">
+        <field name="name">Scrap Records</field>
+        <field name="res_model">sn.smt.feeder.scrap</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Maintenance records -->
+    <record id="view_sn_smt_feeder_maintenance_list" model="ir.ui.view">
+        <field name="name">sn.smt.feeder.maintenance.list</field>
+        <field name="model">sn.smt.feeder.maintenance</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="feeder_id"/>
+                <field name="trigger"/>
+                <field name="snapshot_usage_count"/>
+                <field name="maintained_by"/>
+                <field name="maintained_at"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sn_smt_feeder_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenance Records</field>
+        <field name="res_model">sn.smt.feeder.maintenance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Feeder Care menu: single entry, one page with a notebook of the four lists -->
+    <record id="action_sn_smt_feeder_care" model="ir.actions.client">
+        <field name="name">Feeder Care</field>
+        <field name="tag">sn_wsd_smt.feeder_care</field>
+    </record>
+
+    <menuitem id="menu_sn_smt_feeder_care" name="Feeder Care" parent="menu_sn_smt_root" action="action_sn_smt_feeder_care" sequence="35"/>
+
+    <!-- Daily care state refresh -->
+    <record id="ir_cron_sn_smt_feeder_care_state" model="ir.cron">
+        <field name="name">SMT Feeder: Refresh Care State</field>
+        <field name="model_id" ref="model_sn_smt_feeder"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_refresh_care_state()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+    </record>
+
+</odoo>

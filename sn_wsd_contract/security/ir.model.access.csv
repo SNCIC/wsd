@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_contract_template_user,sn.contract.template user,model_sn_contract_template,base.group_user,1,0,0,0
+access_sn_contract_template_manager,sn.contract.template manager,model_sn_contract_template,sales_team.group_sale_manager,1,1,1,1
+access_sn_contract_template_clause_user,sn.contract.template.clause user,model_sn_contract_template_clause,base.group_user,1,0,0,0
+access_sn_contract_template_clause_manager,sn.contract.template.clause manager,model_sn_contract_template_clause,sales_team.group_sale_manager,1,1,1,1

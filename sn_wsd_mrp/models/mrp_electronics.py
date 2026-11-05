@@ -111,12 +111,20 @@ class MrpBomLineSubstitute(models.Model):
         store=True,
         readonly=True,
     )
+    original_material_specification = fields.Char(
+        string='Original Material Specification',
+        related='original_product_id.material_specification',
+    )
     substitute_product_id = fields.Many2one(
         'product.product',
         string='Substitute Product',
         required=True,
         check_company=True,
         domain="[('id', '!=', original_product_id)]",
+    )
+    substitute_material_specification = fields.Char(
+        string='Substitute Material Specification',
+        related='substitute_product_id.material_specification',
     )
     priority = fields.Integer(
         string='Priority',
@@ -177,13 +185,6 @@ class MrpProduction(models.Model):
         string='Feeder Lines',
     )
 
-    def _requires_feeder_verification(self):
-        self.ensure_one()
-        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
-            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
-        )
-        return bool(feeder_operations)
-
     @api.depends('move_raw_ids.state', 'move_raw_ids.product_uom_qty', 'move_raw_ids.quantity')
     def _compute_can_return_excess(self):
         for production in self:
@@ -215,6 +216,8 @@ class MrpProduction(models.Model):
         return self.bom_id._find_bom_line_by_product(product) if self.bom_id else self.env['mrp.bom.line']
 
     def _is_allowed_substitute_product(self, original_product, candidate_product):
+        """BOM 行级替代判定（产品级 substitute_ids 已退役，替代料统一走
+        sn.wsd.substitute.rule——上料放行链另含规则分支）。"""
         self.ensure_one()
         if not original_product or not candidate_product:
             return False
@@ -224,51 +227,13 @@ class MrpProduction(models.Model):
             bom_line = self._find_bom_line_by_product(original_product)
             if bom_line and candidate_product in bom_line.substitute_line_ids.substitute_product_id:
                 return True
-        return candidate_product in original_product.substitute_ids or original_product in candidate_product.substitute_for_ids
+        return False
 
     def _find_matching_raw_moves(self, material_product):
         self.ensure_one()
         return self.move_raw_ids.filtered(
             lambda move: move.state != 'cancel' and self._is_allowed_substitute_product(move.product_id, material_product)
         )
-
-    def _generate_feeder_lines(self):
-        self.ensure_one()
-        if not self._requires_feeder_verification():
-            return
-        existing_lines = self.feeder_line_ids.filtered(lambda line: line.state != 'returned')
-        if existing_lines:
-            return
-
-        commands = []
-        raw_moves = self.move_raw_ids.filtered(
-            lambda move: move.bom_line_id
-            and move.bom_line_id.x_requires_feeder_verification
-            and move.state != 'cancel'
-        )
-        feeder_operations = self.x_mes_order_id.x_route_operation_ids.filtered(
-            lambda operation: operation.operation_id.x_station_type in ('smt', 'dip')
-        )
-        bom_feeder_operations = feeder_operations.filtered(
-            lambda operation: operation.operation_id.x_station_type != 'smt'
-        )
-        if not bom_feeder_operations:
-            return
-        for feeder_index, move in enumerate(raw_moves, start=1):
-            route_operation = bom_feeder_operations[:1]
-            if not route_operation:
-                continue
-            commands.append(Command.create({
-                'route_operation_id': route_operation.id,
-                'production_id': self.id,
-                'feeder_no': f'F{feeder_index:02d}',
-                'expected_product_id': move.product_id.id,
-                'source_move_id': move.id,
-                'expected_qty': move.product_uom_qty,
-                'state': 'pending',
-            }))
-        if commands:
-            self.write({'feeder_line_ids': commands})
 
     def _sync_feeder_consumption(self):
         for production in self:
@@ -299,12 +264,6 @@ class MrpProduction(models.Model):
                     precision_rounding=line.uom_id.rounding or 0.01,
                 ) > 0 else 'depleted'
                 line.write(vals)
-
-    def action_confirm(self):
-        res = super().action_confirm()
-        for production in self:
-            production._generate_feeder_lines()
-        return res
 
     def _post_inventory(self, cancel_backorder=False):
         res = super()._post_inventory(cancel_backorder=cancel_backorder)
@@ -529,6 +488,10 @@ class MrpExcessReturnLine(models.Model):
         store=True,
         readonly=True,
     )
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
     lot_id = fields.Many2one(
         'stock.lot',
         string='Lot',
@@ -638,6 +601,10 @@ class MrpSubstituteUsage(models.Model):
         readonly=True,
         check_company=True,
     )
+    original_material_specification = fields.Char(
+        string='Original Material Specification',
+        related='original_product_id.material_specification',
+    )
     original_lot_id = fields.Many2one(
         'stock.lot',
         string='Original Lot',
@@ -650,6 +617,10 @@ class MrpSubstituteUsage(models.Model):
         required=True,
         readonly=True,
         check_company=True,
+    )
+    substitute_material_specification = fields.Char(
+        string='Substitute Material Specification',
+        related='substitute_product_id.material_specification',
     )
     substitute_lot_id = fields.Many2one(
         'stock.lot',
@@ -756,6 +727,10 @@ class MrpFeederLine(models.Model):
         related='expected_product_id.default_code',
         readonly=True,
     )
+    expected_material_specification = fields.Char(
+        string='Expected Material Specification',
+        related='expected_product_id.material_specification',
+    )
     expected_qty = fields.Float(
         string='Expected Qty',
     )
@@ -776,6 +751,10 @@ class MrpFeederLine(models.Model):
         string='Actual Code',
         related='actual_product_id.default_code',
         readonly=True,
+    )
+    actual_material_specification = fields.Char(
+        string='Actual Material Specification',
+        related='actual_product_id.material_specification',
     )
     lot_id = fields.Many2one(
         'stock.lot',

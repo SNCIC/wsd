@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_intercompany_sync_log_list" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.log.list</field>
+        <field name="model">sn.intercompany.sync.log</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="create_date" string="Date"/>
+                <field name="agreement_id"/>
+                <field name="direction"/>
+                <field name="action"/>
+                <field name="result" widget="badge"
+                       decoration-success="result == 'success'"
+                       decoration-warning="result == 'skipped'"
+                       decoration-danger="result == 'failed'"/>
+                <field name="source_ref"/>
+                <field name="target_ref"/>
+                <field name="root_ref" optional="hide"/>
+                <field name="detail" optional="show"/>
+                <field name="user_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_sync_log_form" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.log.form</field>
+        <field name="model">sn.intercompany.sync.log</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="agreement_id"/>
+                            <field name="direction"/>
+                            <field name="action"/>
+                            <field name="result"/>
+                        </group>
+                        <group>
+                            <field name="source_ref"/>
+                            <field name="target_ref"/>
+                            <field name="root_ref"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="detail"/>
+                        <field name="diff"/>
+                        <field name="snapshot"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_intercompany_sync_log_search" model="ir.ui.view">
+        <field name="name">sn.intercompany.sync.log.search</field>
+        <field name="model">sn.intercompany.sync.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="source_ref"/>
+                <field name="target_ref"/>
+                <field name="agreement_id"/>
+                <filter name="filter_failed" string="Failed"
+                        domain="[('result', '=', 'failed')]"/>
+                <filter name="filter_skipped" string="Skipped"
+                        domain="[('result', '=', 'skipped')]"/>
+                <group>
+                    <filter name="group_action" string="Action"
+                            context="{'group_by': 'action'}"/>
+                    <filter name="group_result" string="Result"
+                            context="{'group_by': 'result'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_intercompany_sync_log" model="ir.actions.act_window">
+        <field name="name">Synchronization Log</field>
+        <field name="res_model">sn.intercompany.sync.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_intercompany_sync_log" name="Synchronization Log"
+              parent="menu_sn_intercompany_root"
+              action="action_sn_intercompany_sync_log" sequence="30"/>
+</odoo>

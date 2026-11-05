@@ -284,7 +284,19 @@ class MainComponent extends Component {
     }
 
     get addLineBtnName() {
+        if (this.env.model.resModel === "stock.picking" &&
+            this.env.model.record.picking_type_code === "incoming") {
+            return _t("Print Labels");
+        }
         return _t("Add Product");
+    }
+
+    addLineButtonAction() {
+        if (this.env.model.resModel === "stock.picking" &&
+            this.env.model.record.picking_type_code === "incoming") {
+            return this.env.model.print(false, "action_print_material_labels");
+        }
+        return this.onOpenProductPage();
     }
 
     get displayActionButtons() {

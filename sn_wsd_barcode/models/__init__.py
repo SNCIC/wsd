@@ -17,3 +17,4 @@ from . import res_config_settings
 from . import res_partner
 from . import uom_uom
 from . import epc_encoder
+from . import sn_smt_drawing_loading

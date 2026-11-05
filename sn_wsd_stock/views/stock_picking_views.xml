@@ -1,31 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_picking_form_reel_split" model="ir.ui.view">
-        <field name="name">stock.picking.form.reel.split</field>
+    <record id="view_stock_move_operations_material_labels" model="ir.ui.view">
+        <field name="name">stock.move.operations.material.labels</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_stock_move_operations"/>
+        <field name="arch" type="xml">
+            <xpath expr="//widget[@name='generate_serials']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//widget[@name='import_lots']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//widget[@name='import_lots']" position="after">
+                <field name="x_can_generate_material_labels" invisible="1"/>
+                <button name="action_generate_material_labels"
+                        string="Generate Internal Batches"
+                        type="object"
+                        class="btn btn-link"
+                        invisible="not x_can_generate_material_labels"/>
+                <button name="action_revoke_material_labels"
+                        string="Revoke Internal Batches"
+                        type="object"
+                        class="btn btn-link"
+                        confirm="This removes the internal batches generated on this operation so the split can be redone. Continue?"
+                        invisible="not x_can_generate_material_labels"/>
+                <button name="action_print_material_labels"
+                        string="Print Material Labels"
+                        type="object"
+                        class="btn btn-link"
+                        invisible="not x_can_generate_material_labels"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 完工收货单：表单头部"打印物料标签"（成品库待验证一键挂码 /
+         已完成补打，finished-goods-material-sn 定稿口径）。挂在表单上
+     而非 move 行内——view_picking_form 的内嵌 move 列表不带
+         import_lots 挂载点，行内按钮在收货表单上不渲染。 -->
+    <record id="view_picking_form_finished_labels" model="ir.ui.view">
+        <field name="name">stock.picking.form.finished.labels</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//header/button[@name='button_validate'][1]" position="before">
-                <button name="action_open_reel_split_wizard"
-                        string="Generate Reel Lots"
-                        type="object"
-                        class="btn-primary"
-                        groups="stock.group_stock_user"
-                        invisible="not can_generate_reel_lots"/>
+            <xpath expr="//header" position="inside">
+                <button name="action_open_material_label_wizard" type="object"
+                        string="Print Material Labels" class="btn-secondary"
+                        invisible="not is_mes_receipt or state == 'cancel' or not can_print_material_labels"/>
             </xpath>
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="action_view_reel_splits"
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-code-fork"
-                        groups="stock.group_stock_user"
-                        invisible="reel_split_count == 0">
-                    <field name="reel_split_count" string="Reel Splits" widget="statinfo"/>
-                </button>
+        </field>
+    </record>
+
+    <record id="view_stock_move_line_operation_tree_material_labels" model="ir.ui.view">
+        <field name="name">stock.move.line.operations.material.labels</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="default_order">internal_lot_name asc, id asc</attribute>
             </xpath>
-            <xpath expr="//sheet" position="before">
-                <field name="can_generate_reel_lots" invisible="1"/>
-                <field name="reel_split_count" invisible="1"/>
+            <xpath expr="//field[@name='lot_name']" position="before">
+                <field name="internal_lot_name" column_invisible="1"/>
+                <!-- The supplier batch is only read at putaway, on the reels
+                     themselves: the upstream receipt and quality control
+                     transfers may cover several batches on one line. -->
+                <field name="supplier_batch_no"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
+                       readonly="lot_id or (state == 'done' and is_locked)"/>
+            </xpath>
+            <xpath expr="//field[@name='quantity']" position="after">
+                <!-- The quantity per label only matters on the operation that
+                     generates the internal batches: the receipt of a one-step
+                     reception, the storage transfer otherwise. -->
+                <field name="quantity_per_label"
+                       column_invisible="parent.has_tracking != 'lot' or not parent.x_can_generate_material_labels"
+                       readonly="lot_id or (state == 'done' and is_locked)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_move_line_detailed_operation_tree_material_labels" model="ir.ui.view">
+        <field name="name">stock.move.line.detailed.operations.material.labels</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="default_order">internal_lot_name asc, id asc</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lot_name']" position="before">
+                <!-- The detailed operations list does not expose tracking by default,
+                     but the custom columns use it in their column visibility rules. -->
+                <field name="tracking" column_invisible="1"/>
+                <field name="internal_lot_name" column_invisible="1"/>
+                <field name="supplier_batch_no"
+                       invisible="tracking != 'lot'"
+                       readonly="lot_id or (state == 'done' and is_locked)"/>
+            </xpath>
+            <xpath expr="//field[@name='quantity']" position="after">
+                <field name="quantity_per_label"
+                       invisible="tracking != 'lot'"
+                       readonly="lot_id or (state == 'done' and is_locked)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Operations taking material out of the warehouse (deliveries, MES
+         material issue / return / over-pick, outsourcing issue): print the
+         issue labels of the whole operation at once (non-reel tracked lines
+         only, quantity = the issued quantity). Reel materials keep their
+         receipt label and are skipped by the eligibility computation.
+         The button follows the document type only: receipts, storage, quality
+         control and plain internal transfers do not show it, and a document
+         with nothing to print reports it when clicked. -->
+    <record id="view_picking_form_issue_labels" model="ir.ui.view">
+        <field name="name">stock.picking.form.issue.labels</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="x_issue_label_available" invisible="1"/>
+                <button name="action_print_issue_material_labels" type="object"
+                        string="Print Issue Material Labels" class="btn-secondary"
+                        invisible="not x_issue_label_available"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Operation detail dialog (作业 tab -> Details): one button on top of
+         the dialog, above the operation lines, printing the whole operation
+         detail in one go. Same document type rule as the form header. -->
+    <record id="view_stock_move_operations_issue_labels" model="ir.ui.view">
+        <field name="name">stock.move.operations.issue.labels</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_stock_move_operations"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_code']" position="after">
+                <field name="x_issue_label_available" invisible="1"/>
+            </xpath>
+            <xpath expr="//widget[@name='import_lots']" position="after">
+                <button name="action_print_issue_material_labels" type="object"
+                        string="Print Issue Material Labels" class="btn btn-link"
+                        icon="fa-print"
+                        invisible="not x_issue_label_available"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Delivery address (partner_id: delivery address on a delivery,
+         receive-from on a receipt, contact on an internal transfer) stays
+         editable in every state: an address forgotten before validation can
+         still be corrected afterwards. Returns, deliveries and internal
+         transfers share this form and this list, so both are opened up. A
+         change made on a done or cancelled transfer is logged on the chatter
+         by stock.picking.write(). -->
+    <record id="view_picking_form_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.form.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_partner_editable" model="ir.ui.view">
+        <field name="name">stock.picking.list.partner.editable</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Other receipts and other deliveries: department, employee and type of
+         the operation. The delivery address has no meaning on an other
+         delivery and is hidden, together with the label block the standard
+         form renders separately from the field. The virtual location of the
+         type is shown read only: it is the one selecting the stock valuation
+         account of the operation. -->
+    <record id="view_picking_form_other_operation" model="ir.ui.view">
+        <field name="name">stock.picking.form.other.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_td_label')][label[@for='partner_id']]"
+                   position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out' or bool(sn_inventory_operation)</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">sn_other_operation == 'other_out' or bool(sn_inventory_operation)</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='partner_id']" position="after">
+                <field name="sn_other_operation" invisible="1"/>
+                <field name="sn_issue_type_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       required="sn_other_operation == 'other_out'"/>
+                <field name="sn_issue_department_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_issue_employee_id"
+                       invisible="sn_other_operation != 'other_out'"
+                       domain="[('department_id', '=', sn_issue_department_id)] if sn_issue_department_id else []"/>
+                <field name="sn_issue_location_id"
+                       invisible="sn_other_operation != 'other_out'"/>
+                <field name="sn_receive_type_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       required="sn_other_operation == 'other_in'"/>
+                <field name="sn_receive_department_id"
+                       invisible="sn_other_operation != 'other_in'"/>
+                <field name="sn_receive_employee_id"
+                       invisible="sn_other_operation != 'other_in'"
+                       domain="[('department_id', '=', sn_receive_department_id)] if sn_receive_department_id else []"/>
+                <field name="sn_receive_location_id"
+                       invisible="sn_other_operation != 'other_in'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inventory losses and inventory gains: the operation and the virtual
+         location its difference goes through. The location is shown read only
+         on both documents: it is the one selecting the stock valuation account
+         of the operation, and the standard form hides the source of an
+         incoming transfer as well as the destination of an outgoing one. -->
+    <record id="view_picking_form_inventory_operation" model="ir.ui.view">
+        <field name="name">stock.picking.form.inventory.operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='partner_id']" position="after">
+                <field name="sn_inventory_operation" invisible="1"/>
+                <field name="sn_inventory_location_id"
+                       invisible="not sn_inventory_operation"/>
             </xpath>
         </field>
     </record>

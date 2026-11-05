@@ -1,0 +1,1042 @@
+# Odoo zh_CN translation worklist -- sn_wsd_stock
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence return to vendor"
+msgstr "%(name)s 未入库退货序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence vendor return"
+msgstr "%(name)s 退回供应商序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/incoming_material_label.py:0
+msgid ""
+"Material labels can only be generated for active receipt or storage lot "
+"moves."
+msgstr "只能为有效的收货或入库批次调拨生成物料标签。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__x_can_generate_material_labels
+msgid "Can Generate Material Labels"
+msgstr "可生成物料标签"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_stock\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__can_print_material_labels
+msgid "Can Print Material Labels"
+msgstr "可打印物料标签"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_report_sn_wsd_stock_report_incoming_material_label_zpl__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_report_sn_wsd_stock_report_incoming_material_label_zpl
+msgid "Incoming Material Label ZPL Report"
+msgstr "来料标签 ZPL 报表"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__is_mes_receipt
+msgid "Is MES Completion Receipt"
+msgstr "是 MES 完工入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_lot__material_label_location
+msgid ""
+"Location printed on the material label. The final path segment of the "
+"receipt destination is preferred; the current quant location is used as a "
+"fallback."
+msgstr "打印在物料标签上的库位。优先取收货目标的最后一段路径；否则回退使用当前库存库位。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_lot__material_label_location
+msgid "Material Label Location"
+msgstr "物料标签库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Not Stored Return Type"
+msgstr "未入库退货作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return goods to the vendor before they are stored, "
+"i.e. before the internal batches are generated."
+msgstr "用于在货物入库前（即内部批次生成前）退回供应商的作业类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid ""
+"Operation type used to return received goods to the vendor, either before "
+"they are stored (no batch yet) or after (the stored batch is reused)."
+msgstr "用于将已收货货物退回供应商的作业类型：可在入库前（尚无批次）或入库后（沿用已入库批次）使用。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__vendor_return
+msgid "Return to Vendor"
+msgstr "退回供应商"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Return to Vendor (Not Stored)"
+msgstr "退回供应商（未入库）"
+
+#. module: sn_wsd_stock
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_smt\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move_line__internal_lot_name
+msgid "Unique Lot/Serial Number"
+msgstr "唯一批号/序列号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_unstored_return_type_id
+msgid "Vendor Return Type"
+msgstr "供应商退货作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_reception_step
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Reception Step"
+msgstr "收货步骤"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_reception_step
+msgid ""
+"Step of the reception this operation belongs to, following the operation "
+"types of the warehouse reception. With a one-step reception the receipt is "
+"also the storage operation, so it shows up in both reports."
+msgstr "该作业所属的收货步骤，按仓库收货设置的操作类型区分。一步收货时收货单同时就是入库作业，因此会同时出现在收货明细和入库明细中。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_reception_step__receipt
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__receipt
+msgid "Receipt"
+msgstr "收货"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_reception_step__qc
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__qc
+msgid "Quality Control"
+msgstr "质检"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_reception_step__storage
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__storage
+msgid "Storage"
+msgstr "入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_picking_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Scheduled Date"
+msgstr "计划日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_picking_partner_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Vendor"
+msgstr "供应商"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_picking_origin
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+msgid "Transfer Source"
+msgstr "单据来源"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_picking_state
+msgid "Transfer Status"
+msgstr "单据状态"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_picking_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Responsible"
+msgstr "负责人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__product_code
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__product_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Material Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_lot_names
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Batches"
+msgstr "批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_lot_names
+msgid "Batches the operation lines of this move carry."
+msgstr "该作业的作业行所携带的批次。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_supplier_batch_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+msgid "Supplier Batch"
+msgstr "供应商批次"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_supplier_batch_no
+msgid "Supplier batches read on the operation lines of this move."
+msgstr "该作业的作业行上记录的供应商批次。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Document No."
+msgstr "单据号"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Total Quantity"
+msgstr "数量合计"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+msgid "Done"
+msgstr "已完成"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+msgid "Receipt Details"
+msgstr "收货明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_quality_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_quality_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+msgid "Quality Control Details"
+msgstr "质检明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_storage_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_storage_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+msgid "Storage Details"
+msgstr "入库明细"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Reception Details"
+msgstr "来料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_validation_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Validation Date"
+msgstr "验证日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_validation_date
+msgid ""
+"Date the operation of the document was validated. Empty while the document "
+"is still open."
+msgstr "单据作业的验证日期；单据未完成时为空。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_quality_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_storage_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Destination Location"
+msgstr "目的位置"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_receipt
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_receipt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
+msgid "Other Receipts"
+msgstr "其他入库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_delivery
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_delivery
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
+msgid "Other Deliveries"
+msgstr "其他出库单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_in
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_in
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__other_in
+msgid "Other Receipt"
+msgstr "其他入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_picking__sn_other_operation__other_out
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__other_out
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__other_out
+msgid "Other Delivery"
+msgstr "其他出库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_other_operation
+msgid "Other Operation"
+msgstr "其他出入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_other_operation
+msgid ""
+"Other receipt or other delivery the transfer was created from, empty on the "
+"purchase receipts and the sales deliveries."
+msgstr "该调拨由其他入库单或其他出库单创建；采购收货与销售交货为空。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__other_in_type_id
+msgid "Other Receipt Type"
+msgstr "其他入库作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__other_in_type_id
+msgid ""
+"Operation type of the other receipts: goods entering the stock without a "
+"purchase order."
+msgstr "其他入库的作业类型：不通过采购订单直接入库。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__other_out_type_id
+msgid "Other Delivery Type"
+msgstr "其他出库作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__other_out_type_id
+msgid ""
+"Operation type of the other deliveries: goods leaving the stock without a "
+"sales order."
+msgstr "其他出库的作业类型：不通过销售订单直接出库。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other receipts"
+msgstr "%(name)s 其他入库单序列"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence other deliveries"
+msgstr "%(name)s 其他出库单序列"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Source Location"
+msgstr "源位置"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_gain_list
+msgid "Source Document"
+msgstr "来源单据"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+msgid "Contact"
+msgstr "往来单位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_department_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Issuing Department"
+msgstr "领料部门"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_employee_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Issuing Employee"
+msgstr "领料人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_issue_type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_list
+msgid "Issue Type"
+msgstr "领料类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Issue Location"
+msgstr "出库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_department_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+msgid "Receiving Department"
+msgstr "入库部门"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_employee_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+msgid "Receiving Employee"
+msgstr "入库人"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_receive_type_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_list
+msgid "Receipt Type"
+msgstr "入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Receipt Location"
+msgstr "入库库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_department_id
+msgid "Department taking the goods out of the stock."
+msgstr "从库存领用物料的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_employee_id
+msgid ""
+"Employee taking the goods out of the stock, filtered on the issuing "
+"department."
+msgstr "从库存领用物料的员工，按领料部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_type_id
+msgid ""
+"Type of the other delivery. It selects the virtual location the goods leave "
+"to, hence the stock valuation account of the operation."
+msgstr "其他出库单的类型。它决定物料出库的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_issue_location_id
+msgid "Virtual location the goods leave to, read from the issue type."
+msgstr "物料出库的虚拟库位，取自领料类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_department_id
+msgid "Department the goods enter the stock for."
+msgstr "物料入库归属的部门。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_employee_id
+msgid ""
+"Employee bringing the goods into the stock, filtered on the receiving "
+"department."
+msgstr "将物料入库的员工，按入库部门过滤。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_type_id
+msgid ""
+"Type of the other receipt. It selects the virtual location the goods come "
+"from, hence the stock valuation account of the operation."
+msgstr "其他入库单的类型。它决定物料入库来源的虚拟库位，从而决定该业务的存货计价科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_receive_location_id
+msgid "Virtual location the goods come from, read from the receipt type."
+msgstr "物料入库来源的虚拟库位，取自入库类型。"
+
+#. module: sn_wsd_stock
+#: model:ir.model,name:sn_wsd_stock.model_sn_wsd_stock_other_operation_type
+msgid "Other Receipt and Delivery Type"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Applies To"
+msgstr "适用范围"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid "Virtual Location"
+msgstr "虚拟库位"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__code
+msgid "Code"
+msgstr "代码"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_form
+msgid "Notes"
+msgstr "通知"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__sn_wsd_stock_other_operation_type__operation__both
+msgid "Both"
+msgstr "两者"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__operation
+msgid "Direction of the other operations this type may be selected on."
+msgstr "该类型可用于的其他出入库方向。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__location_id
+msgid ""
+"Virtual location the goods leave to (other delivery) or come from (other "
+"receipt). Its stock valuation account is the one used by the accounting "
+"entries of the operation."
+msgstr "其他出库时物料出库、其他入库时物料来源的虚拟库位。该库位上的存货计价科目即该业务会计凭证使用的科目。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__company_id
+msgid "Company the type and its virtual location belong to."
+msgstr "该类型及其虚拟库位所属的公司。"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_stock_other_operation_type
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_stock_other_operation_type
+msgid "Other Operation Types"
+msgstr "其他出入库类型"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select an issue type on the other delivery %s before validating it."
+msgstr "验证其他出库单 %s 前请先选择领料类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "Select a receipt type on the other receipt %s before validating it."
+msgstr "验证其他入库单 %s 前请先选择入库类型。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other delivery."
+msgstr "类型 %s 不能用于其他出库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid "The type %s cannot be used on an other receipt."
+msgstr "类型 %s 不能用于其他入库单。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid ""
+"The issuing employee %(employee)s does not belong to the department "
+"%(department)s."
+msgstr "领料人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/other_operation.py:0
+msgid ""
+"The receiving employee %(employee)s does not belong to the department "
+"%(department)s."
+msgstr "入库人 %(employee)s 不属于部门 %(department)s。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/sn_wsd_stock_other_operation_type.py:0
+msgid "The type code must be unique."
+msgstr "类型编码必须唯一。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_sn_wsd_stock_other_operation_type__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_stock
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_stock_detail
+msgid "Details"
+msgstr "明细"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+msgid "Operation Details"
+msgstr "作业明细"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+msgid "MES Operation Details"
+msgstr "MES 作业明细"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_operation_kind
+msgid "Operation Kind"
+msgstr "作业类别"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_operation_kind
+msgid ""
+"Kind of operation this move belongs to, read on the operation type of its "
+"transfer. It drives the operation detail reports and tells the operations "
+"sharing an incoming, outgoing or internal code apart."
+msgstr "该移动所属的作业类别，读取自其调拨的作业类型；用于驱动作业明细报表，并区分共用入库、出库或内部编码的作业。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Warehouse"
+msgstr "仓库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_warehouse_id
+msgid "Operation Warehouse"
+msgstr "作业仓库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_warehouse_id
+msgid ""
+"Warehouse of the operation type of the move. The warehouse field of the move"
+" is the one the procurement routes read, not the one the operation belongs "
+"to."
+msgstr "该移动的作业类型所属仓库。移动上的 warehouse 字段供补货路线读取，并非该作业所属的仓库。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+msgid "MES Order"
+msgstr "制令单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_production_id
+msgid "Production Order"
+msgstr "生产订单"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Manufacturing Order"
+msgstr "制造订单"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_transfer_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_mes_detail_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Operation Type"
+msgstr "作业类型"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__pick
+msgid "Pick"
+msgstr "拣货"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__pack
+msgid "Pack"
+msgstr "打包"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__delivery
+msgid "Delivery"
+msgstr "发货"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__internal
+msgid "Internal Transfer"
+msgstr "内部调拨"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__manufacture
+msgid "Manufacturing"
+msgstr "制造"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__pbm
+msgid "Picking Before Manufacturing"
+msgstr "制造前拣货"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__sam
+msgid "Stock After Manufacturing"
+msgstr "制造后入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__mes_issue
+msgid "Material Issue"
+msgstr "领料"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__mes_return
+msgid "Material Return"
+msgstr "物料退料"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__mes_over_pick
+msgid "Material Over-pick"
+msgstr "物料超拣"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__mes_fg_receipt
+msgid "Finished Goods Receipt"
+msgstr "完工入库"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_receipt_detail_list
+msgid "Other Receipt Details"
+msgstr "其他入库明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_other_delivery_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_other_delivery_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_other_delivery_detail_list
+msgid "Other Delivery Details"
+msgstr "其他出库明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_vendor_return_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_vendor_return_detail
+msgid "Return to Vendor Details"
+msgstr "退货明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_pick_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_pick_detail
+msgid "Pick Details"
+msgstr "拣货明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_pack_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_pack_detail
+msgid "Pack Details"
+msgstr "打包明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_delivery_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_delivery_detail
+msgid "Delivery Details"
+msgstr "发货明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_internal_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_internal_detail
+msgid "Internal Transfer Details"
+msgstr "内部调拨明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_manufacture_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_manufacture_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_manufacture_detail_list
+msgid "Manufacturing Details"
+msgstr "制造明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_pbm_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_pbm_detail
+msgid "Picking Before Manufacturing Details"
+msgstr "制造前拣货明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_sam_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_sam_detail
+msgid "Stock After Manufacturing Details"
+msgstr "制造后入库明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_mes_issue_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_mes_issue_detail
+msgid "Material Issue Details"
+msgstr "领料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_mes_return_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_mes_return_detail
+msgid "Material Return Details"
+msgstr "退料明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_mes_over_pick_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_mes_over_pick_detail
+msgid "Material Over-pick Details"
+msgstr "超领明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_mes_fg_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_mes_fg_receipt_detail
+msgid "Finished Goods Receipt Details"
+msgstr "完工入库明细"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_consignment_in
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_consignment_in
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "Consignment Receipts"
+msgstr "受托入库单"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_consignment_in_type_id
+msgid "Consignment Receipt Type"
+msgstr "受托入库作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_consignment_in_type_id
+msgid ""
+"Operation type of the consignment receipts: goods provided by the customer "
+"and stored for that customer, entering the stock without a purchase order "
+"and going through the quality control and storage operations of the "
+"reception."
+msgstr "受托入库的作业类型：由客户提供并代客户保管的货物，不通过采购订单入库，并继续走收货的质检与入库作业。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_warehouse__sn_outsourcing_issue_type_id
+msgid "Outsourcing Issue Type"
+msgstr "外加工领料作业类型"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_warehouse__sn_outsourcing_issue_type_id
+msgid ""
+"Operation type of the outsourcing issues: goods sent out to a subcontractor."
+" The operation type is created by hand, so it is linked here rather than "
+"created with the warehouse."
+msgstr "外加工领料的作业类型：发往外部加工商的货物。该作业类型为手工创建，因此在此关联而不是随仓库创建。"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__consignment_in
+msgid "Consignment Receipt"
+msgstr "受托入库"
+
+#. module: sn_wsd_stock
+#: model:ir.model.fields.selection,name:sn_wsd_stock.selection__stock_move__sn_operation_kind__outsourcing_issue
+msgid "Outsourcing Issue"
+msgstr "外加工领料"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_consignment_in_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_consignment_in_detail
+msgid "Consignment Receipt Details"
+msgstr "受托入库明细"
+
+#. module: sn_wsd_stock
+#: model:ir.actions.act_window,name:sn_wsd_stock.action_sn_wsd_outsourcing_issue_detail
+#: model:ir.ui.menu,name:sn_wsd_stock.menu_sn_wsd_outsourcing_issue_detail
+msgid "Outsourcing Issue Details"
+msgstr "外加工领料明细"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_consignment_in_list
+msgid "Consignor"
+msgstr "委托方"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/models/stock_warehouse.py:0
+msgid "%(name)s Sequence consignment receipts"
+msgstr "%(name)s 受托入库序列"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_operation_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_reception_detail_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_stock_other_operation_type_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Generate Internal Batches"
+msgstr "生成内部批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+msgid "Revoke Internal Batches"
+msgstr "撤销内部批次"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_material_labels
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_finished_labels
+msgid "Print Material Labels"
+msgstr "打印物料标签"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_picking_form_issue_labels
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_move_operations_issue_labels
+msgid "Print Issue Material Labels"
+msgstr "打印领料标签"

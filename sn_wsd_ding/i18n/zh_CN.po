@@ -1,0 +1,911 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_ding
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-24 02:09+0000\n"
+"PO-Revision-Date: 2026-08-24 02:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid ""
+"%(name)s: DingTalk approval already launched (config: %(config)s, instance: "
+"%(code)s, status: %(status)s)."
+msgstr "%(name)s：钉钉审批已启动（配置：%(config)s，实例：%(code)s，状态：%(status)s）。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__action_time
+msgid "Action Time"
+msgstr "操作时间"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_ding
+#: model:ir.actions.act_window,name:sn_wsd_ding.action_dingding_approval_config
+#: model:ir.ui.menu,name:sn_wsd_ding.menu_sn_wsd_ding_config
+msgid "Approval Config"
+msgstr "审批配置"
+
+#. module: sn_wsd_ding
+#: model:ir.actions.act_window,name:sn_wsd_ding.action_dingding_approval_instance
+#: model:ir.ui.menu,name:sn_wsd_ding.menu_sn_wsd_ding_instance
+msgid "Approval Instances"
+msgstr "审批实例"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__log_ids
+msgid "Approval Logs"
+msgstr "审批日志"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_instance.py:0
+msgid "Approval instance refreshed."
+msgstr "审批实例已刷新。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__approver_name
+msgid "Approver"
+msgstr "审批人"
+
+#. module: sn_wsd_ding
+#: model:ir.actions.server,name:sn_wsd_ding.action_server_fetch_dingding_user_ids
+msgid "Batch Fetch DingTalk User IDs"
+msgstr "批量获取钉钉用户ID"
+
+#. module: sn_wsd_ding
+#: model:ir.actions.server,name:sn_wsd_ding.action_server_refresh_dingding_approval_instances
+msgid "Batch Refresh Status"
+msgstr "批量刷新状态"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__comment
+msgid "Comment"
+msgstr "意见/备注"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__config_id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__config_id
+msgid "Config"
+msgstr "配置"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_res_config_settings
+msgid "Config Settings"
+msgstr "配置设置"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__create_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__create_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__create_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Current user has no phone; cannot map to DingTalk user."
+msgstr "当前用户没有电话号码；无法映射到钉钉用户。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__description
+msgid "Description"
+msgstr "说明"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__child_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_field_form
+msgid "Detail Fields"
+msgstr "明细字段"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+#: code:addons/sn_wsd_ding/models/dingding_approval_instance.py:0
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+#: model:ir.ui.menu,name:sn_wsd_ding.menu_sn_wsd_ding_root
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "DingTalk"
+msgstr "钉钉"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_sn_wsd_ding_client
+msgid "DingTalk API Client"
+msgstr "钉钉API客户端"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "DingTalk API error: %(code)s %(msg)s"
+msgstr "钉钉 API 错误：%(code)s %(msg)s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_agent_id
+msgid "DingTalk Agent ID"
+msgstr "钉钉Agent ID"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_app_key
+msgid "DingTalk App Key"
+msgstr "钉钉App Key"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_app_secret
+msgid "DingTalk App Secret"
+msgstr "钉钉App Secret"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_app_uuid
+msgid "DingTalk App UUID"
+msgstr "钉钉App UUID"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_sn_wsd_ding_approval_config
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "DingTalk Approval Config"
+msgstr "钉钉审批配置"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_tree
+msgid "DingTalk Approval Configs"
+msgstr "钉钉审批配置"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_sn_wsd_ding_approval_field
+msgid "DingTalk Approval Field Mapping"
+msgstr "钉钉审批字段映射"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_sn_wsd_ding_approval_instance
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_form
+msgid "DingTalk Approval Instance"
+msgstr "钉钉审批实例"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_sn_wsd_ding_approval_instance_log
+msgid "DingTalk Approval Instance Log"
+msgstr "钉钉审批实例日志"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_tree
+msgid "DingTalk Approval Instances"
+msgstr "钉钉审批实例"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_callback_aes_key
+msgid "DingTalk Callback AES Key"
+msgstr "钉钉回调AES密钥"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__dingding_callback_token
+msgid "DingTalk Callback Token"
+msgstr "钉钉回调令牌"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__dingding_field_id
+msgid "DingTalk Field ID"
+msgstr "钉钉字段ID"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_field_form
+msgid "DingTalk Field Mapping"
+msgstr "钉钉字段映射"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__dingding_field_name
+msgid "DingTalk Field Name"
+msgstr "钉钉字段名称"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__dingding_field_type
+msgid "DingTalk Field Type"
+msgstr "钉钉字段类型"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "DingTalk HTTP error %s: %s"
+msgstr "钉钉 HTTP 错误 %s：%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__process_code
+msgid "DingTalk Process Code"
+msgstr "钉钉流程编码"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "DingTalk Schema"
+msgstr "钉钉架构"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__dingding_schema_json
+msgid "DingTalk Schema (raw)"
+msgstr "钉钉表单结构 (原始)"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_users__dingding_user_id
+msgid "DingTalk User ID"
+msgstr "钉钉用户ID"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "DingTalk fields synced."
+msgstr "钉钉字段已同步。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client_inherit.py:0
+msgid "DingTalk form_component_values is required."
+msgstr "钉钉表单组件值是必需的。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client_inherit.py:0
+msgid "DingTalk originator_user_id is required."
+msgstr "钉钉发起人用户ID是必需的。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client_inherit.py:0
+msgid "DingTalk process_code is required."
+msgstr "钉钉流程代码是必需的。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "DingTalk request failed: %s"
+msgstr "钉钉请求失败：%s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "DingTalk response is not JSON (HTTP %s)."
+msgstr "钉钉响应不是 JSON 格式（HTTP %s）。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "DingTalk response missing process_instance_id."
+msgstr "钉钉响应缺少流程实例ID。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "DingTalk template code not found for name: %s"
+msgstr "未找到名称对应的钉钉模板 code: %s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "DingTalk user not found for mobile: %s"
+msgstr "未找到手机号对应的钉钉用户：%s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid "DingTalk user_id updated: %s"
+msgstr "钉钉 user_id 已更新：%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_users__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__display_name
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_client__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__end_time
+msgid "End Time"
+msgstr "结束时间"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid "Errors: %s"
+msgstr "错误：%s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "Failed to get DingTalk access_token."
+msgstr "获取钉钉 access_token 失败。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client_inherit.py:0
+msgid ""
+"Failed to get DingTalk form schema via v1.0 SDK (process_code=%(code)s, app_uuid=%(app)s).\n"
+"%(details)s"
+msgstr ""
+"通过 v1.0 SDK 获取钉钉表单结构失败（process_code=%(code)s，app_uuid=%(app)s）。\n"
+"%(details)s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Failed to sync fields from DingTalk: %s"
+msgstr "从钉钉同步字段失败：%s"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_users_form_dingding_user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_users_form_simple_modif_dingding_user_id
+msgid "Fetch DingTalk User ID"
+msgstr "获取钉钉用户ID"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid ""
+"Fetch DingTalk template processCode by this record's Name, then fill Process"
+" Code."
+msgstr "根据当前记录的名称获取钉钉模板 processCode，并自动填写流程编码。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "Fetch DingTalk userid by mobile/phone."
+msgstr "通过手机/电话获取钉钉用户ID。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid ""
+"Fetch form fields from DingTalk process definition and update mappings."
+msgstr "从钉钉流程定义获取表单字段并更新映射。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__field_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "Field Mappings"
+msgstr "字段映射"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__field_owner
+msgid "Field Owner"
+msgstr "字段所有者"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid ""
+"Field path can only follow many2one relations. '%(field)s' on '%(model)s' is"
+" %(ttype)s."
+msgstr "字段路径只能遵循多对一关系。'%(model)s' 上的 '%(field)s' 是 %(ttype)s。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "First errors (max 10):"
+msgstr "前几个错误（最多10个）："
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid ""
+"First errors:\n"
+"%s"
+msgstr ""
+"主要错误：\n"
+"%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,help:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_o2m_field_id
+msgid ""
+"For DingTalk table field: choose the One2many field on the target model that"
+" represents the detail table."
+msgstr "针对钉钉表格字段：在目标模型上选择代表明细表的一对多（One2many）字段。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "Generate Launch Action"
+msgstr "生成启动操作"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid ""
+"Generate a server action to launch DingTalk approvals from the target model."
+msgstr "生成服务器操作以从目标模型启动钉钉审批。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,help:sn_wsd_ding.field_sn_wsd_ding_approval_config__server_action_id
+msgid ""
+"Generated server action bound to the target model to launch this DingTalk "
+"approval from documents."
+msgstr "生成的绑定到目标模型的服务器操作，用于从单据直接发起该钉钉审批。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "Get Template Code"
+msgstr "获取模板 code"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_config_settings__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_res_users__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_client__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,help:sn_wsd_ding.field_sn_wsd_ding_approval_config__target_model_id
+#: model:ir.model.fields,help:sn_wsd_ding.field_sn_wsd_ding_approval_field__target_model_id
+msgid ""
+"If set, this config is intended to be launched from records of this model, "
+"and record_field mappings will read from that record."
+msgstr "如果设置，此配置将支持从该模型的记录中发起，且记录字段映射将从该记录读取。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__initiator_user_id
+msgid "Initiator"
+msgstr "发起人"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__instance_id
+msgid "Instance"
+msgstr "实例"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Invalid field '%(field)s' on model '%(model)s'."
+msgstr "模型 '%(model)s' 上的字段 '%(field)s' 无效。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Invalid record field path."
+msgstr "记录字段路径无效。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Invalid value while following field path '%s'."
+msgstr "遵循字段路径 '%s' 时值无效。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__last_sync_error
+msgid "Last Sync Error"
+msgstr "最近同步错误"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__last_sync_at
+msgid "Last Synced At"
+msgstr "最近同步时间"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__write_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__write_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__write_date
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Launch DingTalk Approval: %s"
+msgstr "启动钉钉审批：%s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Launched: %(ok)s, Errors: %(err)s"
+msgstr "已启动：%(ok)s，错误：%(err)s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__line_model_id
+msgid "Line Model"
+msgstr "明细行模型"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_form
+msgid "Logs"
+msgstr "日志"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "Missing dependency alibabacloud_dingtalk: %s"
+msgstr "缺少依赖库 alibabacloud_dingtalk：%s"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "Mobile/Phone is empty."
+msgstr "手机/电话为空。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__name
+msgid "Name"
+msgstr "名称"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Name is required to fetch DingTalk template code."
+msgstr "名称不能为空，用于获取钉钉模板 code。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "No fields found from DingTalk process definition."
+msgstr "在钉钉流程定义中未找到字段。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "No records selected."
+msgstr "未选择记录。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__node_name
+msgid "Node"
+msgstr "节点"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_o2m_field_id
+msgid "Odoo Detail Table (One2many)"
+msgstr "Odoo 明细表 (One2many)"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__server_action_id
+msgid "One-click Server Action"
+msgstr "一键发起服务器操作"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "One-click action generated/updated. Please refresh the page."
+msgstr "一键操作已生成/更新。请刷新页面。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_tree
+msgid "Open"
+msgstr "打开"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_form
+msgid "Open Related"
+msgstr "打开相关"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__owner_sort
+msgid "Owner Sort"
+msgstr "所属排序"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__parent_field_id
+msgid "Parent Field"
+msgstr "父级字段"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "Please configure DingTalk App Key and App Secret in Settings."
+msgstr "请在设置中配置钉钉 App Key 和 App Secret。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_client.py:0
+msgid "Please configure DingTalk App UUID in Settings."
+msgstr "请在设置中配置钉钉 App UUID。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid "Please set Mobile or Phone first."
+msgstr "请先设置手机或电话。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Please set Target Model first."
+msgstr "请先设置目标模型。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Please set the target model before selecting a record field."
+msgstr "选择记录字段前请先设置目标模型。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__process_instance_id
+msgid "Process Instance ID"
+msgstr "流程实例ID"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_form
+msgid "Raw"
+msgstr "原始"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__raw_response
+msgid "Raw Response"
+msgstr "原始响应"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__raw_type
+msgid "Raw Type"
+msgstr "原始类型"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_field_id
+msgid "Record Field"
+msgstr "记录字段"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_field_model_id
+msgid "Record Field Model"
+msgstr "记录字段模型"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_field_model_name
+msgid "Record Field Model Name"
+msgstr "记录字段模型名称"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__record_field_path
+msgid "Record Field Path"
+msgstr "记录字段路径"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Record is required to build DingTalk form from record fields."
+msgstr "需要记录才能从记录字段构建钉钉表单。"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_form
+msgid "Refresh"
+msgstr "刷新"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__res_model
+msgid "Related Model"
+msgstr "相关模型"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_instance_tree
+msgid "Related Record"
+msgstr "相关记录"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__res_id
+msgid "Related Record ID"
+msgstr "相关记录ID"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__res_name
+msgid "Related Record Name"
+msgstr "相关记录名称"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__required
+msgid "Required"
+msgstr "必填"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Required DingTalk field missing: %s"
+msgstr "缺少必需的钉钉字段：%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__result
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__dingding_schema_sync_at
+msgid "Schema Synced At"
+msgstr "结构同步时间"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "See server logs for full traceback."
+msgstr "查看服务器日志以获取完整回溯。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_instance.py:0
+msgid "Selected approval instances refreshed."
+msgstr "已刷新选定的审批实例。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__sequence
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid "Skipped(no phone): %s"
+msgstr "已跳过（无电话）：%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__start_time
+msgid "Start Time"
+msgstr "开始时间"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance__status
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.view_dingding_approval_config_form
+msgid "Sync DingTalk Fields"
+msgstr "同步钉钉字段"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_config__target_model_id
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_field__target_model_id
+msgid "Target Model"
+msgstr "目标模型"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "Template code updated."
+msgstr "模板 code 已更新。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "This approval config is for model %s."
+msgstr "此审批配置适用于模型 %s。"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/res_users.py:0
+msgid "Updated: %s"
+msgstr "已更新：%s"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,help:sn_wsd_ding.field_res_config_settings__dingding_callback_aes_key
+msgid "Used to decrypt/verify DingTalk event callbacks."
+msgstr "用于解密/验证钉钉事件回调。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,help:sn_wsd_ding.field_res_config_settings__dingding_callback_token
+msgid ""
+"Used to verify DingTalk event callbacks (approval instance status change)."
+msgstr "用于验证钉钉事件回调（审批实例状态变更）。"
+
+#. module: sn_wsd_ding
+#: model:ir.model,name:sn_wsd_ding.model_res_users
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields,field_description:sn_wsd_ding.field_sn_wsd_ding_approval_instance_log__approver_user_id
+msgid "User ID"
+msgstr "用户ID"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "User ID Lookup"
+msgstr "用户ID查询"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "aes_key"
+msgstr "aes_key"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "appUuid"
+msgstr "appUuid"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__attachment
+msgid "attachment"
+msgstr "附件"
+
+#. module: sn_wsd_ding
+#. odoo-python
+#: code:addons/sn_wsd_ding/models/dingding_approval_config.py:0
+msgid "attachment mapping does not support Odoo record values yet."
+msgstr "附件映射尚不支持Odoo记录值。"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__date
+msgid "date"
+msgstr "日期"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__department
+msgid "department"
+msgstr "部门"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "dingxxxx"
+msgstr "dingxxxx"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__money
+msgid "money"
+msgstr "金额"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__multi_select
+msgid "multi_select"
+msgstr "多选"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__number
+msgid "number"
+msgstr "数字"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__select
+msgid "select"
+msgstr "单选"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__table
+msgid "table"
+msgstr "明细表"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__text
+msgid "text"
+msgstr "文本"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__textarea
+msgid "textarea"
+msgstr "多行文本"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "token"
+msgstr "token"
+
+#. module: sn_wsd_ding
+#: model:ir.model.fields.selection,name:sn_wsd_ding.selection__sn_wsd_ding_approval_field__dingding_field_type__user
+msgid "user"
+msgstr "用户"
+
+#. module: sn_wsd_ding
+#: model_terms:ir.ui.view,arch_db:sn_wsd_ding.res_config_settings_view_form_dingding_user
+msgid "xxxx"
+msgstr "xxxx"

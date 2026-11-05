@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Products: look a product up by its material specification. The variant
+         search view inherits this one, so it is covered as well. -->
+    <record id="view_product_template_search_material_specification" model="ir.ui.view">
+        <field name="name">product.template.search.material.specification</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='name']" position="after">
+                <field name="material_specification"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Bills of materials: look a BOM up by the specification of its product. -->
+    <record id="view_mrp_bom_search_material_specification" model="ir.ui.view">
+        <field name="name">mrp.bom.search.material.specification</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.view_mrp_bom_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='product_tmpl_id']" position="after">
+                <field name="material_specification"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

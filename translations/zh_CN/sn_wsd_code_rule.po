@@ -1,0 +1,447 @@
+# Odoo zh_CN translation worklist -- sn_wsd_code_rule
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_code_rule
+#. odoo-python
+#: code:addons/sn_wsd_code_rule/models/code_rule.py:0
+msgid "All companies"
+msgstr "所有公司"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_needaction
+msgid "Action Needed"
+msgstr "待处理"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__target_field
+msgid "Character field of the document the generated code is written to."
+msgstr "生成编码写入的单据字符字段。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model,name:sn_wsd_code_rule.model_sn_code_counter
+msgid "Coding Rule Counter"
+msgstr "编码规则计数器"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model,name:sn_wsd_code_rule.model_sn_code_rule_preview
+msgid "Coding Rule Preview"
+msgstr "编码规则预览"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model,name:sn_wsd_code_rule.model_sn_code_rule_segment
+msgid "Coding Rule Segment"
+msgstr "编码规则段"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__create_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__create_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__create_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__date_source__today
+msgid "Current Date"
+msgstr "当前日期"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\digest\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__period__day
+msgid "Daily"
+msgstr "每天"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__display_name
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__display_name
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__display_name
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model,name:sn_wsd_code_rule.model_sn_code_rule
+msgid "Document Coding Rule"
+msgstr "单据编码规则"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__empty_policy__blank
+msgid "Empty String"
+msgstr "空字符串"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__seq_impl__engine
+msgid "Engine Counter"
+msgstr "引擎计数器"
+
+#. module: sn_wsd_code_rule
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__error
+msgid "Error"
+msgstr "错误"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__lookup_field_path
+msgid "Field path read on the matched lookup record."
+msgstr "在匹配到的查找记录上读取的字段路径。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_preview__res_id
+msgid "Id of an existing document record to render against."
+msgstr "用于渲染的现有单据记录 ID。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选此项，则需要查看新消息。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__message_has_error
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选此项， 某些消息将出现发送错误。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_code_rule
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__key
+msgid "Key"
+msgstr "密钥KEY"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__write_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__write_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__write_date
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__company_id
+msgid "Leave empty to apply to every company."
+msgstr "留空则适用于所有公司。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_code_rule\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__lookup_domain
+msgid "Lookup Domain"
+msgstr "查表条件"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__model_name
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__rule_model_name
+msgid "Model"
+msgstr "模型"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__rule_model_name
+msgid "Model of the parent rule, feeding the field path pickers."
+msgstr "父规则的模型，用于字段路径选择器。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__period__month
+msgid "Monthly"
+msgstr "每月"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息的数量"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__group_field_paths
+msgid ""
+"One field path per line: the counter restarts whenever any of these values "
+"changes (e.g. product_id.default_code)."
+msgstr "每行一个字段路径：只要其中任一值发生变化，计数器即重新开始（例如 product_id.default_code）。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__picking_type_id
+msgid ""
+"Only used when the model is stock.picking: distinguishes rules for "
+"issue/receipt/return/over-pick documents."
+msgstr "仅当模型为 stock.picking 时使用：区分出库/入库/退货/超拣单据的规则。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__date_format
+msgid "Python strftime codes, e.g. %%Y%%m%%d -> 20260908."
+msgstr "Python strftime 代码，例如 %%Y%%m%%d -> 20260908。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__empty_policy__error
+msgid "Raise Error"
+msgstr "抛出错误"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_code_rule
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__res_id
+msgid "Record"
+msgstr "记录"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__date_source__field
+msgid "Record Date Field"
+msgstr "记录日期字段"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__date_field_path
+msgid ""
+"Record date used when the source is a field (dot notation); falls back to "
+"today when empty or unset."
+msgstr "来源为字段（点号表示法）时使用的记录日期；为空或未设置时回退为今天。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__field_path
+msgid ""
+"Record field rendered as the segment value, dot notation across many2one "
+"hops (e.g. picking_id.partner_id.ref)."
+msgstr "渲染为段值的记录字段，支持跨多对一跳转的点号表示法（例如 picking_id.partner_id.ref）。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__result
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_code_rule
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__rule_id
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_preview__rule_id
+msgid "Rule"
+msgstr "规则"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__lookup_domain
+msgid ""
+"Search domain on the lookup model; {{field_path}} placeholders are resolved "
+"against the coded record first, e.g. [('x_drawing_no', '=', "
+"{{product_id.default_code}})]."
+msgstr ""
+"查找模型上的搜索域；{{field_path}} 占位符先按被编码的记录解析，例如 [('x_drawing_no', '=', "
+"{{product_id.default_code}})]。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_code_rule\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__segment_id
+msgid "Segment"
+msgstr "段"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__segment_count
+msgid "Segment Count"
+msgstr "段数"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule_segment__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule_segment__sequence_code
+msgid ""
+"Sequence code called via next_by_code when the implementation is ir.sequence"
+" (keeps counting on an existing sequence)."
+msgstr "实现方式为 ir.sequence 时通过 next_by_code 调用的序列代码（在现有序列上继续计数）。"
+
+#. module: sn_wsd_code_rule
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__separator
+msgid "String inserted between rendered segments."
+msgstr "插入到各渲染段之间的字符串。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_code_rule\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_code_rule.constraint_sn_code_counter_counter_uniq
+msgid "The coding counter key must be unique per segment."
+msgstr "计数器键在每个段内必须唯一。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_counter__value
+msgid "Value"
+msgstr "值"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_code_rule.field_sn_code_rule__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_search
+msgid "Archived"
+msgstr "已归档"
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Coding Rule"
+msgstr "编码规则"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_code_rule\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_search
+msgid "Coding Rules"
+msgstr "编码规则"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\addons\privacy_lookup\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_code_rule.selection__sn_code_rule_segment__segment_type__lookup
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_segment_form
+msgid "Lookup"
+msgstr "查询"
+
+#. module: sn_wsd_code_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid ""
+"Lookup segments configure their domain and\n"
+"                                    sequence segments their reset dimensions in\n"
+"                                    the segment form below the list."
+msgstr ""
+"查找段在列表下方的段表单中\n"
+"                                    配置其搜索域，序列段则\n"
+"                                    配置其重置维度。"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_form
+msgid "Material Issue Coding"
+msgstr "领料单编码"
+
+#. module: sn_wsd_code_rule
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_code_rule\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_code_rule.field_sn_code_rule__segment_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_code_rule.view_sn_code_rule_list
+msgid "Segments"
+msgstr "段配置"

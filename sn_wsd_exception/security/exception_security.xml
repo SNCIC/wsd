@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- 异常权限并入制造：日常处理（读/建/改/验证）= mrp.group_mrp_user，
+         配置与删除 = mrp.group_mrp_manager。旧组的删除在
+         security/cleanup_groups.xml（本模块装载序列末尾）执行。 -->
 
     <data noupdate="1">
-        <record id="rule_sn_wsd_exception_type_company" model="ir.rule">
-            <field name="name">Exception type company rule</field>
-            <field name="model_id" ref="model_sn_wsd_exception_type"/>
+        <record id="rule_sn_wsd_exception_ticket_company" model="ir.rule">
+            <field name="name">Exception ticket company rule</field>
+            <field name="model_id" ref="model_sn_wsd_exception_ticket"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
 
-        <record id="rule_sn_wsd_exception_record_company" model="ir.rule">
-            <field name="name">Exception record company rule</field>
-            <field name="model_id" ref="model_sn_wsd_exception_record"/>
+        <record id="rule_sn_wsd_exception_category_company" model="ir.rule">
+            <field name="name">Exception category company rule</field>
+            <field name="model_id" ref="model_sn_wsd_exception_category"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_sn_wsd_exception_team_company" model="ir.rule">
+            <field name="name">Exception team company rule</field>
+            <field name="model_id" ref="model_sn_wsd_exception_team"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_sn_wsd_exception_reason_company" model="ir.rule">
+            <field name="name">Exception reason company rule</field>
+            <field name="model_id" ref="model_sn_wsd_exception_reason"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
     </data>

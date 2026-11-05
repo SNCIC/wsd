@@ -186,45 +186,60 @@ class MesOrderRoute(models.Model):
 
         for op_id, node in node_by_op.items():
             common_op = common_by_operation.get(op_id)
+            current = by_op.get(op_id)
             allow_serial_creation = node.get('x_allow_serial_creation')
             if allow_serial_creation is None and common_op:
                 allow_serial_creation = common_op.x_allow_serial_creation
-            allow_reentry = node.get('x_allow_reentry')
-            if allow_reentry is None and common_op:
-                allow_reentry = common_op.x_allow_reentry
-            allow_repair_return = node.get('x_allow_repair_return')
-            if allow_repair_return is None and common_op:
-                allow_repair_return = common_op.x_allow_repair_return
             allow_skip_with_override = node.get('x_allow_skip_with_override')
             if allow_skip_with_override is None and common_op:
                 allow_skip_with_override = common_op.x_allow_skip_with_override
-            ng_retry_limit = node.get('x_ng_retry_limit')
-            if ng_retry_limit in (None, '') and common_op:
-                ng_retry_limit = common_op.x_ng_retry_limit
+            # canvas payloads may omit the manual duration (older payloads,
+            # legacy callers): keep the stored value instead of resetting it
+            time_cycle = node.get('time_cycle_manual')
+            if time_cycle is None:
+                time_cycle = current.time_cycle_manual if current else 0.0
+            # canvas payloads do not carry the work center either: sync keeps
+            # following the common route first, a local edit keeps the stored
+            # value instead of silently clearing it
+            workcenter_id = node.get('workcenter_id')
+            if workcenter_id is None:
+                if common_op and common_op.workcenter_id:
+                    workcenter_id = common_op.workcenter_id.id
+                elif current and current.workcenter_id:
+                    workcenter_id = current.workcenter_id.id
+            # canvas payloads carry the layout; sync graphs / older payloads
+            # may omit it -- keep the stored position per axis instead of
+            # resetting it to the origin
+            canvas_vals = {}
+            if node.get('x') is not None:
+                canvas_vals['x_canvas_x'] = node['x']
+            if node.get('y') is not None:
+                canvas_vals['x_canvas_y'] = node['y']
             vals = {
                 'operation_id': op_id,
-                'workcenter_id': (
-                    node.get('workcenter_id')
-                    or (common_op.workcenter_id.id if common_op and common_op.workcenter_id else False)
-                ),
+                'workcenter_id': workcenter_id or False,
                 'name': node.get('name'),
                 'x_step_code': node.get('step_code'),
-                'x_station_type': node.get('x_station_type'),
                 'sequence': node.get('sequence') or 100,
-                'time_cycle_manual': node.get('time_cycle_manual') or 0.0,
+                'time_cycle_manual': time_cycle,
                 'x_allow_entry': bool(node.get('x_allow_entry')),
                 'x_allow_exit': bool(node.get('x_allow_exit')),
                 'x_allow_serial_creation': bool(allow_serial_creation),
-                'x_allow_reentry': bool(allow_reentry),
-                'x_allow_repair_return': bool(allow_repair_return),
                 'x_allow_skip_with_override': bool(allow_skip_with_override),
-                'x_ng_retry_limit': int(ng_retry_limit or 0),
                 'is_input': bool(node.get('x_allow_entry')),
-                'x_canvas_x': node.get('x'),
-                'x_canvas_y': node.get('y'),
+                'x_canvas_x': canvas_vals.get(
+                    'x_canvas_x', current.x_canvas_x if current else 0),
+                'x_canvas_y': canvas_vals.get(
+                    'x_canvas_y', current.x_canvas_y if current else 0),
             }
-            current = by_op.get(op_id)
             if current and current in frozen:
+                # The freeze protects business fields (operation, edges,
+                # flags, counters); the canvas layout is pure UI -- keep
+                # persisting the dragged position so an in-production order
+                # keeps its arrangement after save (layout drags are the
+                # one edit allowed on a frozen node).
+                if canvas_vals:
+                    current.write(canvas_vals)
                 continue
             if current:
                 current.write(vals)
@@ -246,11 +261,14 @@ class MesOrderRoute(models.Model):
                 new_deps.setdefault(tgt_op, set()).add(src_op)
         for row in rows:
             if row in frozen:
+                # a frozen row keeps its own predecessors (its side is frozen)
                 continue
             fresh_ids = [row_by_op[o].id for o in new_deps.get(row.operation_id.id, ()) if o in row_by_op]
-            # edges pointing at frozen rows are kept as-is (their side is frozen)
-            kept_frozen = row.blocked_by_ids.filtered(lambda r: r in frozen)
-            row.blocked_by_ids = kept_frozen | RouteOp.browse(fresh_ids)
+            # editable rows follow the graph exactly: a deleted edge stays
+            # deleted even when it came from a frozen source (the edge lives
+            # on the editable target's blocked_by_ids, so only the target's
+            # own frozen state protects it)
+            row.blocked_by_ids = RouteOp.browse(fresh_ids)
 
         if common_route:
             counter_map = {
@@ -315,7 +333,7 @@ class MesOrderRoute(models.Model):
                 'name': op.name,
                 'step_code': op.x_step_code,
                 'sequence': op.sequence,
-                'x_station_type': op.x_station_type,
+                'time_cycle_manual': op.time_cycle_manual,
                 'is_input': op.is_input,
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
@@ -383,10 +401,21 @@ class MesOrderRouteOperation(models.Model):
     )
     name = fields.Char()
     display_label = fields.Char(compute='_compute_display_label')
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # display_label is a non-stored compute: search the underlying
+        # operation name/code instead so m2o lookups keep working.
+        if name:
+            domain = list(domain or []) + [
+                '|', '|',
+                ('name', operator, name),
+                ('operation_id.name', operator, name),
+                ('operation_id.code', operator, name),
+            ]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
     x_step_code = fields.Char()
-    x_station_type = fields.Selection(
-        related='operation_id.x_station_type', store=True,
-    )
     sequence = fields.Integer(default=100)
     time_cycle_manual = fields.Float(default=60.0)
     x_canvas_x = fields.Integer(
@@ -407,22 +436,9 @@ class MesOrderRouteOperation(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this MES order operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same MES order operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this MES order operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this MES order operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     is_input = fields.Boolean(
         string='Input Operation',
@@ -455,6 +471,12 @@ class MesOrderRouteOperation(models.Model):
     x_wip_qty = fields.Integer(
         string='In Progress', compute='_compute_pass_statistics', store=True,
         help='SNs currently at this operation.',
+    )
+    x_entered_qty = fields.Integer(
+        string='Entered', compute='_compute_pass_statistics', store=True,
+        help='Distinct SNs that ever entered this operation (any result, '
+             'including in progress): the arrived quantity for '
+             'remaining = planned - entered.',
     )
     x_ok_qty = fields.Integer(
         string='Passed', compute='_compute_pass_statistics', store=True,
@@ -517,14 +539,25 @@ class MesOrderRouteOperation(models.Model):
             op.x_reported_qty = ok_qty + ng_qty + scrap_qty
             op.x_wip_qty = len(op.serial_wip_ids)
             histories = op.serial_history_ids
-            op.x_ok_qty = len(histories.filtered(lambda h: h.result == 'ok'))
-            op.x_ng_qty = len(histories.filtered(lambda h: h.result == 'ng'))
+            # 到站台数（去重）：进过本工序就算——含在制、NG 待复测、报废，
+            # 复测/维修回流不重复计
+            op.x_entered_qty = len(set(histories.mapped(
+                'serial_identity_id').ids))
+            # 台数按 SN 去重：一块板复测多行只算一台（测了几次查历史行）
+            op.x_ok_qty = len(set(
+                histories.filtered(lambda h: h.result == 'ok')
+                .mapped('serial_identity_id').ids))
+            op.x_ng_qty = len(set(
+                histories.filtered(lambda h: h.result == 'ng')
+                .mapped('serial_identity_id').ids))
             if op.mes_route_id.manage_mode == 'report':
                 op.x_scrap_qty = scrap_qty
                 passed = ok_qty + ng_qty + scrap_qty
                 op.x_yield_rate = (ok_qty / passed) if passed else 0.0
             else:
-                op.x_scrap_qty = len(histories.filtered(lambda h: h.result == 'scrap'))
+                op.x_scrap_qty = len(set(
+                    histories.filtered(lambda h: h.result == 'scrap')
+                    .mapped('serial_identity_id').ids))
                 passed = op.x_ok_qty + op.x_ng_qty + op.x_scrap_qty
                 op.x_yield_rate = (op.x_ok_qty / passed) if passed else 0.0
 
@@ -560,18 +593,40 @@ class MesOrderRouteOperation(models.Model):
         ]
         if serial_identity:
             domain.append(('serial_identity_id', '=', serial_identity.id))
+        # 维修截断：关单之后的 OK 才推进可达性（回流的板从回流点重走）
+        cutoff = self.env.context.get('sn_wsd_pass_cutoff')
+        if cutoff:
+            domain.append(('out_date', '>', cutoff))
+        # 返工截断水位（oqc-disposition-closure 任务 5.3）：只认发起时刻
+        # 之后新落的历史行——秒级同秒的时间戳分不开旧 OK 与重走
+        watermark = self.env.context.get('sn_wsd_pass_cutoff_min_id')
+        if watermark:
+            domain.append(('id', '>', watermark))
         return self.env['sn.wsd.serial.operation.history'].search(domain).mapped('route_operation_id')
 
     def _reachable_operations(self, mes_order, serial_identity=None):
         done = self._completed_operations(mes_order, serial_identity)
+        if self.env.context.get('sn_wsd_pass_cutoff'):
+            # 维修截断后严格重走：只有"截断点后有 OK 前驱"的工序可达
+            # （授权种子由 enter_station 单判）；起点站不再默认可达。
+            return self.filtered(
+                lambda op: op.blocked_by_ids and op.blocked_by_ids & done)
         return self.filtered(lambda op: not op.blocked_by_ids or op.blocked_by_ids & done)
 
 
 class SerialOperationHistory(models.Model):
-    """Append-only record: SN passed this operation of this MES order.
+    """Record of an SN passing an operation of this MES order.
 
-    Only result='ok' counts as completed for reachability; 'ng' blocks the
-    successors until handled (repair/scrap flows are out of scope for now).
+    The row is born at the station scan (enter_station writes it together
+    with the WIP row). A one-scan station pass (pass_one_station) backfills
+    the verdict in the same transaction; the terminal's two-step
+    OK/NG/scrap flow leaves the in_progress row until the operator decides,
+    and the NG-pending state keeps it open until the defect code scan.
+    Every completed pass (OK or NG) consumes one of the operation's
+    pass-limit attempts; multiple OK rows per (SN, operation) are
+    legitimate (test-station retests, rework revisits). The old
+    "at most one ok row" partial index was dropped in migration
+    19.0.10.0.0 — station-pass-count.
     """
     _name = 'sn.wsd.serial.operation.history'
     _description = 'SN Operation History'
@@ -592,20 +647,82 @@ class SerialOperationHistory(models.Model):
              'the WIP row on leave, kept for equipment-level traceability).',
     )
     result = fields.Selection(
-        [('ok', 'OK'), ('ng', 'NG'), ('scrap', 'Scrap'), ('skipped', 'Skipped')],
+        [('in_progress', 'WIP'), ('ok', 'OK'), ('ng', 'NG'),
+         ('scrap', 'Scrap')],
         required=True, index=True,
+        help='WIP (key in_progress) = the SN entered this operation and is '
+             'still parked there (the row waits for its leave backfill).')
+    x_batch_pass_log_id = fields.Many2one(
+        'sn.wsd.batch.pass.log', string='Batch Pass Log',
+        index=True, ondelete='set null', copy=False,
+        help='Set when this OK row was written by a batch station pass '
+             '(administrative pass) instead of a physical scan; the log '
+             'header carries the operator, reason and SN list.',
+    )
+    x_batch_pass_reason = fields.Selection(
+        related='x_batch_pass_log_id.reason', string='Batch Pass Reason',
+    )
+    x_is_rework = fields.Boolean(
+        string='Rework Pass', index=True, copy=False,
+        help='Set on pass rows written while the board carried an active '
+             'OQC rework voucher: the row is a re-walk, not first-pass '
+             'production. Reports and piece-rate ledgers can tell them '
+             'apart (station OK counts are SN-deduped anyway).',
     )
     in_date = fields.Datetime()
-    out_date = fields.Datetime(default=fields.Datetime.now)
+    out_date = fields.Datetime(index=True)
+    operator_code = fields.Char(
+        index=True,
+        help='Employee who scanned the pass (API: M_EMP; terminal: current '
+             'user employee). Old rows written before the column have no '
+             'source to backfill.')
+    x_dwell_hours = fields.Float(
+        string='Dwell (h)', compute='_compute_x_dwell_hours', store=True,
+        help='Hours the SN spent at this operation once it left: '
+             'out_date - in_date. Zero for in-progress rows.')
+    x_wip_dwell_hours = fields.Float(
+        string='In-Progress Dwell (h)', compute='_compute_x_wip_dwell_hours',
+        help='Hours since the SN entered this operation, for in-progress '
+             'rows only. Computed at read time and never stored -- it must '
+             'keep moving with the clock.')
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
 
-    _history_uniq = models.Constraint(
-        'unique(serial_identity_id, route_operation_id)',
-        'An SN passes an operation of a MES order only once (re-entry rules '
-        'are handled at the operation level, not by duplicating history).',
-    )
+    def _auto_init(self):
+        """Composite index for the "current operation per SN" projection
+        (``WHERE mes_order_id = %s GROUP BY serial_identity_id, max(id)``,
+        read by the station terminal and the batch-pass candidate list).
+        Created on install as well as on upgrade; migration 19.0.14.11.0
+        runs the same statement for existing databases."""
+        res = super()._auto_init()
+        self.env.cr.execute("""
+            CREATE INDEX IF NOT EXISTS sn_wsd_serial_op_history_order_serial_idx
+            ON sn_wsd_serial_operation_history
+               (mes_order_id, serial_identity_id, id)
+        """)
+        return res
+
+    @api.depends('in_date', 'out_date')
+    def _compute_x_dwell_hours(self):
+        for history in self:
+            if history.in_date and history.out_date:
+                history.x_dwell_hours = (
+                    history.out_date - history.in_date).total_seconds() / 3600.0
+            else:
+                history.x_dwell_hours = 0.0
+
+    # 与存储字段分属两个 compute：混合 store/非 store 会触发 Odoo 注册表
+    # 的 inconsistent-store 警告并可能连带重算写库
+    @api.depends('result', 'in_date')
+    def _compute_x_wip_dwell_hours(self):
+        now = fields.Datetime.now()
+        for history in self:
+            if history.result == 'in_progress' and history.in_date:
+                history.x_wip_dwell_hours = (
+                    now - history.in_date).total_seconds() / 3600.0
+            else:
+                history.x_wip_dwell_hours = 0.0
 
 
 class SerialWip(models.Model):
@@ -673,3 +790,12 @@ class MesOperationReport(models.Model):
     company_id = fields.Many2one(
         'res.company', related='mes_order_id.company_id', store=True, index=True,
     )
+
+    def _apply_report_allocation(self, participant_vals, team_id):
+        """Extension point for the optional allocation arguments of
+        report_operation_qty (report-daily-workbench). The core model has
+        no notion of people allocation, so this is deliberately a no-op;
+        sn_wsd_piece_rate overrides it to persist the team and participant
+        rows on this report."""
+        self.ensure_one()
+        return None

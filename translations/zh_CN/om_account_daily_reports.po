@@ -1,0 +1,24 @@
+# Odoo zh_CN translation worklist -- om_account_daily_reports
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 02:00+0000\n"
+"PO-Revision-Date: 2026-10-12 02:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: om_account_daily_reports
+#. odoo-python
+#: code:addons/om_account_daily_reports/report/report_bankbook.py:0
+#: code:addons/om_account_daily_reports/report/report_cashbook.py:0
+#: code:addons/om_account_daily_reports/report/report_daybook.py:0
+msgid "Form content is missing, this report cannot be printed."
+msgstr "缺少表单内容，无法打印此报表。"

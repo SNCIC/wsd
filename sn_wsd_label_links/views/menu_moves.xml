@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu placement (user request 2026-09-07): the label center lives
+         under Manufacturing; the PDA print screen joins the barcode app's
+         workshop grid instead of the label center. -->
+    <record id="sn_wsd_label.menu_label_center" model="ir.ui.menu">
+        <field name="parent_id" ref="mrp.menu_mrp_root"/>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="sn_wsd_label.menu_label_print_screen" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_workshop_fn_label_print"
+              name="Label Print"
+              parent="sn_wsd_barcode.menu_workshop_functions"
+              action="sn_wsd_label.action_label_print_screen"
+              sequence="65"
+              groups="base.group_user"/>
+</odoo>

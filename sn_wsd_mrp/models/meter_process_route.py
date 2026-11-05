@@ -5,9 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 
 from .constants import (
     BOARD_SIDE_SELECTION,
-    PROCESS_SECTION_SELECTION,
     SIDE_SELECTION,
-    STATION_TYPE_SELECTION,
 )
 
 
@@ -16,6 +14,21 @@ class SnWsdOperation(models.Model):
     _description = 'Standard Operation'
     _order = 'code, id'
     _check_company_auto = True
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # 名称或代码都能搜到：代码是业务稳定键（工艺文件清单、设备 API
+        # 匹配都用它），选择器按代码搜索是现场常态，纯增量不改名称匹配。
+        # Odoo 19 无 _name_search，基类 name_search 只搜 display_name。
+        if name and operator in ('like', 'ilike'):
+            records = self.search_fetch(
+                ['|', ('code', operator, name),
+                 ('display_name', operator, name)] + list(domain or []),
+                ['display_name'], limit=limit)
+            return [(record.id, record.display_name)
+                    for record in records.sudo()]
+        return super().name_search(
+            name, domain=domain, operator=operator, limit=limit)
 
     code = fields.Char(string='Operation Code', index=True, copy=False)
     name = fields.Char(string='Operation', required=True)
@@ -37,15 +50,11 @@ class SnWsdOperation(models.Model):
         domain="[('company_id', '=', company_id), ('active', '=', True)]",
         help='Work centers that can execute this operation.',
     )
-    x_station_type = fields.Selection(
-        STATION_TYPE_SELECTION,
-        string='Operation Type',
-        default='assembly',
-        required=True,
-    )
-    x_process_section = fields.Selection(
-        PROCESS_SECTION_SELECTION,
+    x_process_section = fields.Many2one(
+        'sn.wsd.process.section',
         string='Process Section',
+        index=True,
+        check_company=True,
     )
     time_mode = fields.Selection(
         [('manual', 'Fixed'), ('auto', 'Computed')],
@@ -65,8 +74,19 @@ class SnWsdOperation(models.Model):
         string='Max Test Count',
         required=True,
         default=1,
+        help='Total station passes (OK and NG alike) allowed per SN at this '
+             'operation; end/output operations are always capped at 1.',
     )
     note = fields.Text(string='Notes')
+
+    @api.constrains('x_max_test_count')
+    def _check_max_test_count(self):
+        # 过站总次数上限：必填且 ≥1（0=不限语义已废弃，前端不可选 0）
+        for operation in self:
+            if operation.x_max_test_count < 1:
+                raise ValidationError(_(
+                    'The max test count of operation %s must be at least 1.',
+                    operation.display_name))
 
     _operation_code_company_uniq = models.Constraint(
         'unique(company_id, code)',
@@ -75,8 +95,17 @@ class SnWsdOperation(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if not vals.get('code'):
+                # coding rule first (mes-coding-rule batch 5); fallback to
+                # the legacy ir.sequence when no rule is configured
+                proxy = self.new(dict(
+                    vals, company_id=vals.get('company_id', self.env.company.id)))
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['code'] = rule.render(proxy)
+                    continue
                 code = self.env['ir.sequence'].next_by_code('sn.wsd.operation')
                 if not code:
                     raise UserError(_(
@@ -85,6 +114,31 @@ class SnWsdOperation(models.Model):
                     ) % 'sn.wsd.operation')
                 vals['code'] = code
         return super().create(vals_list)
+
+    @api.model
+    def _seed_operation_code_rule(self):
+        """Seed the default coding rule for operation codes
+        (mes-coding-rule batch 5): OP-NNNNN, counter never reset.
+
+        Idempotent: an existing rule targeting the model wins, so a
+        user-configured rule is never duplicated or overwritten.
+        """
+        Rule = self.env['sn.code.rule']
+        model_id = self.env['ir.model']._get_id('sn.wsd.operation')
+        if not model_id or Rule.search_count([
+                ('model_id', '=', model_id), ('picking_type_id', '=', False)]):
+            return
+        Rule.create({
+            'name': 'Operation Code Coding',
+            'model_id': model_id,
+            'target_field': 'code',
+            'separator': '-',
+            'segment_ids': [
+                (0, 0, {'segment_type': 'fixed', 'text_value': 'OP'}),
+                (0, 0, {'segment_type': 'seq', 'padding': 5,
+                        'period': 'none', 'seq_impl': 'engine'}),
+            ],
+        })
 
 class MeterProcessRoute(models.Model):
     _name = 'sn.wsd.process.route'
@@ -95,6 +149,18 @@ class MeterProcessRoute(models.Model):
 
     name = fields.Char(string='Route Name', required=True)
     code = fields.Char(string='Route Code', required=True, index=True)
+    # 工艺类型：标识整条路线属于哪种工艺（SMT 上料/扣点域以此判定拆行与扣点触发）。
+    x_process_type = fields.Selection(
+        [
+            ('smt', 'SMT'),
+            ('dip', 'DIP'),
+            ('machine', 'Complete Machine'),
+        ],
+        string='Process Type',
+        tracking=True,
+        help='Craft family of this route: SMT lines split the material table '
+             'and deduct points on pass; DIP and complete-machine lines do not.',
+    )
     version = fields.Integer(
         string='Version',
         default=0,
@@ -338,11 +404,10 @@ class MeterProcessRoute(models.Model):
                     '<div style="font-weight:bold;font-size:13px;color:#1a73e8;border-bottom:1px solid #e0e0e0;padding-bottom:4px;margin-bottom:6px;">'
                     '%s &middot; %s</div>'
                     '<div style="font-size:11px;color:#555;line-height:1.7;">'
-                    '工位类型: %s<br/>'
                     '手动时长: %s<br/>'
                     '前置工序: %s'
                     '</div></div>'
-                    % (op.x_step_code or '', op.name or '', op.x_station_type or '-',
+                    % (op.x_step_code or '', op.name or '',
                        op.time_cycle_manual or 0, deps)
                 )
                 parts.append('<span style="color:#4285f4;font-size:22px;font-weight:bold;">&rarr;</span>')
@@ -356,8 +421,10 @@ class MeterProcessRoute(models.Model):
         for route in self:
             nodes = route._flow_graph()['nodes']
             nodes = sorted(nodes, key=lambda n: (n.get('sequence') or 0, str(n.get('uid', ''))))
+            # The operation name is the wording operators read; the step code
+            # is only the fallback for nodes saved without a name.
             route.route_flow_text = ' → '.join(
-                (n.get('step_code') or n.get('name') or '') for n in nodes
+                (n.get('name') or n.get('step_code') or '') for n in nodes
             ) if nodes else False
 
     @api.model
@@ -588,14 +655,10 @@ class MeterProcessRoute(models.Model):
                 'name': op.name,
                 'step_code': op.x_step_code,
                 'sequence': op.sequence,
-                'x_station_type': op.x_station_type,
                 'time_cycle_manual': op.time_cycle_manual,
                 'x_allow_entry': op.x_allow_entry,
                 'x_allow_exit': op.x_allow_exit,
                 'x_allow_serial_creation': op.x_allow_serial_creation,
-                'x_allow_reentry': op.x_allow_reentry,
-                'x_allow_repair_return': op.x_allow_repair_return,
-                'x_ng_retry_limit': op.x_ng_retry_limit,
                 'predecessors': op.blocked_by_route_operation_ids.mapped('x_step_code'),
             })
         for op in self.route_operation_ids:
@@ -621,17 +684,27 @@ class MeterProcessRoute(models.Model):
             ('company_id', 'in', [False, company.id]),
             ('active', '=', True),
         ]
-        operations = self.env['sn.wsd.operation'].search(
-            domain, order='x_process_section, code, name',
-        )
-        return [{
+        operations = self.env['sn.wsd.operation'].search(domain)
+        ordered = sorted(
+            operations,
+            key=lambda op: (
+                op.x_process_section.sequence if op.x_process_section else 999,
+                op.code or '',
+                op.name or '',
+            ))
+        return [self._palette_operation_vals(op, used=False) for op in ordered]
+
+    def _palette_operation_vals(self, op, used):
+        section = op.x_process_section
+        return {
             'id': op.id,
             'code': op.code or '',
             'name': op.name or '',
-            'x_station_type': op.x_station_type or '',
-            'x_process_section': op.x_process_section or '',
-            'used': False,
-        } for op in operations]
+            'section_id': section.id or False,
+            'section_name': section.name or '',
+            'section_sequence': section.sequence if section else 999,
+            'used': used,
+        }
 
     def get_route_operations(self):
         """Return all operations for the palette, with a 'used' flag."""
@@ -642,14 +715,15 @@ class MeterProcessRoute(models.Model):
         operations = self.env['sn.wsd.operation'].browse(
             [op['id'] for op in self.get_route_operations_for_company(self.company_id.id)]
         )
-        return [{
-            'id': op.id,
-            'code': op.code or '',
-            'name': op.name or '',
-            'x_station_type': op.x_station_type or '',
-            'x_process_section': op.x_process_section or '',
-            'used': op.id in used_op_ids,
-        } for op in operations]
+        ordered = sorted(
+            operations,
+            key=lambda op: (
+                op.x_process_section.sequence if op.x_process_section else 999,
+                op.code or '',
+                op.name or '',
+            ))
+        return [self._palette_operation_vals(op, used=op.id in used_op_ids)
+                for op in ordered]
 
     def _apply_flow_versioning(self):
         """保存即版本 core — idempotent: archiving happens only when the
@@ -691,11 +765,25 @@ class MeterProcessRoute(models.Model):
             # Orders not yet online follow the common route automatically —
             # unless they were locally edited (customized): their edits are
             # preserved until a manual sync accepts the common version back.
-            self.env['sn.wsd.mes.order'].search([
+            # Orders whose drawing binding was removed (or rebound to another
+            # route) no longer resolve here: they keep their private snapshot
+            # instead of blocking route maintenance with a resolver error.
+            followers = self.env['sn.wsd.mes.order'].search([
                 ('x_mes_route_id.route_id', '=', self.id),
                 ('x_online_date', '=', False),
                 ('x_mes_route_id.is_customized', '=', False),
-            ]).action_sync_route()
+            ])
+            Route = self.env['sn.wsd.process.route']
+            for order in followers:
+                drawing = order.product_id.default_code
+                side = order.x_side if order.product_id.x_board_side else None
+                workshop = order.production_line_id.workshop_id
+                current = Route._find_current_route_by_drawing_no(
+                    drawing, order.company_id.id, side=side,
+                    workshop_id=workshop.id)
+                if current not in self:
+                    continue
+                order.action_sync_route()
         elif self.state == 'draft' and nodes:
             # Unchanged structure but never went live (e.g. layout-only edit
             # before any save): go live without a new version.
@@ -767,7 +855,11 @@ class MeterProcessRoute(models.Model):
         skip = self.env.context.get('sn_wsd_skip_flow_versioning')
         routes = super().create(vals_list)
         if not skip:
-            routes.filtered(lambda r: r.route_flow_json)._apply_flow_versioning()
+            # 无流程图 JSON 的路线（如 ORM 直建、无画布保存）不参与版本化：
+            # filtered 结果可能为空，ensure_one 会把空记录集当错误抛出。
+            flow_routes = routes.filtered(lambda r: r.route_flow_json)
+            if len(flow_routes) == 1:
+                flow_routes._apply_flow_versioning()
         return routes
 
     def _check_route_graph_cycle(self, adjacency):
@@ -855,11 +947,6 @@ class MeterProcessRoute(models.Model):
                         'Only operations on the flow chart can be selected.',
                         label=label, op=op.display_name,
                     ))
-            if (
-                route.x_daily_input_operation_id
-                and route.x_daily_input_operation_id == route.x_daily_output_operation_id
-            ):
-                raise ValidationError(_('The daily input operation and the daily output operation cannot be the same.'))
             aging_start, aging_end = route.x_aging_start_operation_id, route.x_aging_end_operation_id
             if aging_start and aging_end and aging_start != aging_end:
                 if order_map.get(aging_start.id, 0) > order_map.get(aging_end.id, 0):
@@ -936,13 +1023,6 @@ class MeterProcessRouteOperation(models.Model):
         readonly=True,
         index=True,
     )
-    x_station_type = fields.Selection(
-        related='operation_id.x_station_type',
-        string='Station Type',
-        store=True,
-        readonly=True,
-        index=True,
-    )
     time_mode = fields.Selection(
         [('manual', 'Fixed'), ('auto', 'Computed')],
         string='Duration Computation',
@@ -976,22 +1056,9 @@ class MeterProcessRouteOperation(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this entry operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     needed_by_route_operation_ids = fields.Many2many(
         'sn.wsd.process.route.operation',
@@ -1082,22 +1149,9 @@ class MrpRoutingWorkcenter(models.Model):
         string='Allow Serial Creation',
         help='Allow the API to create a production-stage serial at this BoM operation.',
     )
-    x_allow_reentry = fields.Boolean(
-        string='Allow Reentry',
-        help='Allow a serial to be processed again on the same BoM operation.',
-    )
-    x_allow_repair_return = fields.Boolean(
-        string='Allow Repair Return',
-        help='Allow serials returning from a repair station to enter this BoM operation.',
-    )
     x_allow_skip_with_override = fields.Boolean(
         string='Allow Skip With Override',
         help='Allow this BoM operation to be reached with an explicit route override.',
-    )
-    x_ng_retry_limit = fields.Integer(
-        string='NG Retry Limit',
-        default=0,
-        help='Maximum NG scan-pass attempts allowed before the serial must enter repair. Set 0 for no automatic repair threshold.',
     )
     # Legacy columns kept only so existing work orders (which relate to
     # x_route_operation_id through their BoM operation row) keep working until
@@ -1149,12 +1203,16 @@ class ProcessRouteDrawing(models.Model):
         string='Route Code',
         related='route_id.code',
     )
-    # 带出信息（只读展示，不落库，实时反映产品当前值）。
-    # 路线信息由 route_id 选择列承载，物料标识由图号本身承载，不再重复带出。
+    # 图号选择：绑定时按产品下拉选（图号=default_code），选中即回填
+    # x_drawing_no；解析器仍按图号字符串工作，直填图号的老通道保留。
     product_id = fields.Many2one(
         'product.product',
-        string='Product',
-        compute='_compute_product_info',
+        string='Product (by Drawing No.)',
+        index=True,
+        ondelete='set null',
+        domain="[('default_code', '!=', False)]",
+        help='Pick the product by its drawing number; the drawing key is '
+             'filled from the product internal reference.',
     )
     product_name = fields.Char(
         string='Product Name',
@@ -1193,22 +1251,34 @@ class ProcessRouteDrawing(models.Model):
         'and production side.',
     )
 
-    @api.depends('x_drawing_no')
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        for drawing in self:
+            code = drawing.product_id.default_code
+            if code:
+                drawing.x_drawing_no = code
+
+    @api.depends('x_drawing_no', 'product_id')
     def _compute_product_info(self):
-        """按图号带出产品信息：产品名称/面别/规格。
+        """带出产品信息：优先用选中的产品，否则按图号搜索。
 
         图号是 Char 关联键（product.product.default_code，界面上即"图号"
         字段），一个图号正常只对应一个产品；多个匹配时取第一条。
         """
         ProductProduct = self.env['product.product']
         for drawing in self:
-            product = ProductProduct
-            if drawing.x_drawing_no:
-                product = ProductProduct.search(
-                    [('default_code', '=', drawing.x_drawing_no)],
-                    limit=1,
-                )
-            drawing.product_id = product
+            if drawing.product_id:
+                product = drawing.product_id
+            else:
+                product = ProductProduct
+                if drawing.x_drawing_no:
+                    product = ProductProduct.search(
+                        [('default_code', '=', drawing.x_drawing_no)],
+                        limit=1,
+                    )
+            drawing.product_name = product.product_tmpl_id.name or False
+            drawing.product_board_side = product.x_board_side or False
+            drawing.product_specification = product.material_specification or False
             drawing.product_name = product.product_tmpl_id.name or False
             drawing.product_board_side = product.x_board_side or False
             drawing.product_specification = product.material_specification or False
@@ -1295,10 +1365,12 @@ class RouteSectionStat(models.Model):
         related='route_id.company_id',
         store=True,
     )
-    x_process_section = fields.Selection(
-        PROCESS_SECTION_SELECTION,
+    x_process_section = fields.Many2one(
+        'sn.wsd.process.section',
         string='统计段别',
         required=True,
+        index=True,
+        check_company=True,
     )
     start_operation_id = fields.Many2one(
         'sn.wsd.operation',

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Open the manufacturing product menu on the list view first. -->
+    <record id="mrp.product_template_action" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" ref="product.product_template_tree_view"/>
+    </record>
+
     <record id="view_product_template_form_material_info" model="ir.ui.view">
         <field name="name">product.template.form.material.info</field>
         <field name="model">product.template</field>
@@ -7,12 +13,17 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_information']//group[@name='group_general']/field[@name='type']" position="after">
                 <field name="material_specification"/>
+                <field name="brand_id"/>
                 <field name="rated_current"/>
             </xpath>
             <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']/field[@name='categ_id']" position="after">
                 <field name="abc_class"/>
                 <field name="is_eip_material"/>
                 <field name="is_nqi_material"/>
+            </xpath>
+            <!-- Product picture opens the full size viewer on click. -->
+            <xpath expr="//field[@name='image_1920']" position="attributes">
+                <attribute name="widget">image_viewer</attribute>
             </xpath>
         </field>
     </record>
@@ -22,8 +33,24 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='default_code']" position="attributes">
-                <attribute name="string">Drawing No.</attribute>
+                <attribute name="string">Material Code</attribute>
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Mnemonic code right below the material code of the product form. -->
+    <record id="view_product_template_only_form_mnemonic_code" model="ir.ui.view">
+        <field name="name">product.template.only.form.mnemonic.code</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="after">
+                <field name="mnemonic_code"/>
             </xpath>
         </field>
     </record>
@@ -33,15 +60,33 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_tree_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='default_code']" position="attributes">
-                <attribute name="string">Drawing No.</attribute>
+            <xpath expr="//list" position="attributes">
+                <attribute name="default_order">default_code asc, name asc, id asc</attribute>
+            </xpath>
+            <!-- Material code is the first data column: drop the official node
+                 (it follows the product name) and insert it before the name. -->
+            <xpath expr="//field[@name='name']/following-sibling::field[@name='default_code']" position="replace"/>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="default_code" string="Material Code" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="material_specification" optional="show"/>
+                <field name="mnemonic_code" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="material_specification" optional="hide"/>
+                <field name="brand_id" optional="show"/>
                 <field name="abc_class" optional="hide"/>
                 <field name="rated_current" optional="hide"/>
                 <field name="is_eip_material" optional="hide"/>
                 <field name="is_nqi_material" optional="hide"/>
+            </xpath>
+            <!-- Optional thumbnail appended last: the user can toggle the
+                 column with the list header gear menu. -->
+            <xpath expr="//list" position="inside">
+                <field name="image_128" string="Image" widget="image_viewer"
+                       options="{'size': [40, 40], 'img_class': 'object-fit-contain',
+                                 'viewer_image': 'image_1920'}"
+                       optional="show" readonly="1"/>
             </xpath>
         </field>
     </record>
@@ -52,10 +97,23 @@
         <field name="inherit_id" ref="product.product_product_tree_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="attributes">
-                <attribute name="string">Drawing No.</attribute>
+                <attribute name="string">Material Code</attribute>
+            </xpath>
+            <!-- 挑料弹窗（multi_add）只留业务列：变体值/销售价格/成本按
+                 context 旗标隐藏，产品主列表不受影响 -->
+            <xpath expr="//field[@name='product_template_variant_value_ids']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lst_price']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="column_invisible">context.get('sn_wsd_multi_add')</attribute>
             </xpath>
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="material_specification" optional="hide" readonly="1"/>
+                <field name="material_specification" optional="show" readonly="1"/>
+                <field name="mnemonic_code" optional="show" readonly="1"/>
+                <field name="brand_id" optional="show" readonly="1"/>
                 <field name="abc_class" optional="hide" readonly="1"/>
                 <field name="rated_current" optional="hide" readonly="1"/>
                 <field name="is_eip_material" optional="hide" readonly="1"/>
@@ -70,7 +128,11 @@
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="attributes">
-                <attribute name="string">Drawing No.</attribute>
+                <attribute name="string">Material Code</attribute>
+            </xpath>
+            <!-- Product variant picture opens the full size viewer on click. -->
+            <xpath expr="//field[@name='image_1920']" position="attributes">
+                <attribute name="widget">image_viewer</attribute>
             </xpath>
         </field>
     </record>
@@ -81,7 +143,31 @@
         <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="attributes">
-                <attribute name="string">Drawing No.</attribute>
+                <attribute name="string">Material Code</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_category_form_reel_material" model="ir.ui.view">
+        <field name="name">product.category.form.reel.material</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="x_is_reel_material"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_product_category_list_reel_material" model="ir.ui.view">
+        <field name="name">product.category.list.reel.material</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_list_view"/>
+        <field name="arch" type="xml">
+            <!-- Anchor on the list root: the category list column is "name"
+                 in older databases and "display_name" in newer ones. -->
+            <xpath expr="//list" position="inside">
+                <field name="x_is_reel_material" optional="show"/>
             </xpath>
         </field>
     </record>

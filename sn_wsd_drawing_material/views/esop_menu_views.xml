@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- engineer-side maintenance entry, under Process Management -->
+    <menuitem id="menu_sn_wsd_esop_documents"
+        name="ESOP Documents"
+        parent="sn_wsd_mrp.menu_sn_wsd_process_management"
+        action="action_sn_wsd_esop_documents"
+        sequence="60"/>
+
+    <!-- worker-side fullscreen search page, under the Shop Floor app -->
+    <record id="action_sn_wsd_esop_screen" model="ir.actions.client">
+        <field name="name">ESOP</field>
+        <field name="path">wsd-esop</field>
+        <field name="tag">sn_wsd_esop_screen</field>
+        <field name="target">fullscreen</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_esop_screen"
+        name="ESOP"
+        parent="sn_wsd_workorder.menu_sn_wsd_shop_floor_root"
+        action="action_sn_wsd_esop_screen"
+        sequence="2"/>
+</odoo>

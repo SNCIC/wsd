@@ -8,6 +8,11 @@
             <xpath expr="//form/sheet/group/group/field[@name='parent_id']" position="after">
                 <field name="x_customer_alias" placeholder="e.g. Customer short name"/>
             </xpath>
+            <!-- Maker of the supplied material: a vendor detail, kept in the
+                 Purchase group of the Sales & Purchase tab. -->
+            <xpath expr="//group[@name='purchase']" position="inside">
+                <field name="manufacturer" placeholder="e.g. Maker of the supplied material"/>
+            </xpath>
         </field>
     </record>
 </odoo>

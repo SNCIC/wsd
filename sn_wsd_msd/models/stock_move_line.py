@@ -23,6 +23,11 @@ class StockMoveLine(models.Model):
             line.lot_id._msd_validate_for_use()
 
     def _msd_initialize_incoming_lots(self):
+        """Mark MSD lots as sealed when they first enter internal stock.
+
+        With a three-step reception the goods first land in the input location,
+        so the trigger stays on the receipt segment (external -> internal).
+        """
         incoming_lots = self.env['stock.lot']
         for line in self:
             if (
@@ -30,7 +35,7 @@ class StockMoveLine(models.Model):
                 and line.lot_id
                 and line.lot_id.is_msd_material
                 and line.location_dest_id.usage == 'internal'
-                and line.location_id.usage == 'supplier'
+                and line.location_id.usage != 'internal'
             ):
                 incoming_lots |= line.lot_id
         incoming_lots._msd_initialize_sealed()

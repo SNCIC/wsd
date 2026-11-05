@@ -1,334 +1,204 @@
+import logging
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+_logger = logging.getLogger(__name__)
 
-class MrpProduction(models.Model):
-    _inherit = 'mrp.production'
 
-    x_smt_production_line_id = fields.Many2one(
-        'sn.mrp.production.line',
-        string='SMT Production Line',
-        check_company=True,
-        tracking=True,
-    )
-    x_smt_product_side = fields.Selection(
-        [
-            ('top', 'T Side'),
-            ('bottom', 'B Side'),
-            ('single', 'Single Side'),
-        ],
-        string='SMT Product Side',
-        tracking=True,
-    )
-    x_smt_model_ver = fields.Char(string='SMT Model Version')
-    x_smt_online_state = fields.Selection(
-        [
-            ('draft', 'Draft'),
-            ('online', 'Online'),
-            ('changeover', 'Changeover'),
-        ],
-        string='SMT Online State',
-        default='draft',
-        tracking=True,
+class MesOrderSmtOnline(models.Model):
+    """制令单上线钩子：按 图号+面别 匹配料站表并拆行生成在线料表。
+    制造订单（mrp.production）不再是 SMT 域的锚点。"""
+
+    _inherit = 'sn.wsd.mes.order'
+
+    x_smt_online_material_ids = fields.One2many(
+        'sn.smt.online.material',
+        'mes_order_id',
+        string='SMT Online Materials',
     )
     x_smt_material_table_id = fields.Many2one(
         'sn.smt.material.table',
         string='SMT Material Table',
         copy=False,
         check_company=True,
-        tracking=True,
-    )
-    x_smt_online_material_ids = fields.One2many(
-        'sn.smt.online.material',
-        'production_id',
-        string='SMT Online Materials',
-    )
-    x_smt_offline_material_ids = fields.One2many(
-        'sn.smt.offline.material',
-        'production_id',
-        string='SMT Offline Materials',
     )
     x_smt_online_material_count = fields.Integer(
         string='SMT Online Material Count',
         compute='_compute_x_smt_online_material_count',
     )
+    x_smt_loaded_material_count = fields.Integer(
+        string='SMT Loaded Material Count',
+        compute='_compute_x_smt_online_material_count',
+    )
     x_smt_consumption_count = fields.Integer(
-        string='SMT Consumption Count', compute='_compute_x_smt_consumption_summary',
+        string='SMT Consumption Count',
+        compute='_compute_x_smt_consumption_summary',
     )
     x_smt_consumed_points = fields.Float(
-        string='SMT Consumed Points', compute='_compute_x_smt_consumption_summary',
+        string='SMT Consumed Points',
+        compute='_compute_x_smt_consumption_summary',
     )
 
-    @api.depends('x_smt_online_material_ids')
+    @api.depends('x_smt_online_material_ids.is_load')
     def _compute_x_smt_online_material_count(self):
-        for production in self:
-            production.x_smt_online_material_count = len(production.x_smt_online_material_ids)
+        for order in self:
+            order.x_smt_online_material_count = len(order.x_smt_online_material_ids)
+            order.x_smt_loaded_material_count = len(
+                order.x_smt_online_material_ids.filtered(lambda line: line.is_load == 'Y')
+            )
 
     @api.depends('x_smt_online_material_ids.consumption_ids.consumed_qty')
     def _compute_x_smt_consumption_summary(self):
         consumption_model = self.env['sn.smt.material.consumption']
-        for production in self:
-            records = consumption_model.search([('production_id', '=', production.id)])
-            production.x_smt_consumption_count = len(records)
-            production.x_smt_consumed_points = sum(records.mapped('consumed_qty'))
+        for order in self:
+            records = consumption_model.search([('mes_order_id', '=', order.id)])
+            order.x_smt_consumption_count = len(records)
+            order.x_smt_consumed_points = sum(records.mapped('consumed_qty'))
 
-    def action_open_smt_consumption(self):
+    def _is_smt_route_order(self):
+        """SMT 识别以工艺路线头上的工艺类型为准（sn.wsd.process.route.x_process_type，
+        制令单私有路线经 route_id 指回公共路线）：路线工艺类型为 SMT 即在上线时
+        按 图号+面别 拆行。工序段/工位类型/车间名称均不参与判定。"""
         self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('SMT Material Consumption'),
-            'res_model': 'sn.smt.material.consumption',
-            'view_mode': 'list,form',
-            'domain': [('production_id', '=', self.id)],
-        }
+        route = self.x_mes_route_id.route_id if self.x_mes_route_id else self.env['sn.wsd.process.route']
+        return route.x_process_type == 'smt'
 
-    def _smt_consumption_reconciliation_snapshot(self):
-        self.ensure_one()
-        consumption_model = self.env['sn.smt.material.consumption']
-        records = consumption_model.search([('production_id', '=', self.id)])
-        consumed_by_product = {}
-        for record in records:
-            key = record.actual_item_code or record.required_item_code or '-'
-            consumed_by_product[key] = consumed_by_product.get(key, 0.0) + record.consumed_qty
-        issued_by_product = {
-            move.product_id.default_code or move.product_id.display_name: move.quantity
-            for move in self.move_raw_ids.filtered(lambda item: item.state != 'cancel')
-        }
-        return {
-            'production_id': self.id,
-            'production_name': self.name,
-            'smt_consumption_count': len(records),
-            'smt_consumed_points': sum(records.mapped('consumed_qty')),
-            'consumed_by_product': consumed_by_product,
-            'issued_by_product': issued_by_product,
-        }
-
-    def action_check_smt_consumption_reconciliation(self):
-        self.ensure_one()
-        snapshot = self._smt_consumption_reconciliation_snapshot()
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('SMT Consumption Reconciliation'),
-                'message': _(
-                    'Product-SN consumption records: %(count)s; consumed points: %(points)s.',
-                    count=snapshot['smt_consumption_count'],
-                    points=snapshot['smt_consumed_points'],
-                ),
-                'type': 'info',
-                'sticky': False,
-            },
-        }
-
-    def _validate_smt_material_table_scope(self, material_table):
-        self.ensure_one()
-        table_item_codes = {
-            code
-            for code in material_table.detail_ids.mapped('item_code')
-            if code
-        }
-        if not table_item_codes:
-            return
-        bom_item_codes = {
-            code
-            for code in self.move_raw_ids.filtered(lambda move: move.state != 'cancel').mapped('product_id.default_code')
-            if code
-        }
-        extra_codes = sorted(table_item_codes - bom_item_codes)
-        if extra_codes:
+    def enter_station(self, serial_identity, route_operation,
+                      workcenter=False):
+        """过站扣减收敛点（工序过站扫码口径，2026-08-31 定、2026-09-10
+        措辞澄清）：关键物料清单/料站表维护在哪个工序，校验和扣减就发生
+        在板过该工序的扫码上（含投入站首扫）；其他工序的扫码一律不校验、
+        不扣减。每工序一次扫码即完成进出站（进就是出）——本口径与
+        spec/词典所述"物料关联工序出站 OK"同指同一次扫码。大屏
+        （sn_station_scan）/ 设备 API（_pass_station）/ PDA 过站屏的
+        过站都汇到 enter_station。consume_for_serial 幂等（料站表按
+        SN+制令单、清单行按 SN+工序），重复过站安全；NG 不涉及——
+        本口径只进不出。"""
+        res = super().enter_station(
+            serial_identity, route_operation, workcenter=workcenter)
+        try:
+            self.env['sn.smt.material.consumption'].consume_for_serial(
+                route_operation, identity=serial_identity)
+        except ValidationError as exc:
             raise ValidationError(_(
-                'The SMT material table contains items that are not in the manufacturing order BOM: %s'
-            ) % ', '.join(extra_codes))
+                'SN %(sn)s entering %(op)s of MES order %(order)s: %(msg)s',
+                sn=serial_identity.name,
+                op=route_operation.display_label,
+                order=self.name, msg=str(exc))) from exc
+        return res
+
+    def _mes_flow_net_by_lot(self):
+        """覆写倒冲钩子：本制令单的消耗流水按卷净值（正向 − 冲销），
+        SMT 扣点与整机关键物料 usage_times 流水同源同表。"""
+        self.ensure_one()
+        groups = self.env['sn.smt.material.consumption']._read_group(
+            [('mes_order_id', '=', self.id), ('material_lot_id', '!=', False)],
+            groupby=['material_lot_id'],
+            aggregates=['consumed_qty:sum'],
+        )
+        return {lot: total for lot, total in groups if (total or 0.0) > 0}
+
+    def _mes_reel_end_plan(self, lot, flow_qty):
+        """覆写卷终归零钩子（reel-end-confirm）：已确认用尽的卷在第一次
+        完工倒冲一次扣到 0——total=线边账面余量（流水部分封顶其中）、
+        loss=差额（账面−流水，倒冲打「卷终损耗」标）、active=True（跳过
+        可用性硬校验：人为确认已尽，允许吃到他单在同卷的预留，原生
+        _free_reservation 下折连坐清零）。账面已 0 时 total=0（该卷
+        不再参与任何倒冲）。"""
+        self.ensure_one()
+        if not lot.x_reel_end:
+            return super()._mes_reel_end_plan(lot, flow_qty)
+        line_side = self._mes_line_side_location()
+        groups = self.env['stock.quant']._read_group([
+            ('product_id', '=', lot.product_id.id),
+            ('lot_id', '=', lot.id),
+            ('location_id', '=', line_side.id),
+        ], groupby=[], aggregates=['quantity:sum'])
+        book = (groups[0][0] or 0.0) if groups else 0.0
+        flow_part = min(flow_qty, book)
+        return {
+            'total': book,
+            'loss': max(book - flow_part, 0.0),
+            'active': True,
+        }
 
     def _check_can_generate_smt_online_materials(self):
         self.ensure_one()
-        if self.x_smt_online_state == 'online' and self.x_smt_online_material_ids:
-            raise ValidationError(_(
-                'The manufacturing order is already online. Use SMT unload, changeover, or material change operations instead.'
-            ))
         protected_lines = self.x_smt_online_material_ids.filtered(
-            lambda line: line.loaded_material_lot_id or line.offline_material_ids
+            lambda line: line.loaded_material_lot_id or line.is_load == 'Y'
         )
         if protected_lines:
             raise ValidationError(_(
-                'SMT online materials cannot be regenerated after offline preparation or online loading has started.'
+                'SMT online materials cannot be regenerated after online loading has started.'
             ))
-        existing_operations = self.env['sn.smt.operation.record'].search_count([
-            ('production_id', '=', self.id),
-            ('operation_type', 'in', [
-                'offline_prepare',
-                'online_load',
-                'cart_load',
-                'change',
-                'continue',
-                'changeover_inherit',
-            ]),
+        existing_logs = self.env['sn.smt.material.log'].search_count([
+            ('mes_order_id', '=', self.id),
         ], limit=1)
-        if existing_operations:
+        if existing_logs:
             raise ValidationError(_(
-                'SMT online materials cannot be regenerated because SMT operation records already exist.'
+                'SMT online materials cannot be regenerated because SMT material logs already exist.'
             ))
-
-    def _get_smt_route_operation_for_feeder_lines(self):
-        self.ensure_one()
-        return self.x_mes_order_id.x_route_operation_ids.filtered(
-            lambda operation: operation.operation_id.x_station_type == 'smt'
-        )[:1]
-
-    def _prepare_smt_feeder_line_values(self, online_material, sequence):
-        self.ensure_one()
-        product = self.env['product.product'].search([
-            ('default_code', '=', online_material.item_code),
-        ], limit=1)
-        if not product:
-            return False
-        route_operation = self._get_smt_route_operation_for_feeder_lines()
-        if not route_operation:
-            return False
-        source_move = self._find_matching_raw_moves(product)[:1]
-        return {
-            'online_material_id': online_material.id,
-            'route_operation_id': route_operation.id,
-            'production_id': self.id,
-            'feeder_no': online_material.loadpoint or f'F{sequence:02d}',
-            'device_seq': online_material.device_seq,
-            'table_no': online_material.table_no,
-            'loadpoint': online_material.loadpoint,
-            'chanel_sn': online_material.chanel_sn,
-            'feeder_spec': online_material.feeder_spec,
-            'is_tray': online_material.is_tray,
-            'expected_product_id': product.id,
-            'source_move_id': source_move.id if source_move else False,
-            'expected_qty': online_material.point_qty or source_move.product_uom_qty or 1.0,
-            'state': 'pending',
-        }
-
-    def _generate_smt_feeder_lines_from_online_materials(self):
-        for production in self:
-            route_operation = production._get_smt_route_operation_for_feeder_lines()
-            if not route_operation:
-                continue
-            active_lines = production.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
-            protected_lines = production.feeder_line_ids.filtered(
-                lambda line: line.state not in ('pending', 'returned')
-            )
-            if protected_lines:
-                raise ValidationError(_(
-                    'SMT feeder lines cannot be regenerated after feeder verification has started.'
-                ))
-            production.feeder_line_ids.filtered(lambda line: line.state == 'pending').unlink()
-            commands = []
-            for sequence, online_material in enumerate(
-                active_lines.sorted(lambda line: (line.device_seq, line.table_no, line.loadpoint, line.id)),
-                start=1,
-            ):
-                values = production._prepare_smt_feeder_line_values(online_material, sequence)
-                if values:
-                    commands.append(fields.Command.create(values))
-            if commands:
-                production.write({'feeder_line_ids': commands})
 
     def _prepare_smt_online_materials(self):
-        """Generate the SMT online snapshot without changing the generic MO state."""
+        """按 图号+面别 匹配料站表并拆行；匹配不到生成 0 行并记录提示（不阻断上线）。"""
         self.ensure_one()
-        production = self
-        if production.x_smt_online_state == 'online' and production.x_smt_online_material_ids:
-            return production.x_smt_online_material_ids
-        if not production.x_smt_production_line_id:
-            raise ValidationError(_('Please set the SMT production line first.'))
-        if not production.x_smt_product_side:
-            raise ValidationError(_('Please set the SMT product side first.'))
-        if not production.x_production_line_id:
-            production.x_production_line_id = production.x_smt_production_line_id
-        if not production.x_workshop_id:
-            production.x_workshop_id = production.x_smt_production_line_id.workshop_id
-        material_table = self.env['sn.smt.material.table']._match_for_production(production)
+        if self.x_smt_online_material_ids:
+            return self.x_smt_online_material_ids
+        material_table = self.env['sn.smt.material.table']._match_for_mes_order(self)
         if not material_table:
-            raise ValidationError(_('No matching SMT material table was found for the manufacturing order.'))
-        production._validate_smt_material_table_scope(material_table)
-        production._check_can_generate_smt_online_materials()
-        production.x_smt_online_material_ids.unlink()
-        production.write({
+            _logger.info(
+                'MES order %s (drawing %s, side %s) has no matching SMT '
+                'material table; no online material rows were generated.',
+                self.name, self.product_id.default_code, self.x_side,
+            )
+            return self.env['sn.smt.online.material']
+        self._check_can_generate_smt_online_materials()
+        self.write({
             'x_smt_material_table_id': material_table.id,
             'x_smt_online_material_ids': [
-                fields.Command.create(vals) for vals in material_table._prepare_online_material_vals(production)
+                fields.Command.create(vals)
+                for vals in material_table._prepare_online_material_vals(self)
             ],
-            'x_smt_online_state': 'prepared',
         })
-        production._generate_smt_feeder_lines_from_online_materials()
-        return production.x_smt_online_material_ids
+        return self.x_smt_online_material_ids
 
-    def action_smt_online(self):
-        for production in self:
-            if not production.x_smt_production_line_id:
-                raise ValidationError(_('Please set the SMT production line first.'))
-            if not production.x_smt_product_side:
-                raise ValidationError(_('Please set the SMT product side first.'))
-            if not production.x_workshop_id:
-                production.x_workshop_id = production.x_smt_production_line_id.workshop_id
-            # Online is carried by the MES orders (制令单): the SMT online
-            # materials are prepared by the sn.wsd.mes.order online hook.
-            production._action_online_mes_orders()
-        return True
+    def action_online(self):
+        smt_orders = self.filtered(lambda order: order._is_smt_route_order())
+        for order in smt_orders:
+            order._prepare_smt_online_materials()
+        return super().action_online()
 
     def action_open_smt_online_materials(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('SMT Online Materials'),
+            'name': 'SMT Online Materials',
             'res_model': 'sn.smt.online.material',
-            'view_mode': 'list,form',
-            'domain': [('production_id', '=', self.id)],
-            'context': {'default_production_id': self.id},
+            'view_mode': 'list',
+            'domain': [('mes_order_id', '=', self.id)],
+            'context': {'default_mes_order_id': self.id},
         }
 
-    def _open_smt_wizard(self, xmlid):
+    def action_smt_batch_unload(self):
+        """整单批量下料：所有在线料站一次下线（余量保留在卷上）。
+        与转机继承互不冲突——转机流程内部自行收口源单，不经过此按钮。"""
         self.ensure_one()
-        view = self.env.ref(xmlid)
+        try:
+            result = self.env['sn.smt.loading.service'].unload(self, scope='order')
+        except ValidationError as error:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {'type': 'warning', 'title': _('Batch Unload'), 'message': str(error)},
+            }
         return {
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'res_model': view.model,
-            'view_mode': 'form',
-            'views': [(view.id, 'form')],
-            'context': {'default_production_id': self.id},
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'type': 'success',
+                'title': _('Batch Unload'),
+                'message': _('%(count)s material positions were unloaded; remaining points stay on the reels.',
+                             count=result.get('unloaded_qty', 0)),
+            },
         }
-
-    def action_open_smt_bl_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_bl_wizard_form')
-
-    def action_open_smt_tp_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_tp_wizard_form')
-
-    def action_open_smt_material_query_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_material_query_wizard_form')
-
-    def action_open_smt_lcsl_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_lcsl_wizard_form')
-
-    def action_open_smt_xl_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_xl_wizard_form')
-
-    def action_open_smt_zc_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_zc_wizard_form')
-
-    def action_open_smt_change_wizard(self):
-        return self._open_smt_wizard('sn_wsd_smt.view_sn_smt_change_wizard_form')
-
-
-class MesOrderSmtOnline(models.Model):
-    """Hook the SMT online-material preparation onto the MES-order (制令单)
-    online flow: replacing the legacy MO-level online, the SMT table is now
-    prepared when the MES order goes online."""
-
-    _inherit = 'sn.wsd.mes.order'
-
-    def action_online(self):
-        smt_productions = self.mapped('production_id').filtered('x_has_smt_operations')
-        if smt_productions:
-            smt_productions._prepare_smt_online_materials()
-        super().action_online()
-        if smt_productions:
-            smt_productions.write({'x_smt_online_state': 'online'})
-        return True

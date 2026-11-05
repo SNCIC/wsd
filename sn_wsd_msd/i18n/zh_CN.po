@@ -218,18 +218,6 @@ msgid "Has Message"
 msgstr "有消息"
 
 #. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_smt_operation_mixin__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_move_line__id
-msgid "ID"
-msgstr "ID"
-
-#. module: sn_wsd_msd
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__activity_exception_icon
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_exception_icon
 msgid "Icon"
@@ -240,6 +228,18 @@ msgstr "图标"
 #: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr "指示异常活动的图标。"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_smt_operation_mixin__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_move_line__id
+msgid "ID"
+msgstr "ID"
 
 #. module: sn_wsd_msd
 #: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__message_needaction
@@ -291,115 +291,6 @@ msgid "Lot/Serial Number"
 msgstr "批次/序列号"
 
 #. module: sn_wsd_msd
-#: model:ir.model,name:sn_wsd_msd.model_sn_msd_bake_wizard
-msgid "MSD Bake Wizard"
-msgstr "MSD 烘烤向导"
-
-#. module: sn_wsd_msd
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
-msgid "MSD Control"
-msgstr "MSD 管控"
-
-#. module: sn_wsd_msd
-#: model:ir.model,name:sn_wsd_msd.model_sn_msd_control_rule
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msd_control_rule_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msd_control_rule_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__rule_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_rule_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
-msgid "MSD Control Rule"
-msgstr "MSD 管控规则"
-
-#. module: sn_wsd_msd
-#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_control_rule
-#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_control_rule
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
-msgid "MSD Control Rules"
-msgstr "MSD 管控规则"
-
-#. module: sn_wsd_msd
-#: model:ir.model,name:sn_wsd_msd.model_sn_msd_level
-msgid "MSD MSL Level"
-msgstr "MSD MSL 等级"
-
-#. module: sn_wsd_msd
-#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_root
-msgid "MSD Management"
-msgstr "MSD 管理"
-
-#. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__is_msd_material
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__is_msd_material
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__is_msd_material
-msgid "MSD Material"
-msgstr "MSD 物料"
-
-#. module: sn_wsd_msd
-#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_lot_report
-#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_report
-msgid "MSD Material Report"
-msgstr "MSD 物料报告"
-
-#. module: sn_wsd_msd
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
-msgid "MSD Materials"
-msgstr "MSD 物料"
-
-#. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_state
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
-msgid "MSD State"
-msgstr "MSD 状态"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
-msgid ""
-"MSD control rule thickness ranges cannot overlap for the same MSL level."
-msgstr "对于相同的 MSL 等级，MSD 管控规则的厚度范围不能重叠。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid ""
-"MSD material setup is incomplete. Maintain the MSL level and component "
-"thickness."
-msgstr "MSD 物料设置不完整。请维护 MSL 等级和元件厚度。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid "MSD material under baking cannot be unsealed."
-msgstr "正在烘烤中的 MSD 物料无法拆封。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/product.py:0
-msgid "MSD materials must have an MSL level and component thickness."
-msgstr "MSD 物料必须具有 MSL 等级和元件厚度。"
-
-#. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msl_level_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msl_level_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__msl_level_id
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__name
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msl_level_id
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_form
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
-msgid "MSL Level"
-msgstr "MSL 等级"
-
-#. module: sn_wsd_msd
-#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_level
-#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_level
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_list
-#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_search
-msgid "MSL Levels"
-msgstr "MSL 等级"
-
-#. module: sn_wsd_msd
 #: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
 msgid "Matching"
 msgstr "匹配"
@@ -439,6 +330,115 @@ msgid "Minimum Thickness"
 msgstr "最小厚度"
 
 #. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_bake_wizard
+msgid "MSD Bake Wizard"
+msgstr "MSD 烘烤向导"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
+msgid "MSD Control"
+msgstr "MSD 管控"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_control_rule
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msd_control_rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msd_control_rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_bake_wizard__rule_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_rule_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_form
+msgid "MSD Control Rule"
+msgstr "MSD 管控规则"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/msd_control_rule.py:0
+msgid ""
+"MSD control rule thickness ranges cannot overlap for the same MSL level."
+msgstr "对于相同的 MSL 等级，MSD 管控规则的厚度范围不能重叠。"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_control_rule
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_control_rule
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+msgid "MSD Control Rules"
+msgstr "MSD 管控规则"
+
+#. module: sn_wsd_msd
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_root
+msgid "MSD Management"
+msgstr "MSD 管理"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__is_msd_material
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__is_msd_material
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__is_msd_material
+msgid "MSD Material"
+msgstr "MSD 物料"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_lot_report
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_report
+msgid "MSD Material Report"
+msgstr "MSD 物料报告"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"MSD material setup is incomplete. Maintain the MSL level and component "
+"thickness."
+msgstr "MSD 物料设置不完整。请维护 MSL 等级和元件厚度。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "MSD material under baking cannot be unsealed."
+msgstr "正在烘烤中的 MSD 物料无法拆封。"
+
+#. module: sn_wsd_msd
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSD Materials"
+msgstr "MSD 物料"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/product.py:0
+msgid "MSD materials must have an MSL level and component thickness."
+msgstr "MSD 物料必须具有 MSL 等级和元件厚度。"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_msd_level
+msgid "MSD MSL Level"
+msgstr "MSD MSL 等级"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSD State"
+msgstr "MSD 状态"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_product__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_product_template__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__msl_level_id
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__name
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msl_level_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_control_rule_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_search_msd
+msgid "MSL Level"
+msgstr "MSL 等级"
+
+#. module: sn_wsd_msd
+#: model:ir.actions.act_window,name:sn_wsd_msd.action_sn_msd_level
+#: model:ir.ui.menu,name:sn_wsd_msd.menu_sn_wsd_msd_level
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_sn_msd_level_search
+msgid "MSL Levels"
+msgstr "MSL 等级"
+
+#. module: sn_wsd_msd
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__my_activity_date_deadline
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__my_activity_date_deadline
 msgid "My Activity Deadline"
@@ -466,6 +466,14 @@ msgstr "下一活动摘要"
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__activity_type_id
 msgid "Next Activity Type"
 msgstr "下一活动类型"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"No MSD control rule matches this material MSL level and component "
+"thickness."
+msgstr "没有 MSD 控制规则匹配该物料的 MSL 等级和元件厚度。"
 
 #. module: sn_wsd_msd
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_needaction_counter
@@ -530,17 +538,6 @@ msgid "Responsible User"
 msgstr "责任用户"
 
 #. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_has_sms_error
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "短信发送错误"
-
-#. module: sn_wsd_msd
-#: model:ir.model,name:sn_wsd_msd.model_sn_smt_operation_mixin
-msgid "SMT Operation Mixin"
-msgstr "SMT 操作 Mixin"
-
-#. module: sn_wsd_msd
 #: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
 msgid "Scrap"
 msgstr "报废"
@@ -577,6 +574,17 @@ msgid "Set Dry"
 msgstr "设为干燥"
 
 #. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_msd
+#: model:ir.model,name:sn_wsd_msd.model_sn_smt_operation_mixin
+msgid "SMT Operation Mixin"
+msgstr "SMT 操作 Mixin"
+
+#. module: sn_wsd_msd
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__standard_exposure_minutes
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__standard_exposure_minutes
 msgid "Standard Exposure Minutes"
@@ -587,6 +595,12 @@ msgstr "标准暴露分钟数"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_msd.view_stock_lot_form_msd
 msgid "Start Baking"
 msgstr "开始烘烤"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "Start MSD Baking"
+msgstr "开始 MSD 烘烤"
 
 #. module: sn_wsd_msd
 #: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__activity_state
@@ -606,46 +620,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:sn_wsd_msd.field_stock_lot__msd_target_bake_minutes
 msgid "Target Bake Minutes"
 msgstr "目标烘烤分钟数"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid "The MSD bake count limit has been reached."
-msgstr "已达到 MSD 烘烤次数限制。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid ""
-"The MSD cumulative exposure limit has been reached. The material must be "
-"scrapped."
-msgstr "已达到 MSD 累计暴露限制。该物料必须报废。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid ""
-"The MSD current exposure limit has been reached. Bake the material before "
-"use."
-msgstr "已达到 MSD 当前暴露限制。使用前请对物料进行烘烤。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid "The MSD material is baking and cannot be used."
-msgstr "该 MSD 物料正在烘烤中，无法使用。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid "The MSD material is scrapped and cannot be used."
-msgstr "该 MSD 物料已报废，无法使用。"
-
-#. module: sn_wsd_msd
-#. odoo-python
-#: code:addons/sn_wsd_msd/models/stock_lot.py:0
-msgid "The MSD material is sealed and must be unsealed before use."
-msgstr "该 MSD 物料已封存，使用前必须先拆封。"
 
 #. module: sn_wsd_msd
 #: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_control_rule_positive_bake_count_limit
@@ -713,6 +687,46 @@ msgid "The minimum thickness must be greater than or equal to zero."
 msgstr "最小厚度必须大于或等于零。"
 
 #. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD bake count limit has been reached."
+msgstr "已达到 MSD 烘烤次数限制。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The MSD cumulative exposure limit has been reached. The material must be "
+"scrapped."
+msgstr "已达到 MSD 累计暴露限制。该物料必须报废。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid ""
+"The MSD current exposure limit has been reached. Bake the material before "
+"use."
+msgstr "已达到 MSD 当前暴露限制。使用前请对物料进行烘烤。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is baking and cannot be used."
+msgstr "该 MSD 物料正在烘烤中，无法使用。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is scrapped and cannot be used."
+msgstr "该 MSD 物料已报废，无法使用。"
+
+#. module: sn_wsd_msd
+#. odoo-python
+#: code:addons/sn_wsd_msd/models/stock_lot.py:0
+msgid "The MSD material is sealed and must be unsealed before use."
+msgstr "该 MSD 物料已封存，使用前必须先拆封。"
+
+#. module: sn_wsd_msd
 #: model:ir.model.constraint,message:sn_wsd_msd.constraint_sn_msd_level_positive_standard_exposure
 msgid "The standard exposure minutes must be greater than zero."
 msgstr "标准暴露分钟数必须大于零。"
@@ -762,13 +776,13 @@ msgid "Warning Exposure Minutes"
 msgstr "警告暴露分钟数"
 
 #. module: sn_wsd_msd
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__website_message_ids
-#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__website_message_ids
-msgid "Website Messages"
-msgstr "网站消息"
-
-#. module: sn_wsd_msd
 #: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_control_rule__website_message_ids
 #: model:ir.model.fields,help:sn_wsd_msd.field_sn_msd_level__website_message_ids
 msgid "Website communication history"
 msgstr "网站沟通记录"
+
+#. module: sn_wsd_msd
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_control_rule__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_msd.field_sn_msd_level__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"

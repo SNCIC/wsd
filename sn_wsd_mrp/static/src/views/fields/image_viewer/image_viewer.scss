@@ -1,0 +1,49 @@
+.o_sn_image_viewer {
+    &.o_sn_image_viewer_active img {
+        cursor: zoom-in;
+    }
+}
+
+.o_sn_image_viewer_dialog {
+    .o_sn_iv_stage {
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.04);
+        cursor: grab;
+        display: flex;
+        height: 65vh;
+        justify-content: center;
+        min-height: 20rem;
+        overflow: hidden;
+        position: relative;
+        touch-action: none;
+        user-select: none;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    .o_sn_iv_image {
+        max-height: 100%;
+        max-width: 100%;
+        pointer-events: none;
+        transform-origin: center center;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    .o_sn_iv_percent {
+        min-width: 3.4rem;
+        text-align: center;
+    }
+
+    .o_sn_iv_range {
+        max-width: 12rem;
+    }
+
+    .o_sn_iv_separator {
+        background-color: var(--bs-border-color, #dee2e6);
+        height: 1.25rem;
+        width: 1px;
+    }
+}

@@ -1,5 +1,6 @@
 from . import reflow_data
 from . import wave_data
+from . import aging_data
 from . import device_doc
 from . import equipment
 from . import equipment_document
@@ -20,7 +21,9 @@ from . import cal_config
 from . import cal_import_wizard
 from . import repair_order
 from . import repair_wizard
+from . import device_service
 from . import knowledge
 from . import oee_record
 from . import oee_batch_wizard
 from . import oee_import_wizard
+from . import coding_seed

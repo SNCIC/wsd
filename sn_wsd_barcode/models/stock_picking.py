@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import re
-
 from odoo import models, api, fields, _
 from odoo.tools import html2plaintext, is_html_empty
-from odoo.tools.float_utils import float_compare, float_is_zero
 from odoo.exceptions import ValidationError
 
 
@@ -21,144 +18,6 @@ class StockPicking(models.Model):
             package_tree = self.env['stock.package'].search([('id', 'child_of', shipped_packages.ids)])
             package_tree.write({'x_wsd_pack_state': 'shipped'})
         return result
-
-    def _get_auto_lot_base_name(self, move_line):
-        product = move_line.product_id
-        product_code = product.default_code or getattr(product, 'code', False)
-        if not product_code:
-            return False
-        lot_date = fields.Date.context_today(move_line).strftime('%Y%m%d')
-        return f'{product_code}-{lot_date}'
-
-    def _get_auto_lot_name(self, move_line, sequence=False):
-        base_name = self._get_auto_lot_base_name(move_line)
-        if not base_name:
-            return False
-        if sequence:
-            return f'{base_name}-{sequence:06d}'
-        return base_name
-
-    def _get_next_reel_lot_sequence(self, product, base_name):
-        lots = self.env['stock.lot'].search([
-            ('product_id', '=', product.id),
-            ('name', '=like', f'{base_name}-%'),
-        ])
-        max_sequence = 0
-        pattern = re.compile(rf'^{re.escape(base_name)}-(\d+)$')
-        for lot in lots:
-            match = pattern.match(lot.name or '')
-            if match:
-                max_sequence = max(max_sequence, int(match.group(1)))
-        return max_sequence + 1
-
-    def _get_smt_reel_qty(self, move_line):
-        product = move_line.product_id
-        move = move_line.move_id
-        if (
-            move
-            and move.packaging_uom_id
-            and move.packaging_uom_id != move_line.product_uom_id
-        ):
-            return move.packaging_uom_id._compute_quantity(1.0, move_line.product_uom_id, rounding_method='HALF-UP')
-        return 0.0
-
-    def _split_auto_reel_lot_line(self, line):
-        reel_qty = self._get_smt_reel_qty(line)
-        if float_compare(reel_qty, 0.0, precision_rounding=line.product_uom_id.rounding) <= 0:
-            return False
-
-        total_qty = line.quantity
-        if float_compare(total_qty, 0.0, precision_rounding=line.product_uom_id.rounding) <= 0:
-            return False
-
-        base_name = self._get_auto_lot_base_name(line)
-        if not base_name:
-            return False
-
-        split_quantities = []
-        remaining_qty = total_qty
-        while float_compare(remaining_qty, reel_qty, precision_rounding=line.product_uom_id.rounding) > 0:
-            split_quantities.append(reel_qty)
-            remaining_qty -= reel_qty
-        if not float_is_zero(remaining_qty, precision_rounding=line.product_uom_id.rounding):
-            split_quantities.append(remaining_qty)
-
-        if not split_quantities:
-            return False
-
-        sequence = self._get_next_reel_lot_sequence(line.product_id, base_name)
-        line.write({
-            'quantity': split_quantities[0],
-            'lot_name': self._get_auto_lot_name(line, sequence),
-        })
-        sequence += 1
-
-        new_line_vals = []
-        base_vals = {
-            'picking_id': line.picking_id.id,
-            'move_id': line.move_id.id,
-            'company_id': line.company_id.id,
-            'product_id': line.product_id.id,
-            'product_uom_id': line.product_uom_id.id,
-            'location_id': line.location_id.id,
-            'location_dest_id': line.location_dest_id.id,
-            'owner_id': line.owner_id.id,
-            'package_id': line.package_id.id,
-            'result_package_id': line.result_package_id.id,
-            'picked': line.picked,
-        }
-        for quantity in split_quantities[1:]:
-            new_line_vals.append({
-                **base_vals,
-                'quantity': quantity,
-                'lot_name': self._get_auto_lot_name(line, sequence),
-            })
-            sequence += 1
-        if new_line_vals:
-            self.env['stock.move.line'].create(new_line_vals)
-        return True
-
-    def _mark_auto_reel_lots(self):
-        reel_lines = self.move_line_ids.filtered(
-            lambda line: line.lot_id
-            and line.product_id.tracking == 'lot'
-            and self._get_smt_reel_qty(line) > 0
-        )
-        for line in reel_lines:
-            lot = line.lot_id
-            if lot.x_smt_is_reel and lot.x_smt_initial_qty:
-                continue
-            qty = line.product_uom_id._compute_quantity(line.quantity, line.product_id.uom_id, rounding_method='HALF-UP')
-            vals = {
-                'x_smt_is_reel': True,
-                'x_smt_reel_state': 'in_stock',
-            }
-            if not lot.x_smt_initial_qty:
-                vals['x_smt_initial_qty'] = qty
-            lot.write(vals)
-
-    def _auto_generate_lot_names(self):
-        for picking in self:
-            if not picking.picking_type_id.use_create_lots:
-                continue
-            move_lines = picking.move_line_ids.filtered(
-                lambda line: line.product_id.tracking == 'lot'
-                and line.product_uom_id.compare(line.quantity, 0) > 0
-                and not line.lot_id
-                and not line.lot_name
-            )
-            for line in move_lines:
-                if picking._split_auto_reel_lot_line(line):
-                    continue
-                lot_name = picking._get_auto_lot_name(line)
-                if lot_name:
-                    line.lot_name = lot_name
-
-    def button_validate(self):
-        self._auto_generate_lot_names()
-        res = super().button_validate()
-        self.filtered(lambda picking: picking.state == 'done')._mark_auto_reel_lots()
-        return res
 
     def action_cancel_from_barcode(self):
         self.ensure_one()
@@ -226,6 +85,10 @@ class StockPicking(models.Model):
 
     def action_print_barcode(self):
         return self.action_open_label_type()
+
+    def action_print_material_labels(self):
+        self.ensure_one()
+        return self.action_open_material_label_wizard()
 
     def action_print_delivery_slip(self):
         return self.env.ref('stock.action_report_delivery').report_action(self)

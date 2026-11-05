@@ -1,0 +1,272 @@
+# Odoo zh_CN translation worklist -- mail
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/composer.xml:0
+#: code:addons/mail/static/src/core/common/composer.xml:0
+msgid "(Keep formatting)"
+msgstr "（保留格式）"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/composer.xml:0
+#: code:addons/mail/static/src/core/common/composer.xml:0
+msgid "(Remove formatting)"
+msgstr "（移除格式）"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/composer.xml:0
+#: code:addons/mail/static/src/core/common/composer.xml:0
+msgid "Continue with Full Composer?"
+msgstr "继续使用完整编辑器？"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid ""
+"Failed to render QWeb template for %(template_label)s\n"
+"Target Model: %(model_name)s\n"
+"Language context: %(lang_context)s\n"
+"Error: %(error_details)s\n"
+"\n"
+"Template Source Snippet:\n"
+"%(template_src)s"
+msgstr ""
+"无法为 %(template_label)s 渲染 QWeb 模板\n"
+"目标模型：%(model_name)s\n"
+"语言上下文：%(lang_context)s\n"
+"错误：%(error_details)s\n"
+"\n"
+"模板源码片段：\n"
+"%(template_src)s"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid ""
+"Failed to render inline_template template: %(template_txt)s\n"
+"Error details: %(error)s"
+msgstr ""
+"无法渲染 inline_template 模板：%(template_txt)s\n"
+"错误详情：%(error)s"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/composer.xml:0
+#: code:addons/mail/static/src/core/common/composer.xml:0
+msgid "Formatting can only be restored in Full Composer."
+msgstr "格式只能在完整编辑器中恢复。"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Mail Template: '%(name)s' (ID: %(record_id)s)"
+msgstr "邮件模板：“%(name)s”（ID：%(record_id)s）"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Mass Mailing Template: '%(name)s' (ID: %(record_id)s)"
+msgstr "群发邮件模板：“%(name)s”（ID：%(record_id)s）"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "No language detected in context"
+msgstr "上下文中未检测到语言"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_template.py:0
+#: code:addons/mail/models/mail_template.py:0
+msgid ""
+"Oops! We couldn't save your template due to an issue.\n"
+"\n"
+"Error: %(error_details)s\n"
+"\n"
+"Correct it and try again."
+msgstr ""
+"哎呀！由于出现问题，无法保存您的模板。\n"
+"\n"
+"错误：%(error_details)s\n"
+"\n"
+"请修正后重试。"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Template name not identified"
+msgstr "无法识别模板名称"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/common/store_service.js:0
+#: code:addons/mail/static/src/core/common/store_service.js:0
+msgid "This conversation isn’t available."
+msgstr "此会话不可用。"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Unnamed Mail Template"
+msgstr "未命名邮件模板"
+
+#. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_render_mixin.py:0
+#: code:addons/mail/models/mail_render_mixin.py:0
+msgid "Unnamed Mailing"
+msgstr "未命名群发"
+
+#. module: mail
+#. from po: d:\odoo\odoo19wsd\addons\html_editor\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_process_route__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_item_group__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_smt_material_table__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__mrp_eco__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_issue__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_serial_freeze__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_scheme__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__mrp_excess_return__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_sampling_standard__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_level__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_control_rule__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_mes_order__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_scrap_record__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_repair_order__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_exception_ticket__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request_line__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__sn_label_template__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_category__activity_exception_decoration__warning
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_asset__activity_exception_decoration__warning
+msgid "Alert"
+msgstr "警报"
+
+#. module: mail
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_process_route__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_item_group__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_smt_material_table__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__mrp_eco__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_issue__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_serial_freeze__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_scheme__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__mrp_excess_return__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_sampling_standard__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_level__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_control_rule__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_mes_order__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_scrap_record__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_repair_order__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_exception_ticket__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request_line__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__sn_label_template__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_category__activity_exception_decoration__danger
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_asset__activity_exception_decoration__danger
+msgid "Error"
+msgstr "错误"
+
+#. module: mail
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_process_route__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_item_group__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_smt_material_table__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__mrp_eco__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_issue__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_serial_freeze__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_scheme__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__mrp_excess_return__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_sampling_standard__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_mes_order__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_level__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_control_rule__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_scrap_record__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_repair_order__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_exception_ticket__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request_line__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__sn_label_template__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_category__activity_state__overdue
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_asset__activity_state__overdue
+msgid "Overdue"
+msgstr "逾期"
+
+#. module: mail
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_process_route__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_item_group__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_smt_material_table__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__mrp_eco__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_issue__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_serial_freeze__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_scheme__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__mrp_excess_return__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_sampling_standard__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_level__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_control_rule__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_mes_order__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_scrap_record__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_repair_order__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_exception_ticket__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request_line__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__sn_label_template__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_category__activity_state__planned
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_asset__activity_state__planned
+msgid "Planned"
+msgstr "已安排"
+
+#. module: mail
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_process_route__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_item_group__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_smt_material_table__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__mrp_eco__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_issue__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_serial_freeze__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection_scheme__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_inspection__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__mrp_excess_return__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_quality_sampling_standard__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_mes_order__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_level__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_msd_control_rule__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_scrap_record__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_repair_order__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_wsd_exception_ticket__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__purchase_request_line__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__sn_label_template__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_category__activity_state__today
+#: model:ir.model.fields.selection,name:mail.selection__account_asset_asset__activity_state__today
+msgid "Today"
+msgstr "今天"

@@ -3,11 +3,12 @@
     <data noupdate="1">
         <record id="ir_cron_sn_wsd_exception_escalation" model="ir.cron">
             <field name="name">MES Exception Escalation</field>
-            <field name="model_id" ref="model_sn_wsd_exception_record"/>
+            <field name="model_id" ref="model_sn_wsd_exception_ticket"/>
             <field name="state">code</field>
-            <field name="code">model.cron_escalate_overdue_exceptions()</field>
-            <field name="interval_number">10</field>
+            <field name="code">model.cron_escalate()</field>
+            <field name="interval_number">5</field>
             <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
         </record>
     </data>
 </odoo>

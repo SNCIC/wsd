@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root section menus only. They are referenced as parents by view
+         files that load before menu_views.xml (meter pack, serial history,
+         operation report, process documents), and menu parents resolve at
+         XML parse time, so the sections must be created first. -->
+    <menuitem id="menu_sn_wsd_process_management"
+              name="Process Management"
+              parent="mrp.menu_mrp_root"
+              sequence="25"/>
+
+    <menuitem id="menu_sn_wsd_traceability"
+              name="Traceability"
+              parent="mrp.menu_mrp_root"
+              sequence="35"/>
+</odoo>

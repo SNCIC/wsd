@@ -33,6 +33,13 @@ const UI_LABELS = {
     destinationLineside: _t("Workshop line side (auto-validated)"),
     destinationStock: _t("Finished goods stock (waiting for validation)"),
     enterSn: _t("Feed SN"),
+    exceptionCategoryRequired: _t("Select a category first."),
+    exceptionNoLine: _t("This work center has no production line; exceptions are reported per line."),
+    exceptionNoteLabel: _t("Description"),
+    exceptionNotePlaceholder: _t("One line: what happened on the line?"),
+    exceptionSubmit: _t("Report"),
+    exceptionTitle: _t("Report Exception"),
+    reportException: _t("Report Exception"),
     finish: _t("Finish"),
     inProgressHere: _t("In progress at this station"),
     inputPoint: _t("Input Point"),
@@ -55,10 +62,18 @@ const UI_LABELS = {
     okQtyLabel: _t("OK Qty"),
     ngQtyLabel: _t("NG Qty"),
     scrapBtn: _t("Scrap"),
+    modeClear: _t("Clear Pass"),
+    modeBatchPass: _t("Batch Pass"),
     modeNg: _t("NG mode"),
     modeOk: _t("OK pass-through"),
     modeScrap: _t("Scrap mode"),
+    modeNgScan: _t("Scan defect code…"),
+    ngInvalidDefect: _t(
+        "Unknown defect code. Scan a defect code, another in-progress SN, or cancel."),
+    ngPendingSwitched: _t("Waiting SN switched."),
+    ngWaitHint: _t("rejected — scan its defect code"),
     moreWipHidden: _t("More WIP hidden — scanning still works"),
+    noOpenWip: _t("This board already left this station."),
     otherOrders: _t("Other live orders"),
     snLeftNg: _t("SN left with NG."),
     snLeftOk: _t("SN left with OK."),
@@ -78,7 +93,7 @@ const UI_LABELS = {
     registerMaterialConsumption: _t("Register Material Consumption"),
     remainingQuantity: _t("Remaining Quantity:"),
     reportAndFinish: _t("Report and Finish"),
-    reportModeBadge: _t("Report"),
+    reportModeBadge: _t("Work Report"),
     reportedLabel: _t("Reported"),
     reportedQuantity: _t("Reported Quantity"),
     reportQuantity: _t("Report Quantity"),
@@ -126,6 +141,7 @@ export class SnWsdShopFloor extends Component {
                 scan: "",
                 expandedWipId: null,
                 mode: "ok",
+                ngPending: false,
             },
             stationScrapDialog: {
                 open: false,
@@ -146,6 +162,16 @@ export class SnWsdShopFloor extends Component {
                 qty: 0,
                 destination: "stock",
                 workshopId: null,
+            },
+            exception: {
+                lineId: null,
+                lineName: "",
+                categories: [],
+            },
+            exceptionDialog: {
+                open: false,
+                categoryId: null,
+                note: "",
             },
         });
         onWillStart(async () => {
@@ -212,9 +238,85 @@ export class SnWsdShopFloor extends Component {
                 workcenterId ?? this.state.station.workcenterId ?? false,
             ]);
             this.applyStationData(data);
+            await this.loadExceptionContext();
         } finally {
             this.state.station.loading = false;
         }
+    }
+
+    // ------------------------------------------------------------------
+    // exception reporting (delegated to sn_wsd_exception terminal service)
+    // ------------------------------------------------------------------
+
+    async loadExceptionContext() {
+        const workcenterId = this.state.station.workcenterId;
+        if (!workcenterId) {
+            return;
+        }
+        try {
+            const data = await this.orm.silent.call(
+                "sn.wsd.exception.service", "terminal_context", [workcenterId]);
+            this.state.exception.lineId = data.line_id || null;
+            this.state.exception.lineName = data.line_name || "";
+            this.state.exception.categories = data.categories || [];
+        } catch {
+            // exception module unavailable or no access: keep the terminal alive
+            this.state.exception.lineId = null;
+        }
+    }
+
+    openExceptionDialog() {
+        if (!this.state.exception.lineId) {
+            this.notification.add(this.labels.exceptionNoLine, { type: "warning" });
+            return;
+        }
+        const dialog = this.state.exceptionDialog;
+        dialog.open = true;
+        dialog.categoryId = null;
+        dialog.note = "";
+    }
+
+    closeExceptionDialog() {
+        this.state.exceptionDialog.open = false;
+    }
+
+    async submitException() {
+        const dialog = this.state.exceptionDialog;
+        if (!dialog.categoryId) {
+            this.notification.add(this.labels.exceptionCategoryRequired, { type: "warning" });
+            return;
+        }
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.exception.service", "report", [], {
+                    line_id: this.state.exception.lineId,
+                    category_id: dialog.categoryId,
+                    note: dialog.note || "",
+                });
+            this.notification.add(result.message, { type: "success" });
+            this.closeExceptionDialog();
+        } catch (error) {
+            this.notifyError(error);
+        }
+    }
+
+    openBatchPass() {
+        const order = this.selectedStationOrder;
+        if (!order || !order.op?.id) {
+            return;
+        }
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "sn.wsd.batch.pass.wizard",
+            view_mode: "form",
+            target: "new",
+            name: this.labels.modeBatchPass,
+            context: {
+                default_mes_order_id: order.id,
+                default_route_operation_id: order.op.id,
+                default_workcenter_id: this.state.station.workcenterId,
+            },
+        });
     }
 
     applyStationData(data) {
@@ -228,6 +330,7 @@ export class SnWsdShopFloor extends Component {
         station.orders = data.orders;
         station.wip = data.wip;
         station.scrapReasons = data.scrap_reasons || [];
+        station.canBatchPass = !!data.can_batch_pass;
         station.wipTotal = data.wip_total || data.wip.length;
         station.workcenterId = data.workcenter?.id || null;
         if (!station.orders.some((o) => o.id === station.selectedOrderId)) {
@@ -264,7 +367,11 @@ export class SnWsdShopFloor extends Component {
     }
 
     setStationMode(mode) {
-        this.state.station.mode = mode;
+        const station = this.state.station;
+        station.mode = mode;
+        if (mode !== "ng") {
+            station.ngPending = false;
+        }
     }
 
     toggleWipRow(row) {
@@ -289,9 +396,25 @@ export class SnWsdShopFloor extends Component {
         if (!code) {
             return;
         }
+        if (station.ngPending) {
+            station.scan = "";
+            await this.onNgPendingScan(code);
+            return;
+        }
+        if (station.mode === "clear") {
+            // clear-pass mode: wipe the SN's traces on the selected order
+            // instead of feeding/parking it (managers only, audit logged)
+            station.scan = "";
+            await this.clearStationPass(code);
+            return;
+        }
         try {
             const result = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_scan", [
                 station.workcenterId, code, station.selectedOrderId || false,
+                // OK mode: the scan itself passes the station through the
+                // same one-shot kernel as the device API (enter + leave in
+                // one transaction); NG/scrap keep their two-step flow
+                station.mode === "ok",
             ]);
             if (result.action === "select_order" || result.action === "entered") {
                 if (result.data) {
@@ -301,16 +424,26 @@ export class SnWsdShopFloor extends Component {
                 if (result.action === "entered") {
                     this.notification.add(this.labels.snEntered, { type: "success" });
                 }
+            } else if (result.action === "passed") {
+                // one-shot OK: the kernel entered and left the station in
+                // the scan's own transaction, nothing is left pending
+                station.selectedOrderId = result.order_id;
+                this.applyStationData(result.data);
+                this.notification.add(this.labels.snLeftOk, { type: "success" });
+                if (result.finished) {
+                    this.notification.add(this.labels.snFlowFinished, { type: "success" });
+                }
             } else if (result.action === "leave") {
                 station.selectedOrderId = result.order_id;
                 station.scan = "";
                 this.focusScanInput();
-                const mode = station.mode;
-                if (mode === "ok" || mode === "ng") {
-                    await this.leaveStationWip({ id: result.wip_id }, mode);
+                if (station.mode === "ng") {
+                    // two-step NG: hold the WIP row and wait for the defect
+                    // code scan before actually leaving the station
+                    this.setNgPending(result.wip_id, code);
                 } else {
                     // scrap keeps its mandatory reason dialog
-                    const row = station.wip.find((w) => w.id === result.wip_id);
+                    const row = station.wip.find((w) => w.wip_id === result.wip_id);
                     const dialog = this.state.stationScrapDialog;
                     dialog.open = true;
                     dialog.row = row || { id: result.wip_id };
@@ -326,13 +459,102 @@ export class SnWsdShopFloor extends Component {
         }
     }
 
+    async clearStationPass(code) {
+        try {
+            const result = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_clear", [
+                    this.state.station.workcenterId, code,
+                    this.state.station.selectedOrderId || false,
+                ]);
+            this.applyStationData(result.data);
+            this.notification.add(
+                _t("Cleared %s pass records.", result.cleared),
+                { type: "success" });
+        } catch (error) {
+            this.notifyError(error);
+        }
+        this.focusScanInput();
+    }
+
     focusScanInput() {
         setTimeout(() => {
             document.querySelector(".o_sn_wsd_scan_input")?.focus();
         }, 0);
     }
 
+    setNgPending(wipId, sn) {
+        const station = this.state.station;
+        const row = station.wip.find((w) => w.wip_id === wipId);
+        station.ngPending = {
+            wipId: wipId,
+            sn: row?.sn || sn || "",
+            orderName: row?.order_name || "",
+        };
+        this.focusScanInput();
+    }
+
+    cancelNgPending() {
+        this.state.station.ngPending = false;
+        this.focusScanInput();
+    }
+
+    async onNgPendingScan(code) {
+        // while waiting for a defect code, the scan box resolves codes (or
+        // switches to another in-progress SN); sn_station_scan is NOT used
+        // here so an unknown input can never feed a new SN as a side effect
+        const station = this.state.station;
+        try {
+            const defect = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_resolve_ng_defect", [code]);
+            if (defect) {
+                const pending = station.ngPending;
+                station.ngPending = false;
+                await this.leaveNgWithDefect(pending.wipId, defect.id);
+                return;
+            }
+        } catch (error) {
+            this.notifyError(error);
+            this.focusScanInput();
+            return;
+        }
+        const row = station.wip.find((w) => w.sn === code && w.wip_id);
+        if (row) {
+            station.ngPending = {
+                wipId: row.wip_id,
+                sn: row.sn,
+                orderName: row.order_name || "",
+            };
+            this.notification.add(this.labels.ngPendingSwitched, { type: "info" });
+        } else {
+            this.notification.add(this.labels.ngInvalidDefect, { type: "warning" });
+        }
+        this.focusScanInput();
+    }
+
+    async leaveNgWithDefect(wipId, defectId) {
+        try {
+            const payload = await this.orm.silent.call(
+                "sn.wsd.mes.order", "sn_station_leave", [
+                    wipId, "ng", false, defectId,
+                ]);
+            this.applyStationData(payload.data);
+            this.notification.add(this.labels.snLeftNg, { type: "warning" });
+            if (payload.finished) {
+                this.notification.add(this.labels.snFlowFinished, { type: "success" });
+            }
+        } catch (error) {
+            this.notifyError(error);
+        }
+        this.focusScanInput();
+    }
+
     async leaveStationWip(row, result) {
+        if (!row.wip_id) {
+            // the station already recorded its verdict: the row is the
+            // board's latest finished pass, nothing left to complete here
+            this.notification.add(this.labels.noOpenWip, { type: "info" });
+            return;
+        }
         if (result === "scrap") {
             const dialog = this.state.stationScrapDialog;
             dialog.open = true;
@@ -340,9 +562,15 @@ export class SnWsdShopFloor extends Component {
             dialog.reasonId = null;
             return;
         }
+        if (result === "ng") {
+            // same two-step flow as the scan box: WIP-row NG button only
+            // holds the row, the leave happens on the defect code scan
+            this.setNgPending(row.wip_id, row.sn);
+            return;
+        }
         try {
             const payload = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_leave", [
-                row.id, result, false,
+                row.wip_id, result, false,
             ]);
             this.applyStationData(payload.data);
             this.notification.add(
@@ -364,7 +592,7 @@ export class SnWsdShopFloor extends Component {
         }
         try {
             const payload = await this.orm.silent.call("sn.wsd.mes.order", "sn_station_leave", [
-                dialog.row.id, "scrap", dialog.reasonId,
+                dialog.row.wip_id || dialog.row.id, "scrap", dialog.reasonId,
             ]);
             this.state.stationScrapDialog.open = false;
             this.state.stationScrapDialog.row = false;

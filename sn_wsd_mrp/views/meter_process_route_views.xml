@@ -23,6 +23,7 @@
                 <field name="code"/>
                 <field name="active"/>
                 <field name="name"/>
+                <field name="x_process_type" optional="show"/>
                 <field name="x_production_side"/>
                 <field name="x_workshop_id"/>
                 <field name="x_is_default"/>
@@ -64,6 +65,7 @@
                         <group>
                             <field name="code" readonly="version > 0"/>
                             <field name="name"/>
+                            <field name="x_process_type"/>
                             <field name="version" readonly="1"/>
                             <!-- state/route_flow_json invisible: the canvas edits are
                                  pushed into route_flow_json and saved/versioned by the
@@ -110,8 +112,11 @@
                     </div>
                     <notebook>
                         <!-- 图号绑定：[Maintain Route] 从排产弹窗/齐套检查跳转过来时，
-                             预填的图号行落在这里，保存即建绑定。 -->
-                        <page string="Drawing Numbers" name="drawing_bindings">
+                             预填的图号行落在这里，保存即建绑定。仅新建记录可见；
+                             已保存路线的绑定统一在图号绑定视图维护（2026-09-07
+                             用户要求：配错图号要能随时删，表单内联编辑移除）。 -->
+                        <page string="Drawing Numbers" name="drawing_bindings"
+                              invisible="id">
                             <field name="x_drawing_ids" nolabel="1">
                                 <list editable="bottom">
                                     <field name="x_drawing_no"/>
@@ -174,15 +179,11 @@
                 <field name="x_step_code"/>
                 <field name="operation_id"/>
                 <field name="workcenter_id" optional="hide"/>
-                <field name="x_station_type"/>
                 <field name="time_mode"/>
                 <field name="time_cycle_manual"/>
                 <field name="x_allow_entry"/>
                 <field name="x_allow_serial_creation"/>
-                <field name="x_allow_reentry"/>
-                <field name="x_allow_repair_return"/>
                 <field name="x_allow_skip_with_override"/>
-                <field name="x_ng_retry_limit"/>
             </list>
         </field>
     </record>
@@ -204,7 +205,6 @@
                         <group>
                             <field name="route_workshop_id" readonly="1"/>
                             <field name="available_workcenter_ids" invisible="1"/>
-                            <field name="x_station_type" readonly="1"/>
                             <field name="time_mode" widget="radio" options="{'horizontal': true}"/>
                             <field name="time_mode_batch" invisible="time_mode == 'manual'"/>
                             <field name="time_cycle_manual"/>
@@ -217,10 +217,7 @@
                     <group string="Route Control">
                         <field name="x_allow_entry"/>
                         <field name="x_allow_serial_creation"/>
-                        <field name="x_allow_reentry"/>
-                        <field name="x_allow_repair_return"/>
                         <field name="x_allow_skip_with_override"/>
-                        <field name="x_ng_retry_limit"/>
                     </group>
                 </sheet>
             </form>
@@ -251,7 +248,6 @@
             <list multi_edit="1">
                 <field name="code"/>
                 <field name="name"/>
-                <field name="x_station_type"/>
                 <field name="x_process_section"/>
                 <field name="active"/>
                 <field name="create_uid" optional="hide"/>
@@ -272,7 +268,6 @@
                         <group>
                             <field name="code"/>
                             <field name="name"/>
-                            <field name="x_station_type"/>
                             <field name="x_process_section"/>
                         </group>
                         <group>
@@ -295,12 +290,10 @@
             <search>
                 <field name="code"/>
                 <field name="name"/>
-                <field name="x_station_type"/>
                 <field name="x_process_section"/>
                 <filter string="Active" name="active_only" domain="[('active', '=', True)]"/>
                 <filter string="Inactive" name="inactive_only" domain="[('active', '=', False)]"/>
                 <group>
-                    <filter string="Station Type" name="group_station_type" context="{'group_by': 'x_station_type'}"/>
                     <filter string="Process Section" name="group_process_section" context="{'group_by': 'x_process_section'}"/>
                 </group>
             </search>
@@ -313,5 +306,23 @@
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_sn_wsd_operation_search"/>
         <field name="context">{'search_default_active_only': 1}</field>
+    </record>
+
+    <!-- dialog form for the inline "create and edit" of the section
+         many2one on operations / route section statistics -->
+    <record id="view_sn_wsd_process_section_form" model="ir.ui.view">
+        <field name="name">sn.wsd.process.section.form</field>
+        <field name="model">sn.wsd.process.section</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="sequence"/>
+                    <field name="active"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+            </form>
+        </field>
     </record>
 </odoo>

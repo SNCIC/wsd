@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_supplier_code" model="ir.ui.view">
+        <field name="name">res.partner.form.supplier.code</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']//group[@name='purchase']" position="inside">
+                <field name="supplier_categ_id"
+                       options="{'no_create': True}"
+                       placeholder="Pick a group to get a code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_supplier_code" model="ir.ui.view">
+        <field name="name">res.partner.search.supplier.code</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="supplier_categ_id" string="Supplier Group"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

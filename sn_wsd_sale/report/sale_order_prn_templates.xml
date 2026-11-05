@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The dot-matrix sheet of the sale order: one 135 mm band of the 241 mm
+         continuous form per page, the width of the paper unchanged and the
+         height of the band raised from the 93 mm of the inspection request to
+         the 13.5 cm of the sale order form. The rules and the fonts follow the
+         inspection request of the quality module, which is printed on the same
+         printer. -->
+    <template id="report_sale_order_prn">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_sale.report_sale_order_prn_document">
+                    <!-- Every band asks for the break that starts the next one,
+                         except the last band of the last order: a batch of
+                         orders printed from the list then starts each order on
+                         its own form instead of stacking them on one page. -->
+                    <t t-set="last_document" t-value="o_last"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_sale_order_prn_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="is_last_document" t-value="last_document"/>
+        <t t-set="bands" t-value="o._sn_get_dot_matrix_pages()"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <t t-foreach="bands" t-as="band">
+                <!-- One band per page. wkhtmltopdf does not break on its own
+                     after a page block: every band but the last asks for the
+                     break, so a long order continues on the next form. -->
+                <div class="page sn-sale-order-prn"
+                     t-att-style="'color: #111; font-size: 12px;' + ('' if band_last and is_last_document else ' page-break-after: always;')">
+                    <style t-if="band_first">
+                        /* The font stack names the simplified faces one by one:
+                           a bare "serif" falls back to a traditional or a
+                           Japanese face where the ideographic comma and full
+                           stop sit in the middle of the box instead of its left
+                           corner, and where 门 has no glyph of its own. */
+                        .sn-sale-order-prn, .sn-sale-order-prn table,
+                        .sn-sale-order-prn td, .sn-sale-order-prn th,
+                        .sn-sale-order-prn span, .sn-sale-order-prn div,
+                        .sn-sale-order-prn b {
+                            font-family: SimSun, 'Songti SC', 'Noto Serif CJK SC',
+                                'Source Han Serif SC', serif;
+                        }
+                        /* One order takes a 135 mm band of the continuous
+                           form: 6 mm of top margin and 4 mm of bottom margin
+                           come from the paper format, the band itself stays a
+                           minimum so a band with more rows than the sheet
+                           shows grows instead of being cut. The page must not
+                           be taller than the form: the printer feeds a whole
+                           page per order, and the surplus pushes the following
+                           sheets lower. */
+                        .sn-sale-order-prn {
+                            page-break-inside: avoid;
+                            min-height: 118mm;
+                        }
+                        .sn-sale-order-prn table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        .sn-sale-order-prn .sheet-title {
+                            text-align: center;
+                            font-size: 24px;
+                            font-weight: 700;
+                            letter-spacing: 6px;
+                            line-height: 1.4;
+                            white-space: nowrap;
+                            padding-top: 0.5mm;
+                            margin: 0;
+                        }
+                        /* The head band keeps its height whatever the logo
+                           is: it is what the item table starts from, and a
+                           taller band pushed the signature line onto the next
+                           form of the continuous paper. */
+                        .sn-sale-order-prn table.head td {
+                            border: 0 none !important;
+                            padding: 0;
+                            height: 13mm;
+                            vertical-align: middle;
+                        }
+                        .sn-sale-order-prn table.meta td {
+                            border: 0 none !important;
+                            padding: 0 2px;
+                            height: 6mm;
+                            font-size: 12px;
+                            vertical-align: middle;
+                        }
+                        /* The rules are given in points on purpose: a 1px line
+                           (0.26 mm) is below the dot size of a dot-matrix
+                           printer and came out as a dotted line. 1pt keeps a
+                           continuous line, even after the printer scales the
+                           page down. */
+                        .sn-sale-order-prn table.items th,
+                        .sn-sale-order-prn table.items td {
+                            border: 1pt solid #000;
+                            padding: 0.8mm;
+                            font-size: 11px;
+                            vertical-align: middle;
+                            word-break: break-all;
+                        }
+                        /* The head row stays white: the report assets paint a
+                           background on some cells and the dot-matrix printer
+                           turns it into a grey band over the first rule. */
+                        .sn-sale-order-prn table.items thead th {
+                            padding: 0.8mm;
+                            font-weight: 700;
+                            background: #fff !important;
+                            box-shadow: none !important;
+                        }
+                        /* The height of a row is carried by the cell of the
+                           first column: wkhtmltopdf ignores a height set on a
+                           table row and on a block inside the cell. */
+                        .sn-sale-order-prn table.items tbody td {
+                            height: 38px;
+                        }
+                        .sn-sale-order-prn .center { text-align: center; }
+                        .sn-sale-order-prn .right { text-align: right; }
+                        .sn-sale-order-prn .total-label { font-weight: 700; }
+                        .sn-sale-order-prn table.foot td {
+                            border: 0 none !important;
+                            padding: 0.5mm 2px 0;
+                            font-size: 12px;
+                        }
+                    </style>
+
+                    <table class="head">
+                        <tr>
+                            <td style="width: 30%;">
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                     style="max-width: 180px; max-height: 46px;"/>
+                                <span t-else="" style="font-size: 18px; font-weight: 700;"
+                                      t-out="company.name"/>
+                            </td>
+                            <td><div class="sheet-title">Sales Order</div></td>
+                            <td style="width: 26%;"/>
+                        </tr>
+                    </table>
+
+                    <table class="meta">
+                        <tr>
+                            <td style="width: 42%;">Customer:
+                                <span t-out="o.partner_id.ref or ''"/>
+                                <t t-if="o.partner_id.ref"> </t>
+                                <span t-out="o.partner_id.name or ''"/>
+                            </td>
+                            <td style="width: 28%;">Business Date:
+                                <span t-field="o.date_order"
+                                      t-options='{"widget": "date", "format": "yyyy-MM-dd"}'/>
+                            </td>
+                            <td style="width: 30%;">Order No.:
+                                <span t-out="o.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Summary:
+                                <span t-out="o.sn_summary or ''"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="items">
+                        <thead>
+                            <tr class="center">
+                                <th style="width: 5%;">No.</th>
+                                <th style="width: 16%;">Product Code</th>
+                                <th style="width: 20%;">Product Name</th>
+                                <th style="width: 22%;">Specification</th>
+                                <th style="width: 6%;">Unit</th>
+                                <th style="width: 8%;">Quantity</th>
+                                <th style="width: 13%;">Delivery Date</th>
+                                <th style="width: 10%;">Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="band" t-as="row">
+                                <td class="center"><t t-out="row['sequence']"/></td>
+                                <td><t t-out="row['product_code']"/></td>
+                                <td><t t-out="row['product_name']"/></td>
+                                <td><t t-out="row['material_specification']"/></td>
+                                <td class="center"><t t-out="row['uom']"/></td>
+                                <td class="center"><t t-out="row['quantity']"/></td>
+                                <td class="center"><t t-out="row['delivery_date']"/></td>
+                                <td><t t-out="row['note']"/></td>
+                            </tr>
+                            <!-- The paper form keeps room to add the materials
+                                 missing on the order by hand. -->
+                            <tr t-foreach="o._sn_get_dot_matrix_blank_rows(band)"
+                                t-as="blank_row">
+                                <td class="center">&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <!-- The total is printed once, on the last band of
+                                 the form: it is the total of the order, not the
+                                 subtotal of the band. -->
+                            <tr t-if="band_last" class="center">
+                                <td colspan="5" class="total-label">Total Quantity</td>
+                                <td class="center"><t t-out="o._sn_get_dot_matrix_total()"/></td>
+                                <td colspan="2">&#160;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="foot">
+                        <tr>
+                            <td style="width: 60%;">Prepared by:
+                                <span t-field="o.create_uid.name"/>
+                            </td>
+                            <td style="width: 40%;">Salesperson:
+                                <span t-field="o.user_id.name"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </template>
+</odoo>

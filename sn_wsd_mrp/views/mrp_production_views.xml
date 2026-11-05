@@ -25,13 +25,20 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                 <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+                
             <xpath expr="//field[@name='name']" position="attributes">
                 <attribute name="string">Manufacturing Order No.</attribute>
             </xpath>
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+                <attribute name="options">{'show_time': false}</attribute>
+            </xpath>
             <xpath expr="//field[@name='date_deadline']" position="attributes">
                 <attribute name="optional">show</attribute>
-            </xpath>
-            <xpath expr="//field[@name='date_start']" position="attributes">
                 <attribute name="widget">datetime</attribute>
                 <attribute name="options">{'show_time': false}</attribute>
             </xpath>
@@ -39,15 +46,19 @@
                 <attribute name="widget">datetime</attribute>
                 <attribute name="options">{'show_time': false}</attribute>
             </xpath>
-            <xpath expr="//field[@name='date_deadline']" position="attributes">
-                <attribute name="widget">datetime</attribute>
-                <attribute name="options">{'show_time': false}</attribute>
-            </xpath>
             <xpath expr="//field[@name='name']" position="after">
                 <field name="x_customer_display_name" optional="show"/>
             </xpath>
-            <xpath expr="//field[@name='date_finished']" position="after">
+
+            <xpath expr="//field[@name='x_customer_display_name']" position="after">
+                <field name="product_id" readonly="1" optional="show" ></field>
+                <field name="material_specification" optional="show"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_start']" position="after">
                 <field name="x_actual_start_date" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="after">
                 <field name="x_actual_finished_date" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='bom_id']" position="after">
@@ -63,6 +74,13 @@
             <xpath expr="//field[@name='product_qty']" position="attributes">
                 <attribute name="string">Input Qty</attribute>
             </xpath>
+
+            <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="x_nameplate_begin" optional="show" />
+                <field name="x_nameplate_end" optional="show" />
+                <field name="x_contract_no" optional="show" />
+            </xpath>
+
             <xpath expr="//field[@name='product_qty']" position="after">
                 <field name="qty_produced" string="Output Qty" sum="Total Output Qty" optional="show"/>
                 <field name="x_is_eip_material" optional="show" widget="boolean_toggle"/>
@@ -126,11 +144,6 @@
             <xpath expr="//header//button[@name='action_start']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//form" position="inside">
-                <field name="x_has_meter_operations" invisible="1"/>
-            </xpath>
-            <!-- internal-serial smart button moved to the MES orders (制令单):
-                 boards are produced and tracked under their MES order -->
             <xpath expr="//notebook" position="attributes">
                 <attribute name="class">o_sn_wsd_mrp_production_notebook</attribute>
             </xpath>
@@ -140,9 +153,18 @@
                        decoration-danger="x_mes_schedule_state == 'unplanned'"
                        decoration-warning="x_mes_schedule_state == 'partial'"
                        decoration-success="x_mes_schedule_state == 'planned'"/>
+                <field name="x_nameplate_begin" />
+                <field name="x_nameplate_end" />
+                <field name="x_contract_no" />
             </xpath>
             <xpath expr="//div[@name='bom_div']" position="after">
                 <field name="x_route_id" groups="mrp.group_mrp_routings"/>
+            </xpath>
+            <!-- Material Specification (规格) right after the header product
+                 field; the first product_id of the native form is the header
+                 one (verified against addons/mrp/views/mrp_production_views.xml) -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="material_specification"/>
             </xpath>
             <xpath expr="//field[@name='move_raw_ids']" position="attributes">
                 <attribute name="domain">[('state', 'not in', ['done', 'cancel'])]</attribute>
@@ -155,13 +177,13 @@
                 <attribute name="optional">hide</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[1]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or lot_producing_ids</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'lot', False) or lot_producing_ids</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[2]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'lot', False) or not lot_producing_ids or product_qty == 1</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'lot', False) or not lot_producing_ids or product_qty == 1</attribute>
             </xpath>
             <xpath expr="(//button[@name='action_generate_serial'])[3]" position="attributes">
-                <attribute name="invisible">not x_has_meter_operations or product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
+                <attribute name="invisible">product_tracking in ('none', 'serial', False) or lot_producing_ids</attribute>
             </xpath>
             <!-- Work Orders (operations) page: hidden. Work orders are never
                  generated in this project (mrp.routing.workcenter
@@ -192,7 +214,6 @@
                             <!-- hidden column: the o2m dialog parses the full MES-order
                                  form against the fields collected from this inline list,
                                  so every field of that form must appear here (column_invisible) -->
-                            <field name="internal_serial_count" column_invisible="1"/>
                             <field name="name"/>
                             <field name="production_line_id"/>
                             <field name="date_plan"/>

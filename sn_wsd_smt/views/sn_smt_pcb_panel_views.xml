@@ -10,6 +10,7 @@
                 <field name="product_no"/>
                 <field name="quantity"/>
                 <field name="pcb_item_sn" string="PCB Item Code"/>
+                <field name="pcb_item_spec" optional="show"/>
                 <field name="board_count"/>
                 <field name="state"/>
                 <field name="production_name"/>
@@ -37,6 +38,7 @@
                         <group>
                             <field name="quantity"/>
                             <field name="pcb_item_sn" string="PCB Item Code"/>
+                            <field name="pcb_item_spec"/>
                         </group>
                         <group>
                             <field name="production_id" readonly="1"/>

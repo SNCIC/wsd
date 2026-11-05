@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_exception_ticket">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_exception.report_exception_ticket_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_exception_ticket_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="row mb-4">
+                    <div class="col-8">
+                        <h2>MES Exception Handling Report</h2>
+                        <h3><span t-field="o.name"/></h3>
+                    </div>
+                    <div class="col-4 text-end">
+                        <span class="badge"
+                              t-attf-class="#{o.level == 'critical' and 'text-bg-danger' or (o.level == 'urgent' and 'text-bg-warning' or 'text-bg-secondary')}">
+                            <span t-field="o.level"/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <table class="table table-sm table-bordered">
+                            <tr><th class="table-light">Workshop / Line</th><td><span t-field="o.workshop_id.display_name"/> / <span t-field="o.production_line_id.display_name"/></td></tr>
+                            <tr><th class="table-light">Category</th><td><span t-field="o.category_id.display_name"/><t t-if="o.subcategory_id"> / <span t-field="o.subcategory_id.display_name"/></t></td></tr>
+                            <tr><th class="table-light">MES Order</th><td><span t-field="o.mes_order_id.display_name"/></td></tr>
+                            <tr t-if="o.repeat_of_id"><th class="table-light">Repeat Of</th><td><span t-field="o.repeat_of_id.name"/></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table class="table table-sm table-bordered">
+                            <tr><th class="table-light">Reported By</th><td><span t-field="o.reported_by_id.name"/></td></tr>
+                            <tr><th class="table-light">Responsible</th><td><span t-field="o.responsible_user_id.name"/></td></tr>
+                            <tr><th class="table-light">Team</th><td><span t-field="o.team_id.display_name"/></td></tr>
+                            <tr><th class="table-light">Status</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <h5>Description</h5>
+                <p t-field="o.description"/>
+
+                <h5>Timeline</h5>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr><th>Reported At</th><th>Responded At</th><th>Closed At</th><th>Suspended (minutes)</th><th>Response (minutes)</th><th>MTTR (minutes)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span t-field="o.reported_at" t-options='{"widget": "datetime"}'/></td>
+                            <td><span t-field="o.respond_at" t-options='{"widget": "datetime"}'/></td>
+                            <td><span t-field="o.closed_at" t-options='{"widget": "datetime"}'/></td>
+                            <td><span t-field="o.suspended_minutes"/></td>
+                            <td><span t-field="o.response_minutes"/></td>
+                            <td><span t-field="o.mttr_minutes"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-if="o.pause_line_ids">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr><th>Suspension</th><th>Reason</th><th>Duration (minutes)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.pause_line_ids" t-as="pause">
+                                <td><span t-field="pause.started_at" t-options='{"widget": "datetime"}'/> - <span t-field="pause.ended_at" t-options='{"widget": "datetime"}'/></td>
+                                <td><span t-field="pause.reason"/></td>
+                                <td><span t-field="pause.duration_minutes"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+
+                <h5>Handling</h5>
+                <table class="table table-sm table-bordered">
+                    <tr><th class="table-light" style="width: 20%">Exception Reason</th><td><span t-field="o.reason_id.display_name"/></td></tr>
+                    <tr><th class="table-light">Temporary Action</th><td><span t-field="o.temp_action"/></td></tr>
+                    <tr><th class="table-light">Root Cause</th><td><span t-field="o.root_cause"/></td></tr>
+                    <tr><th class="table-light">Corrective Action</th><td><span t-field="o.corrective_action"/></td></tr>
+                </table>
+
+                <h5>Losses</h5>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr><th>Downtime (minutes)</th><th>Impact Quantity</th><th>Scrap Quantity</th><th>Rework Quantity</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span t-field="o.downtime_minutes"/></td>
+                            <td><span t-field="o.impact_qty"/></td>
+                            <td><span t-field="o.scrap_qty"/></td>
+                            <td><span t-field="o.rework_qty"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+                        <div style="border-top: 1px solid #000; width: 70%; margin: auto; padding-top: 4px;">
+                            <div>Handled By</div>
+                            <div t-field="o.responsible_user_id.name"/>
+                        </div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <div style="border-top: 1px solid #000; width: 70%; margin: auto; padding-top: 4px;">
+                            <div>Confirmed By</div>
+                            <div t-field="o.confirm_user_id.name"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_exception_pareto">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>MES Exception Pareto Report</h2>
+                    <p>
+                        Dimension: <b t-out="dimension_label"/>
+                        <t t-if="docs[0].date_from or docs[0].date_to">
+                            -
+                            <span t-if="docs[0].date_from" t-out="docs[0].date_from"/>
+                            ~
+                            <span t-if="docs[0].date_to" t-out="docs[0].date_to"/>
+                        </t>
+                    </p>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Dimension</th>
+                                <th>Count</th>
+                                <th>Share (%)</th>
+                                <th>Cumulative (%)</th>
+                                <th style="width: 30%">Distribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="rows" t-as="row">
+                                <td><t t-out="row['rank']"/></td>
+                                <td><t t-out="row['label']"/></td>
+                                <td><t t-out="row['count']"/></td>
+                                <td><t t-out="round(row['share'], 1)"/></td>
+                                <td><t t-out="round(row['cumulative'], 1)"/></td>
+                                <td>
+                                    <div t-attf-style="background-color:#4a69bd;color:#fff;text-align:center;height:14px;width:#{row['share']}%;min-width:2px;"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">Total</th>
+                                <th><t t-out="total"/></th>
+                                <th colspan="3"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="pareto_page">
+        <t t-call="web.html_container">
+            <div style="max-width: 1100px; margin: 24px auto; padding: 0 16px; color: #212529;">
+                <h2 style="margin-bottom: 4px;">MES Exception Pareto Report</h2>
+                <form method="get" action="/sn_wsd_exception/pareto"
+                      style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 20px; padding: 12px; border: 1px solid #dee2e6; border-radius: 8px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label for="dimension" style="font-size: 13px; color: #6c757d;">Dimension</label>
+                        <select name="dimension" id="dimension"
+                                style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 6px; min-width: 160px;">
+                            <option value="subcategory" t-att-selected="dimension == 'subcategory'">Subcategory</option>
+                            <option value="category" t-att-selected="dimension == 'category'">Category</option>
+                            <option value="line" t-att-selected="dimension == 'line'">Production Line</option>
+                            <option value="level" t-att-selected="dimension == 'level'">Level</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label for="date_from" style="font-size: 13px; color: #6c757d;">From</label>
+                        <input type="date" name="date_from" id="date_from" t-att-value="date_from"
+                               style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 6px;"/>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label for="date_to" style="font-size: 13px; color: #6c757d;">To</label>
+                        <input type="date" name="date_to" id="date_to" t-att-value="date_to"
+                               style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 6px;"/>
+                    </div>
+                    <button type="submit"
+                            style="padding: 7px 22px; background: #714b67; color: #fff; border: none; border-radius: 6px; cursor: pointer;">View</button>
+                </form>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8f9fa;">
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: left;">Rank</th>
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: left;">Dimension</th>
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: right;">Count</th>
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: right;">Share (%)</th>
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: right;">Cumulative (%)</th>
+                            <th style="border: 1px solid #dee2e6; padding: 8px 10px; width: 30%;">Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="rows" t-as="row">
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px;"><t t-out="row['rank']"/></td>
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px;"><t t-out="row['label']"/></td>
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px; text-align: right;"><t t-out="row['count']"/></td>
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px; text-align: right;"><t t-out="round(row['share'], 1)"/></td>
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px; text-align: right;"><t t-out="round(row['cumulative'], 1)"/></td>
+                            <td style="border: 1px solid #dee2e6; padding: 6px 10px;">
+                                <div t-attf-style="background:#714b67;color:#fff;text-align:center;height:14px;border-radius:3px;width:#{row['share']}%;min-width:2px;"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f8f9fa; font-weight: bold;">
+                            <td colspan="2" style="border: 1px solid #dee2e6; padding: 8px 10px;">Total</td>
+                            <td style="border: 1px solid #dee2e6; padding: 8px 10px; text-align: right;"><t t-out="total"/></td>
+                            <td colspan="3" style="border: 1px solid #dee2e6;"/>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

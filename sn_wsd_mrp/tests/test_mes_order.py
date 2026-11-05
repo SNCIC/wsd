@@ -1,3 +1,5 @@
+from psycopg2 import IntegrityError
+
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase, tagged
@@ -44,8 +46,8 @@ class TestMesOrder(TransactionCase):
         # test route two confirmed operations reachable via the legacy graph
         # (daily input and output must differ).
         Operation = cls.env['sn.wsd.operation']
-        cls.op_in = Operation.create({'name': 'OP-IN', 'code': 'IN1', 'x_station_type': 'assembly'})
-        cls.op_out = Operation.create({'name': 'OP-OUT', 'code': 'OUT1', 'x_station_type': 'final_test'})
+        cls.op_in = Operation.create({'name': 'OP-IN', 'code': 'IN1'})
+        cls.op_out = Operation.create({'name': 'OP-OUT', 'code': 'OUT1'})
         cls.route.write({
             'state': 'confirmed',
             'x_production_side': 'single',
@@ -69,6 +71,11 @@ class TestMesOrder(TransactionCase):
         route_ops[0].x_allow_entry = True
         route_ops[1].x_allow_exit = True
         route_ops[1].blocked_by_route_operation_ids = [(6, 0, route_ops[0].ids)]
+        # Reel materials are distinguished by product category: components
+        # that must move whole reels have to sit in this category.
+        cls.reel_category = cls.env['product.category'].create({
+            'name': 'REEL-TEST', 'x_is_reel_material': True,
+        })
 
     def _make_mo(self, qty=10000):
         product = self.env['product.product'].create({
@@ -91,6 +98,42 @@ class TestMesOrder(TransactionCase):
         line_side = self.env['stock.location'].create({'name': 'LINE-SIDE', 'usage': 'internal'})
         self.workshop.component_location_id = line_side.id
         return line_side
+
+    def _gate_online(self, order):
+        """上线硬闸脚手架（mes-picking-lifecycle R1）：占位领料单过闸，
+        上线后取消，不污染后续对 picking_ids 的断言。"""
+        from .pick_gate import give_pick
+        picking = give_pick(self.env, order)
+        order.action_online()
+        picking.action_cancel()
+        return order
+
+    def test_online_replaces_occupying_order(self):
+        """一产线一在线单：占用时 action_online 返回确认向导（指明占用者），
+        向导确认后占用单自动下线、本单上线。"""
+        from .pick_gate import give_pick
+        mo_a = self._make_mo()
+        order_a = self._make_order(mo_a, 4)
+        self._gate_online(order_a)
+        self.assertTrue(order_a.x_online_date)
+        mo_b = self._make_mo()
+        order_b = self._make_order(mo_b, 4)
+        give_pick(self.env, order_b)
+        action = order_b.action_online()
+        self.assertEqual(action.get('res_model'), 'sn.wsd.mes.online.confirm')
+        self.assertFalse(order_b.x_online_date, 'nothing happens before the confirm')
+        wizard = self.env['sn.wsd.mes.online.confirm'].create({
+            'mes_order_id': order_b.id,
+            'occupying_ids': [(6, 0, order_a.ids)],
+        })
+        self.assertIn(order_a.name, wizard.message)
+        wizard.action_confirm_replace()
+        self.assertFalse(order_a.x_online_date, 'the occupying order is taken offline')
+        self.assertTrue(order_b.x_online_date)
+        self.assertEqual(order_a.state, 'in_progress',
+                         'being replaced does not change the lifecycle state')
+        self.assertIn('offline', self.env['sn.wsd.mes.order.log'].search([
+            ('mes_order_id', '=', order_a.id)]).mapped('action'))
 
     def _stock_component(self, mo, qty=100):
         """Put component stock in the MO source location so pickings validate."""
@@ -453,7 +496,10 @@ class TestMesOrder(TransactionCase):
         mo = self._make_mo(1000)
         order = self._make_order(mo, 100)
         self.assertFalse(mo._has_online_mes_order(), 'nothing online yet')
+        from .pick_gate import give_pick
+        gate_picking = give_pick(self.env, order)
         onlined = mo._action_online_mes_orders()
+        gate_picking.action_cancel()
         self.assertEqual(order, onlined)
         self.assertTrue(order.x_online_date, 'the MES order must be online')
         self.assertEqual(order.state, 'in_progress', 'online moves released to in_progress')
@@ -502,8 +548,25 @@ class TestMesOrder(TransactionCase):
         order = self._make_order(mo, qty)
         if mode != 'station':
             order.x_manage_mode = mode
-        order.action_online()
+        self._gate_online(order)
         return order
+
+    def _leave_ng(self, order, serial):
+        """NG leave; sn_wsd_quality (when installed) makes a defect code
+        mandatory, so pass one in that case."""
+        kwargs = {}
+        if 'sn.wsd.quality.defect.code' in self.env:
+            DefectCode = self.env['sn.wsd.quality.defect.code']
+            defect = DefectCode.search(
+                [('company_id', 'in', [order.company_id.id, False])], limit=1)
+            if not defect:
+                defect = DefectCode.create({
+                    'name': 'Test NG', 'code': 'TNG',
+                    'category': 'other', 'severity': 'minor',
+                })
+            kwargs['ng_defect'] = defect
+        order.leave_station(serial, 'ng', **kwargs)
+        return kwargs.get('ng_defect', False)
 
     def test_30_scan_enter_counts_input_on_entry(self):
         """Feeding an SN at the start work center counts input immediately,
@@ -569,18 +632,21 @@ class TestMesOrder(TransactionCase):
 
     def test_34_report_mode_quantities(self):
         """Report-mode quantities read the reported amounts at the counter
-        operations; successors unlock once the plan quantity is reached."""
+        operations; successors unlock by cascade (report-offline)：下游累计
+        不得超过上游累计，不再要求前置报满。"""
         order = self._make_online_order(qty=4, mode='report')
         op_in_row = order.x_mes_route_id.x_daily_input_operation_id
         op_out_row = order.x_mes_route_id.x_daily_output_operation_id
         order.report_operation_qty(op_in_row, 3)
         self.assertEqual(order.x_input_qty, 3.0)
         self.assertEqual(op_in_row.x_reported_qty, 3.0)
+        order.report_operation_qty(op_out_row, 3)
+        self.assertEqual(order.x_output_qty, 3.0)
         with self.assertRaises(ValidationError):
             order.report_operation_qty(op_out_row, 1)
         order.report_operation_qty(op_in_row, 1)
-        order.report_operation_qty(op_out_row, 2)
-        self.assertEqual(order.x_output_qty, 2.0)
+        order.report_operation_qty(op_out_row, 1)
+        self.assertEqual(order.x_output_qty, 4.0)
 
     def test_44_report_quota_scrap_and_completion(self):
         """Quota rule (OK+scrap consume, NG is a statistic, the whole batch
@@ -590,7 +656,7 @@ class TestMesOrder(TransactionCase):
         mo = self._make_bom_mo(qty=10)
         order = self._make_order(mo, 4)
         order.x_manage_mode = 'report'
-        order.action_online()
+        self._gate_online(order)
         op_in_row = order.x_mes_route_id.x_daily_input_operation_id
         op_out_row = order.x_mes_route_id.x_daily_output_operation_id
         component, line_side = self._stock_line_side(order)
@@ -636,7 +702,7 @@ class TestMesOrder(TransactionCase):
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         order = self._make_order(mo, 4)
-        order.action_online()
+        self._gate_online(order)
         wc_in, wc_out = self._done_workcenters()
         serial = order.scan_enter('SN-DONE-001', wc_in)
         order.leave_station(serial, 'ok')
@@ -731,21 +797,25 @@ class TestMesOrder(TransactionCase):
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         order_a = self._make_order(mo, 4)
-        order_a.action_online()
-        order_b = self._make_order(mo, 4)
-        order_b.action_online()
+        self._gate_online(order_a)
+        # 一条产线同一时刻只有一张在线单：B 单上第二条线
+        other_line = self.env['sn.mrp.production.line'].create(
+            {'name': 'LB-BIND', 'workshop_id': self.workshop.id})
+        order_b = self._make_order(mo, 4, line=other_line)
+        self._gate_online(order_b)
         wc_in, wc_out = self._done_workcenters()
+        wc_in_b = self._make_workcenter(self.op_in, line=other_line)
         serial = order_a.scan_enter('SN-BIND-001', wc_in)
-        order_a.leave_station(serial, 'ng')
+        self._leave_ng(order_a, serial)
         # NG on A, not produced there -> cannot enter B
         with self.assertRaises(ValidationError):
-            order_b.scan_enter('SN-BIND-001', wc_in)
+            order_b.scan_enter('SN-BIND-001', wc_in_b)
         # a healthy board produced through the end operation is released
         serial2 = order_a.scan_enter('SN-BIND-002', wc_in)
         order_a.leave_station(serial2, 'ok')
         order_a.scan_enter('SN-BIND-002', wc_out)
         order_a.leave_station(serial2, 'ok')
-        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in)
+        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in_b)
         self.assertTrue(serial2_b)
 
     def test_47_station_scan_routing(self):
@@ -757,25 +827,27 @@ class TestMesOrder(TransactionCase):
         })
         mo = self._make_bom_mo(qty=10)
         order_a = self._make_order(mo, 4)                 # line LA
-        order_a.action_online()
+        self._gate_online(order_a)
         order_b = self._make_order(mo, 4, line=other_line)  # line LB2
-        order_b.action_online()
+        self._gate_online(order_b)
         wc_in, _wc_out = self._done_workcenters()  # bound to LA
         Station = self.env['sn.wsd.mes.order']
         data = Station.sn_station_floor_data(wc_in.id)
         self.assertEqual([o['name'] for o in data['orders']], [order_a.name])
         # order barcode switches nothing here (B is another line, not listed)
-        # feed a new SN through the scan router
+        # feed a new SN through the scan router: the scan enters the station
+        # and hands back the leave action for the station's own verdict
         result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001', order_a.id)
-        self.assertEqual(result['action'], 'entered')
+        self.assertEqual(result['action'], 'leave')
         self.assertEqual(order_a.x_input_qty, 1.0)
-        # scanning that WIP SN returns the leave action
+        # scanning that WIP SN returns the leave action again
         result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001')
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
-        # an unknown SN without a selected order is refused
-        with self.assertRaises(ValidationError):
-            Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        # 一站一扫：未知 SN 自动解析工位的在线单并投入（无在线单才拒绝）
+        result = Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        self.assertEqual(result['action'], 'leave')
+        self.assertEqual(result['order_id'], order_a.id)
         # scanning the order barcode switches the current order
         result = Station.sn_station_scan(wc_in.id, order_a.name)
         self.assertEqual(result['action'], 'select_order')
@@ -786,21 +858,26 @@ class TestMesOrder(TransactionCase):
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         order = self._make_order(mo, 4)
-        order.action_online()
+        self._gate_online(order)
         log = order.x_online_log_ids
         self.assertEqual(len(log), 1)
         self.assertEqual(log.action, 'online')
         self.assertEqual(log.user_id, self.env.user)
-        # a board in progress blocks the offline
-        wc_in, _wc_out = self._done_workcenters()
+        wc_in, wc_out = self._done_workcenters()
         serial = order.scan_enter('SN-LOG-001', wc_in)
-        with self.assertRaises(ValidationError):
-            order.action_offline()
-        # leave the station -> offline succeeds and is logged
-        order.leave_station(serial, 'ng')
+        # a board in progress does NOT block going offline: feeding new SNs
+        # is what online gates, the flow itself keeps running
         order.action_offline()
         self.assertFalse(order.x_online_date)
-        self.assertEqual(order.x_online_log_ids.mapped('action'), ['offline', 'online'])
+        # feeding a new SN into the start operation is refused offline
+        with self.assertRaises(ValidationError):
+            order.scan_enter('SN-LOG-002', wc_in)
+        # the in-progress board keeps flowing: it leaves and re-enters fine
+        order.leave_station(serial, 'ok')
+        order.scan_enter('SN-LOG-001', wc_out)
+        order.leave_station(serial, 'ok')  # produced through the end op
+        self.assertEqual(order.x_online_log_ids.mapped('action'),
+                         ['offline', 'online'])
 
     def test_45_station_leave_scrap(self):
         """Station mode: leaving with result Scrap is terminal -- the SN is
@@ -808,7 +885,7 @@ class TestMesOrder(TransactionCase):
         self._set_line_side()
         mo = self._make_bom_mo(qty=10)
         order = self._make_order(mo, 8)
-        order.action_online()
+        self._gate_online(order)
         wc_in, _wc_out = self._done_workcenters()
         self._stock_line_side(order)
         serial = order.scan_enter('SN-SCRAP-001', wc_in)
@@ -828,3 +905,736 @@ class TestMesOrder(TransactionCase):
         # the scrapped SN is sealed for this order
         with self.assertRaises(ValidationError):
             order.scan_enter('SN-SCRAP-001', wc_in)
+
+    # ------------------------------------------------------------------
+    # NG re-pass: re-entry rules + retry limit (x_max_test_count)
+    # ------------------------------------------------------------------
+    def _ng_pass(self, order, wc, sn_name):
+        serial = order.scan_enter(sn_name, wc)
+        self._leave_ng(order, serial)
+        return serial
+
+    def test_49_pass_cap_counts_ok_and_ng(self):
+        """The pass cap counts every pass (OK and NG alike): cap 2 allows
+        two passes and blocks the third; an OK pass no longer seals the
+        operation (mid-route ops only)."""
+        order = self._make_online_order()
+        wc_in = self._make_workcenter(self.op_in, line=self.line)
+        self.op_in.x_max_test_count = 3
+        self._ng_pass(order, wc_in, 'SN-NG-001')
+        serial = order.scan_enter('SN-NG-001', wc_in)
+        order.leave_station(serial, 'ok')
+        serial = order.scan_enter('SN-NG-001', wc_in)  # ok row does not seal
+        order.leave_station(serial, 'ok')
+        with self.assertRaises(ValidationError):
+            self._ng_pass(order, wc_in, 'SN-NG-001')  # 4th pass blocked
+
+    def test_49b_cap_must_be_at_least_one(self):
+        """Max test count is required and must be >= 1 (0 = unlimited was
+        dropped); no context marker may bypass the cap anymore."""
+        order = self._make_online_order()
+        wc_in = self._make_workcenter(self.op_in, line=self.line)
+        self.op_in.x_max_test_count = 1
+        self._ng_pass(order, wc_in, 'SN-NG-003')
+        with self.assertRaises(ValidationError):
+            self._ng_pass(order, wc_in, 'SN-NG-003')  # cap 1 used
+        with self.assertRaises(ValidationError):
+            self.op_in.x_max_test_count = 0
+
+    def test_49c_history_rows_coexist_many_ok(self):
+        """Multiple ng and ok rows may coexist per (SN, operation) — the
+        one-ok-row partial index is gone."""
+        order = self._make_online_order()
+        wc_in = self._make_workcenter(self.op_in, line=self.line)
+        self.op_in.x_max_test_count = 3
+        serial = order.scan_enter('SN-NG-004', wc_in)
+        self._leave_ng(order, serial)
+        serial = order.scan_enter('SN-NG-004', wc_in)
+        order.leave_station(serial, 'ok')
+        serial = order.scan_enter('SN-NG-004', wc_in)
+        order.leave_station(serial, 'ok')
+        rows = self.env['sn.wsd.serial.operation.history'].search([
+            ('serial_identity_id', '=', serial.id),
+            ('route_operation_id.operation_id', '=', self.op_in.id),
+        ])
+        self.assertEqual(sorted(rows.mapped('result')), ['ng', 'ok', 'ok'])
+
+    # --- mes-picking-lifecycle R1: 在产续领（上线后账内剩余仍可领） ---
+    def test_60_pick_after_online(self):
+        """1000 套先发一半、上线投产后再补另一半：向导放行、净领累计、
+        状态不回退（in_progress 保持）。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(order.state, 'released')  # 2 < 4, not full yet
+        order.action_online()
+        self.assertEqual(order.state, 'in_progress')
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 2})
+        action = wizard.action_pick()
+        # 成功提示（display_notification + 自动关向导）
+        self.assertEqual(action['tag'], 'display_notification')
+        self.assertEqual(action['params']['type'], 'success')
+        self.assertIn(order.name, action['params']['message'])
+        p2 = (order.picking_ids - p1)
+        self.assertAlmostEqual(p2.x_mes_order_qty, 2.0)
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 4.0)
+        self.assertEqual(order.state, 'in_progress',
+                         're-picking an online order must not roll the state back')
+
+    def test_61_pick_while_offline_in_flight(self):
+        """下线只停止投入新 SN：在制继续流到产出，账内剩余仍可领。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        order.action_online()
+        order.action_offline()
+        self.assertFalse(order.x_online_date)
+        self.assertEqual(order.state, 'in_progress')
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 2})
+        wizard.action_pick()
+        p2 = (order.picking_ids - p1)
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 4.0)
+
+    def test_62_pick_blocked_on_terminal_states(self):
+        """done / cancelled 的制令单不可领料。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 4)
+        # cancelled
+        order.action_generate_picking(qty_this=2)
+        order.action_cancel()
+        self.assertEqual(order.state, 'cancelled')
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 1})
+        with self.assertRaises(UserError):
+            wizard.action_pick()
+        # done
+        order2 = self._make_order(mo, 4)
+        order2.state = 'done'
+        wizard2 = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order2.id, 'qty_this': 1})
+        with self.assertRaises(UserError):
+            wizard2.action_pick()
+
+    def test_63_qty_cap_kept_after_online(self):
+        """上线后台数封顶维持：本次数量使净领超过排产即拦截。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        order.action_online()
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 3})
+        with self.assertRaises(ValidationError):
+            wizard.action_pick()
+
+    def test_64_online_requires_picking(self):
+        """不可跳过领料硬闸：零领料上线拦截；存在未验证领料单即放行。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        order = self._make_order(mo, 4)
+        with self.assertRaises(ValidationError):
+            order.action_online()
+        self.assertFalse(order.x_online_date)
+        order.action_generate_picking(qty_this=2)  # open, not validated yet
+        order.action_online()
+        self.assertTrue(order.x_online_date)
+
+    # --- mes-picking-lifecycle R2: 退料净额 ---
+    def test_70_return_net_ledger(self):
+        """领满 4 退 1：退货单方向线边→仓库、台数记负，净领 3，状态不回退。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=4)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(order.state, 'picked')
+        line_side = order.production_line_id.workshop_id.component_location_id
+        order.action_generate_return(qty=1)
+        ret = (order.picking_ids - p1)
+        self.assertAlmostEqual(ret.x_mes_order_qty, -1.0)
+        self.assertEqual(ret.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.return',
+                         'returns carry their own WH/MR operation type')
+        self.assertTrue(ret.name.startswith('MR-') or '/MR/' in ret.name, f'unexpected return picking name: {ret.name}')
+        self.assertEqual(ret.location_id, line_side, 'return ships FROM the line side')
+        self.assertEqual(ret.location_dest_id,
+                         mo.picking_type_id.warehouse_id.lot_stock_id)
+        ret.move_ids.picked = True
+        ret.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 3.0, 'net picked after the return')
+        self.assertEqual(order.state, 'picked',
+                         'a return must not roll the state back')
+
+    def test_71_return_reopens_remaining_and_direction_aware_already(self):
+        """退 1 后剩余恢复、可再领（picked 状态入口），且 already 认方向：
+        退料回补 BOM 行额度而不是挤占。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=4)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        order.action_generate_return(qty=1)
+        ret = (order.picking_ids - p1)
+        ret.move_ids.picked = True
+        ret.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 3.0)
+        # R1 对偶：picked 状态、剩余 1 → 领料向导可用
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 1})
+        wizard.action_pick()
+        p3 = (order.picking_ids - p1 - ret)
+        # BOM 2/台：已发 8、退回 2 → already 6，总封顶 8 → 本批 min(2, 2) = 2
+        self.assertAlmostEqual(p3.move_ids.product_uom_qty, 2.0)
+        p3.move_ids.picked = True
+        p3.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 4.0)
+
+    def test_72_overreturn_blocked(self):
+        """超退拦截：向导与服务端双层。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=4)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        wizard = self.env['sn.wsd.mes.return.wizard'].create(
+            {'mes_order_id': order.id, 'qty_return': 5})
+        with self.assertRaises(ValidationError):
+            wizard.action_return()
+        with self.assertRaises(UserError):
+            order.action_generate_return(qty=5)
+
+    def test_73_return_capped_by_line_side_stock(self):
+        """线边不足时散料退料按实际持有量封顶（倒冲扣过的退不回来）。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        # 领 2 台 = 4 件组件在线边；人为把线边扣到只剩 1 件（模拟已消耗）
+        line_side = order.production_line_id.workshop_id.component_location_id
+        component = mo.bom_id.bom_line_ids.product_id
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id),
+            ('location_id', '=', line_side.id)])
+        quant.quantity = 1.0
+        order.action_generate_return(qty=2)
+        ret = (order.picking_ids - p1)
+        # BOM 份额 4 件，但线边只有 1 件 → 退 1 件
+        self.assertAlmostEqual(ret.move_ids.product_uom_qty, 1.0)
+
+    # --- mes-picking-lifecycle R3: 补料（挑料，账外，单独台账，不扩产出） ---
+    def test_80_over_pick_beyond_plan(self):
+        """领满后补料 2 件：只发所挑的料、WH/OP 单、原因落单、补料单数
+        累计、净领不动、台数不适用记 0。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=4)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertAlmostEqual(order.picked_qty, 4.0)
+        self.assertEqual(order.x_over_pick_count, 0)
+        component = mo.bom_id.bom_line_ids.product_id
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create({
+            'mes_order_id': order.id, 'mode': 'supplement',
+            'over_reason': 'scrap make-up',
+            'supplement_line_ids': [(0, 0, {
+                'product_id': component.id, 'qty': 2})],
+        })
+        wizard.action_pick()
+        p2 = (order.picking_ids - p1)
+        self.assertTrue(p2.x_is_over_pick)
+        self.assertEqual(p2.picking_type_id.sequence_code,
+                         'sn.wsd.mes.picking.over',
+                         'supplements carry their own WH/OP operation type')
+        self.assertTrue(p2.name.startswith('OP-') or '/OP/' in p2.name, f'unexpected supplement name: {p2.name}')
+        self.assertEqual(p2.x_over_reason, 'scrap make-up')
+        # 挑料口径：单上只有所挑的一行、数量精确 2（不再按台数整份展开）
+        self.assertEqual(len(p2.move_ids), 1)
+        self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
+        self.assertAlmostEqual(p2.x_mes_order_qty, 0.0)
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertEqual(order.x_over_pick_count, 1)
+        self.assertAlmostEqual(order.picked_qty, 4.0,
+                               'supplements must not enter the net ledger')
+
+    def test_81_over_pick_gates(self):
+        """补料门禁：原因必填、至少一行、数量必须为正、料必须在 BOM 内。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=4)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        component = mo.bom_id.bom_line_ids.product_id
+        stranger = self.env['product.product'].create({
+            'name': 'NOT-IN-BOM', 'uom_id': self.uom_unit.id})
+        Wizard = self.env['sn.wsd.mes.pick.wizard']
+        # 原因必填
+        with self.assertRaises(ValidationError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': component.id, 'qty': 1})],
+            }).action_pick()
+        # 至少一行
+        with self.assertRaises(ValidationError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+            }).action_pick()
+        # 数量为正（行约束在建行即拦）
+        with self.assertRaises(ValidationError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': component.id, 'qty': 0})],
+            })
+        # BOM 外的料硬拦
+        with self.assertRaises(UserError):
+            Wizard.create({
+                'mes_order_id': order.id, 'mode': 'supplement',
+                'over_reason': 'make-up',
+                'supplement_line_ids': [
+                    (0, 0, {'product_id': stranger.id, 'qty': 1})],
+            }).action_pick()
+
+    def test_82_over_pick_counts_into_already(self):
+        """补料量计入 BOM 行累计（物理口径，挤占账内额度）。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        component = mo.bom_id.bom_line_ids.product_id
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=3)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        # 账内 3 台=6 件；补料 2 件 → already 8 = BOM×4 总封顶
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
+        p2 = (order.picking_ids - p1)
+        p2.move_ids.picked = True
+        p2.button_validate()
+        # 续领最后 1 台：该组件额度被补料挤占 → 全部组件跳过 → 拒建空单
+        wizard = self.env['sn.wsd.mes.pick.wizard'].create(
+            {'mes_order_id': order.id, 'qty_this': 1})
+        with self.assertRaises(UserError):
+            wizard.action_pick()
+
+    def test_83_over_pick_does_not_extend_output_quota(self):
+        """补料不扩产出：报工配额仍按排产台数封顶。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        component = mo.bom_id.bom_line_ids.product_id
+        order = self._make_order(mo, 4)
+        order.x_manage_mode = 'report'
+        order.action_generate_picking(qty_this=4)
+        order.action_online()  # 开放的领料单即满足上线硬闸
+        op_in_row = order.x_mes_route_id.x_daily_input_operation_id
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
+        p2 = (order.picking_ids - p1)
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertEqual(order.x_over_pick_count, 1)
+        # 报满排产 4 台后，第 5 台仍被拦（补料不扩产出配额）
+        order.report_operation_qty(op_in_row, 4)
+        with self.assertRaises(ValidationError):
+            order.report_operation_qty(op_in_row, 1)
+
+    def test_84_over_pick_lot_reels(self):
+        """批次料需求=所挑数量（补料同口径）：预留自动挂批，扫 SN 带量
+        hook 把行数量抬到该批次源库位当前余量。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        Lot = self.env['stock.lot']
+        Quant = self.env['stock.quant']
+        lot1 = Lot.create({'product_id': component.id, 'name': 'LOT-OP-1',
+                           'company_id': self.company.id})
+        lot2 = Lot.create({'product_id': component.id, 'name': 'LOT-OP-2',
+                           'company_id': self.company.id})
+        Quant.create({'product_id': component.id, 'location_id': src.id,
+                      'quantity': 7.0, 'lot_id': lot1.id})
+        Quant.create({'product_id': component.id, 'location_id': src.id,
+                      'quantity': 5.0, 'lot_id': lot2.id})
+        order = self._make_order(mo, 4)
+        # 账内领 1 台：需求=2 件，确认后原生预留挂 lot1（FIFO），
+        # hook 把预留行数量带成 lot1 当前余量 7
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
+        self.assertEqual(p1.move_ids.move_line_ids.lot_id, lot1)
+        self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
+        p1.move_ids.picked = True
+        p1.button_validate()
+        # 补料 2 件：需求=所挑数量 2；lot1 已随 p1 整卷发到线边，预留挑 lot2
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
+        p2 = (order.picking_ids - p1)
+        self.assertTrue(p2.x_is_over_pick)
+        self.assertAlmostEqual(p2.move_ids.product_uom_qty, 2.0)
+        self.assertEqual(p2.move_ids.move_line_ids.lot_id, lot2)
+        self.assertAlmostEqual(p2.move_ids.move_line_ids.quantity, 5.0)
+
+    # --- 在途互斥（新口径）：hook 带量经原生预留占满整卷，后单自动跳卷 ---
+    def test_85_reel_mutex_skips_occupied_lot(self):
+        """两张在途领料单同卷互斥（原生预留口径）：第一单预留行被 hook
+        抬到整卷 7（写入即占满 lot1 预留），第二单预留视 lot1 可用 0，
+        自动跳到 lot2 并带量 5——两单先后验证互不冲突。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        Lot = self.env['stock.lot']
+        Quant = self.env['stock.quant']
+        lot1 = Lot.create({'product_id': component.id, 'name': 'LOT-MU-1',
+                           'company_id': self.company.id})
+        lot2 = Lot.create({'product_id': component.id, 'name': 'LOT-MU-2',
+                           'company_id': self.company.id})
+        Quant.create({'product_id': component.id, 'location_id': src.id,
+                      'quantity': 7.0, 'lot_id': lot1.id})
+        Quant.create({'product_id': component.id, 'location_id': src.id,
+                      'quantity': 5.0, 'lot_id': lot2.id})
+        order = self._make_order(mo, 8)
+        # 第一批领 1 台（需 2 件）：预留挂 lot1，hook 带量 7（占满预留）
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        self.assertEqual(p1.move_ids.move_line_ids.lot_id, lot1)
+        self.assertAlmostEqual(p1.move_ids.move_line_ids.quantity, 7.0)
+        # 第二批领 1 台：lot1 预留已被 p1 整卷占满 → 预留自动挑 lot2
+        order.action_generate_picking(qty_this=1)
+        p2 = (order.picking_ids - p1)
+        self.assertEqual(p2.move_ids.move_line_ids.lot_id, lot2)
+        self.assertAlmostEqual(p2.move_ids.move_line_ids.quantity, 5.0)
+        # 两单先后验证互不冲突（各走各的整卷）
+        p1.move_ids.picked = True
+        p1.button_validate()
+        p2.move_ids.picked = True
+        p2.button_validate()
+        self.assertEqual(p1.state, 'done')
+        self.assertEqual(p2.state, 'done')
+
+    def test_86_reel_mutex_exhausted_falls_back_loose(self):
+        """退料挑卷互斥（定制互斥仅剩退料域）：同单第一张退料单未验证时
+        已整卷挑走线边批次，第二张挑卷视该批为 0 → 无可发批次 → 该行
+        不退，整单无可退组件时拦截。"""
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        lot = self.env['stock.lot'].create({
+            'product_id': component.id, 'name': 'LOT-MU-3',
+            'company_id': self.company.id})
+        self.env['stock.quant'].create({
+            'product_id': component.id, 'location_id': src.id,
+            'quantity': 7.0, 'lot_id': lot.id})
+        order = self._make_order(mo, 8)
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        p1.move_ids.picked = True
+        p1.button_validate()  # 整卷 7 落线边
+        # 第一张退料单（1 台需 2 件）：整卷挑 lot1（7），保持未验证
+        order.action_generate_return(qty=1)
+        r1 = (order.picking_ids - p1)
+        self.assertEqual(r1.move_ids.move_line_ids.lot_id, lot)
+        self.assertAlmostEqual(r1.move_ids.move_line_ids.quantity, 7.0)
+        # 第二张退料单：lot1 在途已被 r1 整卷占用 → 无可发批次 → 拦截
+        with self.assertRaises(UserError):
+            order.action_generate_return(qty=1)
+
+    # --- mes-picking-lifecycle R4: 全链回归（补料 × 完工倒冲） ---
+    def test_87_completion_after_over_pick_backflush(self):
+        """补料后完工：倒冲按流水/线边正常扣，补料的量就在线边可用。"""
+        order = self._order_with_output()  # 在产、产出 1 台的在线单
+        component, line_side = self._stock_line_side(order)
+        self._stock_component(order.production_id)  # 补料从仓库源头发货
+        order.action_generate_over_picking(
+            [{'product_id': component.id, 'qty': 2}], 'make-up')
+        p_over = order.picking_ids.filtered(lambda p: p.x_is_over_pick)
+        p_over.move_ids.picked = True
+        p_over.button_validate()
+        self.assertEqual(order.x_over_pick_count, 1)
+        order.action_complete(1.0, 'stock')
+        self.assertEqual(order.state, 'done')
+        # 线边 100 + 补料 2 − 倒冲 2 = 100
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id), ('location_id', '=', line_side.id)])
+        self.assertEqual(quant.quantity, 100.0)
+
+    # --- MO smart button: aggregate every MES-order stock document ---
+    def test_88_mo_smart_button_aggregates_pickings(self):
+        self._set_line_side()
+        mo = self._make_bom_mo(qty=10)
+        self._stock_component(mo)
+        order = self._make_order(mo, 4)
+        order.action_generate_picking(qty_this=2)
+        order.action_generate_picking(qty_this=2)
+        self.assertEqual(mo.x_mes_picking_count, 2)
+        act = mo.action_open_mes_pickings()
+        self.assertEqual(act['res_model'], 'stock.picking')
+        self.assertEqual(act['domain'],
+                         [('x_mes_order_id', 'in', mo.x_mes_order_ids.ids)])
+
+    # --- picking-bom-exact-demand: 需求=BOM 份额、实发=卷余量、份额封顶 ---
+    def test_89_lot_exact_demand_over_issue_and_coverage(self):
+        """批次料需求按 BOM 份额；hook 带量后实发(7)>需求(2)照常过账，
+        台数账本按份额累计；份额领满后再领被「已覆盖」防呆拦截。"""
+        line_side = self._set_line_side()
+        mo = self._make_bom_mo(qty=1)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        component.categ_id = self.reel_category.id
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        lot = self.env['stock.lot'].create({
+            'product_id': component.id, 'name': 'LOT-EX-1',
+            'company_id': self.company.id})
+        self.env['stock.quant'].create({
+            'product_id': component.id, 'location_id': src.id,
+            'quantity': 7.0, 'lot_id': lot.id})
+        order = self._make_order(mo, 1)
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        # 需求=BOM 份额 2（不整卷改写、无预填批次行）；确认即预留挂批，
+        # hook 把行数量带成 lot 当前余量 7
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
+        line = p1.move_ids.move_line_ids
+        self.assertEqual(line.lot_id, lot)
+        self.assertAlmostEqual(line.quantity, 7.0)
+        # 实发 7 > 需求 2：验证照常过账，整卷落线边
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(p1.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id),
+            ('location_id', '=', line_side.id)])
+        self.assertAlmostEqual(quant.quantity, 7.0)
+        self.assertEqual(quant.lot_id, lot)
+        # 台数账本按份额：净领 1 台（不是 3.5）
+        self.assertAlmostEqual(order.picked_qty, 1.0)
+        # 份额已覆盖（already 2 ≥ 份额 2）→ 再领拦截、不建空单
+        with self.assertRaises(UserError):
+            order.action_generate_picking(qty_this=1)
+
+    def test_96_non_reel_lot_issues_exact_demand(self):
+        """Lot-tracked material outside a reel category issues its exact
+        demand: the hook leaves the native reservation quantity untouched
+        instead of raising it to the whole lot balance."""
+        line_side = self._set_line_side()
+        mo = self._make_bom_mo(qty=1)
+        component = mo.bom_id.bom_line_ids.product_id
+        component.tracking = 'lot'
+        self.assertFalse(component._is_reel_material(),
+                         'default category must not be a reel category')
+        src = mo.picking_type_id.warehouse_id.lot_stock_id
+        lot = self.env['stock.lot'].create({
+            'product_id': component.id, 'name': 'LOT-NR-1',
+            'company_id': self.company.id})
+        self.env['stock.quant'].create({
+            'product_id': component.id, 'location_id': src.id,
+            'quantity': 7.0, 'lot_id': lot.id})
+        order = self._make_order(mo, 1)
+        order.action_generate_picking(qty_this=1)
+        p1 = order.picking_ids
+        self.assertAlmostEqual(p1.move_ids.product_uom_qty, 2.0)
+        line = p1.move_ids.move_line_ids
+        self.assertEqual(line.lot_id, lot)
+        # Actual quantity = demand 2, not the whole lot balance 7
+        self.assertAlmostEqual(line.quantity, 2.0)
+        p1.move_ids.picked = True
+        p1.button_validate()
+        self.assertEqual(p1.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', component.id),
+            ('location_id', '=', line_side.id)])
+        self.assertAlmostEqual(quant.quantity, 2.0)
+
+    # --- finished-goods-material-sn: 手动完工一批一码 ---
+    def _order_with_lot_output(self, contract_no=False):
+        """一台产出在制的 lot 追踪订单（成品批次口径由物料SN接管）。"""
+        self.company.partner_id.ref = 'SNCIC'
+        order = self._order_with_output()
+        finished = order.production_id.product_id
+        finished.tracking = 'lot'
+        finished.is_storable = True  # 库存断言需要真实库存记账
+        if contract_no:
+            order.production_id.x_contract_no = contract_no
+        return order
+
+    def _lineside_workshop(self, order):
+        """MO 仓库下的线边车间（完工线边直验目的地）。"""
+        wh = order.production_id.picking_type_id.warehouse_id
+        workshop = self.env['sn.mrp.workshop'].create(
+            {'name': 'WS-FGSN-%s' % order.id, 'code': 'WSFGSN%s' % order.id})
+        workshop.component_location_id = self.env['stock.location'].create({
+            'name': 'FGSN-LINE-SIDE-%s' % order.id, 'usage': 'internal',
+            'location_id': wh.lot_stock_id.location_id.id,
+        }).id
+        return workshop
+
+    def test_90_lineside_completion_batch_sn(self):
+        """线边直验自动生成批级码：5 段命名、批次段=合同号、来源回链。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertEqual(receipt.state, 'done')
+        line = receipt.move_ids.move_line_ids
+        self.assertEqual(line.lot_id.product_id, order.production_id.product_id)
+        parts = line.lot_id.name.split('$')
+        self.assertEqual(len(parts), 5)
+        self.assertEqual(parts[0], 'DWG-MES-TEST')
+        self.assertEqual(parts[1], 'SNCIC')
+        self.assertEqual(parts[2], 'HT2026-088')
+        self.assertEqual(parts[3], '1')
+        # 批次属性与来源链
+        self.assertEqual(line.lot_id.arrival_batch_no, 'HT2026-088')
+        # 供应商批次=批次段，行与 lot 双写（2026-09-12 修：标签/行列读它）
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.lot_id.material_sn_base, line.lot_id.name)
+        self.assertEqual(line.lot_id.source_picking_id, receipt)
+        # 库存落线边且挂码
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', order.production_id.product_id.id),
+            ('location_id', '=', workshop.component_location_id.id),
+            ('lot_id', '=', line.lot_id.id)])
+        self.assertAlmostEqual(quant.quantity, 1.0)
+
+    def test_91_lineside_sn_fallback_date_batch(self):
+        """MO 无合同号（外贸）→ 批次段兜底当天日期，流程不拦截。"""
+        order = self._order_with_lot_output(contract_no=False)
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        lot = receipt.move_ids.move_line_ids.lot_id
+        today = fields.Date.context_today(order).strftime('%Y%m%d')
+        self.assertEqual(lot.name.split('$')[2], today)
+        self.assertEqual(lot.arrival_batch_no, today)
+        self.assertEqual(lot.supplier_batch_no, today)
+        self.assertEqual(receipt.move_ids.move_line_ids.supplier_batch_no, today)
+
+    def test_92_stock_completion_no_auto_lot_native_gate(self):
+        """成品库路径：行不带码等标签向导；无码验证被原生缺批次约束拦截。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        component, line_side = self._stock_line_side(order)
+        order.action_complete(1.0, 'stock')
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertNotEqual(receipt.state, 'done')
+        # 纯需求量形态：不带处理数量、无带量行（确认预留只留 0 量占位）
+        # ——等标签向导挂码行
+        self.assertFalse(receipt.move_ids.move_line_ids)
+        self.assertFalse(receipt.move_ids.picked)
+        # 系统默认约束拦截：无处理数量不许验证（不建定制拦截）
+        with self.assertRaises(UserError):
+            receipt.button_validate()
+
+    def test_93_sn_sequence_increments(self):
+        """全局序列复用来料：两次完工序号递增、码唯一。"""
+        orders = []
+        for i in range(2):
+            order = self._order_with_lot_output(contract_no='HT2026-088')
+            self._stock_line_side(order)
+            workshop = self._lineside_workshop(order)
+            order.action_complete(1.0, 'lineside', workshop=workshop)
+            orders.append(order)
+        names = []
+        for order in orders:
+            receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+            names.append(receipt.move_ids.move_line_ids.lot_id.name)
+        self.assertNotEqual(names[0], names[1])
+        self.assertEqual(int(names[1].split('$')[4]), int(names[0].split('$')[4]) + 1)
+
+    def test_94_stock_label_print_then_validate(self):
+        """成品库路径：单据按钮一键补码（生成 lot+挂 picked 行）后可过账。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        component, line_side = self._stock_line_side(order)
+        order.action_complete(1.0, 'stock')
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertTrue(receipt.can_print_material_labels)
+        action = receipt.action_open_material_label_wizard()
+        self.assertIn('report', str(action.get('type', '')))
+        move = receipt.move_ids
+        line = move.move_line_ids.filtered(lambda l: l.quantity)
+        self.assertTrue(line.picked)
+        self.assertEqual(len(line.lot_id), 1)
+        self.assertEqual(line.lot_id.name.split('$')[2], 'HT2026-088')
+        # 标签按钮建行也写供应商批次（2026-09-12 修）
+        self.assertEqual(line.supplier_batch_no, 'HT2026-088')
+        self.assertEqual(line.lot_id.supplier_batch_no, 'HT2026-088')
+        # 补码后验证放行，库存挂码落成品库位
+        receipt.button_validate()
+        self.assertEqual(receipt.state, 'done')
+        quant = self.env['stock.quant'].search([
+            ('product_id', '=', move.product_id.id),
+            ('location_id', '=', receipt.location_dest_id.id),
+            ('lot_id', '=', line.lot_id.id)])
+        self.assertAlmostEqual(quant.quantity, 1.0)
+
+    def test_95_lineside_receipt_reprint(self):
+        """已完成线边收货单：同按钮直接重打已有码（不重复生成）。"""
+        order = self._order_with_lot_output(contract_no='HT2026-088')
+        self._stock_line_side(order)
+        workshop = self._lineside_workshop(order)
+        order.action_complete(1.0, 'lineside', workshop=workshop)
+        receipt = order.picking_ids.filtered(lambda p: p.state != 'cancel')
+        self.assertEqual(receipt.state, 'done')
+        self.assertTrue(receipt.can_print_material_labels)
+        lot_before = receipt.move_ids.move_line_ids.lot_id
+        action = receipt.action_open_material_label_wizard()
+        self.assertIn('report', str(action.get('type', '')))
+        # 重打不新增码、不改行
+        self.assertEqual(receipt.move_ids.move_line_ids.lot_id, lot_before)

@@ -162,7 +162,22 @@ export default class LineComponent extends Component {
                 return sublineLotName === this.lotName;
             }).virtual_id;
         }
-        this.env.model.updateLineQty(lineVirtualId, quantity);
+        return this.env.model.updateLineQty(lineVirtualId, quantity);
+    }
+
+    async onQuantityChange(ev) {
+        const value = ev.target.value.trim();
+        if (!value) {
+            ev.target.value = "";
+            return;
+        }
+        const newQuantity = Number(value);
+        if (!Number.isFinite(newQuantity) || newQuantity < 0) {
+            ev.target.value = "";
+            return;
+        }
+        await this.addQuantity(newQuantity - this.qtyDone);
+        ev.target.value = "";
     }
 
     completePackage() {

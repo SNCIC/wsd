@@ -17,12 +17,20 @@ class MrpFeederScanWizard(models.TransientModel):
         related='feeder_line_id.expected_product_id',
         readonly=True,
     )
+    expected_material_specification = fields.Char(
+        string='Expected Material Specification',
+        related='expected_product_id.material_specification',
+    )
     scanned_barcode = fields.Char(string='Scanned Material Barcode')
     scanned_product_id = fields.Many2one(
         'product.product',
         string='Identified Material',
         compute='_compute_scanned_product',
         store=False,
+    )
+    scanned_material_specification = fields.Char(
+        string='Scanned Material Specification',
+        related='scanned_product_id.material_specification',
     )
     scanned_product_name = fields.Char(
         string='Identified Material Name',

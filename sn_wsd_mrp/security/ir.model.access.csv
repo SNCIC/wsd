@@ -1,7 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sn_wsd_internal_serial_user,sn.wsd.internal.serial user,model_sn_wsd_internal_serial,base.group_user,1,1,1,1
-access_sn_wsd_meter_aging_batch_user,sn.wsd.meter.aging.batch user,model_sn_wsd_meter_aging_batch,base.group_user,1,1,1,1
-access_sn_wsd_meter_aging_batch_line_user,sn.wsd.meter.aging.batch.line user,model_sn_wsd_meter_aging_batch_line,base.group_user,1,1,1,1
 access_sn_wsd_meter_pack_record_user,sn.wsd.meter.pack.record user,model_sn_wsd_meter_pack_record,base.group_user,1,1,1,1
 access_sn_wsd_serial_identity_user,sn.wsd.serial.identity user,model_sn_wsd_serial_identity,base.group_user,1,1,1,0
 access_sn_wsd_carton_pallet_binding_log_user,sn.wsd.carton.pallet.binding.log user,model_sn_wsd_carton_pallet_binding_log,base.group_user,1,0,1,0
@@ -35,10 +32,38 @@ access_sn_wsd_mes_order_manager,sn.wsd.mes.order manager,model_sn_wsd_mes_order,
 
 access_sn_wsd_mes_schedule_wizard_user,sn.wsd.mes.schedule.wizard user,model_sn_wsd_mes_schedule_wizard,mrp.group_mrp_user,1,1,1,0
 access_sn_wsd_mes_pick_wizard_user,sn.wsd.mes.pick.wizard user,model_sn_wsd_mes_pick_wizard,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_mes_online_confirm_user,sn.wsd.mes.online.confirm user,model_sn_wsd_mes_online_confirm,mrp.group_mrp_user,1,0,1,0
 access_sn_wsd_mes_route_user,sn.wsd.mes.route user,model_sn_wsd_mes_order_route,base.group_user,1,1,1,0
 access_sn_wsd_mes_route_operation_user,sn.wsd.mes.route.operation user,model_sn_wsd_mes_order_route_operation,base.group_user,1,1,1,1
 access_sn_wsd_serial_operation_history_user,sn.wsd.serial.operation.history user,model_sn_wsd_serial_operation_history,base.group_user,1,1,1,0
+access_sn_wsd_clear_pass_log_user,sn.wsd.clear.pass.log user,model_sn_wsd_clear_pass_log,mrp.group_mrp_user,1,0,0,0
 access_sn_wsd_serial_wip_user,sn.wsd.serial.wip user,model_sn_wsd_serial_wip,base.group_user,1,1,1,1
 access_sn_wsd_mes_operation_report_user,sn.wsd.mes.operation.report user,model_sn_wsd_mes_operation_report,base.group_user,1,1,1,0
 access_sn_wsd_mes_done_wizard_user,sn.wsd.mes.done.wizard user,model_sn_wsd_mes_done_wizard,mrp.group_mrp_user,1,0,1,0
 access_sn_wsd_scrap_reason_user,sn.wsd.scrap.reason user,model_sn_wsd_scrap_reason,base.group_user,1,0,0,0
+access_sn_wsd_serial_binding_user,sn.wsd.serial.binding user,model_sn_wsd_serial_binding,base.group_user,1,1,1,0
+access_sn_wsd_serial_binding_manager,sn.wsd.serial.binding manager,model_sn_wsd_serial_binding,mrp.group_mrp_manager,1,1,1,1
+access_production_process_doc_type_user,production.process.doc.type user,model_production_process_doc_type,mrp.group_mrp_user,1,0,0,0
+access_production_process_doc_type_manager,production.process.doc.type manager,model_production_process_doc_type,mrp.group_mrp_manager,1,1,1,1
+access_production_process_doc_user,production.process.document user,model_production_process_document,mrp.group_mrp_user,1,1,1,0
+access_production_process_doc_code_user,production.process.document.code user,model_production_process_document_code,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_meter_pack_barcode_user,sn.wsd.meter.pack.barcode user,model_sn_wsd_meter_pack_barcode,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_generate_sn_wizard_user,sn.wsd.generate.sn.wizard user,model_sn_wsd_generate_sn_wizard,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_mes_return_wizard_user,sn.wsd.mes.return.wizard user,model_sn_wsd_mes_return_wizard,mrp.group_mrp_user,1,1,1,0
+access_sn_wsd_mes_pick_wizard_line_user,sn.wsd.mes.pick.wizard.line user,model_sn_wsd_mes_pick_wizard_line,mrp.group_mrp_user,1,1,1,1
+access_sn_wsd_substitute_rule_user,sn.wsd.substitute.rule user,model_sn_wsd_substitute_rule,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_substitute_rule_manager,sn.wsd.substitute.rule manager,model_sn_wsd_substitute_rule,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_batch_pass_log_user,sn.wsd.batch.pass.log user,model_sn_wsd_batch_pass_log,base.group_user,1,0,0,0
+access_sn_wsd_batch_pass_log_manager,sn.wsd.batch.pass.log manager,model_sn_wsd_batch_pass_log,mrp.group_mrp_manager,1,0,1,0
+access_sn_wsd_batch_pass_wizard_manager,sn.wsd.batch.pass.wizard manager,model_sn_wsd_batch_pass_wizard,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_batch_pass_wizard_line_manager,sn.wsd.batch.pass.wizard.line manager,model_sn_wsd_batch_pass_wizard_line,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_brand_user,sn.wsd.brand user,model_sn_wsd_brand,base.group_user,1,0,0,0
+access_sn_wsd_brand_manager,sn.wsd.brand manager,model_sn_wsd_brand,purchase.group_purchase_manager,1,1,1,1
+access_production_process_doc_quick_entry_wizard_user,production.process.doc.quick.entry.wizard user,model_production_process_doc_quick_entry_wizard,mrp.group_mrp_user,1,1,1,1
+access_production_process_doc_quick_entry_line_user,production.process.doc.quick.entry.line user,model_production_process_doc_quick_entry_line,mrp.group_mrp_user,1,1,1,1
+access_production_process_doc_copy_wizard_user,production.process.doc.copy.wizard user,model_production_process_doc_copy_wizard,mrp.group_mrp_user,1,1,1,1
+access_production_process_doc_copy_line_user,production.process.doc.copy.line user,model_production_process_doc_copy_line,mrp.group_mrp_user,1,1,1,1
+access_production_process_doc_manager,production.process.document manager,model_production_process_document,mrp.group_mrp_manager,1,1,1,1
+access_production_process_doc_code_manager,production.process.document.code manager,model_production_process_document_code,mrp.group_mrp_manager,1,1,1,1
+access_sn_wsd_process_section_user,sn.wsd.process.section user,model_sn_wsd_process_section,mrp.group_mrp_user,1,0,0,0
+access_sn_wsd_process_section_manager,sn.wsd.process.section manager,model_sn_wsd_process_section,mrp.group_mrp_manager,1,1,1,1

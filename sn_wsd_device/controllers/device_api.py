@@ -1,9 +1,10 @@
 import json
-from datetime import datetime, timezone
 
 from odoo import http
 from odoo.fields import Command
 from odoo.http import request
+
+from ..device_time import parse_device_datetime
 
 # Limits guarding the public endpoints against malformed payloads.
 MAX_ZONES = 100
@@ -17,19 +18,60 @@ class DeviceDataController(http.Controller):
         POST /api/device/reflow  -> reflow soldering packets
         POST /api/device/wave    -> wave soldering packets
         body:  {"device_sn": str, "collect_time": ISO datetime, "zones": {name: number}}
+        POST /api/device/aging   -> aging-room temperature points (no SN)
+        body:  {"device_sn": str, "collect_time": ISO datetime, "temperature": number}
         200 -> {"code": 200, "message": "Saved successfully"}
         400 -> {"code": 400, "message": "<english reason>"}
     """
 
+    # Odoo 19 defaults auth='none' routes to a readonly cursor; these
+    # endpoints write, so readonly=False is mandatory on all three.
     @http.route('/api/device/reflow', type='http', auth='none',
-                methods=['POST'], csrf=False)
+                methods=['POST'], csrf=False, readonly=False)
     def receive_reflow_data(self, **kwargs):
         return self._receive_zone_packet('sn.wsd.device.reflow.record')
 
     @http.route('/api/device/wave', type='http', auth='none',
-                methods=['POST'], csrf=False)
+                methods=['POST'], csrf=False, readonly=False)
     def receive_wave_data(self, **kwargs):
         return self._receive_zone_packet('sn.wsd.device.wave.record')
+
+    @http.route('/api/device/aging', type='http', auth='none',
+                methods=['POST'], csrf=False, readonly=False)
+    def receive_aging_data(self, **kwargs):
+        """One aging-room temperature point per packet: same wire rules as
+        the zone packets, but a single temperature instead of a zone map
+        (the room has no zone breakdown and no product SN is involved)."""
+        try:
+            payload = json.loads(request.httprequest.get_data() or b'{}')
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return self._error(400, 'invalid json body, expected utf-8 json')
+        if not isinstance(payload, dict):
+            return self._error(400, 'json body must be an object')
+        device_sn = str(payload.get('device_sn') or '').strip()
+        if not device_sn:
+            return self._error(400, 'missing device_sn')
+        collect_dt = self._parse_collect_time(payload.get('collect_time'))
+        if collect_dt is None:
+            return self._error(
+                400, 'invalid collect_time, expected ISO 8601 datetime')
+        temperature = payload.get('temperature')
+        if isinstance(temperature, bool) or \
+                not isinstance(temperature, (int, float)):
+            return self._error(
+                400, 'invalid temperature, expected a number')
+        request.env['sn.wsd.device.aging.record'].sudo().create({
+            # auth='none' carries no user/company: stamp the main company
+            # (single-factory deployment; the EIP join keys on device_sn,
+            # not on this column)
+            'company_id': request.env['res.company'].sudo().search(
+                [], order='id asc', limit=1).id,
+            'device_sn': device_sn,
+            'collect_time': collect_dt,
+            'temperature': float(temperature),
+        })
+        return request.make_json_response(
+            {'code': 200, 'message': 'Saved successfully'})
 
     def _receive_zone_packet(self, model):
         """Validate a zone-temperature packet and store it on `model`.
@@ -89,12 +131,9 @@ class DeviceDataController(http.Controller):
         if not raw or not isinstance(raw, str):
             return None
         try:
-            dt = datetime.fromisoformat(raw)
+            return parse_device_datetime(raw)
         except ValueError:
             return None
-        if dt.tzinfo:
-            dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
-        return dt
 
     @staticmethod
     def _error(code, message):

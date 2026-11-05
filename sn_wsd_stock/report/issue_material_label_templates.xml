@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+    Issue material label ZPL shell: the label-center engine produces the full
+    ^XA..^XZ payload for every operation line (see report/issue_material_label.py);
+    this qweb-text template only echoes it verbatim.
+    -->
+    <template id="report_issue_material_label_zpl">
+        <t t-translation="off"><t t-out="zpl"/></t>
+    </template>
+</odoo>

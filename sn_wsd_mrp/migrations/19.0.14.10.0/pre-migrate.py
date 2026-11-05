@@ -1,0 +1,49 @@
+def _table_exists(cr, table_name):
+    cr.execute(
+        "SELECT EXISTS (SELECT 1 FROM information_schema.tables "
+        "WHERE table_name = %s)", (table_name,))
+    return cr.fetchone()[0]
+
+
+def _column_type(cr, table_name, column_name):
+    cr.execute(
+        "SELECT data_type FROM information_schema.columns "
+        "WHERE table_name = %s AND column_name = %s",
+        (table_name, column_name))
+    row = cr.fetchone()
+    return row[0] if row else None
+
+
+def migrate(cr, version):
+    """Prepare the selection->many2one swap of x_process_section.
+
+    The ORM converts the existing varchar column in place (varchar->int);
+    legacy keys like 'smt' would abort that cast, and the required stat
+    column cannot hold NULLs. So: stash, blank the operation column, and
+    move the stat rows aside entirely (post-migrate recreates them).
+
+    A database whose column is already integer was migrated before (the
+    stored values are section ids, not legacy keys) -- nothing to stash,
+    the post-migrate step then no-ops."""
+    if _table_exists(cr, 'sn_wsd_operation') and \
+            _column_type(cr, 'sn_wsd_operation', 'x_process_section') == 'character varying':
+        # Idempotent: an interrupted upgrade may have run this script already,
+        # and the stashed rows must survive until post-migrate consumes them.
+        if not _table_exists(cr, 'tmp_ps_migration_operation'):
+            cr.execute("""
+                CREATE TABLE tmp_ps_migration_operation AS
+                SELECT id, x_process_section
+                  FROM sn_wsd_operation
+                 WHERE x_process_section IS NOT NULL
+            """)
+        # NULLs cast cleanly to integer during the ORM column conversion
+        cr.execute(
+            'UPDATE sn_wsd_operation SET x_process_section = NULL '
+            'WHERE x_process_section IS NOT NULL')
+    if _table_exists(cr, 'sn_wsd_route_section_stat') and \
+            _column_type(cr, 'sn_wsd_route_section_stat', 'x_process_section') == 'character varying':
+        if not _table_exists(cr, 'tmp_ps_migration_stat'):
+            cr.execute(
+                'CREATE TABLE tmp_ps_migration_stat AS '
+                'SELECT * FROM sn_wsd_route_section_stat')
+        cr.execute('DELETE FROM sn_wsd_route_section_stat')

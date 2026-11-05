@@ -1,0 +1,418 @@
+# Odoo zh_CN translation worklist -- sn_wsd_api
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Enter product SN, press Enter or click Query"
+msgstr "输入产品 SN，按回车或点击查询"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "Export"
+msgstr "导出"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "No data"
+msgstr "无数据"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+#: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+msgid "Operator"
+msgstr "操作员"
+
+#. module: sn_wsd_api
+#. odoo-javascript
+#: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
+msgid "SN not found"
+msgstr "未找到该 SN"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__is_ng
+msgid ""
+"1 when the event result is NG/fail; sums as the NG count in group headers."
+msgstr "事件结果为 NG/失败时为 1；分组表头中汇总为 NG 数量。"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__display_name
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_trace_event__time_of_day
+msgid "HH:MM:SS part of the event time; group by day for the date."
+msgstr "事件时间中的时:分:秒部分；按天分组即为日期。"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_aoi_defect_detail__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__operation
+msgid "Operation"
+msgstr "作业"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_back
+msgid "Pack Back"
+msgstr "包装背面"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_door_seal
+msgid "Pack Door Seal"
+msgstr "包装门封口"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_door_seal_rf
+msgid "Pack Door Seal Rf"
+msgstr "包装门封口 RF"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left
+msgid "Pack Left"
+msgstr "包装左侧"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left_seal
+msgid "Pack Left Seal"
+msgstr "包装左封口"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left_seal_rf
+msgid "Pack Left Seal Rf"
+msgstr "包装左封口 RF"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_mac
+msgid "Pack Mac"
+msgstr "包装 MAC"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_module
+msgid "Pack Module"
+msgstr "包装模块"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_nameplate_rf
+msgid "Pack Nameplate Rf"
+msgstr "包装铭牌 RF"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right
+msgid "Pack Right"
+msgstr "包装右侧"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right_seal
+msgid "Pack Right Seal"
+msgstr "包装右封口"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right_seal_rf
+msgid "Pack Right Seal Rf"
+msgstr "包装右封口 RF"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_mes_test_result__pack_top
+msgid "Pack Top"
+msgstr "包装顶部"
+
+#. module: sn_wsd_api
+#: model:ir.model,name:sn_wsd_api.model_sn_wsd_trace_event
+msgid "SN Trace Event"
+msgstr "SN 追溯事件"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__serial_identity_id
+msgid "Serial Identity"
+msgstr "产品SN"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__source_id
+msgid "Source ID"
+msgstr "来源 ID"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__source_model
+msgid "Source Model"
+msgstr "来源模型"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__table_position
+msgid "Verbatim uploaded form field M_ADDRESS."
+msgstr "原样上传的表单字段 M_ADDRESS。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__box_sn
+msgid "Verbatim uploaded form field M_BOX_SN."
+msgstr "原样上传的表单字段 M_BOX_SN。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__code_id
+msgid "Verbatim uploaded form field M_CODE_ID."
+msgstr "原样上传的表单字段 M_CODE_ID。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__collaborator_code
+msgid "Verbatim uploaded form field M_COLLABORATION_EMP."
+msgstr "原样上传的表单字段 M_COLLABORATION_EMP。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__leadseal_codes
+msgid "Verbatim uploaded form field M_LEADSEAL_ID (pipe-separated)."
+msgstr "原样上传的表单字段 M_LEADSEAL_ID（以竖线分隔）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pcba_codes
+msgid "Verbatim uploaded form field M_MAIN_ID (pipe-separated)."
+msgstr "原样上传的表单字段 M_MAIN_ID（以竖线分隔）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__module_codes
+msgid "Verbatim uploaded form field M_MODULE_ID (pipe-separated)."
+msgstr "原样上传的表单字段 M_MODULE_ID（以竖线分隔）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_back
+msgid "Verbatim uploaded form field M_PACK_BACK."
+msgstr "原样上传的表单字段 M_PACK_BACK。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_door_seal
+msgid "Verbatim uploaded form field M_PACK_DOOR_SEAL."
+msgstr "原样上传的表单字段 M_PACK_DOOR_SEAL。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_door_seal_rf
+msgid "Verbatim uploaded form field M_PACK_DOOR_SEAL_RF."
+msgstr "原样上传的表单字段 M_PACK_DOOR_SEAL_RF。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left
+msgid "Verbatim uploaded form field M_PACK_LEFT."
+msgstr "原样上传的表单字段 M_PACK_LEFT。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left_seal
+msgid "Verbatim uploaded form field M_PACK_LEFT_SEAL."
+msgstr "原样上传的表单字段 M_PACK_LEFT_SEAL。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_left_seal_rf
+msgid "Verbatim uploaded form field M_PACK_LEFT_SEAL_RF."
+msgstr "原样上传的表单字段 M_PACK_LEFT_SEAL_RF。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_mac
+msgid "Verbatim uploaded form field M_PACK_MAC."
+msgstr "原样上传的表单字段 M_PACK_MAC。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_module
+msgid "Verbatim uploaded form field M_PACK_MODULE."
+msgstr "原样上传的表单字段 M_PACK_MODULE。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_nameplate_rf
+msgid "Verbatim uploaded form field M_PACK_NAMEPLATE_RF."
+msgstr "原样上传的表单字段 M_PACK_NAMEPLATE_RF。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right
+msgid "Verbatim uploaded form field M_PACK_RIGHT."
+msgstr "原样上传的表单字段 M_PACK_RIGHT。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right_seal
+msgid "Verbatim uploaded form field M_PACK_RIGHT_SEAL."
+msgstr "原样上传的表单字段 M_PACK_RIGHT_SEAL。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_right_seal_rf
+msgid "Verbatim uploaded form field M_PACK_RIGHT_SEAL_RF."
+msgstr "原样上传的表单字段 M_PACK_RIGHT_SEAL_RF。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pack_top
+msgid "Verbatim uploaded form field M_PACK_TOP."
+msgstr "原样上传的表单字段 M_PACK_TOP。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__parameter_plan
+msgid "Verbatim uploaded form field M_PARAMETER_PLAN."
+msgstr "原样上传的表单字段 M_PARAMETER_PLAN。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__program_num
+msgid "Verbatim uploaded form field M_PROGRAM_NUM."
+msgstr "原样上传的表单字段 M_PROGRAM_NUM。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__pallet_sn
+msgid "Verbatim uploaded form field M_SECOND_SN."
+msgstr "原样上传的表单字段 M_SECOND_SN。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__software_name
+msgid "Verbatim uploaded form field M_SOFTWARE_NAME."
+msgstr "原样上传的表单字段 M_SOFTWARE_NAME。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__software_num
+msgid "Verbatim uploaded form field M_SOFTWARE_NUM."
+msgstr "原样上传的表单字段 M_SOFTWARE_NUM。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__internal_code
+msgid ""
+"Verbatim uploaded form field M_STR1 (nameplate scanned with this pass)."
+msgstr "原样上传的表单字段 M_STR1（本次过站扫描的铭牌）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__defect_code_raw
+msgid "Verbatim uploaded form field M_STR2 (defect code)."
+msgstr "原样上传的表单字段 M_STR2（缺陷代码）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__assembly_crc
+msgid "Verbatim uploaded form field M_STR5 (assembly check code)."
+msgstr "原样上传的表单字段 M_STR5（装配校验码）。"
+
+#. module: sn_wsd_api
+#: model:ir.model.fields,help:sn_wsd_api.field_sn_wsd_mes_test_result__test_plan_num
+msgid "Verbatim uploaded form field M_TEST_PLAN."
+msgstr "原样上传的表单字段 M_TEST_PLAN。"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Event Time (Day)"
+msgstr "事件时间（天）"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search
+msgid "Group By"
+msgstr "分组方式"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "Machine SN"
+msgstr "整机SN"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\resource\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Nameplate"
+msgstr "铭牌"
+
+#. module: sn_wsd_api
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Quality"
+msgstr "质量"
+
+#. module: sn_wsd_api
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Repair"
+msgstr "维修"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__result
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Result"
+msgstr "结果"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_serial_binding_search_api
+msgid "SN / Nameplate"
+msgstr "SN/铭牌"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_trace_event__event_type__scrap
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_search
+msgid "Test"
+msgstr "测试"
+
+#. module: sn_wsd_api
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__time_of_day
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_trace_event_list
+msgid "Time"
+msgstr "时间"

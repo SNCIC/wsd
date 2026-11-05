@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_request_form_approved_qty" model="ir.ui.view">
+        <field name="name">purchase.request.form.approved.qty</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/list/field[@name='product_qty']" position="after">
+                <field name="approved_qty" readonly="request_state not in ['draft', 'to_approve']"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_form_contract_information" model="ir.ui.view">
+        <field name="name">purchase.order.form.contract.information</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="before">
+                <field name="price_unit_tax_included" string="Tax Included Unit Price" readonly="qty_invoiced != 0"/>
+                <field name="price_unit_tax_excluded" string="Untaxed Unit Price" readonly="qty_invoiced != 0"/>
+            </xpath>
+            <!-- Brand of the ordered product: read-only on the order line, it
+                 comes from the product and is printed on the contract. -->
+            <xpath expr="//field[@name='order_line']//list/field[@name='product_id']" position="after">
+                <field name="brand_id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//field[@name='product_id']" position="after">
+                <field name="brand_id"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="attributes">
+                <attribute name="string">Untaxed Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="after">
+                <field name="price_total" string="Tax Included Amount"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="before">
+                <field name="price_unit_tax_included" string="Tax Included Unit Price" readonly="qty_invoiced != 0"/>
+                <field name="price_unit_tax_excluded" string="Untaxed Unit Price" readonly="qty_invoiced != 0"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="contract_information" string="Contract Information">
+                    <group>
+                        <group string="Contract Details">
+                            <field name="contract_number"/>
+                            <field name="signing_date"/>
+                            <field name="signing_location"/>
+                            <field name="amount_tax" readonly="1" string="VAT Amount"/>
+                        </group>
+                        <group string="Attachments">
+                            <field name="contract_attachment_ids" widget="many2many_binary"/>
+                            <field name="has_contract_attachment" widget="boolean_toggle" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_form_vendor_price_sync" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.price.sync</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Switch living with the other confirmation options: it decides
+                 whether the prices changed on the order lines are remembered as
+                 the default prices of the vendor. -->
+            <xpath expr="//page[@name='purchase_delivery_invoice']//group[@name='other_info']" position="inside">
+                <field name="sync_price_to_vendor_pricelist"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_form_missing_receipt" model="ir.ui.view">
+        <field name="name">purchase.order.form.missing.receipt</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- The standard Receive button is hidden once every receipt is done
+                 or cancelled. This one rebuilds the receipt of the quantity still
+                 expected from the vendor, typically after returning goods. -->
+            <xpath expr="//header/field[@name='state']" position="before">
+                <field name="sn_missing_receipt" invisible="1"/>
+                <button name="action_sn_create_missing_receipt"
+                        string="Receive Remaining"
+                        type="object"
+                        class="oe_highlight"
+                        groups="stock.group_stock_user"
+                        invisible="not sn_missing_receipt"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_kpis_tree_contract_attachment" model="ir.ui.view">
+        <field name="name">purchase.order.kpis.tree.contract.attachment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="has_contract_attachment"
+                       string="Contract Attached"
+                       widget="boolean_toggle"
+                       readonly="1"
+                       optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- The vendor of a purchase order is a supplier: the dropdown of the
+         partner field only lists the partners flagged as suppliers, and the
+         contacts of a supplier company (their own rank stays at 0, the rank is
+         held by the commercial entity). A partner that is only a customer can no
+         longer be picked as the vendor of an order, which is what the partner
+         records imported from the account need: the same company is numbered
+         once in the customer file and once in the vendor file. -->
+    <record id="purchase_order_form_vendor_domain" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.domain</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id'][@widget='res_partner_many2one']" position="attributes">
+                <attribute name="domain">['|', ('supplier_rank', '&gt;', 0), ('commercial_partner_id.supplier_rank', '&gt;', 0)]</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

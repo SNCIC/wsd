@@ -1,0 +1,131 @@
+# Odoo zh_CN translation worklist -- sn_wsd_purchase
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
+msgid "Approved quantity can only be changed before the request is approved."
+msgstr "已批准数量只能在申请批准前修改。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__contract_number
+msgid "Contract number printed on the purchase contract."
+msgstr "打印在采购合同上的合同编号。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__signing_date
+msgid "Date printed as the contract signing date."
+msgstr "打印为合同签订日期的日期。"
+
+#. module: sn_wsd_purchase
+#. from po: d:\odoo\odoo19wsd\myaddons\purchase_request\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__received_qty
+msgid "Quantity completed"
+msgstr "已完成数量"
+
+#. module: sn_wsd_purchase
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_purchase\i18n\zh_CN.po
+#: model:ir.model.constraint,message:sn_wsd_purchase.constraint_purchase_request_line_check_approved_qty
+msgid "The approved quantity must be between zero and the requested quantity."
+msgstr "批准数量必须介于零和申请数量之间。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__received_qty
+msgid "Received Quantity"
+msgstr "收货数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quality Control Quantity"
+msgstr "质检数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__qc_qty
+msgid "Quantity that has completed the quality control step of the reception."
+msgstr "已完成来料质检环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Stocked Quantity"
+msgstr "入库数量"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
+msgid "Quantity that has completed the storage step of the reception."
+msgstr "已完成来料上架入库环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_receipt_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_receipt_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_receipt_detail_list
+msgid "Receipt Details"
+msgstr "收货明细"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "%(order)s updated the vendor price of %(vendor)s from %(old_price)s to %(new_price)s %(currency)s (discount %(old_discount)s%% -> %(new_discount)s%%)."
+msgstr "%(order)s 已将 %(vendor)s 的供应商价格由 %(old_price)s 更新为 %(new_price)s %(currency)s（折扣 %(old_discount)s%% → %(new_discount)s%%）。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_order.py:0
+msgid "%(order)s: the vendor pricelist was not updated for %(product)s, the taxes of the order line differ from the vendor taxes of the product."
+msgstr "%(order)s：未更新 %(product)s 的供应商价格表，订单行的税与产品的供应商税不一致。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid "Update Vendor Pricelist"
+msgstr "更新供应商价格表"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sync_price_to_vendor_pricelist
+msgid "Write the unit prices and discounts changed on the order lines back to the vendor pricelist of the order vendor when the order is confirmed, so that the next purchase order defaults to them."
+msgstr "确认订单时，把订单行上修改过的单价与折扣写回该订单供应商的价格表，使下一张采购订单默认带出这些价格。"
+
+#. module: sn_wsd_purchase
+#: model:ir.actions.act_window,name:sn_wsd_purchase.action_sn_purchase_summary_detail
+#: model:ir.ui.menu,name:sn_wsd_purchase.menu_sn_purchase_summary_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_summary_detail_list
+msgid "Summary Details"
+msgstr "汇总明细"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__supplier_id
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier"
+msgstr "供应商"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__po_supplier_id
+msgid "Supplier of the purchase order this request line was ordered on; empty until a purchase order is placed."
+msgstr "该请购明细所下采购订单的供应商；未下采购订单时为空。"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Requests for Quotation"
+msgstr "询价单"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_purchase
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_order_detail_search
+msgid "Cancelled"
+msgstr "已取消"

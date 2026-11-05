@@ -11,6 +11,21 @@ class MeterQualityDefectCode(models.Model):
     name = fields.Char(string='Defect Name', required=True)
     code = fields.Char(string='Defect Code', required=True, index=True)
     active = fields.Boolean(default=True)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        # Scan-friendly: match by code as well as by name.
+        if name:
+            domain = list(domain or []) + [
+                '|', ('code', operator, name), ('name', operator, name)]
+            return super().name_search('', domain=domain, operator='ilike', limit=limit)
+        return super().name_search(name, domain=domain, operator=operator, limit=limit)
+
+    @api.depends('code', 'name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = ' - '.join(
+                part for part in (record.code, record.name) if part)
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -93,28 +108,28 @@ class MeterQualityIssue(models.Model):
         required=True,
         index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Meter Serial',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         required=True,
         index=True,
         check_company=True,
         tracking=True,
     )
-    production_id = fields.Many2one(
-        'mrp.production',
-        string='Manufacturing Order',
-        related='internal_serial_id.production_id',
-        store=True,
-        readonly=True,
-    )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='internal_serial_id.mes_order_id',
+        related='route_operation_id.mes_order_id',
         store=True,
         readonly=True,
         index=True,
+    )
+    production_id = fields.Many2one(
+        'mrp.production',
+        string='Manufacturing Order',
+        related='mes_order_id.production_id',
+        store=True,
+        readonly=True,
     )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
@@ -228,8 +243,16 @@ class MeterQualityIssue(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.quality.issue') or _('New')
         records = super().create(vals_list)
         records._sync_meter_quality_state()
@@ -242,19 +265,15 @@ class MeterQualityIssue(models.Model):
 
     def _sync_meter_quality_state(self):
         for issue in self:
-            meter = issue.internal_serial_id
-            if not meter:
+            identity = issue.serial_identity_id
+            if not identity:
                 continue
-            open_issues = meter.quality_issue_ids.filtered(lambda item: item.state not in ('closed', 'scrapped'))
+            open_issues = identity.quality_issue_ids.filtered(
+                lambda item: item.state not in ('closed', 'scrapped'))
             if open_issues:
-                meter.x_quality_hold_state = 'hold'
-                if meter.final_result == 'pass':
-                    meter.final_result = 'hold'
-            else:
-                if meter.x_quality_hold_state == 'hold':
-                    meter.x_quality_hold_state = 'released'
-                if meter.final_result == 'hold':
-                    meter.final_result = 'pass'
+                identity.x_quality_hold_state = 'hold'
+            elif identity.x_quality_hold_state == 'hold':
+                identity.x_quality_hold_state = 'released'
 
     def action_start_analysis(self):
         self.write({'state': 'analysis'})
@@ -284,20 +303,16 @@ class MeterQualityIssue(models.Model):
             'disposition': 'scrap',
             'closed_time': fields.Datetime.now(),
         })
-        self.internal_serial_id.write({
-            'state': 'scrapped',
-            'final_result': 'scrap',
-            'x_quality_hold_state': 'scrapped',
-        })
+        self.serial_identity_id.x_quality_hold_state = 'scrapped'
         return True
 
 
-class InternalSerial(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentity(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
     quality_issue_ids = fields.One2many(
         'sn.wsd.quality.issue',
-        'internal_serial_id',
+        'serial_identity_id',
         string='Quality Issues',
     )
     quality_issue_count = fields.Integer(
@@ -307,6 +322,12 @@ class InternalSerial(models.Model):
     open_quality_issue_count = fields.Integer(
         string='Open Quality Issue Count',
         compute='_compute_quality_issue_summary',
+    )
+    inspection_count = fields.Integer(
+        string='Inspection Count',
+        compute='_compute_inspection_count',
+        help='Inspections this serial took part in: as a sample row, as a '
+             'result cell, or registered in the FAI/OQC sample lists.',
     )
     x_quality_hold_state = fields.Selection(
         [
@@ -348,6 +369,30 @@ class InternalSerial(models.Model):
             record.quality_issue_count = len(record.quality_issue_ids)
             record.open_quality_issue_count = len(open_issues)
 
+    def _inspection_trace_domain(self):
+        self.ensure_one()
+        return ['|', '|', '|',
+                ('sample_ids.serial_identity_id', '=', self.id),
+                ('cell_ids.serial_identity_id', '=', self.id),
+                ('x_fai_serial_ids', 'in', self.ids),
+                ('x_fai_arrived_serial_ids', 'in', self.ids)]
+
+    def _compute_inspection_count(self):
+        Inspection = self.env['sn.wsd.quality.inspection']
+        for record in self:
+            record.inspection_count = Inspection.search_count(
+                record._inspection_trace_domain())
+
+    def action_view_inspections(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Inspections'),
+            'res_model': 'sn.wsd.quality.inspection',
+            'view_mode': 'list,form',
+            'domain': self._inspection_trace_domain(),
+        }
+
     def action_view_quality_issues(self):
         self.ensure_one()
         return {
@@ -355,9 +400,9 @@ class InternalSerial(models.Model):
             'name': _('Quality Issues'),
             'res_model': 'sn.wsd.quality.issue',
             'view_mode': 'list,form',
-            'domain': [('internal_serial_id', '=', self.id)],
+            'domain': [('serial_identity_id', '=', self.id)],
             'context': {
-                'default_internal_serial_id': self.id,
+                'default_serial_identity_id': self.id,
                 'default_company_id': self.company_id.id,
             },
         }
@@ -407,44 +452,4 @@ class MesTestResult(models.Model):
     def _compute_quality_issue_count(self):
         for record in self:
             record.quality_issue_count = len(record.quality_issue_ids)
-
-    @api.model
-    def _find_default_defect_code(self, test_result):
-        domain = [('company_id', '=', test_result.company_id.id)]
-        route_operation = test_result.route_operation_id.operation_id if test_result.route_operation_id else self.env['mrp.routing.workcenter']
-        if route_operation and route_operation.x_station_type:
-            domain.append(('station_type', '=', route_operation.x_station_type))
-        return self.env['sn.wsd.quality.defect.code'].search(domain, order='severity desc, id asc', limit=1)
-
-    def _create_quality_issue_from_failure(self):
-        issue_model = self.env['sn.wsd.quality.issue']
-        for record in self:
-            if record.result != 'fail' or not record.internal_serial_id:
-                continue
-            internal_serial = record.internal_serial_id
-            existing = issue_model.search([
-                ('test_result_id', '=', record.id),
-            ], limit=1)
-            if existing:
-                continue
-            defect_code = record.defect_code_id or self._find_default_defect_code(record)
-            if not defect_code:
-                continue
-            issue_model.create({
-                'internal_serial_id': internal_serial.id,
-                'route_operation_id': record.route_operation_id.id,
-                'test_result_id': record.id,
-                'workcenter_id': record.workcenter_id.id,
-                'defect_code_id': defect_code.id,
-                'issue_source': 'test_result',
-                'state': 'open',
-                'detected_time': record.test_time,
-                'note': record.note,
-            })
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        records._create_quality_issue_from_failure()
-        return records
 

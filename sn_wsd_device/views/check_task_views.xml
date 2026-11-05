@@ -36,6 +36,10 @@
                             string="Submit Task" class="btn-primary"
                             invisible="task_status == 'completed'"
                             confirm="Submit this task? Results cannot be edited afterwards."/>
+                    <button name="action_complete_all" type="object"
+                            string="Complete All" class="btn-primary"
+                            invisible="task_status == 'completed'"
+                            confirm="Fill every unchecked item as Pass and submit this task?"/>
                     <field name="task_status" widget="statusbar"
                            statusbar_visible="pending,in_progress,completed"/>
                 </header>

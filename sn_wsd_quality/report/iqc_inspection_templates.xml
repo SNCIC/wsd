@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_iqc_inspection">
+        <t t-call="web.html_container">
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sn_wsd_quality.report_iqc_inspection_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_iqc_inspection_document">
+        <t t-set="company" t-value="o.company_id"/>
+        <t t-set="lot" t-value="o.lot_id"/>
+        <t t-set="supplier" t-value="o.picking_id.partner_id"/>
+        <t t-set="metrics" t-value="o._get_iqc_report_metrics()"/>
+        <t t-set="result_labels" t-value="o._get_iqc_result_labels()"/>
+        <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
+            <div class="page sn-iqc-record"
+                 style="font-family: SimSun, serif; color: #111; font-size: 11px;">
+                <style>
+                    .sn-iqc-record, .sn-iqc-record table, .sn-iqc-record td,
+                    .sn-iqc-record th, .sn-iqc-record span, .sn-iqc-record b {
+                        font-family: SimSun, serif;
+                    }
+                    .sn-iqc-record table { width: 100%; border-collapse: collapse; }
+                    /* The sheet is laid out once for A4: the test data block
+                       grows into the room that is left over, and nothing is
+                       pushed onto a second page. */
+                    .sn-iqc-record { page-break-inside: avoid; }
+                    /* Block heights are applied as symmetric cell padding by
+                       the markup (see REPORT_HEIGHT_MM of the report helper):
+                       wkhtmltopdf sizes a row from its content, and symmetric
+                       padding keeps what a row holds centred in it. */
+                    .sn-iqc-record table.items tr { page-break-inside: avoid; }
+                    /* Only the blocks of the paper form carry rules. The head
+                       band and the No./Date band stay plain, and the border is
+                       switched off on every level of those two tables: the
+                       report assets bring their own cell rules, and a border
+                       left on the row or the section shows through as well. */
+                    /* Field names and values sit centred in their cell, the way
+                       the paper form reads. The head band and the No./Date band
+                       are left alone: they keep the alignment they had, the
+                       logo and the sheet number on the left, the title and the
+                       date centred. */
+                    .sn-iqc-record td, .sn-iqc-record th {
+                        padding: 3px 4px;
+                        vertical-align: middle;
+                    }
+                    /* The tick ledger and the conclusion line keep their own
+                       alignment: the ticks line up from the left the way the
+                       boxes of the paper form are filled in, instead of being
+                       spread out across the cell. The conclusion selector
+                       spells the table out so it outweighs the centring rule
+                       of the summary block. */
+                    .sn-iqc-record .marks,
+                    .sn-iqc-record table.summary td.conclusion {
+                        text-align: left;
+                    }
+                    .sn-iqc-record table.info td,
+                    .sn-iqc-record table.info th,
+                    .sn-iqc-record table.items td,
+                    .sn-iqc-record table.items th,
+                    .sn-iqc-record table.summary td,
+                    .sn-iqc-record table.summary th,
+                    .sn-iqc-record table.test-data td,
+                    .sn-iqc-record table.test-data th {
+                        border: 1px solid #111;
+                        text-align: center;
+                    }
+                    .sn-iqc-record table.head,
+                    .sn-iqc-record table.head thead,
+                    .sn-iqc-record table.head tbody,
+                    .sn-iqc-record table.head tr,
+                    .sn-iqc-record table.head td,
+                    .sn-iqc-record table.head th,
+                    .sn-iqc-record table.meta,
+                    .sn-iqc-record table.meta thead,
+                    .sn-iqc-record table.meta tbody,
+                    .sn-iqc-record table.meta tr,
+                    .sn-iqc-record table.meta td,
+                    .sn-iqc-record table.meta th {
+                        border: 0 none !important;
+                    }
+                    .sn-iqc-record .title {
+                        text-align: center;
+                        font-size: 21px;
+                        font-weight: 700;
+                        margin: 0 0 4px;
+                    }
+                    .sn-iqc-record .logo { height: 34px; }
+                    .sn-iqc-record .label { white-space: nowrap; }
+                    .sn-iqc-record .center { text-align: center; }
+                    .sn-iqc-record .test-data td {
+                        text-align: center;
+                        padding: 2px 3px;
+                    }
+                    .sn-iqc-record .fail { color: #b00; }
+                    .sn-iqc-record .marks span { margin-right: 3px; }
+                </style>
+                <style t-out="o._get_iqc_report_styles()"/>
+
+                <table class="plain head">
+                    <tr>
+                        <td style="width: 30%;">
+                            <img t-if="company.logo"
+                                 t-att-src="image_data_uri(company.logo)"
+                                 class="logo"/>
+                        </td>
+                        <td class="center">
+                            <div class="title">Inspection Record of Purchased (Outsourced) Parts</div>
+                        </td>
+                        <td class="head-block" style="width: 30%;"></td>
+                    </tr>
+                </table>
+                <table class="plain meta">
+                    <tr>
+                        <td>No.: <span t-field="o.name"/></td>
+                        <td class="center meta-block">
+                            Inspection Date:
+                            <span t-field="o.finish_time" t-options='{"widget": "datetime"}'/>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="info">
+                    <tr>
+                        <!-- Columns: label, value, label, maker value (widest,
+                             so the maker and the supplier behind it keep one
+                             line each), qty label and qty value (narrow, they
+                             only hold a short word and a figure). -->
+                        <td class="label" style="width: 12%;">Part Name</td>
+                        <td style="width: 16%;"><span t-field="o.product_id.name"/></td>
+                        <td class="label" style="width: 12%;">Part Model</td>
+                        <td style="width: 32%;"><span t-field="o.material_specification"/></td>
+                        <td class="label" style="width: 12%;">Batch Qty</td>
+                        <td class="center info-block" style="width: 16%;"><span t-field="o.lot_qty"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Production Batch No.</td>
+                        <td><span t-esc="o._get_iqc_supplier_batch_no()"/></td>
+                        <td class="label center">Manufacturer Name<div>(Supplier Name)</div></td>
+                        <td class="center">
+                            <div t-foreach="o._get_iqc_manufacturer_supplier_lines()"
+                                 t-as="maker_line" t-esc="maker_line"/>
+                        </td>
+                        <td class="label">Inspection Qty</td>
+                        <td class="center info-block"><span t-field="o.sample_size"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspection Batch No.</td>
+                        <td><span t-field="lot.name"/></td>
+                        <td class="label">Inspection Basis</td>
+                        <td><span t-field="o.x_inspection_basis"/></td>
+                        <td class="label">Qualified Qty</td>
+                        <td class="center info-block"><span t-field="o.x_pass_qty"/></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspection Mode</td>
+                        <td>
+                            <t t-if="o.sampling_method == 'full'">Full Inspection</t>
+                            <t t-else="">Sampling Inspection</t>
+                        </td>
+                        <td colspan="2" class="center">
+                            <span t-esc="o._get_iqc_sampling_notice()"/>
+                        </td>
+                        <td class="label">Qualified Rate</td>
+                        <td class="center info-block"><span t-field="o.x_pass_rate"/>%</td>
+                    </tr>
+                </table>
+
+                <table class="items">
+                    <thead>
+                        <tr>
+                            <th style="width: 7%;">Item No.</th>
+                            <th style="width: 14%;">Items Inspected</th>
+                            <th style="width: 22%;">Requirement</th>
+                            <th>Test Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.line_ids" t-as="line">
+                            <td t-att-class="'center numeric-item-block' if line.item_type == 'numeric' else 'center plain-item-block'">
+                                <t t-esc="line_index + 1"/>
+                            </td>
+                            <td class="center"><span t-field="line.name"/></td>
+                            <td>
+                                <span t-esc="line._get_report_requirement()"/>
+                            </td>
+                            <td>
+                                <t t-if="line.item_type == 'numeric'">
+                                    <table class="test-data"
+                                           t-attf-style="font-size: #{metrics['font_size']}px;">
+                                        <tr t-foreach="line._get_report_test_data_rows()"
+                                            t-as="row">
+                                            <td t-foreach="row" t-as="cell"
+                                                t-att-class="cell[1]">
+                                                <t t-esc="cell[0]"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </t>
+                                <t t-else="">
+                                    <div class="marks">
+                                        <t t-foreach="line._get_report_mark_cells()"
+                                           t-as="mark">
+                                            <span t-if="mark == 'pass'">&#10003;</span>
+                                            <span t-elif="mark == 'fail'" class="fail">&#10007;</span>
+                                            <span t-else="">&#9633;</span>
+                                        </t>
+                                    </div>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="summary">
+                    <tr>
+                        <td class="label" style="width: 14%;">Defect Description</td>
+                        <td class="description" colspan="5">
+                            <span t-field="o.note"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Conclusion</td>
+                        <td class="conclusion" colspan="5">
+                            <span>
+                                <t t-if="o.result == 'pass'">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span t-esc="result_labels['pass']"/>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result in ('fail', 'reject', 'concession')">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span t-esc="result_labels['fail']"/>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result in ('fail', 'reject')">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span t-esc="result_labels['reject']"/>
+                            <span style="margin-left: 46px;">
+                                <t t-if="o.result == 'concession'">&#9745;</t>
+                                <t t-else="">&#9744;</t>
+                            </span>
+                            <span t-esc="result_labels['concession']"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Inspector</td>
+                        <td colspan="2"><span t-field="o.inspector_id.name"/></td>
+                        <td class="label" style="width: 14%;">Reviewer</td>
+                        <td class="inspector" colspan="2"><span t-field="o.x_reviewer_id.name"/></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+</odoo>

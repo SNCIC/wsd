@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_exception.ParetoDashboard">
+        <div class="o_sn_wsd_pareto p-3">
+            <h4 class="mb-3" t-out="labels.title"/>
+            <div class="d-flex flex-wrap gap-3 align-items-end border rounded p-3 mb-3 bg-view">
+                <div class="d-flex flex-column gap-1">
+                    <label class="small text-muted mb-0" t-out="labels.dimension"/>
+                    <select class="form-select" t-model="state.dimension" style="min-width: 180px;">
+                        <option value="subcategory" t-out="labels.subcategory"/>
+                        <option value="category" t-out="labels.category"/>
+                        <option value="line" t-out="labels.line"/>
+                        <option value="level" t-out="labels.level"/>
+                    </select>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <label class="small text-muted mb-0" t-out="labels.from"/>
+                    <input type="date" class="form-control" t-model="state.date_from"/>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <label class="small text-muted mb-0" t-out="labels.to"/>
+                    <input type="date" class="form-control" t-model="state.date_to"/>
+                </div>
+                <button class="btn btn-primary" t-on-click="() => this.load()" t-out="labels.view"/>
+            </div>
+            <div t-if="state.loading" class="text-muted p-3">…</div>
+            <table t-else="" class="table table-bordered">
+                <thead>
+                    <tr class="table-light">
+                        <th t-out="labels.rank"/>
+                        <th t-out="labels.dimension"/>
+                        <th class="text-end" t-out="labels.count"/>
+                        <th class="text-end" t-out="labels.share"/>
+                        <th class="text-end" t-out="labels.cumulative"/>
+                        <th style="width: 30%" t-out="labels.distribution"/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-if="!state.rows.length">
+                        <td colspan="6" class="text-center text-muted" t-out="labels.noData"/>
+                    </tr>
+                    <tr t-foreach="state.rows" t-as="row" t-key="row.rank">
+                        <td t-out="row.rank"/>
+                        <td t-out="row.label"/>
+                        <td class="text-end" t-out="row.count"/>
+                        <td class="text-end" t-out="Math.round(row.share * 10) / 10"/>
+                        <td class="text-end" t-out="Math.round(row.cumulative * 10) / 10"/>
+                        <td>
+                            <div t-attf-style="background:#714b67;color:#fff;text-align:center;height:14px;border-radius:3px;width:#{Math.max(row.share, 1)}%;min-width:2px;"/>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot t-if="state.rows.length">
+                    <tr class="table-light fw-bold">
+                        <td colspan="2" t-out="labels.total"/>
+                        <td class="text-end" t-out="state.total"/>
+                        <td colspan="3"/>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </t>
+</templates>

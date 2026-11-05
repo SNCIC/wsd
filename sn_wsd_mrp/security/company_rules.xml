@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_mrp_bom_line_substitute_company" model="ir.rule">
+            <field name="name">BoM Line Substitute Material Multi-company</field>
+            <field name="model_id" ref="model_mrp_bom_line_substitute"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mrp_excess_return_company" model="ir.rule">
+            <field name="name">Excess Material Return Multi-company</field>
+            <field name="model_id" ref="model_mrp_excess_return"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mrp_excess_return_line_company" model="ir.rule">
+            <field name="name">Excess Material Return Line Multi-company</field>
+            <field name="model_id" ref="model_mrp_excess_return_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mrp_feeder_line_company" model="ir.rule">
+            <field name="name">SMT Feeder Setup Record Multi-company</field>
+            <field name="model_id" ref="model_mrp_feeder_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mrp_substitute_usage_company" model="ir.rule">
+            <field name="name">Substitute Material Usage Multi-company</field>
+            <field name="model_id" ref="model_mrp_substitute_usage"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_production_process_doc_type_company" model="ir.rule">
+            <field name="name">Production Process Document Type Multi-company</field>
+            <field name="model_id" ref="model_production_process_doc_type"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_production_process_document_company" model="ir.rule">
+            <field name="name">Production Process Document Multi-company</field>
+            <field name="model_id" ref="model_production_process_document"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_production_process_document_code_company" model="ir.rule">
+            <field name="name">Production Process Document Number Multi-company</field>
+            <field name="model_id" ref="model_production_process_document_code"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_mrp_production_line_company" model="ir.rule">
+            <field name="name">Manufacturing Production Line Multi-company</field>
+            <field name="model_id" ref="model_sn_mrp_production_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_mrp_team_company" model="ir.rule">
+            <field name="name">Manufacturing Team Multi-company</field>
+            <field name="model_id" ref="model_sn_mrp_team"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_mrp_team_member_company" model="ir.rule">
+            <field name="name">Manufacturing Team Member Multi-company</field>
+            <field name="model_id" ref="model_sn_mrp_team_member"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_mrp_workshop_company" model="ir.rule">
+            <field name="name">Manufacturing Workshop Multi-company</field>
+            <field name="model_id" ref="model_sn_mrp_workshop"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_batch_pass_log_company" model="ir.rule">
+            <field name="name">Batch Station Pass Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_batch_pass_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_carton_pallet_binding_log_company" model="ir.rule">
+            <field name="name">Carton Pallet Binding Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_carton_pallet_binding_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_clear_pass_log_company" model="ir.rule">
+            <field name="name">Station Pass Clear Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_clear_pass_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_mes_operation_report_company" model="ir.rule">
+            <field name="name">MES Operation Report Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_operation_report"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_mes_order_company" model="ir.rule">
+            <field name="name">MES Production Order Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_order"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_mes_order_log_company" model="ir.rule">
+            <field name="name">MES Order Online Log Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_order_log"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_mes_order_route_company" model="ir.rule">
+            <field name="name">MES Order Process Route Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_order_route"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_mes_order_route_operation_company" model="ir.rule">
+            <field name="name">MES Order Route Operation Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_order_route_operation"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_meter_pack_barcode_company" model="ir.rule">
+            <field name="name">Meter Pack Barcode Line Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_meter_pack_barcode"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_meter_pack_record_company" model="ir.rule">
+            <field name="name">Meter Pack Record Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_meter_pack_record"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_operation_company" model="ir.rule">
+            <field name="name">Standard Operation Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_operation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_process_route_company" model="ir.rule">
+            <field name="name">Meter Process Route Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_process_route"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_process_route_drawing_company" model="ir.rule">
+            <field name="name">Process Route Drawing Number Binding Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_process_route_drawing"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_process_route_operation_company" model="ir.rule">
+            <field name="name">Meter Process Route Operation Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_process_route_operation"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_process_route_version_company" model="ir.rule">
+            <field name="name">Process Route Flow Version Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_process_route_version"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_process_section_company" model="ir.rule">
+            <field name="name">Process Section Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_process_section"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_route_section_stat_company" model="ir.rule">
+            <field name="name">Route Section Statistics Setting Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_route_section_stat"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_scrap_reason_company" model="ir.rule">
+            <field name="name">Scrap Reason Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_scrap_reason"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_serial_binding_company" model="ir.rule">
+            <field name="name">Serial Identity Binding Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_serial_binding"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_serial_identity_company" model="ir.rule">
+            <field name="name">Physical Serial Identity Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_serial_identity"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_serial_operation_history_company" model="ir.rule">
+            <field name="name">SN Operation History Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_serial_operation_history"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_serial_wip_company" model="ir.rule">
+            <field name="name">SN Work In Progress Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_serial_wip"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_wsd_substitute_rule_company" model="ir.rule">
+            <field name="name">Substitute Material Rule Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_substitute_rule"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

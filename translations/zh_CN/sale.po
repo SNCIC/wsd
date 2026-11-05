@@ -1,0 +1,226 @@
+# Odoo zh_CN translation worklist -- sale
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sale
+#. odoo-javascript
+#: code:addons/sale/static/src/js/product_card/product_card.xml:0
+#: code:addons/sale/static/src/js/product_card/product_card.xml:0
+msgid "Click to configure"
+msgstr "点击配置"
+
+#. module: sale
+#. odoo-python
+#: code:addons/sale/models/sale_order.py:0
+#: code:addons/sale/models/sale_order.py:0
+msgid "Import Template for Quotations"
+msgstr "报价单导入模板"
+
+#. module: sale
+#. odoo-javascript
+#: code:addons/sale/static/src/views/sale_file_upload_kanban/sale_file_upload_kanban_renderer.js:0
+#: code:addons/sale/static/src/views/sale_file_upload_list/sale_file_upload_list_renderer.js:0
+#: code:addons/sale/static/src/views/sale_file_upload_kanban/sale_file_upload_kanban_renderer.js:0
+#: code:addons/sale/static/src/views/sale_file_upload_list/sale_file_upload_list_renderer.js:0
+msgid "Import a request for quotation from a customer"
+msgstr "从客户导入询价单"
+
+#. module: sale
+#. odoo-python
+#: code:addons/sale/controllers/portal.py:0
+#: code:addons/sale/controllers/portal.py:0
+msgid "The amount is lower than the prepayment amount."
+msgstr "金额低于预付款金额。"
+
+#. module: sale
+#. odoo-python
+#: code:addons/sale/wizard/payment_link_wizard.py:0
+#: code:addons/sale/wizard/payment_link_wizard.py:0
+msgid "The amount must be greater than the prepayment amount."
+msgstr "金额必须大于预付款金额。"
+
+#. module: sale
+#. odoo-python
+#: code:addons/sale/wizard/payment_link_wizard.py:0
+#: code:addons/sale/wizard/payment_link_wizard.py:0
+msgid "The sale order has expired."
+msgstr "销售订单已过期。"
+
+#. module: sale
+#. odoo-javascript
+#: code:addons/sale/static/src/js/upload_rfq_cog_menu/upload_rfq_cog_menu.xml:0
+#: code:addons/sale/static/src/js/upload_rfq_cog_menu/upload_rfq_cog_menu.xml:0
+msgid "Upload Request For Quotation"
+msgstr "上传询价单"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_sale_order_line__collapse_composition
+msgid "Collapse Composition"
+msgstr "折叠组成"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_sale_order_line__collapse_prices
+msgid "Collapse Prices"
+msgstr "折叠价格"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_sale_order__has_authorized_transaction_ids
+msgid "Has Authorized Transactions"
+msgstr "有已授权的交易"
+
+#. module: sale
+#: model:mail.message.subtype,name:sale.mt_salesteam_invoice_paid
+msgid "Invoice Paid"
+msgstr "发票已付款"
+
+#. module: sale
+#: model:mail.message.subtype,name:sale.mt_salesteam_invoice_posted
+msgid "Invoice Posted"
+msgstr "发票已过账"
+
+#. module: sale
+#: model:product.template,description_sale:sale.product_product_1_product_template
+msgid "Office chairs can harm your floor: protect it"
+msgstr "办公椅可能损坏地板：请做好保护"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_payment_link_wizard__prepayment_amount
+msgid "Prepayment Amount"
+msgstr "预付款金额"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_account_move_line__sale_line_warn_msg
+#: model:ir.model.fields,field_description:sale.field_sale_order_line__sale_line_warn_msg
+msgid "Sale Line Warn Msg"
+msgstr "销售行警告信息"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_product_product__sale_line_warn_msg
+#: model:ir.model.fields,field_description:sale.field_product_template__sale_line_warn_msg
+msgid "Sales Order Line Warning"
+msgstr "销售订单行警告"
+
+#. module: sale
+#: model:ir.model.fields,field_description:sale.field_sale_order_line__translated_product_name
+msgid "Translated Product Name"
+msgstr "已翻译的产品名称"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_template
+msgid "Amount paid:"
+msgstr "已付金额："
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
+msgid "Combo Product"
+msgstr "组合产品"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "DHL Connector"
+msgstr "DHL 连接器"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
+msgid "Delivery Date:"
+msgstr "交货日期："
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.product_pricelist_item_form
+msgid ""
+"For formula or fixed pricing, the original price isn’t shown in\n"
+"                                sale orders."
+msgstr ""
+"对于公式或固定定价，原价不会显示在\n"
+"                                销售订单中。"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.report_saleorder_document
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_content
+msgid "Section Summary"
+msgstr "章节小计"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.mass_cancel_orders_view_form
+msgid "So, are you sure you want to cancel these"
+msgstr "您确定要取消这些"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.view_order_form
+msgid "Subsection Name"
+msgstr "小节名称"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "Values set here are company-specific."
+msgstr "此处设置的值是特定于每家公司的"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid "View Other Providers"
+msgstr "查看其他提供商"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.mass_cancel_orders_view_form
+msgid "items?"
+msgstr "单据吗？"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_pay_modal
+msgid "you confirm acceptance on behalf of"
+msgstr "您代表以下方确认接受"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.sale_order_portal_pay_modal
+msgid "<span id=\"o_sale_portal_use_amount_total\">By paying,</span>"
+msgstr "<span id=\"o_sale_portal_use_amount_total\">付款即表示，</span>"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid ""
+"Compute shipping costs and ship with DHL<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"计算运费并通过 DHL 发货<br/>\n"
+"                                    <strong>（请前往 主页&gt;应用 安装）</strong>"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid ""
+"Compute shipping costs and ship with FedEx<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"计算运费并通过 FedEx 发货<br/>\n"
+"                                    <strong>（请前往 主页&gt;应用 安装）</strong>"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid ""
+"Compute shipping costs and ship with UPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"计算运费并通过 UPS 发货<br/>\n"
+"                                    <strong>（请前往 主页&gt;应用 安装）</strong>"
+
+#. module: sale
+#: model_terms:ir.ui.view,arch_db:sale.res_config_settings_view_form
+msgid ""
+"Compute shipping costs and ship with USPS<br/>\n"
+"                                    <strong>(please go to Home&gt;Apps to install)</strong>"
+msgstr ""
+"计算运费并通过 USPS 发货<br/>\n"
+"                                    <strong>（请前往 主页&gt;应用 安装）</strong>"

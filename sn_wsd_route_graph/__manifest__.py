@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Route Graph Editor',
-    'version': '19.0.2.0.0',
+    'version': '19.0.2.1.0',
     'summary': 'AntV X6 directed graph editor for process routes',
     'description': """
 Full-screen directed-graph editor (AntV X6) for sn.wsd.process.route.

@@ -1,0 +1,51 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_field
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid "The label field path cannot be empty."
+msgstr "标签字段路径不能为空。"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid "Unknown model %s in label field path."
+msgstr "标签字段路径中的模型 %s 不存在。"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid "The label field path %s contains an empty segment."
+msgstr "标签字段路径 %s 含有空段。"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid "Unknown field %s in label field path %s."
+msgstr "标签字段路径 %s 中的字段 %s 不存在。"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid "Field %s (type %s) cannot be printed on a label: %s."
+msgstr "字段 %s（类型 %s）不能打印到标签上：%s。"
+
+#. module: sn_wsd_field
+#. odoo-python
+#: code:addons/sn_wsd_field/models/field_reader.py:0
+msgid ""
+"Only many2one hops are allowed in label field path %s (field %s is a %s)."
+msgstr "标签字段路径 %s 只允许经过多对一字段（字段 %s 是 %s 类型）。"

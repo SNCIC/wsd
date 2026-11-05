@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The header information of a BOM is printed on the first line of its
+         component lines only: the merged cells renderer hides the values the
+         lines below repeat, the way the Kingdee BOM detail list reads. -->
+    <record id="view_sn_bom_detail_list" model="ir.ui.view">
+        <field name="name">mrp.bom.line.sn.bom.detail.list</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="arch" type="xml">
+            <list string="BOM Details" create="false" delete="false"
+                  editable="bottom" js_class="sn_wsd_bom_merged_cells_list"
+                  default_order="parent_product_code, bom_version, sequence">
+                <field name="bom_id" column_invisible="1"/>
+                <field name="categ_id" column_invisible="1"/>
+                <field name="bom_code"/>
+                <field name="bom_version" optional="show"/>
+                <field name="parent_product_code"/>
+                <field name="parent_product_name"/>
+                <field name="bom_active" widget="boolean_toggle" readonly="1"/>
+                <field name="parent_material_specification"/>
+                <field name="sequence" string="No."/>
+                <field name="product_code"/>
+                <field name="product_id" readonly="1"
+                       context="{'display_default_code': False}"/>
+                <field name="material_specification"/>
+                <field name="qty_numerator"
+                       options="{'hide_trailing_zeros': True}"/>
+                <field name="qty_denominator"/>
+                <field name="product_qty" readonly="1" force_save="1"/>
+                <field name="product_uom_id" groups="uom.group_uom" readonly="1"/>
+                <field name="x_board_side" optional="show"/>
+                <field name="x_advance_issue" optional="show"/>
+                <field name="substitute_rule_count" string="Subs." optional="hide"/>
+                <field name="workshop_id" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_bom_detail_form" model="ir.ui.view">
+        <field name="name">mrp.bom.line.sn.bom.detail.form</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="arch" type="xml">
+            <form string="BOM Line" create="false" duplicate="false">
+                <sheet>
+                    <group>
+                        <group string="BOM">
+                            <field name="bom_id" readonly="1"/>
+                            <field name="bom_code"/>
+                            <field name="bom_version"/>
+                            <field name="bom_active"/>
+                            <field name="workshop_id"/>
+                        </group>
+                        <group string="Parent Product">
+                            <field name="parent_product_code"/>
+                            <field name="parent_product_name"/>
+                            <field name="parent_material_specification"/>
+                            <field name="categ_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Component">
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_code"/>
+                            <field name="material_specification"/>
+                        </group>
+                        <group string="Usage">
+                            <field name="qty_numerator"/>
+                            <field name="qty_denominator"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="product_uom_id"/>
+                            <field name="sequence"/>
+                            <field name="x_board_side"/>
+                            <field name="x_advance_issue"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_bom_detail_search" model="ir.ui.view">
+        <field name="name">mrp.bom.line.sn.bom.detail.search</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="arch" type="xml">
+            <search string="BOM Details">
+                <field name="bom_code"/>
+                <field name="parent_product_code"/>
+                <field name="parent_product_name"/>
+                <field name="product_code"/>
+                <field name="product_id"/>
+                <field name="parent_material_specification"/>
+                <field name="material_specification"/>
+                <field name="categ_id"/>
+                <separator/>
+                <filter name="bom_active" string="Production Ready"
+                        domain="[('bom_active', '=', True)]"/>
+                <filter name="bom_archived" string="Archived BOMs"
+                        domain="[('bom_active', '=', False)]"/>
+                <filter name="advance_issue" string="Advance Issue"
+                        domain="[('x_advance_issue', '=', True)]"/>
+                <group>
+                    <filter name="group_bom" string="BOM"
+                            context="{'group_by': 'bom_id'}"/>
+                    <filter name="group_categ" string="BOM Group"
+                            context="{'group_by': 'categ_id'}"/>
+                    <filter name="group_workshop" string="Workshop"
+                            context="{'group_by': 'workshop_id'}"/>
+                    <filter name="group_active" string="Data Status"
+                            context="{'group_by': 'bom_active'}"/>
+                </group>
+                <searchpanel view_types="list">
+                    <field name="categ_id" string="BOM Group"
+                           icon="fa-th-list" enable_counters="1" limit="0"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_bom_detail" model="ir.actions.act_window">
+        <field name="name">BOM Details</field>
+        <field name="res_model">mrp.bom.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_sn_bom_detail_list"/>
+        <field name="search_view_id" ref="view_sn_bom_detail_search"/>
+        <field name="context">{'search_default_bom_active': 1}</field>
+    </record>
+
+    <menuitem id="menu_sn_bom_detail"
+              name="BOM Details"
+              parent="mrp.menu_mrp_bom"
+              action="action_sn_bom_detail"
+              sequence="20"/>
+</odoo>

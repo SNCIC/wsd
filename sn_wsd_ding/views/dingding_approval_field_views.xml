@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_dingding_approval_field_form" model="ir.ui.view">
+            <field name="name">sn.wsd.ding.approval.field.form</field>
+            <field name="model">sn.wsd.ding.approval.field</field>
+            <field name="arch" type="xml">
+                <form string="DingTalk Field Mapping">
+                    <sheet>
+                        <group>
+                            <field name="config_id" readonly="1"/>
+                            <field name="parent_field_id" invisible="1"/>
+                            <field name="sequence"/>
+                            <field name="dingding_field_id" readonly="1"/>
+                            <field name="dingding_field_name" readonly="1"/>
+                            <field name="dingding_field_type" readonly="1"/>
+                            <field name="required" readonly="1"/>
+                            <field name="field_owner" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="record_field_model_name" invisible="1"/>
+                            <field name="record_field_path" widget="field_selector"
+                                   options="{'model': 'record_field_model_name', 'follow_relations': true, 'only_searchable': false}"
+                                   invisible="dingding_field_type == 'table'"/>
+                            <field name="record_o2m_field_id" invisible="dingding_field_type != 'table'"/>
+                        </group>
+                        <notebook invisible="dingding_field_type != 'table'">
+                            <page string="Detail Fields">
+                                <field name="child_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" width="1"/>
+                                        <field name="dingding_field_id" readonly="1" optional="hide"/>
+                                        <field name="dingding_field_name" readonly="1"/>
+                                        <field name="dingding_field_type" readonly="1"/>
+                                        <field name="field_owner" optional="hide"/>
+                                        <field name="record_field_model_name" invisible="1"/>
+                                        <field name="record_field_path" widget="field_selector"
+                                               options="{'model': 'record_field_model_name', 'follow_relations': true, 'only_searchable': false}"/>
+                                        <field name="required" readonly="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

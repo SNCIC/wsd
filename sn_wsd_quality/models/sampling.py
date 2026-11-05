@@ -41,6 +41,7 @@ SAMPLE_SELECTION_METHOD_SELECTION = [
 
 DEFAULT_AQL_VALUES = [0.01, 0.015, 0.025, 0.04, 0.065, 0.1, 0.15, 0.25, 0.4, 0.65, 1.0, 1.5, 2.5, 4.0, 6.5, 10.0]
 DEFAULT_SAMPLE_SIZE_CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R']
+MAX_DETAILED_SAMPLE_ROWS = 500
 
 
 class QualitySamplingStandard(models.Model):
@@ -326,12 +327,24 @@ class QualitySamplingLotRange(models.Model):
     @api.constrains('lot_qty_min', 'lot_qty_max', 'sample_size_code')
     def _check_lot_range(self):
         for record in self:
+            if type(record.id).__name__ == 'NewId':
+                continue
             if record.lot_qty_min <= 0:
                 raise ValidationError(_('The start quantity must be greater than zero.'))
             if record.lot_qty_max < record.lot_qty_min:
                 raise ValidationError(_('The end quantity must be greater than or equal to the start quantity.'))
             if not (record.sample_size_code or '').strip():
                 raise ValidationError(_('The sample size code is required.'))
+            origin_id = record._origin.id if record._origin else 0
+            overlaps = self.search([
+                ('id', '!=', origin_id),
+                ('standard_id', '=', record.standard_id.id),
+                ('inspection_level', '=', record.inspection_level),
+                ('lot_qty_min', '<=', record.lot_qty_max),
+                ('lot_qty_max', '>=', record.lot_qty_min),
+            ], limit=1)
+            if overlaps:
+                raise ValidationError(_('Lot quantity ranges must not overlap for the same standard and inspection level.'))
 
 
 class QualitySamplingPlan(models.Model):
@@ -453,6 +466,12 @@ class QualityInspectionScheme(models.Model):
                     raise ValidationError(_('A lot quantity source is required for AQL sampling.'))
                 if float_compare(scheme.aql_value, 0.0, precision_digits=6) < 0:
                     raise ValidationError(_('AQL must be greater than or equal to zero.'))
+                if not self.env['sn.wsd.quality.sampling.plan'].search_count([
+                    ('standard_id', '=', scheme.sampling_standard_id.id),
+                    ('switching_mode', '=', scheme.switching_mode),
+                    ('aql_value', '=', scheme.aql_value),
+                ]):
+                    raise ValidationError(_('The selected AQL value is not configured in the sampling standard.'))
 
     def _get_lot_qty_from_values(self, values):
         self.ensure_one()
@@ -472,10 +491,12 @@ class QualityInspectionScheme(models.Model):
         if source == 'mes_order':
             mes_order = self.env['sn.wsd.mes.order'].browse(values.get('mes_order_id')).exists()
             if mes_order:
-                serial_count = len(mes_order.internal_serial_ids.filtered(
-                    lambda serial: serial.active and not serial.is_confirmed_scrapped()
-                ))
-                return serial_count or int(round(mes_order.planned_qty or 0.0))
+                # 批量口径=已完成过站行（pass-history-on-enter）：在制行
+                # （in_progress，空 out_date）不计，AQL 批量不因在制板抬高
+                identity_count = self.env['sn.wsd.serial.operation.history'].search_count(
+                    [('mes_order_id', '=', mes_order.id),
+                     ('result', '!=', 'in_progress')])
+                return identity_count or int(round(mes_order.planned_qty or 0.0))
             return 0
         if source == 'production':
             production = self.env['mrp.production'].browse(values.get('production_id')).exists()
@@ -615,15 +636,40 @@ class QualityInspection(models.Model):
         'inspection_id',
         string='Samples',
     )
+    sample_value_ids = fields.One2many(
+        'sn.wsd.quality.inspection.sample.value',
+        'inspection_id',
+        string='Sample Values',
+    )
     sample_checked_qty = fields.Integer(string='Checked Samples', compute='_compute_sample_counts', store=True)
     sample_defect_qty = fields.Integer(string='Defect Samples', compute='_compute_sample_counts', store=True)
 
-    @api.depends('sample_ids.result')
+    @api.depends(
+        'sample_ids.result',
+        'sample_ids.serial_identity_id',
+        'sample_ids.qty',
+        'sample_ids.defect_code_id',
+        'x_picked_qty',
+    )
     def _compute_sample_counts(self):
         for inspection in self:
-            checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
-            inspection.sample_checked_qty = len(checked_samples)
-            inspection.sample_defect_qty = len(checked_samples.filtered(lambda sample: sample.result == 'fail'))
+            if inspection.inspection_type == 'ipqc':
+                # 异常驱动录入（add-mes-ipqc-patrol 重构）：无不良零录入；
+                # fail 行有 SN=板级按 SN 去重，无 SN 行按 qty 记数量；
+                # 已检数取实际抽取数（未填时回退方案样本量）
+                fail_samples = inspection.sample_ids.filtered(lambda s: s.result == 'fail')
+                with_sn = fail_samples.filtered(lambda s: s.serial_identity_id)
+                sn_less = fail_samples.filtered(lambda s: not s.serial_identity_id)
+                inspection.sample_checked_qty = inspection.x_picked_qty or inspection.sample_size
+                inspection.sample_defect_qty = len(set(with_sn.mapped('serial_identity_id').ids)) + sum(sn_less.mapped('qty'))
+            else:
+                # IQC/OQC rows may represent one serial or an aggregated
+                # quantity when no serial tracking is available.
+                checked_samples = inspection.sample_ids.filtered(lambda sample: sample.result in ('pass', 'fail'))
+                inspection.sample_checked_qty = sum(checked_samples.mapped('qty'))
+                inspection.sample_defect_qty = sum(
+                    checked_samples.filtered(lambda sample: sample.result == 'fail').mapped('qty')
+                )
 
     @api.depends(
         'state',
@@ -636,7 +682,10 @@ class QualityInspection(models.Model):
     )
     def _compute_result(self):
         super()._compute_result()
-        for inspection in self.filtered(lambda record: record.inspection_type in ('iqc', 'oqc') and record.state == 'done'):
+        # 让步结论在 done 期间粘住（与基础实现的 guard 同口径）：让步是
+        # 明确决策不是 d 的函数,重开后按当前结果重判
+        # (oqc-disposition-closure 任务 2.3)
+        for inspection in self.filtered(lambda record: record.inspection_type in ('iqc', 'oqc') and record.state == 'done' and record.result != 'concession'):
             defect_qty = inspection.sample_defect_qty if inspection.sample_ids else inspection.defect_qty
             if defect_qty >= inspection.reject_qty:
                 inspection.result = 'reject'
@@ -659,30 +708,44 @@ class QualityInspection(models.Model):
         })
         for key, value in sampling_values.items():
             values.setdefault(key, value)
+        # 巡检实际抽取数随样本量提示一起预填（IPQC 巡检 cron 开单同走此处）
+        values.setdefault('x_picked_qty', values.get('sample_size'))
         inspection = self.create(values)
         inspection._ensure_sample_units()
+        if inspection.inspection_type == 'fai':
+            # FAI 检验项默认合格（报工模式行即录入面；过站模式行结果
+            # 由格派生，预填值仅作兜底）：建单即预填，检验员只改异常项
+            inspection.line_ids._set_pass_values()
         return inspection
 
     def _get_candidate_sample_serials(self):
         self.ensure_one()
-        serial_model = self.env['sn.wsd.internal.serial'].with_context(active_test=False)
-        domain = [('active', '=', True)]
+        identity_model = self.env['sn.wsd.serial.identity']
         if self.mes_order_id:
-            domain.append(('mes_order_id', '=', self.mes_order_id.id))
+            domain = [('mes_order_id', '=', self.mes_order_id.id)]
         elif self.production_id:
-            domain.append(('production_id', '=', self.production_id.id))
+            domain = [('production_id', '=', self.production_id.id)]
         else:
-            return serial_model
+            return identity_model
+        # SNs that actually flowed through the order: WIP or history rows
+        wip_ids = self.env['sn.wsd.serial.wip'].search(domain).mapped('serial_identity_id')
+        history_ids = self.env['sn.wsd.serial.operation.history'].search(domain).mapped('serial_identity_id')
+        identities = (wip_ids | history_ids).filtered(lambda identity: identity.active)
         if self.product_id:
-            domain.append(('product_id', '=', self.product_id.id))
-        return serial_model.search(domain, order='serial_no, id')
+            lot_domain = [
+                ('name', 'in', identities.mapped('name')),
+                ('product_id', '=', self.product_id.id)]
+            lots = self.env['stock.lot'].with_context(active_test=False).search(lot_domain)
+            lot_names = set(lots.mapped('name'))
+            identities = identities.filtered(lambda identity: identity.name in lot_names)
+        return identities.sorted(lambda identity: (identity.name, identity.id))
 
     def _select_systematic_serials(self, candidates, sample_size):
         if not candidates or sample_size <= 0:
             return candidates.browse()
         if len(candidates) <= sample_size:
             return candidates
-        selected = self.env['sn.wsd.internal.serial']
+        selected = self.env['sn.wsd.serial.identity']
         step = len(candidates) / float(sample_size)
         used_indexes = set()
         for index in range(sample_size):
@@ -696,50 +759,95 @@ class QualityInspection(models.Model):
     def _sample_commands_from_serials(self, serials):
         self.ensure_one()
         commands = []
-        for sequence, serial in enumerate(serials, 1):
+        for sequence, identity in enumerate(serials, 1):
+            lot = self.env['stock.lot'].with_context(active_test=False).search(
+                [('name', '=', identity.name)], limit=1)
             commands.append(Command.create({
                 'sequence': sequence,
                 'company_id': self.company_id.id,
-                'internal_serial_id': serial.id,
-                'lot_id': serial.lot_id.id if 'lot_id' in serial._fields else False,
+                'serial_identity_id': identity.id,
+                'lot_id': lot.id,
             }))
         return commands
 
     def _sample_commands_from_placeholders(self):
         self.ensure_one()
-        return [
-            Command.create({
+        if self.sample_size <= 0:
+            return []
+        if self.line_ids.filtered(lambda line: line.sample_record_mode == 'per_sample') and self.sample_size <= MAX_DETAILED_SAMPLE_ROWS:
+            return [Command.create({
                 'sequence': sequence,
                 'company_id': self.company_id.id,
                 'lot_id': self.lot_id.id,
-            })
-            for sequence in range(1, self.sample_size + 1)
-        ]
+                'qty': 1,
+            }) for sequence in range(1, self.sample_size + 1)]
+        return [Command.create({
+            'sequence': 1,
+            'company_id': self.company_id.id,
+            'lot_id': self.lot_id.id,
+            'qty': self.sample_size,
+        })]
+
+    def _sample_value_commands(self):
+        self.ensure_one()
+        value_model = self.env['sn.wsd.quality.inspection.sample.value']
+        commands = []
+        sample_lines = self.line_ids.filtered(lambda line: line.sample_record_mode in ('per_sample', 'per_lot'))
+        for line in sample_lines:
+            if line.sample_record_mode == 'per_lot':
+                commands.append(Command.create({
+                    'inspection_id': self.id,
+                    'line_id': line.id,
+                    'sequence': 1,
+                }))
+                continue
+            for sample in self.sample_ids:
+                commands.append(Command.create({
+                    'inspection_id': self.id,
+                    'sample_id': sample.id,
+                    'line_id': line.id,
+                    'sequence': sample.sequence,
+                }))
+        return commands
 
     def _ensure_sample_units(self):
         for inspection in self.filtered(lambda record: not record.sample_ids and record.sample_size > 0):
             if inspection.sample_selection_method == 'manual':
                 continue
-            serials = inspection._select_systematic_serials(
-                inspection._get_candidate_sample_serials(),
-                inspection.sample_size,
-            )
-            if serials:
-                inspection.write({'sample_ids': inspection._sample_commands_from_serials(serials)})
-            elif inspection.inspection_type in ('iqc', 'oqc'):
+            if inspection.sampling_method == 'full' and inspection.sample_size > MAX_DETAILED_SAMPLE_ROWS:
                 inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
+            else:
+                serials = inspection._select_systematic_serials(
+                    inspection._get_candidate_sample_serials(),
+                    inspection.sample_size,
+                )
+                if serials:
+                    inspection.write({'sample_ids': inspection._sample_commands_from_serials(serials)})
+                elif inspection.inspection_type in ('iqc', 'oqc'):
+                    inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
+            if not inspection.sample_value_ids:
+                inspection.write({'sample_value_ids': inspection._sample_value_commands()})
 
     def action_done(self):
         for inspection in self:
             missing = inspection.line_ids.filtered(lambda line: line.required and line.result == 'pending')
             if missing:
                 raise UserError(_('Complete all required inspection items before finishing the inspection.'))
-            if inspection.inspection_type in ('iqc', 'oqc') and inspection.sample_checked_qty < inspection.sample_size:
+            # Full-lot OQC keeps no sample ledger (boards are judged one
+            # by one at the station): the n-sample gate does not apply
+            # there. Quantity closure is governed by the full-lot gap
+            # confirmation (oqc-disposition-closure task 3.3), not by n.
+            if inspection.inspection_type in ('iqc', 'oqc')                     and not inspection.x_full_inspection                     and inspection.sample_checked_qty < inspection.sample_size:
                 raise UserError(_('Complete all required samples before finishing the inspection.'))
             if inspection.inspection_type == 'oqc' and inspection.defect_line_ids.filtered(lambda line: not line.defect_code_id):
                 raise UserError(_('Defect code is required on every OQC defect line.'))
             if inspection.inspection_type in ('iqc', 'oqc') and inspection.sample_ids.filtered(lambda sample: sample.result == 'fail' and not sample.defect_code_id):
                 raise UserError(_('Defect code is required on every failed sample.'))
+            pending_values = inspection.sample_value_ids.filtered(
+                lambda value: value.result == 'pending' and value.line_id.required
+            )
+            if pending_values:
+                raise UserError(_('Complete all configured sample value rows before finishing the inspection.'))
         self.write({
             'state': 'done',
             'finish_time': fields.Datetime.now(),
@@ -782,13 +890,20 @@ class QualityInspectionSample(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial',
-        string='Serial Number',
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
         check_company=True,
         index=True,
     )
     lot_id = fields.Many2one('stock.lot', string='Lot/Serial Number', check_company=True, index=True)
+    # 不良归属的检验项目（add-mes-ipqc-patrol）：fail 行挂上"哪个项目
+    # 查出的"，统计/SPC 按 x_line_id.name 分组即得"哪个项目不良多"
+    x_line_id = fields.Many2one(
+        'sn.wsd.quality.inspection.line', string='Inspection Item',
+        index=True, copy=False,
+        ondelete='set null',
+    )
     result = fields.Selection(
         [
             ('pending', 'Pending'),
@@ -802,22 +917,47 @@ class QualityInspectionSample(models.Model):
         index=True,
     )
     defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True)
+    # 行数量（add-mes-ipqc-patrol 重构）：扫 SN 行恒为 1 板；无 SN 手工
+    # 行按 qty 记不良数量
+    qty = fields.Integer(string='Qty', default=1, required=True)
     note = fields.Char(string='Notes')
 
-    _sample_serial_uniq = models.Constraint(
-        'unique(inspection_id, internal_serial_id)',
-        'The same serial number can only be sampled once in one inspection.',
+    _sample_serial_defect_uniq = models.Constraint(
+        'unique(inspection_id, serial_identity_id, defect_code_id)',
+        'The same serial number with the same defect code can only be recorded once in one inspection.',
+    )
+    _sample_qty_positive = models.Constraint(
+        'check(qty >= 1)',
+        'Sample quantity must be at least one.',
+    )
+    _sample_serial_qty_one = models.Constraint(
+        'check(serial_identity_id IS NULL OR qty = 1)',
+        'A sample row with a serial number always stands for exactly one board.',
     )
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.quality.inspection.sample') or _('New')
             if not vals.get('company_id') and vals.get('inspection_id'):
                 inspection = self.env['sn.wsd.quality.inspection'].browse(vals['inspection_id']).exists()
                 vals['company_id'] = inspection.company_id.id
         return super().create(vals_list)
+
+    @api.onchange('serial_identity_id')
+    def _onchange_serial_identity_id(self):
+        # 扫码=记不良：SN 填入且尚未判定时自动置 fail（检验员随后挂缺陷码/项目）
+        if self.serial_identity_id and self.result == 'pending':
+            self.result = 'fail'
 
     def action_set_pass(self):
         self.write({'result': 'pass'})
@@ -827,12 +967,63 @@ class QualityInspectionSample(models.Model):
         self.write({'result': 'fail'})
         return True
 
-    @api.constrains('inspection_id', 'company_id', 'internal_serial_id', 'lot_id', 'defect_code_id')
+    @api.constrains('inspection_id', 'company_id', 'serial_identity_id', 'lot_id', 'defect_code_id')
     def _check_sample_company(self):
         for sample in self:
             if sample.inspection_id.company_id != sample.company_id:
                 raise ValidationError(_('The sample must belong to the same company as the inspection.'))
-            related_records = [sample.internal_serial_id, sample.lot_id, sample.defect_code_id]
+            related_records = [sample.serial_identity_id, sample.lot_id, sample.defect_code_id]
             for record in related_records:
                 if record and record.company_id and record.company_id != sample.company_id:
                     raise ValidationError(_('Sample related records must belong to the same company.'))
+
+
+class QualityInspectionSampleValue(models.Model):
+    _name = 'sn.wsd.quality.inspection.sample.value'
+    _description = 'WSD Quality Inspection Sample Value'
+    _order = 'inspection_id, line_id, sequence, id'
+    _check_company_auto = True
+
+    inspection_id = fields.Many2one('sn.wsd.quality.inspection', required=True, ondelete='cascade', check_company=True, index=True)
+    sample_id = fields.Many2one('sn.wsd.quality.inspection.sample', string='Sample', ondelete='cascade', check_company=True, index=True)
+    line_id = fields.Many2one('sn.wsd.quality.inspection.line', string='Inspection Item', required=True, ondelete='cascade', check_company=True, index=True)
+    company_id = fields.Many2one('res.company', related='inspection_id.company_id', store=True, readonly=True)
+    sequence = fields.Integer(default=10)
+    measured_value = fields.Float(string='Measured Value')
+    text_value = fields.Char(string='Text Value')
+    measured_at = fields.Datetime(string='Measured At')
+    result = fields.Selection([('pending', 'Pending'), ('pass', 'Pass'), ('fail', 'Fail')], default='pending', required=True, index=True)
+    error_value = fields.Float(string='Error Value', compute='_compute_value_result', store=True)
+    defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True)
+    note = fields.Char(string='Notes')
+
+    _value_line_uniq = models.Constraint(
+        'unique(inspection_id, sample_id, line_id)',
+        'A sample value can only be recorded once for an inspection item.',
+    )
+
+    @api.depends('measured_value', 'text_value', 'line_id.nominal_value', 'line_id.lower_limit', 'line_id.upper_limit', 'line_id.item_type')
+    def _compute_value_result(self):
+        for value in self:
+            value.error_value = value.measured_value - value.line_id.nominal_value
+            if value.line_id.item_type != 'numeric':
+                continue
+            if not value.measured_value and not value.text_value \
+                    and not value.measured_at:
+                # A row nobody has measured yet holds no figure: judging it
+                # against the limits would read the default 0.0 as a real
+                # measurement and fail the item before the inspector starts.
+                # The recording stamp is what tells an untouched row from a
+                # measured zero, which a PPM item does record, so the row
+                # only stays pending while nothing was ever written on it.
+                value.result = 'pending'
+            elif value.measured_value < value.line_id.lower_limit \
+                    or value.measured_value > value.line_id.upper_limit:
+                value.result = 'fail'
+            else:
+                value.result = 'pass'
+
+    @api.onchange('measured_value', 'text_value')
+    def _onchange_measured_value(self):
+        for value in self:
+            value.measured_at = fields.Datetime.now()

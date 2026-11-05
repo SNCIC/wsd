@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_sn_consumable_info_company" model="ir.rule">
+            <field name="name">Consumable Info Multi-company</field>
+            <field name="model_id" ref="model_sn_consumable_info"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_consumable_record_company" model="ir.rule">
+            <field name="name">Consumable Record Multi-company</field>
+            <field name="model_id" ref="model_sn_consumable_record"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_consumable_template_company" model="ir.rule">
+            <field name="name">Consumable Template Multi-company</field>
+            <field name="model_id" ref="model_sn_consumable_template"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_sn_consumable_type_company" model="ir.rule">
+            <field name="name">Consumable Type Multi-company</field>
+            <field name="model_id" ref="model_sn_consumable_type"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

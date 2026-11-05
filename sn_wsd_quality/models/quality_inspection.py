@@ -1,11 +1,26 @@
 import logging
+from datetime import timedelta
 
 from odoo import Command, api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare
 
+from .oqc_disposition_event import OQC_DISPOSITION_CLOSED_STATES
+
 
 _logger = logging.getLogger(__name__)
+
+SAMPLE_RECORD_MODE_SELECTION = [
+    ('none', 'No Sample Values'),
+    ('per_lot', 'One Value per Lot'),
+    ('per_sample', 'One Value per Sample'),
+]
+
+# Decimals a generated or displayed measurement keeps when the inspection item
+# says nothing: the three-decimal figures items carried before the setting
+# existed. An item measured in whole units is set to 0 instead.
+DEFAULT_DECIMAL_PLACES = 3
+MAX_DECIMAL_PLACES = 6
 
 
 class QualityInspectionScheme(models.Model):
@@ -60,17 +75,15 @@ class QualityInspectionScheme(models.Model):
         index=True,
         copy=False,
     )
-    workcenter_id = fields.Many2one(
-        'mrp.workcenter',
-        string='Work Center',
-        check_company=True,
-        index=True,
-    )
     operation_id = fields.Many2one(
-        'mrp.routing.workcenter',
+        'sn.wsd.operation',
         string='Operation',
         check_company=True,
         index=True,
+        help='Operation scope of the scheme. FAI: the first-article station '
+             'samples must leave with an OK result; IPQC: the patrolled '
+             'operation; OQC: the trigger-point operation. Not used by IQC '
+             '(incoming material has no route).',
     )
     production_line_id = fields.Many2one(
         'sn.mrp.production.line',
@@ -115,6 +128,15 @@ class QualityInspectionScheme(models.Model):
         'The inspection scheme code must be unique per company.',
     )
 
+    @api.constrains('inspection_type', 'operation_id')
+    def _check_operation_scope(self):
+        # QMS §1.1 方案维度=类别/工序/成品；除来料检外必有工序
+        for scheme in self:
+            if scheme.inspection_type != 'iqc' and not scheme.operation_id:
+                raise ValidationError(_(
+                    'Inspection schemes of type %(type)s require an '
+                    'operation.', type=scheme.inspection_type))
+
     @api.constrains('interval_minutes', 'sample_size', 'accept_qty', 'reject_qty')
     def _check_scheme_numbers(self):
         for scheme in self:
@@ -134,6 +156,82 @@ class QualityInspectionScheme(models.Model):
     def action_set_obsolete(self):
         self.write({'state': 'obsolete'})
         return True
+
+    # ------------------------------------------------------------------
+    # 定时巡检引擎（add-mes-ipqc-patrol V1）：活动驱动开单
+    # ------------------------------------------------------------------
+    def _ipqc_patrol_tick(self):
+        """每小时由 ir.cron 调用：对每张生效 ipqc 方案按(产线×工序)判定
+        ——到期（距上次巡检 ≥ 间隔）且自锚点后有产出活动（过站∪报工）
+        才开单；停线/无产出不开；方案未配产线=该工序有活动的产线逐线开。
+        锚点=该(方案,产线)最近一张巡检单的 scheduled_time（open 单在等
+        视为本周期已覆盖，不重复开）。"""
+        Inspection = self.env['sn.wsd.quality.inspection']
+        History = self.env['sn.wsd.serial.operation.history']
+        Report = self.env['sn.wsd.mes.operation.report']
+        now = fields.Datetime.now()
+        created = Inspection
+        for scheme in self.search([
+                ('inspection_type', '=', 'ipqc'),
+                ('state', '=', 'effective'),
+                ('operation_id', '!=', False)]):
+            op = scheme.operation_id
+            interval = timedelta(minutes=scheme.interval_minutes or 60)
+            lines = scheme.production_line_id
+            if not lines:
+                # 该工序近一个间隔内有活动的产线（发现候选线）
+                groups = History._read_group(
+                    [('route_operation_id.operation_id', '=', op.id),
+                     ('out_date', '>', now - interval)],
+                    groupby=['mes_order_id.production_line_id'],
+                    aggregates=['id:count'],
+                )
+                report_groups = Report._read_group(
+                    [('route_operation_id.operation_id', '=', op.id),
+                     ('create_date', '>', now - interval)],
+                    groupby=['mes_order_id.production_line_id'],
+                    aggregates=['id:count'],
+                )
+                line_ids = {g[0].id for g in groups if g[0]}                     | {g[0].id for g in report_groups if g[0]}
+                lines = self.env['sn.mrp.production.line'].browse(line_ids)
+            for line in lines:
+                last = Inspection.search([
+                    ('inspection_type', '=', 'ipqc'),
+                    ('scheme_id', '=', scheme.id),
+                    ('production_line_id', '=', line.id),
+                ], order='scheduled_time desc', limit=1)
+                if last and last.state in ('open', 'in_progress'):
+                    continue  # 有单在等：本周期已覆盖
+                anchor_time = last.scheduled_time if last                     else now - interval
+                if now - anchor_time < interval:
+                    continue  # 未到期
+                activity = History.search_count([
+                    ('route_operation_id.operation_id', '=', op.id),
+                    ('mes_order_id.production_line_id', '=', line.id),
+                    ('out_date', '>', anchor_time),
+                ]) or Report.search_count([
+                    ('route_operation_id.operation_id', '=', op.id),
+                    ('mes_order_id.production_line_id', '=', line.id),
+                    ('create_date', '>', anchor_time),
+                ])
+                if not activity:
+                    continue  # 停线/换线间隙：无产出不开单
+                inspection = Inspection.create_from_scheme(scheme, {
+                    'production_line_id': line.id,
+                    'scheduled_time': now,
+                })
+                inspection.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=(scheme.responsible_user_id
+                             or self.env.user).id,
+                    summary=_('Patrol inspection due'),
+                    note=_('Patrol inspection of %(op)s on line %(line)s '
+                           'is due; sample hint: %(count)s.',
+                           op=op.display_name, line=line.display_name,
+                           count=inspection.sample_size),
+                )
+                created |= inspection
+        return created
 
     def action_set_draft(self):
         self.write({'state': 'draft'})
@@ -262,9 +360,20 @@ class QualityInspectionSchemeLine(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+    )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+    )
     instruction = fields.Text(string='Instruction')
 
     _plan_item_code_uniq = models.Constraint(
@@ -315,9 +424,12 @@ class QualityInspectionSchemeLine(models.Model):
             'required': item.required,
             'lower_limit': item.lower_limit,
             'upper_limit': item.upper_limit,
+            'nominal_value': item.nominal_value,
             'expected_value': item.expected_value,
             'selection_values': item.selection_values,
             'unit': item.unit,
+            'sample_record_mode': item.sample_record_mode,
+            'decimal_places': item.decimal_places,
             'instruction': item.instruction,
         }
 
@@ -364,9 +476,24 @@ class QualityInspectionItem(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+        help='Controls whether this item gets one lot value, one value per sample, or no separate value rows.',
+    )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+        help='Decimals a generated value keeps for this item. An item measured '
+             'in whole units is set to 0 so generated figures stay integral '
+             'and the printed record shows them the same way.',
+    )
     instruction = fields.Text(string='Instruction')
     note = fields.Text(string='Notes')
 
@@ -374,6 +501,13 @@ class QualityInspectionItem(models.Model):
         'unique(company_id, code)',
         'The inspection item code must be unique per company.',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'sample_record_mode' not in vals:
+                vals['sample_record_mode'] = 'per_sample' if vals.get('item_type') == 'numeric' else 'none'
+        return super().create(vals_list)
 
     @api.constrains('item_type', 'lower_limit', 'upper_limit')
     def _check_numeric_limits(self):
@@ -453,9 +587,17 @@ class QualityInspectionItemGroupLine(models.Model):
     required = fields.Boolean(related='item_id.required', string='Required', store=True, readonly=True)
     lower_limit = fields.Float(related='item_id.lower_limit', string='Lower Limit', store=True, readonly=True)
     upper_limit = fields.Float(related='item_id.upper_limit', string='Upper Limit', store=True, readonly=True)
+    nominal_value = fields.Float(related='item_id.nominal_value', string='Nominal Value', store=True, readonly=True)
     expected_value = fields.Char(related='item_id.expected_value', string='Expected Value', store=True, readonly=True)
     selection_values = fields.Char(related='item_id.selection_values', string='Allowed Values', store=True, readonly=True)
     unit = fields.Char(related='item_id.unit', string='Unit', store=True, readonly=True)
+    sample_record_mode = fields.Selection(
+        related='item_id.sample_record_mode', string='Sample Recording', store=True, readonly=True,
+    )
+    decimal_places = fields.Integer(
+        related='item_id.decimal_places', string='Decimal Places',
+        store=True, readonly=True,
+    )
 
     _group_item_uniq = models.Constraint(
         'unique(group_id, item_id)',
@@ -504,6 +646,12 @@ class QualityInspection(models.Model):
         tracking=True,
     )
     scheme_code = fields.Char(string='Scheme Code', related='scheme_id.code', store=True, readonly=True)
+    x_coding_prefix = fields.Char(
+        string='Coding Prefix',
+        compute='_compute_x_coding_prefix',
+        help='Uppercase inspection type (FAI/IQC/IPQC/OQC) rendered as the '
+             'document-number prefix by the coding rule engine.',
+    )
     state = fields.Selection(
         [
             ('open', 'Open'),
@@ -542,6 +690,7 @@ class QualityInspection(models.Model):
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     product_id = fields.Many2one('product.product', string='Product', check_company=True, index=True)
     product_tmpl_id = fields.Many2one(related='product_id.product_tmpl_id', string='Product Template', store=True, readonly=True)
+    material_specification = fields.Char(string='Material Specification', related='product_id.material_specification')
     picking_id = fields.Many2one('stock.picking', string='Transfer', check_company=True, index=True)
     move_line_id = fields.Many2one('stock.move.line', string='Operation Line', check_company=True, index=True)
     lot_id = fields.Many2one('stock.lot', string='Lot/Serial Number', check_company=True, index=True)
@@ -553,8 +702,184 @@ class QualityInspection(models.Model):
     inspector_id = fields.Many2one('res.users', string='Inspector', default=lambda self: self.env.user, tracking=True)
     sample_window_start = fields.Datetime(string='Sample Window Start')
     sample_window_end = fields.Datetime(string='Sample Window End')
-    evidence_travel_id = fields.Many2one('sn.wsd.mes.sn.travel', string='Evidence Travel', check_company=True)
-    evidence_internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Evidence SN', check_company=True)
+    evidence_serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='Evidence SN', check_company=True, index=True,
+    )
+    # FAI 样本清单（add-mes-fai）：投入登记的样本 SN / 其中过首件工序出站
+    # OK 的样本；NG/报废出站的样本从清单剔除释放名额（维修回流不回补）
+    x_fai_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_serial_rel',
+        'inspection_id', 'serial_id', string='FAI Samples',
+        help='Serial numbers registered as first-article samples for this '
+             'round (fed in at the start operation while quota is open).',
+    )
+    x_fai_arrived_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_arrived_rel',
+        'inspection_id', 'serial_id', string='FAI Arrived Samples',
+        help='Samples that already left the first-article operation with an '
+             'OK result and wait for the inspector.',
+    )
+    x_fai_removed_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_quality_inspection_fai_removed_rel',
+        'inspection_id', 'serial_id', string='FAI Removed Samples',
+        help='Samples dropped from this round after an NG/scrap leave at '
+             'the first-article operation. Reworked boards never re-enter '
+             'the sample list (first articles must be untouched boards); '
+             'the quota they released is refilled by fresh feeds only.',
+    )
+    # OQC 样本台账（oqc-entry-trigger 决策 3/5）：复用 FAI 的逐板字段族，
+    # NG/报废出站的样本与 FAI 刻意分叉——不剔除、不释放名额（补位会一直
+    # 抽到凑满良品、AQL 缺陷计数 d 失真），记入此名单参与 d 与到检判定
+    x_oqc_ng_serial_ids = fields.Many2many(
+        'sn.wsd.serial.identity', 'sn_wsd_quality_inspection_oqc_ng_rel',
+        'inspection_id', 'serial_identity_id', string='OQC NG Samples',
+        copy=False,
+        help='Samples that left the outgoing operation with an NG or scrap '
+             'result. Unlike FAI they keep their slot: refilling would '
+             'distort the AQL defect count, so they stay in the sample '
+             'list and count towards the defect quantity.',
+    )
+    # FAI 逐板检验视图（fai-matrix-form 界面重构）：扫码切换当前板
+    # （过站）/ 扫不良板落行（报工）；数量三件套存储留档
+    x_fai_current_sn = fields.Many2one(
+        'sn.wsd.serial.identity', string='Inspecting SN', copy=False,
+        help='Board currently shown in the inspection tab (switched by '
+             'scanning or picking a product from the history tab).',
+    )
+    x_fai_scan = fields.Char(
+        string='Scan SN', copy=False,
+        help='Scan a board SN: station mode switches the inspected board, '
+             'report mode records a defective board.',
+    )
+    x_fai_ok_qty = fields.Integer(
+        string='OK Qty', compute='_compute_x_fai_counts', store=True,
+        help='Picked products that passed this first-article round.',
+    )
+    x_fai_ng_qty = fields.Integer(
+        string='NG Qty', compute='_compute_x_fai_counts', store=True,
+        help='Picked products found defective this first-article round.',
+    )
+
+    @api.depends(
+        'inspection_type', 'sample_size', 'mes_order_id.x_manage_mode',
+        'cell_ids.result', 'cell_ids.serial_identity_id',
+        'sample_ids.result', 'sample_ids.x_line_id',
+        'x_oqc_ng_serial_ids', 'x_full_inspection',
+        # 处置结案（retest/scrap/concession 事件）改变当前有效不良集
+        'x_oqc_disposition_event_ids',
+        # 台账口径：合格数聚合过站历史，历史行落定即重算
+        'mes_order_id.x_mes_route_id.operation_ids.serial_history_ids.result',
+    )
+    def _compute_x_fai_counts(self):
+        # 逐板检验计数（决策 5）：FAI/OQC 共用同一套字段与口径
+        for inspection in self:
+            if inspection.inspection_type not in ('fai', 'oqc'):
+                inspection.x_fai_ok_qty = 0
+                inspection.x_fai_ng_qty = 0
+                continue
+            if inspection.mes_order_id.x_manage_mode == 'report':
+                ng = len(inspection.sample_ids.filtered(lambda s: s.result == 'fail'))
+            elif inspection.inspection_type == 'oqc':
+                # OQC 过站矩阵：不良 = fail 格的样本 SN 去重 ∪ NG 出站名单
+                ng = len(inspection._oqc_bad_serial_ids())
+            else:
+                fail_cells = inspection.cell_ids.filtered(lambda c: c.result == 'fail')
+                ng = len(set(fail_cells.mapped('serial_identity_id').ids))
+            inspection.x_fai_ng_qty = ng
+            if inspection.x_full_inspection:
+                # 台账口径（oqc-full-lot-form）：合格板不铺格，合格数 =
+                # OQC 工序 OK 出站台数（过站历史），与样本量无关
+                history = inspection.mes_order_id.x_mes_route_id.operation_ids
+                oqc_op = history.filtered(
+                    lambda r: r.operation_id
+                    == inspection.scheme_id.operation_id)
+                ok = self.env['sn.wsd.serial.operation.history']\
+                    .search_count([
+                        ('mes_order_id', '=', inspection.mes_order_id.id),
+                        ('route_operation_id', 'in', oqc_op.ids),
+                        ('result', '=', 'ok'),
+                    ]) if oqc_op else 0
+                inspection.x_fai_ok_qty = ok
+            else:
+                inspection.x_fai_ok_qty = max(
+                    0, (inspection.sample_size or 0) - ng)
+
+    @api.onchange('x_fai_scan')
+    def _onchange_x_fai_scan(self):
+        # 扫码=异常驱动的入口：过站切换当前检验板；报工记不良板
+        # （FAI/OQC 共用，决策 5）
+        code = (self.x_fai_scan or '').strip()
+        self.x_fai_scan = False
+        if not code or self.inspection_type not in ('fai', 'oqc') or not self.mes_order_id:
+            return
+        serial = self.env['sn.wsd.serial.identity'].search(
+            [('name', '=', code)], limit=1)
+        # id 比较：onchange 的虚拟记录上 m2m 成员是 NewId(origin)，
+        # 与 browse 出的记录直接做 `in` 身份比较恒为 False
+        if self.mes_order_id.x_manage_mode == 'report':
+            if not serial:
+                raise UserError(_('Unknown serial number "%s": defective '
+                                  'boards must carry a registered SN.', code))
+            if serial.id in self.sample_ids.serial_identity_id.ids:
+                raise UserError(_('%s is already recorded as defective.', code))
+            self.sample_ids = [Command.create({
+                'serial_identity_id': serial.id,
+                'result': 'fail',
+            })]
+        elif self.inspection_type == 'oqc':
+            # OQC 合法域（oqc-disposition-closure 任务 7.2）：过站矩阵单 =
+            # 本单原抽样板 ∪ 本单已登记异常板（_oqc_known_serials）——
+            # 全检新 NG 不加名单即可扫入集中处置；其余（报工/手工单）仍
+            # 只认本轮样本。非法 SN（其他制令单/未登记/跨公司）同一句
+            # 拒绝文案，不泄露范围外信息，也不改当前选择
+            origin = self._origin
+            if origin and origin._oqc_station_mode():
+                legal = origin._oqc_known_serials()
+            else:
+                legal = self.x_fai_serial_ids
+            if not serial or serial.id not in legal.ids:
+                raise UserError(_(
+                    'SN %s is not part of inspection %s.', code,
+                    origin.name if origin else self.name or ''))
+            self.x_fai_current_sn = serial.id
+        else:
+            if not serial or serial.id not in self.x_fai_arrived_serial_ids.ids:
+                raise UserError(_(
+                    '"%s" is not one of this round\'s picked products '
+                    '(boards must reach the first-article operation first).', code))
+            self.x_fai_current_sn = serial.id
+
+    def _oqc_station_mode(self):
+        """OQC 过站矩阵模式的判别式：挂在制令单上且非报工模式。
+        闸门/矩阵展开/d 口径只认"有制令单的过站单"；手工建的无制令单
+        OQC 单不进新状态机，保持单据级清单行为（决策 6）。"""
+        self.ensure_one()
+        return bool(
+            self.inspection_type == 'oqc'
+            and self.mes_order_id
+            and self.mes_order_id.x_manage_mode != 'report'
+        )
+
+    def _oqc_bad_serial_ids(self):
+        """OQC 当前有效不良集（oqc-disposition-closure 任务 2.2 d 重算
+        口径）：NG 名单 ∪ fail 格 ∪ 带 SN 缺陷行 ∪ 本站 NG/报废过站事实，
+        去掉最新处置状态已结（retest_passed/scrapped/concession）的 SN；
+        无事件的 NG 事实保守留在集内。同板多源只计 1（集合去重）；首次
+        事实与历次判定由处置事件历史保留，此处只回答"当前还有效吗"。"""
+        self.ensure_one()
+        serials = self.x_oqc_ng_serial_ids
+        serials |= self.cell_ids.filtered(
+            lambda c: c.result == 'fail').mapped('serial_identity_id')
+        serials |= self.defect_line_ids.mapped('serial_identity_id')
+        serials |= self._oqc_ng_fact_serials()
+        if serials:
+            dispositions = self._oqc_current_dispositions(serials)
+            closed = {sid for sid, info in dispositions.items()
+                      if info.get('state') in OQC_DISPOSITION_CLOSED_STATES}
+            serials = serials.filtered(
+                lambda s: s.id not in closed)
+        return serials
+
     sample_size = fields.Integer(string='Sample Size', default=1)
     inspected_qty = fields.Integer(string='Inspected Qty', compute='_compute_inspection_counts', store=True)
     defect_qty = fields.Integer(string='Defect Qty', compute='_compute_inspection_counts', store=True)
@@ -562,6 +887,8 @@ class QualityInspection(models.Model):
     reject_qty = fields.Integer(string='Reject Qty', default=1)
     line_ids = fields.One2many('sn.wsd.quality.inspection.line', 'inspection_id', string='Inspection Items')
     defect_line_ids = fields.One2many('sn.wsd.quality.inspection.defect.line', 'inspection_id', string='Defect Lines')
+    # FAI 检验矩阵（add-mes-fai-matrix）：样本 × 检验项的结果格
+    cell_ids = fields.One2many('sn.wsd.quality.inspection.cell', 'inspection_id', string='Result Cells')
     attachment_ids = fields.Many2many(
         'ir.attachment',
         'sn_wsd_quality_inspection_attachment_rel',
@@ -570,6 +897,11 @@ class QualityInspection(models.Model):
         string='Attachments',
     )
     note = fields.Text(string='Notes')
+
+    @api.depends('inspection_type')
+    def _compute_x_coding_prefix(self):
+        for inspection in self:
+            inspection.x_coding_prefix = (inspection.inspection_type or '').upper()
 
     @api.depends('state', 'line_ids.result', 'defect_line_ids.defect_qty', 'sample_size', 'accept_qty', 'reject_qty')
     def _compute_result(self):
@@ -596,26 +928,105 @@ class QualityInspection(models.Model):
                 elif inspection.defect_qty <= inspection.accept_qty:
                     inspection.result = 'pass'
 
-    @api.depends('line_ids.result', 'defect_line_ids.defect_qty')
+    @api.depends('line_ids.result', 'defect_line_ids.defect_qty',
+                 'defect_line_ids.serial_identity_id',
+                 'cell_ids.result', 'cell_ids.serial_identity_id',
+                 'x_oqc_ng_serial_ids', 'x_oqc_disposition_event_ids')
     def _compute_inspection_counts(self):
         for inspection in self:
             inspection.inspected_qty = len(inspection.line_ids.filtered(lambda line: line.result not in ('pending', 'na')))
-            inspection.defect_qty = sum(inspection.defect_line_ids.mapped('defect_qty')) + len(
-                inspection.line_ids.filtered(lambda line: line.result == 'fail')
-            )
+            if inspection._oqc_station_mode():
+                # OQC 过站矩阵（任务 2.2）：d = 当前有效不良 SN 去重台数
+                # （NG 名单/fail 格/带 SN 缺陷行/NG 事实，已结处置剔除，
+                # 同板多源只计 1）+ 无 SN 缺陷行的数量合计；报工模式保持
+                # 现状口径（缺陷行 + fail 项目行）
+                inspection.defect_qty = sum(
+                    line.defect_qty for line in inspection.defect_line_ids
+                    if not line.serial_identity_id
+                ) + len(inspection._oqc_bad_serial_ids())
+            else:
+                inspection.defect_qty = sum(inspection.defect_line_ids.mapped('defect_qty')) + len(
+                    inspection.line_ids.filtered(lambda line: line.result == 'fail')
+                )
+
+    x_patrol_operation_id = fields.Many2one(
+        related='scheme_id.operation_id', string='Patrol Operation',
+        store=True, readonly=True, index=True,
+        help='Operation the patrol scheme watches (from the scheme).',
+    )
+    # 巡检实际抽取数（add-mes-ipqc-patrol 重构）：异常驱动录入下无不良
+    # 零录入，已检样本数以此为准（预填方案样本量提示，检验员可改）
+    x_picked_qty = fields.Integer(
+        string='Picked Qty', copy=False,
+        help='How many boards the inspector actually picked for this patrol. '
+             'Defaults to the scheme sample size hint and stays editable.',
+    )
+    # 巡检历史页签：同产线×同巡检工序的过往巡检单（只读趋势视图）
+    x_ipqc_history_ids = fields.Many2many(
+        'sn.wsd.quality.inspection', string='Recent Inspections',
+        compute='_compute_x_ipqc_history',
+        help='Previous patrol inspections of the same production line and '
+             'operation, newest first.',
+    )
+
+    @api.depends('inspection_type', 'company_id', 'production_line_id',
+                 'x_patrol_operation_id')
+    def _compute_x_ipqc_history(self):
+        for inspection in self:
+            inspection.x_ipqc_history_ids = False
+            if inspection.inspection_type != 'ipqc':
+                continue
+            inspection.x_ipqc_history_ids = self.search([
+                ('inspection_type', '=', 'ipqc'),
+                ('company_id', '=', inspection.company_id.id),
+                ('production_line_id', '=', inspection.production_line_id.id),
+                ('x_patrol_operation_id', '=',
+                 inspection.x_patrol_operation_id.id),
+                ('id', '!=', inspection.id),
+            ], order='scheduled_time desc, id desc', limit=15)
+
+    @api.onchange('scheme_id')
+    def _onchange_scheme_id(self):
+        # 手动开单（add-mes-ipqc-patrol V0）：选方案即带模板行快照与样本量，
+        # 与 create_from_scheme 同口径（cron 开单不走此处）
+        if self.scheme_id:
+            self.line_ids = self._line_commands_from_scheme(self.scheme_id)
+            self.sample_size = self.scheme_id.sample_size
+            self.x_picked_qty = self.scheme_id.sample_size
+            if self.inspection_type == 'fai':
+                # FAI 检验项默认合格：选方案展开快照即预填，只改异常项
+                self.line_ids._set_pass_values()
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
-                inspection_type = vals.get('inspection_type') or 'quality'
-                vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the per-type legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                else:
+                    inspection_type = vals.get('inspection_type') or 'quality'
+                    vals['name'] = self.env['ir.sequence'].next_by_code(f'sn.wsd.quality.inspection.{inspection_type}') or _('New')
+            if not vals.get('model_code'):
+                # The part model printed on the record is the product's own
+                # specification unless the caller states one (a manufacturing
+                # order carries the meter model instead), so an inspection
+                # taken from a transfer needs no retyping.
+                product = self.env['product.product'].browse(
+                    vals.get('product_id')).exists()
+                if product:
+                    vals['model_code'] = product.material_specification or ''
             if not vals.get('mes_order_id'):
-                travel = self.env['sn.wsd.mes.sn.travel'].browse(vals.get('evidence_travel_id')).exists() if vals.get('evidence_travel_id') else self.env['sn.wsd.mes.sn.travel']
-                serial = self.env['sn.wsd.internal.serial'].browse(vals.get('evidence_internal_serial_id')).exists() if vals.get('evidence_internal_serial_id') else travel.internal_serial_id
-                workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else travel.route_operation_id
-                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else travel.production_id or (workorder.mes_order_id.production_id if workorder else False)
-                mes_order = serial.mes_order_id or travel.mes_order_id or (workorder.mes_order_id if workorder else False) or production.x_mes_order_id
+                workorder = self.env['sn.wsd.mes.order.route.operation'].browse(vals.get('route_operation_id')).exists() if vals.get('route_operation_id') else self.env['sn.wsd.mes.order.route.operation']
+                production = self.env['mrp.production'].browse(vals.get('production_id')).exists() if vals.get('production_id') else (workorder.mes_order_id.production_id if workorder else False)
+                mes_order = (
+                    (workorder.mes_order_id if workorder else False)
+                    or (production.x_mes_order_id if production else False)
+                )
                 if mes_order:
                     vals['mes_order_id'] = mes_order.id
         return super().create(vals_list)
@@ -640,8 +1051,6 @@ class QualityInspection(models.Model):
         for scheme in candidates:
             if not scheme._matches_product_scope(product):
                 continue
-            if scheme.workcenter_id and route_operation and scheme.workcenter_id != route_operation.workcenter_id:
-                continue
             if scheme.operation_id and route_operation and scheme.operation_id != route_operation.operation_id:
                 continue
             if scheme.production_line_id:
@@ -657,7 +1066,6 @@ class QualityInspection(models.Model):
             return max(matched_schemes, key=lambda scheme: (
                 scheme._product_scope_score(product),
                 4 if scheme.operation_id else 0,
-                2 if scheme.workcenter_id else 0,
                 1 if scheme.production_line_id else 0,
                 -scheme.id,
             ))
@@ -674,9 +1082,11 @@ class QualityInspection(models.Model):
                 'required': line.required,
                 'lower_limit': line.lower_limit,
                 'upper_limit': line.upper_limit,
+                'nominal_value': line.nominal_value,
                 'expected_value': line.expected_value,
                 'selection_values': line.selection_values,
                 'unit': line.unit,
+                'sample_record_mode': line.sample_record_mode,
                 'instruction': line.instruction,
             })
             for line in scheme.line_ids
@@ -707,9 +1117,27 @@ class QualityInspection(models.Model):
         })
         return True
 
+    def _is_sample_matrix_inspection(self):
+        """Whether the samples ride on the sample × item result cells.
+
+        Station-mode FAI/OQC record one cell per sample and item; report-mode
+        (and manually created) inspections keep the document-level lines with
+        the measurements of the incoming record instead.
+        """
+        self.ensure_one()
+        return bool(
+            self.inspection_type in ('fai', 'oqc')
+            and self.mes_order_id
+            and self.mes_order_id.x_manage_mode != 'report')
+
     def action_set_all_pass(self):
         for inspection in self:
-            inspection.line_ids._set_pass_values()
+            if inspection._is_sample_matrix_inspection():
+                # Station-mode FAI/OQC: every cell goes pass, the item results
+                # follow their cells.
+                inspection.cell_ids._set_pass_values()
+            else:
+                inspection.line_ids._set_pass_values()
         return True
 
     def action_batch_set_pass(self):
@@ -725,7 +1153,12 @@ class QualityInspection(models.Model):
             missing = inspection.line_ids.filtered(lambda line: line.required and line.result == 'pending')
             if missing:
                 raise UserError(_('Complete all required inspection items before finishing the inspection.'))
-            if inspection.inspection_type == 'oqc' and inspection.inspected_qty < inspection.sample_size:
+            # 完检齐套口径按模式分叉：过站矩阵模式的样本台账在 m2m 字段
+            # 上（到检 ∪ NG ≥ n，由 mes_order_oqc 的 action_done 校验），
+            # 单据级 inspected_qty 只对非矩阵（含报工/手工）OQC 生效
+            if inspection.inspection_type == 'oqc' \
+                    and not inspection._oqc_station_mode() \
+                    and inspection.inspected_qty < inspection.sample_size:
                 raise UserError(_('The OQC sample inspection is not complete.'))
             if inspection.inspection_type == 'oqc' and inspection.defect_line_ids.filtered(lambda line: not line.defect_code_id):
                 raise UserError(_('Defect code is required on every OQC defect line.'))
@@ -766,19 +1199,18 @@ class QualityInspection(models.Model):
                 ('company_id', '=', inspection.company_id.id),
             ], order='severity desc, id asc', limit=1)
             serial_defects = []
-            for defect_line in inspection.defect_line_ids.filtered('internal_serial_id'):
-                serial_defects.append((defect_line.internal_serial_id, defect_line.defect_code_id or default_defect_code))
-            header_serials = inspection.evidence_internal_serial_id
-            for serial in header_serials:
-                serial_defects.append((serial, default_defect_code))
-            for serial, defect_code in serial_defects:
-                serial.x_quality_hold_state = 'hold'
+            for defect_line in inspection.defect_line_ids.filtered('serial_identity_id'):
+                serial_defects.append((defect_line.serial_identity_id, defect_line.defect_code_id or default_defect_code))
+            if inspection.evidence_serial_identity_id:
+                serial_defects.append((inspection.evidence_serial_identity_id, default_defect_code))
+            for identity, defect_code in serial_defects:
+                identity.x_quality_hold_state = 'hold'
                 if defect_code and not issue_model.search([
-                    ('internal_serial_id', '=', serial.id),
+                    ('serial_identity_id', '=', identity.id),
                     ('inspection_id', '=', inspection.id),
                 ], limit=1):
                     issue_model.create({
-                        'internal_serial_id': serial.id,
+                        'serial_identity_id': identity.id,
                         'route_operation_id': inspection.route_operation_id.id,
                         'workcenter_id': inspection.workcenter_id.id,
                         'defect_code_id': defect_code.id,
@@ -788,6 +1220,41 @@ class QualityInspection(models.Model):
                         'inspection_id': inspection.id,
                         'note': inspection.name,
                     })
+
+    def _fai_expand_result_cells(self):
+        # 投入逐台展开矩阵：每个样本 SN × 每个检验项补缺失的结果格（幂等）。
+        # 检验在首件工序阶段进行（板在制时即可检），判定放行后下道才拉板；
+        # FAI/OQC 共用（决策 4/5）：OQC 走同一条展开链
+        Cell = self.env['sn.wsd.quality.inspection.cell']
+        for inspection in self:
+            if inspection.inspection_type not in ('fai', 'oqc'):
+                continue
+            if not inspection.mes_order_id or inspection.mes_order_id.x_manage_mode == 'report':
+                continue  # 报工模式无 SN：保持单据级结果，不展开矩阵
+            existing = {
+                (cell.serial_identity_id.id, cell.line_id.id)
+                for cell in inspection.cell_ids
+            }
+            cell_values = [
+                {
+                    'inspection_id': inspection.id,
+                    'company_id': inspection.company_id.id,
+                    'serial_identity_id': serial.id,
+                    'line_id': line.id,
+                }
+                for serial in inspection.x_fai_serial_ids
+                for line in inspection.line_ids
+                if (serial.id, line.id) not in existing
+            ]
+            if cell_values:
+                cells = Cell.create(cell_values)
+                # 检验项默认都是 OK：展开即预填合格值（数值=区间中值/
+                # 文本=期望值/判定式=manual pass），检验员只改异常格。
+                # 静音通用格钩子（oqc-disposition-closure 任务 1.5）：
+                # 程序化铺格不是人工编辑，不落 result_edit 事件
+                cells.with_context(
+                    sn_wsd_oqc_cell_silent=True)._set_pass_values()
+        return True
 
     @api.model
     def create_fai_for_production(self, production):
@@ -816,75 +1283,73 @@ class QualityInspection(models.Model):
         })
 
     @api.model
-    def _is_ok_travel_for_auto_inspection(self, travel):
-        return bool(travel.result == 'pass' or travel.event_type in ('pass', 'complete') and not travel.result)
+    def _single_lot_from_move_lines(self, move_lines):
+        """Lot the incoming material carries, when it is unambiguous.
+
+        The lines of one product on a transfer usually share a single lot; the
+        inspection copies it so the printed record carries the batch without
+        anyone retyping it. Several lots stay for the inspector to pick.
+        """
+        lots = move_lines.mapped('lot_id')
+        return lots if len(lots) == 1 else self.env['stock.lot']
 
     @api.model
-    def create_auto_inspections_for_travel(self, travel):
-        if not travel or not self._is_ok_travel_for_auto_inspection(travel):
-            return self.env['sn.wsd.quality.inspection']
-        inspections = self.env['sn.wsd.quality.inspection']
-        for inspection_type in ('fai', 'ipqc', 'oqc'):
-            inspections |= self.create_for_travel(inspection_type, travel)
-        return inspections
+    def _iqc_source_move_lines(self, move_lines, product):
+        """Lines carrying the incoming batch of a transfer.
+
+        The batch the receiving flow recorded may sit on the quality-control
+        transfer or on the receipt that fed it: both are read back so the
+        inspection quotes the batch the goods actually arrived with.
+        """
+        upstream = move_lines.move_id.move_orig_ids.picking_id.move_line_ids
+        return move_lines | upstream.filtered(
+            lambda line: line.product_id == product)
 
     @api.model
-    def create_for_travel(self, inspection_type, travel):
-        if not travel or not travel.route_operation_id or not travel.production_id:
-            return self.env['sn.wsd.quality.inspection']
-        product = travel.product_id or travel.route_operation_id.product_id or travel.production_id.product_id
-        scheme = self._find_scheme(
-            inspection_type,
-            product=product,
-            route_operation=travel.route_operation_id,
-            production=travel.production_id,
-        )
-        if not scheme:
-            return self.env['sn.wsd.quality.inspection']
-        existing_domain = [
-            ('inspection_type', '=', inspection_type),
-            ('scheme_id', '=', scheme.id),
-            ('evidence_travel_id', '=', travel.id),
-        ]
-        existing = self.search(existing_domain, limit=1)
-        if existing:
-            return existing
-        if inspection_type == 'fai':
-            existing = self.search([
-                ('inspection_type', '=', 'fai'),
-                ('scheme_id', '=', scheme.id),
-                ('production_id', '=', travel.production_id.id),
-                ('state', '!=', 'skipped'),
-            ], limit=1)
-            if existing:
-                return existing
-        route_operation = travel.route_operation_id
-        production = travel.production_id
-        production_line = travel.production_line_id or route_operation.mes_order_id.production_line_id or production.x_production_line_id
-        workcenter = travel.workcenter_id or route_operation.workcenter_id
-        return self.create_from_scheme(scheme, {
-            'production_id': production.id,
-            'route_operation_id': route_operation.id,
-            'workcenter_id': workcenter.id if workcenter else False,
-            'production_line_id': production_line.id if production_line else False,
-            'product_id': product.id if product else False,
-            'area_sn': production_line.code if production_line else False,
-            'model_code': production.x_meter_model or product.default_code if product else False,
-            'scheduled_time': travel.event_time or fields.Datetime.now(),
-            'sample_window_start': travel.event_time,
-            'sample_window_end': travel.event_time,
-            'evidence_travel_id': travel.id,
-            'evidence_internal_serial_id': travel.internal_serial_id.id,
+    def _iqc_lot_from_move_lines(self, move_lines, product):
+        """Lot of the incoming batch, numbered when the transfer carries none.
+
+        The lot the receiving flow labelled rides along on the transfer lines.
+        A receipt without one still gets a numbered batch for the inspection,
+        out of the stock.lot coding rule (see the quality coding seeder), so
+        the printed record always has a batch to quote.
+        """
+        lot = self._single_lot_from_move_lines(move_lines)
+        if lot or not product:
+            return lot
+        lot_model = self.env['stock.lot']
+        company = product.company_id or self.env.company
+        proxy = lot_model.new({
+            'name': '/',
+            'product_id': product.id,
+            'company_id': company.id,
+        })
+        rule = self.env['sn.code.rule']._find_rule(proxy)
+        if not rule:
+            return lot_model
+        supplier_batch = next(
+            (line.supplier_batch_no for line
+             in self._iqc_source_move_lines(move_lines, product)
+             if line.supplier_batch_no), '')
+        return lot_model.create({
+            'name': rule.render(proxy),
+            'product_id': product.id,
+            'company_id': company.id,
+            'supplier_batch_no': supplier_batch,
         })
 
     @api.model
     def create_iqc_for_move_line(self, move_line):
         if not move_line or not move_line.picking_id:
             return self.browse()
+        # On a quality-control transfer the goods are still in the input
+        # location: the operation line usually carries no done quantity yet,
+        # so fall back on the move demand to size the inspection lot.
         return self.create_iqc_for_picking_product(
             move_line.picking_id,
             move_line.product_id,
-            move_line=move_line,
+            move=move_line.move_id,
+            move_line=move_line if move_line.quantity_product_uom > 0 else False,
         )
 
     @api.model
@@ -922,40 +1387,22 @@ class QualityInspection(models.Model):
         else:
             lot_qty = 0
 
+        move_lines = move_line or self.env['stock.move.line']
+        if not move_lines and move:
+            move_lines = move.move_line_ids
+
         return self.create_from_scheme(scheme, {
             'picking_id': picking.id,
+            'move_line_id': move_line.id if move_line else False,
             'product_id': product.id,
+            'lot_id': self._iqc_lot_from_move_lines(move_lines, product).id,
             'lot_qty': lot_qty,
             'scheduled_time': picking.scheduled_date,
         })
 
     @api.model
-    def create_oqc_for_route_operation(self, route_operation):
-        product = route_operation.mes_order_id.product_id
-        scheme = self._find_scheme('oqc', product=product, route_operation=route_operation, production=route_operation.mes_order_id.production_id)
-        if not scheme:
-            raise UserError(_('No effective OQC inspection scheme was found for this route operation.'))
-        existing = self.search([
-            ('inspection_type', '=', 'oqc'),
-            ('route_operation_id', '=', route_operation.id),
-            ('state', 'in', ('open', 'in_progress')),
-        ], limit=1)
-        if existing:
-            return existing
-        return self.create_from_scheme(scheme, {
-            'production_id': route_operation.mes_order_id.production_id.id,
-            'route_operation_id': route_operation.id,
-            'workcenter_id': route_operation.workcenter_id.id,
-            'production_line_id': route_operation.mes_order_id.production_line_id.id,
-            'product_id': product.id,
-            'area_sn': route_operation.mes_order_id.production_line_id.code,
-            'model_code': route_operation.mes_order_id.production_id.x_meter_model or product.default_code,
-            'scheduled_time': fields.Datetime.now(),
-        })
-
-    @api.model
     def cron_generate_ipqc_inspections(self):
-        _logger.info('IPQC cron generation is disabled; inspections are generated from OK MES travel events.')
+        _logger.info('IPQC cron generation is disabled.')
         return True
 
 
@@ -996,9 +1443,20 @@ class QualityInspectionLine(models.Model):
     required = fields.Boolean(string='Required', default=True)
     lower_limit = fields.Float(string='Lower Limit')
     upper_limit = fields.Float(string='Upper Limit')
+    nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
+    sample_record_mode = fields.Selection(
+        SAMPLE_RECORD_MODE_SELECTION,
+        string='Sample Recording',
+        default='none',
+        required=True,
+    )
+    decimal_places = fields.Integer(
+        string='Decimal Places',
+        default=DEFAULT_DECIMAL_PLACES,
+    )
     instruction = fields.Text(string='Instruction')
     is_checked = fields.Boolean(string='Checked')
     measured_value = fields.Float(string='Measured Value')
@@ -1034,6 +1492,8 @@ class QualityInspectionLine(models.Model):
         string='Attachments',
     )
     note = fields.Char(string='Notes')
+    # FAI 检验矩阵：该项目行下的样本结果格
+    cell_ids = fields.One2many('sn.wsd.quality.inspection.cell', 'line_id', string='Result Cells')
 
     def _set_pass_values(self):
         for line in self:
@@ -1048,10 +1508,16 @@ class QualityInspectionLine(models.Model):
             line.write(vals)
         return True
 
+    def _get_value_digits(self):
+        """Decimals the measurements of this item are written with."""
+        self.ensure_one()
+        return max(0, min(MAX_DECIMAL_PLACES, self.decimal_places))
+
     def _get_pass_numeric_value(self):
         self.ensure_one()
         if float_compare(self.lower_limit, self.upper_limit, precision_rounding=0.0001) <= 0:
-            return (self.lower_limit + self.upper_limit) / 2.0
+            return round((self.lower_limit + self.upper_limit) / 2.0,
+                         self._get_value_digits())
         return self.measured_value
 
     def _get_pass_text_value(self):
@@ -1061,26 +1527,183 @@ class QualityInspectionLine(models.Model):
             return allowed[0] if allowed else (self.text_value or self.expected_value)
         return self.expected_value or self.text_value
 
-    @api.depends('item_type', 'is_checked', 'measured_value', 'lower_limit', 'upper_limit', 'text_value', 'expected_value', 'manual_result')
+    @api.model
+    def _judge_item_value(self, item_type, measured=0.0, text='', expected='',
+                          allowed='', lower=0.0, upper=0.0, manual=False):
+        """判定口径（FAI 检验矩阵抽取）：单据级 line 与样本级 cell 共用，
+        只做纯值判定；line._compute_result 的行为与抽取前完全等价。
+        显式人工判定优先于值判定：na（报废处置）与 fail（NG 落格/
+        人工判退）对任何项型生效——pass 不优先，预填的合格值不遮蔽
+        后续改坏的测量/文本值。"""
+        if manual in ('na', 'fail'):
+            return manual
+        if item_type == 'numeric':
+            if float_compare(measured, lower, precision_rounding=0.0001) < 0:
+                return 'fail'
+            if float_compare(measured, upper, precision_rounding=0.0001) > 0:
+                return 'fail'
+            return 'pass'
+        if item_type == 'selection':
+            values = [value.strip() for value in (allowed or '').split(',') if value.strip()]
+            return 'pass' if not values or text in values else 'fail'
+        if item_type == 'text':
+            return 'pass' if not expected or text == expected else 'fail'
+        return manual or 'pending'
+
+    @api.depends('item_type', 'is_checked', 'measured_value', 'lower_limit', 'upper_limit',
+                 'text_value', 'expected_value', 'manual_result', 'cell_ids.result',
+                 'inspection_id.sample_ids.result', 'inspection_id.sample_ids.x_line_id')
     def _compute_result(self):
         for line in self:
+            if line.inspection_id.inspection_type in ('fai', 'oqc') \
+                    and line.inspection_id.mes_order_id \
+                    and line.inspection_id.mes_order_id.x_manage_mode != 'report':
+                # 过站 FAI/OQC 矩阵（决策 4）：行结果由结果格派生（任一格
+                # fail 即 fail；报废板的 na 格不拖累——口径同单据级聚合，
+                # 报废处置置 na 后其余 pass 即行 pass）
+                results = set(line.cell_ids.mapped('result'))
+                if 'fail' in results:
+                    line.result = 'fail'
+                elif line.cell_ids and results <= {'pass', 'na'}:
+                    line.result = 'pass'
+                else:
+                    line.result = 'pending'
+                continue
+            if line.inspection_id.inspection_type == 'fai' \
+                    and line.inspection_id.sample_ids.filtered(
+                        lambda s: s.result == 'fail' and s.x_line_id == line):
+                # 报工 FAI：扫过不良板的项目行自动判 fail（快照默认合格，
+                # 检验员只扫不良板，行结果随不良行翻转）
+                line.result = 'fail'
+                continue
             if not line.is_checked:
                 line.result = 'pending'
                 continue
+            line.result = self._judge_item_value(
+                line.item_type,
+                measured=line.measured_value,
+                text=line.text_value,
+                expected=line.expected_value,
+                allowed=line.selection_values,
+                lower=line.lower_limit,
+                upper=line.upper_limit,
+                manual=line.manual_result,
+            )
+
+
+class QualityInspectionCell(models.Model):
+    """FAI 检验矩阵结果格（add-mes-fai-matrix）：样本 × 检验项一格，
+    过站模式齐套后自动展开；判定口径与 line 共用 _judge_item_value。"""
+
+    _name = 'sn.wsd.quality.inspection.cell'
+    _description = 'WSD Quality Inspection Result Cell'
+    _order = 'inspection_id, serial_identity_id, line_id, id'
+    _check_company_auto = True
+
+    inspection_id = fields.Many2one(
+        'sn.wsd.quality.inspection',
+        string='Inspection',
+        required=True,
+        ondelete='cascade',
+        check_company=True,
+        index=True,
+    )
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        index=True,
+    )
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity',
+        string='SN',
+        required=True,
+        check_company=True,
+        index=True,
+    )
+    line_id = fields.Many2one(
+        'sn.wsd.quality.inspection.line',
+        string='Inspection Item',
+        required=True,
+        ondelete='cascade',
+        check_company=True,
+        index=True,
+    )
+    measured_value = fields.Float(string='Measured Value')
+    text_value = fields.Char(string='Text Value')
+    manual_result = fields.Selection(
+        [
+            ('pending', 'Pending'),
+            ('pass', 'Pass'),
+            ('fail', 'Fail'),
+            ('na', 'N/A'),
+        ],
+        string='Manual Result',
+        default='pending',
+    )
+    result = fields.Selection(
+        [
+            ('pending', 'Pending'),
+            ('pass', 'Pass'),
+            ('fail', 'Fail'),
+            ('na', 'N/A'),
+        ],
+        string='Result',
+        compute='_compute_result',
+        store=True,
+        index=True,
+    )
+    note = fields.Char(string='Notes')
+    defect_code_id = fields.Many2one(
+        'sn.wsd.quality.defect.code', string='Defect Code',
+        check_company=True, index=True,
+        help='Defect code of the failing check on this board.',
+    )
+    item_type = fields.Selection(related='line_id.item_type', string='Item Type', readonly=True)
+    lower_limit = fields.Float(related='line_id.lower_limit', string='Lower Limit', readonly=True)
+    upper_limit = fields.Float(related='line_id.upper_limit', string='Upper Limit', readonly=True)
+    instruction = fields.Text(
+        related='line_id.instruction', string='Instruction', readonly=True)
+
+    _sample_line_uniq = models.Constraint(
+        'unique(inspection_id, serial_identity_id, line_id)',
+        'Each sample and inspection item pair can only have one result cell in one inspection.',
+    )
+
+    @api.depends('manual_result', 'measured_value', 'text_value',
+                 'line_id.item_type', 'line_id.lower_limit', 'line_id.upper_limit',
+                 'line_id.expected_value', 'line_id.selection_values')
+    def _compute_result(self):
+        for cell in self:
+            line = cell.line_id
+            if cell.manual_result == 'pending' \
+                    and not cell.measured_value and not cell.text_value:
+                # 未录入的空格保持 pending，避免数值空值被上下限判成 fail
+                cell.result = 'pending'
+                continue
+            cell.result = line._judge_item_value(
+                line.item_type,
+                measured=cell.measured_value,
+                text=cell.text_value,
+                expected=line.expected_value,
+                allowed=line.selection_values,
+                lower=line.lower_limit,
+                upper=line.upper_limit,
+                manual=cell.manual_result,
+            )
+
+    def _set_pass_values(self):
+        # 参照 line._set_pass_values：预填合格值并置 pass，行结果随格派生
+        for cell in self:
+            line = cell.line_id
+            vals = {'manual_result': 'pass'}
             if line.item_type == 'numeric':
-                if float_compare(line.measured_value, line.lower_limit, precision_rounding=0.0001) < 0:
-                    line.result = 'fail'
-                elif float_compare(line.measured_value, line.upper_limit, precision_rounding=0.0001) > 0:
-                    line.result = 'fail'
-                else:
-                    line.result = 'pass'
-            elif line.item_type == 'selection':
-                allowed = [value.strip() for value in (line.selection_values or '').split(',') if value.strip()]
-                line.result = 'pass' if not allowed or line.text_value in allowed else 'fail'
-            elif line.item_type == 'text':
-                line.result = 'pass' if not line.expected_value or line.text_value == line.expected_value else 'fail'
-            else:
-                line.result = line.manual_result or 'pending'
+                vals['measured_value'] = line._get_pass_numeric_value()
+            elif line.item_type in ('selection', 'text'):
+                vals['text_value'] = line._get_pass_text_value()
+            cell.write(vals)
+        return True
 
 
 class QualityInspectionDefectLine(models.Model):
@@ -1104,7 +1727,7 @@ class QualityInspectionDefectLine(models.Model):
         readonly=True,
     )
     defect_code_id = fields.Many2one('sn.wsd.quality.defect.code', string='Defect Code', check_company=True, index=True)
-    internal_serial_id = fields.Many2one('sn.wsd.internal.serial', string='Serial Number', check_company=True, index=True)
+    serial_identity_id = fields.Many2one('sn.wsd.serial.identity', string='SN', check_company=True, index=True)
     defect_qty = fields.Integer(string='Defect Qty', default=1)
     position = fields.Char(string='Position')
     description = fields.Text(string='Description')
@@ -1127,7 +1750,7 @@ class QualityInspectionSkip(models.Model):
     scheme_id = fields.Many2one('sn.wsd.quality.inspection.scheme', string='Inspection Scheme', check_company=True, index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True, index=True)
     workcenter_id = fields.Many2one('mrp.workcenter', string='Work Center', check_company=True, index=True)
-    operation_id = fields.Many2one('mrp.routing.workcenter', string='Operation', check_company=True, index=True)
+    operation_id = fields.Many2one('sn.wsd.operation', string='Operation', check_company=True, index=True)
     area_sn = fields.Char(string='Area SN', index=True)
     model_code = fields.Char(string='Model Code', index=True)
     scheduled_time = fields.Datetime(string='Scheduled Time', required=True, default=fields.Datetime.now, index=True)
@@ -1146,8 +1769,16 @@ class QualityInspectionSkip(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if vals.get('name', _('New')) == _('New'):
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 vals['name'] = self.env['ir.sequence'].next_by_code('sn.wsd.quality.inspection.skip') or _('New')
         return super().create(vals_list)
 
@@ -1168,29 +1799,6 @@ class QualityInspectionSkip(models.Model):
         except Exception:
             _logger.warning('Failed to create IPQC skip record for scheme %s', scheme.display_name, exc_info=True)
             return self.env['sn.wsd.quality.inspection.skip']
-
-
-class MesSnTravel(models.Model):
-    _inherit = 'sn.wsd.mes.sn.travel'
-
-    def record_event(self, *args, **kwargs):
-        result = super().record_event(*args, **kwargs)
-        travel_id = result.get('travel_id') if isinstance(result, dict) else False
-        if travel_id and not self.env.context.get('skip_auto_quality_inspection'):
-            self.browse(travel_id).exists()._auto_create_quality_inspections()
-        return result
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        if not self.env.context.get('skip_auto_quality_inspection'):
-            records._auto_create_quality_inspections()
-        return records
-
-    def _auto_create_quality_inspections(self):
-        inspection_model = self.env['sn.wsd.quality.inspection'].with_context(skip_auto_quality_inspection=True)
-        for travel in self:
-            inspection_model.create_auto_inspections_for_travel(travel)
 
 
 class MrpProduction(models.Model):
@@ -1220,7 +1828,7 @@ class MrpProduction(models.Model):
         }
 
     def action_create_fai_inspection(self):
-        raise UserError(_('Manual quality inspection creation is disabled. Use OK MES travel events instead.'))
+        raise UserError(_('Manual quality inspection creation is disabled.'))
 
 
 class StockMoveLine(models.Model):
@@ -1251,11 +1859,9 @@ class StockMoveLine(models.Model):
         inspections = self.env['sn.wsd.quality.inspection']
         for move_line in self.filtered(
             lambda line: line.picking_id
-            and line.picking_id.picking_type_code == 'incoming'
-            and not line.picking_id.return_id
+            and line.picking_id._is_iqc_control_picking()
             and line.product_id
             and line.product_id.is_storable
-            and line.quantity_product_uom > 0
         ):
             inspections |= inspections.create_iqc_for_move_line(move_line)
         return inspections
@@ -1277,15 +1883,17 @@ class StockMove(models.Model):
                 move.move_line_ids.x_quality_inspection_ids
             )
 
-    def _get_iqc_target_move_lines(self):
-        self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.quantity_product_uom > 0
-        )
-
     def action_create_iqc_inspection(self):
         self.ensure_one()
-        inspection = self._get_iqc_target_move_lines()._auto_create_iqc_inspections()
+        picking = self.picking_id
+        if not picking._is_iqc_control_picking():
+            return False
+        inspection = self.env['sn.wsd.quality.inspection'].create_iqc_for_picking_product(
+            picking,
+            self.product_id,
+            move=self,
+            move_line=self.move_line_ids[:1],
+        )
         return inspection.action_open_form() if inspection else False
 
 
@@ -1302,6 +1910,19 @@ class StockPicking(models.Model):
         string='IQC Inspection Count',
         compute='_compute_x_iqc_inspection_count',
     )
+    x_is_iqc_control_picking = fields.Boolean(
+        string='IQC Controlled Operation',
+        compute='_compute_x_is_iqc_control_picking',
+        help='Technical flag used by the views: the operation whose validation '
+             'is gated by the incoming quality control. With a three-step '
+             'reception it is the Quality Control transfer, otherwise the '
+             'receipt itself.',
+    )
+
+    @api.depends('picking_type_id', 'return_id')
+    def _compute_x_is_iqc_control_picking(self):
+        for picking in self:
+            picking.x_is_iqc_control_picking = picking._is_iqc_control_picking()
 
     def _compute_x_iqc_inspection_count(self):
         for picking in self:
@@ -1311,79 +1932,97 @@ class StockPicking(models.Model):
                 )
             )
 
+    def _get_iqc_control_picking_type(self):
+        """Operation type whose validation is gated by the incoming quality control.
+
+        With a three-step reception (vendors -> input -> quality -> stock) the
+        inspection gates the dedicated Quality Control transfer (input ->
+        quality). One/two-step receptions keep gating the receipt itself. The
+        quality-control operation type only exists once it is active, which is
+        when the warehouse reception steps are set to three steps.
+        """
+        self.ensure_one()
+        picking_type = self.picking_type_id
+        if not picking_type:
+            return self.env['stock.picking.type']
+        warehouse = (
+            picking_type.warehouse_id
+            or picking_type.default_location_dest_id.warehouse_id
+            or picking_type.default_location_src_id.warehouse_id
+        )
+        qc_type = warehouse.qc_type_id if warehouse else False
+        if qc_type and qc_type.active:
+            return qc_type
+        return picking_type if picking_type.code == 'incoming' else self.env['stock.picking.type']
+
     def _is_iqc_control_picking(self):
         self.ensure_one()
-        return bool(
-            self.picking_type_code == 'incoming'
-            and not self.return_id
-        )
+        if self.return_id or not self.picking_type_id:
+            return False
+        return self.picking_type_id == self._get_iqc_control_picking_type()
 
-    def _get_iqc_required_move_lines(self):
-        self.ensure_one()
-        return self.move_line_ids.filtered(
-            lambda line: line.product_id
-            and line.product_id.is_storable
-            and line.quantity_product_uom > 0
-        )
-
-    def _get_iqc_required_moves_without_lines(self):
+    def _get_iqc_required_moves(self):
         self.ensure_one()
         return self.move_ids.filtered(
             lambda move: move.state not in ('cancel', 'done')
             and move.product_id
             and move.product_id.is_storable
             and move.product_uom_qty > 0
-            and not move.move_line_ids
         )
 
-    def _auto_create_iqc_inspections(self):
+    def _create_iqc_inspections(self):
         inspection_model = self.env['sn.wsd.quality.inspection']
         inspections = inspection_model
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            product_moves = {}
-            for move in picking.move_ids.filtered(
-                lambda record: record.state not in ('cancel', 'done')
-                and record.product_id
-                and record.product_id.is_storable
-                and record.product_uom_qty > 0
-            ):
-                product_moves.setdefault(move.product_id, self.env['stock.move'])
-                product_moves[move.product_id] |= move
+            product_sources = {}
+            for move in picking._get_iqc_required_moves():
+                sources = product_sources.setdefault(move.product_id, {
+                    'move_lines': self.env['stock.move.line'],
+                    'moves': self.env['stock.move'],
+                })
+                sources['moves'] |= move
+                sources['move_lines'] |= move.move_line_ids
 
-            for product, moves in product_moves.items():
+            for product, sources in product_sources.items():
+                move_lines = sources['move_lines']
+                scheme = inspection_model._find_scheme(
+                    'iqc',
+                    product=product,
+                    move_line=move_lines[:1],
+                )
+                if not scheme:
+                    continue
                 existing = inspection_model.search([
                     ('inspection_type', '=', 'iqc'),
                     ('picking_id', '=', picking.id),
                     ('product_id', '=', product.id),
+                    ('scheme_id', '=', scheme.id),
                     ('state', '!=', 'skipped'),
                 ], limit=1)
                 if existing:
                     inspections |= existing
                     continue
 
-                scheme = inspection_model._find_scheme('iqc', product=product)
-                if not scheme:
-                    continue
-
-                lot_qty = sum(
-                    move.product_uom._compute_quantity(
-                        move.product_uom_qty,
-                        product.uom_id,
+                # The quality-control transfer may not be picked yet: fall back
+                # on the moves' demand when no done quantity is available.
+                lot_qty = sum(move_lines.mapped('quantity_product_uom'))
+                if not lot_qty:
+                    lot_qty = sum(
+                        move.product_uom._compute_quantity(
+                            move.product_uom_qty,
+                            product.uom_id,
+                        )
+                        for move in sources['moves']
                     )
-                    for move in moves
-                )
                 inspections |= inspection_model.create_from_scheme(scheme, {
                     'picking_id': picking.id,
+                    'move_line_id': move_lines.id if len(move_lines) == 1 else False,
                     'product_id': product.id,
+                    'lot_id': inspection_model._iqc_lot_from_move_lines(move_lines, product).id,
                     'lot_qty': int(round(lot_qty)),
                     'scheduled_time': picking.scheduled_date,
                 })
         return inspections
-
-    def _create_backorder(self, backorder_moves=None):
-        backorders = super()._create_backorder(backorder_moves=backorder_moves)
-        backorders._auto_create_iqc_inspections()
-        return backorders
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -1396,22 +2035,38 @@ class StockPicking(models.Model):
 
     def action_confirm(self):
         result = super().action_confirm()
-        self._auto_create_iqc_inspections()
+        self._create_iqc_inspections()
         return result
 
     def action_assign(self):
-        return super().action_assign()
+        result = super().action_assign()
+        self._create_iqc_inspections()
+        return result
+
+    def _action_done(self):
+        result = super()._action_done()
+        self._create_downstream_iqc_inspections()
+        return result
+
+    def _create_downstream_iqc_inspections(self):
+        """Create IQC inspections on the operations a receipt just pushed.
+
+        A three-step reception pushes the goods to the quality-control
+        transfer when the receipt is validated; creating its inspections right
+        away makes them available as soon as the goods reach the quality area.
+        """
+        downstream_pickings = self.env['stock.picking']
+        for move in self.move_ids:
+            downstream_pickings |= move.move_dest_ids.picking_id
+        downstream_pickings._create_iqc_inspections()
 
     def _check_iqc_before_validate(self):
         inspection_model = self.env['sn.wsd.quality.inspection']
         for picking in self.filtered(lambda record: record._is_iqc_control_picking()):
-            picking._auto_create_iqc_inspections()
-            required_products = picking.move_ids.filtered(
-                lambda move: move.state not in ('cancel', 'done')
-                and move.product_id
-                and move.product_id.is_storable
-                and move.quantity > 0
-            ).mapped('product_id')
+            incoming_products = picking._get_iqc_required_moves().mapped('product_id')
+            required_products = incoming_products.filtered(
+                lambda product: inspection_model._find_scheme('iqc', product=product)
+            )
             inspections = inspection_model.search([
                 ('inspection_type', '=', 'iqc'),
                 ('picking_id', '=', picking.id),
@@ -1441,7 +2096,7 @@ class StockPicking(models.Model):
         result = super()._pre_action_done_hook()
         if result is not True:
             return result
-        self._auto_create_iqc_inspections()
+        self._create_iqc_inspections()
         self._check_iqc_before_validate()
         return True
 
@@ -1464,3 +2119,8 @@ class StockPicking(models.Model):
                 'default_inspection_type': 'iqc',
             },
         }
+
+    def action_create_iqc_inspections(self):
+        self.ensure_one()
+        self._create_iqc_inspections()
+        return self.action_open_iqc_inspections()

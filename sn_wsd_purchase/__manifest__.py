@@ -1,0 +1,19 @@
+{
+    'name': 'SN WSD Purchase Contract Report',
+    'version': '19.0.4.3.0',
+    'summary': 'Purchase contract fields, purchase detail tracking, vendor price sync and supplier-only vendor field',
+    'depends': ['purchase', 'purchase_request', 'account', 'stock', 'sn_wsd_mrp', 'sn_wsd_material', 'sn_wsd_code_rule', 'sn_wsd_list'],
+    'data': [
+        'data/purchase_contract_data.xml',
+        'data/purchase_request_code_rule.xml',
+        'views/purchase_order_views.xml',
+        'views/purchase_detail_views.xml',
+        'report/purchase_contract_templates.xml',
+        'report/purchase_contract_default_templates.xml',
+        'report/purchase_contract_reports.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'author': 'SNCIC',
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            The action on the root menu is deliberate: ir.ui.menu.load_web_menus()
+            gives an app the action of the first menu on its first-child chain that
+            has one ("if it's an app take action of first (sub)child having one
+            defined"), and that action is what opening the app runs. Without an
+            action here the app would open whatever the first child happens to be.
+            sn_wsd_barcode carries an action on its root for the same reason.
+        -->
+        <menuitem id="menu_sn_wsd_kingdee_root"
+                  name="Kingdee"
+                  sequence="210"
+                  web_icon="sn_wsd_kingdee,static/description/icon.png"
+                  action="action_kingdee_sync_log"
+                  groups="base.group_system"/>
+
+        <!-- The synchronization console: the single entry point of the module. -->
+        <menuitem id="menu_sn_wsd_kingdee_sync"
+                  name="Synchronization"
+                  parent="menu_sn_wsd_kingdee_root"
+                  sequence="5"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_sync_in"
+                  name="Kingdee to Odoo"
+                  parent="menu_sn_wsd_kingdee_sync"
+                  action="action_sn_wsd_kingdee_sync_in"
+                  sequence="10"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_sync_out"
+                  name="Odoo to Kingdee"
+                  parent="menu_sn_wsd_kingdee_sync"
+                  action="action_sn_wsd_kingdee_sync_out"
+                  sequence="20"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_sync_log"
+                  name="Sync Logs"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="action_kingdee_sync_log"
+                  sequence="10"
+                  groups="base.group_system"/>
+
+        <menuitem id="menu_sn_wsd_kingdee_settings"
+                  name="Configuration"
+                  parent="menu_sn_wsd_kingdee_root"
+                  action="base.res_config_setting_act_window"
+                  sequence="20"
+                  groups="base.group_system"/>
+    </data>
+</odoo>

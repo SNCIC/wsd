@@ -7,21 +7,65 @@ import {
     BarcodeVideoScanner,
     isBarcodeScannerSupported,
 } from "@web/core/barcode/barcode_video_scanner";
-import { Component, onMounted, onWillStart, onWillUnmount, useState } from "@odoo/owl";
+import { Component, onMounted, onPatched, onWillStart, onWillUnmount, useExternalListener, useState } from "@odoo/owl";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 const SMT_OPS = new Set(["smt_offline_prepare", "smt_online_load", "smt_cart_load", "smt_unload", "smt_material_refill"]);
 
-const SMT_OPERATION_BUTTONS = [
-    { key: "smt_online_load", label: _t("TP") },
-    { key: "smt_cart_load", label: _t("LCSL") },
-    { key: "smt_unload", label: _t("XL") },
-    { key: "smt_material_refill", label: _t("CHANGE") },
+// SMT material operations collapsed into one sub-mode button: picking a
+// pill routes to the same step flows the old top-level buttons used
+const SMT_MATERIAL_ACTIONS = [
+    { key: "smt_online_load", label: _t("Load Material") },
+    { key: "smt_offline_prepare", label: _t("Prepare") },
+    { key: "smt_unload", label: _t("Unload") },
+    { key: "smt_material_refill", label: _t("Refill") },
+    { key: "smt_cart_load", label: _t("Cart Mount") },
+    { key: "smt_changeover", label: _t("Changeover") },
 ];
 
-const DIP_OPERATION_BUTTONS = [
-    { key: "dip_material_load", label: _t("Load") },
+const SMT_OPERATION_BUTTONS = [
+    { key: "smt_material", label: _t("SMT Material") },
 ];
+
+// jigs are shared by both workshops: SMT and DIP each get the button
+const JIG_BUTTON = { key: "equipment_tooling", label: _t("Jig") };
+
+// product station passing is NOT done on PDA for now -- the DIP screen
+// only carries the shared jig sub-mode
+const DIP_OPERATION_BUTTONS = [JIG_BUTTON];
+
+// equipment sub-modes of the SMT workshop screen: pick a pill, scan the SN
+const EQUIPMENT_MODES = {
+    tooling: {
+        key: "equipment_tooling",
+        label: _t("Tooling"),
+        actions: [
+            { key: "online", label: _t("Put online") },
+            { key: "offline", label: _t("Take offline") },
+            { key: "issue", label: _t("Issue") },
+            { key: "return_", label: _t("Return") },
+            { key: "maintain_start", label: _t("Maintain start") },
+            { key: "maintain_done", label: _t("Maintain done") },
+            { key: "repair_start", label: _t("Repair start"), extra: "fault" },
+            { key: "repair_done", label: _t("Repair done") },
+        ],
+    },
+    consumable: {
+        key: "equipment_consumable",
+        label: _t("Consumables"),
+        actions: [
+            { key: "load", label: _t("Put online") },
+            { key: "unload", label: _t("Take offline") },
+            { key: "issue", label: _t("Issue") },
+            { key: "return_", label: _t("Return") },
+            { key: "thaw_start", label: _t("Thaw start") },
+            { key: "thaw_end", label: _t("Thaw done") },
+            { key: "stir_start", label: _t("Stir start") },
+            { key: "stir_end", label: _t("Stir done") },
+            { key: "exhaust", label: _t("Exhaust") },
+        ],
+    },
+};
 
 export class WorkshopOperationAction extends Component {
     static template = "sn_wsd_barcode.WorkshopOperationAction";
@@ -30,11 +74,15 @@ export class WorkshopOperationAction extends Component {
 
     setup() {
         this.action = useService("action");
+        this.orm = useService("orm");
         this.notification = useService("notification");
         this.barcodeService = useService("barcode");
         this.mobileService = useService("sn_wsd_barcode_mobile");
         this.scanMutex = new Mutex();
         this.operationMode = this.props.action.context?.operation_mode || "smt";
+        // workshop-functions grid entries open the action directly in an
+        // equipment sub-mode (tooling / consumable pills only)
+        this.initialEquipmentDomain = this.props.action.context?.initial_equipment_domain || false;
         this.state = useState({
             lines: [],
             stations: [],
@@ -50,6 +98,7 @@ export class WorkshopOperationAction extends Component {
             total: 0,
             userName: "",
             smtStep: 0,
+            smtReelEndPending: false,
             smtDeviceTable: "",
             smtLoadpoint: "",
             smtMaterialSn: "",
@@ -67,9 +116,17 @@ export class WorkshopOperationAction extends Component {
             smtLoading: false,
             cameraScannerEnabled: false,
             readyToToggleCamera: true,
+                    equipmentDomain: false,
+            equipmentAction: false,
+            equipmentExtra: "",
+            prepareCartSn: "",
+            changeoverTargetProduction: false,
         });
 
         this.cameraScannerSupported = isBarcodeScannerSupported();
+        if (this.initialEquipmentDomain) {
+            this.state.equipmentDomain = this.initialEquipmentDomain;
+        }
         this.barcodeVideoScannerProps = {
             delayBetweenScan: 1200,
             facingMode: "environment",
@@ -95,13 +152,84 @@ export class WorkshopOperationAction extends Component {
         });
 
         onWillStart(() => this.loadData());
+        // Scan-gun keep-focus: whenever focus lands on a non-input element
+        // (tab pills, action buttons, page background), pull the cursor back
+        // into the command box, unless a legit consumer owns it (selector
+        // modal, dropdown, notification). focusin also covers the
+        // "never focused since mount" case -- focusout alone would not fire.
+        useExternalListener(document, "focusin", (ev) =>
+            this.onDocumentFocusIn(ev)
+        );
         onMounted(() => {
             this.mobileService.enableReader();
             this.focusCommandInput();
         });
+        // Owl re-renders can silently swap the command input node (e.g. when
+        // loadData resolves), losing focus without any event -- re-assert the
+        // cursor after every patch unless the selector modal owns the screen.
+        onPatched(() => {
+            if (!this.state.selector) {
+                this.focusCommandInput();
+            }
+        });
         onWillUnmount(() => {
             this.mobileService.stopReader();
         });
+    }
+
+    _focusHeldByConsumer(el) {
+        return !!(
+            el &&
+            ((el.matches && el.matches("input, textarea, select")) ||
+                el.isContentEditable ||
+                (el.closest &&
+                    el.closest(".modal, .dropdown-menu, .o_notification_manager")))
+        );
+    }
+
+    _commandInput() {
+        // this.el is normally set on mount; fall back to the document for
+        // robustness (the action is fullscreen, the input is unique)
+        return (
+            (this.el && this.el.querySelector(".o_sn_wsd_workshop_command")) ||
+            document.querySelector(".o_sn_wsd_workshop_command")
+        );
+    }
+
+    _clearCommandBox() {
+        this.state.command = "";
+        const input = this._commandInput();
+        // PDA 扫码枪可能原生填值（不触发 t-model 的 input 事件），state
+        // 置空不会引发重渲染——必须同步原生清空 DOM 值
+        if (input && input.value) {
+            input.value = "";
+        }
+    }
+
+    onDocumentFocusIn(ev) {
+        if (!this.el || !this.el.isConnected) {
+            return;
+        }
+        // the line/work-center selector modal owns focus while open
+        if (this.state.selector) {
+            return;
+        }
+        const input = this._commandInput();
+        if (!input || ev.target === input) {
+            return;
+        }
+        if (this._focusHeldByConsumer(ev.target)) {
+            return;
+        }
+        setTimeout(() => {
+            if (!this.el || !this.el.isConnected || this.state.selector) {
+                return;
+            }
+            const active = document.activeElement;
+            if (active !== input && !this._focusHeldByConsumer(active)) {
+                this.focusCommandInput();
+            }
+        }, 80);
     }
 
     async loadData() {
@@ -161,11 +289,38 @@ export class WorkshopOperationAction extends Component {
     }
 
     get smtOperationButtons() {
-        return this.isDipMode ? DIP_OPERATION_BUTTONS : SMT_OPERATION_BUTTONS;
+        if (this.isDipMode) {
+            return DIP_OPERATION_BUTTONS;
+        }
+        return [...SMT_OPERATION_BUTTONS,
+                JIG_BUTTON, EQUIPMENT_MODES.consumable];
+    }
+
+    get equipmentModeDef() {
+        if (this.state.equipmentDomain === "smt_material") {
+            return { key: "smt_material", label: _t("SMT Material"),
+                     actions: SMT_MATERIAL_ACTIONS };
+        }
+        return this.state.equipmentDomain
+            ? EQUIPMENT_MODES[this.state.equipmentDomain] : false;
+    }
+
+    get equipmentActionDef() {
+        const def = this.equipmentModeDef;
+        return def
+            ? def.actions.find((a) => a.key === this.state.equipmentAction) || false
+            : false;
     }
 
     get isSmtMode() {
         return this.operationMode === "smt";
+    }
+
+    // feeder control flag of the selected production line: when on, the
+    // online-load cycle scans the feeder channel SN before each loadpoint
+    get smtFeederControl() {
+        const line = this.state.lines.find((l) => l.id === this.state.selectedLineId);
+        return Boolean(line && line.is_feeder_control);
     }
 
     get isDipMode() {
@@ -205,25 +360,25 @@ export class WorkshopOperationAction extends Component {
         const step = this.state.smtStep;
         if (op === "smt_offline_prepare") {
             const parts = [];
-            if (this.state.smtDeviceTable) {
-                parts.push(_t("Device Table: ") + this.state.smtDeviceTable);
+            if (this.state.prepareCartSn) {
+                parts.push(_t("Cart SN: ") + this.state.prepareCartSn);
+            }
+            if (this.state.smtFeederSn) {
+                parts.push(_t("Channel SN: ") + this.state.smtFeederSn);
             }
             if (this.state.smtLoadpoint) {
-                parts.push(_t("Feeder Position: ") + this.state.smtLoadpoint);
+                parts.push(_t("Loadpoint: ") + this.state.smtLoadpoint);
             }
             if (this.state.smtMaterialSn) {
                 parts.push(_t("Material SN: ") + this.state.smtMaterialSn);
-            }
-            if (this.state.smtFeederSn) {
-                parts.push(_t("Cart SN: ") + this.state.smtFeederSn);
             }
             return parts.join(" | " );
         }
         if (op === "smt_online_load") {
             const messages = [
-                _t("Scan device table, for example 1.A."),
-                _t("Scan feeder position SN."),
-                _t("Scan material SN."),
+                _t("Scan the TABLE code, for example 3.T1."),
+                _t("Scan the feeder channel SN."),
+                _t("Scan the loadpoint, then the material SN."),
             ];
             return messages[Math.max(step - 1, 0)] || messages[0];
         }
@@ -241,6 +396,14 @@ export class WorkshopOperationAction extends Component {
         return this.scanMessage;
     }
 
+    get reelEndYesLabel() {
+        return _t("Old reel used up");
+    }
+
+    get reelEndNoLabel() {
+        return _t("Still has material");
+    }
+
     get originalValueLabel() {
         return _t("Last Scan");
     }
@@ -249,9 +412,6 @@ export class WorkshopOperationAction extends Component {
         return _t("Result");
     }
 
-    get totalLabel() {
-        return _t("Total");
-    }
 
     get requiredQtyLabel() {
         return _t("Required");
@@ -281,7 +441,9 @@ export class WorkshopOperationAction extends Component {
         if (!this.state.selectedLineId) {
             return this.state.stations;
         }
-        return this.state.stations.filter((station) => station.line_id === this.state.selectedLineId);
+        // 车间级工位（未挂产线）不随产线过滤隐藏；产线级工位按选中线显示
+        return this.state.stations.filter(
+            (station) => !station.line_id || station.line_id === this.state.selectedLineId);
     }
 
     get selectedStation() {
@@ -313,17 +475,17 @@ export class WorkshopOperationAction extends Component {
         const op = this.state.selectedOperation;
         if (op === "smt_offline_prepare") {
             const parts = [];
-            if (this.state.smtDeviceTable) {
-                parts.push(_t("Device Table: ") + this.state.smtDeviceTable);
+            if (this.state.prepareCartSn) {
+                parts.push(_t("Cart SN: ") + this.state.prepareCartSn);
+            }
+            if (this.state.smtFeederSn) {
+                parts.push(_t("Channel SN: ") + this.state.smtFeederSn);
             }
             if (this.state.smtLoadpoint) {
-                parts.push(_t("Feeder Position: ") + this.state.smtLoadpoint);
+                parts.push(_t("Loadpoint: ") + this.state.smtLoadpoint);
             }
             if (this.state.smtMaterialSn) {
                 parts.push(_t("Material SN: ") + this.state.smtMaterialSn);
-            }
-            if (this.state.smtFeederSn) {
-                parts.push(_t("Cart SN: ") + this.state.smtFeederSn);
             }
             return parts.join(" | " );
         }
@@ -373,6 +535,18 @@ export class WorkshopOperationAction extends Component {
         return this.state.cameraScannerEnabled ? "bg-success text-white" : "text-primary";
     }
 
+    get progressPercent() {
+        const s = this.state.smtMaterialSummary;
+        if (!s || !s.required_qty) {
+            return 0;
+        }
+        return Math.round((s.loaded_qty / s.required_qty) * 100);
+    }
+
+    get cancelOperationLabel() {
+        return _t("Cancel");
+    }
+
     get resultClass() {
         return {
             "text-success": this.state.resultType === "success",
@@ -387,7 +561,7 @@ export class WorkshopOperationAction extends Component {
         if (this.env.config.breadcrumbs.length > 1) {
             this.env.config.historyBack();
         } else {
-            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_production_menu_action");
+            this.action.doAction("sn_wsd_barcode.sn_wsd_barcode_workshop_functions_action");
         }
     }
 
@@ -402,7 +576,7 @@ export class WorkshopOperationAction extends Component {
 
     focusCommandInput() {
         setTimeout(() => {
-            const input = this.el?.querySelector(".o_sn_wsd_workshop_command");
+            const input = this._commandInput();
             if (input) {
                 input.focus();
                 input.setSelectionRange(input.value.length, input.value.length);
@@ -437,6 +611,7 @@ export class WorkshopOperationAction extends Component {
 
     resetSmtScan() {
         this.state.smtStep = 0;
+        this.state.smtReelEndPending = false;
         this.state.smtDeviceTable = "";
         this.state.smtLoadpoint = "";
         this.state.smtMaterialSn = "";
@@ -468,6 +643,9 @@ export class WorkshopOperationAction extends Component {
     async submitCommand(ev) {
         ev.preventDefault();
         const command = this.state.command.trim();
+        // 提交即清空：错误分支不再残留旧码，下一扫不用手动删
+        // （此前依赖各流程分支自行清理，报错路径会漏）
+        this.state.command = "";
         if (!command) {
             return;
         }
@@ -476,14 +654,19 @@ export class WorkshopOperationAction extends Component {
 
     async onBarcodeScanned(barcode) {
         const cleanBarcode = String(barcode || "").trim();
+        // 统一汇合点清空命令框：PDA 扫码枪可能原生填值（不经 t-model），
+        // state 清空之外同时原生清空 DOM 输入框，双保险
+        this._clearCommandBox();
         if (!cleanBarcode || this.state.selector) {
             return;
         }
         await this.scanMutex.exec(async () => {
-            if (this.isSmtOperation) {
+            if (this.state.equipmentDomain === "smt_material") {
+                await this._handleSmtMaterialScan(cleanBarcode);
+            } else if (this.state.equipmentDomain) {
+                await this._handleEquipmentScan(cleanBarcode);
+            } else if (this.isSmtOperation) {
                 await this._handleSmtScan(cleanBarcode);
-            } else if (this.state.selectedOperation) {
-                await this.processScan(cleanBarcode, this.state.selectedOperation);
             } else {
                 this.state.rawValue = cleanBarcode;
                 this.setResult(_t("Select an operation before scanning."), "warning");
@@ -494,8 +677,154 @@ export class WorkshopOperationAction extends Component {
         });
     }
 
+    async _handleSmtMaterialScan(barcode) {
+        const action = this.state.equipmentAction;
+        if (!action) {
+            this.setResult(_t("Pick a material action before scanning."), "warning");
+            return;
+        }
+        if (action === "smt_offline_prepare") {
+            await this._handleOfflinePrepareFlow(barcode);
+        } else if (action === "smt_changeover") {
+            await this._handleChangeoverFlow(barcode);
+        } else {
+            await this._handleSmtScan(barcode);
+        }
+    }
+
+    // offline prepare: scan cart once, then loop ([channel SN ->] loadpoint
+    // -> reel) mirroring the online-loading order; feeder channel scan only
+    // when the production line enables feeder control
+    async _handleOfflinePrepareFlow(barcode) {
+        if (!this.state.prepareCartSn) {
+            this.state.prepareCartSn = barcode;
+            this.state.command = "";
+            this.resetSmtScan();
+            this.state.smtStep = 2; // skip the device-table step: offline
+            this.setResult(
+                this.smtFeederControl
+                    ? _t("Cart %s locked. Scan the feeder channel SN.", barcode)
+                    : _t("Cart %s locked. Scan the loadpoint.", barcode),
+                "success"
+            );
+            this.focusCommandInput();
+            return;
+        }
+        // cart locked: channel SN -> reel SN -> slot -> stage submit (loop)
+        await this._handleOfflinePrepareStep(barcode);
+    }
+
+    // changeover: scan target production order barcode, then device table
+    async _handleChangeoverFlow(barcode) {
+        if (!this.state.changeoverTargetProduction) {
+            // resolve the production order by name via the ORM
+            const ids = await this.orm.search(
+                "mrp.production", [["name", "=", barcode]], { limit: 1 });
+            if (!ids.length) {
+                this.setResult(
+                    _t("Production order %s not found.", barcode), "danger");
+                return;
+            }
+            this.state.changeoverTargetProduction = ids[0];
+            this.state.command = "";
+            this.setResult(
+                _t("Target order recorded. Scan the device table (e.g. 3.Table1)."),
+                "info");
+            this.focusCommandInput();
+            return;
+        }
+        try {
+            const res = await rpc("/sn_wsd_barcode/smt/do_changeover", {
+                production_id: this.state.productionId,
+                target_production_id: this.state.changeoverTargetProduction,
+                workcenter_id: this.state.selectedStationId,
+            });
+            this.state.command = "";
+            this.setResult(res.message || "", res.ok ? "success" : "danger");
+            if (res.ok) {
+                this.state.changeoverTargetProduction = false;
+                await this.loadSmtContext();
+            }
+        } catch (error) {
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.focusCommandInput();
+        }
+    }
+
+    pickEquipmentAction(key) {
+        this.state.equipmentAction = key;
+        this.state.equipmentExtra = "";
+        this.state.command = "";
+        if (this.state.equipmentDomain === "smt_material") {
+            // route to the standard SMT step flow for that operation
+            this.state.selectedOperation = key;
+            this.resetSmtScan();
+            this.state.smtStep = 1;
+            this.setResult(this._smtStepHint(key), "info");
+            this.focusCommandInput();
+            return;
+        }
+        this.setResult(_t("Scan the equipment SN."), "info");
+        this.focusCommandInput();
+    }
+
+    _smtStepHint(key) {
+        if (key === "smt_online_load") {
+            return _t("TP: scan the TABLE code, for example 3.T1.");
+        }
+        if (key === "smt_offline_prepare") {
+            this.state.prepareCartSn = "";
+            return _t("Prepare: scan the cart SN first.");
+        }
+        // (hint only -- the flow starts at the cart scan, not at smtStep)
+        if (key === "smt_unload") {
+            return _t("Unload: scan material SN.");
+        }
+        if (key === "smt_material_refill") {
+            return _t("Refill: scan old material SN.");
+        }
+        if (key === "smt_changeover") {
+            this.state.changeoverTargetProduction = false;
+            return _t("Changeover: scan the target production order barcode.");
+        }
+        return _t("Scan.");
+    }
+
+    async _handleEquipmentScan(sn) {
+        if (!this.state.equipmentAction) {
+            this.setResult(_t("Pick an equipment action before scanning."), "warning");
+            return;
+        }
+        const payload = { action: this.state.equipmentAction, sn };
+        if (this.state.selectedStationId) {
+            payload.workcenter_id = this.state.selectedStationId;
+        }
+        if (this.equipmentActionDef?.extra && this.state.equipmentExtra) {
+            payload[this.equipmentActionDef.extra] = this.state.equipmentExtra;
+        }
+        try {
+            const result = await rpc(`/sn_wsd_barcode/pda/${this.state.equipmentDomain}/call`, payload);
+            this.state.command = "";
+            if (result.data) {
+                this.setResult(
+                    `${result.data.sn} · ${result.data.state || ""}`, "success");
+            } else {
+                this.setResult(result.message || "", result.ok ? "success" : "danger");
+            }
+        } catch (error) {
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.focusCommandInput();
+        }
+    }
+
     async _handleSmtScan(rawBarcode) {
         if (this.state.smtLoading) {
+            return;
+        }
+        if (this.state.smtReelEndPending) {
+            this.setResult(_t("Confirm the old reel first (used up / still has material)."), "warning");
             return;
         }
         const op = this.state.selectedOperation;
@@ -520,7 +849,11 @@ export class WorkshopOperationAction extends Component {
             } else if (op === "smt_unload") {
                 this.state.smtMaterialSn = fields.MAT || "";
             }
-            await this._submitSmtOperation(op);
+            const combinedReelEnd = fields.REEL_END;
+            await this._submitSmtOperation(
+                op,
+                combinedReelEnd === undefined ? undefined : combinedReelEnd === "1"
+            );
             return;
         }
 
@@ -537,40 +870,65 @@ export class WorkshopOperationAction extends Component {
         }
     }
 
+    // prepare loop per scan, order mirrors online loading:
+    // [channel SN ->] loadpoint -> reel (one RPC per reel)
     async _handleOfflinePrepareStep(barcode) {
-        const step = this.state.smtStep;
-        if (step === 0 || step === 1) {
-            if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
-                this.state.smtDeviceTable = barcode;
-                this.state.rawValue = barcode;
-                this.state.smtStep = 2;
-                this.state.command = "";
-                this.setResult(_t("Device table recorded. Scan feeder position SN."), "success");
-            } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
-            }
-            return;
-        }
-        if (step === 2) {
-            this.state.smtLoadpoint = barcode;
+        if (this.smtFeederControl && !this.state.smtFeederSn) {
+            this.state.smtFeederSn = barcode;
             this.state.rawValue = barcode;
             this.state.smtStep = 3;
             this.state.command = "";
-            this.setResult(_t("Feeder position recorded. Scan material SN."), "success");
+            this.setResult(_t("Channel recorded. Scan the loadpoint."), "success");
             return;
         }
-        if (step === 3) {
-            this.state.smtMaterialSn = barcode;
+        if (!this.state.smtLoadpoint) {
+            this.state.smtLoadpoint = barcode;
             this.state.rawValue = barcode;
             this.state.smtStep = 4;
             this.state.command = "";
-            this.setResult(_t("Material recorded. Scan cart SN or submit directly."), "success");
+            this.setResult(_t("Loadpoint %s recorded. Scan the material reel SN.", barcode), "success");
             return;
         }
-        if (step === 4) {
-            this.state.smtFeederSn = barcode;
-            this.state.rawValue = barcode;
-            await this._submitSmtOperation("smt_offline_prepare");
+        this.state.smtMaterialSn = barcode;
+        this.state.rawValue = barcode;
+        if (this.state.equipmentDomain === "smt_material"
+                && this.state.equipmentAction === "smt_offline_prepare") {
+            await this._submitOfflinePrepareStage();
+            return;
+        }
+        await this._submitSmtOperation("smt_offline_prepare");
+    }
+
+    async _submitOfflinePrepareStage() {
+        this.state.smtLoading = true;
+        try {
+            const res = await rpc("/sn_wsd_barcode/smt/do_offline_prepare_stage", {
+                cart_sn_input: this.state.prepareCartSn,
+                feeder_sn_input: this.state.smtFeederSn,
+                material_sn_input: this.state.smtMaterialSn,
+                slot_no: this.state.smtLoadpoint,
+                production_id: this.state.productionId || false,
+            });
+            if (res.ok) {
+                this.resetSmtScan();
+                this.state.command = "";
+                // stay in the loop: cart stays locked, scan the next
+                // channel SN (or loadpoint when feeder control is off)
+                this.setResult(
+                    this.smtFeederControl
+                        ? _t("Prepared. Cart %s -- scan the next feeder channel SN.",
+                             this.state.prepareCartSn)
+                        : _t("Prepared. Cart %s -- scan the next loadpoint.",
+                             this.state.prepareCartSn),
+                    "success");
+            } else {
+                this.setResult(res.message || _t("Operation failed."), "danger");
+            }
+        } catch (error) {
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.state.smtLoading = false;
+            this.focusCommandInput();
         }
     }
 
@@ -584,7 +942,7 @@ export class WorkshopOperationAction extends Component {
                 this.state.command = "";
                 this.setResult(_t("Device table recorded. Scan cart SN."), "success");
             } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
+                this.setResult(_t("Invalid device table format. Expected N.T, for example 3.T1."), "danger");
             }
             return;
         }
@@ -595,33 +953,98 @@ export class WorkshopOperationAction extends Component {
         }
     }
 
-    async _handleOnlineLoadStep(barcode) {
-        const step = this.state.smtStep;
-        if (step === 0 || step === 1) {
-            if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
-                this.state.smtDeviceTable = barcode;
-                this.state.rawValue = barcode;
-                this.state.smtStep = 2;
-                this.state.command = "";
-                this.setResult(_t("Device table recorded. Scan feeder position SN."), "success");
-            } else {
-                this.setResult(_t("Invalid device table format. Expected N.T, for example 1.A."), "danger");
-            }
+    async _handleOnlineLoadStep(rawBarcode) {
+        // Continuous stream: a TABLE barcode (N.T) is the table-switch
+        // signal from ANY state; everything else flows inside the cycle
+        // [channel ->] loadpoint -> material, one RPC per material.
+        const barcode = rawBarcode.trim();
+        if (/^\d+\.[A-Za-z0-9_-]+$/.test(barcode)) {
+            this.resetSmtScan();
+            this.state.smtDeviceTable = barcode;
+            this.state.rawValue = barcode;
+            this.state.command = "";
+            this.setResult(
+                this.smtFeederControl
+                    ? _t("Table %s. Scan the feeder channel SN.", barcode)
+                    : _t("Table %s. Scan the loadpoint.", barcode),
+                "success"
+            );
             return;
         }
-        if (step === 2) {
+        if (!this.state.smtDeviceTable) {
+            this.setResult(_t("Scan a TABLE code first, for example 3.T1."), "warning");
+            return;
+        }
+        if (this.smtFeederControl && !this.state.smtFeederSn) {
+            this.state.smtFeederSn = barcode;
+            this.state.rawValue = barcode;
+            this.state.command = "";
+            this.setResult(_t("Channel recorded. Scan the loadpoint."), "success");
+            return;
+        }
+        if (!this.state.smtLoadpoint) {
             this.state.smtLoadpoint = barcode;
             this.state.rawValue = barcode;
-            this.state.smtStep = 3;
             this.state.command = "";
-            this.setResult(_t("Feeder position recorded. Scan material SN."), "success");
+            this.setResult(_t("Loadpoint %s. Scan the material reel SN.", barcode), "success");
             return;
         }
-        if (step === 3) {
-            this.state.smtMaterialSn = barcode;
-            this.state.rawValue = barcode;
-            await this._submitSmtOperation("smt_online_load");
+        this.state.smtMaterialSn = barcode;
+        this.state.rawValue = barcode;
+        await this._submitOnlineLoad();
+    }
+
+    // per-material submit of the continuous online-load cycle; the table
+    // context survives so the operator keeps scanning loadpoint -> reel
+    // until they scan the next TABLE code
+    async _submitOnlineLoad() {
+        const table = this.state.smtDeviceTable;
+        const loadpoint = this.state.smtLoadpoint;
+        const material = this.state.smtMaterialSn;
+        if (!this.state.selectedStationId) {
+            this.setResult(_t("Select a work center first."), "warning");
+            return;
         }
+        this.state.smtLoading = true;
+        try {
+            const barcode = this._buildSmtBarcode("smt_online_load");
+            const result = await rpc("/sn_wsd_barcode/smt/process_smt_scan", {
+                station_id: this.state.selectedStationId,
+                barcode,
+                operation: "online_load",
+            });
+            if (result.ok) {
+                this.state.command = "";
+                this._resetOnlineCycle(table);
+                this.setResult(
+                    _t(
+                        "Loaded %s / %s (%s). Scan the next loadpoint or a new TABLE.",
+                        table,
+                        loadpoint,
+                        material
+                    ),
+                    "success"
+                );
+                await this.loadSmtContext();
+            } else {
+                this._resetOnlineCycle(table);
+                this.setResult(result.message || _t("Operation failed."), "danger");
+            }
+        } catch (error) {
+            this._resetOnlineCycle(table);
+            this.setResult(error.message || _t("Operation failed."), "danger");
+        } finally {
+            this.state.smtLoading = false;
+            this.focusCommandInput();
+        }
+    }
+
+    _resetOnlineCycle(keepTable) {
+        this.state.smtStep = 0;
+        this.state.smtFeederSn = "";
+        this.state.smtLoadpoint = "";
+        this.state.smtMaterialSn = "";
+        this.state.smtDeviceTable = keepTable || "";
     }
 
     async _handleMaterialRefillStep(barcode) {
@@ -641,17 +1064,39 @@ export class WorkshopOperationAction extends Component {
             }
             this.state.smtMaterialSn = barcode;
             this.state.rawValue = barcode;
-            await this._submitSmtOperation("smt_material_refill");
+            this.state.smtReelEndPending = true;
+            this.state.command = "";
+            this.setResult(
+                _t("Confirm the old reel %s: used up, or still has material?", this.state.smtOldMaterialSn),
+                "info");
         }
+    }
+
+    /**
+     * 卷终确认（reel-end-confirm）：续料/下料提交前操作员判定旧卷是否已尽。
+     * hasEnded=true → 旧卷标记卷终（完工倒冲一次扣到归零，损耗归本单）；
+     * false → 现状不动（旧卷余量留线边，预留继续挂）。
+     */
+    async confirmReelEnd(hasEnded) {
+        if (!this.state.smtReelEndPending) {
+            return;
+        }
+        const op = this.state.selectedOperation;
+        this.state.smtReelEndPending = false;
+        await this._submitSmtOperation(op, hasEnded);
     }
 
     async _handleUnloadStep(barcode) {
         this.state.smtMaterialSn = barcode;
         this.state.rawValue = barcode;
-        await this._submitSmtOperation("smt_unload");
+        this.state.smtReelEndPending = true;
+        this.state.command = "";
+        this.setResult(
+            _t("Confirm the reel %s: used up, or still has material?", barcode),
+            "info");
     }
 
-    _buildSmtBarcode(operation) {
+    _buildSmtBarcode(operation, opts) {
         if (operation === "smt_offline_prepare") {
             const parts = [`DEV=${this.state.smtDeviceTable}`, `LP=${this.state.smtLoadpoint}`];
             if (this.state.smtMaterialSn) {
@@ -673,25 +1118,33 @@ export class WorkshopOperationAction extends Component {
             return parts.join("|");
         }
         if (operation === "smt_material_refill") {
-            return `OLD_MAT=${this.state.smtOldMaterialSn}|NEW_MAT=${this.state.smtMaterialSn}`;
+            const parts = [`OLD_MAT=${this.state.smtOldMaterialSn}`, `NEW_MAT=${this.state.smtMaterialSn}`];
+            if (opts?.reelEnd !== undefined) {
+                parts.push(`REEL_END=${opts.reelEnd ? 1 : 0}`);
+            }
+            return parts.join("|");
         }
         if (operation === "smt_cart_load") {
             return `DEV=${this.state.smtDeviceTable}|CART=${this.state.smtFeederSn}`;
         }
         if (operation === "smt_unload") {
-            return `MAT=${this.state.smtMaterialSn}`;
+            const parts = [`MAT=${this.state.smtMaterialSn}`];
+            if (opts?.reelEnd !== undefined) {
+                parts.push(`REEL_END=${opts.reelEnd ? 1 : 0}`);
+            }
+            return parts.join("|");
         }
         return "";
     }
 
-    async _submitSmtOperation(operation) {
+    async _submitSmtOperation(operation, reelEndOpts) {
         if (!this.state.selectedStationId) {
             this.setResult(_t("Select a work center first."), "warning");
             return;
         }
         this.state.smtLoading = true;
         try {
-            const barcode = this._buildSmtBarcode(operation);
+            const barcode = this._buildSmtBarcode(operation, {reelEnd: reelEndOpts});
             const operationMap = {
                 smt_offline_prepare: "offline_prepare",
                 smt_online_load: "feeder_unload",
@@ -706,7 +1159,6 @@ export class WorkshopOperationAction extends Component {
             });
             if (result.ok) {
                 this.setResult(result.message || _t("Operation completed."), "success");
-                this.state.total += 1;
                 this.resetSmtScan();
                 this.state.command = "";
                 await this.loadSmtContext();
@@ -724,23 +1176,41 @@ export class WorkshopOperationAction extends Component {
     async runOperation(operation) {
         this.state.selectedOperation = operation.key;
         this.setResult("", "info");
-
-        if (this.isDipMode && operation.key === "dip_material_load") {
+        if (operation.key === "smt_material") {
+            this.state.equipmentDomain = "smt_material";
+            this.state.equipmentAction = false;
+            this.state.equipmentExtra = "";
             this.resetSmtScan();
-            this.setResult(_t("Load: scan material SN."), "info");
+            this.state.command = "";
+            this.setResult(_t("Pick a material action, then scan."), "info");
             this.focusCommandInput();
             return;
         }
+        if (EQUIPMENT_MODES.tooling.key === operation.key
+                || EQUIPMENT_MODES.consumable.key === operation.key) {
+            this.state.equipmentDomain =
+                operation.key === EQUIPMENT_MODES.tooling.key ? "tooling" : "consumable";
+            this.state.equipmentAction = false;
+            this.state.equipmentExtra = "";
+            this.resetSmtScan();
+            this.state.command = "";
+            this.setResult(_t("Pick an equipment action, then scan the SN."), "info");
+            this.focusCommandInput();
+            return;
+        }
+        this.state.equipmentDomain = false;
+        this.state.equipmentAction = false;
+        this.state.equipmentExtra = "";
 
         if (SMT_OPS.has(operation.key)) {
             this.resetSmtScan();
             this.state.smtStep = 1;
             if (operation.key === "smt_offline_prepare") {
-                this.setResult(_t("BL: scan device table, for example 1.A."), "info");
+                this.setResult(_t("BL: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_online_load") {
-                this.setResult(_t("TP: scan device table, for example 1.A."), "info");
+                this.setResult(_t("TP: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_cart_load") {
-                this.setResult(_t("LCSL: scan device table, for example 1.A."), "info");
+                this.setResult(_t("LCSL: scan the TABLE code, for example 3.T1."), "info");
             } else if (operation.key === "smt_material_refill") {
                 this.setResult(_t("Refill: scan old material SN."), "info");
             } else if (operation.key === "smt_unload") {
@@ -749,34 +1219,17 @@ export class WorkshopOperationAction extends Component {
             this.focusCommandInput();
             return;
         }
-
-        const command = this.state.command.trim();
-        if (!command) {
-            this.setResult(_t("Scan or enter a barcode first."), "warning");
-            return;
-        }
-        await this.processScan(command, operation.key);
-    }
-
-    async processScan(barcode, operation) {
-        if (!this.state.selectedStationId) {
-            this.setResult(_t("Select a work center first."), "warning");
-            return;
-        }
-        this.state.rawValue = barcode;
-        const result = await rpc("/sn_wsd_barcode/process_workshop_scan", {
-            station_id: this.state.selectedStationId,
-            barcode,
-            operation,
-        });
-        this.setResult(result.message || (result.ok ? _t("Scan accepted") : _t("Scan rejected")), result.ok ? "success" : "danger");
-        if (result.ok) {
-            this.state.command = "";
-            this.state.total += 1;
-        }
     }
 
     cancelSmtOperation() {
+        // 取消=重做当前操作：重新选中当前子胶囊（等价于自动再点一遍
+        // 上料/备料/…），回到该操作流程起点等新扫；扫错了不必手动
+        // 重选模式。
+        if (this.state.equipmentDomain === "smt_material"
+                && this.state.equipmentAction) {
+            this.pickEquipmentAction(this.state.equipmentAction);
+            return;
+        }
         this.state.selectedOperation = false;
         this.resetSmtScan();
         this.state.command = "";

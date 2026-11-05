@@ -2,14 +2,15 @@
 import { Component, onMounted, useRef, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { buildRouteCardHtml } from "./route_flow_widget.js";
+import { buildRouteCardHtml, readPaletteWidth, resetPaletteWidth, startPaletteResize } from "./route_flow_widget.js";
 
 /**
  * MES-order private route editor — the order's own copy of the common flow.
  *
  * Same canvas interactions as the common editor (palette / drag / connect /
  * delete) with order-specific rules:
- * - nodes with execution records (frozen_ids) are locked (no edit/delete);
+ * - nodes with execution records (frozen_ids) are locked (no edit/delete;
+ *   layout drags stay allowed and persist through the freeze);
  * - node colors reflect execution progress (station: wip/done/ng;
  *   report: done/partial);
  * - saving calls the order's action_save_route_graph (private tables only,
@@ -54,9 +55,15 @@ export class MesOrderRouteEditor extends Component {
             selected: null,
             usedOpIds: [],
             paletteVersion: 0,
+            paletteWidth: readPaletteWidth(150),
             editable: false,
             saving: false,
             dirty: false,
+            // closed orders (done/cancelled) start as a one-line summary;
+            // the X6 canvas is built lazily when the user expands it
+            summaryMode: false,
+            routeSummary: "",
+            summaryQty: "",
         });
         this._loading = false;
         this._injectStyles();
@@ -68,12 +75,17 @@ export class MesOrderRouteEditor extends Component {
         const usedSet = new Set(this.state.usedOpIds);
         const groups = {};
         for (const op of this.allOperations) {
-            const s = op.x_process_section || "other";
+            const s = op.section_id || "other";
             (groups[s] = groups[s] || []).push(Object.assign({}, op, { used: usedSet.has(op.id) }));
         }
-        const order = ["smt", "dip", "board_test", "assembly", "testing", "inspection", "packaging"];
-        const labels = { smt: "SMT", dip: "DIP", board_test: "单板调试", assembly: "装配", testing: "调试", inspection: "检验", packaging: "包装" };
-        return order.filter(s => groups[s]).map(s => ({ key: s, label: labels[s] || s, ops: groups[s] }))
+        // groups ordered by the section sequence the server sends; the
+        // section list is master data, so the palette follows it
+        const sections = [...new Map(
+            this.allOperations.filter(o => o.section_id)
+                .map(o => [o.section_id, { key: o.section_id, label: o.section_name || String(o.section_id), seq: o.section_sequence ?? 999 }])
+        ).values()].sort((a, b) => a.seq - b.seq);
+        return sections.filter(s => groups[s.key])
+            .map(s => ({ key: s.key, label: s.label, ops: groups[s.key] }))
             .concat(groups.other ? [{ key: "other", label: "其他", ops: groups.other }] : []);
     }
 
@@ -88,13 +100,20 @@ export class MesOrderRouteEditor extends Component {
         style.id = "o-mes-order-route-css";
         style.textContent = [
             ".o_mes_route_root { border: 1px solid #dfe3e8; background: #fff; }",
+            ".o_mes_route_summary { display: flex; align-items: center; gap: 8px; border: 1px solid #dfe3e8; background: #fff; padding: 10px 12px; cursor: pointer; }",
+            ".o_mes_route_summary:hover { background: #f5f7fa; }",
+            ".o_mes_route_summary .o_mes_route_summary_chain { font-size: 13px; color: #141414; }",
             ".o_mes_route_toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid #dfe3e8; background: #fff; }",
             ".o_mes_route_hint { margin-left: auto; font-size: 12px; color: #8c8c8c; }",
             ".o_mes_route_shell { position: relative; display: flex; height: 520px; }",
             ".o_mes_route_palette { width: 150px; flex-shrink: 0; border-right: 1px solid #dfe3e8; background: #fff; display: flex; flex-direction: column; }",
             ".o_mes_route_palette_header { padding: 10px 12px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #dfe3e8; }",
-            ".o_mes_route_palette_body { flex: 1; overflow-y: auto; padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }",
-            ".o_mes_route_palette .o_palette_group_title { grid-column: 1 / -1; margin: 4px 0 6px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; }",
+            ".o_mes_route_palette_body { flex: 1; overflow-y: auto; padding: 8px 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; align-content: start; }",
+            ".o_mes_route_palette .o_palette_group_title { grid-column: 1 / -1; margin: 3px 0 4px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; }",
+            /* Drag handle between palette and canvas: drag to resize, dblclick resets */
+            ".o_palette_resizer { flex: 0 0 8px; width: 8px; cursor: col-resize; background: transparent; z-index: 6; }",
+            ".o_palette_resizer:hover, .o_palette_resizer.o_resizing { background: #5f95ff; }",
+            "body.o_palette_resizing { cursor: col-resize; user-select: none; }",
             ".o_mes_route_canvas { flex: 1; min-width: 0; }",
             ".o_route_flow_panel { position: absolute; top: 10px; right: 10px; bottom: 10px; width: 248px; background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.16); padding: 14px; overflow-y: auto; box-sizing: border-box; z-index: 5; }",
             ".o_prop_head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #dfe3e8; }",
@@ -115,9 +134,9 @@ export class MesOrderRouteEditor extends Component {
             /* self-sufficient copies of the palette/card styles (the common
                editor/viewer may not be mounted on this page) */
             ".o_palette_group_title { grid-column: 1 / -1; margin: 4px 0 6px; font-size: 11px; font-weight: 600; color: #8c8c8c; text-transform: uppercase; letter-spacing: 0.02em; }",
-            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; height: 56px; margin: 0; padding: 6px 4px; border: 1px solid #5f95ff; border-radius: 8px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
+            ".o_palette_card { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 40px; margin: 0; padding: 4px 3px; border: 1px solid #5f95ff; border-radius: 6px; background: #fff; box-sizing: border-box; cursor: pointer; user-select: none; }",
             ".o_palette_card.o_used { opacity: 0.48; cursor: not-allowed; }",
-            ".o_palette_card .o_palette_name { width: 100%; font-size: 12px; font-weight: 600; color: #141414; line-height: 14px; text-align: center; word-break: break-word; overflow: hidden; }",
+            ".o_palette_card .o_palette_name { width: 100%; font-size: 12px; font-weight: 600; color: #141414; line-height: 14px; text-align: center; word-break: break-word; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }",
             ".o_route_node_card { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; box-sizing: border-box; padding: 8px; background: #fff; gap: 6px; }",
             ".o_node_badges { position: absolute; top: 0; left: 0; display: flex; flex-direction: column; gap: 2px; z-index: 2; pointer-events: none; }",
             ".o_node_badge { font-size: 10px; font-weight: 600; line-height: 14px; padding: 1px 6px; color: #fff; white-space: nowrap; border-radius: 0 0 6px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.12); }",
@@ -155,6 +174,19 @@ export class MesOrderRouteEditor extends Component {
             this.state.usedOpIds = canvas.graph.nodes.map(n => n.operation_id).filter(Boolean);
             this.state.paletteVersion++;
 
+            this._canvas = canvas;
+            // Closed orders collapse to the summary line; expanding builds
+            // the canvas on demand (see onExpandSummary). _userExpanded
+            // keeps an explicitly expanded canvas open across rebuilds.
+            if (!canvas.editable && canvas.graph.nodes.length && !this._userExpanded) {
+                this._loading = false;
+                this.state.dirty = false;
+                this.state.summaryMode = true;
+                this._buildSummary();
+                return;
+            }
+            this.state.summaryMode = false;
+
             const X6 = window.X6;
             if (!mesEdgeRegistered) {
                 try {
@@ -186,7 +218,7 @@ export class MesOrderRouteEditor extends Component {
                 container: this.containerRef.el,
                 grid: true,
                 panning: { enabled: true },
-                mousewheel: { enabled: true, minScale: 0.5, maxScale: 3 },
+                mousewheel: { enabled: true, modifiers: ["ctrl"], minScale: 0.5, maxScale: 3 },
                 connecting: {
                     connector: { name: "normal" },
                     connectionPoint: "anchor",
@@ -199,7 +231,14 @@ export class MesOrderRouteEditor extends Component {
                     validateConnection({ targetMagnet }) { return !!targetMagnet; },
                 },
                 interacting: this.state.editable ? {
-                    nodeMovable: { validateNode: (node) => this._isEditableNode(node) },
+                    // Layout drags are allowed for every node (frozen
+                    // included): the position is pure UI and the server
+                    // keeps persisting it. Business edits (delete/connect/
+                    // flags) stay locked per node. NOTE: X6 evaluates this
+                    // value as boolean | (graph, view) => boolean -- an
+                    // object like {validateNode: fn} is truthy-but-opaque
+                    // and silently never calls the validator.
+                    nodeMovable: true,
                     edgeMovable: false,
                     magnetConnectable: this.state.editable,
                 } : false,
@@ -241,13 +280,16 @@ export class MesOrderRouteEditor extends Component {
                 markDirty();
             });
 
-            // restore the saved layout; unsaved rows fall back to a column
+            // restore the saved layout; unsaved rows fall back to a column.
+            // Stored rows default to (0, 0) -- that is "never placed", not a
+            // position: without this guard every card piles up at the origin.
             canvas.graph.nodes.forEach((n, i) => {
                 const nx = Number.parseFloat(n.x);
                 const ny = Number.parseFloat(n.y);
+                const placed = Number.isFinite(nx) && Number.isFinite(ny) && (nx || ny);
                 this._addNode(graph, n,
-                    Number.isFinite(nx) ? nx : 30,
-                    Number.isFinite(ny) ? ny : 30 + i * 90);
+                    placed ? nx : 30,
+                    placed ? ny : 30 + i * 90);
             });
             canvas.graph.edges.forEach(e => this._addEdge(graph, e));
             this._applyPortMagnets();
@@ -356,6 +398,11 @@ export class MesOrderRouteEditor extends Component {
         setTimeout(apply, 1000);
     }
 
+    // -- Palette width: shared drag handle (persisted by route_flow_widget) --
+    onPaletteResizeStart(ev) { startPaletteResize(this, ev); }
+
+    onPaletteResetWidth() { resetPaletteWidth(this, 150); }
+
     onPaletteClick(ev) {
         if (!this.graph || !this.state.editable) return;
         const opId = parseInt(ev.currentTarget.getAttribute("data-op-id"), 10);
@@ -367,7 +414,7 @@ export class MesOrderRouteEditor extends Component {
         this._addNode(this.graph, {
             uid: "new_" + Date.now(), id: null, operation_id: op.id, name: op.name,
             step_code: op.code, sequence: (existing.length + 1) * 10,
-            x_station_type: op.x_station_type, time_cycle_manual: 60,
+            time_cycle_manual: 60,
             x_allow_entry: existing.length === 0, x_allow_exit: false,
         }, 30, y);
         this.state.usedOpIds = [...this.state.usedOpIds, opId];
@@ -379,6 +426,40 @@ export class MesOrderRouteEditor extends Component {
     _fitView() {
         if (!this.graph) return;
         try { this.graph.zoomToFit({ padding: 24, maxScale: 1 }); } catch (e) { /* empty */ }
+    }
+
+    _buildSummary() {
+        const canvas = this._canvas;
+        if (!canvas) return;
+        const icons = { done: "✓", wip: "●", ng: "✖" };
+        const nodes = [...canvas.graph.nodes].sort(
+            (a, b) => (a.sequence || 0) - (b.sequence || 0));
+        this.state.routeSummary = nodes.map(n => {
+            const st = String(this.states[n.uid] || "").split(":")[0];
+            const icon = icons[st] || (st ? "⚠" : "○");
+            return `${icon} ${n.step_code || n.name || ""}`;
+        }).join(" → ");
+        const data = (this.props.record && this.props.record.data) || {};
+        const tSide = !!data.x_is_dual_side_non_final;
+        const done = tSide ? data.produced_qty : data.x_done_qty;
+        this.state.summaryQty = `${tSide ? "产出" : "入库"} ${done ?? 0} / ${data.planned_qty ?? 0}`;
+    }
+
+    onExpandSummary() {
+        this._userExpanded = true;
+        this.state.summaryMode = false;
+        // let OWL mount the shell (and its container div) before X6 inits
+        setTimeout(() => this._build(), 50);
+    }
+
+    onCollapseSummary() {
+        this._userExpanded = false;
+        if (this.graph) {
+            try { this.graph.dispose(); } catch (e) { /* UMD may ignore */ }
+            this.graph = null;
+        }
+        this.state.summaryMode = true;
+        this._buildSummary();
     }
 
     onFitScreen() { this._fitView(); }

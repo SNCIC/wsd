@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_picking_form_picklight" model="ir.ui.view">
+        <field name="name">stock.picking.form.picklight</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='button_validate'][1]" position="before">
+                <field name="picklight_enabled" invisible="1"/>
+                <button name="action_picklight_start"
+                        string="Start Picklight"
+                        type="object"
+                        class="btn-secondary"
+                        groups="stock.group_stock_user"
+                        invisible="not picklight_enabled or state in ['done', 'cancel']"/>
+                <button name="action_picklight_stop"
+                        string="Stop Picklight"
+                        type="object"
+                        class="btn-secondary"
+                        groups="stock.group_stock_user"
+                        invisible="not picklight_enabled or state in ['done', 'cancel']"/>
+            </xpath>
+            <xpath expr="//sheet//div[@name='button_box']" position="inside">
+                <button name="action_view_picklight_commands"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-lightbulb-o"
+                        invisible="picklight_command_count == 0">
+                    <field name="picklight_command_count" widget="statinfo" string="Picklight"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

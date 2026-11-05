@@ -19,7 +19,10 @@ class MeterPackRecord(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
-    serial_id = fields.Many2one('sn.wsd.internal.serial', required=True, index=True, check_company=True)
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='SN', required=True, index=True,
+        check_company=True, ondelete='restrict',
+    )
     production_id = fields.Many2one('mrp.production', index=True, check_company=True)
     pack_route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
@@ -40,28 +43,55 @@ class MeterPackRecord(models.Model):
     pack_time = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
     operator_code = fields.Char(index=True)
     scan_check_result = fields.Selection([('pass', 'Pass'), ('fail', 'Fail'), ('hold', 'Hold')], default='pass')
-    note = fields.Char()
+    product_id = fields.Many2one(
+        'product.product', string='Product',
+        related='production_id.product_id', readonly=True)
+    material_specification = fields.Char(
+        string='Material Specification',
+        related='product_id.material_specification',
+    )
+    nameplate_sn = fields.Char(
+        string='Nameplate SN', compute='_compute_nameplate_sn',
+        help='Current nameplate bound to this SN (latest current binding).')
 
-    def action_apply_to_serial(self):
-        for record in self.filtered('active'):
-            record.serial_id.write({
-                'seal_no': record.seal_no,
-                'carton_no': record.carton_no,
-                'pallet_no': record.pallet_no,
-                'pack_date': record.pack_time,
+    def _compute_nameplate_sn(self):
+        # one batched search for the whole list page, not one per row; pack
+        # SNs are machines, so match them against the bound machine SN side
+        bindings = self.env['sn.wsd.serial.binding'].search([
+            ('bound_serial_identity_id', 'in', self.serial_identity_id.ids),
+            ('binding_type', '=', 'nameplate'),
+            ('is_current', '=', True),
+        ])
+        nameplate_by_machine = {
+            b.bound_serial_identity_id.id: b.serial_identity_id.name
+            for b in bindings
+        }
+        for pack in self:
+            pack.nameplate_sn = nameplate_by_machine.get(pack.serial_identity_id.id, '')
+    note = fields.Char()
+    barcode_line_ids = fields.One2many(
+        'sn.wsd.meter.pack.barcode', 'pack_id', string='Barcode Lines')
+
+    def _get_serial_lot(self):
+        self.ensure_one()
+        lot = self.env['stock.lot'].with_context(active_test=False).search([
+            ('name', '=', self.serial_identity_id.name),
+            '|',
+            ('company_id', '=', False),
+            ('company_id', '=', self.company_id.id),
+        ], limit=1)
+        if not lot and self.production_id:
+            lot = self.env['stock.lot'].create({
+                'name': self.serial_identity_id.name,
+                'product_id': self.production_id.product_id.id,
+                'company_id': self.company_id.id,
             })
-            if record.pack_route_operation_id:
-                record.serial_id.current_route_operation_id = record.pack_route_operation_id
-            record.action_sync_stock_package()
+        return lot
 
     def action_sync_stock_package(self):
         for record in self.filtered(lambda item: item.active and item.carton_package_id):
-            serial = record.serial_id
             production = record.production_id
-            lot = serial.lot_id
-            if not lot and production:
-                lot = production._get_or_create_stage_lot(serial.serial_no, identity=serial.serial_identity_id)
-                serial.lot_id = lot
+            lot = record._get_serial_lot()
             if not lot or not production:
                 continue
             move_lines = production.move_finished_ids.move_line_ids.filtered(
@@ -71,7 +101,7 @@ class MeterPackRecord(models.Model):
                 move_lines.write({'result_package_id': record.carton_package_id.id})
             quants = self.env['stock.quant'].search([
                 ('lot_id', '=', lot.id),
-                ('product_id', '=', serial.product_id.id),
+                ('product_id', '=', production.product_id.id),
                 ('quantity', '>', 0),
                 ('location_id.usage', 'in', ['internal', 'transit']),
             ])
@@ -82,9 +112,25 @@ class MeterPackRecord(models.Model):
                 raise ValidationError(_(
                     'Serial number %(serial)s is already stored in package %(package)s.'
                 ) % {
-                    'serial': serial.serial_no,
+                    'serial': record.serial_identity_id.name,
                     'package': conflicting.package_id[:1].display_name,
                 })
             quants.filtered(lambda quant: not quant.package_id).write({
                 'package_id': record.carton_package_id.id,
             })
+
+
+class MeterPackBarcodeLine(models.Model):
+    """One uploaded packing barcode (seals, RF codes, MAC, module, side
+    codes) attached to the pack record."""
+    _name = 'sn.wsd.meter.pack.barcode'
+    _description = 'Meter Pack Barcode Line'
+    _order = 'id'
+
+    pack_id = fields.Many2one(
+        'sn.wsd.meter.pack.record', required=True, ondelete='cascade',
+        index=True)
+    code = fields.Char(required=True, index=True,
+                       help='Source field of the uploaded barcode, e.g. M_PACK_MAC.')
+    value = fields.Char(required=True)
+    company_id = fields.Many2one(related='pack_id.company_id', store=True)

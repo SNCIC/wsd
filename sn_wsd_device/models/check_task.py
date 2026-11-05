@@ -57,8 +57,16 @@ class CheckTask(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        rule_env = self.env['sn.code.rule']
         for vals in vals_list:
             if not vals.get('name') or vals.get('name') == '/':
+                # coding rule first (mes-coding-rule batch 4); fall back to
+                # the legacy sequence when no rule is configured
+                proxy = self.new(vals)
+                rule = rule_env._find_rule(proxy)
+                if rule:
+                    vals['name'] = rule.render(proxy)
+                    continue
                 vals['name'] = self.env['ir.sequence'].next_by_code(
                     'sn.wsd.device.check.task') or '/'
         return super().create(vals_list)
@@ -91,6 +99,19 @@ class CheckTask(models.Model):
             })
             # Close the loop: feed the equipment ledger.
             task.equipment_id.last_spot_check_date = fields.Datetime.now()
+
+    def action_complete_all(self):
+        """One-click completion: fill the blank items as Pass, then submit.
+
+        Items that already carry a verdict keep it, so a failure recorded by
+        the operator still ends up in the overall result.
+        """
+        for task in self:
+            if task.task_status == 'completed':
+                continue
+            task.line_ids._fill_missing_as_pass()
+            task.action_submit()
+        return True
 
     @api.model
     def _mark_previous_unfinished_overdue(self):
@@ -162,6 +183,24 @@ class CheckTaskLine(models.Model):
                     'pass'
                     if line.lower_limit <= line.measured_value <= line.upper_limit
                     else 'fail')
+
+    def _fill_missing_as_pass(self):
+        """Fill the items without a verdict as Pass.
+
+        A range item without a measured value gets its upper limit as the
+        measured value so the automatic judgement passes it; a measured value
+        already recorded is never overwritten.
+        """
+        for line in self:
+            if line.line_result:
+                continue
+            if line.value_type == 'range':
+                if not line.measured_value and not (
+                        line.lower_limit <= 0.0 <= line.upper_limit):
+                    line.measured_value = line.upper_limit
+                line._auto_judge_range_lines()
+            if not line.line_result:
+                line.line_result = 'pass'
 
     def action_download_guide(self):
         self.ensure_one()

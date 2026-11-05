@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Seed the default tooling SN coding rule (mes-coding-rule batch 5).
+         The seeder is idempotent: an existing rule for the model wins. -->
+    <function model="sn.tooling.code.seed" name="_seed_tooling_sn_rule"
+              eval="[]"/>
+</odoo>

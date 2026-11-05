@@ -3,6 +3,7 @@
     <data noupdate="1">
         <record id="group_sn_wsd_shop_floor_user" model="res.groups">
             <field name="name">Shop Floor User</field>
+            <!-- 异常权限已并入制造用户/管理员，不再挂独立的异常组 -->
             <field name="implied_ids" eval="[Command.link(ref('mrp.group_mrp_user'))]"/>
         </record>
 

@@ -1,9 +1,10 @@
 {
     'name': 'SN WSD WIP',
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.1.1',
     'summary': 'WIP reporting and visualization for manufacturing orders',
     'depends': ['mrp', 'sn_wsd_api', 'sn_wsd_quality'],
     'data': [
+        'security/company_rules.xml',
         'security/ir.model.access.csv',
         'views/wip_report_views.xml',
         'views/mrp_production_views.xml',

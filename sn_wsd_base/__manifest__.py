@@ -10,6 +10,12 @@
         'views/hierarchical_list_views.xml',
         'views/product_action_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'sn_wsd_base/static/src/js/quantity_field_defaults.js',
+            'sn_wsd_base/static/src/js/image_field_remove_confirm.js',
+        ],
+    },
     'installable': True,
     'application': False,
     'author': 'SNCIC',

@@ -30,6 +30,7 @@ class ProductProduct(models.Model):
             'display_name',
             'has_image',
             'is_storable',
+            'material_specification',
             'tracking',
             'uom_id',
         ]

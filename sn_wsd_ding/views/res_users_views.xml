@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_dingding_user_id" model="ir.ui.view">
+        <field name="name">res.users.form.dingding.user.id</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_fetch_dingding_user_id"
+                        type="object"
+                        string="Fetch DingTalk User ID"
+                        class="btn-primary"
+                        groups="base.group_system"/>
+            </xpath>
+            <xpath expr="//page[@name='preferences']/group/group[@name='other_preferences']" position="inside">
+                <field name="dingding_user_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_users_form_simple_modif_dingding_user_id" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.dingding.user.id</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences_page']/group/group[@name='other_preferences']" position="inside">
+                <field name="dingding_user_id" readonly="1"/>
+                <button name="action_fetch_dingding_user_id"
+                        type="object"
+                        string="Fetch DingTalk User ID"
+                        class="btn-secondary"
+                        groups="base.group_system"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

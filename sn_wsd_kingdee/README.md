@@ -1,0 +1,296 @@
+# sn_wsd_kingdee（金蝶云星空对接）
+
+## 功能概述
+
+通过金蝶官方的 Python 版 WebAPI SDK（`k3cloud_webapi_sdk`）对接金蝶云星空（K/3 Cloud）：
+
+- 在“设置 → Kingdee”里维护 WebAPI 连接参数与物料默认组织
+- 一键测试连接：不需要先保存设置，可直接用当前填写的参数跑一次真实业务查询（读取 1 条物料编码）来验证凭据；
+  `GetDataCenters` 是免鉴权接口，凭据错也照样返回，不能用来验连
+- 分页读取：`iter_bill_query()` 按金蝶语义翻页（`TopRowCount` 是绝对终止行号而非页大小，必须随偏移增长）
+- **统一的同步控制台**：`Kingdee → Synchronization`（同步）下按方向分「金蝶 → Odoo」与「Odoo → 金蝶」，
+  页面按模块分组列出每个同步对象，行内 **Synchronize** 直接同步（入站另有 `Preview` 预演，不写入）。
+  调度键是 **(方向, 金蝶对象)** 而不是 Odoo 模型——客户与供应商共用 `res.partner`，只能靠对象区分。
+  已登记但尚未实现的行会灰显且不显示按钮，控制台因此同时是**账套基础资料地图**
+  （全量清单、被引用次数与实施顺序见 `docs/基础资料同步清单.md`）
+- 物料主数据双向同步：`BD_MATERIAL` 的保存、提交、审核、反审核、查看，以及批量导入——带回**规格型号**、
+  物料属性 / 类别 / 分组的**编码与其中文名**，自动落 Odoo 产品类别，并把物料置为**管理库存 + 按批次追溯**
+- 客户与供应商主数据：`BD_Customer` 双向（保存 / 提交 / 审核 / 反审核 / 查看 / 删除），
+  `BD_Supplier` **仅入站**。两者在 Odoo 里都是 `res.partner`，但账套**分别编号**，
+  所以各有一套金蝶字段（`kingdee_number` 对 `kingdee_supplier_number`），
+  入站还会写 `customer_rank` / `supplier_rank`；**推送客户时只取真正的客户**，
+  本库 831 个纯供应商不会再被当作客户写进金蝶
+- 基础资料入站：`BD_Currency` 币别（按 ISO 代码**认领**已有币别，不重复创建）、`BD_Department` 部门、
+  `BD_UNIT` 计量单位（按名称认领，并把金蝶的单位组换算重建成 Odoo 的参考单位链条，**只添加不拆散**）、
+  `BD_STOCK` 仓库（落为内部库位：Odoo 仓库的短名只有 5 字符，装不下账套的 `02.01禁用`）、
+  `BD_BatchMainFile` 批号主档（必须有物料，否则明确报错）、`BD_Empinfo` 员工与 `HR_ORG_HRPOST` 岗位
+  （部门/岗位按金蝶编码解析，解析不到就留空）、`BD_BANK` 银行（按名称认领）
+- 物料推送的单位不再只靠设置页的默认值：按 **物料上的编码 → 产品自身单位的金蝶编码 → 设置页**
+  三级取值。物料级优先是为了**不改动账套里已有物料的单位**；产品单位这一级才是替代硬编码的那一级
+- 新单据只需实现字段映射与 payload（`_kingdee_number()` / `_kingdee_payload()`），状态、动作、
+  逐条错误隔离、日志与通知由 `sn.wsd.kingdee.sync.mixin` 提供，工序见 `docs/kingdee-接入SOP.md`
+- 每次调用都落库到“金蝶同步日志”，含请求/响应报文、耗时、错误信息；**失败的日志用独立事务写入，不会因为后续报错回滚而丢失**
+- 错误按金蝶 `MsgCode` 给出可操作提示（`1` 凭据错且重试无效、`4` 表单不存在、`8` 参数为空、`9` 字段名不存在）
+- 定时任务刷新已对接物料（默认关闭）
+- 物料表单新增“Kingdee”页签，可查看同步状态与相关日志
+
+> **子实体字段必须嵌套**：Material 的子实体字段（`SubHeadEntity`、`SubHeadEntity1`…
+> `SubHeadEntity6`）平铺发送会被 WebAPI 拒绝——报"寻找实体上 X 对应的属性描述符失败，
+> 实体不存在此属性"；必须按元数据 `entityKey` 嵌套，单据头字段（`FCreateOrgId` /
+> `FUseOrgId` / `FNumber` / `FName` / `FMaterialGroup`）才平铺。字段与实体的对应见
+> `models/product_template.py` 的 `MATERIAL_FIELD_ENTITY`。特别注意 `FErpClsID`（物料属性）
+> 平铺一定被拒且会被金蝶默认成 `1`（外购），必须嵌套在 `SubHeadEntity` 里才能写入 2=自制。
+
+> **字段标识来源：** 任何 `formId` / `fieldKey` 一律以本地离线金蝶知识库为准
+> （`odoo-kingdee/data/kingdee-openapi`）：
+> **`fields_master.csv` 查字段名 / 必录 / 枚举 / 引用对象 —— 该表把实际账套元数据合并到
+> 平台登记版之上，「必录」以账套为准**；`kingdee_api_catalog.csv` 查 formId 与操作；
+> 只有在需要完整实体树时才读 `metadata/{formId}.json`（那是**平台登记版**）。
+> **禁止凭命名习惯或 SDK 自带 demo 推测：** demo 里的 `FUserOrgId` 已失效，
+> 正确为 `FUseOrgId`；本文档字段名均按该索引校正过。
+
+> ⚠️ **平台版元数据 ≠ 账套元数据，两者的「必录」会不一致。** 实测 `BD_Customer`：
+> 平台版 `metadata/BD_Customer.json` 只标 `FName` / `FCreateOrgId` / `FTRADINGCURRID` 必录，
+> 而账套版**另外**标了 `FSELLER`（销售员）/ `FSALDEPTID`（销售部门）/ `FTTel`（固定电话）。
+> **只读平台版会漏掉账套的强制字段**，只能等 `Save` 被拒才发现。查必录请用主索引
+> （`python tools/kingdee_fields.py must <formId>`；`tools/probe_form.py` 默认也读主索引，
+> 加 `--legacy` 才读平台版树）。
+
+> **默认值只有一个来源**：连接与物料的默认值（`lcid`、`org_num`、超时、单位、物料属性、
+> 物料类别、物料分组）集中在 `models/kingdee_client.py` 的 `DEFAULTS`；设置页只存与默认值不同的部分，
+> 调用方一律通过 `get_unit_number()` / `get_setting()` 读取，不要在别处再抄一份。
+
+## 依赖
+
+- Odoo：19.0
+- Odoo 模块：`base`、`web`、`product`（含 `uom`）、`hr`（部门基础资料用）。
+  **依赖按需增加**：仓库落地时才加 `stock`，会计科目类落地时才加 `account`，
+  这样「在控制台加一行」永远不会顺手拖进一个应用
+- Python（Odoo 必装）：`requests`
+- 金蝶 WebAPI SDK：本地 wheel，**不在 PyPI 上**，随本模块一起分发：
+  `sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl`
+
+> ⚠️ **发行名 ≠ 导入名：** wheel 的文件名/发行名是 `kingdee.cdp.webapi.sdk`，但它装出来的可导入包是 **`k3cloud_webapi_sdk`** （wheel 内的 `top_level.txt` 即此）。
+> 所以 `pip show kingdee.cdp.webapi.sdk` 有输出 **不等于** 代码可用；真正的判据是能 import k3cloud_webapi_sdk。代码里的导入是 `from k3cloud_webapi_sdk.main import K3CloudApiSdk` （与官方 demo 一致），**不要** 照着 wheel 文件名去改导入。
+
+SDK 采用懒加载（`models/kingdee_client.py`），因此**未安装 wheel 时模块也能正常安装和配置**，只有在真正调用接口时才会报出带安装命令的错误提示。
+
+`kingdee.cdp.webapi.sdk` 为 MIT 许可，声明依赖 `requests`、`urllib3`。
+
+### SDK 目录里哪些要部署
+
+| 内容 | 部署需要吗 | 说明 |
+| :--- | :--- | :--- |
+| `python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl` | **需要** | 运行时依赖的安装来源，随仓库一起带上即可保证任何新机器都能确定性安装 |
+| `python_sdk_demo/` | 不需要 | 官方示例（含 `.idea`、`.pytest_cache`），仅供开发查接口用法 |
+| `Python3.0SDK使用说明.docx` | 不需要 | 官方文档 |
+| `python_sdk_demo/conf.ini` | **禁止部署** | 内含体验环境的真实 `AppID` / `AppSecret` / `AcctID`；已在仓库根 `.gitignore` 忽略（`**/SDK_Python3.0_V8.2.0/python_sdk_demo/conf.ini`），`git clone/pull` 不会带出 |
+
+> 运行时真正被 import 的是**装在 Odoo 解释器里的包**，而不是这个目录本身；目录只是“安装来源”。
+
+## 部署（正式环境）
+
+Odoo **不会**自动安装本地 wheel（`external_dependencies` 只能从 PyPI 安装），必须手动装进**运行 Odoo 的那个解释器**。顺序：同步代码 → 停服务 → 装 SDK → 升级模块 → 起服务 → 验收。
+
+### 1. 同步代码
+
+把 `myaddons` 同步到服务器的 addons 目录（例：`/opt/odoo/odoo19/myaddons`）。若服务器是 git 仓库：
+
+```
+cd /opt/odoo/odoo19/myaddons
+git fetch && git merge --ff-only origin/main
+```
+
+### 2. 安装 SDK（关键：用 Odoo 自己的解释器）
+
+先查出 Odoo 实际使用的解释器，**不要** 用裸 `python3` / `pip` （极易装到别的环境）：
+
+```
+ps -eo pid,user,args | grep -i odoo | head      # 例：/opt/odoo/venv/bin/python3 …/odoo-bin -c /etc/odoo19.conf
+systemctl cat odoo19 | grep -i exec             # 容器部署则看 docker inspect <容器> | grep -i cmd
+```
+
+用同一个解释器安装模块内的 wheel，并立即自检：
+
+```
+PY=/opt/odoo/venv/bin/python3                   # ← 换成上一步查到的解释器
+$PY -m pip install /opt/odoo/odoo19/myaddons/sn_wsd_kingdee/SDK_Python3.0_V8.2.0/python_sdk_v8.2.0/kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl
+$PY -c "import sys, k3cloud_webapi_sdk; print('SDK_OK', k3cloud_webapi_sdk.__file__, sys.executable)"
+```
+
+Windows 开发机：
+
+```
+.venv\Scripts\python.exe -m pip install "myaddons\sn_wsd_kingdee\SDK_Python3.0_V8.2.0\python_sdk_v8.2.0\kingdee.cdp.webapi.sdk-8.2.0-py3-none-any.whl"
+```
+
+### 3. 升级模块并重启
+
+```
+systemctl stop odoo19
+su - odoo -s /bin/bash -c "/opt/odoo/venv/bin/python3 /opt/odoo/odoo19/odoo-bin -c /etc/odoo19.conf -d <数据库名> -u sn_wsd_kingdee --stop-after-init --no-http"
+systemctl start odoo19
+```
+
+（服务用户以 systemd 单元里的 `User=` 为准；`-d` 取实际库名，本例 `odoo19`。）
+
+### 4. 验收
+
+1. 设置 → Kingdee：填好 `Server URL / Account ID / User Name / App ID / App Secret` → 点 **Test Connection**，成功会提示
+   “连接成功：凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”，该结论来自真实业务查询（`GetDataCenters` 免鉴权，不作凭据判据）
+2. 取一个物料点 **Save to Kingdee**，到 `Kingdee → Sync Logs` 看请求/响应报文
+3. 若报“组织”相关错误，再补 `Organization Number`（该账套的组织编码）与 `Create Organization`
+
+### 5. 排查「运行 Odoo 的解释器未安装金蝶 WebAPI SDK（No module named 'k3cloud_webapi_sdk'）」
+
+该提示只说明**运行 Odoo 的解释器 import 不到这个包**。提示末尾会直接给出**可复制的安装命令**（由 `sys.executable` 与模块内 wheel 的绝对路径拼成），先照抄执行；若仍失败，再按序核查：
+
+1. 用 `ps -eo pid,user,args | grep -i odoo` 找到真正的解释器（如 `/opt/odoo/venv/bin/python3`）
+2. 用它验证：`<该解释器> -c "import k3cloud_webapi_sdk"`，再用 `-m pip show kingdee.cdp.webapi.sdk` 对照
+3. 常见原因：装进了别的 venv / 系统 python；`pip install --user` 装到了另一个用户（Odoo 以 `odoo` 运行）；装在容器外而 Odoo 在容器内；Debian/Ubuntu 24.04 的 `externally-managed-environment` 拦截（实际未装成功）；装完没重启服务
+4. 用同一解释器重装后（多 worker 时确认全部重启）执行 `systemctl restart odoo19`
+
+## 金蝶侧准备
+
+1. 在金蝶云星空产品中打开「第三方系统登录授权」，创建应用并记下 **应用ID / 应用密钥 / 授权用户**
+2. 在 `open.kingdee.com` 的同一授权项中取得 **数据中心标识（AcctID，即账套ID）**
+3. 确认 WebAPI 服务已开通，并将 Odoo 服务器出口 IP 加入白名单
+4. 确认服务地址：公有云/体验环境 `https://apiexp.open.kingdee.com/k3cloud/`；私有云为 `https://<域名>/k3cloud/`，必须以 `/k3cloud/` 结尾
+5. 单据字段名（`FNumber`、`FName` 等）需查阅金蝶 WebAPI 文档或产品内的接口示例，SDK 本身不携带字段元数据
+
+## Odoo 侧配置
+
+进入 `设置 → Kingdee`：
+
+| 配置项 | 说明 |
+| :--- | :--- |
+| Server URL | 金蝶环境地址，以 `/k3cloud/` 结尾 |
+| Account ID | 数据中心标识（AcctID） |
+| User Name | 授权的金蝶用户 |
+| App ID / App Secret | 第三方系统登录授权的应用 ID 与密钥 |
+| Organization Number | 组织编码，启用多组织时才需要 |
+| Locale ID | 账套语系，默认 2052 |
+| Connection / Request Timeout | 连接与读取超时（秒） |
+| Create Organization | 物料创建组织（`FCreateOrgId`），**必填** |
+| Material Unit | 物料计量单位：金蝶 `BD_UNIT` 编码（如 `001`=只、`GE`=个），写入物料的基准/库存/采购/销售等 7 个单位字段；留空按 `001` |
+| Use Organization | 物料使用组织（`FUseOrgId`），留空则取创建组织 |
+| Customer Currency | 客户结算币别（`FTRADINGCURRID`，如 `PRE001`），留空按 `PRE001` |
+| Customer Salesman & Department | 本账套要求客户必填销售员（`FSELLER`）与销售部门（`FSALDEPTID`），部门须为销售类部门（如 `ZN0801` 销售一部） |
+| Scheduled Material Refresh | 允许定时任务刷新已对接物料 |
+
+配置完成后点 **Test Connection**，成功会提示“凭据已通过 `BD_MATERIAL` 查询校验（读取 N 行）”。
+
+> 注意：`App Secret` 保存在 `ir.config_parameter` 中，数据库内为明文，请把设置页权限限制在管理员范围内。
+
+## 用户操作
+
+### 1）把物料推送到金蝶
+
+进入 `库存/销售 → 产品`，打开某个产品：
+
+1. 在“Kingdee”页签填写 `Kingdee Number`（留空则取产品的内部参考 `default_code`）；
+   `Kingdee Unit` 留空则取 `设置 → Kingdee → Material Defaults` 里配置的物料计量单位
+2. 点击 **Save to Kingdee** → 状态变为 `Saved`
+3. 需要走审批流时依次点 **Submit** → **Audit**；需要退回时点 **Un-audit**
+4. 点击 **Refresh from Kingdee** 可按物料编码回读金蝶侧的编码/名称/内码
+
+批量操作：在“产品”列表勾选多行 → `动作` 菜单 → `Kingdee: Save Materials / Audit Materials / Refresh Materials`。
+
+### 2）把客户推送到金蝶
+
+打开某个客户（`销售 → 客户`），切到 **Kingdee** 页签：
+
+1. `Kingdee Number` 留空则取客户的 `参考`（`ref`），两者都空时报错提示
+2. 先在 `设置 → Kingdee` 配置 `Customer Currency` 与 `Customer Salesman & Department`
+   （本账套要求客户必须有销售员 `FSELLER` 与销售部门 `FSALDEPTID`，否则推送被拒），也可在客户上覆盖
+3. 点 **Save to Kingdee** → `Saved`；本账套的客户必须先提交（Submit）再审核（Audit），否则审核会被拒绝
+4. **Refresh from Kingdee** 按客户编码回读；**Delete in Kingdee** 删除金蝶侧记录并清空对接状态
+
+批量操作：在客户列表勾选多行 → `动作` 菜单 → `Kingdee: Save / Audit / Refresh Customers`。
+
+### 3）同步控制台
+
+所有同步都从这一个入口出发：菜单 `Kingdee → Synchronization` 下按方向分两个子菜单。
+
+| 菜单 | 做什么 |
+| :--- | :--- |
+| `Kingdee to Odoo` （金蝶 → Odoo） | 从金蝶读回 Odoo |
+| `Odoo to Kingdee` （Odoo → 金蝶） | 把 Odoo 推送到金蝶 |
+
+两个页面是同一张**同步对象清单**，默认按「模块」分组，一行一个同步对象（当前是物料与客户）。
+每行一个 **Synchronize** 按钮，点了直接同步、不弹向导；入站行另有 **Preview** 按钮，
+只读金蝶并报出「预计新建 / 更新 / 跳过」多少条，不写任何数据。
+
+行上的配置（点开该行修改）：
+
+| 字段 | 说明 |
+| :--- | :--- |
+| `Module` | 分组归属：基础资料 / 销售 / 采购 / 库存 / 生产 |
+| `Kingdee Filter` | 入站时的金蝶 `FilterString`，如 `FDocumentStatus = 'C'` 只读已审核；留空读全部 |
+| `Batch Limit` | 单次上限，`0` 表示用同步自身的上限（导入不限；推送默认一封顶，见下） |
+| `Linked Records` / `Pending` | 已对接条数 / 仍需推送条数 |
+| `Last Call` | 该对象最近一次调用时间（取同步日志） |
+
+> ⚠️ **推送方向会写入共享的金蝶账套。** 所以一次只发一批（物料 200 条、客户 50 条），且只挑
+> 「从未保存 / 上次失败」的记录，不会把整本目录重推一遍。首次使用先点 `Preview` 看清要发多少条。
+
+**加一个同步对象** = 一条数据（`data/kingdee_sync_targets.xml`）+ 该模型上对应方向的一个方法
+（在 `models/kingdee_sync_target.py` 的 `SYNC_METHODS` 里登记一行），不需要新视图、新菜单或新向导。
+
+匹配与去重（`_kingdee_find_material()` 逐条判定，顺序如下）：
+
+| 情形 | 结果 |
+| :--- | :--- |
+| 已有产品的 `Kingdee Number` == 物料编码 | **更新**，不新建 |
+| 某产品 `Kingdee Number` 为空、但其 **内部参考** 等于物料编码 | **关联** 该产品并补写 `Kingdee Number`，不新建 |
+| 内部参考等于物料编码，但该产品已对接 **另一个** 金蝶编码 | **拒绝** 并报错，不新建（计入「失败」） |
+| 以上都不中 | **新建** |
+| 金蝶已禁用（`FForbidStatus = B`） | 默认**跳过**（不会归档 Odoo 产品） |
+| `Kingdee Number` 相同的两条 | 由数据库 `UNIQUE(kingdee_number)` 兜底，插不进去 |
+
+> ⚠️ **唯一的重复风险是「内部参考没填」。** 匹配键是物料编码，**不是名称**：若 Odoo 里已有的产品
+> 内部参考为空（或填的不是金蝶编码），导入会为这些物料**新建**产品，结果是同名的两条。
+> 首次导入前务必先 `Preview`，或先把既有产品的内部参考整理成与金蝶编码一致。
+>
+> 另一个边界：若两条 Odoo 产品的内部参考都与同一物料编码相同，只有**第一条**会被关联，另一条保持原样
+> ——既不重复创建，也不会被接管，需要人工改掉它的内部参考。
+
+导入结束后弹通知汇总「新建 / 更新 / 跳过 / 失败」条数，失败的逐条原因也在通知里（最多 5 条），
+完整的请求与响应报文在 `Kingdee → Sync Logs`。
+
+### 4）排查问题
+
+进入 `Kingdee → Sync Logs`：
+
+- 默认按时间倒序，错误行标红；可用「Errors」筛选
+- 打开某条日志可看到完整的请求/响应报文与错误信息
+- 通过“关联记录”列或 `Open Related Record` 按钮跳回对应产品
+
+### 5）启用定时刷新（可选）
+
+1. 在 `设置 → Kingdee` 勾选 `Scheduled Material Refresh` 并保存
+2. 进入 `设置 → 技术 → 计划任务`，找到 `Kingdee: refresh linked materials`，把“有效”打开
+3. 该任务每次取 50 条已对接物料，按上次同步时间从早到晚刷新
+
+## 已知边界
+
+- 已实现物料（`BD_MATERIAL`）与客户（`BD_Customer`）。其它单据（销售订单、采购订单、生产订单等）按 `docs/kingdee-接入SOP.md` 走一遍，再复用 `sn.wsd.kingdee.client` 的方法：`save` / `batch_save` / `bill_action` / `execute_bill_query` / `bill_query` / `iter_bill_query` / `view` / `get_sys_report_data` / `execute`，把 `FormId` 与字段换成目标单据即可；分页一律用 `iter_bill_query()`，因为金蝶的 `TopRowCount` 是绝对终止行号（须为 `StartRow + Limit`），写成页大小会让第二页之后的数据错乱
+- **推送字段为最小集** （`FCreateOrgId` / `FUseOrgId` / `FNumber` / `FName` / 计量单位 7 项 / 可选 `FMaterialGroup`）。计量单位取 `Material Unit`（默认 `001`），可用物料的 `Kingdee Unit` 覆盖；**账套版**元数据里 `BD_MATERIAL` 另有 35 个「必录」字段（`FErpClsID` 物料属性、`FCategoryID` 物料类别、`FStandHourUnitId` 工时单位、`FInvPtyId` 辅助属性等；**平台版多标了 `FMaterialGroup`**，账套版并未标它必录），WebAPI 会给出默认值，如需按管控口径推送请在 `product.template._kingdee_prepare_save()` 中补齐
+- 金蝶报表类接口（科目余额表、库存报表等）需要**先在金蝶中保存查询方案**，把方案 ID 放进请求参数
+- 金蝶 SDK 内部使用 `verify=False` 并关闭了 `InsecureRequestWarning`，即不校验服务端证书
+- SDK 实例按凭据缓存复用会话（含 Cookie），非线程安全，多线程下共用同一实例存在竞态；如需更高并发请自行在客户端层加锁
+- 金蝶没有提供 Odoo 侧的回调入口：**所有同步都由 Odoo 发起**，出站是逐条 **Save** （表单按钮或列表动作），
+  入站是 **Refresh from Kingdee** 单条回读与 **Kingdee → Import Materials** 批量拉取，不存在金蝶推送 Odoo 的通道
+- **入站只写「出站读得到的字段」**：导入与 `Refresh from Kingdee` 只写 `Kingdee Number` / `Kingdee Name` /
+  物料属性 / 物料类别 / 物料分组 / 计量单位（外加同步状态），也就是 `_kingdee_payload()` 取值的那几项——
+  这样「从金蝶导入 → 再推回金蝶」逐字段不变。物料名称只在**新建**时写入，已有产品的改名不会被导入覆盖，
+  金蝶侧的 `FName` 记在 `Kingdee Name`；`Kingdee Unit` 存的是金蝶单位编码（`BD_UNIT`），不会去改 Odoo 的计量单位
+- 导入不写 `Kingdee Master ID`：账套字段索引里 `BD_MATERIAL` 没有可查询的主键字段（不猜字段名），
+  对产品点一次 `Refresh from Kingdee` 即可补上
+- 导入读取的字段清单集中在 `models/product_template.py` 的 `KINGDEE_MATERIAL_FIELDS`：
+  `FNumber` / `FName` / `FDocumentStatus` / `FForbidStatus` / `FErpClsID` /
+  `FCategoryID.FNumber` / `FMaterialGroup.FNumber` / `FBaseUnitId.FNumber`。若该账套拒绝其中某个点号字段，
+  金蝶会以 `MsgCode 9` 报错，把该字段从常量里去掉即可（字段名一律以账套索引为准，不得凭习惯推测）
+- 客户侧：账套元数据把 `FTTel`（联系人子实体 `FT_BD_CUSTCONTACT`）标为必录，但**实测不强制** ——
+  不传联系人子实体照样能保存成功（全量 349 条现网客户的 `FTTel` 均为空）。因此本模块的客户
+  payload 不含联系人子实体。验证脚本：`tools/try_save_customer.py`

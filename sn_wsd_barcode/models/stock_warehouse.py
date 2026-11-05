@@ -21,4 +21,18 @@ class StockWarehouse(models.Model):
             values['pick_type_id']['restrict_scan_dest_location'] = 'no'
         elif not values['pick_type_id'].get('active') and self.pick_type_id.active:
             values['out_type_id']['restrict_scan_source_location'] = self.pick_type_id.restrict_scan_source_location
+        # Three-step reception: the goods land in the input location, then go
+        # through the quality-control and storage steps. Those two operation
+        # types are driven by the reception steps, so their scan settings are
+        # applied here rather than through a data file (inactive types are
+        # skipped by the default active filter).
+        values.setdefault('qc_type_id', {}).update({
+            'restrict_scan_product': True,
+            'restrict_scan_tracking_number': 'mandatory',
+            'restrict_scan_dest_location': 'no',
+        })
+        values.setdefault('store_type_id', {}).update({
+            'restrict_scan_product': True,
+            'restrict_scan_dest_location': 'mandatory',
+        })
         return values

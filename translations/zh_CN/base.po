@@ -1,0 +1,593 @@
+# Odoo zh_CN translation worklist -- base
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:47+0000\n"
+"PO-Revision-Date: 2026-10-12 01:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_module.py:0
+#: code:addons/base/models/ir_module.py:0
+msgid ""
+"\n"
+"It can be installed running: %s"
+msgstr ""
+"\n"
+"可通过运行以下命令安装：%s"
+
+#. module: base
+#. odoo-python
+#: code:addons/models.py:0 code:addons/models.py:0
+msgid ""
+"\n"
+"User: %(user)s\n"
+"Groups: %(allowed_groups_msg)s"
+msgstr ""
+"\n"
+"用户：%(user)s\n"
+"组：%(allowed_groups_msg)s"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid ""
+"Field \"%(field_name)s\" in related path \"%(related_field)s\" is not "
+"searchable. Non-searchable fields cannot be used in related fields."
+msgstr "关联路径“%(related_field)s”中的字段“%(field_name)s”不可搜索。不可搜索的字段不能用于关联字段。"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_ui_view.py:0
+msgid ""
+"Inherited view cannot have '%(attr)s' defined on the record. Use '%(attr)s' "
+"attributes inside the view definition"
+msgstr "继承视图不能在记录上定义“%(attr)s”。请在视图定义内部使用“%(attr)s”属性"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/res_bank.py:0
+msgid ""
+"Please add your own bank account manually: %(account_number)s (%(partner)s)"
+msgstr "请手动添加您自己的银行账户：%(account_number)s（%(partner)s）"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_attachment.py:0
+msgid ""
+"You cannot attach an attachment to itself.\n"
+"Attachment %(record)s cannot have res_id: %(res_id)s"
+msgstr ""
+"附件不能附加到自身。\n"
+"附件 %(record)s 不能有 res_id：%(res_id)s"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_accounting_pdf_reports
+msgid "Accounting Reports For Odoo 19"
+msgstr "Odoo 19 会计报表"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_om_account_accountant
+msgid ""
+"Accounting Reports, Asset Management and Budget, Recurring Payments, Lock "
+"Dates, Fiscal Year, Accounting Dashboard, Financial Reports, Customer Follow"
+" up Management, Bank Statement Import"
+msgstr "会计报表、资产管理与预算、定期付款、锁定日期、财年、会计仪表盘、财务报表、客户跟进管理、银行对账单导入"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_route_graph
+msgid "AntV X6 directed graph editor for process routes"
+msgstr "用于工艺路线的 AntV X6 有向图编辑器"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_themes_backend
+#: model:ir.module.category,name:base.module_category_backend
+msgid "Backend"
+msgstr "后台"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_om_account_daily_reports
+msgid "Cash Book, Day Book and Bank Book Report For Odoo 19"
+msgstr "Odoo 19 的现金记账、日记账和银行记账报表"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_account_daily_reports
+msgid "Cash Book, Day Book, Bank Book Financial Reports"
+msgstr "现金记账、日记账、银行记账财务报表"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_code_rule
+msgid "Configurable document coding rules for the manufacturing domain"
+msgstr "制造领域可配置的单据编码规则"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_account_followup
+msgid "Customer Follow Up Management"
+msgstr "客户跟进管理"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_om_account_followup
+msgid "Customer FollowUp Management"
+msgstr "客户跟进管理"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_label
+msgid "Designable label templates with ZPL / CPCL-JSON rendering"
+msgstr "可使用 ZPL / CPCL-JSON 渲染的可设计标签模板"
+
+#. module: base
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_manufacturing_device_management
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_device
+msgid "Device Management"
+msgstr "设备"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_device
+msgid "Device data collection (reflow soldering, etc.)"
+msgstr "设备数据采集（回流焊等）"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_drawing_material
+msgid "Drawing-number material lists and ESOP work instructions"
+msgstr "图号物料清单与 ESOP 作业指导书"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_plm
+msgid "Engineering change orders and bill of materials versioning"
+msgstr "工程变更单与物料清单版本管理"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_equipments,_assets,_internal_hardware,_allocation_tracking
+msgid "Equipments, Assets, Internal Hardware, Allocation Tracking"
+msgstr "设备、资产、内部硬件、分配跟踪"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_gantt
+msgid "Gantt view support for manufacturing schedules"
+msgstr "为制造计划提供甘特图视图"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_field
+msgid "Generic field-path reader shared by label center and coding rules"
+msgstr "标签中心与编码规则共用的通用字段路径读取器"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_base
+msgid "Hierarchical search panels for product and stock master data"
+msgstr "产品与库存主数据的分层搜索面板"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_bom_import
+msgid ""
+"Import tree-structured ERP BOM Excel exports into mrp.bom through a wizard"
+msgstr "通过向导把树状结构的 ERP BOM Excel 导出导入到 mrp.bom"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_ding
+msgid "Integrate DingTalk users and approvals with Odoo"
+msgstr "把钉钉用户与审批集成到 Odoo"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_inventory,_logistic,_storage
+msgid "Inventory, Logistic, Storage"
+msgstr "库存、物流、仓储"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_invoicing_management
+msgid "Invoicing Management"
+msgstr "发票管理"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_api
+msgid ""
+"MES device test-result ingestion (legacy flows removed; API rewrite planned)"
+msgstr "MES 设备测试结果接入（旧流程已移除；计划重写 API）"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_exception
+msgid ""
+"MES exception tickets: terminal reporting, category routing, claim, "
+"suspension, closure confirmation, Pareto"
+msgstr "MES 异常工单：终端上报、分类派发、认领、挂起、关闭确认、帕累托"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_msd
+msgid "MSD material control for electric meter manufacturing"
+msgstr "电能表制造的湿敏元件物料管控"
+
+#. module: base
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_maintenance
+msgid "Maintenance"
+msgstr "维护保养"
+
+#. module: base
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_manufacturing_manufacturing
+#: model:ir.module.category,name:base.module_category_manufacturing
+msgid "Manufacturing"
+msgstr "制造"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_mrp
+msgid "Manufacturing extensions built on Odoo MRP (MES orders, station flow)"
+msgstr "基于 Odoo MRP 的制造扩展（MES 工单、工位流转）"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_material
+msgid "Material specification fields on business document lines"
+msgstr "业务单据行上的物料规格字段"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_account_accountant
+msgid "Odoo 19 Accounting Community"
+msgstr "Odoo 19 会计社区版"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_accounting_pdf_reports
+msgid "Odoo 19 Accounting Financial Reports"
+msgstr "Odoo 19 会计财务报表"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_account_asset
+#: model:ir.module.module,summary:base.module_om_account_asset
+msgid "Odoo 19 Assets Management"
+msgstr "Odoo 19 资产管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_account_budget
+#: model:ir.module.module,summary:base.module_om_account_budget
+msgid "Odoo 19 Budget Management"
+msgstr "Odoo 19 预算管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_fiscal_year
+msgid "Odoo 19 Fiscal Year & Lock Date"
+msgstr "Odoo 19 财年与锁定日期"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_om_fiscal_year
+msgid "Odoo 19 Fiscal Year, Fiscal Year in Odoo 19, Lock Date in Odoo 19"
+msgstr "Odoo 19 财年、Odoo 19 中的财年、Odoo 19 中的锁定日期"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_om_recurring_payments
+msgid "Odoo 19 Recurring Payment"
+msgstr "Odoo 19 定期付款"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_atliis_list_column_width_saver
+msgid "Odoo UI Enhancer – Save List Column Width Automatically"
+msgstr "Odoo 界面增强 – 自动保存列表列宽"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_picklight
+msgid "Pick-to-light integration for smart shelves and warehouse devices"
+msgstr "智能货架与仓储设备的电子标签拣货集成"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_piece_rate
+msgid ""
+"Piece-rate wage settlements: rate master data, crew allocation, monthly "
+"ledger"
+msgstr "计件工资结算：单价主数据、班组分配、月度台账"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_label_links
+msgid "Print-label entry points and seed templates for business models"
+msgstr "业务模型的打印标签入口与预置模板"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_repair
+msgid "Production repair management for SN and quantity reporting"
+msgstr "按序列号与数量报工的生产维修管理"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_project_management
+msgid "Project Management"
+msgstr "项目管理"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_purchase_management
+msgid "Purchase Management"
+msgstr "采购管理"
+
+#. module: base
+#. from po: d:\odoo\odoo19wsd\myaddons\purchase_request\i18n\zh_CN.po
+#: model:ir.module.module,shortdesc:base.module_purchase_request
+msgid "Purchase Request"
+msgstr "请购单"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_purchase
+msgid "Purchase contract fields and purchase detail tracking"
+msgstr "采购合同字段与采购明细跟踪"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_quality
+msgid "Quality management for WSD meter manufacturing"
+msgstr "WSD 电表制造的质量管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_remove_odoo_enterprise
+msgid "Remove Odoo Enterprise"
+msgstr "移除 Odoo 企业版"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_powered_by_odoo_remove
+msgid "Remove Powered by Odoo"
+msgstr "移除 Powered by Odoo"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_powered_by_odoo_remove
+msgid ""
+"Remove Powered by Odoo from Login, Portal and Brand Promotion from website footer. Remove Odoo branding from the footer of portal pages. Connect with your software Removing the 'Powered by' block entirely Remove from the portal sidebar.  Remove from the login page.  Remove from the brand promotion.  Remove Odoo branding from the footer of portal pages.  Remove branding  De branding Odoo  Hide Powered by odoo  login page  connect with your software  odoo signin page  odoo signup page  odoo sign screen  hide connect with your software\n"
+"    "
+msgstr ""
+"从登录页、门户和网站页脚的品牌推广中移除 Powered by Odoo。移除门户页面页脚的 Odoo 品牌。与您的软件建立联系 彻底移除“Powered by”区块 从门户侧栏移除。从登录页移除。从品牌推广移除。移除门户页面页脚的 Odoo 品牌。 移除品牌  De branding Odoo  Hide Powered by odoo  login page  connect with your software  odoo signin page  odoo signup page  odoo sign screen  hide connect with your software\n"
+"    "
+
+#. module: base
+#: model:ir.module.module,summary:base.module_remove_odoo_enterprise
+msgid "Remove enterprise modules and setting items"
+msgstr "移除企业版模块与设置项"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_report
+msgid "Reporting extensions for SN WSD manufacturing"
+msgstr "SN WSD 制造的报表扩展"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_consumable
+msgid "SMT auxiliary material lifecycle control"
+msgstr "SMT 辅料生命周期管控"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_smt
+msgid "SMT material table and online loading management"
+msgstr "SMT 料表与在线上料管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_bom_import
+msgid "SN WSD BOM Excel Import"
+msgstr "SN WSD BOM Excel 导入"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_base
+msgid "SN WSD Base"
+msgstr "SN WSD 基础"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_odoo19_translations
+msgid "SN WSD Chinese Translations"
+msgstr "SN WSD 中文翻译"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_code_rule
+msgid "SN WSD Code Rule"
+msgstr "SN WSD 编码规则"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_consumable
+msgid "SN WSD Consumable Control"
+msgstr "SN WSD 辅料管控"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_ding
+msgid "SN WSD DingTalk Integration"
+msgstr "SN WSD 钉钉集成"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_drawing_material
+msgid "SN WSD Drawing Material Relations"
+msgstr "SN WSD 图纸物料关系"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_exception
+msgid "SN WSD Exception Management"
+msgstr "SN WSD 异常管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_field
+msgid "SN WSD Field Reader"
+msgstr "SN WSD 字段读取器"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_gantt
+msgid "SN WSD Gantt"
+msgstr "SN WSD 甘特图"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_label
+msgid "SN WSD Label Center"
+msgstr "SN WSD 标签中心"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_label_links
+msgid "SN WSD Label Links"
+msgstr "SN WSD 标签入口"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_mrp
+msgid "SN WSD MRP"
+msgstr "SN WSD 制造"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_msd
+msgid "SN WSD MSD"
+msgstr "SN WSD 湿敏元件管控"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_material
+msgid "SN WSD Material"
+msgstr "SN WSD 物料"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_piece_rate
+msgid "SN WSD Piece Rate"
+msgstr "SN WSD 计件工资"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_plm
+msgid "SN WSD Product Lifecycle Management"
+msgstr "SN WSD 产品生命周期管理"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_purchase
+msgid "SN WSD Purchase Contract Report"
+msgstr "SN WSD 采购合同报表"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_quality
+msgid "SN WSD Quality"
+msgstr "SN WSD 质量"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_repair
+msgid "SN WSD Repair"
+msgstr "SN WSD 维修"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_report
+msgid "SN WSD Report"
+msgstr "SN WSD 报表"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_route_graph
+msgid "SN WSD Route Graph Editor"
+msgstr "SN WSD 路线图编辑器"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_scrap
+msgid "SN WSD Scrap"
+msgstr "SN WSD 报废"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_workorder
+msgid "SN WSD Shop Floor Terminal"
+msgstr "SN WSD 车间终端"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_stock_report
+msgid "SN WSD Stock Report"
+msgstr "SN WSD 库存报表"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_tooling
+msgid "SN WSD Tooling"
+msgstr "SN WSD 工装"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_wip
+msgid "SN WSD WIP"
+msgstr "SN WSD 在制品"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_scrap
+msgid "Scrap record management for SN-based manufacturing"
+msgstr "基于序列号的制造报废记录管理"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_workorder
+msgid "Shop floor station terminal for WSD MES orders"
+msgstr "WSD MES 工单的车间工位终端"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_stock_report
+msgid ""
+"Stock in/out balance report (with drill-down detail) and quant valuation "
+"aggregation"
+msgstr "收发存余额报表（支持下钻明细）与库存计价汇总"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_atliis_list_column_width_saver
+msgid ""
+"Stop resizing columns every time – automatically save and restore your "
+"layout"
+msgstr "不必每次调整列宽 – 自动保存并恢复您的版式"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_odoo19_translations
+msgid ""
+"Supplies and overrides the Chinese (zh_CN) translations of other modules "
+"without touching upstream sources"
+msgstr "在不修改上游源码的前提下，补充和覆盖其他模块的中文（zh_CN）译文"
+
+#. module: base
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_backend_theme
+msgid "Theme"
+msgstr "主题"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_themes
+msgid "Themes"
+msgstr "主题"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_tooling
+msgid "Tooling types, templates, tooling lifecycle, and PDA service"
+msgstr "工装类型、模板、工装生命周期与 PDA 服务"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_tools_ui
+msgid "UI"
+msgstr "界面"
+
+#. module: base
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.module.module,summary:base.module_sn_wsd_barcode
+msgid "Use barcode scanners to process logistics operations"
+msgstr "使用条码扫瞄仪处理物流作业"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_om_recurring_payments
+msgid "Use recurring payments to handle periodically repeated payments"
+msgstr "使用定期付款处理周期性重复的付款"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_purchase_request
+msgid ""
+"Use this module to have notification of requirements of materials and/or "
+"external services and keep track of such requirements."
+msgstr "使用本模块获取物料和/或外部服务需求的通知，并跟踪这些需求。"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_sn_wsd_wip
+msgid "WIP reporting and visualization for manufacturing orders"
+msgstr "制造单的在制品报表与可视化"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_barcode
+msgid "WSD Barcode"
+msgstr "WSD 条码"
+
+#. module: base
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_picklight\i18n\zh_CN.po
+#: model:ir.module.module,shortdesc:base.module_sn_wsd_picklight
+msgid "WSD Pick to Light"
+msgstr "WSD 按灯拣选"
+
+#. module: base
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_warehouse
+#: model:ir.module.category,name:base.module_category_inventory_warehouse
+msgid "Warehouse"
+msgstr "仓库"
+
+#. module: base
+#. from po: d:\odoo\odoo19wsd\addons\web\i18n\zh_CN.po
+#: model:ir.module.category,name:base.module_category_web
+msgid "web"
+msgstr "网络"

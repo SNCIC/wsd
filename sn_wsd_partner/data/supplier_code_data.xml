@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The supplier groups come from the account and live in the database
+         (no xmlids), so both seeds go through function calls: the coding
+         rule, then one counter per group from the references already on
+         file. Both are idempotent — an existing rule or counter wins — so
+         they can run again on every upgrade, which is what makes the
+         counters pick up groups assigned after the install. -->
+    <function model="sn.supplier.code.seed" name="_seed_supplier_code_rule" eval="[]"/>
+    <function model="sn.supplier.code.seed" name="_seed_supplier_counters" eval="[]"/>
+</odoo>

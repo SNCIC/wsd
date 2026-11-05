@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_dingding_approval_instance_tree" model="ir.ui.view">
+            <field name="name">sn.wsd.ding.approval.instance.tree</field>
+            <field name="model">sn.wsd.ding.approval.instance</field>
+            <field name="arch" type="xml">
+                <list string="DingTalk Approval Instances" create="false">
+                    <field name="process_instance_id" optional="hide"/>
+                    <field name="config_id"/>
+                    <field name="status"/>
+                    <field name="start_time" optional="hide"/>
+                    <field name="end_time" optional="hide"/>
+                    <field name="initiator_user_id"/>
+                    <field name="res_name" string="Related Record"/>
+                    <field name="res_model" optional="hide"/>
+                    <field name="res_id" optional="hide"/>
+                    <button name="action_open_related_record"
+                            type="object"
+                            string="Open"
+                            class="btn-link"
+                            invisible="not res_model or not res_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_dingding_approval_instance_form" model="ir.ui.view">
+            <field name="name">sn.wsd.ding.approval.instance.form</field>
+            <field name="model">sn.wsd.ding.approval.instance</field>
+            <field name="arch" type="xml">
+                <form string="DingTalk Approval Instance" create="false">
+                    <header>
+                        <button name="action_refresh_status" type="object" string="Refresh" class="btn-secondary"/>
+                        <button name="action_open_related_record" type="object" string="Open Related" class="btn-secondary"
+                                invisible="not res_model or not res_id"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="config_id"/>
+                                <field name="process_instance_id"/>
+                                <field name="status"/>
+                                <field name="start_time"/>
+                                <field name="end_time"/>
+                            </group>
+                            <group>
+                                <field name="initiator_user_id"/>
+                                <field name="res_name" readonly="1"/>
+                                <field name="res_model" readonly="1"/>
+                                <field name="res_id" readonly="1"/>
+                                <field name="last_sync_at" readonly="1" optional="hide"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Logs">
+                                <field name="log_ids" nolabel="1">
+                                    <list create="false" delete="false">
+                                        <field name="node_name"/>
+                                        <field name="approver_name"/>
+                                        <field name="result"/>
+                                        <field name="comment"/>
+                                        <field name="action_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Raw">
+                                <group>
+                                    <field name="raw_response" widget="text" readonly="1"/>
+                                    <field name="last_sync_error" widget="text" readonly="1" optional="hide"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_dingding_approval_instance" model="ir.actions.act_window">
+            <field name="name">Approval Instances</field>
+            <field name="res_model">sn.wsd.ding.approval.instance</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

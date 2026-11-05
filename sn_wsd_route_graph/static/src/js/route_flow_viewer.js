@@ -117,7 +117,7 @@ export class RouteFlowViewer extends Component {
             container: el,
             grid: true,
             panning: { enabled: true },
-            mousewheel: { enabled: true, minScale: 0.5, maxScale: 3 },
+            mousewheel: { enabled: true, modifiers: ["ctrl"], minScale: 0.5, maxScale: 3 },
             interacting: false,
         });
         this.graph = graph;

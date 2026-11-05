@@ -260,7 +260,7 @@
                         Upload the template file filled with one row per equipment and day. Rows matching an existing record (same equipment, date and shift) replace it when "Overwrite Existing Records" is checked.
                     </p>
                     <p class="mb-0">
-                        <a class="btn btn-secondary"
+                        <a class="btn btn-secondary" role="button"
                            href="/sn_wsd_device/oee_import_template.xlsx"
                            download="oee_import_template.xlsx">Download Template</a>
                     </p>

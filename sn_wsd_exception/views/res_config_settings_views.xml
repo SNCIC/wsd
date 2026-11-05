@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sn_wsd_exception</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Exception Management" name="sn_wsd_exception">
+                    <block title="Escalation" name="exception_escalation">
+                        <setting string="Auto-Escalation" id="exception_escalation_enabled"
+                                 help="Notify the next level when tickets stay unclaimed or unresolved past the level limits. Escalation only notifies, it never reassigns.">
+                            <field name="exception_escalation_enabled"/>
+                        </setting>
+                        <setting string="Escalation Supervisor" id="exception_escalation_supervisor"
+                                 help="Notified at escalation stage 2 (after the line team leader).">
+                            <field name="exception_supervisor_user_id"/>
+                        </setting>
+                        <setting string="Escalation Manager" id="exception_escalation_manager"
+                                 help="Notified at escalation stage 3 and above.">
+                            <field name="exception_manager_user_id"/>
+                        </setting>
+                    </block>
+                    <block title="Level Limits (minutes)" name="exception_level_limits">
+                        <setting string="Normal" id="exception_limits_normal">
+                            <div class="content-group">
+                                <div class="row mt-2">
+                                    <label for="exception_respond_normal_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_respond_normal_minutes" class="col-2"/>
+                                    <label for="exception_resolve_normal_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_resolve_normal_minutes" class="col-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Urgent" id="exception_limits_urgent">
+                            <div class="content-group">
+                                <div class="row mt-2">
+                                    <label for="exception_respond_urgent_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_respond_urgent_minutes" class="col-2"/>
+                                    <label for="exception_resolve_urgent_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_resolve_urgent_minutes" class="col-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Critical" id="exception_limits_critical">
+                            <div class="content-group">
+                                <div class="row mt-2">
+                                    <label for="exception_respond_critical_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_respond_critical_minutes" class="col-2"/>
+                                    <label for="exception_resolve_critical_minutes" class="col-4 o_form_label"/>
+                                    <field name="exception_resolve_critical_minutes" class="col-2"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Closure Confirmation" name="exception_closure_confirmation">
+                        <setting string="Normal Requires Confirmation" id="exception_confirm_normal"
+                                 help="When enabled, normal-level tickets must be confirmed by the line team leader or team leader before closing.">
+                            <field name="exception_level_normal_need_confirm"/>
+                        </setting>
+                        <setting string="Urgent Requires Confirmation" id="exception_confirm_urgent">
+                            <field name="exception_level_urgent_need_confirm"/>
+                        </setting>
+                        <setting string="Critical Requires Confirmation" id="exception_confirm_critical">
+                            <field name="exception_level_critical_need_confirm"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

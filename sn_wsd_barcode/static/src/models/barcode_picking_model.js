@@ -419,9 +419,9 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     updateLineQty(virtualId, qty = 1) {
-        this.actionMutex.exec(() => {
+        return this.actionMutex.exec(async () => {
             const line = this.pageLines.find((l) => l.virtual_id === virtualId);
-            this.updateLine(line, { qty_done: qty });
+            await this.updateLine(line, { qty_done: qty });
             this.trigger("update");
         });
     }
@@ -601,6 +601,9 @@ export default class BarcodePickingModel extends BarcodeModel {
                     // Lot/SN not scanned yet.
                     return isLot ? infos.scanLot : infos.scanSerial;
                 } else if (this.getQtyDone(line) < this.getQtyDemand(line)) {
+                    if (this._isPartialIncomingLotLine(this.selectedLine || this.lastScannedLine)) {
+                        return infos.scanDestLoc;
+                    }
                     // Lot/SN scanned but not enough.
                     barcodeInfo = isLot ? infos.scanLot : infos.scanSerial;
                     barcodeInfo.message = isLot
@@ -770,6 +773,19 @@ export default class BarcodePickingModel extends BarcodeModel {
         return line.qty_done && line.reserved_uom_qty && line.qty_done < line.reserved_uom_qty;
     }
 
+    _isPartialIncomingLotLine(line) {
+        return Boolean(
+            line &&
+                !line.isPackageLine &&
+                this.record.picking_type_code === "incoming" &&
+                line.product_id?.tracking === "lot" &&
+                (line.lot_id || line.lot_name) &&
+                line.qty_done > 0 &&
+                line.qty_done < line.reserved_uom_qty &&
+                this.config.restrict_scan_dest_location !== "no"
+        );
+    }
+
     /**
      * Splits a line if its qty done is less than reserved.
      * In case of a grouped line, if there's is a lot id or product tracking is serial,
@@ -812,7 +828,10 @@ export default class BarcodePickingModel extends BarcodeModel {
             this._clearScanData();
             return false;
         }
-        if (!selectedLine.lot_id) {
+        if (
+            !selectedLine.lot_id ||
+            this._isPartialIncomingLotLine(selectedLine)
+        ) {
             await this.splitLine(selectedLine);
         }
         // If the line has no reservation and is grouped with sibling lines,
@@ -876,6 +895,9 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     get displayPutInPackButton() {
+        if (this.record.picking_type_code === "incoming") {
+            return false;
+        }
         return this.groups.group_tracking_lot && this.config.restrict_put_in_pack != "no";
     }
 
@@ -1013,6 +1035,13 @@ export default class BarcodePickingModel extends BarcodeModel {
                 method: "action_print_barcode",
             },
         ];
+        if (this.record.picking_type_code === "incoming") {
+            buttons.push({
+                name: _t("Print Labels"),
+                class: "o_print_material_labels",
+                method: "action_print_material_labels",
+            });
+        }
         if (this.groups.group_tracking_lot) {
             buttons.push({
                 name: _t("Print Packages"),
@@ -1024,8 +1053,38 @@ export default class BarcodePickingModel extends BarcodeModel {
         return buttons;
     }
 
+    async print(action, method) {
+        if (method !== "action_print_material_labels") {
+            return super.print(...arguments);
+        }
+        await this.save();
+        const options = this._getPrintOptions();
+        if (options.warning) {
+            return this.notification(options.warning, { type: "warning" });
+        }
+        const selectedLine = this.selectedLine || this.lastScannedLine;
+        const line =
+            selectedLine?.lines?.find((subline) => subline.lot_id || subline.lot_name) ||
+            selectedLine;
+        const context = {
+            active_move_line_id: line?.id || false,
+            active_lot_id: line?.lot_id?.id || false,
+        };
+        action = await this.orm.call(this.resModel, method, [[this.resId]], {
+            context,
+        });
+        this.action.doAction(action, options);
+    }
+
     get reloadingMoveLines() {
         return this.currentState !== undefined;
+    }
+
+    get displayAddProductButton() {
+        if (this.record.picking_type_code === "incoming") {
+            return true;
+        }
+        return super.displayAddProductButton;
     }
 
     async save() {
@@ -1531,7 +1590,55 @@ export default class BarcodePickingModel extends BarcodeModel {
             const smlData = this._getMoveLineData(id);
             lines.push(smlData);
         }
+        this._addUnreservedMoveLines(lines, picking);
         return lines;
+    }
+
+    _addUnreservedMoveLines(lines, picking) {
+        const linesByMoveId = new Map();
+        for (const line of lines) {
+            const moveId = line.move_id;
+            if (!moveId) {
+                continue;
+            }
+            const moveLines = linesByMoveId.get(moveId) || [];
+            moveLines.push(line);
+            linesByMoveId.set(moveId, moveLines);
+        }
+
+        for (const moveId of picking.move_ids) {
+            const move = this.cache.getRecord("stock.move", moveId);
+            if (!move || move.state === "done" || move.state === "cancel") {
+                continue;
+            }
+            const moveLines = linesByMoveId.get(moveId) || [];
+            const reservedQuantity = moveLines.reduce(
+                (total, line) => total + (line.quantity || 0),
+                0
+            );
+            const remainingQuantity = move.product_uom_qty - reservedQuantity;
+            if (remainingQuantity <= 0) {
+                continue;
+            }
+
+            const templateLine = moveLines[0];
+            if (!templateLine) {
+                continue;
+            }
+            const unreservedLine = Object.assign({}, templateLine, {
+                id: false,
+                dummy_id: false,
+                virtual_id: this._uniqueVirtualId,
+                move_id: moveId,
+                lot_id: false,
+                lot_name: false,
+                quantity: 0,
+                qty_done: 0,
+                picked: false,
+                reserved_uom_qty: this._parseFloat(remainingQuantity),
+            });
+            lines.push(unreservedLine);
+        }
     }
 
     _defaultLocation() {
@@ -1770,6 +1877,29 @@ export default class BarcodePickingModel extends BarcodeModel {
         if (this.isDone && !this.commands[barcode]) {
             return this.notification(_t("This picking is already done"), { type: "danger" });
         }
+        const currentLine = this.selectedLine || this.lastScannedLine;
+        if (this._isPartialIncomingLotLine(currentLine)) {
+            const destination = await this.cache.getRecordByBarcode(barcode, "stock.location");
+            if (destination) {
+                return this._processLocation({ destLocation: destination, match: true });
+            }
+            // Also support GS1 location/location-destination barcodes. The regular parser may
+            // expose the same value as a lot when the barcode is ambiguous, but an incoming
+            // partial lot must consume a destination location first.
+            const filters = {
+                all: {
+                    company_id: [false].concat(this._getCompanyId() || []),
+                },
+            };
+            const barcodeData = await this._parseBarcode(barcode, filters);
+            const parsedDestination = barcodeData.destLocation || barcodeData.location;
+            if (parsedDestination) {
+                return this._processLocation({
+                    destLocation: parsedDestination,
+                    match: true,
+                });
+            }
+        }
         return super._processBarcode(barcode);
     }
 
@@ -1844,6 +1974,10 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     _getLinesToMove() {
+        const partialIncomingLotLine = this.selectedLine || this.lastScannedLine;
+        if (this._isPartialIncomingLotLine(partialIncomingLotLine)) {
+            return [partialIncomingLotLine];
+        }
         const configScanDest = this.config.restrict_scan_dest_location;
         // Usually, assign the destination to the selected line or to the selected package's lines.
         let lines = this.selectedLine ? [this.selectedLine] : [];
@@ -2458,14 +2592,14 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     _updateLineQty(line, args) {
-        if (args.qty_done) {
+        if (args.qty_done !== undefined) {
             if (line.product_id.tracking === "serial") {
                 const nextQty = line.qty_done + args.qty_done;
                 if (nextQty > 1 && (this.record.use_create_lots || this.record.use_existing_lots)) {
                     return; // Can't have more than 1 qty by serial number.
                 }
             }
-            line.qty_done += args.qty_done;
+            line.qty_done = Math.max(0, line.qty_done + args.qty_done);
             this._setUser();
         }
     }

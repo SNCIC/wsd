@@ -22,6 +22,10 @@ class MrpWorkcenter(models.Model):
     )
     sn_shop_floor_enabled = fields.Boolean(
         string='Show on Shop Floor', default=True)
+    sn_equipment_ids = fields.One2many(
+        'sn.wsd.workcenter.equipment', 'workcenter_id', string='Equipment',
+        help='Equipment assigned to this work center; the hand-typed '
+             'sequence gives the process order of the machines.')
 
     def sn_get_employee_by_barcode(self, barcode):
         return self.env['hr.employee'].sudo().search(

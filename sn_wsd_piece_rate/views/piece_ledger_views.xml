@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 员工计件台账：参与人行归集，口径=已确认未作废（action domain 固定） -->
+    <record id="view_sn_wsd_piece_participant_pivot" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.participant.pivot</field>
+        <field name="model">sn.wsd.piece.settlement.participant</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="employee_id" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="settlement_qty_ok" invisible="1"/>
+                <field name="performance_ratio" invisible="1"/>
+                <field name="sequence" invisible="1"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_piece_participant_list" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.participant.list</field>
+        <field name="model">sn.wsd.piece.settlement.participant</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="settlement_id" string="Settlement"/>
+                <field name="employee_id"/>
+                <field name="employee_code" optional="show"/>
+                <field name="settlement_date"/>
+                <field name="mes_order_id" optional="show"/>
+                <field name="route_operation_id" optional="show"/>
+                <field name="settlement_qty_ok" sum="Total OK" optional="show"/>
+                <field name="performance_ratio" groups="base.group_no_one" optional="hide"/>
+                <field name="amount" sum="Total Amount"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_piece_participant_search" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.participant.search</field>
+        <field name="model">sn.wsd.piece.settlement.participant</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="employee_code"/>
+                <field name="settlement_id" string="Settlement"/>
+                <filter name="f_this_month" string="This Month"
+                        domain="[('settlement_date', '&gt;=',
+                                  context_today().strftime('%Y-%m-01'))]"/>
+                <separator string="Group By"/>
+                <filter string="Employee" name="g_employee"
+                        context="{'group_by': 'employee_id'}"/>
+                <filter string="Business Month" name="g_month"
+                        context="{'group_by': 'settlement_date:month'}"/>
+                <filter string="Workshop" name="g_workshop"
+                        context="{'group_by': 'workshop_id'}"/>
+                <filter string="Production Line" name="g_line"
+                        context="{'group_by': 'production_line_id'}"/>
+                <filter string="Operation" name="g_operation"
+                        context="{'group_by': 'route_operation_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_piece_participant_ledger" model="ir.actions.act_window">
+        <field name="name">Employee Piece Ledger</field>
+        <field name="res_model">sn.wsd.piece.settlement.participant</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="domain">[('settlement_id.state', '=', 'confirmed')]</field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">No confirmed settlements yet</p><p>The ledger aggregates allocated amounts per employee. Only confirmed, non-void settlements count.</p></field>
+    </record>
+</odoo>

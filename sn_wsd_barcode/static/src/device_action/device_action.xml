@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_barcode.DevicePdaAction">
+        <div class="o_content o_sn_wsd_device_action h-100 d-flex flex-column">
+
+            <!-- ❶ 上下文带：返回 / 屏名 / 位置筛选 / 用户 -->
+            <header class="o_sn_wsd_pda_contextbar">
+                <div class="o_sn_wsd_pda_contextbar_top">
+                    <button type="button" class="btn" t-on-click="goBack" t-att-aria-label="backLabel">
+                        <i class="oi oi-chevron-left"/>
+                    </button>
+                    <div class="o_sn_wsd_pda_title" t-out="title"/>
+                    <button type="button" class="o_sn_wsd_pda_selectbtn"
+                            t-on-click="openLocationModal">
+                        <i class="fa fa-map-marker me-1"/>
+                        <t t-out="locationFilterLabel"/>
+                    </button>
+                    <span t-if="state.userName" class="o_sn_wsd_pda_user">
+                        <i class="fa fa-user-circle-o me-1"/>
+                        <t t-out="state.userName"/>
+                    </span>
+                </div>
+            </header>
+
+            <!-- 置顶扫码坞 -->
+            <div class="o_sn_wsd_pda_dock">
+                <form t-on-submit="submitCommand">
+                    <input t-ref="scanInput" t-model="state.command"
+                           class="o_sn_wsd_workshop_command form-control"
+                           t-att-placeholder="scanHint"
+                           t-att-disabled="state.loading ? 'disabled' : null"/>
+                </form>
+            </div>
+
+            <main class="flex-grow-1 overflow-auto">
+                <!-- 报错/提示条钉在滚动区顶部：内容再长也不用上下滑找结果 -->
+                <div class="o_sn_wsd_pda_feedback_dock">
+                    <div t-if="state.message"
+                         class="o_sn_wsd_pda_feedback"
+                         t-attf-class="o_sn_wsd_pda_feedback is-{{state.messageType || 'info'}}">
+                        <t t-out="state.message"/>
+                    </div>
+                </div>
+
+                <!-- 看板视图：进度 + 按设备分组清单 -->
+                <div t-if="state.view === 'board'">
+                    <div class="o_sn_wsd_pda_progress">
+                        <div class="o_sn_wsd_pda_progress_nums">
+                            <div class="o_sn_wsd_pda_num">
+                                <strong t-out="state.progress.due"/>
+                                <span t-out="dueLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-loaded">
+                                <strong t-out="state.progress.done"/>
+                                <span t-out="doneLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-unloaded">
+                                <strong t-out="state.progress.todo"/>
+                                <span t-out="todoLabel"/>
+                            </div>
+                            <div class="o_sn_wsd_pda_num is-overdue">
+                                <strong t-out="state.progress.overdue"/>
+                                <span t-out="overdueLabel"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_rows">
+                        <t t-foreach="state.groups" t-as="group" t-key="group.equipment.id">
+                            <div class="o_sn_wsd_device_group">
+                                <div class="o_sn_wsd_device_group_head">
+                                    <span class="o_sn_wsd_device_code" t-out="group.equipment.code"/>
+                                    <span class="o_sn_wsd_device_name" t-out="group.equipment.name"/>
+                                    <span t-if="group.equipment.location"
+                                          class="o_sn_wsd_device_loc"
+                                          t-out="group.equipment.location"/>
+                                </div>
+                                <div t-foreach="group.tasks" t-as="task" t-key="task.id"
+                                     class="o_sn_wsd_pda_row"
+                                     t-attf-class="o_sn_wsd_pda_row is-{{task.status === 'overdue' ? 'overdue' : (task.status === 'in_progress' ? 'loaded' : 'unloaded')}}">
+                                    <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                                    <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                                    <span class="o_sn_wsd_pda_row_val">
+                                        <t t-out="task.item_count"/> <t t-out="itemsLabel"/>
+                                    </span>
+                                    <span t-if="task.status === 'overdue'"
+                                          class="badge bg-warning text-dark" t-out="taskStatusLabel(task.status)"/>
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                            t-on-click="() => this.startTask(task)" t-out="startLabel"/>
+                                </div>
+                            </div>
+                        </t>
+                        <div t-if="!state.groups.length" class="o_sn_wsd_pda_row is-unloaded">
+                            <span class="o_sn_wsd_pda_row_name" t-out="emptyBoardLabel"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_device_donefold" t-if="state.done.length">
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                t-on-click="() => { this.state.showDone = !this.state.showDone; }"
+                                t-out="doneFoldLabel"/>
+                        <div t-if="state.showDone" class="o_sn_wsd_pda_rows">
+                            <div t-foreach="state.done" t-as="task" t-key="task.id"
+                                 class="o_sn_wsd_pda_row is-loaded">
+                                <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                                <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                                <span class="o_sn_wsd_pda_row_val" t-out="task.executed_time"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 设备视图：档案卡 + 该设备待办 + 报修入口 -->
+                <div t-if="state.view === 'equipment' and state.equipment">
+                    <div class="o_sn_wsd_device_card">
+                        <div class="o_sn_wsd_device_card_head">
+                            <span class="o_sn_wsd_device_code" t-out="state.equipment.code"/>
+                            <span class="o_sn_wsd_device_name" t-out="state.equipment.name"/>
+                            <span class="badge"
+                                  t-attf-class="badge {{state.equipment.status === 'enabled' ? 'bg-success' : (state.equipment.status === 'repair' ? 'bg-warning text-dark' : 'bg-dark')}}"
+                                  t-out="equipmentStatusLabel(state.equipment.status)"/>
+                        </div>
+                        <div class="o_sn_wsd_device_card_body" t-if="state.equipment.location">
+                            <i class="fa fa-map-marker me-1"/>
+                            <t t-out="state.equipment.location"/>
+                        </div>
+                        <div class="o_sn_wsd_device_card_body">
+                            <span class="me-3">
+                                <t t-out="lastCheckLabel"/>: <t t-out="state.equipment.last_spot_check || '—'"/>
+                            </span>
+                            <span>
+                                <t t-out="lastMaintLabel"/>: <t t-out="state.equipment.last_maintenance || '—'"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_rows">
+                        <div t-foreach="state.tasks" t-as="task" t-key="task.id"
+                             class="o_sn_wsd_pda_row"
+                             t-attf-class="o_sn_wsd_pda_row is-{{task.status === 'overdue' ? 'overdue' : (task.status === 'in_progress' ? 'loaded' : 'unloaded')}}">
+                            <span class="badge bg-secondary" t-out="taskKindLabel(task.kind)"/>
+                            <span class="o_sn_wsd_pda_row_name" t-out="task.name"/>
+                            <span class="o_sn_wsd_pda_row_val">
+                                <t t-out="task.item_count"/> <t t-out="itemsLabel"/>
+                            </span>
+                            <span t-if="task.status === 'overdue'"
+                                  class="badge bg-warning text-dark" t-out="taskStatusLabel(task.status)"/>
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                    t-on-click="() => this.startTask(task)"
+                                    t-out="task.status === 'in_progress' ? continueLabel : startLabel"/>
+                        </div>
+                        <div t-if="!state.tasks.length" class="o_sn_wsd_pda_row is-unloaded">
+                            <span class="o_sn_wsd_pda_row_name" t-out="noTasksLabel"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_pills">
+                        <button type="button" class="btn btn-outline-primary"
+                                t-on-click="backToBoard" t-out="backToBoardLabel"/>
+                        <button type="button" class="btn btn-outline-danger"
+                                t-on-click="openRepairModal" t-out="repairLabel"/>
+                    </div>
+                </div>
+
+                <!-- 任务执行视图：默认全 OK，异常项才改，逐项即时落库 -->
+                <div t-if="state.view === 'task' and state.task">
+                    <div class="o_sn_wsd_device_card">
+                        <div class="o_sn_wsd_device_card_head">
+                            <span class="badge bg-secondary" t-out="taskKindLabel(state.task.kind)"/>
+                            <span class="o_sn_wsd_device_code" t-out="state.task.name"/>
+                            <span class="o_sn_wsd_device_name" t-out="defaultOkHintLabel"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_device_lines">
+                        <div t-foreach="state.lines" t-as="line" t-key="line.id"
+                             class="o_sn_wsd_device_line"
+                             t-attf-class="o_sn_wsd_device_line is-{{line.line_result === 'fail' ? 'fail' : (line.line_result === 'pass' ? 'pass' : '')}}">
+                            <div class="o_sn_wsd_device_line_name">
+                                <t t-out="line.name"/>
+                                <a t-if="line.has_guide" t-att-href="guideUrl(line)" target="_blank"
+                                   class="o_sn_wsd_device_guide ms-1">
+                                    <i class="fa fa-file-image-o"/> <t t-out="viewGuideLabel"/>
+                                </a>
+                            </div>
+                            <div t-if="line.method" class="o_sn_wsd_device_line_method" t-out="line.method"/>
+
+                            <!-- status / fixed：pass↔fail 大开关 -->
+                            <div t-if="line.value_type !== 'range'" class="o_sn_wsd_device_line_ctrl">
+                                <button type="button"
+                                        class="btn btn-sm o_sn_wsd_device_ok"
+                                        t-attf-class="btn btn-sm o_sn_wsd_device_ok {{line.line_result === 'pass' ? 'is-on' : ''}}"
+                                        t-on-click="() => this.setLineResult(line, 'pass')"
+                                        t-out="normalLabel"/>
+                                <button type="button"
+                                        class="btn btn-sm o_sn_wsd_device_ng"
+                                        t-attf-class="btn btn-sm o_sn_wsd_device_ng {{line.line_result === 'fail' ? 'is-on' : ''}}"
+                                        t-on-click="() => this.setLineResult(line, 'fail')"
+                                        t-out="abnormalLabel"/>
+                            </div>
+
+                            <!-- range：实测值输入 + 上下限提示 -->
+                            <div t-if="line.value_type === 'range'" class="o_sn_wsd_device_line_ctrl">
+                                <input type="number" step="any" inputmode="decimal"
+                                       class="form-control o_sn_wsd_device_measure"
+                                       t-att-value="line.measured_value"
+                                       t-on-change="(ev) => this.setMeasuredValue(line, ev)"/>
+                                <span class="o_sn_wsd_device_range" t-out="line.lower_limit + ' ~ ' + line.upper_limit + (line.unit ? ' ' + line.unit : '')"/>
+                                <span t-if="line.line_result"
+                                      class="badge"
+                                      t-attf-class="badge {{line.line_result === 'fail' ? 'bg-danger' : 'bg-success'}}"
+                                      t-out="line.line_result === 'fail' ? 'NG' : 'OK'"/>
+                            </div>
+
+                            <input type="text" class="form-control form-control-sm o_sn_wsd_device_note"
+                                   t-att-placeholder="noteLabel"
+                                   t-att-value="line.line_note"
+                                   t-on-change="(ev) => this.setLineNote(line, ev)"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sn_wsd_pda_pills">
+                        <button type="button" class="btn btn-outline-primary"
+                                t-on-click="backToEquipment" t-out="backToEquipmentLabel"/>
+                        <button type="button" class="btn btn-primary btn-lg"
+                                t-on-click="submitTask" t-out="submitTaskLabel"/>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 位置筛选弹层：树形 + 层级图标 -->
+            <div t-if="state.showLocationModal" class="o_sn_wsd_workshop_modal_backdrop"
+                 t-on-click="closeLocationModal">
+                <div class="o_sn_wsd_workshop_modal o_sn_wsd_device_locmodal" t-on-click.stop="() => {}">
+                    <div class="o_sn_wsd_workshop_modal_title" t-out="locationFilterTitle"/>
+                    <div class="o_sn_wsd_workshop_modal_list o_sn_wsd_device_loclist">
+                        <button type="button" class="o_sn_wsd_device_locitem o_sn_wsd_device_locall"
+                                t-att-class="!state.locationId ? 'is-active' : ''"
+                                t-on-click="() => this.selectLocation(null)"
+                                t-out="allLocationsLabel"/>
+                        <button t-foreach="state.locations" t-as="location" t-key="location.id"
+                                type="button" class="o_sn_wsd_device_locitem"
+                                t-att-class="state.locationId === location.id ? 'is-active' : ''"
+                                t-attf-style="margin-left: {{location.depth * 20}}px"
+                                t-on-click="() => this.selectLocation(location)"
+                                t-out="location.name"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报修弹层：故障类型/等级胶囊 + 描述 -->
+            <div t-if="state.showRepairModal" class="o_sn_wsd_workshop_modal_backdrop"
+                 t-on-click="closeRepairModal">
+                <div class="o_sn_wsd_workshop_modal o_sn_wsd_device_repair_modal"
+                     t-on-click.stop="() => {}">
+                    <div class="o_sn_wsd_workshop_modal_title" t-out="repairLabel"/>
+                    <div class="o_sn_wsd_device_repair_section">
+                        <div class="o_sn_wsd_device_repair_label" t-out="faultTypeLabel"/>
+                        <div class="o_sn_wsd_pda_pills">
+                            <button t-foreach="faultTypes" t-as="ft" t-key="ft[0]"
+                                    type="button" class="btn btn-sm"
+                                    t-attf-class="btn btn-sm {{state.repairFaultType === ft[0] ? 'btn-primary' : 'btn-outline-primary'}}"
+                                    t-on-click="() => this.selectRepairFaultType(ft[0])"
+                                    t-out="ft[1]"/>
+                        </div>
+                    </div>
+                    <div class="o_sn_wsd_device_repair_section">
+                        <div class="o_sn_wsd_device_repair_label" t-out="faultLevelLabel"/>
+                        <div class="o_sn_wsd_pda_pills">
+                            <button t-foreach="faultLevels" t-as="fl" t-key="fl[0]"
+                                    type="button" class="btn btn-sm"
+                                    t-attf-class="btn btn-sm {{state.repairFaultLevel === fl[0] ? 'btn-primary' : 'btn-outline-primary'}}"
+                                    t-on-click="() => this.selectRepairFaultLevel(fl[0])"
+                                    t-out="fl[1]"/>
+                        </div>
+                    </div>
+                    <div class="o_sn_wsd_device_repair_section">
+                        <div class="o_sn_wsd_device_repair_label" t-out="faultDescriptionLabel"/>
+                        <textarea class="form-control" rows="3"
+                                  t-model="state.repairDescription"/>
+                    </div>
+                    <div class="o_sn_wsd_pda_pills">
+                        <button type="button" class="btn btn-outline-secondary"
+                                t-on-click="closeRepairModal" t-out="cancelLabel"/>
+                        <button type="button" class="btn btn-danger"
+                                t-on-click="confirmRepair" t-out="confirmLabel"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

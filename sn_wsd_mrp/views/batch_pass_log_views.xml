@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_batch_pass_log_list" model="ir.ui.view">
+        <field name="name">sn.wsd.batch.pass.log.list</field>
+        <field name="model">sn.wsd.batch.pass.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false">
+                <field name="create_date" string="Time"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="reason"/>
+                <field name="note" optional="show"/>
+                <field name="serial_count" string="SNs" sum="Total"/>
+                <field name="history_count" string="Marked Rows" optional="hide"/>
+                <field name="create_uid" string="Operator"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_batch_pass_log_form" model="ir.ui.view">
+        <field name="name">sn.wsd.batch.pass.log.form</field>
+        <field name="model">sn.wsd.batch.pass.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="mes_order_id"/>
+                            <field name="route_operation_id"/>
+                            <field name="create_date" string="Time"/>
+                            <field name="create_uid" string="Operator"/>
+                        </group>
+                        <group>
+                            <field name="reason"/>
+                            <field name="note"/>
+                            <field name="serial_count"/>
+                        </group>
+                    </group>
+                    <separator string="Serials"/>
+                    <field name="serial_identity_ids" nolabel="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="name"/>
+                        </list>
+                    </field>
+                    <separator string="Marked Pass Rows"/>
+                    <field name="history_ids" nolabel="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="serial_identity_id"/>
+                            <field name="out_date"/>
+                            <field name="result"/>
+                            <field name="operator_code"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_batch_pass_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.batch.pass.log.search</field>
+        <field name="model">sn.wsd.batch.pass.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="note"/>
+                <filter name="filter_equipment_failure" string="Equipment Failure"
+                        domain="[('reason', '=', 'equipment_failure')]"/>
+                <filter name="filter_outsourcing" string="Outsourcing"
+                        domain="[('reason', '=', 'outsourcing')]"/>
+                <filter name="filter_process_waiver" string="Temporary Process Waiver"
+                        domain="[('reason', '=', 'process_waiver')]"/>
+                <separator string="Group By"/>
+                <filter string="MES Order" name="g_order" context="{'group_by': 'mes_order_id'}"/>
+                <filter string="Operation" name="g_op" context="{'group_by': 'route_operation_id'}"/>
+                <filter string="Reason" name="g_reason" context="{'group_by': 'reason'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_batch_pass_log" model="ir.actions.act_window">
+        <field name="name">Batch Station Passes</field>
+        <field name="res_model">sn.wsd.batch.pass.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

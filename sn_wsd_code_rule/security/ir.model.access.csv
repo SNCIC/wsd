@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_code_rule_system,sn.code.rule system,model_sn_code_rule,base.group_system,1,1,1,1
+access_sn_code_rule_user,sn.code.rule user,model_sn_code_rule,base.group_user,1,0,0,0
+access_sn_code_rule_segment_system,sn.code.rule.segment system,model_sn_code_rule_segment,base.group_system,1,1,1,1
+access_sn_code_rule_segment_user,sn.code.rule.segment user,model_sn_code_rule_segment,base.group_user,1,0,0,0
+access_sn_code_counter_system,sn.code.counter system,model_sn_code_counter,base.group_system,1,1,1,1
+access_sn_code_counter_user,sn.code.counter user,model_sn_code_counter,base.group_user,1,0,0,0
+access_sn_code_rule_preview,sn.code.rule.preview,model_sn_code_rule_preview,base.group_user,1,1,1,1

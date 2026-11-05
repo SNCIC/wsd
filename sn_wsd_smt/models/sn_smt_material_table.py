@@ -1,10 +1,12 @@
 import base64
 import csv
 import io
-from datetime import datetime
+import re
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+
+from odoo.addons.sn_wsd_mrp.models.constants import SIDE_SELECTION
 
 
 TRACK_TYPE_SELECTION = [
@@ -12,16 +14,11 @@ TRACK_TYPE_SELECTION = [
     ('dual', 'Dual Track'),
 ]
 
-PRODUCT_SIDE_SELECTION = [
-    ('top', 'T Side'),
-    ('bottom', 'B Side'),
-    ('single', 'Single Side'),
-]
+# 产品面别与工艺路线 sn.wsd.process_route.x_production_side 共用同一套 key。
+PRODUCT_SIDE_SELECTION = SIDE_SELECTION
 
 TABLE_TYPE_SELECTION = [
     ('smt', 'SMT Material Table'),
-    ('feeder', 'Feeder Table'),
-    ('other', 'Other'),
 ]
 
 YN_SELECTION = [
@@ -29,23 +26,44 @@ YN_SELECTION = [
     ('N', 'No'),
 ]
 
+# 物料日志操作类型（英文稳定 key，界面中文经 zh_CN.po）。
+MATERIAL_LOG_OPERATION_SELECTION = [
+    ('offline_prepare', 'Offline Preparation'),
+    ('online_load', 'Online Load'),
+    ('cart_load', 'Cart Load'),
+    ('change', 'Change'),
+    ('continue', 'Continue'),
+    ('unload', 'Unload'),
+    ('changeover_inherit', 'Changeover Inherit'),
+]
+
 
 class SnSmtMaterialTable(models.Model):
     _name = 'sn.smt.material.table'
     _description = 'SMT Material Table'
-    _order = 'model_code, product_side, model_ver, id desc'
+    _order = 'model_code, product_side, id desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _check_company_auto = True
 
     name = fields.Char(compute='_compute_name', store=True)
     table_name = fields.Char(string='TABLE_NAME', required=True, tracking=True)
     table_type = fields.Selection(TABLE_TYPE_SELECTION, string='TABLE_TYPE', default='smt', required=True)
+    # 产品料号：取产品上的图号（product.default_code）
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True, tracking=True)
-    model_ver = fields.Char(string='MODEL_VER', index=True)
+    model_spec = fields.Char(string='Specification', compute='_compute_model_spec')
     product_side = fields.Selection(PRODUCT_SIDE_SELECTION, string='PRODUCT_SIDE', required=True, index=True, tracking=True)
     item_count = fields.Integer(string='ITEM_COUNT')
+    total_point_qty = fields.Integer(compute='_compute_total_point_qty', string='Total Points')
     track_type = fields.Selection(TRACK_TYPE_SELECTION, string='TRACK_TYPE', default='single', required=True)
     is_valid = fields.Selection(YN_SELECTION, string='IS_VALID', default='Y', required=True, tracking=True)
+    is_effective = fields.Boolean(
+        string='Is Effective',
+        default=True,
+        tracking=True,
+        help='Uncheck to stop this material table from matching MES orders '
+             'and to block loading, unloading and consumption on its '
+             'loadpoints.',
+    )
     note = fields.Text(string='Note')
     company_id = fields.Many2one(
         'res.company',
@@ -71,17 +89,36 @@ class SnSmtMaterialTable(models.Model):
         'The material table name must be unique per company.',
     )
 
-    @api.depends('table_name', 'model_code', 'product_side', 'model_ver')
+    @api.depends('table_name', 'model_code', 'product_side')
     def _compute_name(self):
         for record in self:
             record.name = record.table_name or ' / '.join(
-                item for item in [record.model_code, record.product_side, record.model_ver] if item
+                item for item in [record.model_code, record.product_side] if item
             )
+
+    @api.depends('model_code')
+    def _compute_model_spec(self):
+        # 规格按图号批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {record.model_code for record in self if record.model_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for record in self:
+            record.model_spec = mapping.get(record.model_code)
 
     @api.depends('detail_ids')
     def _compute_detail_count(self):
         for record in self:
             record.detail_count = len(record.detail_ids)
+
+    @api.depends('detail_ids.point_qty')
+    def _compute_total_point_qty(self):
+        for record in self:
+            record.total_point_qty = sum(record.detail_ids.mapped('point_qty'))
 
     @api.constrains('line_link_ids')
     def _check_has_line_link(self):
@@ -91,38 +128,79 @@ class SnSmtMaterialTable(models.Model):
             if any(link.company_id != record.company_id for link in record.line_link_ids):
                 raise ValidationError(_('The linked production line company must match the material table company.'))
 
-    @api.model
-    def _match_for_production(self, production):
-        candidates = self.search([
-            ('company_id', '=', production.company_id.id),
-            ('model_code', '=', production.product_id.default_code),
-            ('product_side', '=', production.x_smt_product_side),
-            ('is_valid', '=', 'Y'),
-            ('line_link_ids.production_line_id', '=', production.x_smt_production_line_id.id),
-        ])
-        if not candidates:
-            return self.env['sn.smt.material.table']
-        if production.x_smt_model_ver:
-            exact = candidates.filtered(lambda table: table.model_ver == production.x_smt_model_ver)
-            if exact:
-                return exact[:1]
-        blank_ver = candidates.filtered(lambda table: not table.model_ver)
-        return (blank_ver or candidates)[:1]
+    @api.constrains('model_code', 'product_side', 'is_valid', 'is_effective', 'line_link_ids')
+    def _check_line_exclusive_per_model(self):
+        # 同公司同图号+面别的有效且生效表之间，一条产线只能挂在一张表上：
+        # 产线绑定是制令单上线匹配的第一优先级（_match_for_mes_order），
+        # 重复挂线会让 limit=1 静默取表。作废（is_valid='N'）或停用
+        # （is_effective=False）即释放产线，挂接行保留不删（历史可追溯）。
+        for record in self:
+            if record.is_valid != 'Y' or not record.is_effective:
+                continue
+            lines = record.line_link_ids.mapped('production_line_id')
+            if not lines:
+                continue
+            conflict = self.search([
+                ('company_id', '=', record.company_id.id),
+                ('model_code', '=', record.model_code),
+                ('product_side', '=', record.product_side),
+                ('is_valid', '=', 'Y'),
+                ('is_effective', '=', True),
+                ('id', '!=', record.id),
+                ('line_link_ids.production_line_id', 'in', lines.ids),
+            ], limit=1)
+            if conflict:
+                clash_lines = lines & conflict.line_link_ids.mapped('production_line_id')
+                raise ValidationError(_(
+                    'Production line(s) %(lines)s already linked to valid '
+                    'material table %(table)s for model %(model)s, side '
+                    '%(side)s: a production line can only be linked to one '
+                    'valid material table per model and side.',
+                    lines=', '.join(clash_lines.mapped('code')),
+                    table=conflict.table_name,
+                    model=record.model_code,
+                    side=record.product_side,
+                ))
 
-    def _prepare_online_material_vals(self, production):
+    @api.model
+    def _match_for_mes_order(self, mes_order):
+        """按 图号+面别 匹配制令单的料站表；优先取产线绑定的表，
+        否则回退到未绑定任何产线的表。停用（is_effective=False）的表
+        一律不参与匹配——记录不归档，只是不生效。"""
+        base_domain = [
+            ('company_id', '=', mes_order.company_id.id),
+            ('model_code', '=', mes_order.product_id.default_code),
+            ('product_side', '=', mes_order.x_side),
+            ('is_valid', '=', 'Y'),
+            ('is_effective', '=', True),
+        ]
+        line = mes_order.production_line_id
+        if line:
+            candidates = self.search(base_domain + [
+                ('line_link_ids.production_line_id', '=', line.id),
+            ], limit=1)
+            if candidates:
+                return candidates
+        unbound = self.search(base_domain + [
+            ('line_link_ids', '=', False),
+        ], limit=1)
+        if unbound:
+            return unbound
+        return self.search(base_domain, limit=1)
+
+    def _prepare_online_material_vals(self, mes_order):
         self.ensure_one()
         values = []
         for detail in self.detail_ids.sorted(lambda line: (line.device_seq, line.table_no, line.loadpoint, line.id)):
             values.append({
                 'mt_id': self.id,
-                'production_id': production.id,
-                'mo_number': production.name,
-                'project_id': production.origin,
-                'model_code': production.product_id.default_code,
-                'area_sn': production.x_smt_production_line_id.code,
-                'production_line_id': production.x_smt_production_line_id.id,
-                'process_face': production.x_smt_product_side,
+                'mes_order_id': mes_order.id,
+                'model_code': mes_order.product_id.default_code,
+                'area_sn': mes_order.production_line_id.code,
+                'production_line_id': mes_order.production_line_id.id,
+                'process_face': mes_order.x_side,
                 'item_code': detail.item_code,
+                'required_item_code': detail.item_code,
                 'program_name': self.table_name,
                 'device_seq': detail.device_seq,
                 'table_no': detail.table_no,
@@ -136,7 +214,7 @@ class SnSmtMaterialTable(models.Model):
                 'is_skip': detail.is_skip,
                 'is_load': 'N',
                 'is_qc_test': 'N',
-                'company_id': production.company_id.id,
+                'company_id': mes_order.company_id.id,
             })
         return values
 
@@ -190,6 +268,8 @@ class SnSmtMaterialTableDetail(models.Model):
     )
     company_id = fields.Many2one(related='mt_id.company_id', store=True, readonly=True)
     item_code = fields.Char(string='ITEM_CODE', required=True, index=True)
+    # 物料规格（按 item_code 反查），与 feeder_spec（飞达规格/胶带宽度）无关。
+    item_spec = fields.Char(string='Specification', compute='_compute_item_spec')
     device_seq = fields.Integer(string='DEVICE_SEQ', required=True)
     table_no = fields.Char(string='TABLE_NO', required=True)
     loadpoint = fields.Char(string='LOADPOINT', required=True)
@@ -207,40 +287,81 @@ class SnSmtMaterialTableDetail(models.Model):
         'The device sequence, table number, loadpoint, and channel must be unique per material table.',
     )
 
+    @api.constrains('table_no')
+    def _check_table_no_format(self):
+        # The TABLE barcode scanned on the floor is DEVICE.TABLE (e.g. 2.B1):
+        # DEVICE_SEQ carries the "2" and TABLE_NO must hold only "B1".
+        # Storing the whole barcode in TABLE_NO can never match the parsed
+        # station lookup, so every scan on that table would be rejected.
+        # (Pattern kept in sync with DEVICE_TABLE_PATTERN in
+        # sn_smt_loading_service.py.)
+        for detail in self:
+            if re.match(r'^\s*\d+\.', detail.table_no or ''):
+                raise ValidationError(_(
+                    'TABLE_NO must store the table name only (e.g. T1), not '
+                    'the whole DEVICE.TABLE barcode (e.g. 1.T1); the device '
+                    'sequence belongs in DEVICE_SEQ.'))
+
+    @api.depends('item_code')
+    def _compute_item_spec(self):
+        # 规格按物料编码批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {detail.item_code for detail in self if detail.item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for detail in self:
+            detail.item_spec = mapping.get(detail.item_code)
+
 
 class SnSmtOnlineMaterial(models.Model):
     _name = 'sn.smt.online.material'
     _description = 'SMT Online Material'
-    _order = 'production_id, device_seq, table_no, loadpoint, id'
+    _order = 'mes_order_id, device_seq, table_no, loadpoint, id'
     _check_company_auto = True
 
     mt_id = fields.Many2one('sn.smt.material.table', string='MT_ID', check_company=True)
-    production_id = fields.Many2one(
-        'mrp.production',
-        string='Manufacturing Order',
+    # Row origin: SMT rows are split from the material table at order-online
+    # time; drawing_list rows are split from the critical-material list by
+    # sn_wsd_barcode for workshops without a material table (DIP / assembly).
+    source = fields.Selection(
+        [
+            ('smt_table', 'SMT Material Table'),
+            ('drawing_list', 'Drawing Material List'),
+        ],
+        string='Source',
+        default='smt_table',
         required=True,
-        ondelete='cascade',
-        check_company=True,
+        index=True,
     )
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='production_id.x_mes_order_id',
-        store=True,
-        readonly=True,
+        required=True,
         index=True,
+        ondelete='cascade',
+        check_company=True,
     )
-    mo_number = fields.Char(string='MO_NUMBER', required=True, index=True)
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter',
+        string='Work Center',
+        index=True,
+        check_company=True,
+    )
     project_id = fields.Char(string='PROJECT_ID')
     model_code = fields.Char(string='MODEL_CODE', required=True, index=True)
-    area_sn = fields.Char(string='AREA_SN', required=True, index=True)
+    model_spec = fields.Char(string='Specification', compute='_compute_model_spec')
+    area_sn = fields.Char(string='AREA_SN', index=True)
     production_line_id = fields.Many2one('sn.mrp.production.line', string='Production Line', check_company=True)
-    process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE', required=True)
-    item_code = fields.Char(string='ITEM_CODE', required=True)
+    process_face = fields.Selection(PRODUCT_SIDE_SELECTION, string='PROCESS_FACE')
+    item_code = fields.Char(string='ITEM_CODE', index=True)
     program_name = fields.Char(string='PROGRAM_NAME')
-    device_seq = fields.Integer(string='DEVICE_SEQ', required=True)
-    table_no = fields.Char(string='TABLE_NO', required=True)
-    loadpoint = fields.Char(string='LOADPOINT', required=True)
+    device_seq = fields.Integer(string='DEVICE_SEQ')
+    table_no = fields.Char(string='TABLE_NO')
+    loadpoint = fields.Char(string='LOADPOINT')
     chanel_sn = fields.Char(string='CHANEL_SN')
     point_qty = fields.Integer(string='POINT_QTY')
     point_location = fields.Text(string='POINT_LOCATION')
@@ -250,15 +371,11 @@ class SnSmtOnlineMaterial(models.Model):
     is_skip = fields.Selection(YN_SELECTION, string='IS_SKIP', default='N', required=True)
     is_load = fields.Selection(YN_SELECTION, string='IS_LOAD', default='N', required=True)
     is_qc_test = fields.Selection(YN_SELECTION, string='IS_QC_TEST', default='N', required=True)
-    offline_material_ids = fields.One2many(
-        'sn.smt.offline.material',
-        'online_material_id',
-        string='Offline Preparation Records',
-    )
     loaded_material_lot_id = fields.Many2one(
         'stock.lot',
         string='Loaded Material SN',
         copy=False,
+        index=True,
         check_company=True,
     )
     loaded_product_id = fields.Many2one(
@@ -273,6 +390,13 @@ class SnSmtOnlineMaterial(models.Model):
         'sn.smt.feeder',
         string='Loaded Feeder',
         copy=False,
+        check_company=True,
+    )
+    cart_id = fields.Many2one(
+        'sn.smt.cart',
+        string='Cart',
+        copy=False,
+        ondelete='set null',
         check_company=True,
     )
     feeder_line_ids = fields.One2many(
@@ -290,10 +414,17 @@ class SnSmtOnlineMaterial(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    # 卷终确认（reel-end-confirm）：在机卷的卷终状态（跟随 lot）
+    loaded_reel_end = fields.Boolean(
+        string='Loaded Reel End',
+        related='loaded_material_lot_id.x_reel_end',
+        readonly=True,
+    )
 
+    # 一个料站同一时刻只能有一盘料在线（同一制令单下唯一位置行）。
     _sn_smt_online_material_unique = models.Constraint(
-        'unique(production_id, device_seq, table_no, loadpoint, chanel_sn)',
-        'The online material position must be unique per manufacturing order.',
+        'unique(company_id, mes_order_id, device_seq, table_no, loadpoint, chanel_sn)',
+        'The online material position must be unique per MES order.',
     )
 
     @api.depends('loaded_material_lot_id.product_id')
@@ -301,181 +432,126 @@ class SnSmtOnlineMaterial(models.Model):
         for record in self:
             record.loaded_product_id = record.loaded_material_lot_id.product_id
 
+    def action_confirm_reel_end(self):
+        """在线料表的卷终确认入口（reel-end-confirm）：操作员确认该料站
+        在机卷已用尽——标记卷终+归属本单并下线该料站（与 PDA 下料带
+        确认同语义，走同一服务层，写同一份物料日志）。"""
+        for line in self:
+            if line.is_load != 'Y' or not line.loaded_material_lot_id:
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of %(order)s has no loaded material '
+                    'to confirm as used up.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
+            self.env['sn.smt.loading.service'].unload(
+                line.mes_order_id, scope='material',
+                material_sn=line.loaded_material_lot_id.name, reel_end=True)
+        return True
 
-class SnSmtFeeder(models.Model):
-    _name = 'sn.smt.feeder'
-    _description = 'SMT Feeder'
-    _order = 'name, id'
-    _check_company_auto = True
+    def copy(self, default=False):
+        # 复制允许，但不能落在相同站位（同单同料站唯一）：目标设备/表/
+        # 料站与原行一致时明确报错；带新站位的复制（default 传参）可用。
+        # chanel_sn 为空时 SQL 唯一约束不比对 NULL，站位唯一性由
+        # _check_unique_position 补齐。上料状态不随复制。
+        default = dict(default or {})
+        for record in self:
+            target = (
+                default.get('device_seq', record.device_seq),
+                default.get('table_no', record.table_no),
+                default.get('loadpoint', record.loadpoint),
+            )
+            if target == (record.device_seq, record.table_no, record.loadpoint):
+                raise ValidationError(_(
+                    'Cannot duplicate loadpoint %(pos)s of %(order)s onto '
+                    'itself: a loadpoint can only exist once per MES order. '
+                    'Copy to a different loadpoint instead.',
+                    pos='%s.%s/%s' % target,
+                    order=record.mes_order_id.name))
+        default.setdefault('is_load', 'N')
+        default.setdefault('is_qc_test', 'N')
+        return super().copy(default)
 
-    name = fields.Char(string='Feeder SN', required=True, index=True)
-    channel_sn = fields.Char(string='Channel')
-    feeder_spec = fields.Char(string='Feeder Spec')
-    status = fields.Selection(
-        [
-            ('1', 'Normal'),
-            ('2', 'In Use'),
-            ('9', 'Disabled'),
-        ],
-        string='Status',
-        default='1',
-        required=True,
-    )
-    maintenance_ok = fields.Boolean(string='Maintenance OK', default=True)
-    usage_count = fields.Integer(string='Usage Count', default=0)
-    bound_production_id = fields.Many2one(
-        'mrp.production',
-        string='Bound Manufacturing Order',
-        check_company=True,
-    )
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
+    @api.constrains(
+        'company_id', 'mes_order_id', 'device_seq', 'table_no',
+        'loadpoint', 'chanel_sn')
+    def _check_unique_position(self):
+        # SQL 唯一约束对 NULL chanel_sn 不比对（同站可钻空子），这里补齐：
+        # 同公司同单同站位（设备+表+料站+通道，通道空视为空）只允许一行。
+        for line in self:
+            if not line.device_seq or not line.table_no or not line.loadpoint:
+                continue
+            domain = [
+                ('company_id', '=', line.company_id.id),
+                ('mes_order_id', '=', line.mes_order_id.id),
+                ('device_seq', '=', line.device_seq),
+                ('table_no', '=', line.table_no),
+                ('loadpoint', '=', line.loadpoint),
+                ('id', '!=', line.id),
+            ]
+            if line.chanel_sn:
+                domain.append(('chanel_sn', '=', line.chanel_sn))
+            else:
+                domain.append(('chanel_sn', 'in', [False, '']))
+            if self.search_count(domain, limit=1):
+                raise ValidationError(_(
+                    'Loadpoint %(pos)s of MES order %(order)s already has a '
+                    'row; a loadpoint can only exist once per order.',
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name))
 
-    _sn_smt_feeder_name_unique = models.Constraint(
-        'unique(company_id, name)',
-        'The feeder SN must be unique per company.',
-    )
+    @api.depends('model_code')
+    def _compute_model_spec(self):
+        # 规格按图号批量反查产品档案（行上只存编码快照，无产品 m2o）。
+        codes = {record.model_code for record in self if record.model_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for record in self:
+            record.model_spec = mapping.get(record.model_code)
 
+    @api.model
+    def _get_active_lines(self, mes_order, include_skipped=False):
+        lines = mes_order.x_smt_online_material_ids
+        if not include_skipped:
+            lines = lines.filtered(lambda line: line.is_skip != 'Y')
+        return lines
 
-class SnSmtOfflineMaterial(models.Model):
-    _name = 'sn.smt.offline.material'
-    _description = 'SMT Offline Preparation Record'
-    _order = 'production_id, device_seq, table_no, loadpoint, id'
-    _check_company_auto = True
+    def _ensure_material_table_effective(self):
+        """料站表停用（is_effective=False）后，该表拆出的料站行不得再做
+        任何料站操作：上料/换料/续料/料车上料/转机继承/过站门禁与扣点/
+        下料一律拒绝，必须先恢复生效。drawing_list 行（mt_id 为空，
+        来自关键物料清单）不受此门禁约束。"""
+        for line in self:
+            table = line.mt_id
+            if table and not table.is_effective:
+                raise ValidationError(_(
+                    'Material table %(table)s is not effective. Re-enable it '
+                    'before operating loadpoint %(pos)s of %(order)s.',
+                    table=table.table_name,
+                    pos='%s.%s/%s' % (line.device_seq, line.table_no, line.loadpoint),
+                    order=line.mes_order_id.name,
+                ))
+        return True
 
-    online_material_id = fields.Many2one(
-        'sn.smt.online.material',
-        string='Online Material',
-        required=True,
-        ondelete='restrict',
-        check_company=True,
-    )
-    production_id = fields.Many2one(
-        'mrp.production',
-        string='Manufacturing Order',
-        related='online_material_id.production_id',
-        store=True,
-        readonly=True,
-    )
-    mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order',
-        string='MES Order',
-        related='online_material_id.mes_order_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
-    material_table_id = fields.Many2one(
-        'sn.smt.material.table',
-        string='Material Table',
-        related='online_material_id.mt_id',
-        store=True,
-        readonly=True,
-    )
-    material_lot_id = fields.Many2one(
-        'stock.lot',
-        string='Material SN',
-        required=True,
-        check_company=True,
-    )
-    product_id = fields.Many2one(
-        'product.product',
-        string='Material',
-        related='material_lot_id.product_id',
-        store=True,
-        readonly=True,
-    )
-    feeder_id = fields.Many2one(
-        'sn.smt.feeder',
-        string='Feeder',
-        check_company=True,
-    )
-    cart_id = fields.Many2one(
-        'sn.smt.cart',
-        string='Material Cart',
-        check_company=True,
-    )
-    old_material_lot_id = fields.Many2one(
-        'stock.lot',
-        string='Old Material SN',
-        check_company=True,
-    )
-    change_type = fields.Selection(
-        [('change', 'Change'), ('continue', 'Continue')],
-        string='Change Type',
-    )
-    device_seq = fields.Integer(related='online_material_id.device_seq', store=True, readonly=True)
-    table_no = fields.Char(related='online_material_id.table_no', store=True, readonly=True)
-    loadpoint = fields.Char(related='online_material_id.loadpoint', store=True, readonly=True)
-    chanel_sn = fields.Char(related='online_material_id.chanel_sn', store=True, readonly=True)
-    is_online = fields.Selection(YN_SELECTION, string='IS_ONLINE', default='N', required=True)
-    is_repeat = fields.Selection(YN_SELECTION, string='IS_REPEAT', default='N', required=True)
-    item_type = fields.Selection(
-        [('0', 'Material')],
-        string='ITEM_TYPE',
-        default='0',
-        required=True,
-    )
-    action_type = fields.Selection(
-        [('5', 'Offline Preparation')],
-        string='ACTION_TYPE',
-        default='5',
-        required=True,
-    )
-    company_id = fields.Many2one(
-        'res.company',
-        related='online_material_id.company_id',
-        store=True,
-        readonly=True,
-    )
-
-    _sn_smt_offline_material_unique = models.Constraint(
-        'unique(online_material_id)',
-        'The same SMT position can only have one active offline preparation record.',
-    )
-
-
-class SnSmtCart(models.Model):
-    _name = 'sn.smt.cart'
-    _description = 'SMT Material Cart'
-    _order = 'name, id'
-    _check_company_auto = True
-
-    name = fields.Char(string='Cart SN', required=True, index=True)
-    status = fields.Selection(
-        [
-            ('0', 'Idle'),
-            ('1', 'In Use'),
-        ],
-        string='Status',
-        default='0',
-        required=True,
-    )
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
-    offline_material_ids = fields.One2many(
-        'sn.smt.offline.material',
-        'cart_id',
-        string='Offline Materials',
-    )
-
-    _sn_smt_cart_name_unique = models.Constraint(
-        'unique(company_id, name)',
-        'The cart SN must be unique per company.',
-    )
+    @api.model
+    def _get_completion_snapshot(self, mes_order):
+        active_lines = self._get_active_lines(mes_order)
+        loaded_lines = active_lines.filtered(lambda line: line.is_load == 'Y')
+        return {
+            'required_qty': len(active_lines),
+            'loaded_qty': len(loaded_lines),
+            'unloaded_qty': len(active_lines - loaded_lines),
+            'line_complete': not active_lines.filtered(lambda line: line.is_load != 'Y'),
+        }
 
 
 class SnSmtConfig(models.Model):
+    """公司级 key-value 配置存储。SMT 域自身的配置项已随旧流程移除，
+    该模型保留给跨域通用开关（如 sn_wsd_api 的 G0010 / MESSC010）。"""
     _name = 'sn.smt.config'
     _description = 'SMT Configuration'
     _order = 'key, id'
@@ -507,57 +583,84 @@ class SnSmtConfig(models.Model):
         return record.value if record else default
 
 
-class SnSmtOperationRecord(models.Model):
-    _name = 'sn.smt.operation.record'
-    _description = 'SMT Operation Record'
-    _order = 'create_date desc, id desc'
+class SnSmtMaterialLog(models.Model):
+    _name = 'sn.smt.material.log'
+    _description = 'SMT Material Log'
+    _order = 'operated_at desc, id desc'
     _check_company_auto = True
 
-    production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
     mes_order_id = fields.Many2one(
         'sn.wsd.mes.order',
         string='MES Order',
-        related='production_id.x_mes_order_id',
-        store=True,
-        readonly=True,
+        required=True,
         index=True,
+        ondelete='cascade',
+        check_company=True,
     )
     online_material_id = fields.Many2one(
         'sn.smt.online.material',
         string='Online Material',
+        ondelete='set null',
+        index=True,
+        check_company=True,
+    )
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter',
+        string='Work Center',
+        ondelete='set null',
+        check_company=True,
+    )
+    operation_type = fields.Selection(
+        MATERIAL_LOG_OPERATION_SELECTION,
+        string='Operation Type',
+        required=True,
+        index=True,
+    )
+    material_lot_id = fields.Many2one(
+        'stock.lot',
+        string='Material SN',
+        ondelete='restrict',
+        index=True,
+        check_company=True,
+    )
+    old_material_lot_id = fields.Many2one(
+        'stock.lot',
+        string='Old Material SN',
+        ondelete='restrict',
+        index=True,
+        check_company=True,
+    )
+    old_lot_qty = fields.Float(string='Old Lot Remaining Points', copy=False)
+    feeder_id = fields.Many2one(
+        'sn.smt.feeder',
+        string='Feeder',
         ondelete='restrict',
         check_company=True,
     )
-    material_lot_id = fields.Many2one('stock.lot', string='Material SN', check_company=True)
-    old_material_lot_id = fields.Many2one('stock.lot', string='Old Material SN', check_company=True)
-    feeder_id = fields.Many2one('sn.smt.feeder', string='Feeder', check_company=True)
-    cart_id = fields.Many2one('sn.smt.cart', string='Cart', check_company=True)
-    operation_type = fields.Selection(
-        [
-            ('offline_prepare', 'Offline Prepare'),
-            ('online_load', 'Online Load'),
-            ('cart_load', 'Cart Load'),
-            ('unload', 'Unload'),
-            ('change', 'Change'),
-            ('continue', 'Continue'),
-            ('changeover_inherit', 'Changeover Inherit'),
-        ],
-        string='Operation Type',
-        required=True,
+    cart_id = fields.Many2one(
+        'sn.smt.cart',
+        string='Cart',
+        ondelete='restrict',
+        check_company=True,
     )
-    is_online = fields.Selection(YN_SELECTION, string='Is Online', default='N', required=True)
     device_seq = fields.Integer(string='Device Sequence')
-    table_no = fields.Char(string='TABLE No')
+    table_no = fields.Char(string='Table No')
     loadpoint = fields.Char(string='Loadpoint')
     chanel_sn = fields.Char(string='Channel')
-    item_code = fields.Char(string='Item Code')
-    required_item_code = fields.Char(string='Main Item Code')
-    actual_item_code = fields.Char(string='Actual Item Code')
-    qty_before = fields.Float(string='Points Before')
-    operation_qty = fields.Float(string='Operation Points')
-    qty_after = fields.Float(string='Points After')
-    operator_id = fields.Many2one('res.users', string='Operator', default=lambda self: self.env.user, check_company=True)
-    operation_datetime = fields.Datetime(string='Operation Time', default=fields.Datetime.now, index=True)
+    required_item_code = fields.Char(string='Required Item Code', index=True)
+    required_item_spec = fields.Char(string='Specification', compute='_compute_required_item_spec')
+    actual_item_code = fields.Char(string='Actual Item Code', index=True)
+    actual_item_spec = fields.Char(string='Actual Specification', compute='_compute_actual_item_spec')
+    qty_before = fields.Float(string='Points Before', copy=False)
+    qty_after = fields.Float(string='Points After', copy=False)
+    operator_id = fields.Many2one(
+        'res.users',
+        string='Operator',
+        default=lambda self: self.env.user,
+        index=True,
+        check_company=True,
+    )
+    operated_at = fields.Datetime(string='Operated At', default=fields.Datetime.now, index=True)
     note = fields.Char(string='Note')
     company_id = fields.Many2one(
         'res.company',
@@ -567,128 +670,67 @@ class SnSmtOperationRecord(models.Model):
         index=True,
     )
 
+    @api.depends('required_item_code')
+    def _compute_required_item_spec(self):
+        # 规格按料号批量反查产品档案（日志只存编码快照，无产品 m2o）。
+        codes = {log.required_item_code for log in self if log.required_item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for log in self:
+            log.required_item_spec = mapping.get(log.required_item_code)
 
-class SnSmtOperationLog(models.Model):
-    _name = 'sn.smt.operation.log'
-    _description = 'SMT Operation Log'
-    _order = 'create_date desc, id desc'
-    _check_company_auto = True
-
-    operation_record_id = fields.Many2one(
-        'sn.smt.operation.record',
-        string='Operation Record',
-        ondelete='cascade',
-        check_company=True,
-    )
-    production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
-    mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order',
-        string='MES Order',
-        related='production_id.x_mes_order_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
-    event_type = fields.Char(string='Event Type', required=True)
-    message = fields.Char(string='Message')
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
-
-
-class SnSmtTraceability(models.Model):
-    _name = 'sn.smt.traceability'
-    _description = 'SMT Material Traceability'
-    _order = 'create_date desc, id desc'
-    _check_company_auto = True
-
-    production_id = fields.Many2one('mrp.production', string='Manufacturing Order', required=True, check_company=True)
-    mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order',
-        string='MES Order',
-        related='production_id.x_mes_order_id',
-        store=True,
-        readonly=True,
-        index=True,
-    )
-    online_material_id = fields.Many2one(
-        'sn.smt.online.material',
-        string='Online Material',
-        ondelete='restrict',
-        check_company=True,
-    )
-    material_lot_id = fields.Many2one('stock.lot', string='Material SN', required=True, check_company=True)
-    old_material_lot_id = fields.Many2one('stock.lot', string='Old Material SN', check_company=True)
-    feeder_id = fields.Many2one('sn.smt.feeder', string='Feeder', check_company=True)
-    cart_id = fields.Many2one('sn.smt.cart', string='Cart', check_company=True)
-    action_type = fields.Char(string='Action Type', required=True)
-    item_code = fields.Char(string='Item Code')
-    device_seq = fields.Integer(string='Device Sequence')
-    table_no = fields.Char(string='TABLE No')
-    loadpoint = fields.Char(string='Loadpoint')
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        required=True,
-        default=lambda self: self.env.company,
-        index=True,
-    )
+    @api.depends('actual_item_code')
+    def _compute_actual_item_spec(self):
+        codes = {log.actual_item_code for log in self if log.actual_item_code}
+        mapping = {}
+        if codes:
+            rows = self.env['product.product'].search_read(
+                [('default_code', 'in', list(codes))],
+                ['default_code', 'material_specification'],
+            )
+            mapping = {row['default_code']: row['material_specification'] for row in rows}
+        for log in self:
+            log.actual_item_spec = mapping.get(log.actual_item_code)
 
 
 class SnSmtOperationMixin(models.AbstractModel):
+    """上料校验共用的物料/飞达规则（服务层调用）。"""
     _name = 'sn.smt.operation.mixin'
     _description = 'SMT Operation Mixin'
-
-    @api.model
-    def _is_config_enabled(self, key, company):
-        value = self.env['sn.smt.config'].get_value(key, default='0', company=company)
-        return str(value).strip().upper() in {'1', 'Y', 'YES', 'TRUE', 'ON'}
-
-    @api.model
-    def _get_qc_flag(self, production):
-        return 'Y' if self._is_config_enabled('QM011', production.company_id) else 'N'
-
-    @api.model
-    def _get_unload_release_enabled(self, production):
-        return self._is_config_enabled('SMT020', production.company_id)
-
-    @api.model
-    def _get_mes_order_productions(self, production):
-        mes_order = production.x_mes_order_id if production else self.env['sn.wsd.mes.order']
-        return mes_order.production_id if mes_order else production
-
 
     @api.model
     def _normalize_product_code(self, product):
         return product.default_code if product else False
 
     @api.model
-    def _is_allowed_material_product(self, required_product, candidate_product):
+    def _is_allowed_material_product(self, mes_order, required_product, candidate_product):
         if not required_product or not candidate_product:
             return False
         if candidate_product == required_product:
             return True
-        return candidate_product in required_product.substitute_ids or required_product in candidate_product.substitute_for_ids
-
-    @api.model
-    def _check_same_mes_order(self, source_production, target_production):
-        source_order = source_production.x_mes_order_id if source_production else False
-        target_order = target_production.x_mes_order_id if target_production else False
-        if source_order and target_order and source_order != target_order:
-            raise UserError(_('The target manufacturing order must belong to the same MES order.'))
-        return True
-
-    @api.model
-    def _check_feeder_mes_order_scope(self, feeder, production):
-        if not feeder or not feeder.bound_production_id or feeder.bound_production_id == production:
+        # 替代料规则（全局或命中本单）——独立维护的放行依据
+        if candidate_product in self.env['sn.wsd.substitute.rule']._get_substitute_products(
+                mes_order, required_product):
             return True
-        if feeder.bound_production_id not in self._get_mes_order_productions(production):
-            raise UserError(_('The feeder is already bound to another MES order.'))
-        return True
+        production = mes_order.production_id
+        if production:
+            return production._is_allowed_substitute_product(required_product, candidate_product)
+        # 产品级 substitute_ids 已退役：替代放行只认规则与 BOM 行级
+        return False
+
+    @api.model
+    def _allowed_requirement_label(self, mes_order, required_product):
+        """拒绝提示的"要求"展示：主料号 + 命中规则的替代料号清单。"""
+        codes = [required_product.default_code]
+        substitutes = self.env['sn.wsd.substitute.rule']._get_substitute_products(
+            mes_order, required_product)
+        codes += [code for code in substitutes.mapped('default_code') if code]
+        return ', '.join(dict.fromkeys(filter(None, codes)))
 
     @api.model
     def _check_material_expiration(self, lot):
@@ -699,278 +741,47 @@ class SnSmtOperationMixin(models.AbstractModel):
                 break
         if not expiration_value:
             return
-        expiration_dt = fields.Datetime.to_datetime(expiration_value) if not isinstance(expiration_value, datetime) else expiration_value
+        expiration_dt = fields.Datetime.to_datetime(expiration_value)
         if expiration_dt and expiration_dt < fields.Datetime.now():
             raise ValidationError(_('The material or product has expired.'))
 
     @api.model
-    def _check_material_move_scope(self, production, material_lot, require_issue=False):
-        moves = production.move_raw_ids.filtered(lambda move: move.state != 'cancel')
-        if not moves:
-            return
-        target_moves = production._find_matching_raw_moves(material_lot.product_id)
-        if not target_moves:
-            raise ValidationError(_('The material is not reserved for the current manufacturing order.'))
-        move_lines = target_moves.mapped('move_line_ids').filtered(
-            lambda line: line.lot_id == material_lot and line.state != 'cancel'
-        )
-        if require_issue and not move_lines:
-            raise ValidationError(_('The material has not been issued and cannot be loaded online.'))
-        if target_moves.mapped('move_line_ids') and not move_lines:
-            raise ValidationError(_('The material is not reserved for the current manufacturing order.'))
+    def _check_material_common_rules(self, mes_order, online_material, material_lot):
+        """物料SN 只查不建；料号一致或替代料；未在其他位置在线；未过期；数量为正。
 
-    @api.model
-    def _check_material_common_rules(self, production, online_material, material_lot, require_issue=False, require_positive_qty=False):
-        required_product = self.env['product.product'].search([
+        拒绝提示列出要求料号及命中规则的可用替代料号清单。"""
+        # 料站表停用即整表禁止操作：上料/换料/续料/上料校验都在此收口。
+        online_material._ensure_material_table_effective()
+        if not material_lot:
+            raise ValidationError(_('The material SN could not be resolved to a stock lot.'))
+        product_model = self.env['product.product']
+        required_product = product_model.search([
             ('default_code', '=', online_material.item_code),
         ], limit=1)
-        if required_product and not production._is_allowed_substitute_product(required_product, material_lot.product_id):
-            raise ValidationError(_('The material does not match the current SMT loadpoint requirement.'))
+        if required_product and not self._is_allowed_material_product(mes_order, required_product, material_lot.product_id):
+            raise ValidationError(_(
+                'The material does not match the current SMT loadpoint requirement (%(required)s).',
+                required=self._allowed_requirement_label(mes_order, required_product),
+            ))
         if not required_product and self._normalize_product_code(material_lot.product_id) != online_material.item_code:
-            raise ValidationError(_('The material does not match the current SMT loadpoint requirement.'))
-        if require_positive_qty and material_lot.product_qty <= 0:
-            raise ValidationError(_('The current material quantity is zero.'))
-        if self.env['sn.smt.offline.material'].search_count([
-            ('material_lot_id', '=', material_lot.id),
-            ('is_online', '=', 'Y'),
-        ], limit=1):
-            raise ValidationError(_('The material is already loaded online or continued.'))
-        self._check_material_expiration(material_lot)
-        self._check_material_move_scope(production, material_lot, require_issue=require_issue)
-
-    @api.model
-    def _get_active_online_materials(self, production, include_skipped=False):
-        lines = production.x_smt_online_material_ids
-        if not include_skipped:
-            lines = lines.filtered(lambda line: line.is_skip != 'Y')
-        return lines
-
-    @api.model
-    def _is_scope_complete(self, lines):
-        active_lines = lines.filtered(lambda line: line.is_skip != 'Y')
-        return not active_lines.filtered(lambda line: line.is_load != 'Y')
-
-    @api.model
-    def _get_completion_snapshot(self, production):
-        active_lines = self._get_active_online_materials(production)
-        loaded_lines = active_lines.filtered(lambda line: line.is_load == 'Y')
-        feeder_lines = production.feeder_line_ids.filtered(
-            lambda line: line.state in ('pending', 'verified', 'consuming')
-        )
-        return {
-            'required_qty': len(active_lines),
-            'loaded_qty': len(loaded_lines),
-            'unloaded_qty': len(active_lines - loaded_lines),
-            'table_complete_keys': {
-                (line.device_seq, line.table_no)
-                for line in active_lines
-                if self._is_scope_complete(
-                    active_lines.filtered(
-                        lambda current: current.device_seq == line.device_seq and current.table_no == line.table_no
-                    )
-                )
-            },
-            'machine_complete_keys': {
-                line.device_seq
-                for line in active_lines
-                if self._is_scope_complete(
-                    active_lines.filtered(lambda current: current.device_seq == line.device_seq)
-                )
-            },
-            'line_complete': self._is_scope_complete(active_lines),
-            'feeder_pending': bool(feeder_lines.filtered(lambda line: line.state == 'pending')),
-        }
-
-    @api.model
-    def _sync_feeder_lines_after_unload(self, production, online_materials):
-        if not online_materials:
-            return
-        feeder_lines = production.feeder_line_ids.filtered(
-            lambda line: line.state in ('verified', 'consuming')
-        )
-        for feeder_line in feeder_lines:
-            lot = feeder_line.lot_id
-            if not lot:
-                continue
-            still_online = production.x_smt_online_material_ids.filtered(
-                lambda line: line.is_load == 'Y' and line.loaded_material_lot_id == lot
-            )
-            if still_online:
-                continue
-            feeder_line.write({
-                'actual_product_id': False,
-                'lot_id': False,
-                'lot_name': False,
-                'loaded_qty': 0.0,
-                'state': 'pending',
-                'verify_datetime': False,
-                'verify_user_id': False,
-            })
-
-    @api.model
-    def _sync_feeder_binding_after_unload(self, production, feeder, release_enabled):
-        if not feeder:
-            return
-        still_in_use = self.env['sn.smt.online.material'].search([
-            ('production_id', 'in', self._get_mes_order_productions(production).ids),
-            ('loaded_feeder_id', '=', feeder.id),
+            raise ValidationError(_(
+                'The material does not match the current SMT loadpoint requirement (%(required)s).',
+                required=online_material.item_code,
+            ))
+        if self.env['sn.smt.online.material'].search_count([
+            ('loaded_material_lot_id', '=', material_lot.id),
             ('is_load', '=', 'Y'),
-        ], limit=1)
-        if still_in_use:
-            feeder.write({
-                'status': '2',
-                'bound_production_id': still_in_use.production_id.id,
-            })
-        elif release_enabled:
-            feeder.write({'status': '1', 'bound_production_id': False})
-
-    @api.model
-    def _sync_production_after_smt_change(self, production):
-        snapshot = self._get_completion_snapshot(production)
-        if snapshot['line_complete']:
-            production.x_smt_online_state = 'online'
-            # Online is carried by the MES orders (制令单)
-            production._action_online_mes_orders()
-            if production._fields.get('x_meter_flow_state'):
-                production.x_meter_flow_state = 'material_ready'
-        else:
-            if production._fields.get('x_meter_flow_state'):
-                production.x_meter_flow_state = 'draft'
-        return snapshot
-
-    @api.model
-    def _finalize_unload_lines(self, production, lines, unload_scope, clear_online_table=False):
-        if not lines:
-            return self.env['sn.smt.online.material']
-        self._archive_online_operation_records(production, lines, note=unload_scope)
-        now = fields.Datetime.now()
-        release_enabled = self._get_unload_release_enabled(production)
-        for line in lines:
-            loaded_lot = line.loaded_material_lot_id
-            loaded_feeder = line.loaded_feeder_id
-            offline_records = self.env['sn.smt.offline.material'].search([
-                ('online_material_id', '=', line.id),
-            ])
-            carts = offline_records.mapped('cart_id')
-            line.write({
-                'is_load': 'N',
-                'is_qc_test': 'N',
-                'loaded_material_lot_id': False,
-                'loaded_feeder_id': False,
-                'unloaded_at': now,
-                'unload_scope': unload_scope,
-            })
-            offline_records.write({'is_online': 'N'})
-            if loaded_feeder:
-                self._sync_feeder_binding_after_unload(production, loaded_feeder, release_enabled)
-            if loaded_lot:
-                still_loaded_lot = self.env['sn.smt.online.material'].search_count([
-                    ('loaded_material_lot_id', '=', loaded_lot.id),
-                    ('is_load', '=', 'Y'),
-                ], limit=1)
-                if not still_loaded_lot:
-                    loaded_lot.write({
-                        'x_smt_reel_state': 'depleted'
-                        if loaded_lot.x_smt_available_qty <= 0
-                        else 'unloaded',
-                    })
-            for cart in carts:
-                cart_lines = cart.offline_material_ids.filtered(lambda rec: rec.is_online == 'Y')
-                if release_enabled and not cart_lines:
-                    cart.status = '0'
-            self._create_operation_bundle(
-                production,
-                online_material=line,
-                operation_type='unload',
-                material_lot=loaded_lot if loaded_lot else False,
-                feeder=loaded_feeder if loaded_feeder else False,
-                cart=carts[:1] if carts else False,
-                is_online='N',
-                note=unload_scope,
-            )
-        self._sync_feeder_lines_after_unload(production, lines)
-        if clear_online_table:
-            lines.unlink()
-        self._sync_production_after_smt_change(production)
-        return lines
-
-    @api.model
-    def _create_operation_bundle(self, production, online_material=False, operation_type=False, material_lot=False, old_material_lot=False, feeder=False, cart=False, is_online='N', note=False):
-        loaded_qty = online_material.loaded_qty if online_material else 0.0
-        consumed_qty = online_material.consumed_qty if online_material else 0.0
-        record = self.env['sn.smt.operation.record'].create({
-            'production_id': production.id,
-            'online_material_id': online_material.id if online_material else False,
-            'material_lot_id': material_lot.id if material_lot else False,
-            'old_material_lot_id': old_material_lot.id if old_material_lot else False,
-            'feeder_id': feeder.id if feeder else False,
-            'cart_id': cart.id if cart else False,
-            'operation_type': operation_type,
-            'is_online': is_online,
-            'device_seq': online_material.device_seq if online_material else False,
-            'table_no': online_material.table_no if online_material else False,
-            'loadpoint': online_material.loadpoint if online_material else False,
-            'chanel_sn': online_material.chanel_sn if online_material else False,
-            'item_code': online_material.item_code if online_material else False,
-            'required_item_code': online_material.required_item_code if online_material else False,
-            'actual_item_code': material_lot.product_id.default_code if material_lot else False,
-            'qty_before': online_material.remaining_qty if online_material else 0.0,
-            'operation_qty': loaded_qty if operation_type in ('online_load', 'continue', 'change') else 0.0,
-            'qty_after': online_material.remaining_qty if online_material else 0.0,
-            'operator_id': self.env.user.id,
-            'operation_datetime': fields.Datetime.now(),
-            'note': note,
-            'company_id': production.company_id.id,
-        })
-        self.env['sn.smt.operation.log'].create({
-            'operation_record_id': record.id,
-            'production_id': production.id,
-            'event_type': operation_type,
-            'message': note or operation_type,
-            'company_id': production.company_id.id,
-        })
-        if online_material and operation_type in dict(online_material._fields['last_operation_type'].selection):
-            online_material.last_operation_type = operation_type
-        if material_lot:
-            self.env['sn.smt.traceability'].create({
-                'production_id': production.id,
-                'online_material_id': online_material.id if online_material else False,
-                'material_lot_id': material_lot.id,
-                'old_material_lot_id': old_material_lot.id if old_material_lot else False,
-                'feeder_id': feeder.id if feeder else False,
-                'cart_id': cart.id if cart else False,
-                'action_type': operation_type,
-                'item_code': online_material.item_code if online_material else False,
-                'device_seq': online_material.device_seq if online_material else False,
-                'table_no': online_material.table_no if online_material else False,
-                'loadpoint': online_material.loadpoint if online_material else False,
-                'company_id': production.company_id.id,
-            })
-        return record
-
-    @api.model
-    def _archive_online_operation_records(self, production, online_materials, note='XL'):
-        if not online_materials:
-            return self.env['sn.smt.operation.record']
-        records = self.env['sn.smt.operation.record'].search([
-            ('production_id', '=', production.id),
-            ('online_material_id', 'in', online_materials.ids),
-            ('is_online', '=', 'Y'),
-        ])
-        if not records:
-            return records
-        records.write({'is_online': 'N'})
-        self.env['sn.smt.operation.log'].create([
-            {
-                'operation_record_id': record.id,
-                'production_id': production.id,
-                'event_type': 'archive',
-                'message': note,
-                'company_id': production.company_id.id,
-            }
-            for record in records
-        ])
-        return records
+        ], limit=1):
+            raise ValidationError(_('The material is already loaded online.'))
+        self._check_material_expiration(material_lot)
+        if material_lot._smt_on_hand_qty() <= 0:
+            raise ValidationError(_('The current material quantity is zero.'))
+        # 卷终确认（reel-end-confirm）：已确认用尽的卷禁止再上料——
+        # 防幽灵卷复活（账面已被归零，实物已尽）
+        if material_lot.x_reel_end:
+            raise ValidationError(_(
+                'Reel %(lot)s has been confirmed used up (reel end) and '
+                'cannot be loaded again.', lot=material_lot.name))
 
 
 class SnSmtTableImportMixin(models.AbstractModel):

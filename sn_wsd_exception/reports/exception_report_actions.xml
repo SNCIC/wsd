@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_exception_ticket" model="ir.actions.report">
+        <field name="name">MES Exception Handling Report</field>
+        <field name="model">sn.wsd.exception.ticket</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">sn_wsd_exception.report_exception_ticket</field>
+        <field name="report_file">sn_wsd_exception.report_exception_ticket</field>
+        <field name="print_report_name">'MES Exception %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sn_wsd_exception_ticket"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+
+    <record id="action_report_exception_pareto" model="ir.actions.report">
+        <field name="name">MES Exception Pareto Report</field>
+        <field name="model">sn.wsd.exception.pareto.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">sn_wsd_exception.report_exception_pareto</field>
+        <field name="report_file">sn_wsd_exception.report_exception_pareto</field>
+        <field name="print_report_name">'MES Exception Pareto'</field>
+    </record>
+</odoo>

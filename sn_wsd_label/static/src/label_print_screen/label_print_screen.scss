@@ -1,0 +1,137 @@
+// PDA 标签打印屏：自包含三区样式（上下文带 / 表单+反馈 / 动作坞），
+// 风格与 sn_wsd_barcode 的 PDA 屏一致，但不依赖其资源（核心模块零依赖）。
+$o-sn-label-pda-bar-bg: #1e293b;
+$o-sn-label-pda-bar-btn: rgba(255, 255, 255, 0.14);
+
+.o_sn_label_pda_screen {
+    .o_sn_label_pda_contextbar {
+        background: $o-sn-label-pda-bar-bg;
+        color: #fff;
+
+        .o_sn_label_pda_contextbar_top {
+            align-items: center;
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px;
+
+            .o_sn_label_pda_title {
+                flex: 1;
+                font-size: 1.15rem;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .o_sn_label_pda_body {
+        background: #f1f5f9;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .o_sn_label_pda_feedback {
+        align-items: center;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        font-size: 17px;
+        font-weight: 600;
+        gap: 4px;
+        justify-content: center;
+        line-height: 1.35;
+        margin: 10px 12px;
+        min-height: 56px;
+        padding: 12px 14px;
+        word-break: break-all;
+
+        &.is-success { background: #d1fae5; color: #065f46; }
+        &.is-danger { background: #fee2e2; color: #991b1b; }
+        &.is-warning { background: #fef3c7; color: #92400e; }
+        &.is-info { background: #dbeafe; color: #1e40af; }
+    }
+
+    .o_sn_label_pda_form {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin: 0 12px 12px;
+        padding: 12px;
+
+        .form-label {
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin: 6px 0 0;
+        }
+
+        .o_sn_label_pda_select,
+        .o_sn_label_pda_input {
+            min-height: 48px;
+            font-size: 1rem;
+        }
+
+        .o_sn_label_pda_sn_row {
+            display: flex;
+            gap: 8px;
+
+            .o_sn_label_pda_input {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .o_sn_label_pda_btn {
+                flex: 0 0 88px;
+                font-weight: 600;
+            }
+        }
+
+        .o_sn_label_pda_copies {
+            max-width: 140px;
+        }
+    }
+
+    .o_sn_label_pda_record {
+        align-items: center;
+        background: #e7f8ee;
+        border-left: 4px solid #16a34a;
+        color: #065f46;
+        display: flex;
+        font-size: 15px;
+        font-weight: 600;
+        gap: 6px;
+        margin: 0 12px 12px;
+        min-height: 52px;
+        padding: 10px 14px;
+
+        .fa-check-circle {
+            color: #16a34a;
+        }
+
+        .o_sn_label_pda_record_name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .o_sn_label_pda_dock {
+        display: flex;
+        gap: 10px;
+        padding: 12px;
+
+        .o_sn_label_pda_btn {
+            flex: 1 1 33.333%;
+            min-height: 52px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .o_sn_label_pda_print {
+            flex: 2 1 66.667%;
+        }
+    }
+}

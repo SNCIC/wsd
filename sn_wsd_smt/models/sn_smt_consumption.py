@@ -1,6 +1,8 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+from .sn_smt_material_table import MATERIAL_LOG_OPERATION_SELECTION
+
 
 class SnSmtOnlineMaterialExtension(models.Model):
     _inherit = 'sn.smt.online.material'
@@ -15,7 +17,37 @@ class SnSmtOnlineMaterialExtension(models.Model):
     )
     required_item_code = fields.Char(
         string='Main Item Code',
-        related='required_product_id.default_code',
+        index=True,
+    )
+
+    @api.onchange('required_item_code')
+    def _onchange_required_item_code(self):
+        # 主料料号是手工录入入口，同步到 item_code 后由
+        # _compute_required_product_id 反查产品带出名称/规格。
+        if self.required_item_code:
+            self.item_code = self.required_item_code
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # item_code 不在视图中，onchange 的同步客户端不会回传，落库前强制对齐。
+        for vals in vals_list:
+            if vals.get('required_item_code') and not vals.get('item_code'):
+                vals['item_code'] = vals['required_item_code']
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if vals.get('required_item_code') and not vals.get('item_code'):
+            vals['item_code'] = vals['required_item_code']
+        return super().write(vals)
+
+    required_product_name = fields.Char(
+        string='Main Material Name',
+        related='required_product_id.name',
+        readonly=True,
+    )
+    required_product_spec = fields.Char(
+        string='Main Material Specification',
+        related='required_product_id.material_specification',
         store=True,
         readonly=True,
     )
@@ -25,26 +57,18 @@ class SnSmtOnlineMaterialExtension(models.Model):
         compute='_compute_smt_quantities',
         store=True,
     )
-    scrap_qty = fields.Float(string='Scrap Points', copy=False, default=0.0)
     remaining_qty = fields.Float(
         string='Remaining Points',
         compute='_compute_smt_quantities',
         store=True,
     )
     last_operation_type = fields.Selection(
-        [
-            ('offline_prepare', 'Offline Preparation'),
-            ('online_load', 'Load'),
-            ('unload', 'Unload'),
-            ('change', 'Change'),
-            ('continue', 'Continue'),
-            ('changeover_inherit', 'Changeover Inherit'),
-        ],
+        MATERIAL_LOG_OPERATION_SELECTION,
         string='Last Operation',
         copy=False,
     )
     last_consumed_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial', string='Last Product SN', copy=False, check_company=True,
+        'sn.wsd.serial.identity', string='Last Product SN', copy=False, check_company=True,
     )
     last_consumed_at = fields.Datetime(string='Last Consumption Time', copy=False)
     loaded_at = fields.Datetime(string='Loaded At', copy=False)
@@ -56,37 +80,40 @@ class SnSmtOnlineMaterialExtension(models.Model):
     def _compute_required_product_id(self):
         product_model = self.env['product.product']
         for line in self:
-            line.required_product_id = product_model.search(
-                [('default_code', '=', line.item_code)], limit=1,
-            )
+            if line.item_code:
+                line.required_product_id = product_model.search(
+                    [('default_code', '=', line.item_code)], limit=1,
+                )
+            else:
+                line.required_product_id = False
 
-    @api.depends('consumption_ids.consumed_qty', 'loaded_qty', 'scrap_qty')
+    @api.depends('consumption_ids.consumed_qty', 'consumption_ids.material_lot_id',
+                 'loaded_qty', 'loaded_material_lot_id')
     def _compute_smt_quantities(self):
         for line in self:
-            consumed = sum(line.consumption_ids.mapped('consumed_qty'))
+            # 计数按"当前在机卷"分段：换料/续料/转机后，行上仍挂着历史卷
+            # 的流水，但余量只对当前卷有意义（loaded_qty 也是当前卷口径）。
+            current = line.loaded_material_lot_id
+            rows = line.consumption_ids
+            if current:
+                rows = rows.filtered(lambda record: record.material_lot_id == current)
+            consumed = sum(rows.mapped('consumed_qty'))
             line.consumed_qty = consumed
-            line.remaining_qty = max(line.loaded_qty - consumed - line.scrap_qty, 0.0)
+            line.remaining_qty = max(line.loaded_qty - consumed, 0.0)
 
-    def _set_loaded_quantity(self, material_lot):
+    def _set_loaded_quantity(self, material_lot, operation_type='online_load', fallback_qty=False):
+        """上料时取该卷的在手数量作为本次上机的初始数量——同一卷跨
+        制令单再次上机时，余量随完工倒冲后的库存自动延续。转机继承时
+        若旧单未完工（倒冲未入账、在手虚高），调用方传 fallback_qty
+        （旧单行剩余）回退。最近操作随调用方（上料/换料/续料/转机
+        继承）写入。"""
         self.ensure_one()
-        available_qty = material_lot.x_smt_available_qty or material_lot.product_qty
         values = {
-            'loaded_qty': available_qty,
+            'loaded_qty': fallback_qty if fallback_qty is not False else material_lot._smt_on_hand_qty(),
             'loaded_at': fields.Datetime.now(),
-            'last_operation_type': 'online_load',
+            'last_operation_type': operation_type,
         }
         self.write(values)
-
-
-class SnSmtTraceabilityExtension(models.Model):
-    _inherit = 'sn.smt.traceability'
-
-    required_item_code = fields.Char(
-        string='Main Item Code', related='online_material_id.required_item_code', store=True, readonly=True,
-    )
-    actual_item_code = fields.Char(
-        string='Actual Item Code', related='material_lot_id.product_id.default_code', store=True, readonly=True,
-    )
 
 
 class SnSmtMaterialConsumption(models.Model):
@@ -98,15 +125,13 @@ class SnSmtMaterialConsumption(models.Model):
     company_id = fields.Many2one(
         'res.company', required=True, default=lambda self: self.env.company, index=True,
     )
-    internal_serial_id = fields.Many2one(
-        'sn.wsd.internal.serial', string='Product SN', required=True,
+    serial_identity_id = fields.Many2one(
+        'sn.wsd.serial.identity', string='SN', required=True,
         ondelete='restrict', index=True, check_company=True,
     )
-    serial_no = fields.Char(related='internal_serial_id.serial_no', store=True, readonly=True, index=True)
-    production_id = fields.Many2one('mrp.production', required=True, index=True, check_company=True)
+    serial_no = fields.Char(related='serial_identity_id.name', store=True, readonly=True, index=True)
     mes_order_id = fields.Many2one(
-        'sn.wsd.mes.order', related='production_id.x_mes_order_id',
-        store=True, readonly=True, index=True,
+        'sn.wsd.mes.order', string='MES Order', required=True, index=True, check_company=True,
     )
     route_operation_id = fields.Many2one(
         'sn.wsd.mes.order.route.operation',
@@ -125,10 +150,18 @@ class SnSmtMaterialConsumption(models.Model):
         'product.product', related='online_material_id.required_product_id', store=True, readonly=True,
     )
     required_item_code = fields.Char(related='online_material_id.required_item_code', store=True, readonly=True)
+    required_material_spec = fields.Char(
+        related='required_product_id.material_specification',
+        string='Required Material Specification',
+    )
     actual_product_id = fields.Many2one(
         'product.product', related='material_lot_id.product_id', store=True, readonly=True,
     )
     actual_item_code = fields.Char(related='actual_product_id.default_code', store=True, readonly=True)
+    actual_material_spec = fields.Char(
+        related='actual_product_id.material_specification',
+        string='Actual Material Specification',
+    )
     device_seq = fields.Integer(related='online_material_id.device_seq', store=True, readonly=True)
     table_no = fields.Char(related='online_material_id.table_no', store=True, readonly=True)
     loadpoint = fields.Char(related='online_material_id.loadpoint', store=True, readonly=True)
@@ -148,27 +181,57 @@ class SnSmtMaterialConsumption(models.Model):
     note = fields.Char(string='Note')
 
     _smt_consumption_event_unique = models.Constraint(
-        'unique(internal_serial_id, route_operation_id, online_material_id, external_event_id)',
+        'unique(serial_identity_id, route_operation_id, online_material_id, external_event_id)',
         'A product serial can only consume one material position per event.',
     )
 
     @api.model
+    def _net_consumption_by_lot(self, production):
+        """按卷聚合一张制造单（含其制令单的 SMT 扣点与整机关键物料
+        usage_times 流水）的消耗净值：正向 − 冲销。完工倒冲回填的数量
+        与批次以此为准，不经过 BOM 翻译。"""
+        mes_orders = production.x_mes_order_ids
+        if not mes_orders:
+            return {}
+        groups = self._read_group(
+            [
+                ('mes_order_id', 'in', mes_orders.ids),
+                ('material_lot_id', '!=', False),
+            ],
+            groupby=['material_lot_id'],
+            aggregates=['consumed_qty:sum'],
+        )
+        net = {}
+        for lot, total in groups:
+            qty = total or 0.0
+            if qty > 0:
+                net[lot] = qty
+        return net
+
+    @api.model
     def _get_active_lines(self, route_operation):
-        return route_operation.mes_order_id.production_id.x_smt_online_material_ids.filtered(
-            lambda line: line.is_skip != 'Y' and line.is_load == 'Y' and line.loaded_material_lot_id
+        return route_operation.mes_order_id.x_smt_online_material_ids.filtered(
+            lambda line: line.source == 'smt_table'
+            and line.is_skip != 'Y' and line.is_load == 'Y' and line.loaded_material_lot_id
         )
 
     @api.model
-    def validate_for_serial(self, route_operation, internal_serial):
-        if not route_operation or route_operation.operation_id.x_station_type not in ('smt', 'dip'):
+    def validate_for_serial(self, route_operation, identity=False):
+        # 料站表门禁：只管 smt_table 行，与路线类型无关（没拆表行=不参与）。
+        # 关键物料清单行（drawing_list）的门禁由 sn_wsd_barcode 扩展处理。
+        mes_order = route_operation.mes_order_id
+        table_rows = mes_order.x_smt_online_material_ids.filtered(
+            lambda line: line.source == 'smt_table')
+        if not table_rows:
             return self.env['sn.smt.online.material']
-        production = route_operation.mes_order_id.production_id
+        # 料站表停用即整表禁止操作：过站门禁与扣点一并拒绝。
+        table_rows._ensure_material_table_effective()
         lines = self._get_active_lines(route_operation)
-        expected_lines = production.x_smt_online_material_ids.filtered(lambda line: line.is_skip != 'Y')
+        expected_lines = table_rows.filtered(lambda line: line.is_skip != 'Y')
         if len(lines) != len(expected_lines):
             raise ValidationError(_('All SMT material positions must be loaded before the product can pass this station.'))
         if not lines:
-            raise ValidationError(_('No active SMT material positions are available for this route operation.'))
+            return self.env['sn.smt.online.material']
         self.env.cr.execute(
             'SELECT id FROM sn_smt_online_material WHERE id IN %s FOR UPDATE', [tuple(lines.ids)],
         )
@@ -184,18 +247,47 @@ class SnSmtMaterialConsumption(models.Model):
         return lines
 
     @api.model
-    def consume_for_serial(self, route_operation, internal_serial, operator_code=None,
+    def consume_for_serial(self, route_operation, identity=False, operator_code=None,
                            external_event_id=None, source_system=None, note=None):
-        lines = self.validate_for_serial(route_operation, internal_serial)
+        mes_order = route_operation.mes_order_id
+        # 料站表扣点只认路线维护的物料关联工序（x_material_operation_id，
+        # 私有路线头上即工序实例）：料站表本身不带工序；未维护（或维护的
+        # 实例不在本单路线）且有料站表行 = 扣点无从归属，拦截过站倒逼维护。
+        table_rows = mes_order.x_smt_online_material_ids.filtered(
+            lambda line: line.source == 'smt_table')
+        if table_rows:
+            # 停用表的行连过站扣点也不做：先报停用，再谈工序归属。
+            table_rows._ensure_material_table_effective()
+            material_rop = mes_order.x_material_operation_id
+            if not material_rop or material_rop.mes_route_id != mes_order.x_mes_route_id:
+                raise ValidationError(_(
+                    'The material operation is not maintained on the process '
+                    'route of MES order %(order)s. Maintain the material '
+                    'operation on the route before passing stations.',
+                    order=mes_order.name))
+            if route_operation != material_rop:
+                return self.env['sn.smt.material.consumption']
+        lines = self.validate_for_serial(route_operation, identity)
         if not lines:
             return self.env['sn.smt.material.consumption']
+        # 一块板一张料站表只扣一次：同 SN 在本制令单已有正向扣点流水则跳过
+        # （SMT 车间路线含多道工序，板会在多站过站，按单幂等防止重复扣点）。
+        # drawing_list 行的扣减（按工序幂等 + usage_times）由 sn_wsd_barcode 扩展。
         existing_domain = [
-            ('internal_serial_id', '=', internal_serial.id),
-            ('route_operation_id', '=', route_operation.id),
+            ('serial_identity_id', '=', identity.id),
+            ('mes_order_id', '=', mes_order.id),
+            ('online_material_id.source', '=', 'smt_table'),
+            ('product_qty', '>', 0),
         ]
+        existing = self.search(existing_domain, limit=1)
+        if existing:
+            return existing
         if external_event_id:
-            existing_domain.append(('external_event_id', '=', external_event_id))
-            existing = self.search(existing_domain)
+            existing = self.search([
+                ('serial_identity_id', '=', identity.id),
+                ('route_operation_id', '=', route_operation.id),
+                ('external_event_id', '=', external_event_id),
+            ])
             if existing:
                 return existing
         created = self.env['sn.smt.material.consumption']
@@ -205,8 +297,8 @@ class SnSmtMaterialConsumption(models.Model):
             after = before - point_qty
             record = self.create({
                 'company_id': route_operation.company_id.id,
-                'internal_serial_id': internal_serial.id,
-                'production_id': route_operation.mes_order_id.production_id.id,
+                'serial_identity_id': identity.id,
+                'mes_order_id': mes_order.id,
                 'route_operation_id': route_operation.id,
                 'online_material_id': line.id,
                 'material_lot_id': line.loaded_material_lot_id.id,
@@ -223,7 +315,7 @@ class SnSmtMaterialConsumption(models.Model):
             })
             created |= record
             line.write({
-                'last_consumed_serial_id': internal_serial.id,
+                'last_consumed_serial_id': identity.id,
                 'last_consumed_at': record.consumed_at,
             })
         return created
@@ -234,8 +326,8 @@ class SnSmtMaterialConsumption(models.Model):
             raise ValidationError(_('This SMT consumption has already been reversed.'))
         reversal = self.create({
             'company_id': self.company_id.id,
-            'internal_serial_id': self.internal_serial_id.id,
-            'production_id': self.production_id.id,
+            'serial_identity_id': self.serial_identity_id.id,
+            'mes_order_id': self.mes_order_id.id,
             'route_operation_id': self.route_operation_id.id,
             'online_material_id': self.online_material_id.id,
             'material_lot_id': self.material_lot_id.id,
@@ -253,11 +345,11 @@ class SnSmtMaterialConsumption(models.Model):
         return reversal
 
 
-class InternalSerialSmtExtension(models.Model):
-    _inherit = 'sn.wsd.internal.serial'
+class SerialIdentitySmtExtension(models.Model):
+    _inherit = 'sn.wsd.serial.identity'
 
     smt_consumption_ids = fields.One2many(
-        'sn.smt.material.consumption', 'internal_serial_id', string='SMT Material Consumption',
+        'sn.smt.material.consumption', 'serial_identity_id', string='SMT Material Consumption',
     )
     smt_consumption_count = fields.Integer(
         string='SMT Consumption Count', compute='_compute_smt_consumption_count',
@@ -272,79 +364,9 @@ class InternalSerialSmtExtension(models.Model):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('SMT Material Consumption'),
+            'name': 'Product Material Usage',
             'res_model': 'sn.smt.material.consumption',
             'view_mode': 'list,form',
-            'domain': [('internal_serial_id', '=', self.id)],
-            'context': {'default_internal_serial_id': self.id},
-        }
-
-
-class SnSmtLoadingService(models.AbstractModel):
-    _name = 'sn.smt.loading.service'
-    _description = 'SMT PDA Loading Service'
-
-    @api.model
-    def _new_loading_wizard(self, production, workcenter, device_table, loadpoint, feeder_sn, material_sn):
-        return self.env['sn.smt.tp.wizard'].new({
-            'company_id': production.company_id.id,
-            'production_id': production.id,
-            'workcenter_id': workcenter.id,
-            'device_table_input': device_table,
-            'loadpoint_input': loadpoint,
-            'feeder_input': feeder_sn,
-            'material_sn_input': material_sn,
-        })
-
-    @api.model
-    def validate_loading(self, production, workcenter, device_table, loadpoint, feeder_sn, material_sn):
-        wizard = self._new_loading_wizard(
-            production, workcenter, device_table, loadpoint, feeder_sn, material_sn,
-        )
-        wizard.action_validate()
-        return {
-            'online_material_id': wizard.online_material_id.id,
-            'material_lot_id': wizard.material_lot_id.id,
-            'feeder_id': wizard.feeder_id.id,
-            'message': wizard.message,
-        }
-
-
-class StockLotSmtConsumptionExtension(models.Model):
-    _inherit = 'stock.lot'
-
-    smt_consumption_ids = fields.One2many(
-        'sn.smt.material.consumption', 'material_lot_id', string='SMT Product Usage',
-    )
-    smt_consumption_count = fields.Integer(
-        string='SMT Product Usage Count', compute='_compute_smt_consumption_count',
-    )
-
-    @api.depends('smt_consumption_ids')
-    def _compute_smt_consumption_count(self):
-        for lot in self:
-            lot.smt_consumption_count = len(lot.smt_consumption_ids)
-
-    def action_view_smt_consumption(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('SMT Product Usage'),
-            'res_model': 'sn.smt.material.consumption',
-            'view_mode': 'list,form',
-            'domain': [('material_lot_id', '=', self.id)],
-            'context': {'default_material_lot_id': self.id},
-        }
-
-    @api.model
-    def save_loading(self, production, workcenter, device_table, loadpoint, feeder_sn, material_sn):
-        wizard = self._new_loading_wizard(
-            production, workcenter, device_table, loadpoint, feeder_sn, material_sn,
-        )
-        wizard.action_save()
-        return {
-            'online_material_id': wizard.online_material_id.id,
-            'material_lot_id': wizard.material_lot_id.id,
-            'feeder_id': wizard.feeder_id.id,
-            'message': wizard.message,
+            'domain': [('serial_identity_id', '=', self.id)],
+            'context': {'default_serial_identity_id': self.id},
         }

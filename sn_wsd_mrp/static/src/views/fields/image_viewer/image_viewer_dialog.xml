@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_mrp.ImageViewerDialog">
+        <Dialog title="props.title" size="'xl'" footer="true" withBodyPadding="false"
+                contentClass="'o_sn_image_viewer_dialog'">
+            <div class="o_sn_iv_stage" t-ref="stage"
+                 t-on-wheel="onWheel"
+                 t-on-pointerdown="onPointerDown"
+                 t-on-pointermove="onPointerMove"
+                 t-on-pointerup="onPointerUp"
+                 t-on-pointercancel="onPointerUp"
+                 t-on-dblclick="onDoubleClick">
+                <img class="o_sn_iv_image" draggable="false"
+                     t-att-src="props.url" t-att-alt="props.title" t-att-style="imageStyle"/>
+            </div>
+            <t t-set-slot="footer">
+                <div class="o_sn_iv_toolbar d-flex align-items-center justify-content-center gap-1 w-100">
+                    <button type="button" class="btn btn-link px-2" aria-label="Zoom out"
+                            t-att-title="labels.zoomOut" t-on-click="onZoomOut">
+                        <i class="oi oi-minus"/>
+                    </button>
+                    <span class="o_sn_iv_percent small text-nowrap" t-esc="zoomPercent + ' %'"/>
+                    <input type="range" class="form-range o_sn_iv_range" min="20" max="400"
+                           step="5" aria-label="Zoom" t-att-value="zoomPercent"
+                           t-on-input="onScaleInput"/>
+                    <button type="button" class="btn btn-link px-2" aria-label="Zoom in"
+                            t-att-title="labels.zoomIn" t-on-click="onZoomIn">
+                        <i class="oi oi-plus"/>
+                    </button>
+                    <span class="o_sn_iv_separator"/>
+                    <button type="button" class="btn btn-link px-2" aria-label="Reset"
+                            t-att-title="labels.reset" t-on-click="onReset">
+                        <span class="small fw-bold">1:1</span>
+                    </button>
+                    <button type="button" class="btn btn-link px-2 fs-5" aria-label="Rotate left"
+                            t-att-title="labels.rotateLeft" t-on-click="onRotateLeft">&#8634;</button>
+                    <button type="button" class="btn btn-link px-2 fs-5" aria-label="Rotate right"
+                            t-att-title="labels.rotateRight" t-on-click="onRotateRight">&#8635;</button>
+                    <span class="o_sn_iv_separator"/>
+                    <a class="btn btn-link px-2" aria-label="Download"
+                       t-att-title="labels.download" t-att-href="props.url"
+                       t-att-download="props.filename">
+                        <i class="oi oi-arrow-down"/>
+                    </a>
+                </div>
+            </t>
+        </Dialog>
+    </t>
+</templates>

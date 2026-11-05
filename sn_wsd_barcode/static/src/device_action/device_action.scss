@@ -1,0 +1,229 @@
+.o_sn_wsd_device_action {
+    // 看板分组卡：设备头 + 任务行（行色复用 o_sn_wsd_pda_row）
+    .o_sn_wsd_device_group {
+        padding: 0 8px;
+
+        .o_sn_wsd_device_group_head {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 10px 4px 4px;
+            font-weight: 600;
+
+            .o_sn_wsd_device_code {
+                font-size: 1.05rem;
+            }
+
+            .o_sn_wsd_device_name {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: 400;
+            }
+
+            .o_sn_wsd_device_loc {
+                font-size: 0.85rem;
+                color: #64748b;
+                font-weight: 400;
+            }
+        }
+    }
+
+    // 逾期行（pda_row 自带红/绿，逾期=黄）
+    .o_sn_wsd_pda_row.is-overdue {
+        background-color: #fef9c3; // yellow-50
+        border-left: 4px solid #eab308;
+    }
+
+    // 进度第四格：逾期=琥珀
+    .o_sn_wsd_pda_num.is-overdue strong {
+        color: #d97706;
+    }
+
+    // 设备档案卡
+    .o_sn_wsd_device_card {
+        margin: 8px;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+
+        .o_sn_wsd_device_card_head {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+
+            .o_sn_wsd_device_code {
+                font-size: 1.15rem;
+                font-weight: 700;
+            }
+
+            .o_sn_wsd_device_name {
+                flex: 1;
+                font-weight: 500;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .o_sn_wsd_device_card_body {
+            padding-top: 6px;
+            color: #475569;
+            font-size: 0.92rem;
+        }
+    }
+
+    .o_sn_wsd_device_donefold {
+        padding: 8px 8px 16px;
+    }
+
+    // ===== 任务执行视图 =====
+
+    .o_sn_wsd_device_lines {
+        padding: 0 8px 8px;
+    }
+
+    .o_sn_wsd_device_line {
+        padding: 8px 10px;
+        margin-bottom: 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+
+        &.is-pass {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        &.is-fail {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .o_sn_wsd_device_line_name {
+            font-weight: 600;
+            font-size: 0.98rem;
+
+            .o_sn_wsd_device_guide {
+                font-size: 0.85rem;
+                font-weight: 400;
+            }
+        }
+
+        .o_sn_wsd_device_line_method {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .o_sn_wsd_device_line_ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+
+            .o_sn_wsd_device_ok,
+            .o_sn_wsd_device_ng {
+                min-width: 88px;
+                min-height: 44px;
+                font-weight: 600;
+            }
+
+            .o_sn_wsd_device_ok.is-on {
+                background: #16a34a;
+                border-color: #16a34a;
+                color: #fff;
+            }
+
+            .o_sn_wsd_device_ng.is-on {
+                background: #dc2626;
+                border-color: #dc2626;
+                color: #fff;
+            }
+
+            .o_sn_wsd_device_measure {
+                max-width: 140px;
+                min-height: 44px;
+                font-size: 1.15rem;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            .o_sn_wsd_device_range {
+                color: #64748b;
+                font-size: 0.9rem;
+            }
+        }
+
+        .o_sn_wsd_device_note {
+            margin-top: 6px;
+        }
+    }
+
+    // ===== 报修弹层 =====
+
+    .o_sn_wsd_device_repair_modal {
+        .o_sn_wsd_device_repair_section {
+            margin-bottom: 12px;
+        }
+
+        .o_sn_wsd_device_repair_label {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+    }
+
+    // ===== 位置筛选：树形缩进 + 层级图标 =====
+
+    .o_sn_wsd_pda_selectbtn {
+        max-width: 36vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .o_sn_wsd_device_locmodal {
+        .o_sn_wsd_device_loclist {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-height: 56vh;
+            overflow-y: auto;
+            padding: 2px;
+        }
+
+        .o_sn_wsd_device_locitem {
+            display: block;
+            width: calc(100% - 4px);
+            min-height: 52px;
+            margin-bottom: 0;
+            padding: 14px 16px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 1.08rem;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background .12s ease;
+
+            &:hover {
+                background: #e2e8f0;
+            }
+
+            &.is-active {
+                background: #0f172a;
+                border-color: #0f172a;
+                color: #ffffff;
+            }
+        }
+
+        .o_sn_wsd_device_locall {
+            font-weight: 600;
+        }
+    }
+}

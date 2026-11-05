@@ -1,0 +1,196 @@
+.o_list_renderer {
+    th.o_column_filterable {
+        position: relative;
+
+        // The button is only displayed on hover and is positioned right before
+        // the sort icon, both of them being absolutely positioned like the
+        // native sort icon. It must not reserve layout space, otherwise the
+        // column label would be truncated.
+        .o_column_filter_button {
+            border-radius: 2px;
+            background: var(--ListRenderer-thead-bg-color, transparent);
+            padding: 0 2px;
+            position: absolute;
+            top: 50%;
+            right: 0.25rem;
+            z-index: 1;
+            width: 14px;
+            height: 14px;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            transform: translateY(-50%);
+            color: var(--bs-secondary-color, #6c757d);
+            opacity: 0;
+            transition: opacity ease 200ms;
+
+            &:hover {
+                opacity: 1;
+                color: var(--bs-primary, #714b67);
+            }
+
+            &.o_column_filter_active {
+                opacity: 1;
+                color: var(--bs-primary, #714b67);
+            }
+        }
+
+        // The native sort icon stays at its usual place (0.5rem from the right
+        // edge), the filter button is placed right before it.
+        &.o_column_sortable .o_column_filter_button {
+            right: 1.5rem;
+        }
+
+        &:hover .o_column_filter_button {
+            opacity: 1;
+        }
+    }
+}
+
+.o_column_filter_popover {
+    // Every bootstrap popover is capped at --bs-popover-max-width (276px by
+    // default). The panel below is wider than that, so the popover body used
+    // to clip its right edge: the second date input and the apply button were
+    // cut off. The width is driven by the panel itself instead.
+    --bs-popover-max-width: none;
+    max-width: none;
+
+    .popover-body {
+        padding: 0;
+    }
+}
+
+.o_column_filter_hint {
+    padding: 0 0.5rem 0.35rem;
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: 0.8rem;
+}
+
+.o_column_filter_no_result {
+    padding: 0.5rem;
+    color: var(--bs-secondary-color, #6c757d);
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.o_column_filter_panel {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    // Never wider than the viewport on small screens: the popover positioner
+    // takes care of keeping the panel inside the window.
+    max-width: calc(100vw - 1rem);
+    font-size: 0.9rem;
+
+    .o_column_filter_header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+    }
+
+    .o_column_filter_title {
+        flex: 1 1 auto;
+        font-weight: 600;
+    }
+
+    .o_column_filter_mode {
+        flex: 0 0 auto;
+
+        .btn {
+            padding: 0.1rem 0.4rem;
+            font-size: 0.75rem;
+        }
+    }
+
+    .o_column_filter_search {
+        position: relative;
+        padding: 0.5rem 0.75rem 0.25rem;
+
+        input {
+            padding-right: 1.75rem;
+        }
+
+        i {
+            position: absolute;
+            top: 50%;
+            right: 1.4rem;
+            opacity: 0.5;
+            transform: translateY(-40%);
+            pointer-events: none;
+        }
+    }
+
+    .o_column_filter_values {
+        max-height: 260px;
+        padding: 0.25rem 0.75rem 0.5rem;
+        overflow-y: auto;
+    }
+
+    .o_column_filter_value {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.15rem 0;
+        margin: 0;
+        font-weight: normal;
+        cursor: pointer;
+
+        input {
+            flex: 0 0 auto;
+        }
+    }
+
+    .o_column_filter_count {
+        flex: 0 0 auto;
+        margin-left: auto;
+        font-size: 0.8em;
+        color: var(--bs-secondary-color, #6c757d);
+    }
+
+    .o_column_filter_range {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+
+        // Flex items default to min-width: auto, which keeps the native width
+        // of the date and datetime inputs: the range used to overflow the
+        // panel instead of sharing the available width.
+        input {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 0.25rem 0.4rem;
+        }
+    }
+
+    .o_column_filter_range_sep {
+        opacity: 0.6;
+    }
+
+    .o_column_filter_quick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        padding: 0 0.75rem 0.5rem;
+    }
+
+    .o_column_filter_loading {
+        padding: 0.25rem 0;
+        text-align: center;
+        opacity: 0.6;
+    }
+
+    .o_column_filter_load_more {
+        padding: 0.1rem 0;
+        font-size: 0.8rem;
+    }
+
+    .o_column_filter_footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.4rem 0.75rem;
+        border-top: 1px solid var(--bs-border-color, #dee2e6);
+    }
+}

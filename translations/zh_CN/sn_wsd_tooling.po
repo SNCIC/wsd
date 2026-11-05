@@ -1,0 +1,432 @@
+# Odoo zh_CN translation worklist -- sn_wsd_tooling
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_needaction
+msgid "Action Needed"
+msgstr "待处理"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__active
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__active
+msgid "Active"
+msgstr "有效"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__create_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__create_date
+msgid "Created on"
+msgstr "创建日期"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_service__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_code_seed__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__display_name
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__scrap_status__due
+msgid "Due"
+msgstr "截止"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__scrap_status__expired
+msgid "Expired"
+msgstr "过期"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（合作伙伴）"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__has_message
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__has_message
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__message_needaction
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_needaction
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "如果勾选此项，则需要查看新消息。"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__message_has_error
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_error
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_error
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "如果勾选此项， 某些消息将出现发送错误。"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_start_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_repair_done_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_disable_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_scrap_wizard__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__write_date
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__write_date
+msgid "Last Updated on"
+msgstr "上次更新日期"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__scrap_count_limit
+msgid ""
+"Lifetime usage count at which the tooling must be scrapped (0 = disabled)."
+msgstr "工装必须报废的寿命使用次数（0 = 不启用）。"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__remaining_scrap_count
+msgid "Lifetime usages left before the tooling must be scrapped."
+msgstr "工装必须报废前剩余的寿命使用次数。"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_tooling
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_tooling.selection__sn_tooling__scrap_status__normal
+msgid "Normal"
+msgstr "正常"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要采取行动的消息数量"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送错误的消息的数量"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__rating_ids
+msgid "Ratings"
+msgstr "点评"
+
+#. module: sn_wsd_tooling
+#. from po: D:\odoo\odoo19wsd\odoo\addons\base\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__record_id
+msgid "Record"
+msgstr "记录"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_record_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__sequence
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template_maintenance_item__template_id
+msgid "Template"
+msgstr "模板"
+
+#. module: sn_wsd_tooling
+#: model:ir.model,name:sn_wsd_tooling.model_sn_tooling_code_seed
+msgid "Tooling Coding Rule Seeder"
+msgstr "工装编码规则种子数据"
+
+#. module: sn_wsd_tooling
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__scrap_count_reminder
+msgid ""
+"Usage count threshold turning the tooling scrap status to \"due\" (yellow)."
+msgstr "使用次数阈值，达到该值时工装报废状态变为“到期”（黄色）。"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_type__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_template__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_type__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling_template__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_tooling.field_sn_tooling__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_tooling.field_sn_tooling_maintain_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "向导"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+msgid "Action"
+msgstr "操作"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_disable_wizard_form
+msgid "Disable Tooling"
+msgstr "禁用制具"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_maintain_wizard_form
+msgid "Finish Maintenance"
+msgstr "保养完成"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_done_wizard_form
+msgid "Finish Repair"
+msgstr "维修完成"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+msgid "Notes"
+msgstr "通知"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+msgid "Offline"
+msgstr "离线"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\mail\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+msgid "Online"
+msgstr "线上"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Scrap Due"
+msgstr "报废提醒"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Scrap Limit Reached"
+msgstr "已达报废上限"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_scrap_wizard_form
+msgid "Scrap Tooling"
+msgstr "报废制具"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_repair_start_wizard_form
+msgid "Start Repair"
+msgstr "开始维修"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_form
+msgid "Tooling"
+msgstr "工装"
+
+#. module: sn_wsd_tooling
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_form
+msgid "Tooling Record"
+msgstr "工装记录"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+msgid "Tooling SN"
+msgstr "制具SN"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_template_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Tooling Template"
+msgstr "制具建档"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_tooling\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_type_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_search
+msgid "Tooling Type"
+msgstr "制具类型"
+
+#. module: sn_wsd_tooling
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model_terms:ir.ui.view,arch_db:sn_wsd_tooling.view_sn_tooling_record_search
+msgid "User"
+msgstr "用户"

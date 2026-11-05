@@ -1,0 +1,109 @@
+# Odoo zh_CN translation worklist -- sn_wsd_scrap
+# From the source: code terms no pot lists, so no po translates them. Fill in every msgstr, then merge with i18n_apply.py.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-12 01:58+0000\n"
+"PO-Revision-Date: 2026-10-12 01:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: i18n_scan.py (odoo-zh-i18n)\n"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\addons\account\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__blocked
+msgid "Blocked"
+msgstr "受阻"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__fail
+msgid "Fail"
+msgstr "不合格"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__hold
+msgid "Hold"
+msgstr "暂存"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_device\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__pass
+msgid "Pass"
+msgstr "合格"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__previous_route_operation_id
+msgid "Previous Route Operation"
+msgstr "上一路线工序"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_quality\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__hold
+msgid "Quality Hold"
+msgstr "质量挂起/锁仓"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__released
+msgid "Released"
+msgstr "已下达"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__resume_route_operation_id
+msgid "Resume Route Operation"
+msgstr "恢复路线工序"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__route_operation_report_id
+msgid "Route Operation Report"
+msgstr "路线工序报工"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\addons\mrp\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_final_result__scrap
+msgid "Scrap"
+msgstr "报废"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_scrap\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__route_operation_id
+msgid "Scrap Operation"
+msgstr "报废作业"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_scrap\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__scrap_record_count
+msgid "Scrap Record Count"
+msgstr "报废记录计数"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_scrap\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_serial_identity__scrap_record_ids
+msgid "Scrap Records"
+msgstr "报废记录"
+
+#. module: sn_wsd_scrap
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__serial_identity_id
+msgid "Scrap SN"
+msgstr "报废 SN"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_barcode\i18n\zh_CN.po
+#: model:ir.model.fields.selection,name:sn_wsd_scrap.selection__sn_wsd_scrap_record__previous_quality_hold_state__scrapped
+msgid "Scrapped"
+msgstr "已报废"
+
+#. module: sn_wsd_scrap
+#. from po: d:\odoo\odoo19wsd\myaddons\sn_wsd_api\i18n\zh_CN.po
+#: model:ir.model.fields,field_description:sn_wsd_scrap.field_sn_wsd_scrap_record__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_scrap.view_sn_wsd_scrap_record_search
+msgid "MES Order"
+msgstr "制令单"

@@ -5,6 +5,25 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//form/header/button[@name='button_validate'][1]" position="before">
+                <button name="action_create_iqc_inspections"
+                        type="object"
+                        string="Quality Inspection"
+                        class="oe_highlight"
+                        invisible="not x_is_iqc_control_picking or state in ('done', 'cancel')"
+                        groups="stock.group_stock_user"/>
+                <!-- The inspection request travels with the goods from the
+                     receipt to the quality area: printed on the receipt of a
+                     three-step reception, before it is validated. -->
+                <!-- SNERP intercepts the ESC/P download and sends it to the
+                     configured dot-matrix RAW queue. -->
+                <button name="action_print_inspection_request_prn"
+                        type="object"
+                        string="Print Inspection Request"
+                        class="btn-secondary"
+                        invisible="not sn_is_reception_receipt or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+            </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_open_iqc_inspections"
                         type="object"
@@ -17,12 +36,35 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom_qty']" position="after">
+                <!-- The incoming control only speaks about the operation it
+                     gates: on any other transfer its columns are dropped as a
+                     whole. Hiding the button alone would leave its column
+                     behind as an empty strip between Demand and Quantity. -->
+                <field name="x_iqc_inspect_qty"
+                       string="Qty to Inspect"
+                       optional="show"
+                       column_invisible="not parent.x_is_iqc_control_picking"/>
                 <field name="x_quality_inspection_count"
                        string="IQC"
-                       optional="hide"/>
+                       optional="hide"
+                       column_invisible="not parent.x_is_iqc_control_picking"/>
+                <button name="action_create_iqc_inspection"
+                        type="object"
+                        string="IQC"
+                        icon="fa-flask"
+                        column_invisible="not parent.x_is_iqc_control_picking"/>
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <field name="x_iqc_inspection_count" invisible="1"/>
+                <field name="x_is_iqc_control_picking" invisible="1"/>
+                <field name="sn_is_reception_receipt" invisible="1"/>
+            </xpath>
+            <!-- Reviewer printed on the inspection request of the receipt: it
+                 stays editable until the receipt is validated. -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_inspection_request_reviewer_id"
+                       invisible="not sn_is_reception_receipt"
+                       readonly="state in ('done', 'cancel')"/>
             </xpath>
         </field>
     </record>

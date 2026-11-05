@@ -1,0 +1,168 @@
+# Terms deliberately left in English in this project's zh_CN overlay.
+#
+# One msgid per line, followed by an optional `# reason`.  `i18n_scan.py` skips
+# these msgids (they never enter a worklist, so the scan's "left to translate"
+# count is real work and not a list of decisions already taken).  The list is
+# re-checked on every scan: a msgid that is translated now, or that the source
+# does not contain any more, is reported so it can be dropped from this file.
+#
+# Add a term here only when a Chinese translation would be wrong or absurd --
+# not to make a coverage number look better.
+
+# Single-letter tokens and technical names Odoo ships untranslated in every
+# language (its own po files carry them with `msgstr == msgid`).  Translating
+# them would change what the string means, not translate it.
+A       # web: emoji skin-tone group; spreadsheet and html_builder: column / shape label
+B       # web: emoji skin-tone group
+C       # web: emoji skin-tone group; account: debit-credit marker of _('C') / _('D')
+D       # account: debit marker next to _('C') in the automatic entry wizard
+x       # base: placeholder value in the users form arch, not a label
+#
+# Some of the terms below are reported by `i18n_scan.py` as "translated now,
+# drop them from the list", because another module's po happens to translate the
+# term.  They stay declared on purpose: the record each of them is about is
+# served by a po that does not name it, so dropping the declaration puts them
+# straight back into a worklist (bus.model_ir_qweb and the two sn_wsd field names
+# reappeared the round this was tried).  The advisory line is expected; do not
+# "fix" it by removing the declaration.
+Qweb    # bus: name of the ir.qweb model, not UI prose
+ID      # html_editor + 10 project modules: primary-key label, kept by the whole tree
+OEE     # sn_wsd_device: acronym shown as-is in the factory report
+TIN     # base: Uzbekistan tax identifier acronym (res.country.vat_label)
+state   # sn_wsd_exception: field name the python extractor mistakes for a label
+id      # sn_wsd_piece_rate: field name the python extractor mistakes for a label
+Gmail   # google_gmail: brand name of the mail provider
+NUIT    # base: Mozambique tax identifier acronym (res.country.vat_label)
+SN WSD API      # base: module name, an acronym with no Chinese wording
+SN WSD SMT      # base: module name, an acronym with no Chinese wording
+noopener        # html_editor: value of the rel attribute of a link, not prose
+d       # mail: single-letter unit of the record rotting status bar (days)
+“%s”    # mail: quoted placeholder around an activity name, nothing to translate
+La réponse D    # html_editor: demo selection value of the converter test model (French joke)
+L       # product: size attribute value, the same letter in every language
+M       # product: size attribute value, the same letter in every language
+S       # product: size attribute value; muk_web_refresh: single-letter refresh shortcut
+<span>1.00 Units</span>    # sale: demo quantity of the quotation report preview
+ECPay   # payment: brand of the Taiwanese payment provider
+Family Mart     # payment: convenience-store chain name
+Hi-Life         # payment: convenience-store chain name
+OK Mart         # payment: convenience-store chain name
+TWQR    # payment: name of the Taiwanese QR payment scheme
+WERO    # payment: name of the European payment scheme
+iPASS Money     # payment: brand of the Taiwanese payment method
+SOP     # sn_wsd_device: document kind of the knowledge base, used as-is
+EQ001   # sn_wsd_device: placeholder example of an equipment code
+ir.sequence     # sn_wsd_code_rule: technical model name of the sequence implementation
+%(parent)s / %(own)s    # sn_wsd_device: format string made of two placeholders only
+product_id.default_code         # sn_wsd_code_rule: placeholder example of a field path
+[('x_drawing_no', '=', {{product_id.default_code}})]    # sn_wsd_code_rule: placeholder example of a search domain
+
+# sn_wsd_exception: field names the python extractor mistakes for labels, because
+# they sit as the first element of a tuple (the domain and the required-field
+# list); they are identifiers, never UI text.
+temp_action
+root_cause
+corrective_action
+production_line_id
+mes_order_id    # sn_wsd_mrp: field name the python extractor mistakes for a label (tuple position)
+X       # sn_wsd_label: axis letter of the label designer canvas
+Y       # sn_wsd_label: axis letter of the label designer canvas
+W       # sn_wsd_label: width column header
+H       # sn_wsd_label: height column header
+dpi)    # sn_wsd_label: unit fragment of a status line assembled by the template
+V       # sn_wsd_plm: single-letter column of the ECO form
+IQC     # sn_wsd_quality: acronym rendered as-is in the picking form
+<code>ITEM_CODE</code>      # sn_wsd_smt: import template column name, part of the file format
+<code>DEVICE_SEQ</code>     # sn_wsd_smt: import template column name, part of the file format
+<code>TABLE_NO</code>       # sn_wsd_smt: import template column name, part of the file format
+<code>LOADPOINT</code>       # sn_wsd_smt: import template column name, part of the file format
+<code>CHANEL_SN</code>      # sn_wsd_smt: import template column name, part of the file format
+<code>FEEDER_SPEC</code>    # sn_wsd_smt: import template column name, part of the file format
+<code>POINT_QTY</code>      # sn_wsd_smt: import template column name, part of the file format
+<code>IS_SKIP</code>        # sn_wsd_smt: import template column name, part of the file format
+<code>IS_TRAY</code>        # sn_wsd_smt: import template column name, part of the file format
+<code>TRACK_TYPE</code>     # sn_wsd_smt: import template column name, part of the file format
+<code>DIRECTION</code>      # sn_wsd_smt: import template column name, part of the file format
+<code>POINT_LOCATION</code> # sn_wsd_smt: import template column name, part of the file format
+
+# AQL special inspection level codes and the date format hint of the closing
+# wizard: standards and format literals, printed as-is in every language.
+S-1     # sn_wsd_quality: AQL special inspection level code
+S-2     # sn_wsd_quality: AQL special inspection level code
+S-3     # sn_wsd_quality: AQL special inspection level code
+S-4     # sn_wsd_quality: AQL special inspection level code
+YYYY-MM # sn_wsd_piece_rate: placeholder showing the expected date format
+s       # muk_web_refresh: single-letter keyboard shortcut of the search bar
+31/01/%s        # web: date format example of the datetime field, shown as-is
+not =   # web: domain operator symbol of the tree editor
+'${str}'        # spreadsheet: JS template literal wrapper of an error message
+n°      # web_tour: step-number symbol of the tour recorder
+option.label    # web: JS placeholder, never rendered
+optionScope.label       # web: JS placeholder, never rendered
+
+# The emoji-picker letters: skin-tone group markers of emoji_data.js, the same
+# letter in every language.
+O
+P
+R
+i
+o
+r
+v
+
+# web: labels Odoo generates from the field name and keeps out of the pot
+# (export_string_translation=False), on fields no view renders.
+Res
+Is top bar visible
+List order of embedded action ids
+List visibility of embedded actions ids
+<span itemprop="name">Acme Corporation</span>    # web: demo company of the invoice layout preview
+
+# Shop-floor pass/fail markers and quality acronyms: the whole project, and the
+# operators reading the terminals, use these as-is.
+OK      # sn_wsd_workorder and the whole MES: pass marker
+OK:     # sn_wsd_workorder: pass counter label
+NG      # sn_wsd_workorder and the whole MES: fail marker
+NG:     # sn_wsd_workorder: fail counter label
+AQL     # sn_wsd_quality: sampling standard acronym printed as-is
+SN      # sn_wsd_api: serial-number column header, used as-is everywhere in the project
+
+# Field names the python extractor mistakes for labels: they sit as the first
+# element of a tuple (domain, required-field list), never as UI text.
+picking_id
+serial_identity_id
+production_id
+quality_issue_id
+template_id
+tooling_id
+Lorsqu'un pancake prend l'avion à destination de Toronto et qu'il fait une escale technique à St Claude, on dit:      # html_editor: field label of the test-only converter model, kept French in every language
+Acme Corporation        # analytic: demo data company name
+<span>1.00</span>       # account: demo amount of the invoice layout preview
+nimated                 # html_builder: text run of the QWeb fragment A<span>nimated</span>, translating it alone renders garbage
+
+# Device mockup names of the image-shape picker (image_shapes_definition.js).
+# They name a hardware model, and Odoo keeps them in English in every language.
+Galaxy S \#1    # device mockup name (brand + number)
+Galaxy S \#2    # device mockup name (brand + number)
+Galaxy S \#3    # device mockup name (brand + number)
+Galaxy S \#4    # device mockup name (brand + number)
+Galaxy S \#5    # device mockup name (brand + number)
+Galaxy S \#6    # device mockup name (brand + number)
+Half Galaxy S   # device mockup shape (half of the Galaxy S outline)
+MacBook \#1     # device mockup name (brand + number)
+MacBook \#2     # device mockup name (brand + number)
+iMac \#1        # device mockup name (brand + number)
+iMac \#2        # device mockup name (brand + number)
+iMac \#3        # device mockup name (brand + number)
+iPad \#1        # device mockup name (brand + number)
+iPad \#2        # device mockup name (brand + number)
+iPad \#3        # device mockup name (brand + number)
+iPad \#4        # device mockup name (brand + number)
+iPad \#5        # device mockup name (brand + number)
+iPad \#6        # device mockup name (brand + number)
+iPhone \#1      # device mockup name (brand + number)
+iPhone \#2      # device mockup name (brand + number)
+iPhone \#3      # device mockup name (brand + number)
+iPhone \#4      # device mockup name (brand + number)
+iPhone \#5      # device mockup name (brand + number)
+iPhone \#6      # device mockup name (brand + number)

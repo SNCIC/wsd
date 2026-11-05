@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Types of the other receipts and other deliveries: each type carries
+         the virtual location the goods move through, hence the stock
+         valuation account booked by the operation. -->
+    <record id="view_sn_wsd_stock_other_operation_type_list" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.other.operation.type.list</field>
+        <field name="model">sn.wsd.stock.other.operation.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="operation"/>
+                <field name="location_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_stock_other_operation_type_form" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.other.operation.type.form</field>
+        <field name="model">sn.wsd.stock.other.operation.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="operation"/>
+                        </group>
+                        <group>
+                            <field name="location_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_stock_other_operation_type_search" model="ir.ui.view">
+        <field name="name">sn.wsd.stock.other.operation.type.search</field>
+        <field name="model">sn.wsd.stock.other.operation.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="location_id"/>
+                <filter string="Other Deliveries" name="filter_other_out"
+                        domain="[('operation', 'in', ('other_out', 'both'))]"/>
+                <filter string="Other Receipts" name="filter_other_in"
+                        domain="[('operation', 'in', ('other_in', 'both'))]"/>
+                <separator/>
+                <filter string="Archived" name="filter_inactive"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_stock_other_operation_type" model="ir.actions.act_window">
+        <field name="name">Other Operation Types</field>
+        <field name="res_model">sn.wsd.stock.other.operation.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_stock_other_operation_type"
+              name="Other Operation Types"
+              parent="stock.menu_warehouse_config"
+              action="action_sn_wsd_stock_other_operation_type"
+              groups="stock.group_stock_manager"
+              sequence="7"/>
+</odoo>

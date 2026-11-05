@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_list.ListRendererRowsColumnFilter"
+       t-inherit="web.ListRenderer.Rows"
+       t-inherit-mode="extension">
+        <xpath expr="//t[@t-foreach='list.records']" position="attributes">
+            <attribute name="t-foreach">filteredRecords</attribute>
+        </xpath>
+    </t>
+
+</templates>

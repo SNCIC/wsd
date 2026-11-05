@@ -42,7 +42,10 @@ export default class GroupedLineComponent extends LineComponent {
     }
 
     get linesToDisplay() {
-        if (!this.env.model.showReservedSns) {
+        const showIncomingReservedLots =
+            this.env.model.record.picking_type_code === "incoming" &&
+            this.line.product_id.tracking === "lot";
+        if (!this.env.model.showReservedSns && !showIncomingReservedLots) {
             return this.props.line.lines.filter((line) => {
                 return (
                     this.env.model.getQtyDone(line) > 0 ||
@@ -55,7 +58,10 @@ export default class GroupedLineComponent extends LineComponent {
     }
 
     get lotName() {
-        if (!this.env.model.showReservedSns) {
+        const showIncomingReservedLots =
+            this.env.model.record.picking_type_code === "incoming" &&
+            this.line.product_id.tracking === "lot";
+        if (!this.env.model.showReservedSns && !showIncomingReservedLots) {
             // In case we don't display unscanned reserved lots, display it only
             // if only one subline with a lot has some quantity done.
             if (this.linesToDisplay.length === 1) {
