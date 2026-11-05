@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Company Scope',
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.0.3',
     'summary': 'Company scoping for master data that Odoo keeps global',
     'description': """
 Company scoping for master data that Odoo keeps global
