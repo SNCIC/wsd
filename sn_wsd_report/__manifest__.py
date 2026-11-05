@@ -1,8 +1,8 @@
 {
     'name': 'SN WSD Report',
-    'version': '19.0.3.1.1',
+    'version': '19.0.4.0.0',
     'summary': 'Reporting extensions for SN WSD manufacturing',
-    'depends': ['sn_wsd_api', 'sn_wsd_quality'],
+    'depends': ['sn_wsd_api', 'sn_wsd_quality', 'sn_wsd_device', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'views/menu_views.xml',
@@ -13,6 +13,12 @@
             'sn_wsd_report/static/src/js/mes_big_screen_action.js',
             'sn_wsd_report/static/src/xml/mes_big_screen_action.xml',
             'sn_wsd_report/static/src/scss/mes_big_screen_action.scss',
+            'sn_wsd_report/static/src/js/warehouse_screen_action.js',
+            'sn_wsd_report/static/src/xml/warehouse_screen_action.xml',
+            'sn_wsd_report/static/src/scss/warehouse_screen_action.scss',
+            'sn_wsd_report/static/src/js/ai_screen_action.js',
+            'sn_wsd_report/static/src/xml/ai_screen_action.xml',
+            'sn_wsd_report/static/src/scss/ai_screen_action.scss',
         ],
     },
     'installable': True,

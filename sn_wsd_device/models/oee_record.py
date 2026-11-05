@@ -314,9 +314,15 @@ class OeeRecord(models.Model):
             domain, ['equipment_id'],
             ['oee_value:avg', 'availability_rate:avg',
              'performance_rate:avg', 'quality_rate:avg',
-             'actual_output:sum', 'downtime_hours:sum', '__count'])
+             'actual_output:sum', 'downtime_hours:sum',
+             'theoretical_output:sum', 'qualified_qty:sum',
+             'unqualified_qty:sum', '__count'])
         for (equipment, oee_avg, availability_avg, performance_avg,
-                quality_avg, output_sum, downtime_sum, count) in groups:
+                quality_avg, output_sum, downtime_sum, cap_sum,
+                qual_sum, unqual_sum, count) in groups:
+            qual = int(qual_sum or 0)
+            unqual = int(unqual_sum or 0)
+            defect_rate = round(unqual / (qual + unqual) * 100, 2) if (qual + unqual) else 0.0
             per_equipment.append({
                 'equipment_id': equipment.id,
                 'equipment_code': equipment.code or '',
@@ -328,6 +334,10 @@ class OeeRecord(models.Model):
                 'quality': round(quality_avg or 0.0, 1),
                 'output_total': int(output_sum or 0),
                 'downtime_total': round(downtime_sum or 0.0, 1),
+                'capacity_total': int(cap_sum or 0),
+                'qualified_total': qual,
+                'unqualified_total': unqual,
+                'defect_rate': defect_rate,
                 'record_count': count,
             })
         per_equipment.sort(key=lambda item: item['oee'], reverse=True)
@@ -357,18 +367,28 @@ class OeeRecord(models.Model):
         fleet = self._read_group(
             domain, [],
             ['oee_value:avg', 'availability_rate:avg',
-             'performance_rate:avg', 'quality_rate:avg', '__count'])
+             'performance_rate:avg', 'quality_rate:avg',
+             'theoretical_output:sum', 'qualified_qty:sum',
+             'unqualified_qty:sum', '__count'])
         if fleet:
-            oee_avg, availability_avg, performance_avg, quality_avg, count = \
-                fleet[0]
+            (oee_avg, availability_avg, performance_avg, quality_avg,
+             cap_sum, qual_sum, unqual_sum, count) = fleet[0]
         else:
             oee_avg = availability_avg = performance_avg = quality_avg = 0.0
+            cap_sum = qual_sum = unqual_sum = 0.0
             count = 0
+        qual = int(qual_sum or 0)
+        unqual = int(unqual_sum or 0)
+        defect_rate = round(unqual / (qual + unqual) * 100, 2) if (qual + unqual) else 0.0
         kpis = {
             'oee': round(oee_avg or 0.0, 1),
             'availability': round(availability_avg or 0.0, 1),
             'performance': round(performance_avg or 0.0, 1),
             'quality': round(quality_avg or 0.0, 1),
+            'capacity_total': int(cap_sum or 0),
+            'qualified_total': qual,
+            'unqualified_total': unqual,
+            'defect_rate': defect_rate,
             'record_count': count,
             'equipment_count': len(per_equipment),
             'best': per_equipment[0] if per_equipment else None,

@@ -17,4 +17,42 @@
     </record>
 
     <menuitem id="menu_sn_wsd_mes_big_screen" name="MES Big Screen" parent="mrp.menu_mrp_reporting" action="action_sn_wsd_mes_big_screen_server" sequence="32"/>
+
+    <record id="action_sn_wsd_warehouse_screen_server" model="ir.actions.server">
+        <field name="name">Warehouse Stock Board</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="path">sn-wsd-warehouse-stock-board</field>
+        <field name="state">code</field>
+        <field name="code">action = env['sn.wsd.warehouse.dashboard.service'].action_open_warehouse_screen()</field>
+    </record>
+
+    <record id="action_sn_wsd_warehouse_screen_client" model="ir.actions.client">
+        <field name="name">Warehouse Stock Board</field>
+        <field name="tag">sn_wsd_warehouse_screen_action</field>
+        <field name="path">sn-wsd-warehouse-stock-board-display</field>
+        <field name="target">fullscreen</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_warehouse_screen" name="Warehouse Stock Board" parent="stock.menu_warehouse_report" action="action_sn_wsd_warehouse_screen_server" sequence="10"/>
+
+    <menuitem id="menu_sn_wsd_warehouse_screen_mrp" name="Warehouse Stock Board" parent="mrp.menu_mrp_reporting" action="action_sn_wsd_warehouse_screen_server" sequence="33"/>
+
+    <record id="action_sn_wsd_ai_screen_server" model="ir.actions.server">
+        <field name="name">Multi-Dimension Board</field>
+        <field name="model_id" ref="mrp.model_mrp_production"/>
+        <field name="path">sn-wsd-ai-board</field>
+        <field name="state">code</field>
+        <field name="code">action = env['sn.wsd.ai.dashboard.service'].action_open_ai_screen()</field>
+    </record>
+
+    <record id="action_sn_wsd_ai_screen_client" model="ir.actions.client">
+        <field name="name">Multi-Dimension Board</field>
+        <field name="tag">sn_wsd_ai_screen_action</field>
+        <field name="path">sn-wsd-ai-board-display</field>
+        <field name="target">fullscreen</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_sn_wsd_ai_screen" name="Multi-Dimension Board" parent="mrp.menu_mrp_reporting" action="action_sn_wsd_ai_screen_server" sequence="34"/>
 </odoo>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.WarehouseScreenAction">
+        <Layout className="'o_sn_wsd_warehouse_screen_action'">
+            <t t-set-slot="default">
+                <div class="o_wsd_screen" t-att-class="state.loading ? 'o_is_loading' : ''">
+                    <div class="o_wsd_shell">
+                        <header class="o_wsd_header">
+                            <div class="o_wsd_header_wing"/>
+                            <div class="o_wsd_header_title">
+                                <h1>仓库库存可视化看板</h1>
+                                <small t-esc="summary.refresh_time || ''"/>
+                            </div>
+                            <div class="o_wsd_header_wing"/>
+                        </header>
+
+                        <section class="o_wsd_summary">
+                            <div class="o_wsd_card">
+                                <label>当日领料总量</label>
+                                <strong class="o_val_cyan"><t t-esc="formatNumber(summary.today_issue_qty, 1)"/></strong>
+                                <em><t t-esc="summary.today_date || ''"/></em>
+                            </div>
+                            <div class="o_wsd_card">
+                                <label>盘盈总数</label>
+                                <strong class="o_val_green"><t t-esc="formatNumber(summary.gain_total, 1)"/></strong>
+                                <em>待应用盘点盈余</em>
+                            </div>
+                            <div class="o_wsd_card">
+                                <label>盘亏总数</label>
+                                <strong class="o_val_amber"><t t-esc="formatNumber(summary.loss_total, 1)"/></strong>
+                                <em>待应用盘点短缺</em>
+                            </div>
+                            <div class="o_wsd_card">
+                                <label>当前库存总量</label>
+                                <strong class="o_val_cyan"><t t-esc="formatNumber(summary.total_stock, 1)"/></strong>
+                                <em>内部库位结存量</em>
+                            </div>
+                        </section>
+
+                        <section class="o_wsd_filter_bar">
+                            <div class="o_wsd_filter_group">
+                                <label>仓库</label>
+                                <select t-att-value="filters.warehouseId" t-on-change="ev => this.filters.warehouseId = ev.target.value">
+                                    <option value="">全部仓库</option>
+                                    <t t-foreach="warehouses" t-as="wh" t-key="wh.id">
+                                        <option t-att-value="wh.id"><t t-esc="wh.name"/></option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="o_wsd_filter_group">
+                                <label>物料类别</label>
+                                <select t-att-value="filters.categoryId" t-on-change="ev => this.filters.categoryId = ev.target.value">
+                                    <option value="">全部类别</option>
+                                    <t t-foreach="categories" t-as="cat" t-key="cat.id">
+                                        <option t-att-value="cat.id"><t t-esc="cat.name"/></option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="o_wsd_filter_group">
+                                <label>开始日期</label>
+                                <input type="date" t-att-value="filters.dateFrom" t-on-change="ev => this.filters.dateFrom = ev.target.value"/>
+                            </div>
+                            <div class="o_wsd_filter_group">
+                                <label>结束日期</label>
+                                <input type="date" t-att-value="filters.dateTo" t-on-change="ev => this.filters.dateTo = ev.target.value"/>
+                            </div>
+                            <button class="btn o_wsd_btn o_wsd_btn_primary" t-on-click="applyFilters">查询</button>
+                            <button class="btn o_wsd_btn" t-on-click="resetFilters">重置</button>
+                            <div class="o_wsd_filter_spacer"/>
+                            <div class="o_wsd_autorefresh">
+                                <span>自动刷新</span>
+                                <button class="btn o_wsd_btn" t-att-class="state.autoRefresh ? 'o_wsd_btn_active' : ''" t-on-click="toggleAutoRefresh">
+                                    <t t-esc="state.autoRefresh ? `ON ${state.countdown}s` : 'OFF'"/>
+                                </button>
+                            </div>
+                            <button class="btn o_wsd_btn o_wsd_btn_primary" t-on-click="manualRefresh" t-att-disabled="state.refreshing">
+                                <t t-esc="state.refreshing ? '刷新中…' : '立即刷新'"/>
+                            </button>
+                        </section>
+
+                        <main class="o_wsd_grid">
+                            <section class="o_wsd_panel o_wsd_panel_issue">
+                                <div class="o_wsd_panel_heading">
+                                    <span>当天领料信息</span>
+                                    <small>最新 <t t-esc="issueLines.length"/> 条</small>
+                                </div>
+                                <div class="o_wsd_table o_issue_table">
+                                    <div class="o_wsd_table_head">
+                                        <span>领料单号</span>
+                                        <span>物料 / 规格</span>
+                                        <span class="o_col_num">数量</span>
+                                        <span>领用人</span>
+                                        <span>时间</span>
+                                    </div>
+                                    <t t-if="issueLines.length">
+                                        <div t-foreach="issueLines" t-as="line" t-key="`${line.picking_name}-${line.product_code}-${line_index}`" class="o_wsd_table_row" t-att-class="stateClass(line.state)">
+                                            <span><t t-esc="line.picking_name"/></span>
+                                            <span class="o_cell_product">
+                                                <b><t t-esc="line.product_name"/></b>
+                                                <small><t t-esc="line.product_code"/> · <t t-esc="line.spec"/></small>
+                                            </span>
+                                            <span class="o_col_num"><t t-esc="formatNumber(line.qty, 1)"/> <t t-esc="line.uom"/></span>
+                                            <span><t t-esc="line.user_name"/></span>
+                                            <span><t t-esc="formatTime(line.time)"/></span>
+                                        </div>
+                                    </t>
+                                    <div t-else="" class="o_wsd_empty">暂无领料记录</div>
+                                </div>
+                            </section>
+
+                            <section class="o_wsd_panel o_wsd_panel_gain">
+                                <div class="o_wsd_panel_heading">
+                                    <span>盘盈信息</span>
+                                    <small>账面 &lt; 实际</small>
+                                </div>
+                                <div class="o_wsd_table o_gain_table">
+                                    <div class="o_wsd_table_head">
+                                        <span>物料编码</span>
+                                        <span class="o_col_num">账面</span>
+                                        <span class="o_col_num">实际</span>
+                                        <span class="o_col_num">盈余</span>
+                                    </div>
+                                    <t t-if="gainRows.length">
+                                        <div t-foreach="gainRows" t-as="row" t-key="`${row.product_code}-${row.location_name}-${row_index}`" class="o_wsd_table_row o_row_gain">
+                                            <span class="o_cell_product">
+                                                <b><t t-esc="row.product_code"/></b>
+                                                <small><t t-esc="row.product_name"/></small>
+                                            </span>
+                                            <span class="o_col_num"><t t-esc="formatNumber(row.book_qty, 1)"/></span>
+                                            <span class="o_col_num"><t t-esc="formatNumber(row.real_qty, 1)"/></span>
+                                            <span class="o_col_num o_gain_qty">+<t t-esc="formatNumber(row.diff_qty, 1)"/></span>
+                                        </div>
+                                    </t>
+                                    <div t-else="" class="o_wsd_empty">暂无盘盈记录</div>
+                                </div>
+                            </section>
+
+                            <section class="o_wsd_panel o_wsd_panel_loss">
+                                <div class="o_wsd_panel_heading">
+                                    <span>盘亏信息</span>
+                                    <small>账面 &gt; 实际</small>
+                                </div>
+                                <div class="o_wsd_table o_loss_table">
+                                    <div class="o_wsd_table_head">
+                                        <span>物料编码</span>
+                                        <span class="o_col_num">账面</span>
+                                        <span class="o_col_num">实际</span>
+                                        <span class="o_col_num">亏损</span>
+                                    </div>
+                                    <t t-if="lossRows.length">
+                                        <div t-foreach="lossRows" t-as="row" t-key="`${row.product_code}-${row.location_name}-${row_index}`" class="o_wsd_table_row" t-att-class="row.alert ? 'o_row_alert' : 'o_row_loss'">
+                                            <span class="o_cell_product">
+                                                <b><t t-esc="row.product_code"/></b>
+                                                <small><t t-esc="row.product_name"/></small>
+                                            </span>
+                                            <span class="o_col_num"><t t-esc="formatNumber(row.book_qty, 1)"/></span>
+                                            <span class="o_col_num"><t t-esc="formatNumber(row.real_qty, 1)"/></span>
+                                            <span class="o_col_num o_loss_qty"><t t-esc="formatNumber(row.diff_qty, 1)"/></span>
+                                        </div>
+                                    </t>
+                                    <div t-else="" class="o_wsd_empty">暂无盘亏记录</div>
+                                </div>
+                            </section>
+                        </main>
+
+                        <section class="o_wsd_ops_row">
+                            <section class="o_wsd_panel o_wsd_panel_ops">
+                                <div class="o_wsd_panel_heading">
+                                    <span>当前操作状态</span>
+                                    <small>进行中 <t t-esc="formatNumber(summary.active_operation_count)"/> 单</small>
+                                </div>
+                                <div class="o_wsd_op_grid">
+                                    <div t-foreach="operationStats" t-as="op" t-key="op.code" class="o_wsd_op_card" t-att-class="opStatClass(op.code)">
+                                        <label><t t-esc="op.label"/></label>
+                                        <strong><t t-esc="formatNumber(op.active_count)"/></strong>
+                                        <div class="o_wsd_op_meta">
+                                            <span>就绪 <t t-esc="formatNumber(op.ready_count)"/></span>
+                                            <span>今日完成 <t t-esc="formatNumber(op.done_today)"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="o_wsd_panel o_wsd_panel_latest">
+                                <div class="o_wsd_panel_heading">
+                                    <span>最新动态</span>
+                                    <small>库存操作流水</small>
+                                </div>
+                                <div class="o_wsd_table o_latest_table">
+                                    <div class="o_wsd_table_head">
+                                        <span>单号</span>
+                                        <span>类型</span>
+                                        <span>状态</span>
+                                        <span>经办人</span>
+                                        <span>时间</span>
+                                    </div>
+                                    <t t-if="latestOperations.length">
+                                        <div t-foreach="latestOperations" t-as="op" t-key="`${op.name}-${op_index}`" class="o_wsd_table_row" t-att-class="stateClass(op.state)">
+                                            <span><t t-esc="op.name"/></span>
+                                            <span><t t-esc="op.type_label"/></span>
+                                            <span class="o_state_chip" t-att-class="stateClass(op.state)"><t t-esc="op.state_label"/></span>
+                                            <span><t t-esc="op.user_name"/></span>
+                                            <span><t t-esc="formatTime(op.time)"/></span>
+                                        </div>
+                                    </t>
+                                    <div t-else="" class="o_wsd_empty">暂无操作动态</div>
+                                </div>
+                            </section>
+                        </section>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>
