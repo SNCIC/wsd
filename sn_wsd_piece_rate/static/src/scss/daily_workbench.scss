@@ -10,6 +10,10 @@
 
     .o_drw_header {
         flex: 0 0 auto;
+
+        .o_drw_order_search {
+            min-width: 13rem;
+        }
     }
 
     .o_drw_table {

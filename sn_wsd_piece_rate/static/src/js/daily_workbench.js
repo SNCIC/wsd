@@ -34,7 +34,12 @@ export class DailyWorkbench extends Component {
             filters: { workshop: "", line: "", order: "" },
             workshops: [],
             linesList: [],
-            ordersList: [],
+            // searchable order picker: allOrders accumulates across
+            // snapshots (a filtered reload must not shrink the choices),
+            // orderTerm/orderSuggestions drive the type-to-filter dropdown
+            allOrders: [],
+            orderTerm: "",
+            orderSuggestions: [],
             selectedId: null,
             error: "",
             notice: "",
@@ -101,7 +106,6 @@ export class DailyWorkbench extends Component {
         // distinct picker options from the snapshot (orders already filtered)
         const workshops = new Map();
         const lines = new Map();
-        const orders = new Map();
         for (const line of data.lines) {
             if (line.workshop) {
                 workshops.set(line.workshop, line.workshop);
@@ -109,22 +113,63 @@ export class DailyWorkbench extends Component {
             if (line.production_line) {
                 lines.set(line.production_line, line.production_line);
             }
-            orders.set(line.mes_order_id, line.order_name);
         }
         this.state.workshops = [...workshops.values()].map((n) => ({
             name: n,
         }));
         this.state.linesList = [...lines.values()].map((n) => ({ name: n }));
-        this.state.ordersList = [...orders.entries()].map(([id, name]) => ({
-            id,
-            name,
-        }));
+        this.mergeOrders(data);
         if (this.state.selectedId
                 && !data.lines.some(
                     (l) => l.route_operation_id === this.state.selectedId)) {
             this.state.selectedId = null;
         }
         this.state.loading = false;
+    }
+
+    /** Accumulate the order choices across snapshots: once an order has
+     * been seen it stays pickable even when the current filter narrows the
+     * table down to a single order (recent first). */
+    mergeOrders(data) {
+        const map = new Map(
+            this.state.allOrders.map((o) => [o.id, o.name]));
+        for (const line of data.lines) {
+            map.set(line.mes_order_id, line.order_name);
+        }
+        this.state.allOrders = [...map.entries()]
+            .map(([id, name]) => ({ id, name }))
+            .sort((a, b) => b.id - a.id);
+    }
+
+    // ------------------------------------------------------------------
+    // searchable order filter (type to filter, click to apply)
+    // ------------------------------------------------------------------
+
+    onOrderTerm(ev) {
+        this.state.orderTerm = ev.target.value;
+        const term = this.state.orderTerm.trim().toLowerCase();
+        if (!term) {
+            this.state.orderSuggestions = [];
+            if (this.state.filters.order) {
+                this.state.filters.order = "";
+                this.onFilterChange();
+            }
+            return;
+        }
+        this.state.orderSuggestions = this.state.allOrders
+            .filter((o) => o.name.toLowerCase().includes(term))
+            .slice(0, 10);
+    }
+
+    pickOrder(order) {
+        this.state.filters.order = String(order.id);
+        this.state.orderTerm = order.name;
+        this.state.orderSuggestions = [];
+        this.onFilterChange();
+    }
+
+    hideOrderSuggestions() {
+        this.state.orderSuggestions = [];
     }
 
     async onFilterChange() {
@@ -147,6 +192,7 @@ export class DailyWorkbench extends Component {
         this.state.lines = filtered;
         this.state.teams = data.teams;
         this.state.scrapReasons = data.scrap_reasons;
+        this.mergeOrders(data);
         if (this.state.selectedId
                 && !filtered.some(
                     (l) => l.route_operation_id === this.state.selectedId)) {

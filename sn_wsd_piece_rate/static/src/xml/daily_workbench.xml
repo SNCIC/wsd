@@ -19,13 +19,22 @@
                             <option t-att-value="pl.name" t-esc="pl.name"/>
                         </t>
                     </select>
-                    <select class="form-select form-select-sm" t-att-value="state.filters.order"
-                            t-on-change="ev => { state.filters.order = ev.target.value; this.onFilterChange(); }">
-                        <option value="" t-esc="labels.mesOrder"/>
-                        <t t-foreach="state.ordersList" t-as="o" t-key="o.id">
-                            <option t-att-value="o.id" t-esc="o.name"/>
-                        </t>
-                    </select>
+                    <div class="position-relative">
+                        <input class="form-control form-control-sm o_drw_order_search"
+                               t-att-placeholder="labels.mesOrder"
+                               t-att-value="state.orderTerm"
+                               autocomplete="off"
+                               t-on-input="onOrderTerm"
+                               t-on-blur="hideOrderSuggestions"/>
+                        <ul t-if="state.orderSuggestions.length"
+                            class="o_drw_suggestions list-group position-absolute w-100 shadow">
+                            <t t-foreach="state.orderSuggestions" t-as="o" t-key="o.id">
+                                <li class="list-group-item list-group-item-action"
+                                    t-on-mousedown.prevent="() => this.pickOrder(o)"
+                                    t-esc="o.name"/>
+                            </t>
+                        </ul>
+                    </div>
                 </div>
                 <div class="ms-auto d-flex gap-2 align-items-center">
                     <button class="btn btn-primary" t-esc="labels.submit"
