@@ -1,5 +1,10 @@
+import json
+from urllib.parse import urlencode
+
 from odoo import fields, models
 from odoo.tools import drop_view_if_exists
+
+EXPORT_URL = '/sn_wsd_stock_report/export/xlsx'
 
 # stock_move_line.date 存的是 UTC naive 时间戳，期间归属必须换算到业务时区，
 # 否则每天 0:00-8:00 的流水会被算到前一天（进而落到区间外）。
@@ -134,6 +139,27 @@ class SnWsdStockBalanceReport(models.Model):
             return fields.Date.to_date(date_from), fields.Date.to_date(date_to)
         date_range = self.env['sn.wsd.stock.balance.range']._current(self.env)
         return date_range.date_from, date_range.date_to
+
+    def action_export_xlsx(self):
+        """Download the rows matching the current search as an Excel workbook.
+
+        The period travels with the action so the file is built from the same
+        dates the list was generated with, not from whatever the shared period
+        row holds by the time the download is requested.
+        """
+        params = {}
+        date_from = self.env.context.get('sn_wsd_balance_date_from')
+        date_to = self.env.context.get('sn_wsd_balance_date_to')
+        if date_from and date_to:
+            params['date_from'] = fields.Date.to_date(date_from).isoformat()
+            params['date_to'] = fields.Date.to_date(date_to).isoformat()
+        domain = self.env.context.get('active_domain')
+        if domain:
+            params['domain'] = json.dumps(domain)
+        url = EXPORT_URL
+        if params:
+            url = '%s?%s' % (url, urlencode(params))
+        return {'type': 'ir.actions.act_url', 'url': url, 'target': 'self'}
 
     def action_open_details(self):
         """下钻：打开本行（物料 × 仓库）在报表区间内的收发流水明细。"""
