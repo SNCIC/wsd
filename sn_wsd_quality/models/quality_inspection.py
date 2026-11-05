@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import timedelta
 
 from odoo import Command, api, fields, models, _
@@ -21,6 +22,10 @@ SAMPLE_RECORD_MODE_SELECTION = [
 # existed. An item measured in whole units is set to 0 instead.
 DEFAULT_DECIMAL_PLACES = 3
 MAX_DECIMAL_PLACES = 6
+
+# First number written in the free-text expected value ("820", "820 V",
+# "820 ± 5"): the target generated measurements scatter around.
+EXPECTED_VALUE_NUMBER = re.compile(r'[-+]?\d+(?:[.,]\d+)?')
 
 
 class QualityInspectionScheme(models.Model):
@@ -362,6 +367,7 @@ class QualityInspectionSchemeLine(models.Model):
     upper_limit = fields.Float(string='Upper Limit')
     nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
+    tolerance = fields.Float(string='Tolerance (±)')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
     sample_record_mode = fields.Selection(
@@ -426,6 +432,7 @@ class QualityInspectionSchemeLine(models.Model):
             'upper_limit': item.upper_limit,
             'nominal_value': item.nominal_value,
             'expected_value': item.expected_value,
+            'tolerance': item.tolerance,
             'selection_values': item.selection_values,
             'unit': item.unit,
             'sample_record_mode': item.sample_record_mode,
@@ -478,6 +485,13 @@ class QualityInspectionItem(models.Model):
     upper_limit = fields.Float(string='Upper Limit')
     nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
+    tolerance = fields.Float(
+        string='Tolerance (±)',
+        help='Half width of the band auto-generated measurements scatter in, '
+             'around the expected value. Generated figures stay inside the '
+             'item limits; when it is left at zero the symmetric deviation of '
+             'the limits is used instead.',
+    )
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
     sample_record_mode = fields.Selection(
@@ -589,6 +603,7 @@ class QualityInspectionItemGroupLine(models.Model):
     upper_limit = fields.Float(related='item_id.upper_limit', string='Upper Limit', store=True, readonly=True)
     nominal_value = fields.Float(related='item_id.nominal_value', string='Nominal Value', store=True, readonly=True)
     expected_value = fields.Char(related='item_id.expected_value', string='Expected Value', store=True, readonly=True)
+    tolerance = fields.Float(related='item_id.tolerance', string='Tolerance (±)', store=True, readonly=True)
     selection_values = fields.Char(related='item_id.selection_values', string='Allowed Values', store=True, readonly=True)
     unit = fields.Char(related='item_id.unit', string='Unit', store=True, readonly=True)
     sample_record_mode = fields.Selection(
@@ -1084,6 +1099,7 @@ class QualityInspection(models.Model):
                 'upper_limit': line.upper_limit,
                 'nominal_value': line.nominal_value,
                 'expected_value': line.expected_value,
+                'tolerance': line.tolerance,
                 'selection_values': line.selection_values,
                 'unit': line.unit,
                 'sample_record_mode': line.sample_record_mode,
@@ -1445,6 +1461,7 @@ class QualityInspectionLine(models.Model):
     upper_limit = fields.Float(string='Upper Limit')
     nominal_value = fields.Float(string='Nominal Value')
     expected_value = fields.Char(string='Expected Value')
+    tolerance = fields.Float(string='Tolerance (±)')
     selection_values = fields.Char(string='Allowed Values')
     unit = fields.Char(string='Unit')
     sample_record_mode = fields.Selection(
@@ -1513,12 +1530,44 @@ class QualityInspectionLine(models.Model):
         self.ensure_one()
         return max(0, min(MAX_DECIMAL_PLACES, self.decimal_places))
 
+    def _get_expected_numeric_value(self):
+        """Numeric target written in the free-text expected value."""
+        self.ensure_one()
+        match = EXPECTED_VALUE_NUMBER.search(self.expected_value or '')
+        if not match:
+            return None
+        return float(match.group(0).replace(',', '.'))
+
+    def _get_value_generation_band(self):
+        """Centre and half width generated measurements scatter in.
+
+        The centre is the expected value of the item, so generated figures read
+        like real measurements around the target instead of sitting on one
+        figure. The half width is the tolerance configured on the item; when
+        none is set the symmetric deviation of the limits is used. The band is
+        clipped to the limits, so every generated figure stays in range.
+        """
+        self.ensure_one()
+        center = self._get_expected_numeric_value()
+        if center is None:
+            if float_compare(self.nominal_value, 0.0,
+                             precision_rounding=0.0001) != 0:
+                center = self.nominal_value
+            else:
+                center = (self.lower_limit + self.upper_limit) / 2.0
+        lower, upper = self.lower_limit, self.upper_limit
+        if float_compare(lower, upper, precision_rounding=0.0001) > 0:
+            lower, upper = upper, lower
+        room = min(center - lower, upper - center)
+        half = abs(self.tolerance)
+        if float_compare(room, 0.0, precision_rounding=0.0001) > 0:
+            half = min(half, room) if half else room
+        return center, max(half, 0.0)
+
     def _get_pass_numeric_value(self):
         self.ensure_one()
-        if float_compare(self.lower_limit, self.upper_limit, precision_rounding=0.0001) <= 0:
-            return round((self.lower_limit + self.upper_limit) / 2.0,
-                         self._get_value_digits())
-        return self.measured_value
+        center, _half = self._get_value_generation_band()
+        return round(center, self._get_value_digits())
 
     def _get_pass_text_value(self):
         self.ensure_one()

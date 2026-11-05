@@ -9,7 +9,7 @@ import random
 
 from odoo import Command, api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools.float_utils import float_repr
+from odoo.tools.float_utils import float_compare, float_repr
 
 
 REPORT_TEST_DATA_COLUMNS = 7
@@ -478,19 +478,23 @@ class QualityInspectionLine(models.Model):
         return True
 
     def _generate_random_value(self, index):
-        """Random measure inside the item limits.
+        """Random measure inside the band of the expected value.
 
-        The value only depends on the record, the row index and the limits,
-        so the same item always produces the same figures.
+        The figures scatter around the expected value of the item within the
+        configured tolerance (the limits only bound the band), so a sample of
+        measurements reads like real readings instead of one repeated figure.
+        The value only depends on the record, the row index and the band, so
+        the same item always produces the same figures.
         """
         self.ensure_one()
-        lower, upper = self.lower_limit, self.upper_limit
-        if upper < lower:
-            lower, upper = upper, lower
-        seed = '%s-%s-%s-%s' % (self.id, index, lower, upper)
+        center, half = self._get_value_generation_band()
+        if float_compare(half, 0.0, precision_rounding=0.0001) <= 0:
+            return round(center, self._get_value_digits())
+        seed = '%s-%s-%s-%s' % (self.id, index, center, half)
         digest = hashlib.sha1(seed.encode('utf-8')).hexdigest()[:12]
         generator = random.Random(int(digest, 16))
-        return round(generator.uniform(lower, upper), self._get_value_digits())
+        return round(generator.uniform(center - half, center + half),
+                     self._get_value_digits())
 
     def action_generate_values(self):
         """Fill every pending measurement of this item."""
@@ -526,8 +530,9 @@ class QualityInspectionLine(models.Model):
         """Record a qualifying value on every measurement still waiting.
 
         Deterministic counterpart of ``action_generate_values``: numeric items
-        take the middle of their limits instead of a random figure, so a record
-        filled by "all pass" reads back the same every time.
+        scatter around their expected value the same way it does, so a record
+        filled by "all pass" carries a sample of figures instead of the same
+        one repeated per row.
         """
         for line in self:
             if line.inspection_id.state == 'done':
@@ -535,11 +540,11 @@ class QualityInspectionLine(models.Model):
                     'Reset the inspection before recording new values.'))
             line._ensure_sample_value_rows()
             now = fields.Datetime.now()
-            for value in line.sample_value_ids.filtered(
-                    lambda item: item.result == 'pending'):
+            for index, value in enumerate(line.sample_value_ids.filtered(
+                    lambda item: item.result == 'pending'), 1):
                 values = {'measured_at': now}
                 if line.item_type == 'numeric':
-                    measured = line._get_pass_numeric_value()
+                    measured = line._generate_random_value(index)
                     # The conclusion is written along with the measurement,
                     # the way action_generate_values does it: the sample value
                     # only refreshes its result as a side effect of the
