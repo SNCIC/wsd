@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Inter-Company Rules',
-    'version': '19.0.2.2.2',
+    'version': '19.0.2.2.3',
     'summary': 'Two-way trade agreements between the companies of the database',
     'category': 'Productivity',
     'description': '''Synchronize documents between the companies of the same database.

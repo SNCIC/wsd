@@ -223,8 +223,12 @@ class SnIntercompanyProductMap(models.Model):
                                        created, 'created', agreement) if record else self.browse()
                 return created.product_variant_id, mapping, RESOLUTION_CREATED
         elif auto_create and not create:
-            # Dry run: report that the product would be created.
-            return self.env['product.product'], self.browse(), RESOLUTION_CREATABLE
+            # Dry run: report whether the product could really be created, so
+            # the coverage report does not promise lines the run would refuse
+            # because the code is already taken.
+            if self._can_create_target_product(product, target_company, agreement):
+                return self.env['product.product'], self.browse(), RESOLUTION_CREATABLE
+            return self.env['product.product'], self.browse(), RESOLUTION_TEXT
 
         return self.env['product.product'], self.browse(), RESOLUTION_TEXT
 
@@ -285,28 +289,45 @@ class SnIntercompanyProductMap(models.Model):
         return matches[:1] if len(matches) == 1 else self.env['product.template']
 
     @api.model
-    def _create_target_product(self, product, target_company, agreement):
-        """Copy ``product`` into ``target_company``.
+    def _target_code(self, product, target_company, agreement):
+        """Code the copy takes, or False when the copy cannot be created.
 
         The code is kept when it is free in the target company. When another
         article already owns it, the prefix of the agreement is prepended; with
-        no prefix configured the product is not created at all, because a
-        duplicated code would make the next resolution pick the wrong article.
+        no prefix configured nothing is created, because a duplicated code
+        would make the next resolution pick the wrong article.
         """
         code = (product.default_code or '').strip()
+        if not code:
+            return ''
         Product = self.env['product.template'].sudo()
-        taken = Product.search_count([
-            ('default_code', '=', code), ('company_id', '=', target_company.id),
-        ]) if code else 0
-        if taken:
-            prefix = (agreement.target_code_prefix or '').strip() if agreement else ''
-            if not prefix:
-                return Product.browse()
-            code = '%s%s' % (prefix, code)
-            if Product.search_count([
-                    ('default_code', '=', code),
-                    ('company_id', '=', target_company.id)]):
-                return Product.browse()
+        if not Product.search_count([
+                ('default_code', '=', code), ('company_id', '=', target_company.id)]):
+            return code
+        prefix = (agreement.target_code_prefix or '').strip() if agreement else ''
+        if not prefix:
+            return False
+        prefixed = '%s%s' % (prefix, code)
+        if Product.search_count([
+                ('default_code', '=', prefixed), ('company_id', '=', target_company.id)]):
+            return False
+        return prefixed
+
+    @api.model
+    def _can_create_target_product(self, product, target_company, agreement):
+        """Whether a dry run would really create the product.
+
+        Uses the very same rule as the creation, so the coverage report cannot
+        promise lines the real run would refuse.
+        """
+        return self._target_code(product, target_company, agreement) is not False
+
+    @api.model
+    def _create_target_product(self, product, target_company, agreement):
+        """Copy ``product`` into ``target_company``."""
+        code = self._target_code(product, target_company, agreement)
+        if code is False:
+            return self.env['product.template']
         values = {
             'name': product.name,
             'default_code': code or False,
