@@ -200,6 +200,32 @@ class SnIntercompanySyncMixin(models.AbstractModel):
             'message': message,
         })
 
+    def _sn_issue_unmapped_product(self, product, target_company):
+        """Report a line whose product has no counterpart in the other company.
+
+        Raised once per document and product: an order with twenty unmapped
+        lines would otherwise bury the queue under twenty identical issues.
+        """
+        self.ensure_one()
+        message = _(
+            "The product \"%(product)s\" of %(company)s has no counterpart in "
+            "%(target)s; the line was copied as text.",
+            product=product.display_name,
+            company=product.company_id.display_name,
+            target=target_company.display_name,
+        )
+        Issue = self.env['sn.intercompany.sync.issue'].sudo()
+        existing = Issue.search([
+            ('source_model', '=', self._name),
+            ('source_id', '=', self.id),
+            ('issue_type', '=', 'data'),
+            ('state', '=', 'open'),
+            ('message', '=', message),
+        ], limit=1)
+        if existing:
+            return existing
+        return self._sn_issue('data', message)
+
     # ------------------------------------------------------------------
     # Locking and snapshots
     # ------------------------------------------------------------------

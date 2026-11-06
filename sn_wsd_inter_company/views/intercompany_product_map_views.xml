@@ -5,13 +5,15 @@
         <field name="model">sn.intercompany.product.map</field>
         <field name="arch" type="xml">
             <list>
-                <field name="agreement_id"/>
-                <field name="direction"/>
+                <field name="source_company_id"/>
                 <field name="source_product_tmpl_id"/>
+                <field name="target_company_id"/>
                 <field name="target_product_tmpl_id"/>
-                <field name="uom_ratio"/>
-                <field name="price_factor"/>
-                <field name="active"/>
+                <field name="origin"/>
+                <field name="uom_ratio" optional="hide"/>
+                <field name="price_factor" optional="hide"/>
+                <field name="active" optional="show"/>
+                <field name="note" optional="hide"/>
             </list>
         </field>
     </record>
@@ -23,20 +25,25 @@
             <form>
                 <sheet>
                     <group>
-                        <group string="Mapping">
-                            <field name="agreement_id"/>
-                            <field name="direction"/>
+                        <group string="Companies">
+                            <field name="source_company_id"/>
+                            <field name="target_company_id"/>
                             <field name="active"/>
+                            <field name="origin"/>
+                            <field name="agreement_id" options="{'no_create': True}"/>
                         </group>
                         <group string="Products">
-                            <field name="source_product_tmpl_id"/>
-                            <field name="target_product_tmpl_id"/>
+                            <field name="source_product_tmpl_id"
+                                   domain="[('company_id', 'in', [source_company_id, False])]"/>
+                            <field name="target_product_tmpl_id"
+                                   domain="[('company_id', 'in', [target_company_id, False])]"
+                                   placeholder="Copy the line as text"/>
                             <field name="uom_ratio"/>
                             <field name="price_factor"/>
                         </group>
                     </group>
                     <group>
-                        <field name="note"/>
+                        <field name="note" placeholder="Why the two products are the same article"/>
                     </group>
                 </sheet>
             </form>
@@ -48,11 +55,28 @@
         <field name="model">sn.intercompany.product.map</field>
         <field name="arch" type="xml">
             <search>
-                <field name="agreement_id"/>
                 <field name="source_product_tmpl_id"/>
                 <field name="target_product_tmpl_id"/>
+                <field name="source_company_id"/>
+                <field name="target_company_id"/>
+                <filter name="filter_manual" string="Entered by a User"
+                        domain="[('origin', '=', 'manual')]"/>
+                <filter name="filter_code" string="Matched by Code"
+                        domain="[('origin', '=', 'code')]"/>
+                <filter name="filter_created" string="Created Automatically"
+                        domain="[('origin', '=', 'created')]"/>
+                <separator/>
+                <filter name="filter_text" string="Copied as Text"
+                        domain="[('target_product_tmpl_id', '=', False)]"/>
+                <separator/>
                 <filter name="filter_archived" string="Archived"
                         domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_origin" string="Built By"
+                            context="{'group_by': 'origin'}"/>
+                    <filter name="group_source" string="Source Company"
+                            context="{'group_by': 'source_company_id'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -61,6 +85,8 @@
         <field name="name">Product Mapping</field>
         <field name="res_model">sn.intercompany.product.map</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_intercompany_product_map_search"/>
+        <field name="context">{'search_default_group_origin': 1}</field>
     </record>
 
     <menuitem id="menu_sn_intercompany_product_map" name="Product Mapping"

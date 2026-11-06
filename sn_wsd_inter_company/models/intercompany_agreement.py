@@ -100,6 +100,26 @@ class SnIntercompanyAgreement(models.Model):
         required=True,
     )
     markup_percent = fields.Float(string='Markup (%)', default=0.0)
+    auto_map_by_code = fields.Boolean(
+        string='Match Products by Code',
+        default=True,
+        help="When the selling company sells a product the buying company "
+             "already holds under the same code and the same name, the two are "
+             "linked automatically. A code alone is not enough: the two "
+             "catalogues may use the same code for different articles.")
+    auto_create_target_product = fields.Boolean(
+        string='Create the Missing Product in the Buyer',
+        default=True,
+        help="When the buying company never purchased the article before, a "
+             "product is created there from the one of the seller, so the "
+             "purchase order can carry a product and the receipt can move "
+             "stock. The creation is flagged on the product.")
+    target_code_prefix = fields.Char(
+        string='Prefix for Taken Codes',
+        help="Prefix added to the code when the buying company already uses it "
+             "for another article. Without a prefix such a line is copied as "
+             "text and reported as an issue, because a duplicate code would "
+             "make the next synchronization pick the wrong product.")
     conflict_policy = fields.Selection(
         CONFLICT_POLICY_SELECTION,
         string='Conflict Policy',
@@ -122,8 +142,6 @@ class SnIntercompanyAgreement(models.Model):
     date_start = fields.Date(string='Start Date')
     date_end = fields.Date(string='End Date')
     note = fields.Html(string='Terms')
-    product_map_ids = fields.One2many(
-        'sn.intercompany.product.map', 'agreement_id', string='Product Mapping')
     product_map_count = fields.Integer(compute='_compute_product_map_count')
     sync_log_ids = fields.One2many(
         'sn.intercompany.sync.log', 'agreement_id', string='Synchronization Log')
@@ -138,10 +156,19 @@ class SnIntercompanyAgreement(models.Model):
         'An agreement already exists between these two companies.',
     )
 
-    @api.depends('product_map_ids')
+    @api.depends('company_a_id', 'company_b_id')
     def _compute_product_map_count(self):
+        """Mappings of the company pair, whichever agreement created them."""
+        Map = self.env['sn.intercompany.product.map'].sudo()
         for agreement in self:
-            agreement.product_map_count = len(agreement.product_map_ids)
+            if not agreement.company_a_id or not agreement.company_b_id:
+                agreement.product_map_count = 0
+                continue
+            companies = (agreement.company_a_id.id, agreement.company_b_id.id)
+            agreement.product_map_count = Map.search_count([
+                ('source_company_id', 'in', companies),
+                ('target_company_id', 'in', companies),
+            ])
 
     @api.depends('sync_log_ids')
     def _compute_sync_log_count(self):
@@ -268,27 +295,44 @@ class SnIntercompanyAgreement(models.Model):
     def _map_product(self, product, direction):
         """Product usable in the target company for ``product``.
 
-        An empty record set means the source product cannot exist in the
-        target company: the line is copied as a text line instead.
+        Kept for callers that still think in directions; the resolution itself
+        lives in the product mapping model and works on companies.
         """
         self.ensure_one()
         if not product:
             return self.env['product.product']
-        mapping = self.product_map_ids.filtered(
-            lambda line: line.active
-            and line.direction in (direction, 'both')
-            and line.source_product_tmpl_id == product.product_tmpl_id)
-        if not mapping:
+        target_company = self._target_company(direction) if direction else False
+        if not target_company:
             return self.env['product.product']
-        return mapping[:1]._mapped_product()
+        resolved, _mapping, _mode = self._resolve_product(product, target_company)
+        return resolved
 
-    def _price_for(self, product, unit_price, target_company):
-        """Unit price of the generated line, following the price policy."""
+    def _resolve_product(self, product, target_company, create=True, record=True):
+        """Product of ``target_company`` standing for ``product``.
+
+        Returns ``(product, mapping, mode)``; see the product mapping model for
+        the meaning of ``mode``.
+        """
+        self.ensure_one()
+        return self.env['sn.intercompany.product.map']._sn_resolve_product(
+            product, target_company, agreement=self, create=create, record=record)
+
+    def _price_for(self, product, unit_price, target_company,
+                   uom_ratio=1.0, price_factor=1.0):
+        """Unit price of the generated line, following the price policy.
+
+        The price is expressed per unit of the target product, so it is divided
+        by the unit ratio before the price factor is applied.
+        """
         self.ensure_one()
         if self.price_policy == 'cost_markup' and product:
             cost = product.with_company(target_company).standard_price
-            return cost * (1 + self.markup_percent / 100.0)
-        return unit_price
+            price = cost * (1 + self.markup_percent / 100.0)
+        else:
+            price = unit_price
+        if uom_ratio and uom_ratio > 0:
+            price = price / uom_ratio
+        return price * (price_factor or 1.0)
 
     # ------------------------------------------------------------------
     # Consistency check
@@ -425,4 +469,83 @@ class SnIntercompanyAgreement(models.Model):
             'view_mode': 'list,form',
             'domain': [('agreement_id', '=', self.id)],
             'context': {'default_agreement_id': self.id},
+        }
+
+    def action_view_product_map(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Product Mapping'),
+            'res_model': 'sn.intercompany.product.map',
+            'view_mode': 'list,form',
+            'domain': [
+                ('source_company_id', 'in',
+                 (self.company_a_id.id, self.company_b_id.id)),
+                ('target_company_id', 'in',
+                 (self.company_a_id.id, self.company_b_id.id)),
+            ],
+            'context': {
+                'default_agreement_id': self.id,
+                'default_source_company_id': self.company_a_id.id,
+                'default_target_company_id': self.company_b_id.id,
+            },
+        }
+
+    # ------------------------------------------------------------------
+    # Product coverage
+    # ------------------------------------------------------------------
+    def action_analyze_product_mapping(self):
+        """Tell how the products of each side resolve in the other company.
+
+        Read only: nothing is created, so the report can be run before turning
+        the automatic creation on. The modes are the ones of the resolver:
+        direct, mapped, code, creatable and text.
+        """
+        self.ensure_one()
+        Map = self.env['sn.intercompany.product.map']
+        lines = []
+        for direction in ('a_to_b', 'b_to_a'):
+            if not self._is_direction_enabled(direction):
+                continue
+            source_company = self._source_company(direction)
+            target_company = self._target_company(direction)
+            products = self.env['product.template'].sudo().search([
+                ('company_id', '=', source_company.id),
+                ('active', '=', True),
+            ])
+            counts = {}
+            samples = []
+            for product in products:
+                _resolved, _mapping, mode = Map._sn_resolve_product(
+                    product.product_variant_id, target_company,
+                    agreement=self, create=False, record=False)
+                counts[mode] = counts.get(mode, 0) + 1
+                if mode == 'text' and len(samples) < 5:
+                    samples.append('%s %s' % (product.default_code or '-', product.name))
+            lines.append(_(
+                "%(source)s to %(target)s: %(total)s products | direct "
+                "%(direct)s, mapped %(mapped)s, matched by code %(code)s, "
+                "creatable %(creatable)s, text %(text)s",
+                source=source_company.name,
+                target=target_company.name,
+                total=len(products),
+                direct=counts.get('direct', 0),
+                mapped=counts.get('mapped', 0),
+                code=counts.get('code', 0),
+                creatable=counts.get('creatable', 0),
+                text=counts.get('text', 0),
+            ))
+            if samples:
+                lines.append('    ' + _('Lines that would stay text: ')
+                             + ', '.join(samples))
+        message = '\n'.join(lines) or _('No direction is enabled on this agreement.')
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Product Coverage'),
+                'message': message,
+                'sticky': True,
+                'type': 'info',
+            },
         }

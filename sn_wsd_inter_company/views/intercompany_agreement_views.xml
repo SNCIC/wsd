@@ -48,6 +48,10 @@
                                 class="oe_stat_button" icon="fa-exclamation-triangle">
                             <field name="open_issue_count" widget="statinfo" string="Issues"/>
                         </button>
+                        <button name="action_view_product_map" type="object"
+                                class="oe_stat_button" icon="fa-exchange">
+                            <field name="product_map_count" widget="statinfo" string="Mappings"/>
+                        </button>
                     </div>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. A - B trade agreement"/></h1>
@@ -67,10 +71,14 @@
                         </group>
                     </group>
                     <group>
-                        <group string="Prices">
+                        <group string="Prices and Products">
                             <field name="price_policy"/>
                             <field name="markup_percent"
                                    invisible="price_policy != 'cost_markup'"/>
+                            <field name="auto_map_by_code"/>
+                            <field name="auto_create_target_product"/>
+                            <field name="target_code_prefix"
+                                   invisible="not auto_create_target_product"/>
                         </group>
                         <group string="Defaults">
                             <field name="sync_user_id" options="{'no_create_edit': True}"/>
@@ -86,17 +94,22 @@
                     </group>
                     <notebook>
                         <page string="Product Mapping" name="product_mapping">
-                            <field name="product_map_ids">
-                                <list editable="bottom">
-                                    <field name="direction"/>
-                                    <field name="source_product_tmpl_id"/>
-                                    <field name="target_product_tmpl_id"/>
-                                    <field name="uom_ratio"/>
-                                    <field name="price_factor"/>
-                                    <field name="active"/>
-                                    <field name="note"/>
-                                </list>
-                            </field>
+                            <div class="d-flex gap-2 mb-3">
+                                <button name="action_view_product_map" type="object"
+                                        class="btn btn-secondary"
+                                        string="Open the Product Mapping"/>
+                                <button name="action_analyze_product_mapping" type="object"
+                                        class="btn btn-secondary"
+                                        string="Analyze Product Coverage"/>
+                            </div>
+                            <p class="text-muted">
+                                The two companies keep independent catalogues, so a product
+                                sold by one is resolved into a product of the other before it
+                                reaches the generated document: an explicit mapping first, then
+                                the same code with the same name, then a product created in the
+                                buying company. Lines that resolve to nothing are copied as text
+                                and reported in the issue queue.
+                            </p>
                         </page>
                         <page string="Terms" name="terms">
                             <field name="note" placeholder="Commercial terms of the agreement"/>
