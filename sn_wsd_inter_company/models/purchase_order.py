@@ -204,7 +204,7 @@ class PurchaseOrder(models.Model):
         elif agreement:
             price = agreement._price_for(product, price, company, ratio, factor)
         vals = {
-            'name': product.name if not product and line.name else line.name,
+            'name': line.name or (product.name if product else ''),
             'product_uom_qty': quantity,
             'product_id': product.id,
             # A text line still needs a unit: keep the one of the purchase line.

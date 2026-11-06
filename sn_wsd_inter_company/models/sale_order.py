@@ -194,7 +194,7 @@ class SaleOrder(models.Model):
         elif agreement:
             price = agreement._price_for(product, price, company, ratio, factor)
         return {
-            'name': product.name if not product and so_line.name else so_line.name,
+            'name': so_line.name or (product.name if product else ''),
             'product_qty': quantity,
             'product_id': product.id,
             # A text line still needs a unit: keep the one of the sale line.

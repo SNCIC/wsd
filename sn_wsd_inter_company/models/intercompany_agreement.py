@@ -433,12 +433,14 @@ class SnIntercompanyAgreement(models.Model):
             if not agreement.company_a_id or not agreement.company_b_id:
                 raise ValidationError(_("Set both companies first."))
             agreement.state = 'running'
-            if agreement.warehouse_a_id or agreement.warehouse_b_id:
-                continue
-            agreement.warehouse_a_id = self.env['stock.warehouse'].sudo().search(
-                [('company_id', '=', agreement.company_a_id.id)], limit=1)
-            agreement.warehouse_b_id = self.env['stock.warehouse'].sudo().search(
-                [('company_id', '=', agreement.company_b_id.id)], limit=1)
+            # Fill whichever side is still empty: ending the loop as soon as
+            # one warehouse is set would leave the other side unconfigured.
+            for field_name, company in (('warehouse_a_id', agreement.company_a_id),
+                                        ('warehouse_b_id', agreement.company_b_id)):
+                if agreement[field_name]:
+                    continue
+                agreement[field_name] = self.env['stock.warehouse'].sudo().search(
+                    [('company_id', '=', company.id)], limit=1)
 
     def action_suspend(self):
         self.write({'state': 'suspended'})
