@@ -111,7 +111,13 @@ class AccountMove(models.Model):
                     company=origin_invoice.company_id.name,
                 ))
                 origin_invoice._sn_log('create', target=move)
-                if self.env.company.intercompany_document_state == 'posted':
+                # The agreement owns the state of the documents it generates;
+                # the company switch only drives the documents created without
+                # an agreement, the same way the orders already behave.
+                agreement = origin_invoice.intercompany_agreement_id
+                wanted_state = agreement.auto_state if agreement \
+                    else self.env.company.intercompany_document_state
+                if wanted_state == 'posted':
                     move._post(soft=True)
                 moves += move
         return moves
