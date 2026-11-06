@@ -1963,3 +1963,38 @@ msgid ""
 "                                and reported in the issue queue."
 msgstr ""
 "两家公司各自独立建料，所以销售方的物料在写入生成单据前会先解析为对方公司的物料：先查显式对照，再找编码与名称都相同的物料，最后在采购方新建。都无法解析的行仅复制为文字，并记入问题队列。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid ""
+"%(source)s to %(target)s: %(total)s products | direct %(direct)s, mapped "
+"%(mapped)s, mnemonic %(mnemonic)s, matched by code %(code)s, creatable "
+"%(creatable)s, text %(text)s"
+msgstr ""
+"%(source)s 到 %(target)s：共 %(total)s 个物料 | 本司已有 %(direct)s、已对照 "
+"%(mapped)s、助记码匹配 %(mnemonic)s、按编码匹配 %(code)s、可新建 %(creatable)s、仅文字 %(text)s"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_mnemonic
+msgid "Match Products by Mnemonic Code"
+msgstr "按助记码匹配物料"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__origin__mnemonic
+msgid "Matched Through the Mnemonic Code"
+msgstr "通过助记码匹配"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Matched by Mnemonic Code"
+msgstr "按助记码匹配"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_mnemonic
+msgid ""
+"The mnemonic code of a product is the code the same article carries in the "
+"other catalogue, in both directions. It is the strongest link between the "
+"two catalogues: it identifies the article even when the two companies "
+"numbered it differently."
+msgstr "物料的助记码就是同一物料在另一套目录里的编码，双向成立。它是两套目录之间最强的关联：即使两家公司各自编号不同，也能认出是同一物料。"

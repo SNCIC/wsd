@@ -100,6 +100,13 @@ class SnIntercompanyAgreement(models.Model):
         required=True,
     )
     markup_percent = fields.Float(string='Markup (%)', default=0.0)
+    auto_map_by_mnemonic = fields.Boolean(
+        string='Match Products by Mnemonic Code',
+        default=True,
+        help="The mnemonic code of a product is the code the same article "
+             "carries in the other catalogue, in both directions. It is the "
+             "strongest link between the two catalogues: it identifies the "
+             "article even when the two companies numbered it differently.")
     auto_map_by_code = fields.Boolean(
         string='Match Products by Code',
         default=True,
@@ -526,13 +533,14 @@ class SnIntercompanyAgreement(models.Model):
                     samples.append('%s %s' % (product.default_code or '-', product.name))
             lines.append(_(
                 "%(source)s to %(target)s: %(total)s products | direct "
-                "%(direct)s, mapped %(mapped)s, matched by code %(code)s, "
-                "creatable %(creatable)s, text %(text)s",
+                "%(direct)s, mapped %(mapped)s, mnemonic %(mnemonic)s, "
+                "matched by code %(code)s, creatable %(creatable)s, text %(text)s",
                 source=source_company.name,
                 target=target_company.name,
                 total=len(products),
                 direct=counts.get('direct', 0),
                 mapped=counts.get('mapped', 0),
+                mnemonic=counts.get('mnemonic', 0),
                 code=counts.get('code', 0),
                 creatable=counts.get('creatable', 0),
                 text=counts.get('text', 0),

@@ -61,6 +61,8 @@
                 <field name="target_company_id"/>
                 <filter name="filter_manual" string="Entered by a User"
                         domain="[('origin', '=', 'manual')]"/>
+                <filter name="filter_mnemonic" string="Matched by Mnemonic Code"
+                        domain="[('origin', '=', 'mnemonic')]"/>
                 <filter name="filter_code" string="Matched by Code"
                         domain="[('origin', '=', 'code')]"/>
                 <filter name="filter_created" string="Created Automatically"
