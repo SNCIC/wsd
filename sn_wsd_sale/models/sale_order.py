@@ -2,6 +2,8 @@ from odoo import fields, models
 from odoo.tools import formatLang
 from odoo.tools.misc import get_lang
 
+from odoo.addons.sn_wsd_prn.amount import amount_to_chinese
+
 # Item rows of the dot-matrix order sheet. The continuous form gives one 140 mm
 # band per order; a longer order continues on the next band instead of losing
 # its last lines, the same way the inspection request of the quality module
@@ -12,7 +14,8 @@ SN_DOT_MATRIX_ROWS = 7
 class SaleOrder(models.Model):
     """Fields and data of the dot-matrix order sheet."""
 
-    _inherit = 'sale.order'
+    _name = 'sale.order'
+    _inherit = ['sale.order', 'sn.prn.mixin']
 
     sn_summary = fields.Char(
         string='Summary',
@@ -59,6 +62,8 @@ class SaleOrder(models.Model):
                 'uom': line.product_uom_id.name or '',
                 'quantity': self._sn_format_dot_matrix_quantity(
                     line.product_uom_qty),
+                'unit_price': self._sn_prn_number(line.price_unit, 2),
+                'amount': self._sn_prn_number(line.price_subtotal, 2),
                 'delivery_date': line._sn_get_dot_matrix_delivery_date(),
                 'note': line.note or '',
             })
@@ -92,9 +97,23 @@ class SaleOrder(models.Model):
     def _sn_get_dot_matrix_total(self):
         """Total quantity of the order, printed in the total row of the sheet."""
         self.ensure_one()
-        total = sum(self._sn_get_dot_matrix_order_lines().mapped(
-            'product_uom_qty'))
-        return self._sn_format_dot_matrix_quantity(total)
+        return self._sn_get_dot_matrix_totals()['quantity']
+
+    def _sn_get_dot_matrix_totals(self):
+        """Quantity, amount and written amount of the order sheet.
+
+        The amount is the untaxed total, the figure the amount column of the
+        lines adds up to; the capitals are read from that same figure.
+        """
+        self.ensure_one()
+        lines = self._sn_get_dot_matrix_order_lines()
+        quantity = sum(lines.mapped('product_uom_qty'))
+        amount = self.amount_untaxed
+        return {
+            'quantity': self._sn_format_dot_matrix_quantity(quantity),
+            'amount': self._sn_prn_number(amount, 2),
+            'amount_in_words': amount_to_chinese(amount),
+        }
 
     # ------------------------------------------------------------------
     # Actions

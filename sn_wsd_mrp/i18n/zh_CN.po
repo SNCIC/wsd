@@ -3064,11 +3064,13 @@ msgid "Matched"
 msgstr "匹配"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_list_material_info
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_list_material_info
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_template_only_form_drawing_no
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_form_drawing_no
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_product_product_easy_form_drawing_no
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
 msgid "Material Code"
 msgstr "物料编码"
 
@@ -3136,6 +3138,7 @@ msgid "Material Requisition"
 msgstr "领料单"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid "Material Return"
 msgstr "退料单"
@@ -5134,7 +5137,9 @@ msgid "Product Lot/Serial"
 msgstr "产品批次/序列号"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__product_name
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
 msgid "Product Name"
 msgstr "产品名称"
 
@@ -5387,9 +5392,11 @@ msgid "Quality Traceability"
 msgstr "质量追溯"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_workorder_form_sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_schedule_wizard__qty
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__qty
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
 msgid "Quantity"
 msgstr "数量"
 
@@ -6550,7 +6557,9 @@ msgid "Start boundary of the aging statistics window."
 msgstr "老化统计区间的开始边界。"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_manufacturing_batch__date_start
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
 msgid "Start Date"
 msgstr "开始日期"
 
@@ -7532,7 +7541,9 @@ msgid "Unbind"
 msgstr "解绑"
 
 #. module: sn_wsd_mrp
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_pick_wizard_line__product_uom_id
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
 msgid "Unit"
 msgstr "单位"
 
@@ -8874,3 +8885,238 @@ msgstr "资产号"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__sn_sale_asset_number
 msgid "Asset number the customer assigned to the equipment of the source sales orders."
 msgstr "客户为来源销售订单设备分配的资产号。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Production Order"
+msgstr "生产任务单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Department:"
+msgstr "部门："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Document No.:"
+msgstr "单据编号："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Source Warehouse:"
+msgstr "发料仓库："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Product Code:"
+msgstr "产品编码："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Product Name:"
+msgstr "产品名称："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Product Specification:"
+msgstr "产品规格型号："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Warehouse Keeper:"
+msgstr "仓管："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Received by:"
+msgstr "领料："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_return_prn.py:0
+msgid "Returned by:"
+msgstr "退料："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Prepared by:"
+msgstr "制单："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Approved by:"
+msgstr "审核："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Issued Qty"
+msgstr "实发数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_return_prn.py:0
+msgid "Returned Qty"
+msgstr "实退数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Demand Qty"
+msgstr "应发数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Old Code"
+msgstr "旧物料编码"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Workshop:"
+msgstr "生产车间："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Created on:"
+msgstr "制单日期："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "No.:"
+msgstr "编号："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Print Date:"
+msgstr "单据打印日期："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Released by:"
+msgstr "下达人："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/production_order_prn.py:0
+msgid "End Date"
+msgstr "完工日期"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_picking_form_mes_material_prn
+msgid "Print Material Issue"
+msgstr "打印生产领料单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_picking_form_mes_material_prn
+msgid "Print Material Issue (Detail)"
+msgstr "打印生产领料单（详细）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_picking_form_mes_material_prn
+msgid "Print Material Return"
+msgstr "打印生产退料单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_form_prn
+msgid "Print Production Order"
+msgstr "打印生产任务单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_mrp.action_print_mes_issue_prn
+msgid "Print Material Issues (ESC/P)"
+msgstr "批量打印生产领料单（ESC/P）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_mrp.action_print_mes_issue_detail_prn
+msgid "Print Material Issues (Detail, ESC/P)"
+msgstr "批量打印生产领料单（详细，ESC/P）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_mrp.action_print_mes_return_prn
+msgid "Print Material Returns (ESC/P)"
+msgstr "批量打印生产退料单（ESC/P）"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_mrp.action_print_production_order_prn
+msgid "Print Production Orders (ESC/P)"
+msgstr "批量打印生产任务单（ESC/P）"
+
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Total:"
+msgstr "合计："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_issue_prn.py:0
+msgid "Production Material Issue"
+msgstr "生产领料单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/mes_return_prn.py:0
+msgid "Production Material Return"
+msgstr "生产退料单"
