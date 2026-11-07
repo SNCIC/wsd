@@ -152,6 +152,10 @@ class MrpProductionMesSchedule(models.Model):
             ('state', 'not in', ('done', 'cancel')),
             ('product_id.default_code', '!=', False),
         ])
+        # Evaluate the non-stored compute on the whole recordset first: the
+        # batched pass runs two queries per workshop, while letting filtered()
+        # evaluate record by record ran them once per production order.
+        productions._compute_x_mes_route_check()
         missing = productions.filtered(lambda p: p.x_mes_route_missing)
         if operator in ('=', '=='):
             values, op = [value], 'in'

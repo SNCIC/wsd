@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from odoo import api, fields, models, _, Command
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
@@ -201,10 +203,18 @@ class MrpProduction(models.Model):
         if not productions:
             return
 
-        open_raw_moves = productions.move_raw_ids.filtered(lambda move: move.state not in ('done', 'cancel'))
-        open_raw_moves._fields['forecast_availability'].compute_value(open_raw_moves)
+        # The native implementation already forced the batch computation of
+        # forecast_availability on every raw move (see _compute_components_availability
+        # in addons/mrp/models/mrp_production.py). Recomputing it here per record
+        # was duplicated work and the main cost of the manufacturing order list,
+        # so the open moves are only regrouped in memory below.
+        open_moves_by_production = defaultdict(list)
+        for move in productions.move_raw_ids:
+            if move.state not in ('done', 'cancel'):
+                open_moves_by_production[move.raw_material_production_id.id].append(move)
+
         for production in productions:
-            raw_moves = production.move_raw_ids.filtered(lambda move: move.state not in ('done', 'cancel'))
+            raw_moves = self.env['stock.move'].concat(*open_moves_by_production[production.id])
             production.components_availability_state = 'available'
             production.components_availability = _('Available')
             if any(
