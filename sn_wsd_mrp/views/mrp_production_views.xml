@@ -11,11 +11,21 @@
             <xpath expr="//search/field[@name='workcenter_id']" position="after">
                 <field name="x_workshop_id"/>
             </xpath>
-            <xpath expr="//search/filter[@name='filter_in_progress']" position="after">
+            <!-- MES scheduling coverage (排产状态): the native work-order
+                 scheduling buttons are retired on this project, coverage
+                 lives on the MES orders, so filter/group by it here. -->
+            <xpath expr="//search/filter[@name='filter_ready']" position="after">
                 <separator/>
+                <filter string="Unplanned" name="filter_mes_unplanned"
+                        domain="[('x_mes_schedule_state', '=', 'unplanned')]"/>
+                <filter string="Partially Planned" name="filter_mes_partial"
+                        domain="[('x_mes_schedule_state', '=', 'partial')]"/>
+                <filter string="Planned" name="filter_mes_planned"
+                        domain="[('x_mes_schedule_state', '=', 'planned')]"/>
             </xpath>
             <xpath expr="//search/group" position="inside">
                 <filter string="Workshop" name="group_workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
+                <filter string="Schedule State" name="group_mes_schedule_state" domain="[]" context="{'group_by': 'x_mes_schedule_state'}"/>
             </xpath>
         </field>
     </record>
@@ -64,6 +74,12 @@
             <xpath expr="//field[@name='bom_id']" position="after">
                 <field name="x_route_id" optional="show" groups="mrp.group_mrp_routings"/>
                 <field name="x_workshop_id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='x_workshop_id']" position="after">
+                <field name="x_mes_schedule_state" string="Schedule State" optional="show" widget="badge"
+                       decoration-danger="x_mes_schedule_state == 'unplanned'"
+                       decoration-warning="x_mes_schedule_state == 'partial'"
+                       decoration-success="x_mes_schedule_state == 'planned'"/>
             </xpath>
             <xpath expr="//field[@name='components_availability']" position="attributes">
                 <attribute name="string">Kit Status</attribute>
