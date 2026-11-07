@@ -788,6 +788,25 @@ msgid "Ratio Baseline"
 msgstr "基线比例"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__x_ratio_locked
+msgid "Ratio Locked"
+msgstr "锁定"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+msgid "Ratio capped"
+msgstr "比例已封顶"
+
+#. module: sn_wsd_piece_rate
+#. odoo-python
+#: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
+msgid ""
+"The total performance ratio cannot exceed 100%; the typed ratio was "
+"capped."
+msgstr "绩效比合计不能超过 100%，输入的比例已被截断。"
+
+#. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__ratio_total
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__active_line_ratio_total
 msgid "Ratio Total"

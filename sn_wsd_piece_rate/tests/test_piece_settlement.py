@@ -107,3 +107,94 @@ class TestPieceSettlement(PieceRateTestCommon):
         other = self._settlement(100.0)
         other._resolve_rate_price()
         self.assertAlmostEqual(other.price, 0.35)
+
+
+@tagged('post_install', '-at_install')
+class TestSettlementRatioRebalance(PieceRateTestCommon):
+    """结算单比例操作=日报工同款（2026-11-07 piece-ratio-to-settlement）：
+    显式锁定行+本次手输行固定、其余未锁定行均分剩余（尾差归末行）、
+    手输封顶（100−其余固定行，截断+warning）、均分/带出全员解锁。"""
+
+    def _crew(self, ratios=(40.0, 30.0, 30.0)):
+        settlement = self._settlement(100.0)
+        settlement.write({'participant_ids': [
+            (0, 0, {'employee_id': self.emp_zhang.id,
+                    'performance_ratio': ratios[0],
+                    'x_ratio_baseline': ratios[0]}),
+            (0, 0, {'employee_id': self.emp_li.id,
+                    'performance_ratio': ratios[1],
+                    'x_ratio_baseline': ratios[1]}),
+            (0, 0, {'employee_id': self.emp_wang.id,
+                    'performance_ratio': ratios[2],
+                    'x_ratio_baseline': ratios[2]}),
+        ]})
+        return settlement
+
+    def _by_employee(self, settlement):
+        return {p.employee_id.name: p for p in settlement.participant_ids}
+
+    def test_manual_keeps_others_split_evenly(self):
+        """手输 50：该行固定，其余未锁定行均分剩余（非按基线权重）。"""
+        settlement = self._crew()
+        crew = self._by_employee(settlement)
+        crew['PRS Zhang'].performance_ratio = 50.0  # typed over baseline 40
+        settlement._onchange_participant_ids_rebalance()
+        crew = self._by_employee(settlement)
+        self.assertEqual(crew['PRS Zhang'].performance_ratio, 50.0)
+        self.assertEqual(crew['PRS Li'].performance_ratio, 25.0)
+        self.assertEqual(crew['PRS Wang'].performance_ratio, 25.0)
+
+    def test_lock_keeps_through_manual_edit(self):
+        """锁定行穿越重摊保持不变。"""
+        settlement = self._crew()
+        crew = self._by_employee(settlement)
+        crew['PRS Li'].x_ratio_locked = True  # 30 locked
+        crew['PRS Zhang'].performance_ratio = 50.0
+        settlement._onchange_participant_ids_rebalance()
+        crew = self._by_employee(settlement)
+        self.assertEqual(crew['PRS Li'].performance_ratio, 30.0)
+        self.assertEqual(crew['PRS Zhang'].performance_ratio, 50.0)
+        self.assertEqual(crew['PRS Wang'].performance_ratio, 20.0)
+
+    def test_typed_value_capped_with_warning(self):
+        """锁定 60 后手输 50 → 封顶到 40 并返回 warning，末行 0。"""
+        settlement = self._crew()
+        crew = self._by_employee(settlement)
+        crew['PRS Zhang'].x_ratio_locked = True
+        crew['PRS Zhang'].performance_ratio = 60.0
+        settlement._onchange_participant_ids_rebalance()  # commit the lock pass
+        crew = self._by_employee(settlement)
+        crew['PRS Li'].performance_ratio = 50.0  # cap = 100 - 60 = 40
+        warning = settlement._onchange_participant_ids_rebalance()
+        crew = self._by_employee(settlement)
+        self.assertEqual(crew['PRS Zhang'].performance_ratio, 60.0)
+        self.assertEqual(crew['PRS Li'].performance_ratio, 40.0)
+        self.assertEqual(crew['PRS Wang'].performance_ratio, 0.0)
+        self.assertTrue(warning and warning.get('warning'))
+
+    def test_equal_split_releases_locks(self):
+        """均分：全员 1/N 且全部解锁。"""
+        settlement = self._crew()
+        crew = self._by_employee(settlement)
+        crew['PRS Zhang'].x_ratio_locked = True
+        settlement.action_equal_split()
+        self.assertFalse(settlement.participant_ids.filtered('x_ratio_locked'))
+        self.assertEqual(
+            settlement.participant_ids.mapped('performance_ratio'),
+            [33.3333, 33.3333, 33.3334])
+
+    def test_fill_from_team_releases_locks(self):
+        """从班组带出：既有成员按成员权重归一化（37.5/37.5/25）+全部解锁。"""
+        self._rate(0.3)
+        settlement = self._crew()
+        settlement.team_id = self.team
+        crew = self._by_employee(settlement)
+        crew['PRS Zhang'].x_ratio_locked = True
+        settlement.action_fill_from_team()
+        self.assertFalse(settlement.participant_ids.filtered('x_ratio_locked'))
+        self.assertEqual(
+            settlement.participant_ids.mapped('employee_id.name'),
+            ['PRS Zhang', 'PRS Li', 'PRS Wang'])
+        self.assertEqual(
+            settlement.participant_ids.mapped('performance_ratio'),
+            [37.5, 37.5, 25.0])
