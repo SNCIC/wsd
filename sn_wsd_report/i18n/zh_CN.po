@@ -2132,3 +2132,17 @@ msgstr "中南多维度看板服务"
 #: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_ai_screen
 msgid "Multi-Dimension Board"
 msgstr "中南多维度看板"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/order_flow_dashboard.py:0
+#: model:ir.actions.client,name:sn_wsd_report.action_sn_wsd_order_flow_screen_client
+#: model:ir.actions.server,name:sn_wsd_report.action_sn_wsd_order_flow_screen_server
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_order_flow_screen
+msgid "Order Flow Board"
+msgstr "订单全流程看板"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_order_flow_dashboard_service
+msgid "Order Full-Flow Dashboard Service"
+msgstr "订单全流程看板服务"

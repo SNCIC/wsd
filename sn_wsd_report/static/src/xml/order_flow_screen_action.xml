@@ -72,7 +72,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>订单档案</span>
-                                        <small>SALES ORDER PROFILE</small>
+                                        <small>销售订单档案</small>
                                     </div>
                                     <div class="o_order_profile">
                                         <div class="o_profile_row o_profile_head">
@@ -105,7 +105,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>工序流转</span>
-                                        <small>STATION FLOW</small>
+                                        <small>工序流转明细</small>
                                     </div>
                                     <div class="o_station_rows">
                                         <div t-foreach="stations" t-as="st" t-key="st.step_code"
@@ -121,8 +121,8 @@
                                             </div>
                                             <div class="o_st_nums">
                                                 <strong><t t-esc="formatNumber(st.passed)"/></strong>
-                                                <span t-if="st.wip">WIP <t t-esc="formatNumber(st.wip)"/></span>
-                                                <span t-if="st.ng" class="o_ng">NG <t t-esc="formatNumber(st.ng)"/></span>
+                                                <span t-if="st.wip">在制 <t t-esc="formatNumber(st.wip)"/></span>
+                                                <span t-if="st.ng" class="o_ng">不良 <t t-esc="formatNumber(st.ng)"/></span>
                                                 <em><t t-esc="st.time"/></em>
                                             </div>
                                         </div>
@@ -136,7 +136,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>订单全流程 · 接单到发货</span>
-                                        <small>ORDER JOURNEY</small>
+                                        <small>全流程轨迹</small>
                                     </div>
                                     <div class="o_timeline_wrap">
                                         <div class="o_timeline_track">
@@ -162,7 +162,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>SN 实时追踪</span>
-                                        <small>SERIAL TRACE</small>
+                                        <small>序列号追踪</small>
                                     </div>
                                     <div class="o_trace_table">
                                         <table>
@@ -192,7 +192,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>质量检测</span>
-                                        <small>QUALITY</small>
+                                        <small>检测结果</small>
                                     </div>
                                     <div class="o_quality_body">
                                         <div class="o_gauge_wrap">
@@ -218,7 +218,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>工序产出分布</span>
-                                        <small>OUTPUT BY STATION</small>
+                                        <small>各工序产出</small>
                                     </div>
                                     <div class="o_chart_wrap">
                                         <canvas t-ref="stationCanvas"/>

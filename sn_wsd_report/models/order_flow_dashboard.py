@@ -1,56 +1,57 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 
+# 看板为厂内中文大屏，标签直接固定中文（与本模块其它大屏一致）
 NODE_LABELS = [
-    ('sale', _('Sales Order')),
-    ('material', _('Material Ready')),
-    ('production', _('Production Start')),
-    ('stations', _('Station Flow')),
-    ('test', _('Quality Test')),
-    ('receipt', _('Completion')),
-    ('delivery', _('Delivery')),
+    ('sale', '销售接单'),
+    ('material', '物料齐套'),
+    ('production', '生产开工'),
+    ('stations', '工序过站'),
+    ('test', '质量检测'),
+    ('receipt', '完工入库'),
+    ('delivery', '销售发货'),
 ]
 
 SALE_STATE_LABELS = {
-    'draft': _('Quotation'),
-    'sent': _('Quotation Sent'),
-    'sale': _('Sale Order'),
-    'done': _('Locked'),
-    'cancel': _('Cancelled'),
+    'draft': '报价单',
+    'sent': '报价已发送',
+    'sale': '销售订单',
+    'done': '已锁定',
+    'cancel': '已取消',
 }
 
 MO_STATE_LABELS = {
-    'draft': _('Draft'),
-    'confirmed': _('Confirmed'),
-    'progress': _('In Progress'),
-    'to_close': _('To Close'),
-    'done': _('Done'),
-    'cancel': _('Cancelled'),
+    'draft': '草稿',
+    'confirmed': '已确认',
+    'progress': '生产中',
+    'to_close': '待关闭',
+    'done': '已完工',
+    'cancel': '已取消',
 }
 
 PICKING_STATE_LABELS = {
-    'draft': _('Draft'),
-    'waiting': _('Waiting'),
-    'confirmed': _('Ready'),
-    'assigned': _('Ready'),
-    'done': _('Done'),
-    'cancel': _('Cancelled'),
+    'draft': '草稿',
+    'waiting': '等待',
+    'confirmed': '待处理',
+    'assigned': '已就绪',
+    'done': '已完成',
+    'cancel': '已取消',
 }
 
 MES_STATE_LABELS = {
-    'released': _('Released'),
-    'picked': _('Picked'),
-    'in_progress': _('In Progress'),
-    'done': _('Done'),
-    'cancelled': _('Cancelled'),
+    'released': '已下达',
+    'picked': '已领料',
+    'in_progress': '生产中',
+    'done': '已完工',
+    'cancelled': '已取消',
 }
 
 RESULT_LABELS = {
-    'ok': _('OK'),
-    'ng': _('NG'),
-    'scrap': _('Scrap'),
-    'hold': _('Hold'),
-    'in_progress': _('WIP'),
+    'ok': '通过',
+    'ng': '不良',
+    'scrap': '报废',
+    'hold': '挂起',
+    'in_progress': '在制',
 }
 
 

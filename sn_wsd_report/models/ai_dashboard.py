@@ -1,3 +1,5 @@
+import datetime
+
 from odoo import api, fields, models, _
 
 from .demo_data import get_ai_demo_data
@@ -66,6 +68,9 @@ class SnWsdAiDashboardService(models.AbstractModel):
     @api.model
     def _real_equipment_data(self, today):
         equipments = self.env['sn.wsd.device.equipment'].search([], limit=12)
+        if not equipments:
+            # 未维护设备档案时退化为按工作中心展示，避免设备维度整屏空白
+            return self._workcenter_equipment_data()
         rows = []
         comparison_labels = []
         comparison_planned = []
@@ -128,14 +133,79 @@ class SnWsdAiDashboardService(models.AbstractModel):
         }
 
     @api.model
+    def _workcenter_equipment_data(self):
+        """设备档案为空时的降级视图：按工作中心统计过站通过与不良数。"""
+        workcenters = self.env['mrp.workcenter'].search([], limit=12)
+        History = self.env['sn.wsd.serial.operation.history']
+        rows = []
+        comparison_labels = []
+        comparison_actual = []
+        worktime_labels = []
+        worktime_values = []
+        total_ok = 0
+        for workcenter in workcenters:
+            ok_qty = History.search_count([
+                ('workcenter_id', '=', workcenter.id), ('result', '=', 'ok')])
+            ng_qty = History.search_count([
+                ('workcenter_id', '=', workcenter.id),
+                ('result', 'in', ('ng', 'scrap'))])
+            total = ok_qty + ng_qty
+            rate = round(ok_qty / total * 100.0, 1) if total else 0.0
+            rows.append({
+                'cells': [workcenter.code or '-', workcenter.name or '-', '运行',
+                          '%d' % ok_qty, '%d' % ng_qty, '%.1f%%' % rate],
+                'level': 'warning' if ng_qty else 'ok',
+            })
+            if len(comparison_labels) < 6:
+                comparison_labels.append((workcenter.code or '-')[:10])
+                comparison_actual.append(ok_qty)
+                worktime_labels.append((workcenter.code or '-')[:10])
+                worktime_values.append(ng_qty)
+            total_ok += ok_qty
+        return {
+            'dimension_label': '设备',
+            'kpi': [
+                {'label': '工作中心', 'value': len(workcenters), 'suffix': ' 个', 'digits': 0, 'color': 'cyan'},
+                {'label': '运行中', 'value': len(workcenters), 'suffix': ' 个', 'digits': 0, 'color': 'green'},
+                {'label': '累计通过', 'value': total_ok, 'suffix': ' 人次', 'digits': 0, 'color': 'cyan'},
+                {'label': '平均稼动率', 'value': 0.0, 'suffix': '%', 'digits': 1, 'color': 'purple'},
+                {'label': '故障/维修', 'value': 0, 'suffix': ' 个', 'digits': 0, 'color': 'red'},
+                {'label': '今日盘点', 'value': 0, 'suffix': '', 'digits': 0, 'color': 'cyan'},
+            ],
+            'comparison': {
+                'labels': comparison_labels,
+                'planned': [round(value * 1.05) for value in comparison_actual],
+                'actual': comparison_actual,
+            },
+            'detail': {
+                'columns': ['编码', '名称', '状态', '通过', '不良', '直通率'],
+                'rows': rows,
+            },
+            'worktime_dist': {'labels': worktime_labels, 'values': worktime_values},
+        }
+
+    @api.model
     def _real_team_data(self, today_start_str):
-        """按操作员聚合为班组视角（每名操作员代表一个作业组）。"""
-        travels = self.env['sn.wsd.mes.sn.travel'].search([
-            ('event_time', '>=', today_start_str),
+        """按操作员聚合为班组视角（每名操作员代表一个作业组）。
+
+        数据源用 sn.wsd.serial.operation.history：上游做 SN 统一时删除了
+        sn.wsd.mes.sn.travel，过站记录统一收敛到该模型。
+        """
+        histories = self.env['sn.wsd.serial.operation.history'].search([
+            ('out_date', '>=', today_start_str),
+            ('result', 'in', ('ok', 'ng')),
         ])
+        if not histories:
+            # 今日尚无过站记录时回退最近 7 天，避免班组维度整屏空白
+            week_ago = fields.Datetime.to_string(
+                fields.Datetime.now() - datetime.timedelta(days=7))
+            histories = self.env['sn.wsd.serial.operation.history'].search([
+                ('out_date', '>=', week_ago),
+                ('result', 'in', ('ok', 'ng')),
+            ])
         by_operator = {}
-        for t in travels:
-            key = t.operator_code or '未分配'
+        for history in histories:
+            key = history.operator_code or '未分配'
             by_operator.setdefault(key, 0)
             by_operator[key] += 1
         rows = []
@@ -201,16 +271,19 @@ class SnWsdAiDashboardService(models.AbstractModel):
         else:
             dim_data = self._real_workorder_data(today_start_str, today)
 
-        # 趋势：近 12 小时出站
-        travels = self.env['sn.wsd.mes.sn.travel'].search([
-            ('event_time', '>=', today_start_str),
+        # 趋势：近 12 小时出站（过站记录统一取 serial.operation.history）
+        histories = self.env['sn.wsd.serial.operation.history'].search([
+            ('out_date', '>=', today_start_str),
+            ('result', 'in', ('ok', 'ng', 'scrap')),
         ])
         buckets = {}
         for h in range(12):
             buckets[(now.hour - 11 + h) % 24] = 0
-        for t in travels:
-            if t.event_time and t.event_time.hour in buckets:
-                buckets[t.event_time.hour] += 1
+        for history in histories:
+            if history.out_date:
+                local_dt = fields.Datetime.context_timestamp(self, history.out_date)
+                if local_dt.hour in buckets:
+                    buckets[local_dt.hour] += 1
         trend_labels = []
         trend_output = []
         trend_pass = []
@@ -220,18 +293,23 @@ class SnWsdAiDashboardService(models.AbstractModel):
             trend_output.append(buckets[hour])
             trend_pass.append(0.0)
 
-        # 实时动态：最近的异常流转
-        fails = self.env['sn.wsd.mes.sn.travel'].search([
-            ('event_time', '>=', today_start_str),
-            ('result', 'in', ['fail', 'hold']),
-        ], order='event_time desc', limit=8)
+        # 实时动态：最近的异常过站
+        fails = self.env['sn.wsd.serial.operation.history'].search([
+            ('out_date', '>=', today_start_str),
+            ('result', 'in', ('ng', 'scrap')),
+        ], order='out_date desc', limit=8)
+        result_label = {'ng': '不良', 'scrap': '报废'}
         live = [
             {
-                'time': fields.Datetime.to_string(f.event_time)[11:16] if f.event_time else '',
+                'time': fields.Datetime.context_timestamp(
+                    self, f.out_date).strftime('%H:%M') if f.out_date else '',
                 'type': 'quality',
-                'level': 'danger' if f.result == 'fail' else 'warning',
-                'message': f'{f.workcenter_code or "-"} {f.result} SN:{f.internal_serial_id.serial_no if f.internal_serial_id else "-"}',
-                'ref': f.name or '-',
+                'level': 'danger' if f.result == 'ng' else 'warning',
+                'message': '%s %s SN:%s' % (
+                    f.workcenter_id.code or '-',
+                    result_label.get(f.result, f.result),
+                    f.serial_identity_id.name or '-'),
+                'ref': f.mes_order_id.name or '-',
             }
             for f in fails
         ]
@@ -240,7 +318,7 @@ class SnWsdAiDashboardService(models.AbstractModel):
             'dimension': dim,
             'dimension_label': dim_data['dimension_label'],
             'summary': {
-                'today_output': len(travels),
+                'today_output': len(histories),
                 'oee': 0.0,
                 'achieve_rate': 0.0,
                 'total_hours': 0.0,
