@@ -1,0 +1,13 @@
+# Python dependencies of the SNCIC wsd modules that the official Odoo 19
+# requirements do not already provide.
+#
+#   pip install -r requirements.txt
+#
+# Pillow and requests are used by the modules as well (sn_wsd_prn and
+# sn_wsd_kingdee respectively), but they ship with Odoo itself, so they are
+# not repeated here.
+
+# sn_wsd_ding - DingTalk integration. Installed as a pair: the SDK pulls in
+# the Alibaba Cloud credentials, gateway and Tea runtime packages.
+alibabacloud_dingtalk==2.2.67
+pycryptodome==4.3.0
