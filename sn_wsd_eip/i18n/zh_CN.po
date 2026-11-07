@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 08:56+0000\n"
-"PO-Revision-Date: 2026-11-02 08:56+0000\n"
+"POT-Creation-Date: 2026-11-02 09:17+0000\n"
+"PO-Revision-Date: 2026-11-02 09:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -312,7 +312,7 @@ msgstr "设备"
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_mes_test_result_detail__id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_serial_operation_history__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__info_code
@@ -428,7 +428,7 @@ msgstr "规格型号"
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ng
 msgid "NG"
-msgstr "NG"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__nameplate_code
@@ -459,13 +459,27 @@ msgstr "备注"
 #. module: sn_wsd_eip
 #: model:ir.model.fields.selection,name:sn_wsd_eip.selection__sn_wsd_eip_pass_record_line__item_result__ok
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_operation_mapping__operation_id
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__operation_id
 msgid "Operation"
 msgstr "工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_value_mapping__operation_ids
+msgid "Operations"
+msgstr "工序"
+
+#. module: sn_wsd_eip
+#: model:ir.model.fields,help:sn_wsd_eip.field_sn_wsd_eip_value_mapping__operation_ids
+msgid ""
+"Operations mapped to this interface code (from the EIP operation code "
+"mapping) -- shown beside the code so the target station is visible while "
+"maintaining value keys."
+msgstr ""
+"按编码反查工序映射得到的工序——维护取值键时直接看到目标工位。"
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__pcb_code
@@ -555,7 +569,7 @@ msgstr "工序实例"
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__serial_identity_id
 msgid "SN"
-msgstr "SN"
+msgstr ""
 
 #. module: sn_wsd_eip
 #: model:ir.model.fields,field_description:sn_wsd_eip.field_sn_wsd_eip_pass_record__sn_name
