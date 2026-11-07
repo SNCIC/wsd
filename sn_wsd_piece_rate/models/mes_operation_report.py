@@ -349,6 +349,29 @@ class MesOperationReport(models.Model):
                 }) for index, (member, ratio) in enumerate(
                     zip(members, ratios))]
 
+    @api.onchange('team_id')
+    def _onchange_team_id_fill_participants(self):
+        """Picking a team on the ledger form brings its members in as
+        participants automatically (piece-ratio-to-settlement follow-up,
+        2026-11-07): the former Fill-From-Team button effect, now fired on
+        team selection. Switching teams replaces the roster (same caliber
+        as the button); clearing the team leaves people untouched; manual
+        add/remove stays available after the fill. Ratios are stored
+        team-normalized for downstream compatibility only — the ledger
+        generation still re-splits evenly on the settlement."""
+        if not self.team_id or not self.team_id.member_ids:
+            return
+        members = self.team_id.member_ids
+        ratios = self.env['sn.wsd.piece.settlement']._distribute_ratios(
+            members.mapped('performance_ratio'))
+        self.participant_ids = [fields.Command.clear()] + [
+            fields.Command.create({
+                'employee_id': member.employee_id.id,
+                'performance_ratio': ratio,
+                'sequence': 10 * (index + 1),
+            }) for index, (member, ratio) in enumerate(
+                zip(members, ratios))]
+
     def action_equal_split(self):
         Settlement = self.env['sn.wsd.piece.settlement']
         for report in self:

@@ -598,6 +598,35 @@ class TestDailyWorkbench(PieceRateTestCommon):
             [50.0, 50.0])
         self.assertEqual(first.state, 'void')
 
+    def test_ledger_team_onchange_fills_participants(self):
+        """报工记录表单选班组自动带出成员（2026-11-07）：换班组替换名单、
+        清空班组不动人、空班组不带出；带出后可手动增删。"""
+        report = self._make_report(self.order, self.op_a, 10.0)
+        # picking a team brings its members in (ratios team-normalized,
+        # stored for downstream compatibility only)
+        report.team_id = self.team
+        report._onchange_team_id_fill_participants()
+        self.assertEqual(
+            report.participant_ids.mapped('employee_id'),
+            self.team.member_ids.mapped('employee_id'))
+        self.assertEqual(
+            sum(report.participant_ids.mapped('performance_ratio')), 100.0)
+        # manual adjustment after the fill survives until the team changes
+        report.participant_ids[0].unlink()
+        self.assertEqual(len(report.participant_ids),
+                         len(self.team.member_ids) - 1)
+        # clearing the team leaves people untouched
+        report.team_id = False
+        report._onchange_team_id_fill_participants()
+        self.assertEqual(len(report.participant_ids),
+                         len(self.team.member_ids) - 1)
+        # re-picking the team replaces the roster again
+        report.team_id = self.team
+        report._onchange_team_id_fill_participants()
+        self.assertEqual(
+            report.participant_ids.mapped('employee_id'),
+            self.team.member_ids.mapped('employee_id'))
+
     # ------------------------------------------------------------------
     # wizard To Report tab: line load + participant prefill
     # ------------------------------------------------------------------
