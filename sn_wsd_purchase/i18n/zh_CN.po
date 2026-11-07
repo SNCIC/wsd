@@ -190,22 +190,30 @@ msgid "1. Product Details"
 msgstr "一、采购产品的明细表"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "No."
 msgstr "序号"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Product Code"
 msgstr "物料编码"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Product Name"
 msgstr "产品名称"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Specification"
 msgstr "产品规格"
 
@@ -216,7 +224,9 @@ msgid "Brand"
 msgstr "品牌"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Unit"
 msgstr "单位"
 
@@ -287,7 +297,9 @@ msgid "Authorized Agent:"
 msgstr "委托代理人："
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.report_purchase_contract
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Date:"
 msgstr "日期："
 
@@ -320,7 +332,9 @@ msgid "Untaxed Unit Price"
 msgstr "不含税单价"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.purchase_order_form_contract_information
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Unit Price"
 msgstr "含税单价"
 
@@ -372,14 +386,18 @@ msgid "Description"
 msgstr "说明"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__product_code
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_code
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Material Code"
 msgstr "物料编码"
 
 #. module: sn_wsd_purchase
+#. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order_line__product_name
 #: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_request_line__product_name
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
 msgid "Material Name"
 msgstr "物料名称"
 
@@ -610,3 +628,158 @@ msgstr "入库数量"
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
 msgid "Quantity that has completed the storage step of the reception."
 msgstr "已完成来料上架入库环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_order_names
+msgid "Sale Orders"
+msgstr "销售订单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_order_names
+msgid "Sales orders behind the replenishment need of this purchase order."
+msgstr "本采购订单补货需求背后的销售订单。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_contract_number
+msgid "Sale Contract Number"
+msgstr "销售合同编号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_contract_number
+msgid "Contract number of the source sales orders. Empty contract numbers fall back to the order number."
+msgstr "来源销售订单的合同编号；合同编号为空时显示订单号。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_supply_order_number
+msgid "Sale Supply Order Number"
+msgstr "供货单号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_supply_order_number
+msgid "Supply order number the customer issued for the source sales orders."
+msgstr "客户为来源销售订单开具的供货单号。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_asset_number
+msgid "Sale Asset Number"
+msgstr "资产号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_asset_number
+msgid "Asset number the customer assigned to the equipment of the source sales orders."
+msgstr "客户为来源销售订单设备分配的资产号。"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Purchase Receipt"
+msgstr "外购入库单"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/vendor_return_prn.py:0
+msgid "Purchase Return"
+msgstr "外购退料单"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Vendor:"
+msgstr "供应商："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Document Type:"
+msgstr "单据类型："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Printed:"
+msgstr "打印次数："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Approved by:"
+msgstr "审核："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Prepared by:"
+msgstr "制单："
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Tax %"
+msgstr "税率"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Amount"
+msgstr "金额"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Warehouse"
+msgstr "仓库"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/vendor_return_prn.py:0
+msgid "Returned Qty"
+msgstr "实退数量"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_stock_picking__sn_prn_vendor_return
+msgid "Vendor Return"
+msgstr "外购退料"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_stock_picking_form_goods_receipt_prn
+msgid "Print Purchase Receipt"
+msgstr "打印外购入库单"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_stock_picking_form_goods_receipt_prn
+msgid "Print Purchase Return"
+msgstr "打印外购退料单"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_purchase.action_print_goods_receipt_prn
+msgid "Print Purchase Receipts (ESC/P)"
+msgstr "批量打印外购入库单（ESC/P）"
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_purchase.action_print_vendor_return_prn
+msgid "Print Purchase Returns (ESC/P)"
+msgstr "批量打印外购退料单（ESC/P）"
+
+
+#. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/report/goods_receipt_prn.py:0
+msgid "Total:"
+msgstr "合计："

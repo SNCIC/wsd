@@ -122,41 +122,53 @@ class SnWsdPieceSettlement(models.Model):
 
     @api.onchange('participant_ids')
     def _onchange_participant_ids_rebalance(self):
-        """手改即锁定：改过绩效比的行（值≠基线）保持不动，
-        其余行按各自基线权重分摊剩余比例（基线合计≤0 退化为均分），
-        末行吸收舍入尾差；锁定行合计>100% 时不自动改（确认校验拦截）。
-
-        不变量：auto 行重分后基线同步改写为当前值（auto 集合内部
-        权重比例保持不变，重写不改变后续分摊结果），因此
-        "值==基线" 恒等于 "未被手改"。"""
+        """Workbench-caliber ratio editing (piece-ratio-to-settlement
+        follow-up, 2026-11-07): locked rows and rows typed over in THIS
+        pass (ratio != baseline) stay fixed; the remaining unlocked rows
+        EQUAL-SPLIT the rest (last row absorbs the rounding tail), same
+        as the daily-workbench crew panel. A typed value above the cap
+        (100 - the other fixed rows) is truncated with a warning toast;
+        negatives clamp to 0. Baselines re-sync after every pass, so a
+        manual edit fixes its row for that pass only — persistence needs
+        the explicit lock toggle."""
+        capped = False
         for settlement in self:
             lines = settlement.participant_ids
             if not lines:
                 continue
             manual = lines.filtered(
                 lambda l: abs(l.performance_ratio - l.x_ratio_baseline) > 0.0001)
-            auto = lines - manual
-            if not auto:
-                continue
-            manual_total = sum(manual.mapped('performance_ratio'))
-            remaining = 100.0 - manual_total
-            if remaining < -0.01:
-                continue
-            auto_lines = list(auto)
-            weights = [l.x_ratio_baseline for l in auto_lines]
-            weight_total = sum(weights)
-            if weight_total <= 0:
-                weights = [1.0] * len(auto_lines)
-                weight_total = float(len(auto_lines))
-            for i, line in enumerate(auto_lines):
-                if i < len(auto_lines) - 1:
-                    line.performance_ratio = round(
-                        remaining * weights[i] / weight_total, 4)
-                else:
-                    line.performance_ratio = round(
-                        100.0 - manual_total - sum(
-                            l.performance_ratio for l in auto_lines[:-1]), 4)
+            locked = lines.filtered('x_ratio_locked')
+            # clamp negatives, cap typed values at 100 - other fixed rows
+            for line in manual:
+                if line.performance_ratio < 0:
+                    line.performance_ratio = 0.0
+                others_fixed = sum(
+                    ((locked | manual) - line).mapped('performance_ratio'))
+                cap = round(max(100.0 - others_fixed, 0.0), 4)
+                if line.performance_ratio > cap:
+                    line.performance_ratio = cap
+                    capped = True
+            fixed = locked | manual
+            fixed_total = sum(fixed.mapped('performance_ratio'))
+            auto = lines - fixed
+            if auto and fixed_total <= 100.0 + 0.01:
+                auto_lines = list(auto)
+                share = round((100.0 - fixed_total) / len(auto_lines), 4)
+                for i, line in enumerate(auto_lines):
+                    line.performance_ratio = (
+                        share if i < len(auto_lines) - 1 else round(
+                            100.0 - fixed_total - share * (len(auto_lines) - 1), 4))
+            # consume the manual marks; only explicit locks persist
+            for line in lines:
                 line.x_ratio_baseline = line.performance_ratio
+        if capped:
+            return {'warning': {
+                'title': _('Ratio capped'),
+                'message': _(
+                    'The total performance ratio cannot exceed 100%; '
+                    'the typed ratio was capped.'),
+            }}
 
     @api.constrains('participant_ids', 'participant_ids.performance_ratio')
     def _check_ratio_total(self):
@@ -519,9 +531,12 @@ class SnWsdPieceSettlement(models.Model):
                     'employee_id': e.id,
                     'performance_ratio': r,
                     'x_ratio_baseline': r,
+                    'x_ratio_locked': False,
                 }) for e, r in zip(employees, ratios)]
 
     def action_equal_split(self):
+        """All rows 1/N (tail on the last) and every lock released —
+        workbench caliber."""
         for settlement in self:
             employees = settlement.participant_ids.mapped('employee_id')
             if not employees:
@@ -533,6 +548,7 @@ class SnWsdPieceSettlement(models.Model):
                     'employee_id': e.id,
                     'performance_ratio': r,
                     'x_ratio_baseline': r,
+                    'x_ratio_locked': False,
                 }) for e, r in zip(employees, ratios)]
 
 
@@ -579,6 +595,11 @@ class SnWsdPieceSettlementParticipant(models.Model):
         help='Weight used to auto-redistribute the leftover ratio: rows the '
              'user typed over (ratio != baseline) keep their value, the rest '
              'share the remainder proportionally to their baseline.')
+    x_ratio_locked = fields.Boolean(
+        string='Ratio Locked',
+        help='Explicit lock: the row keeps its ratio through every '
+             'redistribution; unlocked rows equal-split the remainder '
+             '(daily-workbench caliber, 2026-11-07).')
     amount = fields.Monetary(
         string='Allocated Amount', compute='_compute_amount', store=True)
 

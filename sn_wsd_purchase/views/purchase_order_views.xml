@@ -129,4 +129,49 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Sale information forwarded by the replenishment report: the order
+         shows the sales orders behind the need with the references the
+         customer gave for them. -->
+    <record id="purchase_order_form_sale_replenishment" model="ir.ui.view">
+        <field name="name">purchase.order.form.sale.replenishment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='other_info']/field[@name='origin']" position="after">
+                <field name="sn_sale_order_names" readonly="1"
+                       invisible="not sn_sale_order_names"/>
+                <field name="sn_sale_contract_number" readonly="1"
+                       invisible="not sn_sale_contract_number"/>
+                <field name="sn_sale_supply_order_number" readonly="1"
+                       invisible="not sn_sale_supply_order_number"/>
+                <field name="sn_sale_asset_number" readonly="1"
+                       invisible="not sn_sale_asset_number"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_kpis_tree_sale_replenishment" model="ir.ui.view">
+        <field name="name">purchase.order.kpis.tree.sale.replenishment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_sale_order_names" optional="show"/>
+                <field name="sn_sale_contract_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_tree_sale_replenishment" model="ir.ui.view">
+        <field name="name">purchase.order.view.tree.sale.replenishment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_sale_order_names" optional="show"/>
+                <field name="sn_sale_contract_number" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_category_form_view_company" model="ir.ui.view">
+        <field name="name">product.category.form.company</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='first']" position="inside">
+                <field name="company_id" groups="base.group_multi_company"
+                       placeholder="Shared by every company"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_category_list_view_company" model="ir.ui.view">
+        <field name="name">product.category.list.company</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_list_view"/>
+        <field name="arch" type="xml">
+            <!-- Anchor on the list itself: the core list carries a single name
+                 field on some revisions and display_name on others. -->
+            <xpath expr="//list" position="inside">
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_category_search_view_company" model="ir.ui.view">
+        <field name="name">product.category.search.company</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="group_company" string="Company"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1493,7 +1493,9 @@ msgid ""
 "The sales order cannot be generated from %(origin)s because the price list "
 "of %(partner)s is in %(pricelist_currency)s while the purchase order is in "
 "%(order_currency)s."
-msgstr "无法根据 %(origin)s 生成销售订单：%(partner)s 的价目表币种为 %(pricelist_currency)s，而采购订单币种为 %(order_currency)s。"
+msgstr ""
+"无法根据 %(origin)s 生成销售订单：%(partner)s 的价目表币种为 %(pricelist_currency)s，而采购订单币种为 "
+"%(order_currency)s。"
 
 #. module: sn_wsd_inter_company
 #. odoo-python
@@ -1702,3 +1704,297 @@ msgstr "协议"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
 msgid "e.g. A - B trade agreement"
 msgstr "例如：A - B 交易协议"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid ""
+"%(source)s to %(target)s: %(total)s products | direct %(direct)s, mapped "
+"%(mapped)s, matched by code %(code)s, creatable %(creatable)s, text %(text)s"
+msgstr ""
+"%(source)s 到 %(target)s：共 %(total)s 个物料 | 本司已有 %(direct)s、已对照 "
+"%(mapped)s、按编码匹配 %(code)s、可新建 %(creatable)s、仅文字 %(text)s"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.constraint,message:sn_wsd_inter_company.constraint_sn_intercompany_product_map_product_map_uniq
+msgid "A mapping already exists for this product between these two companies."
+msgstr "这两家公司之间已存在该物料的对照。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_product_map.py:0
+msgid "A product mapping needs two different companies."
+msgstr "物料对照需要两个不同的公司。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__agreement_id
+msgid ""
+"Agreement the mapping was first created for. Purely informative: the mapping"
+" itself applies to the company pair."
+msgstr "该对照最初创建时所属的协议。仅供参考：对照本身对公司对生效。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Analyze Product Coverage"
+msgstr "分析物料覆盖"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__origin
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Built By"
+msgstr "生成方式"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Copied as Text"
+msgstr "仅复制为文字"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_form
+msgid "Copy the line as text"
+msgstr "本行仅复制为文字"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_create_target_product
+msgid "Create the Missing Product in the Buyer"
+msgstr "在采购方新建缺失物料"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Created Automatically"
+msgstr "自动新建"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__agreement_id
+msgid "Created Under Agreement"
+msgstr "创建时所属协议"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_product_product__intercompany_generated
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_product_template__intercompany_generated
+msgid "Created by Inter-Company Trade"
+msgstr "跨公司交易创建"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__direction
+msgid ""
+"Direction recorded when the mapping was created. The resolution relies on "
+"the source and target companies, not on this field."
+msgstr "创建对照时记录的贸易方向。解析依据是源公司与目标公司，不依赖此字段。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__origin__manual
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Entered by a User"
+msgstr "人工录入"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__origin
+msgid "How this mapping came to exist."
+msgstr "该对照的生成方式。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_product_map.py:0
+msgid "Inter-Company Products"
+msgstr "跨公司交易物料"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "Lines that would stay text: "
+msgstr "将退化为文字行的物料："
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Mappings"
+msgstr "物料对照"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_code
+msgid "Match Products by Code"
+msgstr "按编码匹配物料"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Matched by Code"
+msgstr "按编码匹配"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__origin__code
+msgid "Matched by Product Code"
+msgstr "按物料编码匹配"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "No direction is enabled on this agreement."
+msgstr "该协议未启用任何方向。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__uom_ratio
+msgid ""
+"One unit of the source product equals this many units of the target product."
+" The quantity of the source line is multiplied by it, the unit price is "
+"divided by it."
+msgstr "1 个源物料等于多少个目标物料。源行数量乘以该比例，单价除以该比例。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Open the Product Mapping"
+msgstr "打开物料对照"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__target_code_prefix
+msgid ""
+"Prefix added to the code when the buying company already uses it for another"
+" article. Without a prefix such a line is copied as text and reported as an "
+"issue, because a duplicate code would make the next synchronization pick the"
+" wrong product."
+msgstr "采购方已把该编码用于另一物料时，为新建物料编码加的前缀。未设前缀时该行仅复制为文字并记入问题队列，因为重复编码会让下次同步选中错误物料。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__target_code_prefix
+msgid "Prefix for Taken Codes"
+msgstr "编码冲突前缀"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid "Prices and Products"
+msgstr "价格与物料"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model,name:sn_wsd_inter_company.model_product_template
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid "Product Coverage"
+msgstr "物料覆盖"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__origin__created
+msgid "Product Created in the Buying Company"
+msgstr "在采购方新建物料"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_product_map__target_product_tmpl_id
+msgid ""
+"Product used on the documents of the target company. Leave empty to copy the"
+" source product as a text line."
+msgstr "目标公司单据上使用的物料。留空表示把源物料仅复制为文字行。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_product_product__intercompany_generated
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_product_template__intercompany_generated
+msgid ""
+"Set when the product was created automatically to receive an article bought "
+"from another company of this database."
+msgstr "该物料是跨公司交易自动创建的，用于接收向本库另一家公司采购的物料。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__source_company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Source Company"
+msgstr "源公司"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_product_map__target_company_id
+msgid "Target Company"
+msgstr "目标公司"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_product_map.py:0
+msgid ""
+"The product \"%(product)s\" belongs to %(company)s and cannot be the source "
+"of a mapping of %(source)s."
+msgstr "物料「%(product)s」属于%(company)s，不能作为%(source)s的源物料。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_product_map.py:0
+msgid ""
+"The product \"%(product)s\" belongs to %(company)s and cannot be the target "
+"of a mapping of %(target)s."
+msgstr "物料「%(product)s」属于%(company)s，不能作为%(target)s的目标物料。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_sync_mixin.py:0
+msgid ""
+"The product \"%(product)s\" of %(company)s has no counterpart in %(target)s;"
+" the line was copied as text."
+msgstr "物料「%(product)s」（%(company)s）在%(target)s没有对应物料，该行已仅复制为文字。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_create_target_product
+msgid ""
+"When the buying company never purchased the article before, a product is "
+"created there from the one of the seller, so the purchase order can carry a "
+"product and the receipt can move stock. The creation is flagged on the "
+"product."
+msgstr "当采购方从未采购过该物料时，按销售方物料在采购方新建一条，使采购单能带物料、收货能产生库存移动。新建的物料会被标记。"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_code
+msgid ""
+"When the selling company sells a product the buying company already holds "
+"under the same code and the same name, the two are linked automatically. A "
+"code alone is not enough: the two catalogues may use the same code for "
+"different articles."
+msgstr "当采购方已有编码与名称都相同的物料时，自动建立对照。只凭编码不够：两套物料目录可能用同一编码表示不同物料。"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_form
+msgid "Why the two products are the same article"
+msgstr "说明这两个物料为何是同一物料"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_agreement_form
+msgid ""
+"The two companies keep independent catalogues, so a product\n"
+"                                sold by one is resolved into a product of the other before it\n"
+"                                reaches the generated document: an explicit mapping first, then\n"
+"                                the same code with the same name, then a product created in the\n"
+"                                buying company. Lines that resolve to nothing are copied as text\n"
+"                                and reported in the issue queue."
+msgstr ""
+"两家公司各自独立建料，所以销售方的物料在写入生成单据前会先解析为对方公司的物料：先查显式对照，再找编码与名称都相同的物料，最后在采购方新建。都无法解析的行仅复制为文字，并记入问题队列。"
+
+#. module: sn_wsd_inter_company
+#. odoo-python
+#: code:addons/sn_wsd_inter_company/models/intercompany_agreement.py:0
+msgid ""
+"%(source)s to %(target)s: %(total)s products | direct %(direct)s, mapped "
+"%(mapped)s, mnemonic %(mnemonic)s, matched by code %(code)s, creatable "
+"%(creatable)s, text %(text)s"
+msgstr ""
+"%(source)s 到 %(target)s：共 %(total)s 个物料 | 本司已有 %(direct)s、已对照 "
+"%(mapped)s、助记码匹配 %(mnemonic)s、按编码匹配 %(code)s、可新建 %(creatable)s、仅文字 %(text)s"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,field_description:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_mnemonic
+msgid "Match Products by Mnemonic Code"
+msgstr "按助记码匹配物料"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields.selection,name:sn_wsd_inter_company.selection__sn_intercompany_product_map__origin__mnemonic
+msgid "Matched Through the Mnemonic Code"
+msgstr "通过助记码匹配"
+
+#. module: sn_wsd_inter_company
+#: model_terms:ir.ui.view,arch_db:sn_wsd_inter_company.view_sn_intercompany_product_map_search
+msgid "Matched by Mnemonic Code"
+msgstr "按助记码匹配"
+
+#. module: sn_wsd_inter_company
+#: model:ir.model.fields,help:sn_wsd_inter_company.field_sn_intercompany_agreement__auto_map_by_mnemonic
+msgid ""
+"The mnemonic code of a product is the code the same article carries in the "
+"other catalogue, in both directions. It is the strongest link between the "
+"two catalogues: it identifies the article even when the two companies "
+"numbered it differently."
+msgstr "物料的助记码就是同一物料在另一套目录里的编码，双向成立。它是两套目录之间最强的关联：即使两家公司各自编号不同，也能认出是同一物料。"

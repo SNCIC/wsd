@@ -204,10 +204,61 @@ class PurchaseOrder(models.Model):
              "confirmed, so that the next purchase order defaults to them.",
     )
 
+    # Sale information of the replenishment need, read from the sale
+    # references forwarded by the replenishment report.
+    sn_sale_order_names = fields.Char(
+        string='Sale Orders',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Sales orders behind the replenishment need of this purchase order.',
+    )
+    sn_sale_contract_number = fields.Char(
+        string='Sale Contract Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Contract number of the source sales orders. Empty contract numbers '
+             'fall back to the order number.',
+    )
+    sn_sale_supply_order_number = fields.Char(
+        string='Sale Supply Order Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Supply order number the customer issued for the source sales orders.',
+    )
+    sn_sale_asset_number = fields.Char(
+        string='Sale Asset Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Asset number the customer assigned to the equipment of the source '
+             'sales orders.',
+    )
+
     @api.depends('contract_attachment_ids')
     def _compute_has_contract_attachment(self):
         for order in self:
             order.has_contract_attachment = bool(order.contract_attachment_ids)
+
+    @api.depends('reference_ids')
+    def _compute_sn_sale_info(self):
+        """Sale information of the sale references carried by the PO."""
+        for order in self:
+            sales = order.reference_ids.sale_ids
+            order.sn_sale_order_names = ', '.join(sorted(set(sales.mapped('name'))))
+            has_contract = 'contract_number' in sales._fields
+            order.sn_sale_contract_number = ', '.join(sorted({
+                sale.contract_number or sale.name
+                for sale in sales if has_contract
+            }))
+            supply_numbers = sales.mapped('sn_supply_order_number') \
+                if 'sn_supply_order_number' in sales._fields else []
+            order.sn_sale_supply_order_number = ', '.join(sorted({
+                number for number in supply_numbers if number
+            }))
+            asset_numbers = sales.mapped('sn_asset_number') \
+                if 'sn_asset_number' in sales._fields else []
+            order.sn_sale_asset_number = ', '.join(sorted({
+                number for number in asset_numbers if number
+            }))
 
     @api.depends('amount_total', 'amount_untaxed', 'amount_tax')
     def _compute_amount_total_chinese(self):

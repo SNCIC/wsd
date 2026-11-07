@@ -50,6 +50,37 @@ class MrpProduction(models.Model):
     x_nameplate_end = fields.Char(string='Nameplate End')
     x_contract_no = fields.Char(string='Contract No')
 
+    # Sale information of the replenishment need, read from the sale
+    # references forwarded by the replenishment report.
+    sn_sale_order_names = fields.Char(
+        string='Sale Orders',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Sales orders behind the replenishment need of this manufacturing '
+             'order.',
+    )
+    sn_sale_contract_number = fields.Char(
+        string='Sale Contract Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Contract number of the source sales orders. Empty contract '
+             'numbers fall back to the order number.',
+    )
+    sn_sale_supply_order_number = fields.Char(
+        string='Sale Supply Order Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Supply order number the customer issued for the source sales '
+             'orders.',
+    )
+    sn_sale_asset_number = fields.Char(
+        string='Sale Asset Number',
+        compute='_compute_sn_sale_info',
+        store=False,
+        help='Asset number the customer assigned to the equipment of the '
+             'source sales orders.',
+    )
+
     @api.onchange('product_id')
     def _onchange_x_route_id_from_drawing_no(self):
         # The route is resolved through the product's 图号 (drawing number):
@@ -210,6 +241,28 @@ class MrpProduction(models.Model):
                     customer = destination_customers
             production.x_customer_id = customer
             production.x_customer_display_name = customer.x_customer_alias or customer.name
+
+    @api.depends('reference_ids')
+    def _compute_sn_sale_info(self):
+        """Sale information of the sale references carried by the MO."""
+        for production in self:
+            sales = production.reference_ids.sale_ids
+            production.sn_sale_order_names = ', '.join(sorted(set(sales.mapped('name'))))
+            has_contract = 'contract_number' in sales._fields
+            production.sn_sale_contract_number = ', '.join(sorted({
+                sale.contract_number or sale.name
+                for sale in sales if has_contract
+            }))
+            supply_numbers = sales.mapped('sn_supply_order_number') \
+                if 'sn_supply_order_number' in sales._fields else []
+            production.sn_sale_supply_order_number = ', '.join(sorted({
+                number for number in supply_numbers if number
+            }))
+            asset_numbers = sales.mapped('sn_asset_number') \
+                if 'sn_asset_number' in sales._fields else []
+            production.sn_sale_asset_number = ', '.join(sorted({
+                number for number in asset_numbers if number
+            }))
 
     @api.depends(
         'state',

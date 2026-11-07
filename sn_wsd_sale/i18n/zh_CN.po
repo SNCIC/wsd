@@ -123,6 +123,16 @@ msgid "Summary"
 msgstr "摘要"
 
 #. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order__sn_supply_order_number
+msgid "Supply Order Number"
+msgstr "供货单号"
+
+#. module: sn_wsd_sale
+#: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order__sn_asset_number
+msgid "Asset Number"
+msgstr "资产号"
+
+#. module: sn_wsd_sale
 #. odoo-python
 #: model:ir.model.fields,field_description:sn_wsd_sale.field_sale_order_line__sn_delivery_date
 #: model_terms:ir.ui.view,arch_db:sn_wsd_sale.report_sale_order_prn_document
@@ -246,3 +256,100 @@ msgstr "制单人："
 #: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
 msgid "Salesperson:"
 msgstr "业务员："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Sales Delivery"
+msgstr "销售出库单"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Sales Order Sheet"
+msgstr "销售开单"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Remark:"
+msgstr "备注："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Warehouse:"
+msgstr "仓管："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Picked by:"
+msgstr "提货人："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Customer Signature:"
+msgstr "客户签字（盖章）："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Page"
+msgstr "页码"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Total Amount"
+msgstr "金额合计"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Unit Price"
+msgstr "单价"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Amount"
+msgstr "金额"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_stock_picking_form_sales_delivery_prn
+msgid "Print Sales Delivery"
+msgstr "打印销售出库单"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_sale.action_print_sales_delivery_prn
+msgid "Print Sales Deliveries (ESC/P)"
+msgstr "批量打印销售出库单（ESC/P）"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_sale.view_stock_picking_form_sales_delivery_prn
+msgid "Delivery Remark"
+msgstr "出库备注"
+
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Total:"
+msgstr "合计："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
+msgid "Quantity Total"
+msgstr "数量合计"

@@ -12,6 +12,8 @@
                 <footer>
                     <button name="action_generate" type="object" string="生成报表"
                             class="btn-primary" data-hotkey="q"/>
+                    <button name="action_generate_and_export" type="object" string="Export Excel"
+                            class="btn-secondary" data-hotkey="e"/>
                     <button string="取消" class="btn-secondary" special="cancel" data-hotkey="x"/>
                 </footer>
             </form>

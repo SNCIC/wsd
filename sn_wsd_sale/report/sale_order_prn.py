@@ -37,6 +37,8 @@ import os
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from odoo.addons.sn_wsd_prn.escp import load_image
+
 _logger = logging.getLogger(__name__)
 
 # Graphics density of the printer: 120 dots per inch horizontally, 180
@@ -77,15 +79,24 @@ PRINTABLE_MM = 116
 TITLE_MM = 2
 META_MM = 12
 SUMMARY_MM = 19
-TABLE_TOP_MM = 25
-HEAD_HEIGHT_MM = 6
-ITEM_HEIGHT_MM = 10
-TOTAL_HEIGHT_MM = 8.5
-SIGNATURE_MM = 111.5
+TABLE_TOP_MM = 24
+HEAD_HEIGHT_MM = 5.5
+ITEM_HEIGHT_MM = 9
+# Two total rows under the item rows: the total quantity, then the total amount
+# with its capitals, as the finance form shows them.
+TOTAL_HEIGHT_MM = 6.5
+TOTAL_ROWS = 2
+SIGNATURE_MM = 110
 CELL_PADDING_MM = 1.5
 META_DATE_MM = 105
 META_NUMBER_MM = 150
-SIGNATURE_COLUMNS_MM = (5, 110)
+SIGNATURE_COLUMNS_MM = (5, 100, 150)
+
+# The company logo sits on the left of the title, as on the paper form.
+LOGO_LEFT_MM = 5
+LOGO_TOP_MM = 2
+LOGO_WIDTH_MM = 42
+LOGO_HEIGHT_MM = 11
 
 # Rows of the item table, as on the paper form: one band carries seven, a longer
 # order is printed on the next bands of the continuous form.
@@ -104,17 +115,19 @@ RULE_DOTS = 2
 # translated with the language of the user, so the sheet follows the interface.
 COLUMNS = (
     (0.05, 'No.'),
-    (0.16, 'Product Code'),
     (0.20, 'Product Name'),
-    (0.22, 'Specification'),
+    (0.24, 'Specification'),
     (0.06, 'Unit'),
     (0.08, 'Quantity'),
-    (0.13, 'Delivery Date'),
-    (0.10, 'Remark'),
+    (0.10, 'Unit Price'),
+    (0.13, 'Amount'),
+    (0.14, 'Remark'),
 )
-# Columns the quantity cell of the total row spans, so that row lines up with
-# the columns above it.
-TOTAL_QUANTITY_COLUMN = (5, 6)
+# Columns the cells of the total rows line up with, so that the rows read under
+# the columns above them.
+TOTAL_QUANTITY_COLUMN = 4
+TOTAL_AMOUNT_COLUMN = 6
+TOTAL_WORDS_COLUMN = 2
 
 # Columns per ESC * command: 576 bytes of graphics data, well inside the line
 # buffer of the printer.
@@ -240,6 +253,20 @@ def _header_font(draw, column_widths, labels):
     return _font(SMALL_SIZE)
 
 
+def _paste_logo(image, data):
+    """Paste the company logo on the head of the sheet, scaled to its box."""
+    logo = load_image(data)
+    if not logo:
+        return
+    box_width = _mm(LOGO_WIDTH_MM)
+    box_height = _mm(LOGO_HEIGHT_MM)
+    scale = min(box_width / logo.width, box_height / logo.height)
+    size = (max(1, int(round(logo.width * scale))),
+            max(1, int(round(logo.height * scale))))
+    image.paste(logo.resize(size, Image.Resampling.LANCZOS),
+                (_mm(LOGO_LEFT_MM), _mm(LOGO_TOP_MM)))
+
+
 def _draw_band(order, rows, is_last, page, page_count):
     """Draw one 135 mm band of the sheet on the drawing grid."""
     translate = order.env._
@@ -255,8 +282,9 @@ def _draw_band(order, rows, is_last, page, page_count):
     right = _mm(CONTENT_RIGHT_MM)
 
     company = _clean(order.company_id.name)
+    _paste_logo(image, order.company_id.logo)
     draw.text((width // 2, _mm(TITLE_MM)),
-              '%s  %s' % (company, translate('Sales Order')),
+              '%s  %s' % (company, translate('Sales Order Sheet')),
               font=title, fill=INK, anchor='ma')
     draw.text((right, _mm(TITLE_MM + 1)), '%d / %d' % (page, page_count),
               font=small, fill=INK, anchor='ra')
@@ -287,14 +315,19 @@ def _draw_band(order, rows, is_last, page, page_count):
     table_top = _mm(TABLE_TOP_MM)
     head_bottom = table_top + _mm(HEAD_HEIGHT_MM)
     body_bottom = head_bottom + _mm(ITEM_HEIGHT_MM) * ITEM_ROWS
-    table_bottom = body_bottom + (_mm(TOTAL_HEIGHT_MM) if is_last else 0)
+    total_height = _mm(TOTAL_HEIGHT_MM) * TOTAL_ROWS if is_last else 0
+    table_bottom = body_bottom + total_height
 
     columns = _column_bounds(left, right)
     column_widths = [columns[index + 1] - columns[index] - _mm(CELL_PADDING_MM)
                      for index in range(len(COLUMNS))]
 
-    for x in columns:
-        draw.line([(x, table_top), (x, table_bottom)],
+    for index, x in enumerate(columns):
+        # The side borders run the whole table; the inner rules stop under the
+        # item rows, so the total rows read across the columns.
+        border = index in (0, len(columns) - 1)
+        bottom = table_bottom if border else body_bottom
+        draw.line([(x, table_top), (x, bottom)],
                   fill=INK, width=_rule(HORIZONTAL_DPI))
     for index in range(ITEM_ROWS + 1):
         y = head_bottom + _mm(ITEM_HEIGHT_MM) * index
@@ -324,12 +357,12 @@ def _draw_band(order, rows, is_last, page, page_count):
                     + _mm(ITEM_HEIGHT_MM) // 2)
         values = (
             str(row['sequence']),
-            row['product_code'],
             row['product_name'],
             row['material_specification'],
             row['uom'],
             row['quantity'],
-            row['delivery_date'],
+            row['unit_price'],
+            row['amount'],
             row['note'],
         )
         for index, value in enumerate(values):
@@ -338,26 +371,44 @@ def _draw_band(order, rows, is_last, page, page_count):
                        column_widths[index], item_lines)
 
     if is_last:
-        total_y = body_bottom + _mm(TOTAL_HEIGHT_MM) // 2
-        draw.text((left + _mm(CELL_PADDING_MM), total_y),
-                  translate('Total Quantity'), font=body, fill=INK,
+        # Two total rows: the quantity, then the amount with its capitals, read
+        # from the total of the order rather than from the band.
+        totals = order._sn_get_dot_matrix_totals()
+        quantity_y = body_bottom + _mm(TOTAL_HEIGHT_MM) // 2
+        amount_y = quantity_y + _mm(TOTAL_HEIGHT_MM)
+        draw.line([(left, body_bottom + _mm(TOTAL_HEIGHT_MM)),
+                   (right, body_bottom + _mm(TOTAL_HEIGHT_MM))],
+                  fill=INK, width=_rule(VERTICAL_DPI))
+        draw.text((left + _mm(CELL_PADDING_MM), quantity_y),
+                  translate('Quantity Total'), font=body, fill=INK,
                   anchor='lm')
-        quantity_left, quantity_right = (
-            columns[index] for index in TOTAL_QUANTITY_COLUMN)
-        draw.text((quantity_right - _mm(CELL_PADDING_MM), total_y),
-                  _clean(order._sn_get_dot_matrix_total()),
-                  font=body, fill=INK, anchor='rm')
+        draw.text(
+            (columns[TOTAL_QUANTITY_COLUMN + 1] - _mm(CELL_PADDING_MM),
+             quantity_y), _clean(totals['quantity']),
+            font=body, fill=INK, anchor='rm')
+        draw.text((left + _mm(CELL_PADDING_MM), amount_y),
+                  translate('Total Amount'), font=body, fill=INK, anchor='lm')
+        draw.text(
+            (columns[TOTAL_WORDS_COLUMN] + _mm(CELL_PADDING_MM), amount_y),
+            _clean(totals['amount_in_words']), font=small, fill=INK,
+            anchor='lm')
+        draw.text(
+            (columns[TOTAL_AMOUNT_COLUMN + 1] - _mm(CELL_PADDING_MM),
+             amount_y), _clean(totals['amount']),
+            font=body, fill=INK, anchor='rm')
 
     sign_y = _mm(SIGNATURE_MM)
-    prepared_left, salesperson_left = (
+    prepared_left, page_left, customer_left = (
         _mm(value) for value in SIGNATURE_COLUMNS_MM)
     draw.text((prepared_left, sign_y),
               '%s%s' % (translate('Prepared by:'),
                         _clean(order.create_uid.name)),
               font=body, fill=INK, anchor='la')
-    draw.text((salesperson_left, sign_y),
-              '%s%s' % (translate('Salesperson:'),
-                        _clean(order.user_id.name)),
+    draw.text((page_left, sign_y),
+              '%s %d / %d' % (translate('Page'), page, page_count),
+              font=body, fill=INK, anchor='la')
+    draw.text((customer_left, sign_y),
+              translate('Customer Signature:'),
               font=body, fill=INK, anchor='la')
 
     return image

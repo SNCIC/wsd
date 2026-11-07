@@ -33,6 +33,7 @@
                 <field name="sample_record_mode"/>
                 <field name="decimal_places"/>
                 <field name="expected_value"/>
+                <field name="tolerance" optional="hide"/>
                 <field name="unit"/>
                 <field name="active"/>
                 <field name="company_id" groups="base.group_multi_company"/>
@@ -62,6 +63,7 @@
                             <field name="sample_record_mode"/>
                             <field name="decimal_places" invisible="item_type != 'numeric'"/>
                             <field name="expected_value"/>
+                            <field name="tolerance" invisible="item_type != 'numeric'"/>
                             <field name="selection_values" invisible="item_type != 'selection'"/>
                             <field name="unit"/>
                             <field name="company_id" groups="base.group_multi_company"/>
@@ -145,6 +147,7 @@
                                     <field name="nominal_value" invisible="item_type != 'numeric'"/>
                                     <field name="sample_record_mode"/>
                                     <field name="expected_value"/>
+                                    <field name="tolerance" invisible="item_type != 'numeric'"/>
                                     <field name="selection_values" invisible="item_type != 'selection'"/>
                                     <field name="unit"/>
                                 </list>
@@ -258,6 +261,7 @@
                                     <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                     <field name="sample_record_mode"/>
                                     <field name="expected_value"/>
+                                    <field name="tolerance" invisible="item_type != 'numeric'"/>
                                     <field name="selection_values" invisible="item_type != 'selection'"/>
                                     <field name="unit"/>
                                 </list>
@@ -277,6 +281,7 @@
                                                 <field name="upper_limit" invisible="item_type != 'numeric'"/>
                                                 <field name="decimal_places" invisible="item_type != 'numeric'"/>
                                                 <field name="expected_value"/>
+                                                <field name="tolerance" invisible="item_type != 'numeric'"/>
                                                 <field name="selection_values" invisible="item_type != 'selection'"/>
                                                 <field name="unit"/>
                                             </group>

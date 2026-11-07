@@ -29,3 +29,5 @@ from . import mrp_bom_line_qty
 from . import stock_move_line
 from . import serial_identity_code_seed
 from . import substitute_rule
+from . import stock_picking_prn
+from . import mrp_production_prn

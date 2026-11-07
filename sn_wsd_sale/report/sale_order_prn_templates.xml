@@ -134,7 +134,7 @@
                                 <span t-else="" style="font-size: 18px; font-weight: 700;"
                                       t-out="company.name"/>
                             </td>
-                            <td><div class="sheet-title">Sales Order</div></td>
+                            <td><div class="sheet-title">Sales Order Sheet</div></td>
                             <td style="width: 26%;"/>
                         </tr>
                     </table>
@@ -165,24 +165,24 @@
                         <thead>
                             <tr class="center">
                                 <th style="width: 5%;">No.</th>
-                                <th style="width: 16%;">Product Code</th>
                                 <th style="width: 20%;">Product Name</th>
-                                <th style="width: 22%;">Specification</th>
+                                <th style="width: 24%;">Specification</th>
                                 <th style="width: 6%;">Unit</th>
                                 <th style="width: 8%;">Quantity</th>
-                                <th style="width: 13%;">Delivery Date</th>
-                                <th style="width: 10%;">Remark</th>
+                                <th style="width: 10%;">Unit Price</th>
+                                <th style="width: 13%;">Amount</th>
+                                <th style="width: 14%;">Remark</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr t-foreach="band" t-as="row">
                                 <td class="center"><t t-out="row['sequence']"/></td>
-                                <td><t t-out="row['product_code']"/></td>
                                 <td><t t-out="row['product_name']"/></td>
                                 <td><t t-out="row['material_specification']"/></td>
                                 <td class="center"><t t-out="row['uom']"/></td>
                                 <td class="center"><t t-out="row['quantity']"/></td>
-                                <td class="center"><t t-out="row['delivery_date']"/></td>
+                                <td class="right"><t t-out="row['unit_price']"/></td>
+                                <td class="right"><t t-out="row['amount']"/></td>
                                 <td><t t-out="row['note']"/></td>
                             </tr>
                             <!-- The paper form keeps room to add the materials
@@ -202,21 +202,26 @@
                                  the form: it is the total of the order, not the
                                  subtotal of the band. -->
                             <tr t-if="band_last" class="center">
-                                <td colspan="5" class="total-label">Total Quantity</td>
-                                <td class="center"><t t-out="o._sn_get_dot_matrix_total()"/></td>
-                                <td colspan="2">&#160;</td>
+                                <td colspan="4" class="total-label">Total Quantity</td>
+                                <td class="center"><t t-out="o._sn_get_dot_matrix_totals()['quantity']"/></td>
+                                <td colspan="3">&#160;</td>
+                            </tr>
+                            <tr t-if="band_last" class="center">
+                                <td colspan="2" class="total-label">Total Amount</td>
+                                <td colspan="4"><t t-out="o._sn_get_dot_matrix_totals()['amount_in_words']"/></td>
+                                <td class="right"><t t-out="o._sn_get_dot_matrix_totals()['amount']"/></td>
+                                <td>&#160;</td>
                             </tr>
                         </tbody>
                     </table>
 
                     <table class="foot">
                         <tr>
-                            <td style="width: 60%;">Prepared by:
+                            <td style="width: 35%;">Prepared by:
                                 <span t-field="o.create_uid.name"/>
                             </td>
-                            <td style="width: 40%;">Salesperson:
-                                <span t-field="o.user_id.name"/>
-                            </td>
+                            <td style="width: 30%;">Page <t t-out="band_index + 1"/> / <t t-out="len(bands)"/></td>
+                            <td style="width: 35%;">Customer Signature:</td>
                         </tr>
                     </table>
                 </div>

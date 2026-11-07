@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="info_type_code" string="Info Type Code"/>
+                <field name="operation_ids" widget="many2many_tags" optional="show"/>
                 <field name="eip_field"/>
                 <field name="source_kind"/>
                 <field name="source_key"/>
@@ -25,6 +26,7 @@
                     <group>
                         <group>
                             <field name="info_type_code" string="Info Type Code"/>
+                            <field name="operation_ids" widget="many2many_tags"/>
                             <field name="eip_field"/>
                         </group>
                         <group>

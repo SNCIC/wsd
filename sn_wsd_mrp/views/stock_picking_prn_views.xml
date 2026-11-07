@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Material issue and return sheets of the 135 mm continuous form: the
+         buttons of the transfer hand the ESC/P stream to SNERP, which sends it
+         unchanged to the dot-matrix RAW queue. The detailed issue sheet is the
+         same picking printed with the demand quantity and the product line. -->
+    <record id="view_stock_picking_form_mes_material_prn" model="ir.ui.view">
+        <field name="name">stock.picking.form.mes.material.prn</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_mes_issue_prn"
+                        type="object"
+                        string="Print Material Issue"
+                        class="btn-secondary"
+                        invisible="not sn_prn_mes_issue or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+                <button name="action_print_mes_issue_detail_prn"
+                        type="object"
+                        string="Print Material Issue (Detail)"
+                        class="btn-secondary"
+                        invisible="not sn_prn_mes_issue or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+                <button name="action_print_mes_return_prn"
+                        type="object"
+                        string="Print Material Return"
+                        class="btn-secondary"
+                        invisible="not sn_prn_mes_return or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_prn_mes_issue" invisible="1"/>
+                <field name="sn_prn_mes_return" invisible="1"/>
+                <field name="sn_prn_reviewer_id"
+                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return"/>
+                <field name="sn_prn_note"
+                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return"/>
+                <field name="sn_prn_print_count" readonly="1" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_print_mes_issue_prn" model="ir.actions.server">
+        <field name="name">Print Material Issues (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_mes_issue_prn()</field>
+    </record>
+
+    <record id="action_print_mes_issue_detail_prn" model="ir.actions.server">
+        <field name="name">Print Material Issues (Detail, ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_mes_issue_detail_prn()</field>
+    </record>
+
+    <record id="action_print_mes_return_prn" model="ir.actions.server">
+        <field name="name">Print Material Returns (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_mes_return_prn()</field>
+    </record>
+</odoo>

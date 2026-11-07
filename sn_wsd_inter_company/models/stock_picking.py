@@ -28,10 +28,19 @@ class StockPicking(models.Model):
                 lambda p: p.picking_type_code in ('incoming', 'dropship'))
             if not receipts:
                 continue
+            ProductMap = self.env['sn.intercompany.product.map']
+            agreement = picking.sale_id.intercompany_agreement_id
             for move in picking.move_ids:
-                if move.state != 'done' or move.product_id.company_id:
+                if move.state != 'done':
                     continue
-                receipt_move = self._find_corresponding_move(move, receipts)
+                target_product = move.product_id
+                if target_product.company_id and target_product.company_id != company:
+                    target_product, _mapping, _mode = ProductMap._sn_resolve_product(
+                        target_product, company, agreement=agreement, create=False)
+                if not target_product:
+                    # The line was copied as text: there is nothing to receive.
+                    continue
+                receipt_move = self._find_corresponding_move(target_product, receipts)
                 if not receipt_move:
                     continue
                 receipt_move.write({
@@ -46,9 +55,15 @@ class StockPicking(models.Model):
         return res
 
     @api.model
-    def _find_corresponding_move(self, delivery_move, candidate_pickings):
+    def _find_corresponding_move(self, target_product, candidate_pickings):
+        """Move of the receipt carrying what the delivery sends.
+
+        The two companies hold different products for the same article, so the
+        delivery move is compared through the product of the receipt, resolved
+        beforehand for the buying company.
+        """
         for move in candidate_pickings.move_ids:
-            if move.product_id == delivery_move.product_id and not move.picked:
+            if move.product_id == target_product and not move.picked:
                 return move
         return self.env['stock.move']
 

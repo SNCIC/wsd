@@ -1,5 +1,9 @@
+from urllib.parse import urlencode
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+
+from .stock_balance_report import EXPORT_URL
 
 
 class SnWsdStockBalanceWizard(models.TransientModel):
@@ -23,7 +27,8 @@ class SnWsdStockBalanceWizard(models.TransientModel):
             if wizard.date_from and wizard.date_to and wizard.date_from > wizard.date_to:
                 raise ValidationError(self.env._('起始日期不能晚于截止日期。'))
 
-    def action_generate(self):
+    def _store_period(self):
+        """Write the selected period into the row the report view aggregates over."""
         self.ensure_one()
         self.env['sn.wsd.stock.balance.range']._current(self.env).write({
             'date_from': self.date_from,
@@ -35,6 +40,20 @@ class SnWsdStockBalanceWizard(models.TransientModel):
         self.env.flush_all()
         # 同一环境内若已经读过报表，ORM 会缓存行数据，flush 不会清它，需要显式失效。
         self.env['sn.wsd.stock.balance.report'].invalidate_model()
+
+    def action_generate_and_export(self):
+        """Store the period, then download the matching workbook."""
+        self.ensure_one()
+        self._store_period()
+        url = '%s?%s' % (EXPORT_URL, urlencode({
+            'date_from': str(self.date_from),
+            'date_to': str(self.date_to),
+        }))
+        return {'type': 'ir.actions.act_url', 'url': url, 'target': 'self'}
+
+    def action_generate(self):
+        self.ensure_one()
+        self._store_period()
         action = self.env['ir.actions.act_window']._for_xml_id(
             'sn_wsd_stock_report.action_sn_wsd_stock_balance_report'
         )

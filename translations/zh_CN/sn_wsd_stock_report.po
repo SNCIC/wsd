@@ -71,3 +71,21 @@ msgstr "最后更新人"
 #: model:ir.model.fields,field_description:sn_wsd_stock_report.field_sn_wsd_stock_balance_wizard__write_date
 msgid "Last Updated on"
 msgstr "上次更新日期"
+
+#. module: sn_wsd_stock_report
+#. odoo-python
+#: code:addons/sn_wsd_stock_report/controllers/export.py:0
+msgid "Period"
+msgstr "统计区间"
+
+#. module: sn_wsd_stock_report
+#. odoo-python
+#: code:addons/sn_wsd_stock_report/controllers/export.py:0
+msgid "Total"
+msgstr "总计"
+
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_stock_balance_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_stock_balance_wizard_form
+msgid "Export Excel"
+msgstr "导出 Excel"

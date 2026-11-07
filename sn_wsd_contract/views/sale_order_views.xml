@@ -4,7 +4,14 @@
          with, the data the paper form carries (number, signing date and
          place) and the PDFs already filed on the order. The button of the
          header only opens the preview; the PDF is produced from its Print
-         button, which runs the same report as a download. -->
+         button, which runs the same report as a download.
+
+         The three references of the customer (contract, supply order and
+         asset) are read together, so they are entered together. The customer
+         reference of the standard module is hidden rather than removed: the
+         contract number is what the customer quotes, and the same value is
+         spread over the invoice reference and the internal orders of the
+         inter-company module. -->
     <record id="view_sale_order_form_contract" model="ir.ui.view">
         <field name="name">sale.order.form.contract</field>
         <field name="model">sale.order</field>
@@ -15,6 +22,9 @@
                 <button name="action_contract_preview" type="object"
                         string="Preview Contract" invisible="state == 'cancel'"/>
             </xpath>
+            <xpath expr="//group[@name='sales_person']/field[@name='client_order_ref']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Contract" name="contract">
                     <group>
@@ -22,6 +32,8 @@
                             <field name="contract_template_id"/>
                             <field name="contract_number"
                                    placeholder="Printed as the order number when empty"/>
+                            <field name="sn_supply_order_number"/>
+                            <field name="sn_asset_number"/>
                             <field name="signing_date"/>
                             <field name="signing_location"/>
                         </group>
