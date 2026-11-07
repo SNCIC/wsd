@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_report.AssemblyLine3DScreenAction">
+        <div class="o_sn_wsd_al3d">
+            <div class="o_al3d_scene" t-ref="sceneRoot"/>
+
+            <!-- 顶栏 -->
+            <header class="o_al3d_top">
+                <div class="o_al3d_brand">
+                    <span class="o_al3d_logo"/>
+                    <span class="o_al3d_bname">LineOps</span>
+                    <span class="o_al3d_bsub">整机自动线看板</span>
+                </div>
+                <div class="o_al3d_topright">
+                    <div class="o_al3d_line">
+                        <span class="o_al3d_lineico"/>
+                        <div>
+                            <div class="o_al3d_linename" t-out="line.name or '整机自动线'"/>
+                            <div class="o_al3d_linecode">
+                                <t t-out="line.code or '-'"/>
+                                <span class="o_al3d_dot_sep">·</span>
+                                <t t-out="line.route or '整机装配工艺'"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_al3d_live">
+                        <span class="o_al3d_dot"/>
+                        <span>Live</span>
+                        <span t-out="state.countdown"/>s
+                    </div>
+                    <button type="button" class="o_al3d_btn" t-on-click="resetView">复位视角</button>
+                    <button type="button" class="o_al3d_btn" t-on-click="toggleAutoRefresh">
+                        <t t-if="state.autoRefresh">暂停刷新</t>
+                        <t t-else="">自动刷新</t>
+                    </button>
+                    <button type="button" class="o_al3d_btn o_al3d_btn_primary" t-on-click="manualRefresh">刷新</button>
+                    <div class="o_al3d_user">
+                        <span class="o_al3d_avatar" t-out="user.initial or '?'"/>
+                        <div>
+                            <div class="o_al3d_uname" t-out="user.name or '—'"/>
+                            <div class="o_al3d_urole" t-out="user.role or ''"/>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- KPI -->
+            <div class="o_al3d_kpis">
+                <t t-foreach="kpis" t-as="kpi" t-key="kpi.id">
+                    <div class="o_al3d_card o_al3d_kpi">
+                        <div t-if="kpi.donut" class="o_al3d_donut" t-att-style="donutStyle(kpi.value)">
+                            <span t-out="kpi.value + '%'"/>
+                        </div>
+                        <div t-else="" t-attf-class="o_al3d_kico o_al3d_kico_#{kpi.icon}"/>
+                        <div class="o_al3d_kbody">
+                            <div class="o_al3d_klabel" t-out="kpi.label"/>
+                            <div class="o_al3d_kvalue">
+                                <span t-if="!kpi.donut" class="o_al3d_knum" t-out="kpi.value + (kpi.unit or '')"/>
+                                <span class="o_al3d_kdelta" t-out="kpi.delta"/>
+                            </div>
+                            <div class="o_al3d_kfoot" t-out="kpi.foot"/>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- 右侧：在线产品 + 工区实时 -->
+            <aside class="o_al3d_card o_al3d_product" t-if="product">
+                <div class="o_al3d_ptitle">
+                    <span class="o_al3d_pico"/>
+                    <span>工区实时</span>
+                    <b t-out="shiftLabel"/>
+                </div>
+
+                <div class="o_al3d_snline">
+                    <div class="o_al3d_snmain">
+                        <span>在线产品</span>
+                        <b t-out="product.sn"/>
+                    </div>
+                    <div>
+                        <span>机型</span>
+                        <em t-out="product.model"/>
+                    </div>
+                    <div>
+                        <span>工单</span>
+                        <em t-out="product.workorder"/>
+                    </div>
+                </div>
+
+                <div class="o_al3d_alist">
+                    <t t-foreach="areas" t-as="a" t-key="a.code">
+                        <div t-att-class="areaClass(a)">
+                            <div class="o_al3d_arow1">
+                                <span class="o_al3d_acode" t-out="a.op"/>
+                                <span class="o_al3d_aname" t-out="a.name"/>
+                                <em class="o_al3d_sbadge" t-out="a.statusLabel"/>
+                            </div>
+                            <div class="o_al3d_ameta">
+                                <span t-out="a.devices + ' 台 × ' + a.slots + ' 表位'"/>
+                                <b t-out="a.active + ' / ' + a.capacity"/>
+                            </div>
+                            <div class="o_al3d_sbar">
+                                <div t-att-style="barStyle(a.occupancy)"/>
+                            </div>
+                            <div class="o_al3d_afoot">
+                                <span t-out="'良率 ' + a.yield + '% · 节拍 ' + a.cycle + 's'"/>
+                                <span t-attf-class="o_al3d_src #{['real','route'].includes(a.source) ? 'o_al3d_src_real' : ''}" t-out="a.sourceLabel"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </aside>
+
+            <!-- 底部：工区流水条 -->
+            <footer class="o_al3d_bottom">
+                <div class="o_al3d_card o_al3d_stations">
+                    <div class="o_al3d_ftitle">
+                        <span class="o_al3d_fico"/>
+                        <div>
+                            <div class="o_al3d_fname">工艺流向 · 装配 → 耐压 → 初调 → 复检1 → 复检2 → 参数设置 → 包装</div>
+                            <div class="o_al3d_fsub">
+                                <t t-out="areas.length"/> 个工区 ·
+                                <t t-out="capacityTotal"/> 个表位 ·
+                                在测 <t t-out="activeTotal"/> 台
+                            </div>
+                        </div>
+                        <div class="o_al3d_legend">
+                            <span><i class="o_al3d_lg_run"/>运行</span>
+                            <span><i class="o_al3d_lg_slow"/>瓶颈</span>
+                            <span><i class="o_al3d_lg_ng"/>异常</span>
+                            <span><i class="o_al3d_lg_idle"/>待机</span>
+                        </div>
+                    </div>
+                    <div class="o_al3d_track">
+                        <t t-foreach="areas" t-as="st" t-key="st.code">
+                            <div t-att-class="stationClass(st)">
+                                <div class="o_al3d_shead">
+                                    <span class="o_al3d_scode" t-out="st.op"/>
+                                    <em class="o_al3d_sbadge" t-out="st.statusLabel"/>
+                                </div>
+                                <div class="o_al3d_sname" t-out="st.name"/>
+                                <div class="o_al3d_smetrics">
+                                    <div>
+                                        <b t-out="st.devices"/>
+                                        <span>设备台</span>
+                                    </div>
+                                    <div>
+                                        <b t-out="st.capacity"/>
+                                        <span>表位</span>
+                                    </div>
+                                    <div>
+                                        <b t-out="st.active"/>
+                                        <span>在测</span>
+                                    </div>
+                                </div>
+                                <div class="o_al3d_sbar">
+                                    <div t-att-style="barStyle(st.occupancy)"/>
+                                </div>
+                                <div class="o_al3d_sfoot">
+                                    <span t-out="'在位 ' + st.occupancy + '%'"/>
+                                    <span t-attf-class="o_al3d_src #{['real','route'].includes(st.source) ? 'o_al3d_src_real' : ''}" t-out="st.sourceLabel"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </footer>
+
+            <div class="o_al3d_source" t-out="sourceLabel"/>
+            <div class="o_al3d_mask" t-if="state.loading">数据加载中…</div>
+            <div class="o_al3d_fault" t-if="state.error" t-out="state.error"/>
+        </div>
+    </t>
+
+</templates>

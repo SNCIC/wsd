@@ -1,3 +1,9 @@
+/* =============================================
+   MES Big Screen — 科技蓝色大屏 (Tech Blue)
+   配色：深蓝底 + 亮青主调（#00E5FF / #4D9FFF）
+   参考：GoViewPro 科技蓝色大屏_模板
+   ============================================= */
+
 .o_sn_wsd_mes_big_screen_fullscreen {
     overflow: hidden;
 
@@ -26,21 +32,23 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     height: 100vh;
     min-height: 0;
     overflow: hidden;
-    color: #c9f7ff;
-    background: #020735;
+    color: #e0f2ff;
+    background: #020a1a;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
 
     .o_control_panel {
         display: none;
     }
 
     .o_sn_wsd_big_screen {
+        position: relative;
         height: 100vh;
         min-height: 0;
         overflow: hidden;
         background:
-            radial-gradient(circle at 50% 0%, rgba(0, 126, 255, 0.35), transparent 28%),
-            radial-gradient(circle at 18% 18%, rgba(0, 255, 210, 0.14), transparent 24%),
-            linear-gradient(180deg, #05105f 0%, #030742 45%, #020527 100%);
+            radial-gradient(ellipse at 50% 0%, rgba(0, 100, 200, 0.22), transparent 55%),
+            radial-gradient(ellipse at 50% 100%, rgba(0, 80, 180, 0.14), transparent 55%),
+            linear-gradient(180deg, #021530 0%, #031029 45%, #010a18 100%);
     }
 
     .o_screen_shell {
@@ -50,37 +58,40 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         min-width: 1280px;
         height: 100vh;
         min-height: 0;
-        padding: 4px 10px 10px;
+        padding: 6px 14px 14px;
         box-sizing: border-box;
-        background-image:
-            linear-gradient(rgba(0, 194, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 194, 255, 0.05) 1px, transparent 1px);
-        background-size: 72px 72px;
+        background-image: radial-gradient(circle, rgba(0, 200, 255, 0.08) 1px, transparent 1.5px);
+        background-size: 26px 26px;
     }
 
-    .o_screen_shell::before,
-    .o_screen_shell::after {
+    .o_screen_shell::before {
         content: "";
         position: absolute;
         pointer-events: none;
         inset: 0;
-        border: 2px solid rgba(0, 108, 255, 0.65);
-        box-shadow: inset 0 0 24px rgba(0, 126, 255, 0.35);
-    }
-
-    .o_screen_shell::after {
-        border-color: rgba(0, 245, 255, 0.16);
-        inset: 52px 10px 10px;
+        border: 1px solid rgba(0, 180, 230, 0.22);
     }
 
     .o_screen_header {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         display: grid;
-        grid-template-columns: 1fr 460px 1fr;
-        align-items: start;
-        height: 82px;
-        gap: 16px;
+        grid-template-columns: 1fr 540px 1fr;
+        align-items: center;
+        height: 78px;
+        gap: 18px;
+    }
+
+    .o_header_wing {
+        height: 6px;
+        background: linear-gradient(90deg, transparent, #00e5ff 30%, #4d9fff 70%, transparent);
+        opacity: 0.75;
+        border: none;
+        clip-path: none;
+    }
+
+    .o_header_wing span {
+        display: none;
     }
 
     .o_header_title {
@@ -92,62 +103,45 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     .o_header_title_inner {
         position: relative;
         z-index: 2;
-        min-width: 420px;
-        padding: 10px 40px 12px;
+        padding: 8px 40px 18px;
         text-align: center;
-        background: linear-gradient(180deg, rgba(26, 106, 255, 0.92), rgba(4, 29, 130, 0.78));
-        border: 1px solid rgba(0, 220, 255, 0.75);
-        clip-path: polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0 50%);
-        box-shadow: 0 0 26px rgba(0, 136, 255, 0.65), inset 0 0 18px rgba(0, 238, 255, 0.25);
     }
 
     .o_header_title h1 {
         margin: 0;
-        letter-spacing: 5px;
+        letter-spacing: 6px;
         font-size: 30px;
         line-height: 1;
-        font-weight: 800;
+        font-weight: 700;
         color: #ffffff;
-        text-shadow: 0 0 16px rgba(0, 234, 255, 0.9);
+        text-shadow: 0 0 14px rgba(0, 200, 255, 0.5);
+    }
+
+    .o_header_title_inner::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 4px;
+        transform: translateX(-50%);
+        width: 75%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #00e5ff 25%, #4d9fff 75%, transparent);
+        box-shadow: 0 0 10px #00e5ff;
     }
 
     .o_header_date {
         display: none;
     }
 
-    .o_header_wing {
-        height: 58px;
-        border-top: 4px solid rgba(0, 102, 255, 0.85);
-        border-bottom: 2px solid rgba(0, 214, 255, 0.5);
-        background:
-            repeating-linear-gradient(70deg, transparent 0, transparent 8px, rgba(0, 132, 255, 0.36) 9px, rgba(0, 132, 255, 0.36) 12px),
-            linear-gradient(180deg, rgba(5, 45, 164, 0.6), rgba(5, 18, 95, 0.1));
-        clip-path: polygon(0 0, 100% 0, 88% 100%, 18% 100%, 12% 76%, 0 76%);
-    }
-
-    .o_header_wing_right {
-        transform: scaleX(-1);
-    }
-
-    .o_header_wing span {
-        display: inline-block;
-        width: 9px;
-        height: 9px;
-        margin: 22px 6px 0;
-        border-radius: 50%;
-        background: #00fff0;
-        box-shadow: 0 0 10px #00fff0;
-    }
-
     .o_screen_grid {
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: minmax(0, 1.08fr) minmax(0, 2fr) minmax(0, 1.02fr);
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 2fr) minmax(0, 1fr);
         gap: 14px;
         width: 100%;
         min-width: 0;
-        height: calc(100vh - 104px);
+        height: calc(100vh - 100px);
         min-height: 0;
     }
 
@@ -159,11 +153,11 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     }
 
     .o_screen_column_left {
-        grid-template-rows: 1.08fr 0.92fr;
+        grid-template-rows: 1.1fr 0.9fr;
     }
 
     .o_screen_column_center {
-        grid-template-rows: 1.35fr 0.65fr;
+        grid-template-rows: 1.15fr 0.85fr;
     }
 
     .o_screen_column_right {
@@ -175,13 +169,9 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     .o_cylinder_card {
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(0, 184, 255, 0.62);
-        background:
-            linear-gradient(180deg, rgba(3, 18, 94, 0.9), rgba(2, 9, 54, 0.84)),
-            radial-gradient(circle at 50% 0%, rgba(0, 218, 255, 0.12), transparent 42%);
-        box-shadow:
-            0 0 18px rgba(0, 116, 255, 0.3),
-            inset 0 0 22px rgba(0, 174, 255, 0.14);
+        background: linear-gradient(180deg, rgba(8, 28, 60, 0.92), rgba(4, 16, 40, 0.92));
+        border: 1px solid rgba(0, 180, 230, 0.28);
+        box-shadow: 0 0 10px rgba(0, 100, 200, 0.12);
     }
 
     .o_tech_panel::before,
@@ -190,10 +180,7 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         position: absolute;
         inset: 0;
         pointer-events: none;
-        border: 1px solid rgba(0, 246, 255, 0.15);
-        background:
-            linear-gradient(90deg, rgba(0, 234, 255, 0.28), transparent 18%, transparent 82%, rgba(0, 234, 255, 0.28)) top / 100% 1px no-repeat,
-            linear-gradient(90deg, rgba(0, 234, 255, 0.22), transparent 26%, transparent 74%, rgba(0, 234, 255, 0.22)) bottom / 100% 1px no-repeat;
+        background: linear-gradient(180deg, rgba(0, 200, 255, 0.04), transparent 30%);
     }
 
     .o_panel_heading {
@@ -202,74 +189,94 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 34px;
-        padding: 10px 14px 6px;
-        color: #e9fdff;
-        font-size: 14px;
-        font-weight: 700;
+        min-height: 36px;
+        padding: 10px 14px 8px 34px;
+        color: #e5f7ff;
+        font-size: 15px;
+        font-weight: 600;
+        background: linear-gradient(90deg, rgba(0, 150, 200, 0.18), transparent 65%);
+        border-bottom: 1px solid rgba(0, 180, 230, 0.22);
+    }
+
+    .o_panel_heading::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 6px;
+        bottom: 6px;
+        width: 24px;
+        background: linear-gradient(180deg, #00e5ff, #4d9fff);
+        clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
+        box-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
     }
 
     .o_panel_heading small {
-        color: #77cfff;
-        font-size: 10px;
-        font-weight: 500;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+        color: #7fb8d9;
+        font-size: 11px;
+        font-weight: 400;
     }
 
     .o_heading_mark {
-        width: 12px;
-        height: 18px;
-        margin-right: 8px;
-        border-left: 3px solid #00f6ff;
-        border-right: 3px solid #006fff;
-        box-shadow: 0 0 10px rgba(0, 246, 255, 0.8);
+        display: none;
     }
 
     .o_ring_metric_grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 10px;
-        padding: 12px 14px;
+        padding: 14px;
     }
 
     .o_ring_metric {
         display: grid;
         justify-items: center;
         gap: 6px;
-        color: #93ecff;
+        color: #9cd3ef;
         font-size: 11px;
     }
 
     .o_ring {
+        position: relative;
         width: 64px;
         height: 64px;
         display: grid;
         place-items: center;
         border-radius: 50%;
         color: #ffffff;
-        font-size: 11px;
-        font-weight: 800;
+        font-size: 15px;
+        font-weight: 700;
         background:
-            radial-gradient(circle, rgba(0, 16, 80, 0.9) 45%, transparent 47%),
-            conic-gradient(from 0deg, #00f6ff, transparent 28%, #0a6cff 62%, #00f6ff 100%);
-        box-shadow: 0 0 16px rgba(0, 214, 255, 0.55);
+            radial-gradient(circle, rgba(2, 10, 26, 0.95) 50%, transparent 52%),
+            conic-gradient(from 0deg, #00e5ff, #4d9fff, #00e5ff);
+        box-shadow: 0 0 6px rgba(0, 200, 255, 0.4);
     }
 
-    .o_ring_green {
-        background:
-            radial-gradient(circle, rgba(0, 16, 80, 0.9) 45%, transparent 47%),
-            conic-gradient(from 0deg, #00ffd0, transparent 30%, #05a871 66%, #00ffd0 100%);
+    .o_ring::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        background: rgba(2, 10, 26, 0.9);
     }
 
-    .o_ring_blue {
-        background:
-            radial-gradient(circle, rgba(0, 16, 80, 0.9) 45%, transparent 47%),
-            conic-gradient(from 0deg, #70a8ff, transparent 30%, #0a6cff 66%, #70a8ff 100%);
+    .o_ring > span {
+        position: relative;
+        z-index: 1;
     }
 
+    .o_ring_cyan,
+    .o_ring_green,
+    .o_ring_blue,
     .o_ring_amber {
         background:
-            radial-gradient(circle, rgba(0, 16, 80, 0.9) 45%, transparent 47%),
-            conic-gradient(from 0deg, #ffe66d, transparent 30%, #ff9f1c 66%, #ffe66d 100%);
+            radial-gradient(circle, rgba(2, 10, 26, 0.95) 50%, transparent 52%),
+            conic-gradient(from 0deg, #00e5ff, #4d9fff, #00e5ff);
     }
 
     .o_left_card_grid {
@@ -280,12 +287,27 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     }
 
     .o_small_metric_card {
-        min-height: 74px;
-        padding: 10px;
-        color: #9defff;
-        background: linear-gradient(180deg, rgba(0, 107, 255, 0.18), rgba(1, 18, 90, 0.72));
-        border: 1px solid rgba(0, 206, 255, 0.38);
-        box-shadow: inset 0 -18px 34px rgba(0, 121, 255, 0.12);
+        min-height: 84px;
+        padding: 9px 12px;
+        color: #9cd3ef;
+        background: linear-gradient(180deg, rgba(8, 32, 68, 0.6), rgba(4, 18, 44, 0.6));
+        border: 1px solid rgba(0, 180, 230, 0.22);
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        column-gap: 8px;
+        row-gap: 4px;
+    }
+
+    .o_small_metric_card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(180deg, #00e5ff, transparent);
     }
 
     .o_small_metric_card span,
@@ -296,25 +318,40 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         white-space: nowrap;
     }
 
+    .o_small_metric_card span {
+        grid-column: 1 / -1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+        word-break: break-all;
+        line-height: 1.35;
+        font-size: 11px;
+        color: #c5e8f8;
+        min-height: 30px;
+        align-self: start;
+    }
+
     .o_small_metric_card strong {
         display: block;
-        margin-top: 8px;
-        color: #fff36d;
-        font-size: 20px;
+        color: #00e5ff;
+        font-size: 22px;
         line-height: 1;
+        font-weight: 700;
+        align-self: end;
     }
 
     .o_small_metric_card em {
-        float: right;
+        align-self: end;
         min-width: 42px;
         padding: 3px 6px;
-        border-radius: 20px;
-        color: #d8fbff;
+        border-radius: 10px;
+        color: #e0f2ff;
         font-style: normal;
         font-size: 10px;
         text-align: center;
-        background: rgba(0, 104, 255, 0.36);
-        border: 1px solid rgba(0, 225, 255, 0.34);
+        background: rgba(0, 180, 230, 0.2);
+        border: 1px solid rgba(0, 200, 255, 0.35);
     }
 
     .o_hex_summary {
@@ -322,33 +359,35 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         grid-template-columns: 1fr 1.15fr 1fr;
         align-items: center;
         gap: 8px;
-        padding: 18px 16px 12px;
+        padding: 16px 14px 10px;
     }
 
     .o_hex_core,
     .o_hex_side {
-        min-height: 118px;
+        min-height: 108px;
         display: grid;
         place-items: center;
         text-align: center;
-        background: linear-gradient(180deg, rgba(0, 127, 255, 0.26), rgba(1, 12, 72, 0.76));
-        border: 1px solid rgba(0, 229, 255, 0.42);
+        background: linear-gradient(180deg, rgba(8, 32, 68, 0.7), rgba(4, 18, 44, 0.7));
+        border: 1px solid rgba(0, 200, 255, 0.35);
         clip-path: polygon(50% 0, 94% 24%, 94% 76%, 50% 100%, 6% 76%, 6% 24%);
     }
 
     .o_hex_core strong {
-        color: #fff36d;
-        font-size: 28px;
+        color: #00e5ff;
+        font-size: 26px;
+        font-weight: 700;
     }
 
     .o_hex_side strong {
-        color: #29f5ff;
-        font-size: 24px;
+        color: #00e5ff;
+        font-size: 22px;
+        font-weight: 700;
     }
 
     .o_hex_core span,
     .o_hex_side span {
-        color: #e9fdff;
+        color: #9cd3ef;
         font-size: 11px;
     }
 
@@ -370,36 +409,35 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         grid-template-columns: 1fr auto;
         gap: 3px 8px;
         padding: 8px 10px;
-        border: 1px solid rgba(0, 191, 255, 0.32);
-        background: rgba(0, 35, 128, 0.34);
+        border: 1px solid rgba(0, 180, 230, 0.25);
+        background: rgba(4, 20, 48, 0.6);
     }
 
     .o_status_chip strong {
-        color: #28f5ff;
+        color: #00e5ff;
     }
 
     .o_status_chip span {
         grid-column: 1 / -1;
-        color: #72bfee;
+        color: #7fb8d9;
         font-size: 10px;
     }
 
     .o_center_frame {
-        padding: 12px 22px 18px;
-        border-radius: 0 0 26px 26px;
+        padding: 10px 22px 16px;
     }
 
     .o_center_top_bar {
         position: relative;
         z-index: 2;
-        height: 46px;
+        height: 38px;
         display: grid;
         grid-template-columns: 1fr 220px 1fr;
         align-items: center;
         gap: 12px;
-        color: #00eaff;
+        color: #00e5ff;
         text-align: center;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .o_center_top_bar strong {
@@ -407,117 +445,202 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         z-index: 2;
         display: grid;
         place-items: center;
-        min-height: 30px;
-        color: #20f4ff;
-        background: linear-gradient(90deg, rgba(1, 18, 86, 0), rgba(1, 20, 94, 0.92) 24%, rgba(1, 20, 94, 0.92) 76%, rgba(1, 18, 86, 0));
-        text-shadow: 0 0 14px rgba(0, 238, 255, 0.75);
+        min-height: 28px;
+        color: #ffffff;
+        font-weight: 600;
+        background: linear-gradient(90deg, transparent, rgba(0, 150, 200, 0.2) 24%, rgba(0, 150, 200, 0.2) 76%, transparent);
     }
 
     .o_center_top_bar span {
-        height: 18px;
-        border-top: 2px solid rgba(0, 229, 255, 0.6);
-        border-bottom: 1px solid rgba(0, 116, 255, 0.55);
-        background: repeating-linear-gradient(110deg, rgba(0, 108, 255, 0.4) 0 6px, transparent 6px 13px);
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+        border: none;
     }
 
     .o_center_body {
         display: grid;
-        grid-template-columns: 140px 1fr 140px;
+        grid-template-columns: 130px 1fr 130px;
         align-items: center;
         gap: 18px;
-        min-height: 320px;
+        min-height: 270px;
     }
 
     .o_side_counter_list {
         display: grid;
-        gap: 16px;
+        gap: 14px;
     }
 
     .o_side_counter {
-        min-height: 56px;
+        min-height: 54px;
         padding: 8px 10px;
         text-align: center;
         color: #ffffff;
-        background: linear-gradient(180deg, rgba(22, 139, 255, 0.32), rgba(3, 18, 86, 0.76));
-        border: 1px solid rgba(87, 188, 255, 0.62);
-        box-shadow: inset 0 0 18px rgba(88, 176, 255, 0.18), 0 0 14px rgba(0, 118, 255, 0.2);
+        background: linear-gradient(180deg, rgba(8, 32, 68, 0.7), rgba(4, 18, 44, 0.7));
+        border: 1px solid rgba(0, 180, 230, 0.35);
     }
 
     .o_side_counter strong {
         display: block;
-        color: #ffffff;
+        color: #00e5ff;
         font-size: 20px;
         line-height: 1;
+        font-weight: 700;
     }
 
     .o_side_counter span {
         display: block;
         margin-top: 6px;
-        color: #a8eaff;
+        color: #9cd3ef;
         font-size: 10px;
     }
 
     .o_gauge_block {
         display: grid;
         justify-items: center;
-        gap: 16px;
+        gap: 10px;
     }
 
-    .o_gauge {
-        --o-gauge-rate: 50;
+    /* ===== 中央 3D 陀螺仪全息环（今日完成任务） ===== */
+
+    .o_gauge3d {
         position: relative;
         width: 360px;
-        height: 190px;
-        overflow: hidden;
+        height: 250px;
+        display: grid;
+        place-items: center;
+        perspective: 850px;
     }
 
-    .o_gauge::before {
-        content: "";
+    .o_g3d_base {
         position: absolute;
-        inset: 0 0 auto;
-        height: 360px;
-        border-radius: 360px 360px 0 0;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        height: 78px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.42) 0%, rgba(0, 229, 255, 0.12) 45%, transparent 70%);
+        box-shadow: 0 0 26px rgba(0, 200, 255, 0.35);
+    }
+
+    .o_g3d_pillar {
+        position: absolute;
+        bottom: 24px;
+        width: 3px;
+        height: 138px;
+        transform-origin: bottom center;
+        background: linear-gradient(180deg, rgba(0, 229, 255, 0.85), rgba(0, 229, 255, 0.05));
+        box-shadow: 0 0 8px rgba(0, 229, 255, 0.55);
+    }
+
+    .o_g3d_pillar_l {
+        left: 98px;
+        transform: rotate(-14deg);
+    }
+
+    .o_g3d_pillar_r {
+        right: 98px;
+        transform: rotate(14deg);
+    }
+
+    .o_g3d_ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        border: 2px solid;
+        will-change: transform;
+    }
+
+    .o_g3d_ring_a {
+        width: 320px;
+        height: 320px;
+        margin: -160px 0 0 -160px;
+        border-color: rgba(0, 229, 255, 0.6);
+        border-style: dashed;
+        animation: o_g3d_spin_a 12s linear infinite;
+    }
+
+    .o_g3d_ring_b {
+        width: 256px;
+        height: 256px;
+        margin: -128px 0 0 -128px;
+        border: 3px solid rgba(77, 159, 255, 0.14);
+        border-top-color: #4d9fff;
+        border-right-color: rgba(77, 159, 255, 0.65);
+        animation: o_g3d_spin_b 7s linear infinite;
+    }
+
+    .o_g3d_ring_c {
+        width: 208px;
+        height: 208px;
+        margin: -104px 0 0 -104px;
+        border-color: rgba(0, 229, 255, 0.45);
+        border-style: dotted;
+        animation: o_g3d_spin_c 18s linear infinite;
+    }
+
+    @keyframes o_g3d_spin_a {
+        from { transform: rotateX(74deg) rotateZ(0deg); }
+        to { transform: rotateX(74deg) rotateZ(360deg); }
+    }
+
+    @keyframes o_g3d_spin_b {
+        from { transform: rotateX(70deg) rotateZ(360deg); }
+        to { transform: rotateX(70deg) rotateZ(0deg); }
+    }
+
+    @keyframes o_g3d_spin_c {
+        from { transform: rotateX(78deg) rotateZ(0deg); }
+        to { transform: rotateX(78deg) rotateZ(360deg); }
+    }
+
+    .o_g3d_disc {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 240px;
+        height: 240px;
+        margin: -120px 0 0 -120px;
+        border-radius: 50%;
+        transform: rotateX(74deg);
         background:
-            radial-gradient(circle at 50% 100%, #050940 0 41%, transparent 42%),
-            conic-gradient(from 270deg at 50% 100%, #34f8ff 0 calc(var(--o-gauge-rate) * 0.5%), rgba(255, 107, 107, 0.58) calc(var(--o-gauge-rate) * 0.5%) 50%, transparent 50% 100%);
-        box-shadow: 0 0 34px rgba(0, 210, 255, 0.42);
+            radial-gradient(circle, rgba(3, 16, 41, 0.96) 0 37%, transparent 38%),
+            conic-gradient(from 0deg,
+                #00e5ff 0 calc(var(--o-gauge-rate, 0) * 1%),
+                rgba(8, 40, 80, 0.55) calc(var(--o-gauge-rate, 0) * 1%) 100%);
+        box-shadow: 0 0 26px rgba(0, 229, 255, 0.45);
     }
 
-    .o_gauge_scale {
-        position: absolute;
-        inset: 16px 28px auto;
-        height: 300px;
-        border-radius: 300px 300px 0 0;
-        background: repeating-conic-gradient(from 270deg at 50% 100%, rgba(255, 255, 255, 0.58) 0 1.2deg, transparent 1.2deg 4deg);
-        mask: radial-gradient(circle at 50% 100%, transparent 0 53%, #000 54% 61%, transparent 62%);
-    }
-
-    .o_gauge_value {
-        position: absolute;
-        inset: 72px 0 auto;
+    .o_gauge3d .o_gauge_value {
+        position: relative;
+        z-index: 3;
         display: grid;
         justify-items: center;
-        gap: 4px;
+        gap: 2px;
         color: #ffffff;
+        text-shadow: 0 2px 12px rgba(0, 40, 90, 0.9);
     }
 
     .o_gauge_value strong {
-        font-size: 42px;
+        font-size: 46px;
         line-height: 1;
-        font-weight: 400;
-        text-shadow: 0 0 18px rgba(0, 238, 255, 0.85);
+        font-weight: 700;
+        color: #00e5ff;
+        text-shadow: 0 0 16px rgba(0, 220, 255, 0.75), 0 4px 10px rgba(0, 30, 70, 0.8);
     }
 
     .o_gauge_value span {
-        font-size: 20px;
+        font-size: 14px;
+        color: #c9e8f8;
     }
 
     .o_center_lines {
         width: 100%;
-        max-width: 520px;
+        max-width: 500px;
         display: grid;
-        gap: 8px;
-        color: #91dcff;
+        gap: 6px;
+        color: #9cd3ef;
         font-size: 11px;
     }
 
@@ -526,17 +649,17 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         grid-template-columns: 1fr auto 1fr;
         gap: 10px;
         padding: 6px 10px;
-        background: linear-gradient(90deg, transparent, rgba(0, 111, 255, 0.28), transparent);
-        border-top: 1px solid rgba(0, 218, 255, 0.2);
-        border-bottom: 1px solid rgba(0, 218, 255, 0.12);
+        background: linear-gradient(90deg, transparent, rgba(0, 120, 180, 0.15), transparent);
+        border-top: 1px solid rgba(0, 180, 230, 0.15);
+        border-bottom: 1px solid rgba(0, 180, 230, 0.1);
     }
 
     .o_center_lines strong {
-        color: #29f5ff;
+        color: #00e5ff;
     }
 
     .o_center_lines em {
-        color: #72bfee;
+        color: #7fb8d9;
         font-style: normal;
         text-align: right;
     }
@@ -544,29 +667,29 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     .o_flip_total {
         display: grid;
         justify-items: center;
-        gap: 8px;
-        color: #e9fdff;
-        font-size: 14px;
+        gap: 6px;
+        color: #e0f2ff;
+        font-size: 13px;
     }
 
     .o_flip_digits {
         display: flex;
-        gap: 7px;
+        gap: 6px;
     }
 
     .o_flip_digits b {
-        width: 45px;
-        height: 50px;
+        width: 42px;
+        height: 48px;
         display: grid;
         place-items: center;
-        color: #7dffff;
-        font-size: 36px;
+        color: #00e5ff;
+        font-size: 32px;
         line-height: 1;
-        font-weight: 400;
+        font-weight: 700;
         font-family: Consolas, "Courier New", monospace;
-        background: linear-gradient(180deg, rgba(0, 137, 255, 0.28), rgba(1, 17, 86, 0.9));
-        border: 1px solid rgba(0, 239, 255, 0.8);
-        box-shadow: inset 0 0 16px rgba(0, 221, 255, 0.24), 0 0 10px rgba(0, 136, 255, 0.38);
+        background: linear-gradient(180deg, rgba(0, 120, 180, 0.2), rgba(4, 18, 44, 0.85));
+        border: 1px solid rgba(0, 200, 255, 0.45);
+        box-shadow: inset 0 0 8px rgba(0, 200, 255, 0.15);
     }
 
     .o_center_chart_panel {
@@ -576,7 +699,7 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     .o_chart_stage {
         position: relative;
         height: calc(100% - 44px);
-        min-height: 210px;
+        min-height: 240px;
     }
 
     .o_top_stat_grid {
@@ -593,19 +716,20 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         text-align: center;
         border-radius: 50% / 18%;
         background:
-            radial-gradient(ellipse at 50% 0%, rgba(20, 255, 244, 0.45), transparent 38%),
-            linear-gradient(180deg, rgba(11, 181, 255, 0.45), rgba(3, 37, 142, 0.68) 58%, rgba(10, 164, 255, 0.25));
+            radial-gradient(ellipse at 50% 0%, rgba(0, 200, 255, 0.3), transparent 38%),
+            linear-gradient(180deg, rgba(8, 40, 80, 0.5), rgba(4, 18, 44, 0.7) 58%, rgba(8, 32, 68, 0.3));
     }
 
     .o_cylinder_card span {
-        color: #aaf6ff;
+        color: #9cd3ef;
         font-size: 10px;
     }
 
     .o_cylinder_card strong {
-        color: #55faff;
-        font-size: 25px;
+        color: #00e5ff;
+        font-size: 24px;
         line-height: 1;
+        font-weight: 700;
     }
 
     .o_cylinder_card em {
@@ -616,7 +740,7 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
 
     .o_bar_rank_list {
         display: grid;
-        gap: 12px;
+        gap: 10px;
         padding: 10px 14px 14px;
     }
 
@@ -629,7 +753,7 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 10px;
-        color: #c7f9ff;
+        color: #b0ddf2;
         font-size: 11px;
     }
 
@@ -639,22 +763,22 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     }
 
     .o_bar_rank_track {
-        height: 9px;
+        height: 8px;
         padding: 1px;
-        border-radius: 8px;
-        background: rgba(0, 62, 175, 0.68);
-        border: 1px solid rgba(0, 169, 255, 0.28);
+        border-radius: 4px;
+        background: rgba(4, 20, 48, 0.6);
+        border: 1px solid rgba(0, 180, 230, 0.22);
         overflow: hidden;
     }
 
     .o_bar_rank_track i {
+        position: relative;
         display: block;
         height: 100%;
         border-radius: inherit;
-        background:
-            repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 2px, transparent 2px 4px),
-            linear-gradient(90deg, #00ffd0, #0088ff);
-        box-shadow: 0 0 12px rgba(0, 255, 213, 0.75);
+        background: linear-gradient(90deg, #00e5ff, #4d9fff);
+        box-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
+        overflow: hidden;
     }
 
     .o_trace_panel {
@@ -677,27 +801,27 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     }
 
     .o_trace_table_head {
-        color: #74cfff;
+        color: #7fb8d9;
         padding: 0 8px 6px;
-        border-bottom: 1px solid rgba(0, 200, 255, 0.24);
+        border-bottom: 1px solid rgba(0, 180, 230, 0.22);
     }
 
     .o_trace_table_row {
-        min-height: 28px;
+        min-height: 26px;
         padding: 5px 8px;
-        color: #d8fbff;
-        background: rgba(0, 44, 139, 0.3);
-        border-bottom: 1px solid rgba(0, 180, 255, 0.16);
+        color: #c5e8f8;
+        background: rgba(4, 20, 48, 0.5);
+        border-bottom: 1px solid rgba(0, 180, 230, 0.12);
     }
 
     .o_is_warning {
-        border-color: rgba(255, 209, 102, 0.58);
-        color: #fff2b0;
+        border-color: rgba(255, 176, 32, 0.5);
+        color: #ffd89a;
     }
 
     .o_is_danger {
-        border-color: rgba(255, 93, 113, 0.72);
-        color: #ffd4da;
+        border-color: rgba(255, 77, 109, 0.6);
+        color: #ffb3c0;
     }
 
     .o_hidden_chart_carrier {
@@ -716,7 +840,7 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         display: flex;
         align-items: center;
         gap: 8px;
-        color: #91dcff;
+        color: #9cd3ef;
         font-size: 11px;
     }
 
@@ -729,17 +853,67 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
     .o_screen_button {
         min-height: 28px;
         padding: 3px 12px;
-        color: #c9f7ff;
-        border: 1px solid rgba(0, 218, 255, 0.55);
-        background: rgba(1, 25, 106, 0.8);
+        color: #e0f2ff;
+        border: 1px solid rgba(0, 200, 255, 0.45);
+        background: rgba(4, 20, 48, 0.8);
         border-radius: 2px;
     }
 
     .o_screen_button.o_is_active,
     .o_screen_button.o_primary {
         color: #ffffff;
-        background: linear-gradient(180deg, rgba(0, 132, 255, 0.88), rgba(1, 48, 170, 0.9));
-        box-shadow: 0 0 12px rgba(0, 174, 255, 0.48);
+        background: linear-gradient(180deg, rgba(0, 150, 200, 0.6), rgba(0, 80, 150, 0.7));
+        border-color: #00e5ff;
+        box-shadow: 0 0 8px rgba(0, 200, 255, 0.4);
+    }
+
+    /* ===== 科技感微动效（克制） ===== */
+
+    .o_gauge_value strong {
+        animation: o_sn_glow_pulse 3.2s ease-in-out infinite;
+    }
+
+    @keyframes o_sn_glow_pulse {
+        0%, 100% {
+            text-shadow: 0 0 8px rgba(0, 200, 255, 0.45);
+        }
+        50% {
+            text-shadow: 0 0 16px rgba(0, 220, 255, 0.85), 0 0 28px rgba(0, 150, 255, 0.5);
+        }
+    }
+
+    .o_flip_digits b {
+        animation: o_sn_glow_pulse 3.2s ease-in-out infinite;
+    }
+
+    .o_header_title_inner {
+        animation: o_sn_title_glow 4.5s ease-in-out infinite;
+    }
+
+    @keyframes o_sn_title_glow {
+        0%, 100% {
+            filter: drop-shadow(0 0 6px rgba(0, 200, 255, 0.4));
+        }
+        50% {
+            filter: drop-shadow(0 0 14px rgba(0, 220, 255, 0.7));
+        }
+    }
+
+    .o_bar_rank_track i::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: o_sn_shimmer 2.6s linear infinite;
+    }
+
+    @keyframes o_sn_shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+        100% {
+            transform: translateX(100%);
+        }
     }
 
     @media (max-width: 1500px) {
@@ -748,26 +922,54 @@ html .o_web_client:has(.o_sn_wsd_mes_big_screen_action) > .o_action_manager {
         }
 
         .o_screen_grid {
-            grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.9fr) minmax(0, 1.04fr);
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.85fr) minmax(0, 1.05fr);
         }
 
-        .o_gauge {
-            width: 320px;
-            height: 170px;
+        .o_gauge3d {
+            width: 300px;
+            height: 215px;
         }
 
-        .o_gauge::before {
-            height: 320px;
+        .o_g3d_ring_a {
+            width: 268px;
+            height: 268px;
+            margin: -134px 0 0 -134px;
         }
 
-        .o_gauge_value {
-            inset: 62px 0 auto;
+        .o_g3d_ring_b {
+            width: 214px;
+            height: 214px;
+            margin: -107px 0 0 -107px;
+        }
+
+        .o_g3d_ring_c {
+            width: 174px;
+            height: 174px;
+            margin: -87px 0 0 -87px;
+        }
+
+        .o_g3d_disc {
+            width: 202px;
+            height: 202px;
+            margin: -101px 0 0 -101px;
+        }
+
+        .o_g3d_pillar_l {
+            left: 78px;
+        }
+
+        .o_g3d_pillar_r {
+            right: 78px;
+        }
+
+        .o_gauge_value strong {
+            font-size: 40px;
         }
 
         .o_flip_digits b {
-            width: 38px;
-            height: 46px;
-            font-size: 31px;
+            width: 36px;
+            height: 44px;
+            font-size: 28px;
         }
     }
 }

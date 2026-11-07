@@ -97,6 +97,48 @@
                         </div>
 
                         <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card">
+                                    <div class="o_kpi_label" t-esc="labels.capacity"/>
+                                    <div class="o_kpi_value o_kpi_value-sm">
+                                        <span t-esc="number(kpis.capacity_total)"/>
+                                        <span class="o_kpi_unit"> pcs</span>
+                                    </div>
+                                    <div class="o_kpi_sub" t-esc="'理论产能(期间合计)'"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip_danger">
+                                    <div class="o_kpi_label" t-esc="labels.defectRate"/>
+                                    <div class="o_kpi_value o_kpi_value-sm">
+                                        <span t-esc="pct(kpis.defect_rate)"/>%
+                                    </div>
+                                    <div class="o_kpi_sub">
+                                        <span t-esc="labels.unqualified"/>: <span t-esc="number(kpis.unqualified_total)"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip o_kpi_chip_success">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-check-circle me-1"/>
+                                        <span t-esc="labels.qualified"/>
+                                    </div>
+                                    <div class="o_kpi_chip_main" t-esc="number(kpis.qualified_total)"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-xl-3">
+                                <div class="o_kpi_card o_kpi_chip">
+                                    <div class="o_kpi_label">
+                                        <i class="fa fa-times-circle me-1"/>
+                                        <span t-esc="labels.unqualified"/>
+                                    </div>
+                                    <div class="o_kpi_chip_main" t-esc="number(kpis.unqualified_total)"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
                             <div class="col-6 col-xl-3">
                                 <div class="o_kpi_card o_kpi_chip o_kpi_chip_success">
                                     <div class="o_kpi_label">
@@ -219,6 +261,8 @@
                                             <th class="text-end" t-esc="labels.quality"/>
                                             <th class="text-end" t-esc="labels.recordsCol"/>
                                             <th class="text-end" t-esc="labels.output"/>
+                                            <th class="text-end" t-esc="labels.capacity"/>
+                                            <th class="text-end" t-esc="labels.defectRate"/>
                                             <th class="text-end" t-esc="labels.downtime"/>
                                         </tr>
                                     </thead>
@@ -245,6 +289,8 @@
                                             <td class="text-end" t-esc="pct(item.quality) + '%'"/>
                                             <td class="text-end" t-esc="number(item.record_count)"/>
                                             <td class="text-end" t-esc="number(item.output_total)"/>
+                                            <td class="text-end" t-esc="number(item.capacity_total)"/>
+                                            <td class="text-end" t-esc="pct(item.defect_rate) + '%'"/>
                                             <td class="text-end" t-esc="number(item.downtime_total)"/>
                                         </tr>
                                     </tbody>

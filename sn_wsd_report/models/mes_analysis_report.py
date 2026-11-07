@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
 
+from .demo_data import get_mes_demo_data
+
 
 class SnWsdMesDashboardService(models.AbstractModel):
     _name = 'sn.wsd.mes.dashboard.service'
@@ -7,6 +9,12 @@ class SnWsdMesDashboardService(models.AbstractModel):
 
     @api.model
     def get_big_screen_data(self):
+        # 无 MES 工单数据时启用集中管理的占位演示数据（见 demo_data.py），
+        # 存在真实数据后自动切回真实查询。
+        if not self.env['sn.wsd.mes.order'].search_count([]):
+            data = get_mes_demo_data()
+            data['summary']['is_demo'] = True
+            return data
         today = fields.Date.context_today(self)
         now = fields.Datetime.context_timestamp(self, fields.Datetime.now())
         mes_orders = self.env['sn.wsd.mes.order'].search([], order='id desc', limit=8)

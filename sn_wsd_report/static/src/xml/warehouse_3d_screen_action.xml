@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_report.Warehouse3DScreenAction">
+        <div class="o_sn_wsd_w3d">
+            <div class="o_w3d_scene" t-ref="sceneRoot"/>
+
+            <!-- 顶栏 -->
+            <header class="o_w3d_top">
+                <div class="o_w3d_brand">
+                    <span class="o_w3d_logo"/>
+                    <span class="o_w3d_bname">FlowDock</span>
+                    <span class="o_w3d_bsub">仓库3D运输看板</span>
+                </div>
+                <div class="o_w3d_topright">
+                    <div class="o_w3d_wh">
+                        <span class="o_w3d_whico"/>
+                        <div>
+                            <div class="o_w3d_whname" t-out="warehouse.name or '仓库'"/>
+                            <div class="o_w3d_whcode" t-out="warehouse.code or '-'"/>
+                        </div>
+                    </div>
+                    <div class="o_w3d_live">
+                        <span class="o_w3d_dot"/>
+                        <span>Live</span>
+                        <span t-out="state.countdown"/>s
+                    </div>
+                    <button type="button" class="o_w3d_btn" t-on-click="resetView">复位视角</button>
+                    <button type="button" class="o_w3d_btn" t-on-click="toggleAutoRefresh">
+                        <t t-if="state.autoRefresh">暂停刷新</t>
+                        <t t-else="">自动刷新</t>
+                    </button>
+                    <button type="button" class="o_w3d_btn o_w3d_btn_primary" t-on-click="manualRefresh">刷新</button>
+                    <div class="o_w3d_user">
+                        <span class="o_w3d_avatar" t-out="user.initial or '?'"/>
+                        <div>
+                            <div class="o_w3d_uname" t-out="user.name or '—'"/>
+                            <div class="o_w3d_urole" t-out="user.role or ''"/>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- KPI -->
+            <div class="o_w3d_kpis">
+                <t t-foreach="kpis" t-as="kpi" t-key="kpi.id">
+                    <div class="o_w3d_card o_w3d_kpi">
+                        <div t-if="kpi.donut" class="o_w3d_donut" t-att-style="donutStyle(kpi.value)">
+                            <span t-out="kpi.value + '%'"/>
+                        </div>
+                        <div t-else="" t-attf-class="o_w3d_kico o_w3d_kico_#{kpi.icon}"/>
+                        <div class="o_w3d_kbody">
+                            <div class="o_w3d_klabel" t-out="kpi.label"/>
+                            <div class="o_w3d_kvalue">
+                                <span t-if="!kpi.donut" class="o_w3d_knum" t-out="kpi.value + (kpi.unit or '')"/>
+                                <span class="o_w3d_kdelta" t-out="kpi.delta"/>
+                            </div>
+                            <div class="o_w3d_kfoot" t-out="kpi.foot"/>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- 右侧单据详情 -->
+            <aside class="o_w3d_card o_w3d_order" t-if="order">
+                <div class="o_w3d_otitle">
+                    <span class="o_w3d_oico"/>
+                    <span>订单</span>
+                    <b t-out="order.code"/>
+                </div>
+                <span class="o_w3d_badge" t-out="order.stateLabel"/>
+                <div class="o_w3d_ogrid">
+                    <div class="o_w3d_ok">客户</div>
+                    <div class="o_w3d_ov" t-out="order.customer"/>
+                    <div class="o_w3d_ok">目的地</div>
+                    <div class="o_w3d_ov" t-out="order.destination"/>
+                    <div class="o_w3d_ok">优先级</div>
+                    <div t-attf-class="o_w3d_ov #{order.priorityHot ? 'o_w3d_ov_hot' : ''}" t-out="order.priority"/>
+                    <div class="o_w3d_ok">单据类型</div>
+                    <div class="o_w3d_ov" t-out="order.type"/>
+                </div>
+                <div class="o_w3d_oprog">
+                    <div class="o_w3d_optitle">
+                        <span>备货进度</span>
+                        <b t-out="order.done + ' / ' + order.total"/>
+                    </div>
+                    <div class="o_w3d_bar">
+                        <div class="o_w3d_barfill" t-att-style="'width:' + order.percent + '%'"/>
+                    </div>
+                </div>
+                <div class="o_w3d_olist">
+                    <t t-foreach="order.rows" t-as="row" t-key="row.label">
+                        <div class="o_w3d_orow">
+                            <span class="o_w3d_ri" t-out="rowIcon(row.icon)"/>
+                            <span class="o_w3d_ork" t-out="row.label"/>
+                            <span class="o_w3d_ov" t-out="row.value"/>
+                        </div>
+                    </t>
+                </div>
+            </aside>
+
+            <!-- 底部 -->
+            <footer class="o_w3d_bottom">
+                <div class="o_w3d_card o_w3d_stages">
+                    <div class="o_w3d_stitle">
+                        <span class="o_w3d_sico"/>
+                        <div>
+                            <div class="o_w3d_sname" t-out="order and order.type or '出库备货'"/>
+                            <div class="o_w3d_ssub">单据拣选、包装与发运备货</div>
+                        </div>
+                    </div>
+                    <div class="o_w3d_steps">
+                        <t t-foreach="stages" t-as="step" t-key="step.name">
+                            <div t-if="step_index" t-att-class="{ 'o_w3d_sline o_w3d_sline_fill': stages[step_index - 1].state === 'active', 'o_w3d_sline': stages[step_index - 1].state !== 'active' }"/>
+                            <div t-att-class="stageStepClass(step)">
+                                <div class="o_w3d_sdot"><span t-out="step.icon"/></div>
+                                <div class="o_w3d_sn" t-out="step.name"/>
+                                <div class="o_w3d_sub">
+                                    <div t-out="step.sub[0]"/>
+                                    <div class="o_w3d_sub2" t-out="step.sub[1]"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="o_w3d_card o_w3d_current" t-if="currentTask">
+                    <div class="o_w3d_small_title">当前任务</div>
+                    <div class="o_w3d_cbody">
+                        <div class="o_w3d_mpallet"><i/><i/><i/></div>
+                        <div class="o_w3d_cinfo">
+                            <div class="o_w3d_cname" t-out="currentTask.code"/>
+                            <div class="o_w3d_cloc" t-out="currentTask.location"/>
+                            <div class="o_w3d_csub" t-out="currentTask.sub"/>
+                            <div class="o_w3d_bar o_w3d_bar_sm">
+                                <div class="o_w3d_barfill" t-att-style="'width:' + currentTask.percent + '%'"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_w3d_card o_w3d_tasks">
+                    <div class="o_w3d_thead">
+                        <b>待办任务（<t t-out="tasks.length"/>）</b>
+                    </div>
+                    <t t-foreach="tasks" t-as="task" t-key="task.code">
+                        <div class="o_w3d_trow">
+                            <b t-out="task.code"/>
+                            <span t-out="task.location"/>
+                            <span t-out="task.pallets"/>
+                            <em t-attf-class="o_w3d_st o_w3d_st_#{task.status}" t-out="task.statusLabel"/>
+                        </div>
+                    </t>
+                    <div class="o_w3d_tempty" t-if="!tasks.length">暂无待办任务</div>
+                </div>
+            </footer>
+
+            <div class="o_w3d_source" t-out="sourceLabel"/>
+            <div class="o_w3d_mask" t-if="state.loading">数据加载中…</div>
+            <div class="o_w3d_fault" t-if="state.error" t-out="state.error"/>
+        </div>
+    </t>
+
+</templates>

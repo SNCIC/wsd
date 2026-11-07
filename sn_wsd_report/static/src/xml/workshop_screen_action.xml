@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_report.WorkshopScreenAction">
+        <Layout className="'o_sn_wsd_mes_big_screen_action o_sn_wsd_workshop_screen_action'">
+            <t t-set-slot="default">
+                <div class="o_sn_wsd_big_screen" t-att-class="state.loading ? 'o_is_loading' : ''">
+                    <div class="o_screen_shell">
+                        <header class="o_screen_header">
+                            <div class="o_header_wing o_header_wing_left">
+                                <span/>
+                                <span/>
+                                <span/>
+                            </div>
+                            <div class="o_header_title">
+                                <div class="o_header_title_inner">
+                                    <h1>车间生产展示大屏</h1>
+                                    <div class="o_ws_subtitle">
+                                        <span t-esc="summary.workshop_name || '-'"/>
+                                        <em t-if="summary.workshop_code">（<t t-esc="summary.workshop_code"/>）</em>
+                                        <span class="o_ws_divider">|</span>
+                                        <span t-esc="summary.line_names || '-'"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_header_wing o_header_wing_right">
+                                <span/>
+                                <span/>
+                                <span/>
+                            </div>
+                        </header>
+
+                        <div class="o_ws_toolbar">
+                            <div class="o_ws_toolbar_left">
+                                <label>车间</label>
+                                <select t-on-change="onWorkshopChange">
+                                    <t t-foreach="workshops" t-as="item" t-key="item.id">
+                                        <option t-att-value="item.id" t-att-selected="item.id === workshop.id">
+                                            <t t-esc="item.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                                <span class="o_ws_data_date">
+                                    数据日期 <t t-esc="summary.data_date || '-'"/>
+                                    <em t-if="summary.is_today === false">（最近生产日）</em>
+                                </span>
+                            </div>
+                            <div class="o_ws_toolbar_right">
+                                <span>刷新于 <t t-esc="(summary.refresh_time || '').slice(11)"/></span>
+                            </div>
+                        </div>
+
+                        <main class="o_screen_grid">
+                            <!-- ================= 左列：指标 / 订单进度 / 生产任务 ================= -->
+                            <section class="o_screen_column o_screen_column_left">
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>车间实时指标</span>
+                                        <small>工位 <t t-esc="summary.station_count || 0"/></small>
+                                    </div>
+                                    <div class="o_ring_metric_grid o_ring_metric_grid_compact">
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_cyan"><span><t t-esc="formatNumber(summary.line_count || 0)"/></span></div>
+                                            <label>生产线</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_green"><span><t t-esc="formatNumber(summary.station_count || 0)"/></span></div>
+                                            <label>工位数</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_blue"><span><t t-esc="formatNumber(summary.active_order_count || 0)"/></span></div>
+                                            <label>在产任务</label>
+                                        </div>
+                                        <div class="o_ring_metric">
+                                            <div class="o_ring o_ring_amber"><span><t t-esc="formatNumber(summary.wip_total || 0)"/></span></div>
+                                            <label>在制数量</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>订单完成进度</span>
+                                        <small>已产出 / 订单量</small>
+                                    </div>
+                                    <div class="o_ws_order_list">
+                                        <div t-if="!salesProgress.length" class="o_ws_empty">暂无已确认销售订单</div>
+                                        <div t-foreach="salesProgress" t-as="item" t-key="item.name"
+                                             class="o_ws_order_row o_is_running">
+                                            <div class="o_ws_order_head">
+                                                <strong><t t-esc="item.name"/></strong>
+                                                <em><t t-esc="item.state_label"/></em>
+                                            </div>
+                                            <div class="o_ws_order_meta">
+                                                <span><t t-esc="item.partner"/></span>
+                                                <span><t t-esc="formatNumber(item.produced)"/> / <t t-esc="formatNumber(item.qty)"/></span>
+                                            </div>
+                                            <div class="o_ws_order_track">
+                                                <i t-att-style="progressBarStyle(item.progress, 100)"/>
+                                            </div>
+                                            <div class="o_ws_order_foot">
+                                                <span>交付进度 <t t-esc="formatNumber(item.progress, 1)"/>%</span>
+                                                <span><t t-esc="item.date || '-'"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>生产任务</span>
+                                        <small>共 <t t-esc="summary.order_count || 0"/> 张</small>
+                                    </div>
+                                    <div class="o_ws_order_list">
+                                        <div t-if="!orders.length" class="o_ws_empty">当前车间暂无生产任务</div>
+                                        <div t-foreach="orders" t-as="item" t-key="item.name"
+                                             class="o_ws_order_row" t-att-class="orderStateClass(item.state)">
+                                            <div class="o_ws_order_head">
+                                                <strong><t t-esc="item.name"/></strong>
+                                                <em><t t-esc="item.state_label"/></em>
+                                            </div>
+                                            <div class="o_ws_order_meta">
+                                                <span><t t-esc="item.product"/></span>
+                                                <span><t t-esc="formatNumber(item.output_qty)"/> / <t t-esc="formatNumber(item.plan_qty)"/></span>
+                                            </div>
+                                            <div class="o_ws_order_track">
+                                                <i t-att-style="progressBarStyle(item.progress, 100)"/>
+                                            </div>
+                                            <div class="o_ws_order_foot">
+                                                <span>进度 <t t-esc="formatNumber(item.progress, 1)"/>%</span>
+                                                <span><t t-esc="item.date_plan || '-'"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- ================= 中列：核心环 / 产量走势 ================= -->
+                            <section class="o_screen_column o_screen_column_center">
+                                <div class="o_center_frame">
+                                    <div class="o_center_top_bar">
+                                        <span/>
+                                        <strong><t t-esc="summary.workshop_name || ''"/></strong>
+                                        <span/>
+                                    </div>
+                                    <div class="o_center_body">
+                                        <div class="o_side_counter_list">
+                                            <div t-foreach="wipCounters" t-as="item" t-key="`wip-${item.id}`" class="o_side_counter">
+                                                <strong><t t-esc="formatNumber(item.wip)"/></strong>
+                                                <span><t t-esc="item.code"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="o_gauge_block">
+                                            <div class="o_gauge3d">
+                                                <div class="o_g3d_base"/>
+                                                <div class="o_g3d_pillar o_g3d_pillar_l"/>
+                                                <div class="o_g3d_pillar o_g3d_pillar_r"/>
+                                                <div class="o_g3d_ring o_g3d_ring_a"/>
+                                                <div class="o_g3d_ring o_g3d_ring_b"/>
+                                                <div class="o_g3d_ring o_g3d_ring_c"/>
+                                                <div class="o_g3d_disc" t-att-style="gaugeStyle"/>
+                                                <div class="o_gauge_value">
+                                                    <strong><t t-esc="passRate"/>%</strong>
+                                                    <span>当日一次通过率</span>
+                                                </div>
+                                            </div>
+                                            <div class="o_center_lines">
+                                                <div>
+                                                    <span>计划数量</span>
+                                                    <strong><t t-esc="formatNumber(summary.plan_qty)"/></strong>
+                                                    <em>在产任务合计</em>
+                                                </div>
+                                                <div>
+                                                    <span>已产出</span>
+                                                    <strong><t t-esc="formatNumber(summary.plan_done)"/></strong>
+                                                    <em>按产出工序计数</em>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="o_side_counter_list">
+                                            <div t-foreach="outputCounters" t-as="item" t-key="`out-${item.id}`" class="o_side_counter">
+                                                <strong><t t-esc="formatNumber(item.ok)"/></strong>
+                                                <span><t t-esc="item.code"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_flip_total">
+                                        <span>当日车间过站数量</span>
+                                        <div class="o_flip_digits">
+                                            <b t-foreach="completedDigits" t-as="digit" t-key="digit_index"><t t-esc="digit"/></b>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>近 8 天产量走势</span>
+                                        <small>趋势线 / 通过·不良</small>
+                                    </div>
+                                    <div class="o_ws_trend_split">
+                                        <div class="o_ws_rate_block">
+                                            <div class="o_ws_rate_caption">
+                                                <span>日产出趋势</span>
+                                                <strong><t t-esc="formatNumber(trendTotal)"/></strong>
+                                                <em>8 天累计（件）</em>
+                                            </div>
+                                            <div class="o_ws_rate_stage"><canvas t-ref="rateCanvas"/></div>
+                                        </div>
+                                        <div class="o_ws_bar_stage"><canvas t-ref="trendCanvas"/></div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- ================= 右列：点检 / 不良 TOP5 / 质量抽检 ================= -->
+                            <section class="o_screen_column o_screen_column_right">
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>设备点检完成情况</span>
+                                    </div>
+                                    <div class="o_ws_check_body">
+                                        <div class="o_ws_check_head">
+                                            <strong><t t-esc="formatNumber(check.rate, 1)"/>%</strong>
+                                            <div class="o_ws_check_track">
+                                                <i t-att-style="progressBarStyle(check.rate, 100)"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_ws_check_list">
+                                            <div t-if="!checkEquipment.length" class="o_ws_empty">近 8 天无点检任务</div>
+                                            <div t-foreach="checkEquipment" t-as="item" t-key="item.code"
+                                                 class="o_ws_check_row" t-att-class="checkStatusClass(item.status)">
+                                                <i class="o_ws_chk_dot"/>
+                                                <div class="o_ws_check_name">
+                                                    <strong><t t-esc="item.name"/></strong>
+                                                    <em><t t-esc="item.code"/></em>
+                                                </div>
+                                                <div class="o_ws_check_progress">
+                                                    <div class="o_ws_check_track">
+                                                        <i t-att-style="progressBarStyle(item.rate, 100)"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>近 8 天 TOP5 不良</span>
+                                        <small>合计 <t t-esc="formatNumber(defectTotal)"/> 件</small>
+                                    </div>
+                                    <div class="o_ws_pie_body">
+                                        <div t-if="!defectTop.length" class="o_ws_empty">近 8 天无不良记录</div>
+                                        <div t-else="" class="o_ws_pie_wrap">
+                                            <canvas t-ref="defectCanvas"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_tech_panel">
+                                    <div class="o_panel_heading">
+                                        <span class="o_heading_mark"/>
+                                        <span>近 8 天质量抽检</span>
+                                        <small>抽检量 / 不良量</small>
+                                    </div>
+                                    <div class="o_ws_quality_body">
+                                        <div class="o_ws_quality_head">
+                                            <strong><t t-esc="formatNumber(quality.pass_rate, 1)"/>%</strong>
+                                            <div class="o_ws_quality_meta">
+                                                检验单 <t t-esc="formatNumber(quality.inspections)"/> 张
+                                                · 抽检 <t t-esc="formatNumber(quality.sample_qty)"/> 件
+                                                · 不良 <t t-esc="formatNumber(quality.defect_qty)"/> 件
+                                            </div>
+                                        </div>
+                                        <div class="o_ws_chart_stage"><canvas t-ref="qualityCanvas"/></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
+
+                        <footer class="o_screen_footer">
+                            <div>
+                                <span>自动刷新</span>
+                                <button class="btn o_screen_button"
+                                        t-att-class="state.autoRefresh ? 'o_is_active' : ''"
+                                        t-on-click="toggleAutoRefresh">
+                                    <t t-esc="state.autoRefresh ? `ON ${state.countdown}s` : 'OFF'"/>
+                                </button>
+                            </div>
+                            <button class="btn o_screen_button o_primary" t-on-click="manualRefresh" t-att-disabled="state.refreshing">
+                                <t t-esc="state.refreshing ? '刷新中' : '立即刷新'"/>
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </t>
+        </Layout>
+    </t>
+</templates>

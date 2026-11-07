@@ -29,7 +29,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>&#24403;&#26376;&#29983;&#20135;&#25351;&#26631;</span>
-                                        <small>&#25130;&#27490;&#26102;&#38388; <t t-esc="summary.refresh_time || ''"/></small>
+                                        <small>&#25130;&#27490; <t t-esc="(summary.refresh_time || '').slice(11)"/></small>
                                     </div>
                                     <div class="o_ring_metric_grid">
                                         <div class="o_ring_metric">
@@ -105,8 +105,14 @@
                                             </div>
                                         </div>
                                         <div class="o_gauge_block">
-                                            <div class="o_gauge" t-att-style="gaugeStyle">
-                                                <div class="o_gauge_scale"/>
+                                            <div class="o_gauge3d">
+                                                <div class="o_g3d_base"/>
+                                                <div class="o_g3d_pillar o_g3d_pillar_l"/>
+                                                <div class="o_g3d_pillar o_g3d_pillar_r"/>
+                                                <div class="o_g3d_ring o_g3d_ring_a"/>
+                                                <div class="o_g3d_ring o_g3d_ring_b"/>
+                                                <div class="o_g3d_ring o_g3d_ring_c"/>
+                                                <div class="o_g3d_disc" t-att-style="gaugeStyle"/>
                                                 <div class="o_gauge_value">
                                                     <strong><t t-esc="centerProgressRate"/>%</strong>
                                                     <span>&#20170;&#26085;&#23436;&#25104;&#20219;&#21153;</span>
@@ -168,7 +174,7 @@
                                     <div class="o_panel_heading">
                                         <span class="o_heading_mark"/>
                                         <span>&#36710;&#38388;&#26085;&#20135;&#37327;</span>
-                                        <small>&#25130;&#27490;&#26102;&#38388; <t t-esc="summary.refresh_time || ''"/></small>
+                                        <small>&#25130;&#27490; <t t-esc="(summary.refresh_time || '').slice(11)"/></small>
                                     </div>
                                     <div class="o_bar_rank_list">
                                         <div t-foreach="outputBars" t-as="item" t-key="`${item.report_date}-${item.station_code}`" class="o_bar_rank_row">
