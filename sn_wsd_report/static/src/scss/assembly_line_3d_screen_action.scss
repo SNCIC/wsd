@@ -1,0 +1,857 @@
+// 整机自动线 3D 看板 · 科技蓝深色
+// 作用域：.o_sn_wsd_al3d（避免影响其他看板）
+
+$al3d-cyan: #00e5ff;
+$al3d-line: rgba(0, 229, 255, 0.16);
+$al3d-ink: #dcebfa;
+$al3d-muted: #6e8fae;
+$al3d-amber: #ffb020;
+$al3d-red: #ff3b52;
+$al3d-num: "Bahnschrift", "DIN Alternate", "Consolas", monospace;
+
+body.o_sn_wsd_al3d_fullscreen {
+    overflow: hidden !important;
+    background: #010a18 !important;
+}
+
+.o_sn_wsd_al3d {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    overflow: hidden;
+    color: $al3d-ink;
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background:
+        radial-gradient(1200px 700px at 55% 16%, #0a3050 0%, rgba(2, 21, 48, 0) 62%),
+        radial-gradient(900px 600px at 10% 90%, #062846 0%, rgba(1, 10, 24, 0) 60%),
+        linear-gradient(180deg, #021530 0%, #010a18 62%, #000610 100%);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(rgba(0, 229, 255, 0.16) 1px, transparent 1px);
+        background-size: 26px 26px;
+        opacity: 0.32;
+        mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 78%);
+        -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 78%);
+    }
+
+    /* ---------------- 3D 容器 ---------------- */
+    .o_al3d_scene {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+
+        canvas { display: block; }
+    }
+
+    .o_al3d_tip {
+        position: absolute;
+        z-index: 30;
+        pointer-events: none;
+        max-width: 260px;
+        padding: 9px 13px;
+        font-size: 11px;
+        line-height: 1.8;
+        color: $al3d-ink;
+        background: linear-gradient(160deg, rgba(4, 26, 48, 0.96), rgba(1, 12, 26, 0.96));
+        border: 1px solid rgba(0, 229, 255, 0.4);
+        border-radius: 6px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 229, 255, 0.18);
+
+        b {
+            color: $al3d-cyan;
+            font-size: 12px;
+        }
+    }
+
+    /* ---------------- 通用卡片 ---------------- */
+    .o_al3d_card {
+        position: relative;
+        background: linear-gradient(158deg, rgba(9, 32, 58, 0.92) 0%, rgba(3, 15, 30, 0.88) 100%);
+        border: 1px solid $al3d-line;
+        border-radius: 8px;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(0, 229, 255, 0.08);
+        backdrop-filter: blur(9px);
+        overflow: hidden;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, $al3d-cyan, transparent);
+            opacity: 0.7;
+        }
+    }
+
+    /* ---------------- 顶栏 ---------------- */
+    .o_al3d_top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 62px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        padding: 0 22px;
+        background: linear-gradient(180deg, rgba(2, 18, 38, 0.96), rgba(2, 14, 30, 0.72));
+        border-bottom: 1px solid $al3d-line;
+        box-shadow: 0 1px 0 rgba(0, 229, 255, 0.18), 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .o_al3d_brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .o_al3d_logo {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #0a5f8a, $al3d-cyan);
+        box-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 8px 6px;
+            border-top: 3px solid #eafcff;
+            border-bottom: 3px solid #eafcff;
+            box-shadow: 0 5px 0 -2px #eafcff;
+        }
+    }
+
+    .o_al3d_bname {
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #ffffff, #8beeff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .o_al3d_bsub {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: $al3d-muted;
+    }
+
+    .o_al3d_topright {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .o_al3d_line {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 4px 12px;
+        border: 1px solid $al3d-line;
+        border-radius: 6px;
+        background: rgba(0, 229, 255, 0.05);
+    }
+
+    .o_al3d_lineico {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #1f8fd6, $al3d-cyan);
+        box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+    }
+
+    .o_al3d_linename { font-size: 12px; font-weight: 700; }
+    .o_al3d_linecode { font-size: 10px; color: $al3d-muted; letter-spacing: 0.5px; }
+    .o_al3d_dot_sep { margin: 0 4px; color: rgba(0, 229, 255, 0.5); }
+
+    .o_al3d_live {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        font-family: $al3d-num;
+        font-size: 11px;
+        font-weight: 700;
+        color: $al3d-cyan;
+        background: rgba(0, 229, 255, 0.09);
+        border: 1px solid rgba(0, 229, 255, 0.28);
+        border-radius: 4px;
+    }
+
+    .o_al3d_dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: $al3d-cyan;
+        box-shadow: 0 0 8px $al3d-cyan;
+        animation: o_al3d_pulse 1.6s infinite;
+    }
+
+    .o_al3d_btn {
+        height: 30px;
+        padding: 0 12px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #9fd8ef;
+        background: rgba(0, 229, 255, 0.06);
+        border: 1px solid rgba(0, 229, 255, 0.22);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+
+        &:hover {
+            color: #eafcff;
+            background: rgba(0, 229, 255, 0.16);
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.25);
+        }
+    }
+
+    .o_al3d_btn_primary {
+        color: $al3d-cyan;
+        border-color: rgba(0, 229, 255, 0.5);
+        background: linear-gradient(180deg, rgba(0, 229, 255, 0.2), rgba(0, 229, 255, 0.06));
+    }
+
+    .o_al3d_user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .o_al3d_avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 800;
+        color: #04202e;
+        background: linear-gradient(135deg, $al3d-cyan, #7ef0ff);
+        box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
+    }
+
+    .o_al3d_uname { font-size: 12px; font-weight: 700; }
+    .o_al3d_urole { font-size: 10px; color: $al3d-muted; }
+
+    /* ---------------- KPI ---------------- */
+    .o_al3d_kpis {
+        position: absolute;
+        top: 76px;
+        left: 22px;
+        z-index: 10;
+        display: flex;
+        gap: 12px;
+    }
+
+    .o_al3d_kpi {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        min-width: 190px;
+    }
+
+    .o_al3d_kico {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 229, 255, 0.22);
+        background: rgba(0, 229, 255, 0.08);
+    }
+
+    .o_al3d_kico_output::after { content: "🏭"; }
+    .o_al3d_kico_wip::after { content: "⚙️"; }
+    .o_al3d_kico_beat::after { content: "⏱"; }
+
+    .o_al3d_donut {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            background: #04182c;
+        }
+
+        span {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: $al3d-num;
+            font-size: 11px;
+            font-weight: 700;
+            color: $al3d-cyan;
+        }
+    }
+
+    .o_al3d_klabel { font-size: 11px; letter-spacing: 1px; color: $al3d-muted; }
+
+    .o_al3d_kvalue {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-top: 2px;
+    }
+
+    .o_al3d_knum {
+        font-family: $al3d-num;
+        font-size: 25px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #eafcff;
+        text-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
+    }
+
+    .o_al3d_kdelta {
+        padding: 1px 6px;
+        font-family: $al3d-num;
+        font-size: 10px;
+        font-weight: 700;
+        color: $al3d-cyan;
+        background: rgba(0, 229, 255, 0.12);
+        border: 1px solid rgba(0, 229, 255, 0.25);
+        border-radius: 3px;
+    }
+
+    .o_al3d_kfoot { margin-top: 2px; font-size: 10px; color: $al3d-muted; }
+
+    /* ---------------- 右侧在线产品 ---------------- */
+    .o_al3d_product {
+        position: absolute;
+        top: 76px;
+        right: 22px;
+        width: 336px;
+        z-index: 10;
+        padding: 14px 16px 16px;
+    }
+
+    .o_al3d_ptitle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+
+        b {
+            font-family: $al3d-num;
+            font-size: 12px;
+            color: $al3d-cyan;
+        }
+    }
+
+    .o_al3d_pico {
+        width: 24px;
+        height: 24px;
+        border-radius: 5px;
+        background: linear-gradient(135deg, #0a5f8a, $al3d-cyan);
+        box-shadow: 0 0 14px rgba(0, 229, 255, 0.5);
+    }
+
+    .o_al3d_badge {
+        float: right;
+        margin-top: -22px;
+        padding: 3px 8px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: $al3d-cyan;
+        background: rgba(0, 229, 255, 0.12);
+        border: 1px solid rgba(0, 229, 255, 0.35);
+        border-radius: 3px;
+    }
+
+    .o_al3d_pgrid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px 14px;
+        margin: 14px 0 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+    }
+
+    .o_al3d_pk { font-size: 11px; color: $al3d-muted; }
+
+    .o_al3d_pv {
+        font-size: 12px;
+        font-weight: 600;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &.o_al3d_pv_hot { color: $al3d-cyan; }
+    }
+
+    /* 在线产品摘要 */
+    .o_al3d_snline {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 10px;
+        margin: 12px 0 4px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+
+        > div {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        span {
+            font-size: 10px;
+            color: $al3d-muted;
+            white-space: nowrap;
+        }
+
+        em {
+            font-size: 11px;
+            font-style: normal;
+            font-weight: 600;
+            color: #b9d6ea;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .o_al3d_snmain {
+        grid-column: 1 / -1;
+
+        b {
+            font-family: $al3d-num;
+            font-size: 13px;
+            color: $al3d-cyan;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    /* 工区实时列表 */
+    .o_al3d_alist {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 10px;
+        max-height: calc(100vh - 320px);
+        overflow-y: auto;
+
+        &::-webkit-scrollbar { width: 3px; }
+        &::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.25); }
+    }
+
+    .o_al3d_arow {
+        --sc: #{$al3d-cyan};
+        padding: 7px 9px 6px;
+        border-radius: 5px;
+        background: rgba(8, 30, 52, 0.72);
+        border: 1px solid rgba(0, 229, 255, 0.12);
+        border-left: 3px solid var(--sc);
+
+        .o_al3d_sbadge {
+            margin-left: auto;
+            background: rgba(0, 229, 255, 0.1);
+        }
+    }
+
+    .o_al3d_arow1 {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .o_al3d_acode {
+        font-family: $al3d-num;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: var(--sc);
+    }
+
+    .o_al3d_aname {
+        font-size: 12px;
+        font-weight: 700;
+        color: #eafcff;
+    }
+
+    .o_al3d_ameta {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 3px 0 4px;
+        font-size: 9.5px;
+        color: #5d7f9c;
+
+        b {
+            font-family: $al3d-num;
+            font-size: 11px;
+            color: #cfe8f7;
+        }
+    }
+
+    .o_al3d_afoot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        color: #5d7f9c;
+    }
+
+    /* 工序进度 */
+    .o_al3d_pprog { margin-top: 4px; }
+
+    .o_al3d_ppptitle {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 11px;
+        color: $al3d-muted;
+
+        b { font-family: $al3d-num; color: $al3d-ink; }
+    }
+
+    .o_al3d_steps {
+        display: flex;
+        gap: 4px;
+    }
+
+    .o_al3d_step {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+        font-size: 9px;
+        line-height: 1.25;
+        color: #4e7391;
+
+        i {
+            display: block;
+            height: 6px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            background: rgba(0, 229, 255, 0.11);
+        }
+    }
+
+    .o_al3d_step_done i { background: rgba(0, 229, 255, 0.55); }
+    .o_al3d_step_done { color: #7fb6cf; }
+
+    .o_al3d_step_active {
+        color: $al3d-cyan;
+        font-weight: 700;
+
+        i {
+            background: $al3d-cyan;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.85);
+        }
+    }
+
+    /* ---------------- 底部工位流水条 ---------------- */
+    .o_al3d_bottom {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        z-index: 10;
+    }
+
+    .o_al3d_stations {
+        padding: 11px 16px 13px;
+    }
+
+    .o_al3d_ftitle {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 10px;
+    }
+
+    .o_al3d_fico {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #0a5f8a, $al3d-cyan);
+        box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
+
+        &::after {
+            content: "⚙️";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 13px;
+        }
+    }
+
+    .o_al3d_fname { font-size: 12.5px; font-weight: 800; letter-spacing: 0.6px; }
+    .o_al3d_fsub { font-size: 10px; color: $al3d-muted; }
+
+    .o_al3d_legend {
+        margin-left: auto;
+        display: flex;
+        gap: 14px;
+        font-size: 10px;
+        color: $al3d-muted;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        i {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+    }
+
+    .o_al3d_lg_run { background: $al3d-cyan; box-shadow: 0 0 8px $al3d-cyan; }
+    .o_al3d_lg_slow { background: $al3d-amber; box-shadow: 0 0 8px $al3d-amber; }
+    .o_al3d_lg_ng { background: $al3d-red; box-shadow: 0 0 8px $al3d-red; }
+    .o_al3d_lg_idle { background: #3f7fa0; }
+
+    .o_al3d_track {
+        display: flex;
+        gap: 14px;
+    }
+
+    .o_al3d_station {
+        --sc: #{$al3d-cyan};
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        padding: 9px 11px 8px;
+        border-radius: 6px;
+        background: linear-gradient(170deg, rgba(10, 36, 60, 0.92), rgba(4, 18, 34, 0.86));
+        border: 1px solid rgba(0, 229, 255, 0.18);
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 3px;
+            border-radius: 6px 6px 0 0;
+            background: var(--sc);
+            box-shadow: 0 0 14px var(--sc);
+        }
+
+        /* 工序之间的流向箭头，强调按工艺流程串行 */
+        &:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            width: 0;
+            height: 0;
+            margin-top: -5px;
+            border-left: 6px solid rgba(0, 229, 255, 0.5);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.5));
+        }
+    }
+
+    .o_al3d_ss_run { --sc: #{$al3d-cyan}; }
+    .o_al3d_ss_slow { --sc: #{$al3d-amber}; border-color: rgba(255, 176, 32, 0.32); }
+    .o_al3d_ss_ng { --sc: #{$al3d-red}; border-color: rgba(255, 59, 82, 0.42); }
+    .o_al3d_ss_idle { --sc: #3f7fa0; border-color: rgba(63, 127, 160, 0.24); }
+
+    .o_al3d_shead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .o_al3d_scode {
+        font-family: $al3d-num;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: var(--sc);
+    }
+
+    .o_al3d_sbadge {
+        padding: 1px 6px;
+        font-size: 9px;
+        font-style: normal;
+        font-weight: 700;
+        white-space: nowrap;
+        border-radius: 3px;
+        color: var(--sc);
+        background: rgba(0, 229, 255, 0.13);
+        border: 1px solid rgba(0, 229, 255, 0.36);
+    }
+
+    .o_al3d_ss_slow .o_al3d_sbadge {
+        background: rgba(255, 176, 32, 0.14);
+        border-color: rgba(255, 176, 32, 0.4);
+    }
+
+    .o_al3d_ss_ng .o_al3d_sbadge {
+        background: rgba(255, 59, 82, 0.16);
+        border-color: rgba(255, 59, 82, 0.45);
+    }
+
+    .o_al3d_ss_idle .o_al3d_sbadge {
+        background: rgba(63, 127, 160, 0.16);
+        border-color: rgba(63, 127, 160, 0.38);
+    }
+
+    .o_al3d_sname {
+        margin: 3px 0 7px;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        color: #eafcff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .o_al3d_smetrics {
+        display: flex;
+        gap: 10px;
+
+        div {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        b {
+            font-family: $al3d-num;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #dcebfa;
+        }
+
+        span {
+            font-size: 9px;
+            color: #5d7f9c;
+        }
+    }
+
+    .o_al3d_sbar {
+        height: 4px;
+        margin: 7px 0 5px;
+        border-radius: 2px;
+        background: rgba(0, 229, 255, 0.09);
+        overflow: hidden;
+
+        > div {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, rgba(0, 229, 255, 0.25), var(--sc));
+            box-shadow: 0 0 10px var(--sc);
+            transition: width 0.7s ease;
+        }
+    }
+
+    .o_al3d_sfoot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        color: #5d7f9c;
+    }
+
+    .o_al3d_src {
+        padding: 0 5px;
+        border-radius: 2px;
+        color: #7d97b0;
+        background: rgba(125, 151, 176, 0.14);
+    }
+
+    .o_al3d_src_real {
+        color: #0a2a3a;
+        background: rgba(0, 229, 255, 0.75);
+        font-weight: 700;
+    }
+
+    /* ---------------- 状态 ---------------- */
+    .o_al3d_source {
+        position: absolute;
+        left: 24px;
+        bottom: 5px;
+        z-index: 11;
+        font-family: $al3d-num;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        color: #45708f;
+    }
+
+    .o_al3d_mask {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 20;
+        padding: 12px 22px;
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: $al3d-cyan;
+        background: rgba(2, 20, 40, 0.9);
+        border: 1px solid rgba(0, 229, 255, 0.35);
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+    }
+
+    .o_al3d_fault {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 21;
+        padding: 10px 18px;
+        font-size: 12px;
+        color: #ff9f43;
+        background: rgba(40, 18, 2, 0.92);
+        border: 1px solid rgba(255, 159, 67, 0.45);
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+    }
+
+    /* ---------------- 窄屏兜底 ---------------- */
+    @media (max-width: 1500px) {
+        .o_al3d_kpi { min-width: 168px; padding: 10px 13px; }
+        .o_al3d_knum { font-size: 22px; }
+        .o_al3d_product { width: 310px; }
+        .o_al3d_smetrics b { font-size: 13px; }
+        .o_al3d_station { padding: 8px 9px 7px; }
+    }
+}
+
+@keyframes o_al3d_pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+}

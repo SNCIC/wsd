@@ -1,0 +1,615 @@
+/* =============================================
+   Workshop Display Board — 车间生产展示大屏
+   复用 MES Big Screen 的视觉骨架（同一套 o_screen_* / o_tech_panel 类），
+   此文件只补充车间特有的工具条、工单卡、工位流转行样式。
+   ============================================= */
+
+.o_sn_wsd_workshop_screen_fullscreen {
+    overflow: hidden;
+
+    .o_web_client > .o_action_manager {
+        width: 100vw !important;
+        height: 100vh !important;
+        padding-top: 0 !important;
+        overflow: hidden !important;
+    }
+}
+
+.o_sn_wsd_workshop_screen_action {
+    /* 大屏不出现滚动条（滚轮仍可滚动） */
+    &,
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    &::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+    }
+
+    /* 头部多一行车间副标题，整体下移 10px */
+    .o_screen_header {
+        height: 88px;
+    }
+
+    .o_ws_subtitle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 6px;
+        color: #8fd3f2;
+        font-size: 12px;
+        letter-spacing: 1px;
+        white-space: nowrap;
+
+        em {
+            font-style: normal;
+            color: #6ea6c9;
+        }
+    }
+
+    .o_ws_divider {
+        margin: 0 6px;
+        color: rgba(0, 200, 255, 0.45);
+    }
+
+    /* ------------------------------------------------ 工具条 */
+    .o_ws_toolbar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: none;
+        height: 34px;
+        margin: 2px 4px 6px;
+        padding: 0 10px;
+        color: #8fd3f2;
+        font-size: 12px;
+        background: linear-gradient(90deg, rgba(6, 32, 66, 0.85), rgba(4, 18, 44, 0.4));
+        border-left: 2px solid #00e5ff;
+    }
+
+    .o_ws_toolbar_left,
+    .o_ws_toolbar_right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .o_ws_toolbar label {
+        color: #7fb8d9;
+        letter-spacing: 2px;
+    }
+
+    .o_ws_toolbar select {
+        min-width: 160px;
+        padding: 2px 8px;
+        color: #e0f2ff;
+        font-size: 12px;
+        background: rgba(6, 30, 66, 0.9);
+        border: 1px solid rgba(0, 180, 230, 0.4);
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+
+        option {
+            background: #061e42;
+            color: #e0f2ff;
+        }
+    }
+
+    .o_ws_data_date {
+        color: #9cd3ef;
+
+        em {
+            font-style: normal;
+            margin-left: 4px;
+            color: #ffb020;
+        }
+    }
+
+    /* 头部与工具条占位后，主网格高度回收 42px */
+    .o_screen_grid {
+        height: calc(100vh - 142px);
+    }
+
+    /* 左列三块：指标 / 订单进度 / 生产任务 */
+    .o_screen_column_left {
+        grid-template-rows: 0.76fr 1.12fr 1.12fr;
+    }
+
+    /* ------------------------------------------------ 工单执行进度 */
+    .o_ws_order_list {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 12px 10px;
+    }
+
+    .o_ws_order_row {
+        padding: 6px 8px;
+        background: rgba(10, 34, 70, 0.4);
+        border-left: 2px solid rgba(40, 90, 150, 0.7);
+
+        &.o_is_running {
+            border-left-color: #00e5ff;
+            background: rgba(0, 140, 190, 0.14);
+        }
+
+        &.o_is_done {
+            border-left-color: #4d9fff;
+        }
+
+        &.o_is_pending {
+            border-left-color: #7a8fa5;
+        }
+    }
+
+    .o_ws_order_head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+
+        strong {
+            color: #ffffff;
+            font-size: 12.5px;
+            letter-spacing: 0.5px;
+        }
+
+        em {
+            flex: none;
+            font-style: normal;
+            padding: 0 6px;
+            color: #9defff;
+            font-size: 10.5px;
+            border: 1px solid rgba(0, 200, 255, 0.35);
+            border-radius: 2px;
+        }
+    }
+
+    .o_ws_order_meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 3px;
+        color: #8fb8d4;
+        font-size: 10.5px;
+
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .o_ws_order_track {
+        height: 6px;
+        margin-top: 5px;
+        background: rgba(4, 20, 48, 0.7);
+        border: 1px solid rgba(0, 180, 230, 0.22);
+        border-radius: 3px;
+        overflow: hidden;
+
+        i {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, #00a8d6, #00e5ff);
+            box-shadow: 0 0 6px rgba(0, 200, 255, 0.55);
+        }
+    }
+
+    .o_ws_order_foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 4px;
+        color: #6ea6c9;
+        font-size: 10px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ------------------------------------------------ 工位流转 */
+    .o_ws_station_list {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 12px 10px;
+    }
+
+    .o_ws_station_row {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr) 78px 40px;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        background: rgba(10, 34, 70, 0.38);
+        border: 1px solid transparent;
+        border-left: 2px solid rgba(40, 90, 150, 0.65);
+
+        &.o_is_warning {
+            border-left-color: #ffb020;
+            background: rgba(120, 80, 10, 0.2);
+        }
+
+        &.o_is_danger {
+            border-left-color: #ff4d6d;
+            background: rgba(120, 20, 40, 0.22);
+        }
+
+        &.o_is_normal {
+            border-left-color: #00e5ff;
+            background: rgba(0, 140, 190, 0.12);
+        }
+
+        &.o_is_idle {
+            border-left-color: rgba(70, 120, 180, 0.5);
+            opacity: 0.72;
+        }
+    }
+
+    .o_ws_st_code {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+
+        span {
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        em {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-style: normal;
+            color: #6ea6c9;
+            font-size: 10px;
+        }
+    }
+
+    .o_ws_st_bar {
+        height: 7px;
+        background: rgba(4, 20, 48, 0.72);
+        border: 1px solid rgba(0, 180, 230, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+
+        i {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, #0a7fb5, #00e5ff);
+            box-shadow: 0 0 5px rgba(0, 200, 255, 0.45);
+        }
+    }
+
+    .o_ws_st_nums {
+        display: flex;
+        align-items: baseline;
+        justify-content: flex-end;
+        gap: 6px;
+        font-size: 10.5px;
+        color: #7fb8d9;
+
+        strong {
+            color: #ffcf70;
+            font-size: 14px;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    .o_ws_ng {
+        font-style: normal;
+        color: #ff8ba0;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .o_ws_st_tag {
+        padding: 1px 4px;
+        text-align: center;
+        font-size: 10px;
+        color: #9defff;
+        border: 1px solid rgba(0, 200, 255, 0.35);
+        border-radius: 2px;
+        white-space: nowrap;
+    }
+
+    .o_is_warning .o_ws_st_tag {
+        color: #ffcf70;
+        border-color: rgba(255, 176, 32, 0.45);
+    }
+
+    .o_is_danger .o_ws_st_tag {
+        color: #ff8ba0;
+        border-color: rgba(255, 77, 109, 0.5);
+    }
+
+    .o_ws_empty {
+        display: grid;
+        place-items: center;
+        min-height: 60px;
+        color: #5f92b5;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    /* 右列三块：点检 / 不良 TOP5 / 质量抽检 */
+    .o_screen_column_right {
+        grid-template-rows: 1.18fr 1.16fr 1fr;
+    }
+
+    .o_screen_column_center {
+        grid-template-rows: 1.12fr 1fr;
+    }
+
+    /* ------------------------------------------------ 产量走势：上折线下柱状 */
+    .o_ws_trend_split {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 4px 10px 8px;
+    }
+
+    .o_ws_rate_block {
+        flex: 0 0 44%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .o_ws_rate_caption {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 0 2px;
+
+        span {
+            color: #7fb8d9;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        strong {
+            color: #ffb020;
+            font-size: 15px;
+            line-height: 1;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 10px rgba(255, 176, 32, 0.45);
+        }
+
+        em {
+            font-style: normal;
+            color: #5f92b5;
+            font-size: 9px;
+        }
+    }
+
+    .o_ws_rate_stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .o_ws_bar_stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        padding-top: 2px;
+        border-top: 1px dashed rgba(0, 174, 255, 0.16);
+    }
+
+    /* ------------------------------------------------ 左列紧凑指标环 */
+    .o_ring_metric_grid_compact {
+        padding: 8px 12px;
+        gap: 6px;
+
+        .o_ring {
+            width: 50px;
+            height: 50px;
+            font-size: 13px;
+        }
+
+        .o_ring_metric {
+            gap: 4px;
+            font-size: 10px;
+        }
+    }
+
+    /* ------------------------------------------------ 设备点检完成情况 */
+    .o_ws_check_body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 12px 12px;
+    }
+
+    .o_ws_check_head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        > strong {
+            flex: 0 0 auto;
+            color: #00e5ff;
+            font-size: 26px;
+            line-height: 1;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 14px rgba(0, 200, 255, 0.55);
+        }
+
+        .o_ws_check_track {
+            flex: 1;
+            height: 8px;
+        }
+    }
+
+    .o_ws_check_list {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* 每行只用颜色表达状态：绿＝完成，红＝未完成，黄＝待执行 */
+    .o_ws_check_row {
+        display: grid;
+        grid-template-columns: 10px minmax(80px, 1fr) 62px;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 8px;
+        color: #7fb8d9;
+        background: rgba(10, 34, 70, 0.42);
+        border-left: 2px solid currentColor;
+    }
+
+    .o_ws_chk_dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px currentColor;
+    }
+
+    .o_ws_check_name {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        min-width: 0;
+
+        strong {
+            color: #d8f2ff;
+            font-size: 11.5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        em {
+            font-style: normal;
+            color: #5f92b5;
+            font-size: 9.5px;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .o_ws_check_progress {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .o_ws_check_track {
+        height: 5px;
+        background: rgba(4, 20, 48, 0.75);
+        border: 1px solid rgba(0, 180, 230, 0.18);
+        border-radius: 3px;
+        overflow: hidden;
+
+        i {
+            display: block;
+            height: 100%;
+            background: currentColor;
+            box-shadow: 0 0 6px currentColor;
+            transition: width 0.6s ease;
+        }
+    }
+
+    .o_ws_chk_ok {
+        color: #35e0a1;
+    }
+
+    .o_ws_chk_bad {
+        color: #ff4d6d;
+    }
+
+    .o_ws_chk_wait {
+        color: #ffb020;
+    }
+
+    /* ------------------------------------------------ 不良 TOP5 饼图 */
+    .o_ws_pie_body {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        padding: 6px 10px 8px;
+    }
+
+    .o_ws_pie_wrap {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    /* ------------------------------------------------ 质量抽检条形图 */
+    .o_ws_quality_body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 12px 10px;
+    }
+
+    .o_ws_quality_head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+
+        strong {
+            color: #00e5ff;
+            font-size: 26px;
+            line-height: 1;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 14px rgba(0, 200, 255, 0.55);
+        }
+
+        span {
+            color: #7fb8d9;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+    }
+
+    .o_ws_quality_meta {
+        color: #9cd3ef;
+        font-size: 10.5px;
+    }
+
+    .o_ws_chart_stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+    }
+}

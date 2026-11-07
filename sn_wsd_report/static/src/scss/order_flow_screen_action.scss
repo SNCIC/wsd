@@ -20,6 +20,21 @@ body:has(.o_sn_wsd_order_flow_action) {
     overflow: hidden;
 }
 
+/* 大屏场景隐藏所有滚动条（滚轮 / 触摸滚动能力保留） */
+html:has(.o_sn_wsd_order_flow_action),
+body:has(.o_sn_wsd_order_flow_action),
+html .o_web_client:has(.o_sn_wsd_order_flow_action),
+html .o_web_client:has(.o_sn_wsd_order_flow_action) > .o_action_manager {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+    }
+}
+
 html .o_web_client > .o_action_manager:has(.o_sn_wsd_order_flow_action),
 html .o_web_client:has(.o_sn_wsd_order_flow_action) > .o_action_manager {
     width: 100vw !important;
@@ -38,6 +53,20 @@ html .o_web_client:has(.o_sn_wsd_order_flow_action) > .o_action_manager {
 
     .o_control_panel {
         display: none;
+    }
+
+    /* 面板内部容器隐藏滚动条，避免大屏上出现灰色滑条 */
+    &,
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    &::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
     }
 
     .o_sn_wsd_big_screen {

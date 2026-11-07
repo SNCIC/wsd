@@ -85,12 +85,15 @@
         <field name="search_view_id" ref="view_sn_wsd_wip_report_search"/>
     </record>
 
+    <!-- 2026-11-07 按现场要求下线「在制品报表」菜单入口；模型与视图保留，需要恢复时取消注释即可 -->
+    <!--
     <menuitem id="menu_sn_wsd_wip_report"
               name="WIP Report"
               parent="mrp.menu_mrp_reporting"
               action="action_sn_wsd_wip_report"
               groups="mrp.group_mrp_user"
               sequence="35"/>
+    -->
 
     <record id="view_sn_wsd_wip_mes_order_report_list" model="ir.ui.view">
         <field name="name">sn.wsd.wip.mes.order.report.list</field>
@@ -260,10 +263,13 @@
         <field name="search_view_id" ref="view_sn_wsd_wip_production_overview_search"/>
     </record>
 
+    <!-- 2026-11-07 按现场要求下线「在制品概览」菜单入口；模型与视图保留，需要恢复时取消注释即可 -->
+    <!--
     <menuitem id="menu_sn_wsd_wip_overview"
               name="WIP Overview"
               parent="mrp.menu_mrp_reporting"
               action="action_sn_wsd_wip_production_overview"
               groups="mrp.group_mrp_user"
               sequence="34"/>
+    -->
 </odoo>

@@ -2146,3 +2146,43 @@ msgstr "订单全流程看板"
 #: model:ir.model,name:sn_wsd_report.model_sn_wsd_order_flow_dashboard_service
 msgid "Order Full-Flow Dashboard Service"
 msgstr "订单全流程看板服务"
+
+#. module: sn_wsd_report
+#: model:ir.actions.client,name:sn_wsd_report.action_sn_wsd_workshop_screen_client
+#: model:ir.actions.server,name:sn_wsd_report.action_sn_wsd_workshop_screen_server
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_workshop_screen
+msgid "Workshop Display Board"
+msgstr "车间展示大屏"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_workshop_screen_service
+msgid "Workshop Display Screen Service"
+msgstr "车间展示大屏服务"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/warehouse_3d_screen.py:0
+#: model:ir.actions.client,name:sn_wsd_report.action_sn_wsd_warehouse_3d_client
+#: model:ir.actions.server,name:sn_wsd_report.action_sn_wsd_warehouse_3d_server
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_warehouse_3d
+msgid "Warehouse 3D Transport Board"
+msgstr "仓库3D运输看板"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_warehouse_3d_screen_service
+msgid "Warehouse 3D Transport Screen Data Service"
+msgstr "仓库3D运输看板数据服务"
+
+#. module: sn_wsd_report
+#. odoo-python
+#: code:addons/sn_wsd_report/models/assembly_line_3d_screen.py:0
+#: model:ir.actions.client,name:sn_wsd_report.action_sn_wsd_assembly_line_3d_client
+#: model:ir.actions.server,name:sn_wsd_report.action_sn_wsd_assembly_line_3d_server
+#: model:ir.ui.menu,name:sn_wsd_report.menu_sn_wsd_assembly_line_3d
+msgid "Assembly Line 3D Board"
+msgstr "整机自动线看板"
+
+#. module: sn_wsd_report
+#: model:ir.model,name:sn_wsd_report.model_sn_wsd_assembly_line_3d_screen_service
+msgid "Assembly Line 3D Screen Data Service"
+msgstr "整机自动线看板数据服务"
