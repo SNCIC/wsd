@@ -76,7 +76,7 @@
                 <field name="x_workshop_id" optional="show"/>
             </xpath>
             <xpath expr="//field[@name='x_workshop_id']" position="after">
-                <field name="x_mes_schedule_state" string="Schedule State" optional="show" widget="badge"
+                <field name="x_mes_schedule_state" optional="show" widget="badge"
                        decoration-danger="x_mes_schedule_state == 'unplanned'"
                        decoration-warning="x_mes_schedule_state == 'partial'"
                        decoration-success="x_mes_schedule_state == 'planned'"/>

@@ -4886,6 +4886,7 @@ msgstr "计划结束日"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_mes_schedule_state__planned
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp
 msgid "Planned"
 msgstr "已排产"
 
@@ -5957,6 +5958,7 @@ msgstr "在制造订单上点击“排产”按钮进行排产。"
 #. module: sn_wsd_mrp
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_split_state
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_mes_schedule_state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp
 msgid "Schedule State"
 msgstr "排产状态"
 
@@ -7552,6 +7554,7 @@ msgstr "下料时间"
 
 #. module: sn_wsd_mrp
 #: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__mrp_production__x_mes_schedule_state__unplanned
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp
 msgid "Unplanned"
 msgstr "未排产"
 
@@ -7869,6 +7872,7 @@ msgstr "工单报表"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_search
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order__x_workshop_id
 #: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_process_route_drawing__x_workshop_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_filter_inherit_sn_wsd_mrp
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_process_route_drawing_search
 msgid "Workshop"
