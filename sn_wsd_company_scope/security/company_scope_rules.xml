@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- A category is visible to its own company and to everybody when it is
+         shared (company_id empty). Same shape as the rule Odoo generates for
+         the models that already carry a company field. -->
+    <record id="rule_product_category_company" model="ir.rule">
+        <field name="name">Product category: allowed companies</field>
+        <field name="model_id" ref="product.model_product_category"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

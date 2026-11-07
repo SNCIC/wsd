@@ -80,6 +80,10 @@
                 <field name="x_nameplate_end" optional="show" />
                 <field name="x_contract_no" optional="show" />
             </xpath>
+            <xpath expr="//field[@name='x_contract_no']" position="after">
+                <field name="sn_sale_order_names" optional="show"/>
+                <field name="sn_sale_contract_number" optional="hide"/>
+            </xpath>
 
             <xpath expr="//field[@name='product_qty']" position="after">
                 <field name="qty_produced" string="Output Qty" sum="Total Output Qty" optional="show"/>
@@ -191,6 +195,19 @@
                  dead UI on the MO form. -->
             <xpath expr="//page[@name='operations']" position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Sale information forwarded by the replenishment report: the
+                 manufacturing order shows the sales orders behind the need
+                 with the references the customer gave for them. -->
+            <xpath expr="//page[@name='miscellaneous']//field[@name='origin']" position="after">
+                <field name="sn_sale_order_names" readonly="1"
+                       invisible="not sn_sale_order_names"/>
+                <field name="sn_sale_contract_number" readonly="1"
+                       invisible="not sn_sale_contract_number"/>
+                <field name="sn_sale_supply_order_number" readonly="1"
+                       invisible="not sn_sale_supply_order_number"/>
+                <field name="sn_sale_asset_number" readonly="1"
+                       invisible="not sn_sale_asset_number"/>
             </xpath>
         </field>
     </record>

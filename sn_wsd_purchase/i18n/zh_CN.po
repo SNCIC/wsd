@@ -610,3 +610,43 @@ msgstr "入库数量"
 #: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_request_line__stocked_qty
 msgid "Quantity that has completed the storage step of the reception."
 msgstr "已完成来料上架入库环节的数量。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_order_names
+msgid "Sale Orders"
+msgstr "销售订单"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_order_names
+msgid "Sales orders behind the replenishment need of this purchase order."
+msgstr "本采购订单补货需求背后的销售订单。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_contract_number
+msgid "Sale Contract Number"
+msgstr "销售合同编号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_contract_number
+msgid "Contract number of the source sales orders. Empty contract numbers fall back to the order number."
+msgstr "来源销售订单的合同编号；合同编号为空时显示订单号。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_supply_order_number
+msgid "Sale Supply Order Number"
+msgstr "供货单号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_supply_order_number
+msgid "Supply order number the customer issued for the source sales orders."
+msgstr "客户为来源销售订单开具的供货单号。"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,field_description:sn_wsd_purchase.field_purchase_order__sn_sale_asset_number
+msgid "Sale Asset Number"
+msgstr "资产号"
+
+#. module: sn_wsd_purchase
+#: model:ir.model.fields,help:sn_wsd_purchase.field_purchase_order__sn_sale_asset_number
+msgid "Asset number the customer assigned to the equipment of the source sales orders."
+msgstr "客户为来源销售订单设备分配的资产号。"

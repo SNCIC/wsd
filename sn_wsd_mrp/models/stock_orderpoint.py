@@ -245,3 +245,34 @@ class StockWarehouseOrderpoint(models.Model):
             qty_to_order = max(self.product_min_qty, self.product_max_qty) - qty_forecast_with_visibility
             qty_to_order = self._get_multiple_rounded_qty(qty_to_order)
         return qty_to_order
+
+    def _prepare_procurement_values(self, date=False):
+        """Forward the sale references of the shortage to the generated documents.
+
+        The native hook only fills ``reference_ids`` when the scheduler passes
+        an ``origins`` context, so an order launched by hand from the
+        replenishment report loses the link back to the sale orders that
+        created the demand. The outgoing moves of the planned scope still carry
+        those references: forward them so the RFQ and the manufacturing order
+        show their source sales orders.
+        """
+        values = super()._prepare_procurement_values(date=date)
+        references = values.get('reference_ids') or self.env['stock.reference']
+        values['reference_ids'] = references | self._sn_get_sale_references()
+        return values
+
+    def _sn_get_sale_references(self):
+        """Sale references of the outgoing moves consuming the planned stock."""
+        self.ensure_one()
+        if 'sale_ids' not in self.env['stock.reference']._fields:
+            return self.env['stock.reference']
+        stores = self._orderpoint_workshop_stores().get(
+            self.location_id.id, self.env['stock.location'])
+        moves = self.env['stock.move'].search([
+            ('product_id', '=', self.product_id.id),
+            ('company_id', '=', self.company_id.id),
+            ('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available')),
+            ('location_id', 'child_of', (self.location_id | stores).ids),
+            ('reference_ids', '!=', False),
+        ])
+        return moves.reference_ids.filtered('sale_ids')

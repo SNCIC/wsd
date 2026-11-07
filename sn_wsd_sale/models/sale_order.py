@@ -21,6 +21,21 @@ class SaleOrder(models.Model):
              'sheet, e.g. the subject of the order.',
     )
 
+    # References the customer gives for the order, entered next to the
+    # contract number on the Contract page. Not copied on duplication: a
+    # duplicated order is a new order and does not carry the numbers the
+    # customer issued for this one.
+    sn_supply_order_number = fields.Char(
+        string='Supply Order Number',
+        copy=False,
+        help='Number of the supply order the customer issued for this order.',
+    )
+    sn_asset_number = fields.Char(
+        string='Asset Number',
+        copy=False,
+        help='Asset number the customer assigned to the ordered equipment.',
+    )
+
     # ------------------------------------------------------------------
     # Dot-matrix sheet data
     # ------------------------------------------------------------------

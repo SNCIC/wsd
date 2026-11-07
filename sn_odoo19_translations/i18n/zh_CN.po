@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 04:22+0000\n"
-"PO-Revision-Date: 2026-11-04 04:22+0000\n"
+"POT-Creation-Date: 2026-11-05 01:06+0000\n"
+"PO-Revision-Date: 2026-11-05 01:06+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -4255,6 +4255,12 @@ msgstr "过期库存"
 msgid "Export"
 msgstr "导出"
 
+#. module: sn_wsd_stock_report
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_stock_balance_report_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock_report.view_sn_wsd_stock_balance_wizard_form
+msgid "Export Excel"
+msgstr "导出 Excel"
+
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection__x_fai_reported_base
 msgid "FAI Reported Base"
@@ -8266,6 +8272,12 @@ msgstr "五边形"
 msgid "Pentagon (R)"
 msgstr "圆角五边形"
 
+#. module: sn_wsd_stock_report
+#. odoo-python
+#: code:addons/sn_wsd_stock_report/controllers/export.py:0
+msgid "Period"
+msgstr "统计区间"
+
 #. module: sn_wsd_barcode
 #. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/exception_report/exception_report.js:0
@@ -12060,11 +12072,14 @@ msgstr "顶面 (T)"
 #. odoo-javascript
 #. module: sn_wsd_mrp
 #. module: sn_wsd_repair
+#. module: sn_wsd_stock_report
+#. odoo-python
 #. module: sn_wsd_wip
 #: model_terms:ir.ui.view,arch_db:sn_wsd_device.view_oee_record_form
 #: code:addons/sn_wsd_gantt/static/src/gantt_renderer.js:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_sn_wsd_batch_pass_log_list
 #: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_order_line_list
+#: code:addons/sn_wsd_stock_report/controllers/export.py:0
 #: model_terms:ir.ui.view,arch_db:sn_wsd_wip.view_sn_wsd_wip_mes_order_report_list
 msgid "Total"
 msgstr "总计"

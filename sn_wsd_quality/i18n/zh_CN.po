@@ -1440,6 +1440,16 @@ msgid "Has Message"
 msgstr "有消息"
 
 #. module: sn_wsd_quality
+#: model:ir.model.fields,help:sn_wsd_quality.field_sn_wsd_quality_inspection_item__tolerance
+msgid ""
+"Half width of the band auto-generated measurements scatter in, around the "
+"expected value. Generated figures stay inside the item limits; when it is "
+"left at zero the symmetric deviation of the limits is used instead."
+msgstr ""
+"自动生成实测值时围绕期望值波动的半幅范围。生成的数值仍落在检验项上下限内；"
+"留空为 0 时改用上下限的对称偏差。"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_quality_defect_code__category__hipot
 msgid "Hipot"
 msgstr "耐压测试"
@@ -4306,6 +4316,14 @@ msgstr "结束数量"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_result_line__tolerance_abs
 msgid "Tolerance (+/- %)"
 msgstr "误差范围 (+/- %)"
+
+#. module: sn_wsd_quality
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item__tolerance
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_item_group_line__tolerance
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_line__tolerance
+#: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_inspection_scheme_line__tolerance
+msgid "Tolerance (±)"
+msgstr "公差 (±)"
 
 #. module: sn_wsd_quality
 #: model:ir.model,name:sn_wsd_quality.model_stock_picking

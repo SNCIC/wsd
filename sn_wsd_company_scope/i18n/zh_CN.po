@@ -1,0 +1,86 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_company_scope
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-05 08:50+0000\n"
+"PO-Revision-Date: 2026-11-05 08:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_category__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_company_scope.product_category_search_view_company
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_category__display_name
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_template__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_category__id
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model.fields,help:sn_wsd_company_scope.field_product_category__company_id
+msgid "Leave empty to share the category with every company."
+msgstr "留空表示该类别由所有公司共用。"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model,name:sn_wsd_company_scope.model_product_template
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_company_scope
+#: model:ir.model,name:sn_wsd_company_scope.model_product_category
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_product__categ_id
+#: model:ir.model.fields,field_description:sn_wsd_company_scope.field_product_template__categ_id
+msgid "Product Category"
+msgstr "产品类别"
+
+#. module: sn_wsd_company_scope
+#: model_terms:ir.ui.view,arch_db:sn_wsd_company_scope.product_category_form_view_company
+msgid "Shared by every company"
+msgstr "所有公司共用"
+
+#. module: sn_wsd_company_scope
+#. odoo-python
+#: code:addons/sn_wsd_company_scope/models/product_category.py:0
+msgid ""
+"The category \"%(child)s\" must belong to the same company as its parent "
+"\"%(parent)s\"."
+msgstr "类别「%(child)s」必须与其上级类别「%(parent)s」属于同一家公司。"
+
+#. module: sn_wsd_company_scope
+#. odoo-python
+#: code:addons/sn_wsd_company_scope/models/product_category.py:0
+msgid ""
+"The category \"%(parent)s\" cannot belong to %(company)s because its "
+"subcategories belong to another company: %(children)s"
+msgstr "类别「%(parent)s」不能归属于%(company)s，因为它的下级类别属于其他公司：%(children)s"
+
+#. module: sn_wsd_company_scope
+#. odoo-python
+#: code:addons/sn_wsd_company_scope/models/product_template.py:0
+msgid ""
+"The product \"%(product)s\" belongs to %(company)s while its category "
+"\"%(categ)s\" belongs to %(categ_company)s."
+msgstr "产品「%(product)s」属于%(company)s，而它的类别「%(categ)s」属于%(categ_company)s。"
+
+#. module: sn_wsd_company_scope
+#. odoo-python
+#: code:addons/sn_wsd_company_scope/models/product_category.py:0
+msgid "every company"
+msgstr "所有公司"

@@ -111,7 +111,13 @@ class AccountMove(models.Model):
                     company=origin_invoice.company_id.name,
                 ))
                 origin_invoice._sn_log('create', target=move)
-                if self.env.company.intercompany_document_state == 'posted':
+                # The agreement owns the state of the documents it generates;
+                # the company switch only drives the documents created without
+                # an agreement, the same way the orders already behave.
+                agreement = origin_invoice.intercompany_agreement_id
+                wanted_state = agreement.auto_state if agreement \
+                    else self.env.company.intercompany_document_state
+                if wanted_state == 'posted':
                     move._post(soft=True)
                 moves += move
         return moves
@@ -212,26 +218,49 @@ class AccountMoveLine(models.Model):
 
     def _inter_company_prepare_invoice_line_data(self):
         self.ensure_one()
+        target_company = self.env.company
+        agreement = self.move_id.intercompany_agreement_id
+        ProductMap = self.env['sn.intercompany.product.map']
+
+        product = self.product_id
+        ratio = 1.0
+        if product and product.company_id and product.company_id != target_company:
+            product, mapping, _mode = ProductMap._sn_resolve_product(
+                product, target_company, agreement=agreement)
+            if not product:
+                self.move_id._sn_issue_unmapped_product(self.product_id, target_company)
+            else:
+                ratio = mapping.uom_ratio or 1.0
+
+        quantity = self.quantity
+        price = self.price_unit
+        if self.product_id and self.product_uom_id:
+            quantity = self.product_uom_id._compute_quantity(
+                quantity, self.product_id.uom_id)
+            price = self.product_uom_id._compute_price(
+                price, self.product_id.uom_id)
+        quantity = quantity * ratio
+        if ratio:
+            price = price / ratio
+
         vals = {
             'display_type': self.display_type,
             'sequence': self.sequence,
             'name': self.name,
-            'quantity': self.quantity,
+            'quantity': quantity,
             'discount': self.discount,
-            'price_unit': self.price_unit,
+            'price_unit': price,
         }
-        if self.product_id.company_id:
-            vals['name'] = self.product_id.name
-        else:
+        if product:
             vals.update({
-                'product_id': self.product_id.id,
-                'product_uom_id': self.product_uom_id.id,
+                'product_id': product.id,
+                'product_uom_id': product.uom_id.id,
             })
         company_b = self.env['res.company']._find_company_from_partner(self.move_id.partner_id.id)
         company_a_partner = self.company_id.partner_id
         company_b_default_distribution = self.env['account.analytic.distribution.model']._get_distribution({
-            'product_id': self.product_id.id,
-            'product_categ_id': self.product_id.categ_id.id,
+            'product_id': (product or self.product_id).id,
+            'product_categ_id': (product or self.product_id).categ_id.id,
             'partner_id': company_a_partner.id,
             'partner_category_id': company_a_partner.category_id.ids,
             'account_prefix': self.account_id.code,

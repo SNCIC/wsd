@@ -168,23 +168,33 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def _prepare_sale_order_line_data(self, line, company):
-        """Values of a sales order line created in ``company``."""
+        """Values of a sales order line created in ``company``.
+
+        The product of the purchase line belongs to the buying company and has
+        to be resolved into a product of the selling company before it can be
+        written on the sales order.
+        """
         order = line.order_id
         agreement = order.intercompany_agreement_id
-        product = line.product_id
-        mapped_product = agreement._map_product(product, order.intercompany_direction) \
-            if agreement else product
-        if agreement and product and not mapped_product and product.company_id:
-            product = self.env['product.product']
-        elif mapped_product:
-            product = mapped_product
+        source_product = line.product_id
+        mapping = self.env['sn.intercompany.product.map']
+        product = source_product
+        if source_product and source_product.company_id \
+                and source_product.company_id != company:
+            product, mapping, _mode = mapping._sn_resolve_product(
+                source_product, company, agreement=agreement)
+            if not product:
+                order._sn_issue_unmapped_product(source_product, company)
+        ratio = (mapping.uom_ratio or 1.0) if mapping else 1.0
+        factor = (mapping.price_factor or 1.0) if mapping else 1.0
         price = line.price_unit or 0.0
         quantity = line.product_qty
-        if line.product_id:
+        if source_product:
             quantity = line.product_uom_id._compute_quantity(
-                quantity, line.product_id.uom_id)
+                quantity, source_product.uom_id)
             price = line.product_uom_id._compute_price(
-                price, line.product_id.uom_id)
+                price, source_product.uom_id)
+        quantity = quantity * ratio
         if agreement and agreement.price_policy == 'pricelist' and product:
             pricelist = order.company_id.partner_id.with_company(company) \
                 .property_product_pricelist
@@ -192,12 +202,13 @@ class PurchaseOrder(models.Model):
                 price = pricelist._get_product_price(
                     product.with_company(company), quantity)
         elif agreement:
-            price = agreement._price_for(product, price, company)
+            price = agreement._price_for(product, price, company, ratio, factor)
         vals = {
-            'name': product.name if not product and line.name else line.name,
+            'name': line.name or (product.name if product else ''),
             'product_uom_qty': quantity,
             'product_id': product.id,
-            'product_uom_id': product.uom_id.id,
+            # A text line still needs a unit: keep the one of the purchase line.
+            'product_uom_id': (product.uom_id or line.product_uom_id).id,
             'price_unit': price,
             'discount': line.discount or 0.0,
             'company_id': company.id,
@@ -381,9 +392,15 @@ class PurchaseOrder(models.Model):
     def _sn_line_changes(self, line, target):
         order = line.order_id
         agreement = order.intercompany_agreement_id
+        mapping_model = self.env['sn.intercompany.product.map']
         product = line.product_id
-        if agreement:
-            product = agreement._map_product(product, order.intercompany_direction) or product
+        if product and product.company_id and product.company_id != target.company_id:
+            product, mapping, _mode = mapping_model._sn_resolve_product(
+                product, target.company_id, agreement=agreement)
+        else:
+            mapping = mapping_model.browse()
+        ratio = (mapping.uom_ratio or 1.0) if mapping else 1.0
+        factor = (mapping.price_factor or 1.0) if mapping else 1.0
         quantity = line.product_qty
         price = line.price_unit
         if line.product_id:
@@ -391,8 +408,9 @@ class PurchaseOrder(models.Model):
                 quantity, line.product_id.uom_id)
             price = line.product_uom_id._compute_price(
                 price, line.product_id.uom_id)
+        quantity = quantity * ratio
         if agreement:
-            price = agreement._price_for(product, price, target.company_id)
+            price = agreement._price_for(product, price, target.company_id, ratio, factor)
         changes = {}
         if product and target.product_id != product:
             changes['product_id'] = product.id
