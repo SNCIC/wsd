@@ -276,10 +276,11 @@ class MesOperationReport(models.Model):
     def action_generate_piece_settlement(self):
         """Generate settlement drafts for the selected unsettled reports
         (closed-month rows reopened, terminal rows, void-and-regenerate
-        fix-ups). Caliber unchanged from the former wizard tab: reports
-        carrying an allocation are copied as-is, the others fall back to
-        the team defaults; an unconfigured rate hard-blocks with the
-        standard maintain-first message."""
+        fix-ups). People are carried over (team defaults when the report
+        has none); ratios are always re-split evenly 1/N here — the
+        settlement draft is the editing point for ratios (piece-ratio-
+        to-settlement, 2026-11-07). An unconfigured rate still
+        hard-blocks with the standard maintain-first message."""
         eligible = self.filtered(lambda r: not r.x_piece_settled)
         if not eligible:
             raise UserError(_(
@@ -298,16 +299,20 @@ class MesOperationReport(models.Model):
             })
             settlement._resolve_rate_price()
             if report.participant_ids:
-                # 报工行带分配：参与人/比例原样复制，结算侧只读
+                # 报工行带人：只带人，比例均分后到结算单上改
+                # （日报工提交自动草稿仍复制录入比例，两条道互不影响）
+                participants = report.participant_ids.sorted('sequence')
+                ratios = Settlement._distribute_ratios(
+                    [1.0] * len(participants))
                 settlement.write({
                     'team_id': report.team_id.id,
                     'participant_ids': [Command.clear()] + [
                         Command.create({
                             'employee_id': p.employee_id.id,
-                            'performance_ratio': p.performance_ratio,
-                            'x_ratio_baseline': p.performance_ratio,
+                            'performance_ratio': ratio,
+                            'x_ratio_baseline': ratio,
                             'sequence': p.sequence,
-                        }) for p in report.participant_ids.sorted('sequence')],
+                        }) for p, ratio in zip(participants, ratios)],
                 })
             else:
                 settlement._default_team_and_participants()

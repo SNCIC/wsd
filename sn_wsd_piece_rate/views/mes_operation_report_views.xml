@@ -37,18 +37,22 @@
         </field>
     </record>
 
-    <!-- 报工行表单：数量只读，人员分配可编辑（受确认冻结守卫约束）。
-         行本身由 report_operation_qty 落库，表单仅承载分配的查看与修改。 -->
+    <!-- 报工行表单：数量只读，人员可维护（受确认冻结守卫约束）；绩效比/
+         结算去向不在此界面——比例在结算单上（重新）分配（piece-ratio-to-
+         settlement 2026-11-07），补生成一键直达。 -->
     <record id="view_sn_wsd_mes_operation_report_form_piece" model="ir.ui.view">
         <field name="name">sn.wsd.mes.operation.report.form.piece</field>
         <field name="model">sn.wsd.mes.operation.report</field>
         <field name="arch" type="xml">
             <form create="false" delete="false">
                 <header>
-                    <button name="action_fill_from_team" type="object"
-                            string="Fill From Team" class="btn-secondary"/>
-                    <button name="action_equal_split" type="object"
-                            string="Split Equally" class="btn-secondary"/>
+                    <!-- piece-ratio-to-settlement: the ledger form is the fact
+                         record (qty + people); ratios live on the settlement.
+                         Allocation quick-fill moved to the settlement form;
+                         generation is one click from here. -->
+                    <button name="action_generate_piece_settlement" type="object"
+                            string="Generate Piece Settlements" class="btn-primary"
+                            invisible="x_piece_settled"/>
                 </header>
                 <sheet>
                     <group>
@@ -82,23 +86,13 @@
                                     <field name="employee_id"
                                            options="{'no_create': True}"/>
                                     <field name="employee_code"/>
-                                    <field name="performance_ratio"/>
+                                    <!-- ratio column removed: ratios are
+                                         (re)allocated on the settlement -->
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer">
                                 <field name="participant_count"/>
                             </group>
-                        </page>
-                        <page string="Piece Settlements" name="settlements">
-                            <field name="piece_settlement_ids" readonly="1">
-                                <list>
-                                    <field name="name"/>
-                                    <field name="date"/>
-                                    <field name="qty_ok"/>
-                                    <field name="amount"/>
-                                    <field name="state" widget="badge"/>
-                                </list>
-                            </field>
                         </page>
                     </notebook>
                 </sheet>

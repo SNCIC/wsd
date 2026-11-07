@@ -570,8 +570,9 @@ class TestDailyWorkbench(PieceRateTestCommon):
         self.assertEqual(
             settlement.participant_ids.mapped('amount'), [12.0, 16.5])
 
-    def test_void_then_regenerate_copies_latest_allocation(self):
-        """作废释放后补生成（台账通道）：新草稿复制最新分配，作废单留痕不变。"""
+    def test_void_then_regenerate_carries_people_splits_evenly(self):
+        """作废释放后补生成（台账通道）：带最新人员、比例一律均分
+        （piece-ratio-to-settlement 2026-11-07），作废单留痕不变。"""
         self._rate(price=0.3)
         order = self._order_with_pick(qty=100)
         wizard = self._wizard()
@@ -582,15 +583,19 @@ class TestDailyWorkbench(PieceRateTestCommon):
         first = report.piece_settlement_ids
         first.action_void()
         self.assertFalse(report.x_piece_settled)
-        # the allocation was corrected after the void
-        report.participant_ids[0].performance_ratio = 40.0
-        report.participant_ids[1].performance_ratio = 60.0
+        # the roster was corrected after the void; ratios on the report
+        # line are ignored by the ledger channel (even split instead)
+        report.participant_ids[1].employee_id = self.emp_wang
         report.action_generate_piece_settlement()
         reborn = report.piece_settlement_ids.filtered(
             lambda s: s.state != 'void')
         self.assertEqual(len(reborn), 1)
         self.assertEqual(
-            reborn.participant_ids.mapped('performance_ratio'), [40.0, 60.0])
+            reborn.participant_ids.mapped('employee_id'),
+            report.participant_ids.mapped('employee_id'))
+        self.assertEqual(
+            reborn.participant_ids.mapped('performance_ratio'),
+            [50.0, 50.0])
         self.assertEqual(first.state, 'void')
 
     # ------------------------------------------------------------------

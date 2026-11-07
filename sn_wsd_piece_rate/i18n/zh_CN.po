@@ -1336,7 +1336,12 @@ msgstr "所选报工行均已存在未作废的计件单。"
 #. module: sn_wsd_piece_rate
 #: model:ir.actions.server,name:sn_wsd_piece_rate.action_sn_wsd_report_generate_settlement
 msgid "Generate Piece Settlements"
-msgstr "生成计件草稿"
+msgstr "生成计件结算"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_form_piece
+msgid "Generate Piece Settlements"
+msgstr "生成计件结算"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_employee_ids
