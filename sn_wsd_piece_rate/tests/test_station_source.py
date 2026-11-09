@@ -8,8 +8,9 @@ from .common_piece_rate import PieceRateTestCommon
 
 @tagged('post_install', '-at_install')
 class TestStationSource(PieceRateTestCommon):
-    """piece-rate 批次4：过站模式数量来源——未结算余额（首次OK锚点去重）、
-    默认带满/改小补切（FIFO 截取）、一台只付一次、超额拦截、并发复核。"""
+    """piece-rate 批次4：过站模式数量来源——未结算余额（按每一次 OK 过站
+    计件，同一 SN 复测/返修重过各算一次）、默认带满/改小补切（FIFO 截取）、
+    超额拦截、并发复核。"""
 
     @classmethod
     def setUpClass(cls):
@@ -37,7 +38,7 @@ class TestStationSource(PieceRateTestCommon):
         })
 
     def _seed_passes(self, count=20, base=None):
-        """造 count 个 SN 的首次 OK 过站（第 3、7 个复测多一行 OK）。"""
+        """造 count 个 SN 的 OK 过站（第 3、7 台各多一条复测 OK，用来验证按次数计件）。"""
         base = base or datetime(2026, 9, 4, 8, 0, 0)
         serials = []
         for i in range(count):
@@ -50,48 +51,54 @@ class TestStationSource(PieceRateTestCommon):
                               when + timedelta(minutes=1))
         return serials, base
 
-    def test_default_full_and_dedup(self):
-        """20 个 SN（复测多行）→ 未结算 20；默认带满 20，覆盖集去重。"""
+    def test_default_full_and_pass_count(self):
+        """20 个 SN、其中 2 台各多一次复测 OK → 共 22 条 OK 过站，
+        未结算 22；默认带满 22，覆盖的 SN 去重后仍是 20 个。"""
         self._rate()
         serials, _ = self._seed_passes(20)
         settlement = self._station_settlement()
-        self.assertAlmostEqual(settlement.unsettled_qty, 20.0)
+        self.assertAlmostEqual(settlement.unsettled_qty, 22.0)
         settlement.action_compute_from_station()
-        self.assertAlmostEqual(settlement.qty_ok, 20.0)
+        self.assertAlmostEqual(settlement.qty_ok, 22.0)
+        self.assertEqual(len(settlement.serial_history_ids), 22)
         self.assertEqual(len(settlement.serial_identity_ids), 20)
         self.assertAlmostEqual(settlement.price, 0.3)
-        self.assertAlmostEqual(settlement.amount, 6.0, places=2)
+        self.assertAlmostEqual(settlement.amount, 6.6, places=2)
         settlement._validate_source()
 
     def test_partial_split_fifo(self):
-        """未结算 20 改小 5 → 覆盖最早 5 台；第二单未结算 15。"""
+        """未结算 22 改小 5 → 覆盖最早 5 条过站记录；第二单未结算 17。"""
         self._rate()
         serials, base = self._seed_passes(20)
         first = self._station_settlement(qty=5.0)
         first.action_compute_from_station()
+        self.assertEqual(len(first.serial_history_ids), 5)
+        # 最早 5 条 = SN1、SN2、SN3、SN3 复测、SN4
         self.assertEqual(
-            set(first.serial_identity_ids.ids),
-            set(s.id for s in serials[:5]))  # base+0..20min 最早的 5 台
+            sorted(first.serial_identity_ids.mapped('name')),
+            ['PRS-SN-001', 'PRS-SN-002', 'PRS-SN-003', 'PRS-SN-004'])
         second = self._station_settlement()
-        self.assertAlmostEqual(second.unsettled_qty, 15.0)
+        self.assertAlmostEqual(second.unsettled_qty, 17.0)
         second.action_compute_from_station()
-        self.assertAlmostEqual(second.qty_ok, 15.0)
-        self.assertEqual(
-            set(second.serial_identity_ids.ids), set(s.id for s in serials[5:]))
+        self.assertAlmostEqual(second.qty_ok, 17.0)
+        self.assertFalse(
+            set(second.serial_history_ids.ids) & set(first.serial_history_ids.ids))
 
-    def test_one_pay_per_sn(self):
-        """已结算 SN 返修回流重过 OK → 不再计入未结算。"""
+    def test_repasse_pays_again(self):
+        """返修回流重过 OK → 该次过站再计一次件（不再按 SN 去重）。"""
         self._rate()
         serials, base = self._seed_passes(5)
         first = self._station_settlement()
         first.action_compute_from_station()
-        # 回流重过：SN-001 再次 OK
+        # 5 台里有 1 台多一条复测 OK → 共 6 条过站记录
+        self.assertAlmostEqual(first.qty_ok, 6.0)
         self._pass_ok(self.station_order, serials[0], self.op_a,
                       base + timedelta(hours=8))
         second = self._station_settlement()
-        self.assertAlmostEqual(second.unsettled_qty, 0.0)
-        with self.assertRaises(UserError):
-            second.action_compute_from_station()
+        self.assertAlmostEqual(second.unsettled_qty, 1.0)
+        second.action_compute_from_station()
+        self.assertAlmostEqual(second.qty_ok, 1.0)
+        self.assertEqual(second.serial_identity_ids.ids, serials[0].ids)
 
     def test_over_quantity_blocked(self):
         """本次结算数量 > 未结算台数 → 拦截。"""
@@ -102,14 +109,17 @@ class TestStationSource(PieceRateTestCommon):
             settlement.action_compute_from_station()
 
     def test_concurrency_clash_rejected(self):
-        """两张单覆盖同一 SN → 确认复核拦截（并发开单防重）。"""
+        """两张单覆盖同一批过站记录 → 确认复核拦截（并发开单防重）。"""
         self._rate()
         serials, _ = self._seed_passes(10)
         first = self._station_settlement()
         first.action_compute_from_station()
+        taken = first.serial_history_ids.ids
         # 绕过按钮手工伪造第二张同覆盖单（模拟并发窗口）
-        second = self._station_settlement(qty=10.0)
-        second.serial_identity_ids = [(6, 0, [s.id for s in serials])]
+        second = self._station_settlement(qty=float(len(taken)))
+        second.serial_history_ids = [(6, 0, taken)]
+        second.serial_identity_ids = [
+            (6, 0, [s.id for s in serials])]
         second._resolve_rate_price()
         first._validate_source()  # 先到者可确认（复核只认已确认单）
         first.state = 'confirmed'

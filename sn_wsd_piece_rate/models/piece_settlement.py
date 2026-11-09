@@ -56,8 +56,19 @@ class SnWsdPieceSettlement(models.Model):
         'settlement_id', 'serial_identity_id',
         string='Covered Serials',
         copy=False,
-        help='SNs whose first OK pass at this operation is paid by this '
-             'settlement (station mode). Voiding releases them.',
+        help='Distinct SNs covered by this settlement (station mode). '
+             'Derived from the covered station passes; shown for lookup only.',
+    )
+    serial_history_ids = fields.Many2many(
+        'sn.wsd.serial.operation.history',
+        'sn_wsd_piece_settlement_pass_rel',
+        'settlement_id', 'history_id',
+        string='Covered Station Passes',
+        copy=False,
+        help='Station mode: every OK station-pass record paid by this '
+             'settlement. One SN may appear several times when it passes '
+             'the operation again (rework) or is补录 by batch pass — each OK '
+             'pass pays once. Voiding releases them.',
     )
     qty_ok = fields.Float(string='OK Quantity', digits='Product Unit of Measure', copy=False)
     price = fields.Float(
@@ -381,15 +392,16 @@ class SnWsdPieceSettlement(models.Model):
         }
 
     # ------------------------------------------------------------------
-    # station-mode source (unsettled balance, first-OK anchor, FIFO capture)
+    # station-mode source (unsettled balance, one pay per OK pass, FIFO)
     # ------------------------------------------------------------------
 
     unsettled_qty = fields.Float(
         string='Unsettled Quantity',
         compute='_compute_unsettled_qty',
         digits='Product Unit of Measure',
-        help='Station mode: SN count with a first OK pass at this operation '
-             'not yet covered by any non-void settlement.')
+        help='Station mode: OK station-pass records at this operation not '
+             'yet covered by any non-void settlement. Every OK pass counts '
+             '-- rework re-passes and batch-pass (administrative) rows too.')
 
     @api.depends('mes_order_id', 'route_operation_id')
     def _compute_unsettled_qty(self):
@@ -397,36 +409,34 @@ class SnWsdPieceSettlement(models.Model):
             if settlement.manage_mode != 'station' or not settlement.route_operation_id:
                 settlement.unsettled_qty = 0.0
                 continue
-            anchors = settlement._station_anchor_map()
-            covered = settlement._covered_serial_ids()
-            settlement.unsettled_qty = len(
-                [sn for sn in anchors if sn not in covered])
+            passes = settlement._station_pass_rows()
+            covered = settlement._covered_history_ids()
+            settlement.unsettled_qty = float(
+                len([row for row in passes if row not in covered]))
 
-    def _station_anchor_map(self):
-        """SN id -> first OK out_date at this (order, operation): the anchor
-        for one-pay-per-SN and FIFO capture. Batch-pass (administrative)
-        OK rows never anchor a payment -- the boards were not physically
-        processed at this operation."""
+    def _station_pass_rows(self):
+        """Every OK station-pass record of this (order, operation), oldest
+        first. One pay per pass: a reworked board that passes OK again, and
+        rows created by batch pass (administrative补录), all count -- what
+        matters is the OK result, not how the board got there."""
         self.ensure_one()
         self.env['sn.wsd.serial.operation.history'].flush_model(
-            ['mes_order_id', 'route_operation_id', 'result', 'out_date',
-             'x_batch_pass_log_id'])
+            ['mes_order_id', 'route_operation_id', 'result', 'out_date'])
         self.env.cr.execute("""
-            SELECT serial_identity_id, MIN(out_date)
+            SELECT id
             FROM sn_wsd_serial_operation_history
             WHERE mes_order_id = %s
               AND route_operation_id = %s
               AND result = 'ok'
-              AND x_batch_pass_log_id IS NULL
-            GROUP BY serial_identity_id
+            ORDER BY out_date ASC NULLS LAST, id ASC
         """, (self.mes_order_id.id, self.route_operation_id.id))
-        return dict(self.env.cr.fetchall())
+        return [row[0] for row in self.env.cr.fetchall()]
 
-    def _covered_serial_ids(self, confirmed_only=False):
-        """SN ids covered by other settlements of this (order, operation).
-        Drafts occupy for sourcing (button/unsettled balance); the
-        confirm-time concurrency recheck counts confirmed settlements only
-        so the first of two racing drafts can still confirm."""
+    def _covered_history_ids(self, confirmed_only=False):
+        """Pass-record ids covered by other settlements of this (order,
+        operation). Drafts occupy for sourcing (button/unsettled balance);
+        the confirm-time concurrency recheck counts confirmed settlements
+        only so the first of two racing drafts can still confirm."""
         self.ensure_one()
         domain = [
             ('mes_order_id', '=', self.mes_order_id.id),
@@ -437,23 +447,22 @@ class SnWsdPieceSettlement(models.Model):
                       else ('state', '!=', 'void'))
         covered = set()
         for other in self.search(domain):
-            covered |= set(other.serial_identity_ids.ids)
+            covered |= set(other.serial_history_ids.ids)
         return covered
 
     def action_compute_from_station(self):
         """Station mode sourcing: resolve the price snapshot and capture the
-        covered SN set, FIFO by first OK out_date. The settlement quantity
-        defaults to the full unsettled count and may be lowered (retroactive
-        split); it can never exceed the unsettled count."""
+        covered pass records, FIFO by out_date. The settlement quantity
+        defaults to the full unsettled pass count and may be lowered
+        (retroactive split); it can never exceed it."""
+        History = self.env['sn.wsd.serial.operation.history']
         for settlement in self:
             if settlement.manage_mode != 'station':
                 raise UserError(_(
                     'This action is only for station-mode settlements.'))
-            anchors = settlement._station_anchor_map()
-            covered = settlement._covered_serial_ids()
-            available = sorted(
-                ((sn, date) for sn, date in anchors.items() if sn not in covered),
-                key=lambda item: (item[1], item[0]))
+            passes = settlement._station_pass_rows()
+            covered = settlement._covered_history_ids()
+            available = [rid for rid in passes if rid not in covered]
             if not available:
                 raise UserError(_(
                     'No unsettled OK quantity at this operation yet.'))
@@ -465,27 +474,36 @@ class SnWsdPieceSettlement(models.Model):
                     'quantity (%(available)s).',
                     qty=settlement.qty_ok, available=len(available)))
             settlement._resolve_rate_price()
-            taken = [sn for sn, _ in available[:int(settlement.qty_ok)]]
-            settlement.write({'serial_identity_ids': [(6, 0, taken)]})
+            taken = available[:int(settlement.qty_ok)]
+            records = History.browse(taken)
+            settlement.write({
+                'serial_history_ids': [(6, 0, taken)],
+                'serial_identity_ids': [
+                    (6, 0, records.serial_identity_id.ids)],
+            })
 
     def _validate_station_coverage(self):
         """Confirm-time recheck: coverage present, matches the quantity, and
-        no SN is claimed by another non-void settlement (concurrency guard)."""
+        no pass record is claimed by another non-void settlement
+        (concurrency guard)."""
         for settlement in self:
             if settlement.manage_mode != 'station':
                 continue
-            if not settlement.serial_identity_ids:
+            if not settlement.serial_history_ids:
                 raise ValidationError(_(
-                    'A station-mode settlement must cover at least one serial.'))
-            if settlement.qty_ok != len(settlement.serial_identity_ids):
+                    'A station-mode settlement must cover at least one '
+                    'station pass.'))
+            if settlement.qty_ok != len(settlement.serial_history_ids):
                 raise ValidationError(_(
-                    'The OK quantity must equal the number of covered serials.'))
-            clash = settlement._covered_serial_ids(
+                    'The OK quantity must equal the number of covered '
+                    'station passes.'))
+            clash = settlement._covered_history_ids(
                 confirmed_only=True) & set(
-                settlement.serial_identity_ids.ids)
+                settlement.serial_history_ids.ids)
             if clash:
                 raise ValidationError(_(
-                    'Some serials are already covered by another settlement.'))
+                    'Some station passes are already covered by another '
+                    'settlement.'))
 
     # ------------------------------------------------------------------
     # participant pre-fill

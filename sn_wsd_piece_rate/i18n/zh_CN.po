@@ -210,6 +210,17 @@ msgid "Covered Serials"
 msgstr "覆盖表 SN"
 
 #. module: sn_wsd_piece_rate
+#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__serial_history_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+msgid "Covered Station Passes"
+msgstr "覆盖的过站记录"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+msgid "Covered Serials (summary)"
+msgstr "覆盖 SN（汇总）"
+
+#. module: sn_wsd_piece_rate
 #: model_terms:ir.actions.act_window,help:sn_wsd_piece_rate.action_sn_wsd_piece_rate
 msgid "Create your first piece rate"
 msgstr "创建第一条计件单价"

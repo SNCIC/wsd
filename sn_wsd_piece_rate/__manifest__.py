@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Piece Rate',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'Piece-rate wage settlements: rate master data, crew allocation, monthly ledger',
     'category': 'Manufacturing',
     'depends': ['sn_wsd_mrp'],

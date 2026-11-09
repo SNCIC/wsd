@@ -124,7 +124,24 @@
                                 <field name="allocated_total" class="oe_subtotal_footer_separator"/>
                             </group>
                         </page>
-                        <page string="Covered Serials" name="serials"
+                        <page string="Covered Station Passes" name="passes"
+                              invisible="manage_mode != 'station'">
+                            <field name="serial_history_ids"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'">
+                                <list>
+                                    <field name="serial_identity_id"/>
+                                    <field name="out_date"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="x_batch_pass_log_id"
+                                           optional="show" string="Batch Pass"/>
+                                </list>
+                            </field>
+                            <group>
+                                <field name="unsettled_qty" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Covered Serials (summary)" name="serials"
                               invisible="manage_mode != 'station'">
                             <field name="serial_identity_ids"
                                    options="{'no_create': True}"
