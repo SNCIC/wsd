@@ -204,6 +204,13 @@ html .o_web_client:has(.o_sn_wsd_warehouse_screen_action) > .o_action_manager {
         gap: 6px;
     }
 
+    /* 大屏展示模式：隐藏「仓库」「物料类别」两个下拉筛选（默认展示全量数据）；
+       日期输入、查询/重置、自动刷新与立即刷新保留。
+       需要恢复筛选时，注释掉下面这条规则即可。 */
+    .o_wsd_filter_group_select {
+        display: none !important;
+    }
+
     .o_wsd_filter_group label {
         color: #9cd3ef;
         font-size: 12px;

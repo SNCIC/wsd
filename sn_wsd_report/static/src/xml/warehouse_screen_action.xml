@@ -38,7 +38,8 @@
                         </section>
 
                         <section class="o_wsd_filter_bar">
-                            <div class="o_wsd_filter_group">
+                            <!-- 大屏展示模式：以下两组下拉筛选由 SCSS 隐藏，保留数据与交互逻辑备用 -->
+                            <div class="o_wsd_filter_group o_wsd_filter_group_select">
                                 <label>仓库</label>
                                 <select t-att-value="filters.warehouseId" t-on-change="ev => this.filters.warehouseId = ev.target.value">
                                     <option value="">全部仓库</option>
@@ -47,7 +48,7 @@
                                     </t>
                                 </select>
                             </div>
-                            <div class="o_wsd_filter_group">
+                            <div class="o_wsd_filter_group o_wsd_filter_group_select">
                                 <label>物料类别</label>
                                 <select t-att-value="filters.categoryId" t-on-change="ev => this.filters.categoryId = ev.target.value">
                                     <option value="">全部类别</option>
