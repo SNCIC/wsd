@@ -81,6 +81,14 @@
         gap: 10px;
     }
 
+    /* 大屏展示模式：隐藏「车间」下拉选择器，避免现场误切；
+       车间名称仍由顶部标题展示，数据日期与刷新时间保留。
+       需要恢复切换功能时，注释掉下面这组规则即可。 */
+    .o_ws_toolbar_left > label,
+    .o_ws_toolbar_left > select {
+        display: none !important;
+    }
+
     .o_ws_toolbar label {
         color: #7fb8d9;
         letter-spacing: 2px;

@@ -6,12 +6,25 @@ from odoo import api, fields, models, _
 
 HISTORY_MODEL = 'sn.wsd.serial.operation.history'
 
+# MES 制令单状态（sn.wsd.mes.order.state）
 STATE_LABELS = {
     'draft': '草稿',
     'confirmed': '已确认',
+    'released': '已下达',
+    'picked': '已领料',
     'in_progress': '生产中',
     'done': '已完工',
     'cancelled': '已取消',
+}
+
+# 销售订单状态（sale.order.state）——销售订单与制令单状态取值不同，
+# 不能共用一套映射，否则大屏上会直接显示 "sale" 之类的英文原值。
+SALE_STATE_LABELS = {
+    'draft': '报价单',
+    'sent': '报价已发送',
+    'sale': '销售订单',
+    'done': '已锁定',
+    'cancel': '已取消',
 }
 
 RESULT_LABELS = {
@@ -133,12 +146,17 @@ class SnWsdWorkshopScreenService(models.AbstractModel):
             [('x_workshop_id', '=', current.id)],
             order='x_production_line_id, sequence, id',
         )
-        orders = self.env['sn.wsd.mes.order'].search(
-            [('x_workshop_id', '=', current.id)], order='id desc', limit=8)
+        # 最新代码里 sn.wsd.mes.order 已带 x_workshop_id（related + store + index）。
+        # 直接按车间取制令单，再用 mes_order_id 关联过站/在制记录，替代旧的
+        # 跨表路径 mes_order_id.x_workshop_id：少一次 JOIN，且工单本身可被复用。
+        workshop_orders = self.env['sn.wsd.mes.order'].search(
+            [('x_workshop_id', '=', current.id)], order='id desc')
+        orders = workshop_orders[:8]
         active_orders = orders.filtered(
             lambda o: o.state not in ('done', 'cancelled'))
 
-        domain_ws = [('mes_order_id.x_workshop_id', '=', current.id)]
+        domain_ws = [('mes_order_id', 'in', workshop_orders.ids)] \
+            if workshop_orders else [('id', '=', 0)]
 
         # 数据日期：取最近一条过站记录的本地日期。现场停线/休息日打开大屏时
         # 不会满屏 0，页面顶部会显式标注“数据日期”。
@@ -171,8 +189,7 @@ class SnWsdWorkshopScreenService(models.AbstractModel):
                 bucket['scrap'] += 1
 
         wip_stats = {}
-        wips = self.env['sn.wsd.serial.wip'].search(
-            [('mes_order_id.x_workshop_id', '=', current.id)])
+        wips = self.env['sn.wsd.serial.wip'].search(domain_ws)
         for wip in wips:
             wip_stats[wip.workcenter_id.id] = wip_stats.get(
                 wip.workcenter_id.id, 0) + 1
@@ -233,29 +250,41 @@ class SnWsdWorkshopScreenService(models.AbstractModel):
             'ng': buckets[day]['ng'],
         } for day in trend_days]
 
-        # ---- 订单完成进度（销售订单 → 关联生产订单的实际产出） ----
+        # ---- 订单完成进度（销售订单 → 生产订单 → MES 制令单） ----
+        # 最新代码里 MO 通过 origin 携带销售订单号，并通过 x_mes_order_ids
+        # 直连 MES 制令单；sale_line_id 在本环境恒为空，已不能再用来反查。
+        # 产出取制令单 produced_qty（最新代码的产出聚合口径），完成进度取
+        # x_progress_rate（完工入库÷排产；双面板 T 面按产出÷排产），不再用
+        # 「已发货就把产出猜成订单量」的兜底。
         sale_orders = self.env['sale.order'].search(
             [('state', 'in', ('sale', 'done'))],
             order='date_order desc, id desc', limit=6)
+        MesOrder = self.env['sn.wsd.mes.order']
         sales_progress = []
         for order in sale_orders:
             order_qty = sum(order.order_line.mapped('product_uom_qty')) or 0.0
-            mos = self.env['mrp.production'].search(
-                [('sale_line_id', 'in', order.order_line.ids)])
-            produced = 0.0
-            if 'x_mes_produced_qty' in mos._fields:
-                produced = sum(mos.mapped('x_mes_produced_qty') or [])
-            elif 'qty_producing' in mos._fields:
-                produced = sum(mos.mapped('qty_producing') or [])
-            if not produced and order.delivery_status == 'full':
-                produced = order_qty
+            mos = self.env['mrp.production'].search([('origin', '=', order.name)])
+            if not mos:
+                # 补货单生成的 MO 不带 origin，最新代码把来源销售单挂在
+                # reference_ids.sale_ids 上，作为第二关联路径兜底。
+                mos = self.env['mrp.production'].search(
+                    [('reference_ids.sale_ids', 'in', [order.id])])
+            mes_orders = MesOrder.search([('production_id', 'in', mos.ids)]) \
+                if mos else MesOrder
+            produced = sum(mes_orders.mapped('produced_qty') or [])
+            planned = sum(mes_orders.mapped('planned_qty') or [])
+            progress = round(
+                sum(m.x_progress_rate * m.planned_qty for m in mes_orders)
+                / planned, 1) if planned else 0.0
+            partner = order.partner_id.display_name or (
+                mes_orders[:1].x_partner_id.display_name if mes_orders else '') or '-'
             sales_progress.append({
                 'name': order.name,
-                'partner': order.partner_id.display_name or '-',
+                'partner': partner,
                 'qty': order_qty,
                 'produced': produced,
-                'progress': round(min(produced / order_qty * 100.0, 100.0), 1) if order_qty else 0.0,
-                'state_label': STATE_LABELS.get(order.state, order.state or ''),
+                'progress': min(progress, 100.0),
+                'state_label': SALE_STATE_LABELS.get(order.state, order.state or ''),
                 'date': fields.Date.to_string(order.date_order.date()) if order.date_order else '',
             })
 
@@ -448,8 +477,13 @@ class SnWsdWorkshopScreenService(models.AbstractModel):
         day_total = sum(row['total'] for row in day_stats.values())
         wip_total = sum(wip_stats.values())
         plan_qty = sum(order.planned_qty or 0.0 for order in active_orders)
-        plan_done = sum(order.x_output_qty or 0.0 for order in active_orders)
-        completion = (plan_done / plan_qty * 100.0) if plan_qty else 0.0
+        # produced_qty 是最新代码里 MES 制令单的产出聚合字段（镜像 x_output_qty）；
+        # 完成率改用官方 x_progress_rate 按排产量加权，含完工入库口径。
+        plan_done = sum(order.produced_qty or 0.0 for order in active_orders)
+        completion = (
+            sum((order.x_progress_rate or 0.0) * (order.planned_qty or 0.0)
+                for order in active_orders) / plan_qty
+        ) if plan_qty else 0.0
 
         rank = sorted(station_flow, key=lambda item: item['ok'], reverse=True)[:8]
         max_rank = max((item['ok'] for item in rank), default=0)
@@ -500,11 +534,11 @@ class SnWsdWorkshopScreenService(models.AbstractModel):
                 'product': order.product_id.display_name or '-',
                 'line': order.production_line_id.name or '-',
                 'plan_qty': order.planned_qty or 0.0,
-                'output_qty': order.x_output_qty or 0.0,
+                'output_qty': order.produced_qty or 0.0,
                 'input_qty': order.x_input_qty or 0.0,
-                'progress': round(
-                    (order.x_output_qty or 0.0) / order.planned_qty * 100.0, 1
-                ) if order.planned_qty else 0.0,
+                # 进度统一取最新代码的官方口径 x_progress_rate，
+                # 不再用 产出÷排产 自行推算。
+                'progress': round(order.x_progress_rate or 0.0, 1),
                 'state': order.state,
                 'state_label': STATE_LABELS.get(order.state, order.state or ''),
                 'date_plan': fields.Date.to_string(order.date_plan) if order.date_plan else '',

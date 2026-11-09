@@ -23,7 +23,8 @@ class SnWsdAiDashboardService(models.AbstractModel):
         for order in orders:
             name = order.name or '-'
             planned = order.planned_qty or 0.0
-            actual = order.x_output_qty or 0.0
+            # produced_qty 是最新代码里 MES 制令单的产出聚合字段
+            actual = order.produced_qty or 0.0
             rate = round(actual / planned * 100.0, 1) if planned else 0.0
             state_label = '完成' if order.state == 'done' else '进行中' if order.state != 'cancelled' else '已取消'
             level = 'ok' if order.state == 'done' else 'normal'
@@ -40,7 +41,8 @@ class SnWsdAiDashboardService(models.AbstractModel):
                 comparison_actual.append(actual)
                 worktime_labels.append(name[:10])
                 worktime_values.append(round(actual * 0.17, 1))
-        total_output = sum(o.x_output_qty or 0.0 for o in orders)
+        total_output = sum(o.produced_qty or 0.0 for o in orders)
+        total_planned = sum(o.planned_qty or 0.0 for o in orders)
         total_hours = round(total_output * 0.17, 1)
         return {
             'dimension_label': '工单',
@@ -48,7 +50,9 @@ class SnWsdAiDashboardService(models.AbstractModel):
                 {'label': '工单总数', 'value': len(orders), 'suffix': '', 'digits': 0, 'color': 'cyan'},
                 {'label': '总产量', 'value': round(total_output), 'suffix': ' 件', 'digits': 0, 'color': 'cyan'},
                 {'label': '总工时', 'value': total_hours, 'suffix': ' h', 'digits': 0, 'color': 'green'},
-                {'label': '目标达成率', 'value': 0.0, 'suffix': '%', 'digits': 1, 'color': 'amber'},
+                {'label': '目标达成率',
+                 'value': round(total_output / total_planned * 100.0, 1) if total_planned else 0.0,
+                 'suffix': '%', 'digits': 1, 'color': 'amber'},
                 {'label': '进行中工单', 'value': len([o for o in orders if o.state not in ('done', 'cancelled')]),
                  'suffix': '', 'digits': 0, 'color': 'purple'},
                 {'label': '异常工单', 'value': 0, 'suffix': '', 'digits': 0, 'color': 'red'},

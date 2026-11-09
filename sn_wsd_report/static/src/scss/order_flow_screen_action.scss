@@ -160,14 +160,17 @@ html .o_web_client:has(.o_sn_wsd_order_flow_action) > .o_action_manager {
         z-index: 2;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         flex: none;
         margin: 2px 0 8px;
         padding: 0 4px;
     }
 
+    /* 大屏展示模式：隐藏「订单」下拉选择器，当前订单由左侧「订单档案」面板展示；
+       工具条已改为右对齐，保留时钟与刷新按钮。需要恢复切换时把 display 改回 flex，
+       并把上方 .o_flow_toolbar 的 justify-content 改回 space-between。 */
     .o_flow_order_picker {
-        display: flex;
+        display: none;
         align-items: center;
         gap: 10px;
 
