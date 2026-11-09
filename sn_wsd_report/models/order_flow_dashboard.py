@@ -117,10 +117,17 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
         # ------------------------------------------------------------------
         # linked records
         # ------------------------------------------------------------------
-        mo = self.env['mrp.production'].search(
-            [('origin', '=', order.name)], order='id', limit=1)
+        # 最新代码里 MO 通过 origin 关联销售订单，MES 制令单再通过
+        # production_id 反向关联 MO；补货单生成的 MO 不带 origin，改用
+        # reference_ids.sale_ids 兜底。旧写法只按单条 MO 取制令单，
+        # 双面板（一个 MO 两张制令单）会漏关联。
+        mos = self.env['mrp.production'].search([('origin', '=', order.name)])
+        if not mos:
+            mos = self.env['mrp.production'].search(
+                [('reference_ids.sale_ids', 'in', [order.id])])
+        mo = mos[:1]
         mes = self.env['sn.wsd.mes.order'].search(
-            [('production_id', '=', mo.id)], order='id', limit=1) if mo else \
+            [('production_id', 'in', mos.ids)], order='id', limit=1) if mos else \
             self.env['sn.wsd.mes.order']
         mroute = mes.x_mes_route_id if mes else self.env['sn.wsd.mes.order.route']
         mops = mroute.operation_ids.sorted('sequence') if mroute else \
@@ -144,8 +151,11 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
         # node status
         # ------------------------------------------------------------------
         planned_qty = mes.planned_qty if mes else (mo.product_qty if mo else 0.0)
-        output_qty = mes.x_output_qty if mes else 0.0
+        # produced_qty 是最新代码里 MES 制令单的产出聚合字段；
+        # x_done_qty 是完工入库数量，x_sn_wip_count 是官方在制 SN 台数。
+        output_qty = mes.produced_qty if mes else 0.0
         done_qty = mes.x_done_qty if mes else 0.0
+        wip_qty = mes.x_sn_wip_count if mes else 0
 
         # 节点 1：销售接单
         sale_time = self._dt_str(order.date_order)
@@ -194,14 +204,13 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
         stations = self._station_rows(mes, mops, planned_qty)
         if stations:
             passed_total = sum(s['passed'] for s in stations)
-            wip_total = sum(s['wip'] for s in stations)
             last_exit = max(
                 (s['out_dt'] for s in stations if s['out_dt']), default=None)
             all_passed = output_qty and output_qty + 0.0001 >= planned_qty
             stations_node = self._node(
                 'stations', 'done' if all_passed else 'active',
                 _('%s 道工序 · 在制 %s') % (
-                    len(stations), self._fmt_qty(wip_total)),
+                    len(stations), self._fmt_qty(wip_qty)),
                 self._day_str(last_exit) if last_exit else '',
                 self._fmt_qty(passed_total),
             )
@@ -295,16 +304,18 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
         # ------------------------------------------------------------------
         # summary
         # ------------------------------------------------------------------
-        wip_total = sum(s['wip'] for s in stations)
         shipped = 0.0
         if delivery and delivery.state == 'done':
             shipped = sum(delivery.move_ids.mapped('quantity'))
         return {
             'summary': {
                 'order_count': len(orders),
-                'in_production': SaleOrder.search_count([]),
+                # 在产口径取 MES 制令单在制状态数，旧写法把全部销售订单数
+                # 当成在产订单数。
+                'in_production': self.env['sn.wsd.mes.order'].search_count(
+                    [('state', 'in', ('picked', 'in_progress'))]),
                 'done_output': output_qty,
-                'wip_qty': wip_total,
+                'wip_qty': wip_qty,
                 'shipped_qty': shipped,
                 'today_date': fields.Date.to_string(today),
                 'refresh_time': now.strftime('%Y-%m-%d %H:%M:%S'),
@@ -325,7 +336,10 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
             'traces': trace_rows,
             'order_info': {
                 'name': order.name,
-                'partner': order.partner_id.name or '-',
+                # 客户优先取销售订单，最新代码里 MES 制令单也有 x_partner_id
+                # （从来源销售单解析），备单场景可作为兜底。
+                'partner': order.partner_id.name
+                    or (mes.x_partner_id.name if mes else '') or '-',
                 'product': order.order_line[:1].product_id.display_name or '-',
                 'qty': self._fmt_qty(
                     sum(order.order_line.mapped('product_uom_qty'))),
@@ -341,8 +355,10 @@ class SnWsdOrderFlowDashboardService(models.AbstractModel):
                     and mes.date_plan else '-',
                 'planned_qty': self._fmt_qty(planned_qty),
                 'output_qty': self._fmt_qty(output_qty),
-                'progress_rate': round(output_qty / planned_qty * 100.0, 1)
-                    if planned_qty else 0.0,
+                # 完成进度统一取官方 x_progress_rate（完工入库÷排产，
+                # 双面板 T 面按产出÷排产），不再用产出÷排产自行推算。
+                'progress_rate': round(mes.x_progress_rate or 0.0, 1)
+                    if mes else 0.0,
             },
         }
 

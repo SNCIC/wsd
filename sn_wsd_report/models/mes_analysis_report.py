@@ -8,6 +8,27 @@ class SnWsdMesDashboardService(models.AbstractModel):
     _description = 'MES Dashboard Service'
 
     @api.model
+    def _progress_row(self, order):
+        """按最新 MES 制令单字段汇总单张工单的进度。
+
+        produced_qty / x_progress_rate / x_yield_total 分别是最新代码里
+        产出、完成进度、良率的权威口径；不良与报废取工序上的 x_ng_qty、
+        x_scrap_qty，不再在大屏里写死 0 和 100%。
+        """
+        ops = order.x_route_operation_ids
+        return {
+            'production_name': order.name,
+            'product_qty': order.planned_qty,
+            'qty_output_total': order.produced_qty,
+            'qty_pass': order.produced_qty,
+            'qty_fail': sum(ops.mapped('x_ng_qty') or []),
+            'qty_scrap': sum(ops.mapped('x_scrap_qty') or []),
+            'progress_rate': round(order.x_progress_rate or 0.0, 2),
+            'pass_rate': round((order.x_yield_total or 0.0) * 100.0, 2),
+            'progress_status': 'normal' if order.state == 'done' else 'warning',
+        }
+
+    @api.model
     def get_big_screen_data(self):
         # 无 MES 工单数据时启用集中管理的占位演示数据（见 demo_data.py），
         # 存在真实数据后自动切回真实查询。
@@ -88,18 +109,7 @@ class SnWsdMesDashboardService(models.AbstractModel):
                 'station_alert_count': open_alert_count,
             },
             'production_progress': [
-                {
-                    'production_name': order.name,
-                    'product_qty': order.planned_qty,
-                    'qty_output_total': order.x_output_qty,
-                    'qty_pass': order.x_output_qty,
-                    'qty_fail': 0.0,
-                    'qty_scrap': 0.0,
-                    'progress_rate': round(order.x_output_qty / order.planned_qty * 100.0, 2) if order.planned_qty else 0.0,
-                    'pass_rate': 100.0 if order.x_output_qty else 0.0,
-                    'progress_status': 'normal' if order.state == 'done' else 'warning',
-                }
-                for order in mes_orders
+                self._progress_row(order) for order in mes_orders
             ],
             'operation_daily': [],
             'test_pass_rates': [],
