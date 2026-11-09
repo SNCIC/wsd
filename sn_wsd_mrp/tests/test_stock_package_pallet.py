@@ -121,9 +121,9 @@ class TestStockPackagePallet(TransactionCase):
         order.action_online()
         wc_in = self._make_workcenter(self.op_in)
         wc_out = self._make_workcenter(self.op_out)
-        serial = order.scan_enter('SN-PLT-001', wc_in)
+        serial = order.scan_enter('126100000001', wc_in)
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-PLT-001', wc_out)
+        order.scan_enter('126100000001', wc_out)
         order.leave_station(serial, 'ok')
         self.assertEqual(order.x_output_qty, 1.0)
         component = mo.bom_id.bom_line_ids.product_id

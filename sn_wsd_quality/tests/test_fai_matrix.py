@@ -1,4 +1,5 @@
 from psycopg2 import IntegrityError
+import itertools
 
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
@@ -107,11 +108,17 @@ class TestFaiMatrix(TransactionCase):
     def _feed(self, order, name):
         return order.scan_enter(name, self.wc_in)
 
-    def _ready_samples(self, order, prefix):
+    _sn_seq = itertools.count(500)
+
+    def _sn(self):
+        """标准格式 SN（过站内核格式闸 2026-11-09）：'1261'+自增 8 位。"""
+        return '1261%08d' % next(self._sn_seq)
+
+    def _ready_samples(self, order):
         # 把 2 台样本送到检并出站 OK → 样本齐套（矩阵在此展开）
         serials = []
-        for n in ('101', '102'):
-            serial = self._feed(order, '%s-%s' % (prefix, n))
+        for _n in ('101', '102'):
+            serial = self._feed(order, self._sn())
             order.leave_station(serial, 'ok')
             serials.append(serial)
         return serials
@@ -129,7 +136,7 @@ class TestFaiMatrix(TransactionCase):
     def test_10_full_sample_set_expands_matrix(self):
         # 到检自动展开 N×M 格且默认合格（异常驱动：检验员只改异常格）
         order = self._order()
-        s1, s2 = self._ready_samples(order, 'SN-MTX-A')
+        s1, s2 = self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         self.assertEqual(len(inspection.cell_ids), 4,
                          'full sample set expands N x M cells')
@@ -159,7 +166,7 @@ class TestFaiMatrix(TransactionCase):
     def test_20_cell_entry_derives_line_and_document(self):
         # 数值格比对上下限自动判；任一格 fail → line fail；全 pass → pass
         order = self._order()
-        s1, s2 = self._ready_samples(order, 'SN-MTX-B')
+        s1, s2 = self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         voltage = self._line(inspection, self.voltage_code)
         bom = self._line(inspection, self.bom_code)
@@ -193,7 +200,7 @@ class TestFaiMatrix(TransactionCase):
     def test_30_any_cell_fail_reopens_round(self):
         # 唯一一格 fail + done → 整轮判退开新一轮；上一轮格留痕
         order = self._order()
-        s1, s2 = self._ready_samples(order, 'SN-MTX-C')
+        s1, s2 = self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         self._cell(inspection, self.voltage_code, s1).write(
             {'measured_value': 25.0})  # 超上限：唯一 fail 格
@@ -220,10 +227,10 @@ class TestFaiMatrix(TransactionCase):
     # ---------------- 一键全部合格（格级） ----------------
     def test_40_set_all_pass_fills_cells_and_unlocks(self):
         order = self._order()
-        self._ready_samples(order, 'SN-MTX-D')
+        self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         with self.assertRaises(ValidationError):
-            self._feed(order, 'SN-MTX-D-103')  # 样本满 2 且未判定：拦
+            self._feed(order, '126100000005')  # 样本满 2 且未判定：拦
         inspection.action_set_all_pass()
         self.assertEqual(set(inspection.cell_ids.mapped('result')),
                          {'pass'}, 'set-all-pass judges every cell')
@@ -236,13 +243,13 @@ class TestFaiMatrix(TransactionCase):
         inspection.action_done()
         self.assertEqual(inspection.result, 'pass')
         self.assertEqual(order.x_fai_state, 'passed')
-        self._feed(order, 'SN-MTX-D-103')  # 投入解锁
+        self._feed(order, '126100000005')  # 投入解锁
 
     # ---------------- 唯一约束 ----------------
     def test_50_duplicate_sn_item_cell_blocked(self):
         # 同 SN 同项第二格：唯一约束拦截（savepoint 包裹，仿 ipqc 写法）
         order = self._order()
-        s1, s2 = self._ready_samples(order, 'SN-MTX-E')
+        s1, s2 = self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         Cell = self.env['sn.wsd.quality.inspection.cell']
         cell = self._cell(inspection, self.voltage_code, s1)
@@ -259,14 +266,14 @@ class TestFaiMatrix(TransactionCase):
     def test_60_scan_switches_board_and_counts(self):
         # 扫码切换当前板；非法 SN 拦截；数量三件套随格联动
         order = self._order()
-        s1, s2 = self._ready_samples(order, 'SN-MTX-D')
+        s1, s2 = self._ready_samples(order)
         inspection = order.x_fai_inspection_id
         inspection.x_fai_scan = s1.name
         inspection._onchange_x_fai_scan()
         self.assertEqual(inspection.x_fai_current_sn, s1,
                          'scanning a picked board switches the inspected board')
         self.assertFalse(inspection.x_fai_scan, 'the scan box clears itself')
-        inspection.x_fai_scan = 'SN-NOT-IN-ROUND'
+        inspection.x_fai_scan = '126100000007'
         with self.assertRaises(UserError):
             inspection._onchange_x_fai_scan()
         self.assertEqual((inspection.x_fai_ok_qty, inspection.x_fai_ng_qty), (2, 0),

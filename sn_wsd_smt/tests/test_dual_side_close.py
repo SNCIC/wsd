@@ -203,9 +203,9 @@ class TestDualSideClose(TransactionCase):
         order = self._gate_online(self._make_order(qty=2))
         self.assertTrue(order.x_is_dual_side_non_final)
         self._load_feeder(order)
-        self._walk(order, 'DC-SN-001')
+        self._walk(order, '126100000001')
         self.assertEqual(order.state, 'in_progress')
-        self._walk(order, 'DC-SN-002')
+        self._walk(order, '126100000002')
         # 流水净值 4（两块板），无报废 → 全额扣；散料 BOM 兜底 2 板 × 4
         self.assertEqual(order.state, 'done')
         self.assertAlmostEqual(order.x_done_qty, 2.0)
@@ -221,9 +221,9 @@ class TestDualSideClose(TransactionCase):
     def test_02_scrap_share_not_double_deducted(self):
         order = self._gate_online(self._make_order(qty=2))
         self._load_feeder(order)
-        self._walk(order, 'DC-SN-101', result='scrap',
+        self._walk(order, '126100000003', result='scrap',
                    scrap_reason=self.reason)
-        self._walk(order, 'DC-SN-102')
+        self._walk(order, '126100000004')
         # 报废单：电容 2（流水批次）+ 螺丝 4；自动关结份额 (2-1)/2 →
         # 电容 4×0.5=2，散料按 1 板 → 螺丝 4
         self.assertEqual(order.state, 'done')
@@ -233,7 +233,7 @@ class TestDualSideClose(TransactionCase):
     def test_03_underfed_not_auto_closed_manual_button_closes(self):
         order = self._gate_online(self._make_order(qty=2))
         self._load_feeder(order)
-        self._walk(order, 'DC-SN-201')
+        self._walk(order, '126100000005')
         self.assertEqual(order.state, 'in_progress')
         order.action_close()
         self.assertEqual(order.state, 'done')
@@ -252,9 +252,9 @@ class TestDualSideClose(TransactionCase):
         self.env['stock.quant'].search([
             ('location_id', '=', self.line_side.id)]).unlink()
         order = self._gate_online(self._make_order(qty=1))
-        serial = order.scan_enter('DC-SN-301', self.wc_t_in)
+        serial = order.scan_enter('126100000006', self.wc_t_in)
         order.leave_station(serial, 'ok')
-        order.scan_enter('DC-SN-301', self.wc_t_out)
+        order.scan_enter('126100000006', self.wc_t_out)
         with self.assertRaises(ValidationError):
             order.leave_station(serial, 'ok')  # 自动关结里的倒冲失败
         self.env.flush_all()
@@ -265,9 +265,9 @@ class TestDualSideClose(TransactionCase):
         # 排产 1：板停在 AOI（WIP）未流出 → 不自动关；流出那一扫才关
         order = self._gate_online(self._make_order(qty=1))
         self._load_feeder(order)
-        serial = order.scan_enter('DC-SN-401', self.wc_t_in)
+        serial = order.scan_enter('126100000007', self.wc_t_in)
         order.leave_station(serial, 'ok')
-        order.scan_enter('DC-SN-401', self.wc_t_out)
+        order.scan_enter('126100000007', self.wc_t_out)
         self.assertEqual(order.state, 'in_progress')
         order.leave_station(serial, 'ok')
         self.assertEqual(order.state, 'done')

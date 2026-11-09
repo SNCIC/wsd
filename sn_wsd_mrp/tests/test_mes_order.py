@@ -573,8 +573,8 @@ class TestMesOrder(TransactionCase):
         carries the work center onto the WIP row and bumps op counters."""
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
-        serial = order.scan_enter('SN-STA-001', wc_in)
-        self.assertEqual(serial.name, 'SN-STA-001')
+        serial = order.scan_enter('126100000001', wc_in)
+        self.assertEqual(serial.name, '126100000001')
         wip = self.env['sn.wsd.serial.wip'].search([
             ('serial_identity_id', '=', serial.id)])
         self.assertEqual(wip.route_operation_id.operation_id, self.op_in)
@@ -593,13 +593,13 @@ class TestMesOrder(TransactionCase):
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
         wc_out = self._make_workcenter(self.op_out, line=self.line)
-        serial = order.scan_enter('SN-STA-002', wc_in)
+        serial = order.scan_enter('126100000002', wc_in)
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-STA-002', wc_out)
+        order.scan_enter('126100000002', wc_out)
         self.assertTrue(order.leave_station(serial, 'ok'))
         self.assertEqual(order.x_output_qty, 1.0)
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-STA-002', wc_in)
+            order.scan_enter('126100000002', wc_in)
 
     def test_32_line_and_workshop_guards(self):
         """Start-operation work centers must share the order's line; every
@@ -609,14 +609,14 @@ class TestMesOrder(TransactionCase):
             {'name': 'WS-X', 'code': 'WSX'})
         with self.assertRaises(ValidationError):
             order.scan_enter(
-                'SN-STA-003',
+                '126100000003',
                 self._make_workcenter(self.op_in, workshop=other_workshop))
         other_line = self.env['sn.mrp.production.line'].create({
             'name': 'LB', 'workshop_id': self.workshop.id,
         })
         with self.assertRaises(ValidationError):
             order.scan_enter(
-                'SN-STA-003', self._make_workcenter(self.op_in, line=other_line))
+                '126100000003', self._make_workcenter(self.op_in, line=other_line))
 
     def test_33_first_entry_rules(self):
         """Unknown SNs cannot join mid-route; known-but-never-fed SNs must
@@ -624,11 +624,11 @@ class TestMesOrder(TransactionCase):
         order = self._make_online_order()
         wc_out = self._make_workcenter(self.op_out, line=self.line)
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-NEVER-SEEN', wc_out)
+            order.scan_enter('126100000004', wc_out)
         serial = self.env['sn.wsd.serial.identity'].create(
-            {'name': 'SN-STA-004'})
+            {'name': '126100000005'})
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-STA-004', wc_out)
+            order.scan_enter('126100000005', wc_out)
 
     def test_34_report_mode_quantities(self):
         """Report-mode quantities read the reported amounts at the counter
@@ -704,9 +704,9 @@ class TestMesOrder(TransactionCase):
         order = self._make_order(mo, 4)
         self._gate_online(order)
         wc_in, wc_out = self._done_workcenters()
-        serial = order.scan_enter('SN-DONE-001', wc_in)
+        serial = order.scan_enter('126100000006', wc_in)
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-DONE-001', wc_out)
+        order.scan_enter('126100000006', wc_out)
         order.leave_station(serial, 'ok')
         self.assertEqual(order.x_output_qty, 1.0)
         return order
@@ -805,17 +805,17 @@ class TestMesOrder(TransactionCase):
         self._gate_online(order_b)
         wc_in, wc_out = self._done_workcenters()
         wc_in_b = self._make_workcenter(self.op_in, line=other_line)
-        serial = order_a.scan_enter('SN-BIND-001', wc_in)
+        serial = order_a.scan_enter('126100000007', wc_in)
         self._leave_ng(order_a, serial)
         # NG on A, not produced there -> cannot enter B
         with self.assertRaises(ValidationError):
-            order_b.scan_enter('SN-BIND-001', wc_in_b)
+            order_b.scan_enter('126100000007', wc_in_b)
         # a healthy board produced through the end operation is released
-        serial2 = order_a.scan_enter('SN-BIND-002', wc_in)
+        serial2 = order_a.scan_enter('126100000008', wc_in)
         order_a.leave_station(serial2, 'ok')
-        order_a.scan_enter('SN-BIND-002', wc_out)
+        order_a.scan_enter('126100000008', wc_out)
         order_a.leave_station(serial2, 'ok')
-        serial2_b = order_b.scan_enter('SN-BIND-002', wc_in_b)
+        serial2_b = order_b.scan_enter('126100000008', wc_in_b)
         self.assertTrue(serial2_b)
 
     def test_47_station_scan_routing(self):
@@ -837,15 +837,15 @@ class TestMesOrder(TransactionCase):
         # order barcode switches nothing here (B is another line, not listed)
         # feed a new SN through the scan router: the scan enters the station
         # and hands back the leave action for the station's own verdict
-        result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001', order_a.id)
+        result = Station.sn_station_scan(wc_in.id, '126100000009', order_a.id)
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(order_a.x_input_qty, 1.0)
         # scanning that WIP SN returns the leave action again
-        result = Station.sn_station_scan(wc_in.id, 'SN-SCAN-001')
+        result = Station.sn_station_scan(wc_in.id, '126100000009')
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
         # 一站一扫：未知 SN 自动解析工位的在线单并投入（无在线单才拒绝）
-        result = Station.sn_station_scan(wc_in.id, 'SN-NOWHERE')
+        result = Station.sn_station_scan(wc_in.id, '126100000010')
         self.assertEqual(result['action'], 'leave')
         self.assertEqual(result['order_id'], order_a.id)
         # scanning the order barcode switches the current order
@@ -864,17 +864,17 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(log.action, 'online')
         self.assertEqual(log.user_id, self.env.user)
         wc_in, wc_out = self._done_workcenters()
-        serial = order.scan_enter('SN-LOG-001', wc_in)
+        serial = order.scan_enter('126100000011', wc_in)
         # a board in progress does NOT block going offline: feeding new SNs
         # is what online gates, the flow itself keeps running
         order.action_offline()
         self.assertFalse(order.x_online_date)
         # feeding a new SN into the start operation is refused offline
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-LOG-002', wc_in)
+            order.scan_enter('126100000012', wc_in)
         # the in-progress board keeps flowing: it leaves and re-enters fine
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-LOG-001', wc_out)
+        order.scan_enter('126100000011', wc_out)
         order.leave_station(serial, 'ok')  # produced through the end op
         self.assertEqual(order.x_online_log_ids.mapped('action'),
                          ['offline', 'online'])
@@ -888,7 +888,7 @@ class TestMesOrder(TransactionCase):
         self._gate_online(order)
         wc_in, _wc_out = self._done_workcenters()
         self._stock_line_side(order)
-        serial = order.scan_enter('SN-SCRAP-001', wc_in)
+        serial = order.scan_enter('126100000013', wc_in)
         reason = self.env['sn.wsd.scrap.reason'].search([], limit=1)
         with self.assertRaises(ValidationError):
             order.leave_station(serial, 'scrap')  # reason is mandatory
@@ -904,7 +904,7 @@ class TestMesOrder(TransactionCase):
         self.assertEqual(scrap.state, 'done')
         # the scrapped SN is sealed for this order
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-SCRAP-001', wc_in)
+            order.scan_enter('126100000013', wc_in)
 
     # ------------------------------------------------------------------
     # NG re-pass: re-entry rules + retry limit (x_max_test_count)
@@ -921,13 +921,13 @@ class TestMesOrder(TransactionCase):
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
         self.op_in.x_max_test_count = 3
-        self._ng_pass(order, wc_in, 'SN-NG-001')
-        serial = order.scan_enter('SN-NG-001', wc_in)
+        self._ng_pass(order, wc_in, '126100000014')
+        serial = order.scan_enter('126100000014', wc_in)
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-NG-001', wc_in)  # ok row does not seal
+        serial = order.scan_enter('126100000014', wc_in)  # ok row does not seal
         order.leave_station(serial, 'ok')
         with self.assertRaises(ValidationError):
-            self._ng_pass(order, wc_in, 'SN-NG-001')  # 4th pass blocked
+            self._ng_pass(order, wc_in, '126100000014')  # 4th pass blocked
 
     def test_49b_cap_must_be_at_least_one(self):
         """Max test count is required and must be >= 1 (0 = unlimited was
@@ -935,9 +935,9 @@ class TestMesOrder(TransactionCase):
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
         self.op_in.x_max_test_count = 1
-        self._ng_pass(order, wc_in, 'SN-NG-003')
+        self._ng_pass(order, wc_in, '126100000015')
         with self.assertRaises(ValidationError):
-            self._ng_pass(order, wc_in, 'SN-NG-003')  # cap 1 used
+            self._ng_pass(order, wc_in, '126100000015')  # cap 1 used
         with self.assertRaises(ValidationError):
             self.op_in.x_max_test_count = 0
 
@@ -947,11 +947,11 @@ class TestMesOrder(TransactionCase):
         order = self._make_online_order()
         wc_in = self._make_workcenter(self.op_in, line=self.line)
         self.op_in.x_max_test_count = 3
-        serial = order.scan_enter('SN-NG-004', wc_in)
+        serial = order.scan_enter('126100000016', wc_in)
         self._leave_ng(order, serial)
-        serial = order.scan_enter('SN-NG-004', wc_in)
+        serial = order.scan_enter('126100000016', wc_in)
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-NG-004', wc_in)
+        serial = order.scan_enter('126100000016', wc_in)
         order.leave_station(serial, 'ok')
         rows = self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id', '=', serial.id),

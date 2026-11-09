@@ -55,8 +55,8 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
     def _full_lot_ng_board(self, order, name):
         """Reject the sample then switch to full lot; a new NG board
         outside the original sample lands pending."""
-        inspection = self._ng_round(order, 'SN-SC-001')
-        self._ng_round(order, 'SN-SC-002')
+        inspection = self._ng_round(order, '126100000001')
+        self._ng_round(order, '126100000002')
         inspection.action_done()
         inspection.action_start_full_inspection()
         self._ng_round(order, name)
@@ -67,7 +67,7 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_01_full_lot_new_ng_scrap_closes(self):
         order = self._order()
-        inspection, board = self._full_lot_ng_board(order, 'SN-SC-101')
+        inspection, board = self._full_lot_ng_board(order, '126100000003')
         self.assertNotIn(board, inspection.x_fai_serial_ids)
         self.assertEqual(self._state(inspection, board), 'pending')
         scrap = self._scrap_record(order, inspection, board)
@@ -98,7 +98,7 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_02_draft_and_failed_scrap_keep_pending(self):
         order = self._order()
-        inspection, board = self._full_lot_ng_board(order, 'SN-SC-201')
+        inspection, board = self._full_lot_ng_board(order, '126100000004')
         # draft only: the board stays pending and unreleased
         draft = self._scrap_record(order, inspection, board)
         self.assertEqual(draft.state, 'draft')
@@ -136,7 +136,7 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_03_rework_board_scrap_voids_voucher(self):
         order = self._order()
-        inspection, board = self._full_lot_ng_board(order, 'SN-SC-301')
+        inspection, board = self._full_lot_ng_board(order, '126100000005')
         a_row = order.x_mes_route_id.operation_ids.filtered(
             lambda r: r.operation_id == self.op_a)[:1]
         inspection.action_rework_sn(board, a_row, 'Fix it.')
@@ -154,7 +154,7 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_04_restore_reopens_disposition(self):
         order = self._order()
-        inspection, board = self._full_lot_ng_board(order, 'SN-SC-401')
+        inspection, board = self._full_lot_ng_board(order, '126100000006')
         scrap = self._scrap_record(order, inspection, board)
         scrap.action_confirm_scrap()
         inspection.invalidate_recordset()
@@ -176,4 +176,4 @@ class TestOqcScrapLink(TestOqcReleaseJudgment):
         self.assertFalse(inspection.x_oqc_release_ready)
         # the restored (abnormal) board cannot just walk on
         with self.assertRaises(ValidationError):
-            order.sn_station_scan(self.wc_b.id, 'SN-SC-401')
+            order.sn_station_scan(self.wc_b.id, '126100000006')

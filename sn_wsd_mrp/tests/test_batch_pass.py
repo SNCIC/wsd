@@ -141,7 +141,7 @@ class TestBatchPass(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b, rop_c = self._rop(order, self.op_b), self._rop(order, self.op_c)
-        serials = [self._walk_to(order, wcs, f'BP-SN-{i}', 'b') for i in range(5)]
+        serials = [self._walk_to(order, wcs, f'12610000001{i}', 'b') for i in range(5)]
         receipt = self._batch(order, rop_b, serials)
         self.assertEqual(receipt['passed'], 5)
         for serial in serials:
@@ -162,7 +162,7 @@ class TestBatchPass(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         rop_a, rop_b = self._rop(order, self.op_a), self._rop(order, self.op_b)
-        serial = order.scan_enter('BP-UP-1', wcs['a'])  # fed, A unjudged
+        serial = order.scan_enter('126100000101', wcs['a'])  # fed, A unjudged
         reason = order._batch_pass_block_reason(serial, rop_b)
         self.assertTrue(reason)
         self.assertIn('decision pending', reason)
@@ -180,8 +180,8 @@ class TestBatchPass(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
-        sn_ok = self._walk_to(order, wcs, 'BP-AT-1', 'b')
-        sn_far = self._walk_to(order, wcs, 'BP-AT-2', 'c')  # past the target
+        sn_ok = self._walk_to(order, wcs, '126100000103', 'b')
+        sn_far = self._walk_to(order, wcs, '126100000104', 'c')  # past the target
         with self.assertRaises(ValidationError):
             with self.cr.savepoint():
                 self._batch(order, rop_b, [sn_ok, sn_far])
@@ -201,7 +201,7 @@ class TestBatchPass(TransactionCase):
         rop_a = self._rop(order, self.op_a)
         rop_b = self._rop(order, self.op_b)
         rop_c = self._rop(order, self.op_c)
-        serial = order.scan_enter('BP-RX-1', self._make_workcenter(self.op_a))
+        serial = order.scan_enter('126100000102', self._make_workcenter(self.op_a))
         with self.assertRaises(ValidationError):
             order._batch_pass_gate_checks(rop_a)
         with self.assertRaises(ValidationError):
@@ -219,10 +219,10 @@ class TestBatchPass(TransactionCase):
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
         self.op_b.x_max_test_count = 1
-        serial = self._walk_to(order, wcs, 'BP-LIM-1', 'b')
-        serial = self._pass(order, wcs['b'], 'BP-LIM-1', 'ok')  # cap used up
+        serial = self._walk_to(order, wcs, '126100000105', 'b')
+        serial = self._pass(order, wcs['b'], '126100000105', 'ok')  # cap used up
         # back upstream (repair-style re-entry at the start operation)
-        serial = order.scan_enter('BP-LIM-1', wcs['a'])
+        serial = order.scan_enter('126100000105', wcs['a'])
         order.leave_station(serial, 'ok')
         reason = order._batch_pass_block_reason(serial, rop_b)
         self.assertTrue(reason)
@@ -236,7 +236,7 @@ class TestBatchPass(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         rop_b = self._rop(order, self.op_b)
-        marked = self._walk_to(order, wcs, 'BP-AU-1', 'b')
+        marked = self._walk_to(order, wcs, '126100000106', 'b')
         self._batch(order, rop_b, [marked], reason='outsourcing')
         log = self.env['sn.wsd.batch.pass.log'].search(
             [('mes_order_id', '=', order.id)])
@@ -244,8 +244,8 @@ class TestBatchPass(TransactionCase):
         with self.assertRaises(AccessError):
             log.unlink()
         # a physical pass row stays unmarked and distinguishable
-        physical = self._walk_to(order, wcs, 'BP-AU-2', 'b')
-        self._pass(order, wcs['b'], 'BP-AU-2', 'ok')
+        physical = self._walk_to(order, wcs, '126100000107', 'b')
+        self._pass(order, wcs['b'], '126100000107', 'ok')
         self.assertFalse(
             self._history(physical, order, rop_b, 'ok').x_batch_pass_log_id)
         self.assertEqual(

@@ -12,6 +12,8 @@ Disposition" of mes-oqc:
   with a reason and records the actual quantity
 - repeated passes count per board, not per pass."""
 
+import itertools
+
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 
@@ -23,12 +25,18 @@ from odoo.addons.sn_wsd_quality.tests.test_oqc_release_judgment import (
 @tagged('post_install', '-at_install')
 class TestOqcFullLotClosure(TestOqcReleaseJudgment):
 
+    _sn_seq = itertools.count(500)
+
+    def _sn(self):
+        """标准格式 SN（过站内核格式闸 2026-11-09）：'1261'+自增 8 位。"""
+        return '1261%08d' % next(self._sn_seq)
+
     def _identity(self, name):
         return self.env['sn.wsd.serial.identity'].search([
             ('name', '=', name), ('company_id', '=', self.company.id)],
             limit=1)
 
-    def _to_full_inspection(self, order, names=('SN-FL-101', 'SN-FL-102')):
+    def _to_full_inspection(self, order, names=('126100000001', '126100000002')):
         """Two NG boards -> d=2 >= Re=2 -> reject -> full-lot switch."""
         inspection = self._ng_round(order, names[0])
         self._ng_round(order, names[1])
@@ -59,8 +67,8 @@ class TestOqcFullLotClosure(TestOqcReleaseJudgment):
         inspection = self._to_full_inspection(order)
         sample_before = inspection.x_fai_serial_ids
         # a board never in the sample leaves the OQC operation NG
-        self._ng_round(order, 'SN-FL-201')
-        board = self._identity('SN-FL-201')
+        self._ng_round(order, '126100000003')
+        board = self._identity('126100000003')
         self.assertNotIn(board, inspection.x_fai_serial_ids)
         self.assertEqual(len(inspection.x_fai_serial_ids),
                          len(sample_before),
@@ -80,7 +88,7 @@ class TestOqcFullLotClosure(TestOqcReleaseJudgment):
     def test_02_reworked_board_ok_becomes_awaiting_reinspection(self):
         order = self._order()
         inspection = self._to_full_inspection(order)
-        board = self._identity('SN-FL-101')
+        board = self._identity('126100000001')
         # send the NG board back through rework to operation A
         a_op_row = order.x_mes_route_id.operation_ids.filtered(
             lambda r: r.operation_id == self.op_a)[:1]
@@ -89,7 +97,7 @@ class TestOqcFullLotClosure(TestOqcReleaseJudgment):
             inspection._oqc_current_dispositions(board)[board.id]['state'],
             'reworking')
         # the board re-walks A then leaves OQC OK
-        self._repass_ok(order, 'SN-FL-101')
+        self._repass_ok(order, '126100000001')
         self.assertEqual(
             inspection._oqc_current_dispositions(board)[board.id]['state'],
             'awaiting_reinspection',
@@ -125,10 +133,10 @@ class TestOqcFullLotClosure(TestOqcReleaseJudgment):
         inspection = self._to_full_inspection(order)
         # both initial NG boards are disposed (retest) and 6 clean boards
         # pass the operation OK -> inspected 8 of lot 10
-        for name in ('SN-FL-101', 'SN-FL-102'):
+        for name in ('126100000001', '126100000002'):
             self._close_retest(inspection, self._identity(name))
         for index in range(6):
-            self._repass_ok(order, 'SN-FL-30%d' % index)
+            self._repass_ok(order, self._sn())
         self.assertEqual(
             len(inspection._oqc_full_inspected_serials()), 8)
 
@@ -166,13 +174,13 @@ class TestOqcFullLotClosure(TestOqcReleaseJudgment):
     def test_05_repeated_passes_count_per_board(self):
         order = self._order()
         inspection = self._to_full_inspection(order)
-        board = self._identity('SN-FL-101')
+        board = self._identity('126100000001')
         # NG -> NG -> OK passes of the same board at the inspection
         # operation (cap raised so the repeats are admitted)
         self.op_c.x_max_test_count = 3
         for result, kwargs in (('ng', {'ng_defect_code_id': self.defect.id}),
                                ('ok', {})):
-            res = order.sn_station_scan(self.wc_c.id, 'SN-FL-101')
+            res = order.sn_station_scan(self.wc_c.id, '126100000001')
             if isinstance(res, dict) and res.get('action') == 'leave':
                 order.sn_station_leave(res['wip_id'], result, **kwargs)
         inspected = inspection._oqc_full_inspected_serials()

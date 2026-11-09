@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from .constants import SIDE_LABELS, SIDE_SELECTION
+from .constants import SIDE_LABELS, SIDE_SELECTION, STANDARD_SN_RE
 
 
 class MesOrder(models.Model):
@@ -835,6 +835,16 @@ class MesOrder(models.Model):
         row is written together with an in_progress history row -- the pass
         ledger is visible from the scan itself (pass-history-on-enter)."""
         self.ensure_one()
+        # SN format gate (user rule 2026-11-09): a standard SN is 12 digits
+        # whose head digit is 1 or 2. Every channel funnels its entry scans
+        # through here (terminal / PDA / device API / batch pass), so the
+        # gate rejects a wrong barcode scanned as SN once for all of them.
+        # Nameplate scans resolve to their machine SN before the kernel on
+        # the device API, so the nameplate code itself never reaches this.
+        if not STANDARD_SN_RE.match(serial_identity.name or ''):
+            raise ValidationError(_(
+                'SN %s is not in the standard format: 12 digits starting '
+                'with 1 or 2.', serial_identity.name))
         if self.x_manage_mode != 'station':
             raise ValidationError(_(
                 'MES order %(name)s is managed by operation reporting; SN '

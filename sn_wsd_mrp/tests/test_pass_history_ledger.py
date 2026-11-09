@@ -127,7 +127,7 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/过站扫码即立历史行（在制立行）/投入站首扫立行
         order = self._make_order_online()
         wc = self._make_workcenter(self.op_a)
-        serial = order.scan_enter('SN-PHL-001', wc)
+        serial = order.scan_enter('126100000001', wc)
         rows = self._rows(serial)
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows.result, 'in_progress')
@@ -141,10 +141,10 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/过站扫码即立历史行（在制立行）/中间站接板扫码
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-002', wcs['a'])
+        serial = order.scan_enter('126100000002', wcs['a'])
         row_a_id = self._rows(serial, self.op_a).id
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-PHL-002', wcs['b'])
+        order.scan_enter('126100000002', wcs['b'])
         row_a = self._rows(serial, self.op_a)
         self.assertEqual(len(row_a), 1)
         self.assertEqual(row_a.id, row_a_id)  # 回填不是新建
@@ -159,7 +159,7 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/出站回填既有行（不再新建）/接板拉出回填 ok
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-003', wcs['a'])
+        serial = order.scan_enter('126100000003', wcs['a'])
         pending = self._rows(serial)
         self.assertEqual(len(pending), 1)
         order.leave_station(serial, 'ok')
@@ -173,9 +173,9 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/出站回填既有行（不再新建）/NG 两段扫码回填
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-004', wcs['a'])
+        serial = order.scan_enter('126100000004', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-004', wcs['b'])
+        serial = order.scan_enter('126100000004', wcs['b'])
         pending_id = self._rows(serial, self.op_b).id
         order.leave_station(
             serial, 'ng', ng_defect=self.defect_code)
@@ -189,11 +189,11 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/出站回填既有行（不再新建）/尾站确认回填
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-005', wcs['a'])
+        serial = order.scan_enter('126100000005', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-005', wcs['b'])
+        serial = order.scan_enter('126100000005', wcs['b'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-005', wcs['c'])
+        serial = order.scan_enter('126100000005', wcs['c'])
         finished = order.leave_station(serial, 'ok')
         self.assertTrue(finished)
         self.assertEqual(
@@ -229,23 +229,23 @@ class TestPassHistoryLedger(TransactionCase):
         order = self._make_order_online(product)
         self.assertTrue(order.production_id.bom_id)
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-006', wcs['a'])
+        serial = order.scan_enter('126100000006', wcs['a'])
         order.leave_station(
             serial, 'scrap', scrap_reason=self.scrap_reason)
         self.assertEqual(self._rows(serial, self.op_a).result, 'scrap')
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-PHL-006', wcs['a'])
+            order.scan_enter('126100000006', wcs['a'])
 
     def test_retest_legs_coexist(self):
         """⑨ 复测多腿：ng 行保持、新腿独立回填 ok。"""
         # spec: station-pass-history/spec/出站回填既有行（不再新建）/复测多腿共存
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-007', wcs['a'])
+        serial = order.scan_enter('126100000007', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-007', wcs['b'])
+        serial = order.scan_enter('126100000007', wcs['b'])
         order.leave_station(serial, 'ng', ng_defect=self.defect_code)
-        serial = order.scan_enter('SN-PHL-007', wcs['b'])
+        serial = order.scan_enter('126100000007', wcs['b'])
         self.assertEqual(
             self._rows(serial, self.op_b).mapped('result'),
             ['ng', 'in_progress'])
@@ -263,11 +263,11 @@ class TestPassHistoryLedger(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         serial = self.env['sn.wsd.serial.identity'].create({
-            'name': 'SN-PHL-008', 'company_id': self.company.id,
+            'name': '126100000008', 'company_id': self.company.id,
         })
         self.env['sn.wsd.repair.order'].create({
             'serial_identity_id': serial.id,
-            'serial_no': 'SN-PHL-008',
+            'serial_no': '126100000008',
             'mes_order_id': order.id,
             'route_operation_id': self._rop(order, self.op_a).id,
             'defect_code_id': self.defect_code.id,
@@ -275,7 +275,7 @@ class TestPassHistoryLedger(TransactionCase):
                 'defect_code_id': self.defect_code.id, 'qty': 1})],
         })
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-PHL-008', wcs['a'])
+            order.scan_enter('126100000008', wcs['a'])
         self.assertFalse(self._rows(serial))
         self.assertFalse(self.env['sn.wsd.serial.wip'].search(
             [('serial_identity_id', '=', serial.id)]))
@@ -285,18 +285,18 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/完成态语义对在制行不可见/次数上限不计在制腿
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-009', wcs['a'])
+        serial = order.scan_enter('126100000009', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-009', wcs['b'])
+        serial = order.scan_enter('126100000009', wcs['b'])
         with self.assertRaises(ValidationError) as ctx:
-            order.scan_enter('SN-PHL-009', wcs['b'])
+            order.scan_enter('126100000009', wcs['b'])
         self.assertIn('must leave that station first', str(ctx.exception))
 
     def test_reachability_ignores_in_progress(self):
         """可达性只认 ok：在制行不解锁后继。"""
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-010', wcs['a'])
+        serial = order.scan_enter('126100000010', wcs['a'])
         reachable = order.get_reachable_operations(serial)
         rop_b = self._rop(order, self.op_b)
         self.assertNotIn(rop_b.id, reachable.ids)
@@ -306,12 +306,12 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/完成态语义对在制行不可见/产出与计件口径不变
         order = self._make_order_online()
         wcs = self._wcs()
-        order.scan_enter('SN-PHL-011', wcs['a'])
-        order.scan_enter('SN-PHL-012', wcs['a'])
+        order.scan_enter('126100000011', wcs['a'])
+        order.scan_enter('126100000012', wcs['a'])
         self.assertEqual(order.x_output_qty, 0.0)
-        serial = order.scan_enter('SN-PHL-013', wcs['a'])
+        serial = order.scan_enter('126100000013', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-013', wcs['b'])
+        serial = order.scan_enter('126100000013', wcs['b'])
         order.leave_station(serial, 'ok')
         self.assertEqual(order.x_output_qty, 1.0)
 
@@ -324,9 +324,9 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/在制查询入口/按单按工序看在制清单, station-pass-history/spec/在制查询入口/在制徽标与置顶
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-020', wcs['a'])
+        serial = order.scan_enter('126100000014', wcs['a'])
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-PHL-020', wcs['b'])  # A 完成、B 在制
+        order.scan_enter('126100000014', wcs['b'])  # A 完成、B 在制
         rows = self.env['sn.wsd.serial.operation.history'].search(
             [('serial_identity_id', '=', serial.id)])
         self.assertEqual(rows[:1].result, 'in_progress')  # NULL 置顶
@@ -343,14 +343,14 @@ class TestPassHistoryLedger(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         with freeze_time('2020-03-01 08:00:00'):
-            serial = order.scan_enter('SN-PHL-021', wcs['a'])
+            serial = order.scan_enter('126100000015', wcs['a'])
         with freeze_time('2020-03-01 09:30:00'):
             order.leave_station(serial, 'ok')
         row_a = self._rows(serial, self.op_a)
         self.assertAlmostEqual(row_a.x_dwell_hours, 1.5, places=4)
         self.assertEqual(row_a.x_wip_dwell_hours, 0.0)
         with freeze_time('2020-03-01 10:00:00'):
-            order.scan_enter('SN-PHL-021', wcs['b'])
+            order.scan_enter('126100000015', wcs['b'])
         with freeze_time('2020-03-01 12:00:00'):
             row_b = self._rows(serial, self.op_b)
             self.assertAlmostEqual(row_b.x_wip_dwell_hours, 2.0, places=4)
@@ -375,26 +375,26 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/完成态语义对在制行不可见/产出与计件口径不变
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-030', wcs['a'])
+        serial = order.scan_enter('126100000016', wcs['a'])
         order.leave_station(serial, 'ok')
-        serial = order.scan_enter('SN-PHL-030', wcs['b'])
+        serial = order.scan_enter('126100000016', wcs['b'])
         order.leave_station(serial, 'ng', ng_defect=self.defect_code)
-        order.scan_enter('SN-PHL-030', wcs['b'])  # B 在制（未出站）
+        order.scan_enter('126100000016', wcs['b'])  # B 在制（未出站）
         rop_b = self._rop(order, self.op_b)
         self.assertEqual(rop_b.x_ok_qty, 0)
         self.assertEqual(rop_b.x_ng_qty, 1)
         self.assertAlmostEqual(rop_b.x_yield_rate, 0.0)
         self.assertFalse(self.env['sn.wsd.repair.pending'].search(
-            [('serial_name', '=', 'SN-PHL-030')]))
+            [('serial_name', '=', '126100000016')]))
 
     def test_clear_pass_counts_in_progress_row(self):
         """清除过站：在制行一并删除并计入审计行数。"""
         # spec: station-pass-history/spec/相邻消费方口径/清除过站含在制行
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-031', wcs['a'])
+        serial = order.scan_enter('126100000017', wcs['a'])
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-PHL-031', wcs['b'])  # B 在制
+        order.scan_enter('126100000017', wcs['b'])  # B 在制
         cleared = order.action_clear_station_pass(serial)
         self.assertEqual(cleared, 2)  # A ok + B 在制
         self.assertFalse(self._rows(serial))
@@ -406,9 +406,9 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/相邻消费方口径/抽样批量源排除在制
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-033', wcs['a'])
+        serial = order.scan_enter('126100000018', wcs['a'])
         order.leave_station(serial, 'ok')
-        order.scan_enter('SN-PHL-033', wcs['b'])  # 在制
+        order.scan_enter('126100000018', wcs['b'])  # 在制
         scheme = self.env['sn.wsd.quality.inspection.scheme'].create({
             'name': 'PHL LOT', 'code': 'PHLLOT', 'inspection_type': 'iqc',
             'lot_qty_source': 'mes_order',
@@ -427,11 +427,11 @@ class TestPassHistoryLedger(TransactionCase):
         # 51 块板（1 完成 + 50 在制）超出默认排产，夹具放量避免撞投入上限
         order = self._make_order_online(qty=60)
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-036', wcs['a'])
+        serial = order.scan_enter('126100000019', wcs['a'])
         order.leave_station(serial, 'ok')
         # 50 块在制板塞满 48 行窗口（若未排除会挤掉刚完成的 ok 行）
         for i in range(50):
-            order.scan_enter('SN-PHL-FILL-%02d' % i, wcs['a'])
+            order.scan_enter('1261000001%02d' % i, wcs['a'])
         after = service.get_big_screen_data()['summary']['today_output_total']
         self.assertEqual(after, before + 1)
 
@@ -443,7 +443,7 @@ class TestPassHistoryLedger(TransactionCase):
         from odoo.modules.module import get_module_path
         order = self._make_order_online()
         wcs = self._wcs()
-        serial = order.scan_enter('SN-PHL-037', wcs['a'])
+        serial = order.scan_enter('126100000020', wcs['a'])
         wip = self.env['sn.wsd.serial.wip'].search(
             [('serial_identity_id', '=', serial.id)])
         # 造"升级前在制、无历史行"的形态，再跑迁移函数
@@ -469,7 +469,7 @@ class TestPassHistoryLedger(TransactionCase):
         # spec: station-pass-history/spec/完成态语义对在制行不可见/维修截断遇在制行不崩
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PHL-014'
+        sn = '126100000021'
         with freeze_time('2020-02-01 08:00:00', auto_tick_seconds=1):
             self.op_b.x_max_test_count = 2
             serial = order.scan_enter(sn, wcs['a'])

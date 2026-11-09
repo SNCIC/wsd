@@ -60,8 +60,8 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_01_station_ng_retest_pass_syncs_history(self):
         order = self._order()
-        inspection = self._ng_round(order, 'SN-RT-101')
-        board = self._identity('SN-RT-101')
+        inspection = self._ng_round(order, '126100000001')
+        board = self._identity('126100000001')
         self.assertEqual(self._state(inspection, board), 'pending')
         self.assertEqual(len(self._history(order, board)), 1)
         self.assertEqual(self._history(order, board).result, 'ng')
@@ -76,7 +76,7 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
         self.assertEqual(history[0].result, 'ng')
         self.assertEqual(history[1].result, 'ok')
         # the board may now enter the successor operation
-        res = order.sn_station_scan(self.wc_b.id, 'SN-RT-101')
+        res = order.sn_station_scan(self.wc_b.id, '126100000001')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         b_rows = self.env['sn.wsd.serial.operation.history'].search([
@@ -91,8 +91,8 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_02_manual_cell_ng_no_duplicate_station_row(self):
         order = self._order()
-        inspection = self._ok_round(order, 'SN-RT-201')
-        board = self._identity('SN-RT-201')
+        inspection = self._ok_round(order, '126100000002')
+        board = self._identity('126100000002')
         self.assertEqual(len(self._history(order, board)), 1)
         # the inspector fails the board on the cells only
         inspection.cell_ids.filtered(
@@ -113,8 +113,8 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_03_numeric_rejudged_on_fresh_value(self):
         order = self._order()
-        inspection = self._ng_round(order, 'SN-RT-301')
-        board = self._identity('SN-RT-301')
+        inspection = self._ng_round(order, '126100000003')
+        board = self._identity('126100000003')
         # out-of-range value keeps the board failed
         self._wizard(inspection, board, voltage=25.0).action_apply()
         inspection.invalidate_recordset()
@@ -136,8 +136,8 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_04_duplicate_confirmation_refused(self):
         order = self._order()
-        inspection = self._ng_round(order, 'SN-RT-401')
-        board = self._identity('SN-RT-401')
+        inspection = self._ng_round(order, '126100000004')
+        board = self._identity('126100000004')
         self._wizard(inspection, board).action_apply()
         inspection.invalidate_recordset()
         with self.assertRaises(UserError) as ctx:
@@ -150,8 +150,8 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_05_failure_rolls_back_atomically(self):
         order = self._order()
-        inspection = self._ng_round(order, 'SN-RT-501')
-        board = self._identity('SN-RT-501')
+        inspection = self._ng_round(order, '126100000005')
+        board = self._identity('126100000005')
         cells = inspection.cell_ids.filtered(
             lambda c: c.serial_identity_id == board)
         # freeze the board: the retest is refused before anything moves
@@ -174,13 +174,13 @@ class TestOqcRetestWizard(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_06_retest_does_not_touch_other_boards(self):
         order = self._order()
-        inspection = self._ng_round(order, 'SN-RT-601')
-        self._ng_round(order, 'SN-RT-602')
-        other = self._identity('SN-RT-602')
-        self._wizard(inspection, self._identity('SN-RT-601')).action_apply()
+        inspection = self._ng_round(order, '126100000006')
+        self._ng_round(order, '126100000007')
+        other = self._identity('126100000007')
+        self._wizard(inspection, self._identity('126100000006')).action_apply()
         inspection.invalidate_recordset()
         self.assertEqual(
-            self._state(inspection, self._identity('SN-RT-601')),
+            self._state(inspection, self._identity('126100000006')),
             'retest_passed')
         self.assertEqual(self._state(inspection, other), 'pending')
         other_cells = inspection.cell_ids.filtered(

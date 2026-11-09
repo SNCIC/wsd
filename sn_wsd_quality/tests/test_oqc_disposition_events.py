@@ -157,7 +157,7 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_01_manual_cell_fail_creates_detected_event(self):
         order = self._order()
-        insp = self._ok_round(order, 'SN-EV-001')
+        insp = self._ok_round(order, '126100000001')
         serial = insp.x_fai_serial_ids[:1]
         self.assertFalse(self._events(insp),
                          'an arrived all-pass board carries no event')
@@ -183,7 +183,7 @@ class TestOqcDispositionEvents(TransactionCase):
 
     def test_02_station_ng_creates_detected_event(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-002')
+        insp = self._ng_round(order, '126100000002')
         serial = insp.x_fai_serial_ids[:1]
         events = self._events(insp)
         self.assertEqual(len(events), 1)
@@ -209,8 +209,8 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_03_ng_fact_without_cells_stays_pending(self):
         order = self._order()
-        insp = self._ok_round(order, 'SN-EV-003')
-        ghost = self._serial('SN-EV-GHOST')
+        insp = self._ok_round(order, '126100000003')
+        ghost = self._serial('126100000004')
         insp.x_oqc_ng_serial_ids = [(4, ghost.id)]
         dispositions = insp._oqc_current_dispositions(ghost)
         self.assertEqual(dispositions[ghost.id]['state'], 'pending',
@@ -225,7 +225,7 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_04_retest_passed_board_reopens_on_new_ng(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-004')
+        insp = self._ng_round(order, '126100000005')
         serial = insp.x_fai_serial_ids[:1]
         # close the board through the private service (the retest wizard
         # of batch 3 calls the same entry)
@@ -268,8 +268,8 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_05_raw_defect_code_registers_but_never_closes(self):
         order = self._order()
-        self._feed_through_a(order, 'SN-EV-005')
-        res = order.sn_station_scan(self.wc_c.id, 'SN-EV-005')
+        self._feed_through_a(order, '126100000006')
+        res = order.sn_station_scan(self.wc_c.id, '126100000006')
         order.with_context(
             sn_wsd_ng_defect_pending=True,
             sn_wsd_oqc_defect_raw='DEV-RAW-42',
@@ -303,7 +303,7 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_06_frozen_board_rejects_disposition_actions(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-006')
+        insp = self._ng_round(order, '126100000007')
         serial = insp.x_fai_serial_ids[:1]
         self.env['sn.wsd.serial.freeze'].create({
             'serial_identity_id': serial.id,
@@ -324,7 +324,7 @@ class TestOqcDispositionEvents(TransactionCase):
     def test_07_rpc_tampering_and_cross_company_refused(self):
         Event = self.env['sn.wsd.quality.oqc.disposition.event']
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-007')
+        insp = self._ng_round(order, '126100000008')
         event = self._events(insp)[0]
         tamper_vals = {
             'company_id': insp.company_id.id,
@@ -371,7 +371,7 @@ class TestOqcDispositionEvents(TransactionCase):
     def test_08_stale_versions_and_duplicate_source_keys(self):
         Event = self.env['sn.wsd.quality.oqc.disposition.event']
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-008')
+        insp = self._ng_round(order, '126100000009')
         serial = insp.x_fai_serial_ids[:1]
         first = self._events(insp)[0]
         # a concurrent edit bumps the version: the page holding the older
@@ -416,13 +416,13 @@ class TestOqcDispositionEvents(TransactionCase):
         Event = self.env['sn.wsd.quality.oqc.disposition.event']
         History = self.env['sn.wsd.serial.operation.history']
         order = self._order()
-        insp = self._ok_round(order, 'SN-EV-B0')  # normal sample, no event
+        insp = self._ok_round(order, '126100000010')  # normal sample, no event
         # pre-upgrade evidence is built directly (bypassing the hooks the
         # station flow now wires): what the migration would see
-        b1 = self._serial('SN-EV-B1')  # NG fact + fail cells, no evidence
-        b2 = self._serial('SN-EV-B2')  # retested: ng then ok history, arrived
-        b3 = self._serial('SN-EV-B3')  # confirmed scrap
-        b4 = self._serial('SN-EV-B4')  # active rework voucher
+        b1 = self._serial('126100000011')  # NG fact + fail cells, no evidence
+        b2 = self._serial('126100000012')  # retested: ng then ok history, arrived
+        b3 = self._serial('126100000013')  # confirmed scrap
+        b4 = self._serial('126100000014')  # active rework voucher
         insp.x_oqc_ng_serial_ids = [(4, b1.id), (4, b3.id), (4, b4.id)]
         insp._oqc_ensure_cells(b1)
         insp.cell_ids.with_context(sn_wsd_oqc_cell_silent=True).filtered(
@@ -470,11 +470,11 @@ class TestOqcDispositionEvents(TransactionCase):
         events = insp._oqc_build_baseline()
         states = {event.serial_identity_id.name: event.state_after
                   for event in events}
-        self.assertEqual(states['SN-EV-B1'], 'pending')
-        self.assertEqual(states['SN-EV-B2'], 'retest_passed')
-        self.assertNotIn('SN-EV-B3', states,
+        self.assertEqual(states['126100000011'], 'pending')
+        self.assertEqual(states['126100000012'], 'retest_passed')
+        self.assertNotIn('126100000013', states,
                          'a board with live events gets no baseline')
-        self.assertEqual(states['SN-EV-B4'], 'reworking')
+        self.assertEqual(states['126100000014'], 'reworking')
         self.assertEqual(
             insp._oqc_current_dispositions(b3)[b3.id]['state'], 'scrapped')
         bot = self.env.ref('base.user_root')
@@ -504,7 +504,7 @@ class TestOqcDispositionEvents(TransactionCase):
     # ------------------------------------------------------------------
     def test_10_inspection_unlink_blocked_by_restrict_fk(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-EV-010')
+        insp = self._ng_round(order, '126100000015')
         self.assertTrue(self._events(insp))
         with self.assertRaises(IntegrityError):
             with self.env.cr.savepoint():

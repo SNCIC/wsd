@@ -6329,6 +6329,13 @@ msgstr "SN %(sn)s 已经由结束工序 %(op)s 离开制令单 %(order)s，不�
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
+"SN %s is not in the standard format: 12 digits starting with 1 or 2."
+msgstr "SN %s 不是标准格式：应为 1 或 2 开头的 12 位数字。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
 "SN %(sn)s has no in-progress pass row on MES order %(order)s; its "
 "station entry record is missing."
 msgstr "SN %(sn)s 在制令单 %(order)s 上没有进行中的过站行，缺少进站记录。"

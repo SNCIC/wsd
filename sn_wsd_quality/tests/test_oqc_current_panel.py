@@ -13,6 +13,7 @@ Covers the ADDED requirement scenarios of inspection-forms:
   (env.get branch) and the FAI form keeps its own actions."""
 
 from unittest.mock import patch
+import itertools
 
 from odoo.api import Environment
 from odoo.exceptions import UserError
@@ -25,6 +26,12 @@ from odoo.addons.sn_wsd_quality.tests.test_oqc_release_judgment import (
 
 @tagged('post_install', '-at_install')
 class TestOqcCurrentPanel(TestOqcReleaseJudgment):
+    _sn_seq = itertools.count(500)
+
+    def _sn(self):
+        """标准格式 SN（过站内核格式闸 2026-11-09）：'1261'+自增 8 位。"""
+        return '1261%08d' % next(self._sn_seq)
+
 
     # ------------------------------------------------------------------
     # helpers
@@ -34,7 +41,7 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
             ('name', '=', name), ('company_id', '=', self.company.id)],
             limit=1)
 
-    def _to_full_inspection(self, order, names=('SN-CP-401', 'SN-CP-402')):
+    def _to_full_inspection(self, order, names=('126100000001', '126100000002')):
         """Two NG boards -> reject -> full-lot switch (open again)."""
         inspection = self._ng_round(order, names[0])
         self._ng_round(order, names[1])
@@ -56,11 +63,11 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
     def test_01_current_board_info_scope(self):
         Inspection = self.env['sn.wsd.quality.inspection']
         order = self._order(qty=5)
-        insp = self._ok_round(order, 'SN-CP-101')
-        self._ng_round(order, 'SN-CP-102')
+        insp = self._ok_round(order, '126100000003')
+        self._ng_round(order, '126100000004')
         # a legal board: pending state, chain defect, plain progress info
-        info = Inspection.oqc_current_board_info(insp.id, 'SN-CP-102')
-        self.assertEqual(info['serial_name'], 'SN-CP-102')
+        info = Inspection.oqc_current_board_info(insp.id, '126100000004')
+        self.assertEqual(info['serial_name'], '126100000004')
         self.assertEqual(info['state'], 'pending')
         self.assertEqual(info['defect_code_id'], self.defect.id)
         self.assertEqual(info['rework_count'], 0)
@@ -69,8 +76,8 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         # another MES order's board: one refusal message, nothing leaked
         line2, wcs2 = self._alt_line_wcs('C1')
         order2 = self._order(qty=5, line=line2)
-        self._ok_round(order2, 'SN-CP-201', wcs=wcs2)
-        for name in ('SN-CP-201', 'SN-CP-GHOST'):
+        self._ok_round(order2, '126100000005', wcs=wcs2)
+        for name in ('126100000005', '126100000006'):
             with self.assertRaises(UserError) as ctx:
                 Inspection.oqc_current_board_info(insp.id, name)
             self.assertIn('is not part of inspection', str(ctx.exception))
@@ -83,9 +90,9 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         manual = Inspection.create({
             'inspection_type': 'oqc', 'scheme_id': self.scheme.id})
         with self.assertRaises(UserError):
-            Inspection.oqc_current_board_info(manual.id, 'SN-CP-102')
+            Inspection.oqc_current_board_info(manual.id, '126100000004')
         with self.assertRaises(UserError):
-            Inspection.oqc_current_board_info(999999999, 'SN-CP-102')
+            Inspection.oqc_current_board_info(999999999, '126100000004')
 
     # ------------------------------------------------------------------
     # Scenario: scanning a full-lot abnormal board centralizes disposition
@@ -95,11 +102,11 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         insp = self._to_full_inspection(order)
         # a board never in the sample leaves the OQC operation NG and scans
         # straight into the panel (no manual sample-list edit)
-        self._ng_round(order, 'SN-CP-303')
-        self.assertNotIn(self._identity('SN-CP-303'), insp.x_fai_serial_ids)
-        insp.x_fai_scan = 'SN-CP-303'
+        self._ng_round(order, '126100000007')
+        self.assertNotIn(self._identity('126100000007'), insp.x_fai_serial_ids)
+        insp.x_fai_scan = '126100000007'
         insp._onchange_x_fai_scan()
-        self.assertEqual(insp.x_fai_current_sn.name, 'SN-CP-303')
+        self.assertEqual(insp.x_fai_current_sn.name, '126100000007')
         self.assertFalse(insp.x_fai_scan, 'the scan box clears itself')
         # the panel fields derive from the latest event
         self.assertEqual(insp.x_oqc_current_state, 'pending')
@@ -107,11 +114,11 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         self.assertEqual(insp.x_oqc_current_rework_count, 0)
         self.assertEqual(insp.x_oqc_current_freeze_state, 'normal')
         # an illegal scan refuses and keeps the current board untouched
-        insp.x_fai_scan = 'SN-CP-GHOST'
+        insp.x_fai_scan = '126100000006'
         with self.assertRaises(UserError) as ctx:
             insp._onchange_x_fai_scan()
         self.assertIn('is not part of inspection', str(ctx.exception))
-        self.assertEqual(insp.x_fai_current_sn.name, 'SN-CP-303',
+        self.assertEqual(insp.x_fai_current_sn.name, '126100000007',
                          'a refused scan never moves the current board')
 
     # ------------------------------------------------------------------
@@ -122,19 +129,20 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         order = self._order()
         insp = self._to_full_inspection(order)
         # close one NG board by retest; six clean boards pass OK
-        self._close_retest(insp, self._identity('SN-CP-401'))
-        for index in range(6):
-            self._repass_ok(order, 'SN-CP-41%d' % index)
+        self._close_retest(insp, self._identity('126100000001'))
+        clean = [self._sn() for _ in range(6)]
+        for name in clean:
+            self._repass_ok(order, name)
         # a repeated pass must not add a ledger row: the pending board
         # leaves the inspection operation a second time (NG then OK rows,
         # one board) -- its disposition stays open until an explicit
         # retest, so the verdict and the counts do not move either
         self.op_c.x_max_test_count = 2
-        res = order.sn_station_scan(self.wc_c.id, 'SN-CP-402')
+        res = order.sn_station_scan(self.wc_c.id, '126100000002')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id', '=', self._identity('SN-CP-402').id),
+            ('serial_identity_id', '=', self._identity('126100000002').id),
             ('mes_order_id', '=', order.id)])
         self.assertGreaterEqual(len(history), 2,
                                 'the raw passes stay individually visible')
@@ -144,15 +152,15 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         # the NG filter hides the retested board but keeps the pending one
         ng = Inspection.oqc_ledger_page(insp.id, 'ng')
         self.assertEqual(ng['total'], 1)
-        self.assertEqual(ng['rows'][0]['serial_name'], 'SN-CP-402')
+        self.assertEqual(ng['rows'][0]['serial_name'], '126100000002')
         self.assertEqual(ng['rows'][0]['verdict'], 'ng')
         self.assertEqual(ng['rows'][0]['disposition_state'], 'pending')
         # the OK filter carries the retested board with its own verdict
         ok = Inspection.oqc_ledger_page(insp.id, 'ok')
         self.assertEqual(ok['total'], 7)
         verdicts = {row['serial_name']: row['verdict'] for row in ok['rows']}
-        self.assertEqual(verdicts['SN-CP-401'], 'retested')
-        self.assertEqual(verdicts['SN-CP-410'], 'ok')
+        self.assertEqual(verdicts['126100000001'], 'retested')
+        self.assertEqual(verdicts[clean[0]], 'ok')
         # pagination: 8 rows over pages of 3, out-of-range pages clamp
         page2 = Inspection.oqc_ledger_page(insp.id, 'all', 2, 3)
         self.assertEqual(page2['page_count'], 3)
@@ -161,20 +169,21 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
         last = Inspection.oqc_ledger_page(insp.id, 'all', 99, 3)
         self.assertEqual(last['page'], 3)
         self.assertEqual(len(last['rows']), 2)
-        # SN search narrows the very same criteria
+        # SN search narrows the very same criteria: the two NG boards share
+        # an 11-digit head (the clean _sn() band starts at ...500)
         found = Inspection.oqc_ledger_page(insp.id, 'all', 1, 80,
-                                           'SN-CP-40')
+                                           '12610000000')
         self.assertEqual(
             sorted(row['serial_name'] for row in found['rows']),
-            ['SN-CP-401', 'SN-CP-402'])
+            ['126100000001', '126100000002'])
 
     # ------------------------------------------------------------------
     # Scenario: panel buttons prefill the wizards; cancel changes nothing
     # ------------------------------------------------------------------
     def test_04_panel_action_buttons_prefill(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-CP-501')
-        serial = self._identity('SN-CP-501')
+        insp = self._ng_round(order, '126100000010')
+        serial = self._identity('126100000010')
         insp.x_fai_current_sn = serial.id
         retest = insp.action_oqc_retest_current_sn()
         self.assertEqual(retest['res_model'],
@@ -219,8 +228,8 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_05_scrap_availability_branch(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-CP-601')
-        serial = self._identity('SN-CP-601')
+        insp = self._ng_round(order, '126100000011')
+        serial = self._identity('126100000011')
         insp.x_fai_current_sn = serial.id
         # scrap is installed in this database: the entry is live
         self.assertTrue(insp.x_oqc_scrap_available)
@@ -271,7 +280,7 @@ class TestOqcCurrentPanel(TestOqcReleaseJudgment):
                              % button)
         # the event history opens server-paginated, scoped to this document
         order = self._order()
-        insp = self._ng_round(order, 'SN-CP-701')
+        insp = self._ng_round(order, '126100000012')
         action = insp.action_open_oqc_disposition_events()
         self.assertEqual(action['res_model'],
                          'sn.wsd.quality.oqc.disposition.event')
