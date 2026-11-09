@@ -149,7 +149,7 @@ class TestStationPassCount(TransactionCase):
         # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/NG 后重扫入站成功
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PC-001'
+        sn = '126100000001'
         # B 工序上限 3：walk_ab 的 ok 占 1，ng、ok 再占 2 → 满 3，
         # 第 4 次拦截（拦的是下一次进站）
         # B 工序上限 3：ng+ok+ok 占满 3 次，第 4 次拦截
@@ -164,7 +164,7 @@ class TestStationPassCount(TransactionCase):
         # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/OK 后可再次入站（非尾站）
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PC-002'
+        sn = '126100000002'
         self._walk_a(order, wcs, sn)
         self._pass(order, wcs['b'], sn, 'ok')
         self._pass(order, wcs['b'], sn, 'ok')
@@ -178,7 +178,7 @@ class TestStationPassCount(TransactionCase):
         # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/OK 后仍不可重入
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PC-003'
+        sn = '126100000003'
         self._walk_ab(order, wcs, sn)
         self._pass(order, wcs['c'], sn, 'ng')
         # 尾站一次机会：即使工序配置 3，第 2 次进站被拦
@@ -198,7 +198,7 @@ class TestStationPassCount(TransactionCase):
         # spec: ng-rework/spec/NG 后可直接重过同工序（重入放宽）/多 ng 与 ok 共存
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PC-004'
+        sn = '126100000004'
         # 冻结在过去并逐步 tick：过站/关单时间戳严格递增且都早于真实
         # 时钟——退出冻结后写的回流行必然落在截断点之后
         with freeze_time('2020-01-01 08:00:00', auto_tick_seconds=1):
@@ -221,7 +221,7 @@ class TestStationPassCount(TransactionCase):
     def test_upstream_return_strict_reachability(self):
         order = self._make_order_online()
         wcs = self._wcs()
-        sn = 'SN-PC-005'
+        sn = '126100000005'
         with freeze_time('2020-01-01 09:00:00', auto_tick_seconds=1):
             self._walk_ab(order, wcs, sn)
             serial = self._pass(order, wcs['c'], sn, 'ng')
@@ -247,7 +247,7 @@ class TestStationPassCount(TransactionCase):
         order = self._make_order_online()
         wcs = self._wcs()
         # SN1：3 次用尽且末次 NG → 进清单
-        sn1 = 'SN-PC-006'
+        sn1 = '126100000006'
         self._walk_a(order, wcs, sn1)
         for _i in range(3):
             self._pass(order, wcs['b'], sn1, 'ng')
@@ -258,7 +258,7 @@ class TestStationPassCount(TransactionCase):
         self.assertEqual(pending.pass_cap, 3)
         self.assertEqual(pending.last_result, 'ng')
         # SN2：3 次用尽但全 OK → 不进清单
-        sn2 = 'SN-PC-007'
+        sn2 = '126100000007'
         self._walk_a(order, wcs, sn2)
         for _i in range(3):
             self._pass(order, wcs['b'], sn2, 'ok')

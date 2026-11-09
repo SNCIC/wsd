@@ -118,11 +118,11 @@ class TestStationFeedQuota(TransactionCase):
     def test_feed_capped_at_planned_qty(self):
         order = self._make_order_online(qty=2)
         wcs = self._wcs()
-        self._feed_ok(order, wcs['a'], 'SN-FQ-001')
-        self._feed_ok(order, wcs['a'], 'SN-FQ-002')
+        self._feed_ok(order, wcs['a'], '126100000001')
+        self._feed_ok(order, wcs['a'], '126100000002')
         # 已投 2 台=排产 2：第 3 台新板被拦，报错带排产数量口径
         with self.assertRaises(ValidationError) as exc:
-            order.scan_enter('SN-FQ-003', wcs['a'])
+            order.scan_enter('126100000003', wcs['a'])
         self.assertIn('scheduled quantity', str(exc.exception))
         self.assertEqual(order.x_input_qty, 2.0)
 
@@ -130,13 +130,13 @@ class TestStationFeedQuota(TransactionCase):
         # 满额后已投入板的复测不受限（拦的只是新板投入）
         order = self._make_order_online(qty=1)
         wcs = self._wcs()
-        serial = self._feed_ok(order, wcs['a'], 'SN-FQ-101')
+        serial = self._feed_ok(order, wcs['a'], '126100000004')
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-FQ-102', wcs['a'])
+            order.scan_enter('126100000005', wcs['a'])
         # SN-101 复过 B（首过 NG 再进站复测）不受台数上限影响
-        order.scan_enter('SN-FQ-101', wcs['b'])
+        order.scan_enter('126100000004', wcs['b'])
         order.leave_station(serial, 'ng', ng_defect=self.defect_code)
-        order.scan_enter('SN-FQ-101', wcs['b'])
+        order.scan_enter('126100000004', wcs['b'])
         order.leave_station(serial, 'ok')
 
     def test_scrap_consumes_quota(self):
@@ -168,19 +168,19 @@ class TestStationFeedQuota(TransactionCase):
         })
         order = self._make_order_online(qty=2, product=scrap_product)
         wcs = self._wcs()
-        scrapped = order.scan_enter('SN-FQ-201', wcs['a'])
+        scrapped = order.scan_enter('126100000006', wcs['a'])
         order.leave_station(scrapped, 'scrap', scrap_reason=self.scrap_reason)
-        self._feed_ok(order, wcs['a'], 'SN-FQ-202')
+        self._feed_ok(order, wcs['a'], '126100000007')
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-FQ-203', wcs['a'])
+            order.scan_enter('126100000008', wcs['a'])
 
     def test_clear_station_pass_frees_quota(self):
         # 清除过站=回到"从未投入"，额度随之释放（计数口径=历史行）
         order = self._make_order_online(qty=2)
         wcs = self._wcs()
-        self._feed_ok(order, wcs['a'], 'SN-FQ-301')
-        serial2 = self._feed_ok(order, wcs['a'], 'SN-FQ-302')
+        self._feed_ok(order, wcs['a'], '126100000009')
+        serial2 = self._feed_ok(order, wcs['a'], '126100000010')
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-FQ-303', wcs['a'])
+            order.scan_enter('126100000011', wcs['a'])
         order.action_clear_station_pass(serial2)
-        self._feed_ok(order, wcs['a'], 'SN-FQ-303')
+        self._feed_ok(order, wcs['a'], '126100000011')

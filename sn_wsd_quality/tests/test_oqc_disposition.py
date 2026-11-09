@@ -107,7 +107,7 @@ class TestOqcDisposition(TransactionCase):
 
     def test_10_rework_voucher_and_rewalk(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-001')
+        insp = self._ng_round(order, '126100000001')
         self.assertEqual(insp.inspection_type, 'oqc')
         serial = insp.x_fai_serial_ids[:1]
         op_a_row = order.x_mes_route_id.operation_ids.filtered(
@@ -132,14 +132,14 @@ class TestOqcDisposition(TransactionCase):
         self.assertFalse(wip)
         self.assertEqual(serial.x_rework_operation_id, op_a_row)
         # re-walk: the real scan at A admits via the voucher, then C again
-        res = order.sn_station_scan(self.wc_a.id, 'SN-OQCD-001')
+        res = order.sn_station_scan(self.wc_a.id, '126100000001')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         history = self.env['sn.wsd.serial.operation.history'].search([
             ('serial_identity_id', '=', serial.id),
             ('mes_order_id', '=', order.id), ('x_is_rework', '=', True)])
         self.assertTrue(history, 're-walked pass rows carry the rework flag')
-        res = order.sn_station_scan(self.wc_c.id, 'SN-OQCD-001')
+        res = order.sn_station_scan(self.wc_c.id, '126100000001')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         # the voucher survives the OK return: it clears only on the
@@ -182,7 +182,7 @@ class TestOqcDisposition(TransactionCase):
         # -- the doc closes as "batch passed, disposition pending" and the
         # release gate keeps blocking until the board is re-inspected.
         order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-002')
+        insp = self._ng_round(order, '126100000002')
         serial = insp.x_fai_serial_ids[:1]
         op_a_row = order.x_mes_route_id.operation_ids.filtered(
             lambda r: r.operation_id == self.op_a)
@@ -194,7 +194,7 @@ class TestOqcDisposition(TransactionCase):
 
     def test_40_full_lot_switch(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-004')
+        insp = self._ng_round(order, '126100000003')
         # spread the cells for the sample and judge the item failed
         insp._fai_expand_result_cells()
         insp.cell_ids.write({'manual_result': 'fail'})
@@ -205,11 +205,11 @@ class TestOqcDisposition(TransactionCase):
         self.assertNotEqual(insp.state, 'done')
         # full lot: a fresh board walks from the start op to the inspection
         # op and its station entry is NOT throttled by the full sample set
-        order.sn_station_scan(self.wc_a.id, 'SN-OQCD-005')
-        res = order.sn_station_scan(self.wc_a.id, 'SN-OQCD-005')
+        order.sn_station_scan(self.wc_a.id, '126100000004')
+        res = order.sn_station_scan(self.wc_a.id, '126100000004')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
-        order.sn_station_scan(self.wc_c.id, 'SN-OQCD-005')
+        order.sn_station_scan(self.wc_c.id, '126100000004')
 
 
     def test_60_in_place_retest_needs_explicit_confirmation(self):
@@ -218,19 +218,19 @@ class TestOqcDisposition(TransactionCase):
         # closes a disposition by itself. d follows the disposition states,
         # the explicit retest event (batch-3 wizard entry) closes the board.
         order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-007')
+        insp = self._ng_round(order, '126100000005')
         serial = insp.x_fai_serial_ids[:1]
-        self.assertIn('SN-OQCD-007', insp.x_oqc_ng_serial_ids.mapped('name'))
+        self.assertIn('126100000005', insp.x_oqc_ng_serial_ids.mapped('name'))
         # the inspector re-judges the NG board's cells pass on the spot
         insp.cell_ids.filtered(
-            lambda c: c.serial_identity_id.name == 'SN-OQCD-007'
+            lambda c: c.serial_identity_id.name == '126100000005'
         ).write({'manual_result': 'pass'})
         # the batch completes with its verdict (d = 1 >= Re = 1 -> reject)
         # and the board stays on the NG list awaiting disposition
         insp.action_done()
         insp.invalidate_recordset()
         self.assertEqual(insp.result, 'reject')
-        self.assertIn('SN-OQCD-007',
+        self.assertIn('126100000005',
                       insp.x_oqc_ng_serial_ids.mapped('name'))
         self.assertFalse(insp.x_oqc_release_ready)
         # explicit confirmation on the reopened document: d recomputes and
@@ -255,7 +255,7 @@ class TestOqcDisposition(TransactionCase):
     def test_50_scrap_marks_cells_na(self):
         Scrap = self.env['sn.wsd.scrap.record']
         order = self._order()
-        insp = self._ng_round(order, 'SN-OQCD-006')
+        insp = self._ng_round(order, '126100000006')
         insp._fai_expand_result_cells()
         serial = insp.x_fai_serial_ids[:1]
         reason = self.env['sn.wsd.scrap.reason'].search([], limit=1)

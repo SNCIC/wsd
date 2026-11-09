@@ -86,7 +86,7 @@ class TestDrawingMaterialUnify(TransactionCase):
             cls.machine_route, [(cls.op_asm, 10)])
         cls.machine_rop_asm = machine_rops[0]
         cls.identity = cls.env['sn.wsd.serial.identity'].create({
-            'name': 'UNIFY-SN-001', 'origin_type': 'manual'})
+            'name': '126100000001', 'origin_type': 'manual'})
         # 过站链：两站皆可进（首站），贴片为产出站
         cls.smt_rop_print.x_allow_entry = True
         cls.smt_rop_place.x_allow_entry = True
@@ -190,7 +190,7 @@ class TestDrawingMaterialUnify(TransactionCase):
         self.assertEqual(online.remaining_qty, 96.0)
         # 印刷（非关联工序）出站：不扣不拦
         other = self.env['sn.wsd.serial.identity'].create({
-            'name': 'UNIFY-SN-002', 'origin_type': 'manual'})
+            'name': '126100000002', 'origin_type': 'manual'})
         self.assertFalse(self._consume(self.smt_order, self.smt_rop_print, other))
 
     # ------------------------------------------------------------------
@@ -240,7 +240,7 @@ class TestDrawingMaterialUnify(TransactionCase):
         self.assertEqual(self.tooling.cycle_usage_count, 1)
         # 第二块板过同一工序：按板计，再 +1（拼版口径同此，逐板各 +1）
         second = self.env['sn.wsd.serial.identity'].create({
-            'name': 'UNIFY-SN-101', 'origin_type': 'manual'})
+            'name': '126100000003', 'origin_type': 'manual'})
         self._pass_station(self.wc_place, second)
         self.assertEqual(self.tooling.total_usage_count, 2)
 

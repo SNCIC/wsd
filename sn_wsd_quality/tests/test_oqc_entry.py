@@ -187,14 +187,14 @@ class TestOqcEntry(TransactionCase):
         order = self._order()
         self.assertEqual(order.x_oqc_state, 'none')
         self.assertFalse(order.x_oqc_inspection_id)
-        self._prepare(order, 'SN-OQC-001')
+        self._prepare(order, '126100000001')
         self.assertFalse(self._oqc_docs(order))
         self.assertEqual(order.x_oqc_state, 'none')
 
     def test_11_first_entry_creates_document_with_aql_snapshot(self):
         # planned 8 -> lot range 1-10 -> code A -> AQL snapshot n=2 Ac=0 Re=1
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-101')
+        s1 = self._reach_oqc(order, '126100000002')
         inspection = order.x_oqc_inspection_id
         self.assertTrue(inspection)
         self.assertEqual(inspection.inspection_type, 'oqc')
@@ -213,21 +213,21 @@ class TestOqcEntry(TransactionCase):
         self.assertEqual(inspection.x_fai_serial_ids, s1,
                          'the first entered board lands as sample 1')
         # one document per order: the second entry collects, never creates
-        s2 = self._reach_oqc(order, 'SN-OQC-102')
+        s2 = self._reach_oqc(order, '126100000003')
         self.assertEqual(inspection.x_fai_serial_ids, s1 | s2)
         self.assertEqual(len(self._oqc_docs(order)), 1)
 
     # ---------------- R2: entry gate at n samples ----------------
     def test_12_gate_blocks_when_slots_full(self):
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-201')
+        s1 = self._reach_oqc(order, '126100000004')
         order.leave_station(s1, 'ok')
-        s2 = self._reach_oqc(order, 'SN-OQC-202')
+        s2 = self._reach_oqc(order, '126100000005')
         order.leave_station(s2, 'ok')
         inspection = order.x_oqc_inspection_id
         self.assertEqual(len(inspection.x_fai_serial_ids), 2)
         # slots full and not passed: the n+1 board is blocked
-        serial3 = self._prepare(order, 'SN-OQC-203')
+        serial3 = self._prepare(order, '126100000006')
         with self.assertRaises(ValidationError):
             order.scan_enter(serial3.name, self.wc_oqc)
         # already-registered samples re-enter freely (retest)
@@ -238,7 +238,7 @@ class TestOqcEntry(TransactionCase):
         # OQC NG samples are NOT dropped (unlike FAI): the slot stays
         # occupied and the board counts to d — refilling would distort AQL
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-301')
+        s1 = self._reach_oqc(order, '126100000007')
         order.leave_station(s1, 'ng', ng_defect=self.defect)
         inspection = order.x_oqc_inspection_id
         self.assertIn(s1, inspection.x_oqc_ng_serial_ids)
@@ -248,14 +248,14 @@ class TestOqcEntry(TransactionCase):
         self.assertEqual(inspection.defect_qty, 1,
                          'the NG board counts to the defect qty')
         # the slot is not released: board 2 registers, board 3 is blocked
-        self._reach_oqc(order, 'SN-OQC-302')
-        serial3 = self._prepare(order, 'SN-OQC-303')
+        self._reach_oqc(order, '126100000008')
+        serial3 = self._prepare(order, '126100000009')
         with self.assertRaises(ValidationError):
             order.scan_enter(serial3.name, self.wc_oqc)
 
     def test_14_ok_leave_arrives_with_default_pass_matrix(self):
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-401')
+        s1 = self._reach_oqc(order, '126100000010')
         order.leave_station(s1, 'ok')
         inspection = order.x_oqc_inspection_id
         self.assertIn(s1, inspection.x_fai_arrived_serial_ids)
@@ -274,7 +274,7 @@ class TestOqcEntry(TransactionCase):
     # ---------------- R3: Ac/Re verdict ----------------
     def test_15_done_pass_unlocks_gate(self):
         order = self._order()
-        for n in ('SN-OQC-501', 'SN-OQC-502'):
+        for n in ('126100000011', '126100000012'):
             serial = self._reach_oqc(order, n)
             order.leave_station(serial, 'ok')
         inspection = order.x_oqc_inspection_id
@@ -285,15 +285,15 @@ class TestOqcEntry(TransactionCase):
         self.assertEqual(inspection.result, 'pass')
         self.assertEqual(order.x_oqc_state, 'passed')
         # pass releases the whole order: the n+1 board flows in freely
-        self._reach_oqc(order, 'SN-OQC-503')
+        self._reach_oqc(order, '126100000013')
         self.assertEqual(len(self._oqc_docs(order)), 1,
                          'a passed order never grows a second document')
 
     def test_16_done_reject_locks_holds_no_second_document(self):
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-601')
+        s1 = self._reach_oqc(order, '126100000014')
         order.leave_station(s1, 'ng', ng_defect=self.defect)
-        s2 = self._reach_oqc(order, 'SN-OQC-602')
+        s2 = self._reach_oqc(order, '126100000015')
         order.leave_station(s2, 'ok')
         inspection = order.x_oqc_inspection_id
         # d = 1 NG board >= Re = 1 -> reject
@@ -314,15 +314,15 @@ class TestOqcEntry(TransactionCase):
         # no second OQC document (one order, one document, no re-draws)
         self.assertEqual(len(self._oqc_docs(order)), 1)
         # the gate still blocks new boards after the reject
-        serial3 = self._prepare(order, 'SN-OQC-603')
+        serial3 = self._prepare(order, '126100000016')
         with self.assertRaises(ValidationError):
             order.scan_enter(serial3.name, self.wc_oqc)
 
     def test_17_concession_unlocks_order(self):
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-701')
+        s1 = self._reach_oqc(order, '126100000017')
         order.leave_station(s1, 'ng', ng_defect=self.defect)
-        s2 = self._reach_oqc(order, 'SN-OQC-702')
+        s2 = self._reach_oqc(order, '126100000018')
         order.leave_station(s2, 'ok')
         inspection = order.x_oqc_inspection_id
         inspection.action_done()
@@ -348,15 +348,15 @@ class TestOqcEntry(TransactionCase):
         self.assertEqual(inspection.state, 'done')
         self.assertEqual(order.x_oqc_state, 'passed',
                          'concession counts as passed')
-        self._reach_oqc(order, 'SN-OQC-703')  # gate open
+        self._reach_oqc(order, '126100000019')  # gate open
 
     def test_18_reset_open_recheck_repasses(self):
         # reject driven by a failing cell, then rework: reopen the same
         # document, correct the matrix, judge again on the same snapshot
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-801')
+        s1 = self._reach_oqc(order, '126100000020')
         order.leave_station(s1, 'ok')
-        s2 = self._reach_oqc(order, 'SN-OQC-802')
+        s2 = self._reach_oqc(order, '126100000021')
         order.leave_station(s2, 'ok')
         inspection = order.x_oqc_inspection_id
         cell = inspection.cell_ids.filtered(
@@ -397,12 +397,12 @@ class TestOqcEntry(TransactionCase):
         # no issue ever opened under the no-auto-issue policy, gate is open
         self.assertEqual(Issue.search_count(
             [('inspection_id', '=', inspection.id)]), 0)
-        serial3 = self._prepare(order, 'SN-OQC-803')
+        serial3 = self._prepare(order, '126100000022')
         order.scan_enter(serial3.name, self.wc_oqc)
 
     def test_19_done_guard_needs_full_samples(self):
         order = self._order()
-        s1 = self._reach_oqc(order, 'SN-OQC-901')
+        s1 = self._reach_oqc(order, '126100000023')
         order.leave_station(s1, 'ok')
         inspection = order.x_oqc_inspection_id
         # arrived (1) + ng (0) < sample size (2)
@@ -412,7 +412,7 @@ class TestOqcEntry(TransactionCase):
     def test_20_no_scheme_never_triggers(self):
         self.scheme.active = False
         order = self._order()
-        for n in ('SN-OQC-NO-1', 'SN-OQC-NO-2', 'SN-OQC-NO-3'):
+        for n in ('126100000024', '126100000025', '126100000026'):
             serial = self._reach_oqc(order, n)
             order.leave_station(serial, 'ok')
         self.assertFalse(self._oqc_docs(order))

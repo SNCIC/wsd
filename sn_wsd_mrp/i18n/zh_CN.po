@@ -6343,6 +6343,13 @@ msgstr "SN %(sn)s 已经由结束工序 %(op)s 离开制令单 %(order)s，不�
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
 msgid ""
+"SN %s is not in the standard format: 12 digits starting with 1 or 2."
+msgstr "SN %s 不是标准格式：应为 1 或 2 开头的 12 位数字。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mes_order.py:0
+msgid ""
 "SN %(sn)s has no in-progress pass row on MES order %(order)s; its "
 "station entry record is missing."
 msgstr "SN %(sn)s 在制令单 %(order)s 上没有进行中的过站行，缺少进站记录。"
@@ -9120,3 +9127,19 @@ msgstr "生产领料单"
 #: code:addons/sn_wsd_mrp/report/mes_return_prn.py:0
 msgid "Production Material Return"
 msgstr "生产退料单"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_stats__x_input_qty
+msgid "Input Quantity"
+msgstr "投入数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_stats__x_output_qty
+msgid "Output Quantity"
+msgstr "产出数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_order_stats
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_order_stats
+msgid "Execution Statistics"
+msgstr "执行统计"

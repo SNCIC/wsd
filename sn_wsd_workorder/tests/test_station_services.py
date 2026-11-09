@@ -79,28 +79,28 @@ class TestStationServices(TransactionCase):
         """One scan per station: the station that scans records its own OK
         (mid-route included); the next station then takes the board over
         with its own scan -- no arrival pull."""
-        data = self.order.sn_station_enter('SN-T1', self.wc_in.id)
+        data = self.order.sn_station_enter('126100000001', self.wc_in.id)
         self.assertEqual(len(data['orders']), 1)
         card = data['orders'][0]
         self.assertEqual(card['op']['wip_qty'], 1)
         self.assertTrue(card['op']['is_input_point'])
         self.assertEqual(card['input_qty'], 1.0)
-        self.assertEqual([w['sn'] for w in data['wip']], ['SN-T1'])
+        self.assertEqual([w['sn'] for w in data['wip']], ['126100000001'])
         wip_id = data['wip'][0]['wip_id']
         MesOrder = self.env['sn.wsd.mes.order']
         # the scanned station records its own OK, even mid-route
         payload = MesOrder.sn_station_leave(wip_id, 'ok')
         self.assertFalse(payload['finished'])
         # the board is still this station's latest record (no open WIP row)
-        self.assertEqual([w['sn'] for w in payload['data']['wip']], ['SN-T1'])
+        self.assertEqual([w['sn'] for w in payload['data']['wip']], ['126100000001'])
         self.assertFalse(payload['data']['wip'][0]['wip_id'])
         self.assertEqual(payload['data']['wip_total'], 1)
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T1')])
+            ('serial_identity_id.name', '=', '126100000001')])
         self.assertEqual(history.route_operation_id.operation_id, self.op_in)
         self.assertEqual(history.result, 'ok')
         # the next station scans the board itself and completes the order
-        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T1')
+        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, '126100000001')
         self.assertTrue(hit['leave'])
         payload = MesOrder.sn_station_leave(hit['wip_id'], 'ok')
         self.assertTrue(payload['finished'])
@@ -108,13 +108,13 @@ class TestStationServices(TransactionCase):
         self.assertEqual(payload['data']['orders'][0]['op']['ok_qty'], 1)
 
     def test_02_leave_through_exit_finishes(self):
-        self.order.sn_station_enter('SN-T2', self.wc_in.id)
+        self.order.sn_station_enter('126100000002', self.wc_in.id)
         # the start station records its own OK, then the exit station scans
         hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
-            self.wc_in.id, 'SN-T2')
+            self.wc_in.id, '126100000002')
         self.env['sn.wsd.mes.order'].sn_station_leave(hit['wip_id'], 'ok')
         hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
-            self.wc_out.id, 'SN-T2')
+            self.wc_out.id, '126100000002')
         self.assertTrue(hit['leave'])
         payload = self.env['sn.wsd.mes.order'].sn_station_leave(
             hit['wip_id'], 'ok')
@@ -122,7 +122,7 @@ class TestStationServices(TransactionCase):
         card = next(o for o in payload['data']['orders'] if o['id'] == self.order.id)
         self.assertEqual(card['output_qty'], 1.0)
         with self.assertRaises(ValidationError):
-            self.order.sn_station_enter('SN-T2', self.wc_in.id)
+            self.order.sn_station_enter('126100000002', self.wc_in.id)
 
     def test_03_scan_leave_one_shot_ok_single_transaction(self):
         """PDA OK verdict rides on the scan call itself (one-shot kernel,
@@ -132,22 +132,22 @@ class TestStationServices(TransactionCase):
         History = self.env['sn.wsd.serial.operation.history']
         Wip = self.env['sn.wsd.serial.wip']
         # fresh SN: feeding + station pass in the scan's own transaction
-        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-T3', True)
+        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, '126100000003', True)
         self.assertTrue(hit['passed'])
         self.assertFalse(hit['wip_id'])
         self.assertEqual(
-            History.search([('serial_identity_id.name', '=', 'SN-T3')]).result,
+            History.search([('serial_identity_id.name', '=', '126100000003')]).result,
             'ok')
-        self.assertFalse(Wip.search([('serial_identity_id.name', '=', 'SN-T3')]))
+        self.assertFalse(Wip.search([('serial_identity_id.name', '=', '126100000003')]))
         # a board stranded in progress (client dropped mid legacy flow) is
         # completed by the one-shot scan of its own station
-        self.order.sn_station_enter('SN-T3B', self.wc_in.id)
-        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, 'SN-T3B', True)
+        self.order.sn_station_enter('126100000004', self.wc_in.id)
+        hit = MesOrder.sn_station_scan_leave(self.wc_in.id, '126100000004', True)
         self.assertTrue(hit['passed'])
         self.assertFalse(Wip.search([
-            ('serial_identity_id.name', '=', 'SN-T3B')]))
+            ('serial_identity_id.name', '=', '126100000004')]))
         # without the flag the legacy two-step shape is preserved
-        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T3')
+        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, '126100000003')
         self.assertTrue(hit['leave'])
         self.assertFalse(hit['passed'])
         self.assertTrue(hit['wip_id'])
@@ -157,15 +157,15 @@ class TestStationServices(TransactionCase):
         """在制口径=每块板最后一条记录：A 判 OK 后仍算 A 的在制（没有开着
         的 WIP 行）；板到 B 进站后 A=0、B=1；B 出站完成后两边都不再显示。"""
         MesOrder = self.env['sn.wsd.mes.order']
-        data = self.order.sn_station_enter('SN-T9', self.wc_in.id)
+        data = self.order.sn_station_enter('126100000005', self.wc_in.id)
         wip_id = data['wip'][0]['wip_id']
         MesOrder.sn_station_leave(wip_id, 'ok')
         data_in = MesOrder.sn_station_floor_data(self.wc_in.id)
         card_in = next(o for o in data_in['orders'] if o['id'] == self.order.id)
         self.assertEqual(card_in['op']['wip_qty'], 1)
-        self.assertEqual([w['sn'] for w in data_in['wip']], ['SN-T9'])
+        self.assertEqual([w['sn'] for w in data_in['wip']], ['126100000005'])
         self.assertFalse(data_in['wip'][0]['wip_id'])
-        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-T9')
+        hit = MesOrder.sn_station_scan_leave(self.wc_out.id, '126100000005')
         self.assertTrue(hit['wip_id'])
         data_in = MesOrder.sn_station_floor_data(self.wc_in.id)
         card_in = next(o for o in data_in['orders'] if o['id'] == self.order.id)
@@ -174,7 +174,7 @@ class TestStationServices(TransactionCase):
         data_out = MesOrder.sn_station_floor_data(self.wc_out.id)
         card_out = next(o for o in data_out['orders'] if o['id'] == self.order.id)
         self.assertEqual(card_out['op']['wip_qty'], 1)
-        self.assertEqual([w['sn'] for w in data_out['wip']], ['SN-T9'])
+        self.assertEqual([w['sn'] for w in data_out['wip']], ['126100000005'])
         self.assertEqual(data_out['wip'][0]['wip_id'], hit['wip_id'])
         MesOrder.sn_station_leave(hit['wip_id'], 'ok')
         data_out = MesOrder.sn_station_floor_data(self.wc_out.id)
@@ -225,7 +225,7 @@ class TestStationServices(TransactionCase):
         self.assertEqual(resolved['id'], defect.id)
         self.assertFalse(
             self.env['sn.wsd.mes.order'].sn_resolve_ng_defect('NOPE-404'))
-        data = self.order.sn_station_enter('SN-T4', self.wc_in.id)
+        data = self.order.sn_station_enter('126100000006', self.wc_in.id)
         wip_id = data['wip'][0]['wip_id']
         MesOrder = self.env['sn.wsd.mes.order']
         with self.assertRaises(ValidationError):
@@ -234,25 +234,25 @@ class TestStationServices(TransactionCase):
             wip_id, 'ng', False, resolved['id'])
         self.assertFalse(payload['finished'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T4')])
+            ('serial_identity_id.name', '=', '126100000006')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, defect)
 
     def test_05_scan_leave_resolves_wip(self):
         """PDA exit-only scan: a WIP SN at this operation resolves to its
         row; the payload is all the terminal needs to leave."""
-        self.order.sn_station_enter('SN-T5', self.wc_in.id)
+        self.order.sn_station_enter('126100000007', self.wc_in.id)
         hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
-            self.wc_in.id, 'SN-T5')
+            self.wc_in.id, '126100000007')
         self.assertEqual(hit['order_id'], self.order.id)
         wip = self.env['sn.wsd.serial.wip'].browse(hit['wip_id'])
-        self.assertEqual(wip.serial_identity_id.name, 'SN-T5')
+        self.assertEqual(wip.serial_identity_id.name, '126100000007')
 
     def test_06_scan_leave_rejects_elsewhere_and_unknown(self):
         """严格一站一扫：板在别的工序未出站时，本站扫码硬拦（不再到站拉
         动）；其余仍硬拦：不在本单路线上的工位扫他单板、非投入站扫未知
         SN（投入站未知 SN=喂料自动注册，合法）、空码。"""
-        self.order.sn_station_enter('SN-T6', self.wc_in.id)
+        self.order.sn_station_enter('126100000008', self.wc_in.id)
         MesOrder = self.env['sn.wsd.mes.order']
         other_op = self.env['sn.wsd.operation'].create(
             {'name': 'OP-OTHER', 'code': 'OTH1'})
@@ -263,12 +263,12 @@ class TestStationServices(TransactionCase):
         })
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan_leave(
-                wc_other.id, 'SN-T6')  # 工位不在该单路线上
+                wc_other.id, '126100000008')  # 工位不在该单路线上
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan_leave(
-                self.wc_out.id, 'SN-T6')  # 板还停在投入站，未出站
+                self.wc_out.id, '126100000008')  # 板还停在投入站，未出站
         with self.assertRaises(ValidationError):
-            MesOrder.sn_station_scan_leave(self.wc_out.id, 'SN-UNKNOWN-404')
+            MesOrder.sn_station_scan_leave(self.wc_out.id, '126100000009')
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan_leave(self.wc_in.id, '   ')
 
@@ -282,18 +282,18 @@ class TestStationServices(TransactionCase):
                 'name': 'Scan Defect', 'code': 'SCND',
                 'category': 'other', 'severity': 'minor',
             })
-        self.order.sn_station_enter('SN-T7', self.wc_in.id)
+        self.order.sn_station_enter('126100000010', self.wc_in.id)
         hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
-            self.wc_in.id, 'SN-T7')
+            self.wc_in.id, '126100000010')
         payload = self.env['sn.wsd.mes.order'].sn_station_leave(
             hit['wip_id'], 'ng', False, defect.id)
         self.assertFalse(payload['finished'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T7')])
+            ('serial_identity_id.name', '=', '126100000010')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, defect)
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-T7')]))
+            ('serial_identity_id.name', '=', '126100000010')]))
 
     def test_08_scan_leave_then_scrap(self):
         """Resolve by scan, leave scrap with a reason: the history row is
@@ -319,22 +319,22 @@ class TestStationServices(TransactionCase):
         reason = self.env['sn.wsd.scrap.reason'].create({
             'name': 'Scrap T8', 'code': 'SCT8',
         })
-        self.order.sn_station_enter('SN-T8', self.wc_in.id)
+        self.order.sn_station_enter('126100000011', self.wc_in.id)
         hit = self.env['sn.wsd.mes.order'].sn_station_scan_leave(
-            self.wc_in.id, 'SN-T8')
+            self.wc_in.id, '126100000011')
         MesOrder = self.env['sn.wsd.mes.order']
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_leave(hit['wip_id'], 'scrap')  # reason required
         payload = MesOrder.sn_station_leave(hit['wip_id'], 'scrap', reason.id)
         self.assertFalse(payload['finished'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T8')])
+            ('serial_identity_id.name', '=', '126100000011')])
         self.assertEqual(history.result, 'scrap')
         scraps = self.env['stock.scrap'].search([
             ('x_scrap_reason_id', '=', reason.id)])
         self.assertTrue(scraps)
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-T8')]))
+            ('serial_identity_id.name', '=', '126100000011')]))
 
     def test_10_one_shot_ok_scan_passes_in_one_call(self):
         """One-shot OK scan = device-API kernel in one call: the scan enters
@@ -342,19 +342,19 @@ class TestStationServices(TransactionCase):
         stranded in_progress history row can survive a dropped client."""
         MesOrder = self.env['sn.wsd.mes.order']
         payload = MesOrder.sn_station_scan(
-            self.wc_in.id, 'SN-T10', False, one_shot_ok=True)
+            self.wc_in.id, '126100000012', False, one_shot_ok=True)
         self.assertEqual(payload['action'], 'passed')
         self.assertEqual(payload['order_id'], self.order.id)
         self.assertFalse(payload['finished'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T10')])
+            ('serial_identity_id.name', '=', '126100000012')])
         self.assertEqual(history.route_operation_id.operation_id, self.op_in)
         self.assertEqual(history.result, 'ok')
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-T10')]))
+            ('serial_identity_id.name', '=', '126100000012')]))
         # the exit station takes the board over with its own one-shot scan
         payload = MesOrder.sn_station_scan(
-            self.wc_out.id, 'SN-T10', False, one_shot_ok=True)
+            self.wc_out.id, '126100000012', False, one_shot_ok=True)
         self.assertTrue(payload['finished'])
         self.assertEqual(payload['data']['wip'], [])
         self.assertEqual(payload['data']['orders'][0]['op']['ok_qty'], 1)
@@ -364,30 +364,30 @@ class TestStationServices(TransactionCase):
         completed by a one-shot OK scan instead of relying on a second
         leave call that a dropped client would strand."""
         MesOrder = self.env['sn.wsd.mes.order']
-        data = self.order.sn_station_enter('SN-T11', self.wc_in.id)
+        data = self.order.sn_station_enter('126100000013', self.wc_in.id)
         self.assertTrue(data['wip'][0]['wip_id'])
         payload = MesOrder.sn_station_scan(
-            self.wc_in.id, 'SN-T11', False, one_shot_ok=True)
+            self.wc_in.id, '126100000013', False, one_shot_ok=True)
         self.assertEqual(payload['action'], 'passed')
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-T11')])
+            ('serial_identity_id.name', '=', '126100000013')])
         self.assertEqual(history.result, 'ok')
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-T11')]))
+            ('serial_identity_id.name', '=', '126100000013')]))
 
     def test_12_one_shot_scan_keeps_strict_gates(self):
         """One-shot rides the same gates: a board in progress at another
         operation is refused, and a duplicate scan of an already-passed
         station keeps the terminal refusal (rework voucher territory)."""
         MesOrder = self.env['sn.wsd.mes.order']
-        self.order.sn_station_enter('SN-T12', self.wc_in.id)
+        self.order.sn_station_enter('126100000014', self.wc_in.id)
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan(
-                self.wc_out.id, 'SN-T12', False, one_shot_ok=True)
+                self.wc_out.id, '126100000014', False, one_shot_ok=True)
         MesOrder.sn_station_leave(
             self.env['sn.wsd.serial.wip'].search([
-                ('serial_identity_id.name', '=', 'SN-T12')], limit=1).id,
+                ('serial_identity_id.name', '=', '126100000014')], limit=1).id,
             'ok')
         with self.assertRaises(ValidationError):
             MesOrder.sn_station_scan(
-                self.wc_in.id, 'SN-T12', False, one_shot_ok=True)
+                self.wc_in.id, '126100000014', False, one_shot_ok=True)

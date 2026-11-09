@@ -81,14 +81,14 @@ class TestBatchPassFreeze(TransactionCase):
             'name': 'WC-FZA', 'x_workshop_id': self.workshop.id,
             'x_operation_id': self.op_a.id,
             'x_production_line_id': self.line.id})
-        serial = order.scan_enter('FZ-SN-1', wc_a)
+        serial = order.scan_enter('126100000001', wc_a)
         order.leave_station(serial, 'ok')  # A judged; the board sits before B
         rop_b = order.x_route_operation_ids.filtered(
             lambda r: r.operation_id == self.op_b)
         self.assertFalse(order._batch_pass_block_reason(serial, rop_b))
         repair = self.env['sn.wsd.repair.order'].create({
             'serial_identity_id': serial.id,
-            'serial_no': 'FZ-SN-1',
+            'serial_no': '126100000001',
             'mes_order_id': order.id,
             'route_operation_id': rop_b.id,
             'defect_code_id': self.defect_code.id,

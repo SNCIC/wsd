@@ -83,9 +83,9 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
     def test_02_pending_board_blocks_then_release_allows(self):
         order = self._order()
         self._stock_line_side(order)
-        inspection = self._ok_round(order, 'SN-RG-101')
-        self._ng_round(order, 'SN-RG-102')
-        ng_serial = self._identity('SN-RG-102')
+        inspection = self._ok_round(order, '126100000001')
+        self._ng_round(order, '126100000002')
+        ng_serial = self._identity('126100000002')
         inspection.action_done()
         self.assertEqual(inspection.state, 'done')
         self.assertEqual(inspection.result, 'pass')  # d=1 <= Ac=1
@@ -94,7 +94,7 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
         with self.assertRaises(UserError) as ctx:
             order.action_complete(1.0, 'stock')
         self.assertIn(inspection.name, str(ctx.exception))
-        self.assertIn('SN-RG-102', str(ctx.exception))
+        self.assertIn('126100000002', str(ctx.exception))
         self.assertEqual(order.x_done_qty, 0.0)
 
         # every known defect closed -> release -> completion goes through
@@ -110,7 +110,7 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
     def test_03_lineside_direct_validate_blocked_before_backflush(self):
         order = self._order()
         component, line_side = self._stock_line_side(order)
-        inspection = self._ok_round(order, 'SN-RG-201')
+        inspection = self._ok_round(order, '126100000003')
         self.assertEqual(inspection.state, 'open')  # not completed yet
         with self.assertRaises(UserError) as ctx:
             order.action_complete(1.0, 'lineside', workshop=self.workshop)
@@ -129,8 +129,8 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
         # order 1: clean sample -> done/pass, released (two orders
         # share the MO: plan 5 each to stay within its quantity)
         order1 = self._order(qty=5)
-        inspection1 = self._ok_round(order1, 'SN-RG-301')
-        self._ok_round(order1, 'SN-RG-302')
+        inspection1 = self._ok_round(order1, '126100000004')
+        self._ok_round(order1, '126100000005')
         inspection1.action_done()
         self.assertTrue(inspection1.x_oqc_release_ready)
         # order 2: NG board pending -> done/pass but not released; its own
@@ -149,8 +149,8 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
         gate2 = give_pick(self.env, order2)
         order2.action_online()
         gate2.action_cancel()
-        inspection2 = self._ok_round(order2, 'SN-RG-303', wcs=wcs2)
-        self._ng_round(order2, 'SN-RG-304', wcs=wcs2)
+        inspection2 = self._ok_round(order2, '126100000006', wcs=wcs2)
+        self._ng_round(order2, '126100000007', wcs=wcs2)
         inspection2.action_done()
         self.assertFalse(inspection2.x_oqc_release_ready)
 
@@ -168,8 +168,8 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
             })
             BindLog.bind_carton_to_pallet('PLT-RG-01', carton_no)
 
-        pack(order1, 'SN-RG-301', 'CTN-RG-01')
-        pack(order2, 'SN-RG-304', 'CTN-RG-02')
+        pack(order1, '126100000004', 'CTN-RG-01')
+        pack(order2, '126100000007', 'CTN-RG-02')
         BindLog.close_pallet('PLT-RG-01')
         pallet = Package.search([
             ('name', '=', 'PLT-RG-01'),
@@ -190,8 +190,8 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
     def test_05_receipt_revalidated_when_new_ng_arrives(self):
         order = self._order()
         self._stock_line_side(order)
-        inspection = self._full_ok_round(order, 'SN-RG-401')
-        self._full_ok_round(order, 'SN-RG-402')
+        inspection = self._full_ok_round(order, '126100000008')
+        self._full_ok_round(order, '126100000009')
         inspection.action_done()
         self.assertTrue(inspection.x_oqc_release_ready)
         order.action_complete(1.0, 'stock')
@@ -200,7 +200,7 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
         self.assertNotEqual(receipt.state, 'done')
 
         # a new NG lands on the released batch (board outside the sample)
-        self._ng_round(order, 'SN-RG-403')
+        self._ng_round(order, '126100000010')
         self.assertFalse(inspection.x_oqc_release_ready)
         with self.assertRaises(UserError) as ctx:
             receipt.button_validate()
@@ -215,31 +215,31 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_06_sn_level_refusals(self):
         order = self._order()
-        inspection = self._ok_round(order, 'SN-RG-501')
-        self._ng_round(order, 'SN-RG-502')
-        ng_serial = self._identity('SN-RG-502')
+        inspection = self._ok_round(order, '126100000011')
+        self._ng_round(order, '126100000012')
+        ng_serial = self._identity('126100000012')
         self._close_retest(inspection, ng_serial)
         inspection.action_done()
         self.assertTrue(inspection.x_oqc_release_ready)
         # clean serials pass
         order._check_oqc_receipt_release(
-            serials=self._identity('SN-RG-501'))
+            serials=self._identity('126100000011'))
 
         # a scrapped serial is refused by name even on a released batch
-        scrapped = self._identity('SN-RG-502')
+        scrapped = self._identity('126100000012')
         scrapped.x_quality_hold_state = 'scrapped'
         with self.assertRaises(UserError) as ctx:
             order._check_oqc_receipt_release(serials=scrapped)
-        self.assertIn('SN-RG-502', str(ctx.exception))
+        self.assertIn('126100000012', str(ctx.exception))
         self.assertIn('scrapped', str(ctx.exception))
         scrapped.x_quality_hold_state = 'released'
 
         # a serial with a re-opened disposition is refused as unresolved
-        self._ng_round(order, 'SN-RG-503')
-        pending = self._identity('SN-RG-503')
+        self._ng_round(order, '126100000013')
+        pending = self._identity('126100000013')
         with self.assertRaises(UserError) as ctx:
             order._check_oqc_receipt_release(serials=pending)
-        self.assertIn('SN-RG-503', str(ctx.exception))
+        self.assertIn('126100000013', str(ctx.exception))
         self.assertIn('awaiting disposition', str(ctx.exception))
 
     # ------------------------------------------------------------------
@@ -263,7 +263,7 @@ class TestOqcReceiptGate(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_08_material_issue_picking_not_mistaken(self):
         order = self._order()
-        inspection = self._ok_round(order, 'SN-RG-601')
+        inspection = self._ok_round(order, '126100000014')
         self.assertFalse(inspection.x_oqc_release_ready)
         order.action_generate_picking()
         warehouse = order.production_id.picking_type_id.warehouse_id

@@ -79,7 +79,7 @@ class ScanPassFixture:
     def _payload(self, **kw):
         payload = {
             'M_DATA_AUTH': 'HQ',
-            'M_SN': 'SN-API-001',
+            'M_SN': '126110000001',
             'M_WORK_STATIONSN': 'APIWCIN',
             'M_EMP': 'APIOP',
             'M_TEST_RESULT': 'OK',
@@ -109,6 +109,45 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         with self.assertRaises(ValidationError):
             self.service.scan_pass(self._payload(M_TEST_RESULT='MAYBE'))
 
+    def test_sn_format_gate_rejects_nonstandard(self):
+        """spec: SN 格式硬闸（2026-11-09 用户口径）——标准 SN 为首位 1/2 的
+        12 位数字（126/226 只是示例，其余位不锁定），其余一律拒收且零落库。"""
+        bad_sns = (
+            'ABC-123',        # not numeric
+            '12611000366',    # 11 digits
+            '1261100036689',  # 13 digits
+            '026110003668',   # head digit 0
+            '326110003668',   # head digit 3
+        )
+        for bad in bad_sns:
+            with self.assertRaises(ValidationError) as ctx:
+                self.service.scan_pass(self._payload(M_SN=bad))
+            self.assertIn('standard format', str(ctx.exception))
+        self.assertFalse(self.env['sn.wsd.serial.identity'].search(
+            [('name', 'in', list(bad_sns))]))
+        self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
+            [('serial_identity_id.name', 'in', list(bad_sns))]))
+        # only the head digit 1/2 is mandated: 126xxx / 226xxx / 136xxx all
+        # pass the gate
+        for good in ('126110003668', '226110003668', '136110003668'):
+            result = self.service.scan_pass(self._payload(M_SN=good))
+            self.assertTrue(result['ok'])
+
+    def test_sn_format_gate_nameplate_exempt(self):
+        """spec: 铭牌码不算——扫铭牌走绑定解析到整机 SN，铭牌码本身不进内核
+        格式闸。"""
+        machine = self.env['sn.wsd.serial.identity'].get_or_create(
+            '126110009999', self.company)
+        self.env['sn.wsd.serial.binding'].create({
+            'serial_identity_id': self.env['sn.wsd.serial.identity'].get_or_create(
+                'NP-FMT-1', self.company).id,
+            'bound_serial_identity_id': machine.id,
+            'binding_type': 'nameplate',
+        })
+        result = self.service.scan_pass(self._payload(M_SN='NP-FMT-1'))
+        self.assertTrue(result['ok'])
+        self.assertEqual(result['sn'], '126110009999')
+
     # ------------------------------------------------------------------
     # device-pass-gate: existence / status / ledger link / idempotency
     # ------------------------------------------------------------------
@@ -116,29 +155,30 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         """spec: 设备码存在性硬拦——查不到即 422，过站零落库。"""
         with self.assertRaises(ValidationError):
             self.service.scan_pass(self._payload(
-                M_SN='SN-GATE-404', M_DEVICE_SN='GHOST-DEV'))
+                M_SN='126110000404', M_DEVICE_SN='GHOST-DEV'))
         self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
-            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+            [('serial_identity_id.name', '=', '126110000404')]))
         self.assertFalse(self.env['sn.wsd.serial.wip'].search(
-            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+            [('serial_identity_id.name', '=', '126110000404')]))
         self.assertFalse(self.env['sn.wsd.mes.test.result'].search(
-            [('serial_identity_id.name', '=', 'SN-GATE-404')]))
+            [('serial_identity_id.name', '=', '126110000404')]))
 
     def test_device_gate_status_blocks(self):
         """spec: 状态闸门——维修/封存/报废设备不得产出过站。"""
-        for status in ('repair', 'sealed', 'scrapped'):
+        for index, status in enumerate(('repair', 'sealed', 'scrapped')):
+            sn = '12611000010%d' % index
             self.equipment.equipment_status = status
             with self.assertRaises(ValidationError):
                 self.service.scan_pass(self._payload(
-                    M_SN='SN-GATE-%s' % status, M_DEVICE_SN='DEV-01'))
+                    M_SN=sn, M_DEVICE_SN='DEV-01'))
             self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
-                [('serial_identity_id.name', '=', 'SN-GATE-%s' % status)]))
+                [('serial_identity_id.name', '=', sn)]))
         self.equipment.equipment_status = 'enabled'
 
     def test_device_gate_links_equipment_ledger(self):
         """spec: 测试结果挂接台账——equipment_id m2o 不再恒空。"""
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-GATE-LINK', M_DEVICE_SN='DEV-01'))
+            M_SN='126110000111', M_DEVICE_SN='DEV-01'))
         self.assertTrue(result['ok'])
         test_result = self.env['sn.wsd.mes.test.result'].browse(
             result['test_result_id'])
@@ -148,18 +188,18 @@ class TestScanPass(ScanPassFixture, TransactionCase):
     def test_device_gate_idempotent_resend_skips_revalidation(self):
         """spec: 幂等重发不重复校验——设备事后转维修中不影响历史事件重发。"""
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-GATE-IDEM', M_DEVICE_SN='DEV-01',
+            M_SN='126110000112', M_DEVICE_SN='DEV-01',
             external_event_id='EVT-GATE-1'))
         self.assertTrue(result['ok'])
         self.equipment.equipment_status = 'repair'
         replay = self.service.scan_pass(self._payload(
-            M_SN='SN-GATE-IDEM', M_DEVICE_SN='DEV-01',
+            M_SN='126110000112', M_DEVICE_SN='DEV-01',
             external_event_id='EVT-GATE-1'))
         self.assertTrue(replay['ok'])
         self.assertEqual(replay['test_result_id'], result['test_result_id'])
         # exactly one pass row: the resend was short-circuited
         self.assertEqual(len(self.env['sn.wsd.serial.operation.history'].search(
-            [('serial_identity_id.name', '=', 'SN-GATE-IDEM')])), 1)
+            [('serial_identity_id.name', '=', '126110000112')])), 1)
         self.equipment.equipment_status = 'enabled'
 
     def test_device_gate_overdue_blocks_and_recovers(self):
@@ -180,13 +220,13 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             # 7 days since the last weekly check, past the 08:00 trigger
             with self.assertRaises(ValidationError):
                 self.service.scan_pass(self._payload(
-                    M_SN='SN-GATE-OVERDUE', M_DEVICE_SN='DEV-01'))
+                    M_SN='126110000113', M_DEVICE_SN='DEV-01'))
             self.assertFalse(self.env['sn.wsd.serial.operation.history'].search(
-                [('serial_identity_id.name', '=', 'SN-GATE-OVERDUE')]))
+                [('serial_identity_id.name', '=', '126110000113')]))
             # the morning crew runs the spot check -> the gate reopens
             self.equipment.last_spot_check_date = datetime(2026, 11, 2, 8, 30)
             result = self.service.scan_pass(self._payload(
-                M_SN='SN-GATE-OVERDUE', M_DEVICE_SN='DEV-01'))
+                M_SN='126110000113', M_DEVICE_SN='DEV-01'))
         self.assertTrue(result['ok'])
 
     def test_02_first_pass_records_only_the_scanned_station(self):
@@ -195,26 +235,26 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         result = self.service.scan_pass(self._payload())
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-001')])
+            ('serial_identity_id.name', '=', '126110000001')])
         self.assertEqual(len(history), 1)
         self.assertEqual(history.route_operation_id.operation_id, self.op_in)
         self.assertEqual(history.result, 'ok')
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-API-001')]))
+            ('serial_identity_id.name', '=', '126110000001')]))
         self.assertEqual(result['panel_qty'], 1)
 
     def test_03_ng_only_scanned_board(self):
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-NG', M_TEST_RESULT='NG', M_STR2='APID'))
+            M_SN='126110000201', M_TEST_RESULT='NG', M_STR2='APID'))
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-NG')])
+            ('serial_identity_id.name', '=', '126110000201')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, self.defect)
 
     def test_04_nameplate_resolution_and_rebind(self):
         machine = self.env['sn.wsd.serial.identity'].get_or_create(
-            'SN-API-M01', self.company)
+            '126100000001', self.company)
         self.env['sn.wsd.serial.binding'].create({
             'serial_identity_id': self.env['sn.wsd.serial.identity'].get_or_create(
                 'NP-API', self.company).id,
@@ -225,7 +265,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(resolved, machine)
         # rebind to a new machine keeps the old row
         machine2 = self.env['sn.wsd.serial.identity'].get_or_create(
-            'SN-API-M02', self.company)
+            '126100000002', self.company)
         self.service._bind_nameplate(machine2, 'NP-API')
         bindings = self.env['sn.wsd.serial.binding'].search([
             ('serial_identity_id.name', '=', 'NP-API')])
@@ -235,12 +275,12 @@ class TestScanPass(ScanPassFixture, TransactionCase):
 
     def test_05_component_unique_assembly(self):
         machine = self.env['sn.wsd.serial.identity'].get_or_create(
-            'SN-API-M03', self.company)
+            '126100000003', self.company)
         Binding = self.env['sn.wsd.meter.component.binding']
         Binding.register_component_bindings(machine, [
             {'component_type': 'main_pcb', 'component_sn': 'PCB-API-1'}])
         other = self.env['sn.wsd.serial.identity'].get_or_create(
-            'SN-API-M04', self.company)
+            '126100000004', self.company)
         with self.assertRaises(ValidationError):
             Binding.register_component_bindings(other, [
                 {'component_type': 'main_pcb', 'component_sn': 'PCB-API-1'}])
@@ -294,16 +334,16 @@ class TestScanPass(ScanPassFixture, TransactionCase):
     #     self.route.x_process_type = 'smt'
     #     # real flow: SNs are printed first (identity exists), then panel-associated
     #     Identity = self.env['sn.wsd.serial.identity']
-    #     for sn in ('SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4'):
+    #     for sn in ('126100000005', '126100000006', '126100000007', '126100000008'):
     #         Identity.get_or_create(sn, self.company, origin_type='laser')
     #     panel = self.env['sn.smt.pcb.panel'].create({
     #         'production_id': self.production.id,
     #         'product_no': 'DWG-API', 'quantity': 4,
     #         'board_ids': [
-    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-PANEL-1'}),
-    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-PANEL-2'}),
-    #             (0, 0, {'board_no': 3, 'pro_sn': 'SN-PANEL-3'}),
-    #             (0, 0, {'board_no': 4, 'pro_sn': 'SN-PANEL-4'}),
+    #             (0, 0, {'board_no': 1, 'pro_sn': '126100000005'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': '126100000006'}),
+    #             (0, 0, {'board_no': 3, 'pro_sn': '126100000007'}),
+    #             (0, 0, {'board_no': 4, 'pro_sn': '126100000008'}),
     #         ],
     #         'state': 'confirmed',
     #     })
@@ -311,41 +351,41 @@ class TestScanPass(ScanPassFixture, TransactionCase):
     #                     msg='route type=%s, private route=%s' % (
     #                         self.order.x_mes_route_id.route_id.x_process_type,
     #                         self.order.x_mes_route_id.route_id.name))
-    #     result = self.service.scan_pass(self._payload(M_SN='SN-PANEL-2'))
+    #     result = self.service.scan_pass(self._payload(M_SN='126100000006'))
     #     self.assertEqual(result['panel_qty'], 4)
-    #     for sn in ['SN-PANEL-1', 'SN-PANEL-2', 'SN-PANEL-3', 'SN-PANEL-4']:
+    #     for sn in ['126100000005', '126100000006', '126100000007', '126100000008']:
     #         history = self.env['sn.wsd.serial.operation.history'].search([
     #             ('serial_identity_id.name', '=', sn),
     #             ('result', '!=', 'in_progress')])
     #         self.assertEqual(history.result, 'ok', sn)
     #     # NG only marks the scanned board
-    #     for sn in ('SN-PB2-1', 'SN-PB2-2'):
+    #     for sn in ('126100000009', '126100000010'):
     #         Identity.get_or_create(sn, self.company, origin_type='laser')
     #     panel2 = self.env['sn.smt.pcb.panel'].create({
     #         'production_id': self.production.id,
     #         'product_no': 'DWG-API', 'quantity': 2,
     #         'board_ids': [
-    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-PB2-1'}),
-    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-PB2-2'}),
+    #             (0, 0, {'board_no': 1, 'pro_sn': '126100000009'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': '126100000010'}),
     #         ],
     #         'state': 'confirmed',
     #     })
     #     result = self.service.scan_pass(self._payload(
-    #         M_SN='SN-PB2-1', M_TEST_RESULT='NG', M_STR2='APID'))
+    #         M_SN='126100000009', M_TEST_RESULT='NG', M_STR2='APID'))
     #     self.assertEqual(result['panel_qty'], 2)
     #     ng = self.env['sn.wsd.serial.operation.history'].search([
-    #         ('serial_identity_id.name', '=', 'SN-PB2-1'),
+    #         ('serial_identity_id.name', '=', '126100000009'),
     #         ('result', '=', 'ng')])
     #     ok = self.env['sn.wsd.serial.operation.history'].search([
-    #         ('serial_identity_id.name', '=', 'SN-PB2-2'),
+    #         ('serial_identity_id.name', '=', '126100000010'),
     #         ('result', '=', 'ok')])
     #     self.assertEqual(ng.result, 'ng')
     #     self.assertEqual(ok.result, 'ok')
 
     def test_09_packing_guards(self):
-        self.service.scan_pass(self._payload(M_SN='SN-API-PK'))
+        self.service.scan_pass(self._payload(M_SN='126110000301'))
         identity = self.env['sn.wsd.serial.identity'].search([
-            ('name', '=', 'SN-API-PK')])
+            ('name', '=', '126110000301')])
         route_op = self.order.x_mes_route_id.operation_ids[:1]
         with self.assertRaises(ValidationError):
             self.service._handle_packing(
@@ -383,7 +423,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
              'item_value': '12', 'item_result': 'NG'},
         ]
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-WIDE',
+            M_SN='126110000401',
             M_DEVICE_SN='DEV-01',
             M_TOOLING='T-1|T-2',
             M_MAIN_ID='PCB-WIDE-1',
@@ -416,14 +456,14 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(items[1].result, 'ng')
         # component bindings registered against the pass
         bindings = self.env['sn.wsd.meter.component.binding'].search([
-            ('serial_identity_id.name', '=', 'SN-API-WIDE')])
+            ('serial_identity_id.name', '=', '126110000401')])
         self.assertEqual(
             sorted(bindings.mapped('component_sn')),
             ['LS-WIDE-1', 'MOD-WIDE-1', 'PCB-WIDE-1'])
 
     def test_11_ng_links_defect_dictionary(self):
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-DFT', M_TEST_RESULT='NG', M_STR2='APID'))
+            M_SN='126110000501', M_TEST_RESULT='NG', M_STR2='APID'))
         test_result = self.env['sn.wsd.mes.test.result'].browse(
             result['test_result_id'])
         self.assertEqual(test_result.defect_code_id, self.defect)
@@ -436,8 +476,8 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         promotes its historical row; current mappings resolve in one search."""
         Identity = self.env['sn.wsd.serial.identity']
         Binding = self.env['sn.wsd.serial.binding']
-        m1 = Identity.get_or_create('SN-CUR-M1', self.company)
-        m2 = Identity.get_or_create('SN-CUR-M2', self.company)
+        m1 = Identity.get_or_create('126100000011', self.company)
+        m2 = Identity.get_or_create('126100000012', self.company)
 
         def bind(machine, source='api'):
             self.service._bind_nameplate(machine, 'NP-CUR')
@@ -472,9 +512,9 @@ class TestScanPass(ScanPassFixture, TransactionCase):
     def test_13_trace_timeline(self):
         """The trace view unions every source; a station pass shows up with
         order, operation, operator and jumps back to its source document."""
-        self.service.scan_pass(self._payload(M_SN='SN-TRACE-T13'))
+        self.service.scan_pass(self._payload(M_SN='226110000013'))
         events = self.env['sn.wsd.trace.event'].search([
-            ('sn', '=', 'SN-TRACE-T13')])
+            ('sn', '=', '226110000013')])
         types = events.mapped('event_type')
         self.assertIn('station', types)
         self.assertIn('test', types)
@@ -498,7 +538,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         in the trace timeline as a station event dated at its entry."""
         History = self.env['sn.wsd.serial.operation.history']
         serial = self.env['sn.wsd.serial.identity'].create({
-            'name': 'SN-TRACE-WIP', 'origin_type': 'manual',
+            'name': '126100000013', 'origin_type': 'manual',
             'company_id': self.order.company_id.id,
         })
         row = History.create({
@@ -509,7 +549,7 @@ class TestScanPass(ScanPassFixture, TransactionCase):
             'in_date': fields.Datetime.now(),
         })
         events = self.env['sn.wsd.trace.event'].search([
-            ('sn', '=', 'SN-TRACE-WIP'), ('event_type', '=', 'station')])
+            ('sn', '=', '126100000013'), ('event_type', '=', 'station')])
         self.assertEqual(len(events), 1)
         self.assertEqual(events.result, 'in_progress')
         self.assertEqual(events.event_time, row.in_date)
@@ -525,9 +565,9 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertEqual(self.service._resolve_company('ORG2'), other)
         # the resolved company scopes the whole call: identities are looked
         # up / created inside it
-        result = self.service.scan_pass(self._payload(M_SN='SN-API-ORG'))
+        result = self.service.scan_pass(self._payload(M_SN='126110000601'))
         identity = self.env['sn.wsd.serial.identity'].search([
-            ('name', '=', 'SN-API-ORG')])
+            ('name', '=', '126110000601')])
         self.assertTrue(result['ok'])
         self.assertEqual(identity.company_id, self.company)
 
@@ -535,15 +575,15 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         # 设备报文 M_STR2 可带多个不良码（;／；分隔）：全部必须在字典里，
         # 第一个落过站行主码，原文列表留在测试结果镜像列
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-MULTI', M_TEST_RESULT='NG',
+            M_SN='126110000701', M_TEST_RESULT='NG',
             M_STR2='APID; APID2；APID'))
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI')])
+            ('serial_identity_id.name', '=', '126110000701')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, self.defect)
         test_result = self.env['sn.wsd.mes.test.result'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI')], limit=1)
+            ('serial_identity_id.name', '=', '126110000701')], limit=1)
         self.assertEqual(test_result.defect_code_id, self.defect)
         self.assertEqual(test_result.defect_code_raw, 'APID; APID2；APID')
 
@@ -551,30 +591,30 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         # 未知缺陷码放行（2026-10-27 用户口径）：字典没维护的码不拒收，
         # 能解析的码取第一个作主码，原文串留在镜像列供人工补录
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-MULTI2', M_TEST_RESULT='NG',
+            M_SN='126110000702', M_TEST_RESULT='NG',
             M_STR2='APID;NOPE'))
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI2')])
+            ('serial_identity_id.name', '=', '126110000702')])
         self.assertEqual(history.result, 'ng')
         self.assertEqual(history.defect_code_id, self.defect)
         test_result = self.env['sn.wsd.mes.test.result'].search([
-            ('serial_identity_id.name', '=', 'SN-API-MULTI2')], limit=1)
+            ('serial_identity_id.name', '=', '126110000702')], limit=1)
         self.assertEqual(test_result.defect_code_raw, 'APID;NOPE')
 
     def test_19_all_defects_unknown_pending_manual(self):
         # 全部码未知：NG 台账照落、缺陷码留空待人工从字典补，
         # 原文串照存；设备通道不再被字典缺口卡住
         result = self.service.scan_pass(self._payload(
-            M_SN='SN-API-PENDING', M_TEST_RESULT='NG',
+            M_SN='126110000801', M_TEST_RESULT='NG',
             M_STR2='NOPE1;NOPE2'))
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-PENDING')])
+            ('serial_identity_id.name', '=', '126110000801')])
         self.assertEqual(history.result, 'ng')
         self.assertFalse(history.defect_code_id)
         test_result = self.env['sn.wsd.mes.test.result'].search([
-            ('serial_identity_id.name', '=', 'SN-API-PENDING')], limit=1)
+            ('serial_identity_id.name', '=', '126110000801')], limit=1)
         self.assertEqual(test_result.defect_code_raw, 'NOPE1;NOPE2')
         self.assertFalse(test_result.defect_code_id)
 
@@ -582,11 +622,11 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         # 复测 = 同一工序再报一次：OK 不封口、次数拦下一次进站；任何情况下
         # 都不给后继工序凭空记 OK（无预置停放）
         self.op_in.x_max_test_count = 3
-        self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
-        result = self.service.scan_pass(self._payload(M_SN='SN-API-RT1'))
+        self.service.scan_pass(self._payload(M_SN='126110000901'))
+        result = self.service.scan_pass(self._payload(M_SN='126110000901'))
         self.assertTrue(result['ok'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-RT1')])
+            ('serial_identity_id.name', '=', '126110000901')])
         in_rows = history.filtered(
             lambda r: r.route_operation_id.operation_id == self.op_in)
         # 首测 + 复测：两行 OK 合法，台数按 SN 去重
@@ -596,16 +636,16 @@ class TestScanPass(ScanPassFixture, TransactionCase):
         self.assertFalse(history.filtered(
             lambda r: r.route_operation_id.operation_id == self.op_out))
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-API-RT1')]))
+            ('serial_identity_id.name', '=', '126110000901')]))
 
     def test_18_retest_pass_limit_not_recorded(self):
         # 次数上限拦复测（默认 1 次）：不落第二行 OK，也不给后继伪造判定
-        self.service.scan_pass(self._payload(M_SN='SN-API-RT2'))
+        self.service.scan_pass(self._payload(M_SN='126110000902'))
         with self.assertRaises(ValidationError) as ctx:
-            self.service.scan_pass(self._payload(M_SN='SN-API-RT2'))
+            self.service.scan_pass(self._payload(M_SN='126110000902'))
         self.assertIn('reached the pass limit', str(ctx.exception))
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-RT2')])
+            ('serial_identity_id.name', '=', '126110000902')])
         in_rows = history.filtered(
             lambda r: r.route_operation_id.operation_id == self.op_in)
         self.assertEqual(len(in_rows), 1)
@@ -616,13 +656,13 @@ class TestScanPass(ScanPassFixture, TransactionCase):
     def test_20_resend_with_event_id_is_idempotent(self):
         # 设备重发（同一个 external_event_id）不重复过站：直接返回首发的
         # 测试结果，不再落第二行、不消耗过站次数
-        payload = self._payload(M_SN='SN-API-IDEM2',
+        payload = self._payload(M_SN='126110001002',
                                 external_event_id='EVT-API-1')
         first = self.service.scan_pass(dict(payload))
         second = self.service.scan_pass(dict(payload))
         self.assertEqual(first['test_result_id'], second['test_result_id'])
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-API-IDEM2')])
+            ('serial_identity_id.name', '=', '126110001002')])
         self.assertEqual(len(history), 1)
         self.assertEqual(history.result, 'ok')
 
@@ -711,21 +751,21 @@ class TestForkRoute(ScanPassFixture, TransactionCase):
 
     def test_01_fork_ok_keeps_board_in_transit(self):
         # 分叉后不预判停放：无在制行、无 WIP，台账只有 FA 的判定行
-        result = self._scan('FWCA', 'FORK-SN-10')
+        result = self._scan('FWCA', '226110000010')
         self.assertTrue(result['ok'])
-        rows = self._rows('FORK-SN-10')
+        rows = self._rows('226110000010')
         self.assertEqual(len(rows), 1)
         self.assertTrue(rows[0]['route_operation_id'][1].startswith('FA'))
         self.assertEqual(rows[0]['result'], 'ok')
         self.assertFalse(self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'FORK-SN-10')]))
+            ('serial_identity_id.name', '=', '226110000010')]))
 
     def test_02_branch_scan_picks_up_no_fabrication(self):
         # 分支工位首扫接板；另一分支永不落行，没有任何伪造 OK
-        self._scan('FWCA', 'FORK-SN-11')
-        result = self._scan('FWCB', 'FORK-SN-11')
+        self._scan('FWCA', '226110000011')
+        result = self._scan('FWCB', '226110000011')
         self.assertTrue(result['ok'])
-        rows = self._rows('FORK-SN-11')
+        rows = self._rows('226110000011')
         labels = [(r['route_operation_id'][1].split(' / ')[0], r['result'])
                   for r in rows]
         self.assertEqual(labels, [('FA', 'ok'), ('FB', 'ok')])
@@ -763,7 +803,7 @@ class TestScanPassHttp(ScanPassFixture, HttpCase):
         self.assertIn('组织机构为空', body['message'])
         # happy path: no token header, plain JSON body
         res = self._post('/api/v1/workorders/scan-pass', json.dumps(
-            self._payload(M_SN='SN-HTTP-01')))
+            self._payload(M_SN='126110002001')))
         body = res.json()
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['code'], 200)
@@ -781,7 +821,7 @@ class TestScanPassHttp(ScanPassFixture, HttpCase):
 
 def _aoi_payload(**kw):
     payload = {
-        'productSn': 'SN-AOI-001',
+        'productSn': '126100000014',
         'machineName': 'APIWCIN',
         'type': '接口',
         'retestResult': '失数',
@@ -818,7 +858,7 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
 
     def test_01_ok_pass_verbatim_details(self):
         result = self.service.submit_aoi_result(_aoi_payload(
-            productSn='SN-AOI-OK',
+            productSn='126100000015',
             defectDetails=[_aoi_defect(confirmed='误报')]))
         self.assertTrue(result['ok'])
         test_result = self.env['sn.wsd.mes.test.result'].browse(
@@ -838,7 +878,7 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
 
     def test_02_ng_primary_defect_from_confirmed(self):
         result = self.service.submit_aoi_result(_aoi_payload(
-            productSn='SN-AOI-NG', stationResult='NG',
+            productSn='126100000016', stationResult='NG',
             defectDetails=[
                 _aoi_defect(confirmed='误报', part='C22'),
                 _aoi_defect(confirmed='确认不良', code='APID', part='R101'),
@@ -859,7 +899,7 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         # 不良代码不校验（2026-11-02 用户口径）：没有确认不良行也照收，
         # 只是主码为空，明细逐字落库
         result = self.service.submit_aoi_result(_aoi_payload(
-            stationResult='NG', productSn='SN-AOI-NG2',
+            stationResult='NG', productSn='126100000017',
             defectDetails=[_aoi_defect(confirmed='误报')]))
         self.assertTrue(result['ok'])
         test_result = self.env['sn.wsd.mes.test.result'].browse(
@@ -875,7 +915,7 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
     def test_04_ng_unknown_defect_code_not_linked(self):
         # 字典里没有的码不再拒收：主码留空待人工补，明细原文照存
         result = self.service.submit_aoi_result(_aoi_payload(
-            stationResult='NG', productSn='SN-AOI-NG3',
+            stationResult='NG', productSn='126100000018',
             defectDetails=[_aoi_defect(confirmed='确认不良', code='NOPE')]))
         self.assertTrue(result['ok'])
         test_result = self.env['sn.wsd.mes.test.result'].browse(
@@ -897,7 +937,7 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         bad_detail['defectCode'] = ''
         with self.assertRaises(ValidationError) as ctx:
             self.service.submit_aoi_result(_aoi_payload(
-                stationResult='NG', productSn='SN-AOI-NG4',
+                stationResult='NG', productSn='126100000019',
                 defectDetails=[bad_detail]))
         self.assertEqual(
             str(ctx.exception),
@@ -906,21 +946,21 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
     def test_06_result_must_be_ok_or_ng(self):
         with self.assertRaises(ValidationError):
             self.service.submit_aoi_result(_aoi_payload(
-                stationResult='HOLD', productSn='SN-AOI-H'))
+                stationResult='HOLD', productSn='126100000020'))
 
     def test_07_invalid_time_rejected(self):
         with self.assertRaises(ValidationError) as ctx:
             self.service.submit_aoi_result(_aoi_payload(
-                testTime='2026-13-99', productSn='SN-AOI-T'))
+                testTime='2026-13-99', productSn='126100000021'))
         self.assertIn('Invalid testTime', str(ctx.exception))
 
     def test_08_unknown_machine_rejected(self):
         with self.assertRaises(ValidationError):
             self.service.submit_aoi_result(_aoi_payload(
-                machineName='NOWC', productSn='SN-AOI-M'))
+                machineName='NOWC', productSn='126100000022'))
 
     def test_09_log_code_idempotent(self):
-        payload = _aoi_payload(productSn='SN-AOI-IDEM', logCode='LOG-AOI-1',
+        payload = _aoi_payload(productSn='126100000023', logCode='LOG-AOI-1',
                                defectDetails=[_aoi_defect()])
         first = self.service.submit_aoi_result(dict(payload))
         second = self.service.submit_aoi_result(dict(payload))
@@ -932,47 +972,47 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
         # the resent upload must not pass the station a second time: exactly
         # one pass row exists and no parking row is written at the successor
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-AOI-IDEM')])
+            ('serial_identity_id.name', '=', '126100000023')])
         self.assertEqual(len(history), 1)
         self.assertEqual(history.result, 'ok')
 
     def test_11_each_station_stamps_its_own_device_workcenter(self):
         # 每个工序只写自己的那一行：首扫完成首工序，第二次 AOI 报工完成
         # 次工序并把真实机器落到该行；不再有预置停放行
-        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC1'))
+        self.service.scan_pass(self._payload(M_SN='226110000101'))
         self.assertFalse(self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-AOI-WC1'),
+            ('serial_identity_id.name', '=', '226110000101'),
             ('result', '=', 'in_progress')]))
         result = self.service.submit_aoi_result(_aoi_payload(
-            productSn='SN-AOI-WC1', machineName='APIWCOUT'))
+            productSn='226110000101', machineName='APIWCOUT'))
         self.assertTrue(result['ok'])
         row = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-AOI-WC1'),
+            ('serial_identity_id.name', '=', '226110000101'),
             ('route_operation_id.operation_id', '=', self.op_out.id)])
         self.assertEqual(row.result, 'ok')
         self.assertEqual(row.workcenter_id, self.wc_out)
 
     def test_12_scan_pass_channel_stamps_device_workcenter(self):
         # 同一口径作用于 scan-pass 通道（M_WORK_STATIONSN）
-        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC2'))
+        self.service.scan_pass(self._payload(M_SN='226110000102'))
         self.service.scan_pass(self._payload(
-            M_SN='SN-AOI-WC2', M_WORK_STATIONSN='APIWCOUT'))
+            M_SN='226110000102', M_WORK_STATIONSN='APIWCOUT'))
         row = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-AOI-WC2'),
+            ('serial_identity_id.name', '=', '226110000102'),
             ('route_operation_id.operation_id', '=', self.op_out.id)])
         self.assertEqual(row.result, 'ok')
         self.assertEqual(row.workcenter_id, self.wc_out)
 
     def test_13_ng_stamps_defect_and_workcenter(self):
         # NG 经过 quality 覆写，缺陷码与工作中心都要落行
-        self.service.scan_pass(self._payload(M_SN='SN-AOI-WC3'))
+        self.service.scan_pass(self._payload(M_SN='226110000103'))
         result = self.service.submit_aoi_result(_aoi_payload(
-            productSn='SN-AOI-WC3', machineName='APIWCOUT',
+            productSn='226110000103', machineName='APIWCOUT',
             stationResult='NG',
             defectDetails=[_aoi_defect(confirmed='确认不良', code='APID')]))
         self.assertTrue(result['ok'])
         row = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-AOI-WC3'),
+            ('serial_identity_id.name', '=', '226110000103'),
             ('route_operation_id.operation_id', '=', self.op_out.id)])
         self.assertEqual(row.result, 'ng')
         self.assertEqual(row.defect_code_id, self.defect)
@@ -982,21 +1022,21 @@ class TestAoiResults(ScanPassFixture, TransactionCase):
     # def test_10_panel_fanout(self):
     #     self.route.x_process_type = 'smt'
     #     Identity = self.env['sn.wsd.serial.identity']
-    #     for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+    #     for sn in ('126100000024', '126100000025'):
     #         Identity.get_or_create(sn, self.company, origin_type='laser')
     #     self.env['sn.smt.pcb.panel'].create({
     #         'production_id': self.production.id,
     #         'product_no': 'DWG-API', 'quantity': 2,
     #         'board_ids': [
-    #             (0, 0, {'board_no': 1, 'pro_sn': 'SN-AOI-P1'}),
-    #             (0, 0, {'board_no': 2, 'pro_sn': 'SN-AOI-P2'}),
+    #             (0, 0, {'board_no': 1, 'pro_sn': '126100000024'}),
+    #             (0, 0, {'board_no': 2, 'pro_sn': '126100000025'}),
     #         ],
     #         'state': 'confirmed',
     #     })
     #     result = self.service.submit_aoi_result(_aoi_payload(
-    #         productSn='SN-AOI-P1'))
+    #         productSn='126100000024'))
     #     self.assertTrue(result['ok'])
-    #     for sn in ('SN-AOI-P1', 'SN-AOI-P2'):
+    #     for sn in ('126100000024', '126100000025'):
     #         history = self.env['sn.wsd.serial.operation.history'].search([
     #             ('serial_identity_id.name', '=', sn),
     #             ('result', '=', 'ok')])
@@ -1019,7 +1059,7 @@ class TestAoiResultsHttp(ScanPassFixture, HttpCase):
             headers={'Content-Type': 'application/json'})
 
     def test_20_wire(self):
-        res = self._post(json.dumps(_aoi_payload(productSn='SN-AOI-HTTP')))
+        res = self._post(json.dumps(_aoi_payload(productSn='126100000026')))
         body = res.json()
         self.assertEqual(res.status_code, 201)
         self.assertEqual(body['code'], 200)
@@ -1033,7 +1073,7 @@ class TestAoiResultsHttp(ScanPassFixture, HttpCase):
         # NG without a confirmed defect is accepted: device channels do not
         # validate defect codes (2026-11-02 rule)
         res = self._post(json.dumps(_aoi_payload(
-            productSn='SN-AOI-HTTP-NG', stationResult='NG',
+            productSn='126100000027', stationResult='NG',
             defectDetails=[_aoi_defect(confirmed='误报')])))
         self.assertEqual(res.status_code, 201)
         self.assertEqual(res.json()['message'], 'success')

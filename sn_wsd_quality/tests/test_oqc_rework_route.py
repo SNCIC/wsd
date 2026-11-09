@@ -70,7 +70,7 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_01_linear_route_legal_and_illegal_targets(self):
         order = self._order()
-        inspection, board = self._ng_board(order, 'SN-RW-101')
+        inspection, board = self._ng_board(order, '126100000001')
         candidates = inspection._oqc_rework_target_candidates()
         self.assertEqual(candidates, self._row(order, self.op_a))
         # the inspection operation itself is refused
@@ -96,15 +96,15 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_02_old_ok_cannot_skip_rewalk(self):
         order = self._order()
-        inspection, board = self._ng_board(order, 'SN-RW-201')
+        inspection, board = self._ng_board(order, '126100000002')
         self._rework(inspection, board, self._row(order, self.op_a))
         # the old A OK predates the voucher start: OQC stays unreachable
         with self.assertRaises(ValidationError) as ctx:
-            order.sn_station_scan(self.wc_c.id, 'SN-RW-201')
+            order.sn_station_scan(self.wc_c.id, '126100000002')
         self.assertIn('not reachable', str(ctx.exception))
         # re-walk the target properly, then OQC admits the board
-        self._pass(order, 'SN-RW-201', self.wc_a)
-        res = order.sn_station_scan(self.wc_c.id, 'SN-RW-201')
+        self._pass(order, '126100000002', self.wc_a)
+        res = order.sn_station_scan(self.wc_c.id, '126100000002')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         self.assertEqual(self._state(inspection, board),
@@ -115,11 +115,11 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_03_voucher_kept_until_retest_confirmation(self):
         order = self._order()
-        self._ok_round(order, 'SN-RW-302')  # second sample board
-        inspection, board = self._ng_board(order, 'SN-RW-301')
+        self._ok_round(order, '126100000003')  # second sample board
+        inspection, board = self._ng_board(order, '126100000004')
         self._rework(inspection, board, self._row(order, self.op_a))
-        self._pass(order, 'SN-RW-301', self.wc_a)
-        res = order.sn_station_scan(self.wc_c.id, 'SN-RW-301')
+        self._pass(order, '126100000004', self.wc_a)
+        res = order.sn_station_scan(self.wc_c.id, '126100000004')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ok')
         self.assertEqual(self._state(inspection, board),
@@ -142,10 +142,10 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_04_repeated_ng_back_to_pending(self):
         order = self._order()
-        inspection, board = self._ng_board(order, 'SN-RW-401')
+        inspection, board = self._ng_board(order, '126100000005')
         self._rework(inspection, board, self._row(order, self.op_a))
-        self._pass(order, 'SN-RW-401', self.wc_a)
-        res = order.sn_station_scan(self.wc_c.id, 'SN-RW-401')
+        self._pass(order, '126100000005', self.wc_a)
+        res = order.sn_station_scan(self.wc_c.id, '126100000005')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(res['wip_id'], 'ng',
                                    ng_defect_code_id=self.defect.id)
@@ -167,7 +167,7 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_05_active_wip_refused(self):
         order = self._order()
-        inspection, board = self._ng_board(order, 'SN-RW-501')
+        inspection, board = self._ng_board(order, '126100000006')
         # a pending board that still sits in progress at another station
         # (e.g. entered but not judged): rework must refuse the direct
         # pull-back instead of leaving a dangling in-progress row
@@ -190,7 +190,7 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_06_already_received_refused(self):
         order = self._order()
-        inspection, board = self._ng_board(order, 'SN-RW-601')
+        inspection, board = self._ng_board(order, '126100000007')
         carton = self.env['stock.package'].get_or_create_wsd_package(
             'CTN-RW-01', 'carton', self.company)
         self.env['sn.wsd.meter.pack.record'].create({
@@ -214,8 +214,8 @@ class TestOqcReworkRoute(TestOqcReleaseJudgment):
     # ------------------------------------------------------------------
     def test_07_reworking_blocks_release_and_concession(self):
         order = self._order()
-        inspection = self._ok_round(order, 'SN-RW-701')
-        inspection, board = self._ng_board(order, 'SN-RW-702')
+        inspection = self._ok_round(order, '126100000008')
+        inspection, board = self._ng_board(order, '126100000009')
         self._rework(inspection, board, self._row(order, self.op_a))
         inspection.action_done()
         inspection.invalidate_recordset()

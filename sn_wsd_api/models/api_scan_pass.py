@@ -205,24 +205,29 @@ class SnWsdApiService(models.AbstractModel):
             return RESULT_FAIL
         raise ApiUnprocessable(_('The test result must be OK or NG.'))
 
+    def _latest_nameplate_binding(self, sn_name):
+        """Newest nameplate binding mapping the scanned nameplate SN to its
+        machine SN (nameplate resolution on the device API)."""
+        return self.env['sn.wsd.serial.binding'].search([
+            ('serial_identity_id.name', '=', sn_name),
+            ('binding_type', '=', 'nameplate'),
+            ('company_id', '=', self.env.company.id),
+        ], order='binding_date desc, id desc', limit=1)
+
     def _resolve_identity(self, sn_name, nameplate_first=True):
         """SN -> identity. A nameplate scanned as the SN resolves to its
         machine SN through the latest nameplate binding."""
         sn_name = (sn_name or '').strip()
         if not sn_name:
             raise ApiBadRequest(_('SN is required.'))
-        company = self.env.company
         if nameplate_first:
-            binding = self.env['sn.wsd.serial.binding'].search([
-                ('serial_identity_id.name', '=', sn_name),
-                ('binding_type', '=', 'nameplate'),
-                ('company_id', '=', company.id),
-            ], order='binding_date desc, id desc', limit=1)
+            binding = self._latest_nameplate_binding(sn_name)
             if binding:
                 return binding.bound_serial_identity_id
         identity = self.env['sn.wsd.serial.identity'].with_context(
             active_test=False).search([
-                ('name', '=', sn_name), ('company_id', '=', company.id),
+                ('name', '=', sn_name),
+                ('company_id', '=', self.env.company.id),
             ], limit=1)
         if identity and not identity.active:
             raise ApiUnprocessable(_('SN %s is inactive.', sn_name))
@@ -445,11 +450,15 @@ class SnWsdApiService(models.AbstractModel):
         employee = self._resolve_employee(payload.get('M_EMP'))
         workcenter = self._resolve_workcenter(payload.get('M_WORK_STATIONSN'))
         result = self._normalize_result(payload.get('M_TEST_RESULT'))
-        identity = self._resolve_identity(payload.get('M_SN'))
+        # SN format gate lives in the station kernel (enter_station): every
+        # channel (terminal / PDA / device API) validates there once. A
+        # nameplate scanned as M_SN resolves to its machine SN below, so
+        # only the machine SN (standard format) reaches the kernel.
+        sn_name = (payload.get('M_SN') or '').strip()
+        identity = self._resolve_identity(sn_name)
         if not identity:
             identity = self.env['sn.wsd.serial.identity'].get_or_create(
-                (payload.get('M_SN') or '').strip(), self.env.company,
-                origin_type='external')
+                sn_name, self.env.company, origin_type='external')
         defect = False
         if result == RESULT_FAIL:
             # 未知缺陷码放行（2026-10-27 用户口径）：设备字典没维护的码

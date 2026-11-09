@@ -80,8 +80,8 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         self._push_reflow_packet('RF-ZONE-99', datetime(2026, 11, 2, 7, 30),
                                  {'Z6': 111.0})
         with freeze_time(datetime(2026, 11, 2, 12, 0)):
-            self._pass(order, wcs['a'], 'SN-EXT-001', 'ok')
-        row = self._rows('SN-EXT-001')
+            self._pass(order, wcs['a'], '126100000001', 'ok')
+        row = self._rows('126100000001')
         self.assertEqual(row.welding_zone, 247.3)
         # same field fed by several zones: max (cooling: min)
         self.assertEqual(row.warming_zone, 120.0)
@@ -94,8 +94,8 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         self._push_reflow_packet('RF-ZONE-01', datetime(2026, 11, 2, 7, 0),
                                  {'Z6': 247.3})
         with freeze_time(datetime(2026, 11, 2, 12, 0)):
-            self._pass(order, wcs['a'], 'SN-EXT-002', 'ok')
-        row = self._rows('SN-EXT-002')
+            self._pass(order, wcs['a'], '126100000002', 'ok')
+        row = self._rows('126100000002')
         self.assertFalse(row.welding_zone)
         self.assertFalse(row.values_extracted)
 
@@ -105,8 +105,8 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         self._push_reflow_packet('RF-ZONE-01', datetime(2026, 11, 2, 7, 0),
                                  {'Z6': 247.3})
         with freeze_time(datetime(2026, 11, 2, 12, 0)):
-            self._pass(order, wcs['a'], 'SN-EXT-003', 'ok')
-        row = self._rows('SN-EXT-003')
+            self._pass(order, wcs['a'], '126100000003', 'ok')
+        row = self._rows('126100000003')
         self.assertEqual(row.welding_zone, 247.3)
         # the covering packet arrives after the pass: a later rerun takes
         # the now-nearest packet and overwrites (bucket 2 semantics)
@@ -121,8 +121,8 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         self._push_reflow_packet('RF-ZONE-01', datetime(2026, 11, 2, 7, 0),
                                  {'Z6': 247.3})
         with freeze_time(datetime(2026, 11, 2, 12, 0)):
-            self._pass(order, wcs['a'], 'SN-EXT-004', 'ok')
-        row = self._rows('SN-EXT-004')
+            self._pass(order, wcs['a'], '126100000004', 'ok')
+        row = self._rows('126100000004')
         row.state = 'delivered'
         self._push_reflow_packet('RF-ZONE-01', datetime(2026, 11, 2, 11, 30),
                                  {'Z6': 250.1})
@@ -152,10 +152,10 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         # other room's points must not leak into the window
         self._push_aging_point('AGE-ZONE-02',
                                datetime(2026, 11, 2, 10, 0), 99.0)
-        serial = self._walk_to_aging(order, wcs, 'SN-EXT-010')
+        serial = self._walk_to_aging(order, wcs, '126100000005')
         with freeze_time(datetime(2026, 11, 2, 16, 0)):
             order.leave_station(serial, 'ok')
-        row = self._aging_row('SN-EXT-010')
+        row = self._aging_row('126100000005')
         self.assertTrue(row)
         points = row.line_ids.filtered(
             lambda line: line.line_type == 'aging_point')
@@ -171,10 +171,10 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         order, wcs = self._setup_order_wcs()
         self._push_aging_point('AGE-ZONE-01',
                                datetime(2026, 11, 2, 9, 0), 70.0)
-        serial = self._walk_to_aging(order, wcs, 'SN-EXT-011')
+        serial = self._walk_to_aging(order, wcs, '126100000006')
         with freeze_time(datetime(2026, 11, 2, 16, 0)):
             order.leave_station(serial, 'ok')
-        row = self._aging_row('SN-EXT-011')
+        row = self._aging_row('126100000006')
         self.assertEqual(len(row.line_ids), 1)
         self.assertEqual(row.agingroom_temperature, 70.0)
         # late points arrive: the rebuild takes the fuller window without
@@ -189,10 +189,10 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
 
     def test_22_aging_no_points(self):
         order, wcs = self._setup_order_wcs()
-        serial = self._walk_to_aging(order, wcs, 'SN-EXT-012')
+        serial = self._walk_to_aging(order, wcs, '126100000007')
         with freeze_time(datetime(2026, 11, 2, 16, 0)):
             order.leave_station(serial, 'ok')
-        row = self._aging_row('SN-EXT-012')
+        row = self._aging_row('126100000007')
         self.assertTrue(row)
         self.assertFalse(row.line_ids)
         self.assertEqual(row.agingroom_temperature, 0.0)
@@ -201,10 +201,10 @@ class TestEipExtract(eip_test_common.EipCaptureCase):
         order, wcs = self._setup_order_wcs()
         self._push_aging_point('AGE-ZONE-01',
                                datetime(2026, 11, 2, 9, 0), 70.0)
-        serial = self._walk_to_aging(order, wcs, 'SN-EXT-013')
+        serial = self._walk_to_aging(order, wcs, '126100000008')
         with freeze_time(datetime(2026, 11, 2, 16, 0)):
             order.leave_station(serial, 'ok')
-        row = self._aging_row('SN-EXT-013')
+        row = self._aging_row('126100000008')
         row.state = 'delivered'
         self._push_aging_point('AGE-ZONE-01',
                                datetime(2026, 11, 2, 15, 0), 74.0)

@@ -1,4 +1,5 @@
 from odoo import fields
+import itertools
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase, tagged
 
@@ -107,6 +108,12 @@ class TestMesFai(TransactionCase):
     def _feed(self, order, name):
         return order.scan_enter(name, self.wc_in)
 
+    _sn_seq = itertools.count(500)
+
+    def _sn(self):
+        """标准格式 SN（过站内核格式闸 2026-11-09）：'1261'+自增 8 位。"""
+        return '1261%08d' % next(self._sn_seq)
+
     def _ng(self, order, serial):
         order.leave_station(serial, 'ng', ng_defect=self.defect)
 
@@ -121,7 +128,7 @@ class TestMesFai(TransactionCase):
         order = self._order()
         self.assertEqual(order.x_fai_state, 'none')
         self.assertFalse(order.x_fai_inspection_ids)
-        s1 = self._feed(order, 'SN-FAI-001')
+        s1 = self._feed(order, '126100000001')
         self.assertEqual(order.x_fai_state, 'in_progress')
         self.assertEqual(order.x_fai_round, 1)
         inspection = order.x_fai_inspection_id
@@ -140,7 +147,7 @@ class TestMesFai(TransactionCase):
     def test_11_no_scheme_no_fai(self):
         self.scheme.active = False
         order = self._order()
-        self._feed(order, 'SN-NOFAI-0')
+        self._feed(order, '126100000002')
         self.assertEqual(order.x_fai_state, 'none')
         self.assertFalse(order.x_fai_inspection_ids)
 
@@ -157,7 +164,7 @@ class TestMesFai(TransactionCase):
 
     def test_12_reonline_opens_new_round(self):
         order = self._order()
-        for n in ('SN-R1-001', 'SN-R1-002'):
+        for n in ('126100000003', '126100000004'):
             serial = self._feed(order, n)
             order.leave_station(serial, 'ok')
         inspection1 = order.x_fai_inspection_id
@@ -176,7 +183,7 @@ class TestMesFai(TransactionCase):
         self.assertEqual(len(order.x_fai_inspection_ids), 1)
         # the next feed opens the new round: round +1, samples reset,
         # history kept
-        s3 = self._feed(order, 'SN-R2-001')
+        s3 = self._feed(order, '126100000005')
         self.assertEqual(order.x_fai_state, 'in_progress')
         self.assertEqual(order.x_fai_round, 2)
         self.assertEqual(order.x_fai_sample_count, 1)
@@ -202,40 +209,40 @@ class TestMesFai(TransactionCase):
     # ---------------- R2 样本收集与投入限流 ----------------
     def test_20_sample_registration_and_gate(self):
         order = self._order()
-        s1 = self._feed(order, 'SN-FAI-001')
-        s2 = self._feed(order, 'SN-FAI-002')
+        s1 = self._feed(order, '126100000001')
+        s2 = self._feed(order, '126100000006')
         inspection = order.x_fai_inspection_id
         self.assertEqual(inspection.x_fai_serial_ids, s1 | s2)
         with self.assertRaises(ValidationError):
-            self._feed(order, 'SN-FAI-003')
+            self._feed(order, '126100000007')
         self.assertEqual(order.x_fai_sample_count, 2)
 
     def test_21_ng_leave_releases_quota_no_rework_refill(self):
         order = self._order()
-        s1 = self._feed(order, 'SN-FAI-101')
-        s2 = self._feed(order, 'SN-FAI-102')
+        s1 = self._feed(order, '126100000008')
+        s2 = self._feed(order, '126100000009')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
         self._ng(order, s2)
         self.assertNotIn(s2, inspection.x_fai_serial_ids)
         self.assertIn(s2, inspection.x_fai_removed_serial_ids)
         self.assertEqual(order.x_fai_sample_count, 1)
         # s2 维修回流复测（同站重扫）：放行进站但不再登记样本
-        order.scan_enter('SN-FAI-102', self.wc_in)
+        order.scan_enter('126100000009', self.wc_in)
         order.leave_station(s2, 'ok')
         self.assertNotIn(s2, inspection.x_fai_serial_ids)
         self.assertNotIn(s2, inspection.x_fai_arrived_serial_ids)
         # 名额已释放：新板可补位
-        s3 = self._feed(order, 'SN-FAI-103')
+        s3 = self._feed(order, '126100000010')
         self.assertIn(s3, inspection.x_fai_serial_ids)
 
     def test_22_arrival_and_ready_activity(self):
         order = self._order()
         # 投入满 N 即铺格（检验在首件工序阶段进行），不再排齐套提醒活动
-        s1 = self._feed(order, 'SN-FAI-201')
+        s1 = self._feed(order, '126100000011')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
         self.assertEqual(len(inspection.cell_ids), 2,
                          'the first sample spreads its cells at feed time')
-        s2 = self._feed(order, 'SN-FAI-202')
+        s2 = self._feed(order, '126100000012')
         self.assertEqual(len(inspection.cell_ids), 4,
                          'the second sample completes the matrix')
         self.assertFalse(
@@ -251,20 +258,20 @@ class TestMesFai(TransactionCase):
     # ---------------- R3+R4 判定联动 ----------------
     def test_30_pass_unlocks_feeding(self):
         order = self._order()
-        for n in ('SN-FAI-301', 'SN-FAI-302'):
+        for n in ('126100000013', '126100000014'):
             serial = self._feed(order, n)
             order.leave_station(serial, 'ok')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
         with self.assertRaises(ValidationError):
-            self._feed(order, 'SN-FAI-303')
+            self._feed(order, '126100000015')
         inspection.action_set_all_pass()
         inspection.action_done()
         self.assertEqual(order.x_fai_state, 'passed')
-        self._feed(order, 'SN-FAI-303')
+        self._feed(order, '126100000015')
 
     def test_31_fail_opens_new_round(self):
         order = self._order()
-        for n in ('SN-FAI-401', 'SN-FAI-402'):
+        for n in ('126100000016', '126100000017'):
             serial = self._feed(order, n)
             order.leave_station(serial, 'ok')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
@@ -285,20 +292,20 @@ class TestMesFai(TransactionCase):
         self.assertEqual(new.sample_size, 2)
         self.assertFalse(new.x_fai_serial_ids)
         # 限流保持：新一轮可投 2 台、第 3 台仍拦
-        self._feed(order, 'SN-FAI-403')
-        self._feed(order, 'SN-FAI-404')
+        self._feed(order, '126100000018')
+        self._feed(order, '126100000019')
         with self.assertRaises(ValidationError):
-            self._feed(order, 'SN-FAI-405')
+            self._feed(order, '126100000020')
 
     def test_32_done_guards(self):
         order = self._order()
         # 样本未投满（1/2）：铺格+判定都可用，但 done 被样本数守卫拦
-        self._feed(order, 'SN-FAI-501')
+        self._feed(order, '126100000021')
         inspection = order.x_fai_inspection_id  # fetch after the first feed created it
         inspection.action_set_all_pass()
         with self.assertRaises(UserError):
             inspection.action_done()  # fed 1 < 2 拦
-        self._feed(order, 'SN-FAI-502')
+        self._feed(order, '126100000022')
         inspection.action_set_all_pass()  # 第二台铺格后逐格置 pass
         inspection.action_done()  # 样本齐+全过 → 通过
         self.assertEqual(inspection.result, 'pass')
@@ -306,5 +313,5 @@ class TestMesFai(TransactionCase):
     def test_33_gate_passes_without_fai(self):
         self.scheme.active = False
         order = self._order()
-        for n in ('A', 'B', 'C'):
-            self._feed(order, 'SN-NOFAI-%s' % n)
+        for _n in ('A', 'B', 'C'):
+            self._feed(order, self._sn())

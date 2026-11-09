@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from .constants import SIDE_LABELS, SIDE_SELECTION
+from .constants import SIDE_LABELS, SIDE_SELECTION, STANDARD_SN_RE
 
 
 class MesOrder(models.Model):
@@ -70,9 +70,9 @@ class MesOrder(models.Model):
              'quantities that were explicitly requested.',
     )
     produced_qty = fields.Float(
-        string='Produced Quantity', compute='_compute_execution_qty', store=True,
-        help='Mirror of the output quantity, kept as the aggregation source '
-             'of the manufacturing order MES figures.',
+        string='Produced Quantity', compute='_compute_execution_qty',
+        help='Mirror of the output quantity, kept in step with the order '
+             'figures (read-time aggregate).',
     )
     state = fields.Selection(
         [('released', 'Released'),
@@ -171,18 +171,23 @@ class MesOrder(models.Model):
     sn_report_ids = fields.One2many(
         'sn.wsd.mes.operation.report', 'mes_order_id',
     )
+    # Execution quantities (read-time aggregates): a station pass writes only
+    # its own history/wip row, so parallel scans on one order never rewrite a
+    # shared row (the previous stored computes did, and Odoo's REPEATABLE READ
+    # turned that into SerializationFailure under concurrent scans). Pivot and
+    # graph reporting reads the SQL view sn.wsd.mes.order.stats instead.
     x_input_qty = fields.Float(
-        string='投入数量', compute='_compute_execution_qty', store=True,
+        string='投入数量', compute='_compute_execution_qty',
         help='SNs fed into this order at the daily input operation '
              '(counted on entry); reported quantity in report mode.',
     )
     x_output_qty = fields.Float(
-        string='产出数量', compute='_compute_execution_qty', store=True,
+        string='产出数量', compute='_compute_execution_qty',
         help='SNs that left the daily output operation with result OK; '
              'reported quantity in report mode.',
     )
     x_workorder_input_qty = fields.Float(
-        string='工单投入数量', compute='_compute_execution_qty', store=True,
+        string='工单投入数量', compute='_compute_execution_qty',
         help='SNs that passed the work-order input operation; reported '
              'quantity in report mode.',
     )
@@ -319,37 +324,54 @@ class MesOrder(models.Model):
         'sn_report_ids.qty_ok', 'sn_report_ids.qty_ng', 'sn_report_ids.qty_scrap',
     )
     def _compute_execution_qty(self):
+        """Order figures taken from the read-time counters of its counter
+        operations.
+
+        One batched aggregation covers the whole recordset (see
+        ``_pass_stats``): a page of orders costs a handful of grouped queries
+        instead of one history traversal per order.
+        """
+        RouteOp = self.env['sn.wsd.mes.order.route.operation']
+        op_ids = set()
+        for order in self:
+            route = order.x_mes_route_id
+            for op in (route.x_daily_input_operation_id,
+                       route.x_daily_output_operation_id,
+                       route.x_workorder_input_operation_id):
+                if op:
+                    op_ids.add(op.id)
+        stats = RouteOp.browse(list(op_ids))._pass_stats() if op_ids else {}
+
+        def _stat(op):
+            return stats.get(op.id) if op else None
+
         for order in self:
             route = order.x_mes_route_id
             if order.x_manage_mode == 'report':
                 def _reported(op):
-                    reports = op.report_ids if op else False
-                    return sum(reports.mapped(
-                        lambda r: r.qty_ok + r.qty_ng + r.qty_scrap)) if reports else 0.0
+                    data = _stat(op)
+                    return (data['rep_ok'] + data['rep_ng'] + data['rep_scrap']
+                            ) if data else 0.0
+
                 def _ok(op):
-                    return sum(op.report_ids.mapped('qty_ok')) if op else 0.0
+                    data = _stat(op)
+                    return data['rep_ok'] if data else 0.0
                 order.x_input_qty = _reported(route.x_daily_input_operation_id)
                 order.x_output_qty = _ok(route.x_daily_output_operation_id)
-                order.x_workorder_input_qty = _reported(route.x_workorder_input_operation_id)
+                order.x_workorder_input_qty = _reported(
+                    route.x_workorder_input_operation_id)
             else:
                 def _entered(op):
-                    # wip and history are mutually exclusive per (SN, op):
-                    # the wip row is deleted as its history row is written.
-                    # 台数按 SN 去重：复测多行只算一台。
-                    if not op:
-                        return 0
-                    sn_ids = set(
-                        op.serial_history_ids.mapped('serial_identity_id').ids)
-                    sn_ids |= set(
-                        op.serial_wip_ids.mapped('serial_identity_id').ids)
-                    return len(sn_ids)
-                out_op = route.x_daily_output_operation_id
-                order.x_output_qty = len(set(
-                    out_op.serial_history_ids
-                    .filtered(lambda h: h.result == 'ok')
-                    .mapped('serial_identity_id').ids)) if out_op else 0.0
+                    data = _stat(op)
+                    return data['entered'] if data else 0
+
+                def _ok(op):
+                    data = _stat(op)
+                    return data['ok'] if data else 0
                 order.x_input_qty = _entered(route.x_daily_input_operation_id)
-                order.x_workorder_input_qty = _entered(route.x_workorder_input_operation_id)
+                order.x_output_qty = _ok(route.x_daily_output_operation_id)
+                order.x_workorder_input_qty = _entered(
+                    route.x_workorder_input_operation_id)
             order.produced_qty = order.x_output_qty
 
     _mes_order_name_uniq = models.Constraint(
@@ -835,6 +857,16 @@ class MesOrder(models.Model):
         row is written together with an in_progress history row -- the pass
         ledger is visible from the scan itself (pass-history-on-enter)."""
         self.ensure_one()
+        # SN format gate (user rule 2026-11-09): a standard SN is 12 digits
+        # whose head digit is 1 or 2. Every channel funnels its entry scans
+        # through here (terminal / PDA / device API / batch pass), so the
+        # gate rejects a wrong barcode scanned as SN once for all of them.
+        # Nameplate scans resolve to their machine SN before the kernel on
+        # the device API, so the nameplate code itself never reaches this.
+        if not STANDARD_SN_RE.match(serial_identity.name or ''):
+            raise ValidationError(_(
+                'SN %s is not in the standard format: 12 digits starting '
+                'with 1 or 2.', serial_identity.name))
         if self.x_manage_mode != 'station':
             raise ValidationError(_(
                 'MES order %(name)s is managed by operation reporting; SN '

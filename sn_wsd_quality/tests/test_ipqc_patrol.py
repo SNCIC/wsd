@@ -148,7 +148,7 @@ class TestIpqcPatrol(TransactionCase):
     def test_20_due_with_activity_creates_inspection(self):
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        self._make_activity(order, wc, 'SN-IPQC-101')
+        self._make_activity(order, wc, '126100000001')
         self.scheme._ipqc_patrol_tick()
         inspection = self.env['sn.wsd.quality.inspection'].search([
             ('inspection_type', '=', 'ipqc'),
@@ -174,7 +174,7 @@ class TestIpqcPatrol(TransactionCase):
         # 巡检活动，到期不开单
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        order.scan_enter('SN-IPQC-401', wc)
+        order.scan_enter('126100000002', wc)
         self.scheme._ipqc_patrol_tick()
         self.assertFalse(self.env['sn.wsd.quality.inspection'].search([
             ('inspection_type', '=', 'ipqc'),
@@ -184,7 +184,7 @@ class TestIpqcPatrol(TransactionCase):
     def test_22_open_inspection_not_duplicated(self):
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        self._make_activity(order, wc, 'SN-IPQC-201')
+        self._make_activity(order, wc, '126100000003')
         self.scheme._ipqc_patrol_tick()
         self.scheme._ipqc_patrol_tick()  # 第二次 tick：有 open 单在等
         count = self.env['sn.wsd.quality.inspection'].search_count([
@@ -199,8 +199,8 @@ class TestIpqcPatrol(TransactionCase):
         order_a = self._order(self.line_a)
         order_b = self._order(self.line_b)
         wc_a, wc_b = self._wc(self.line_a), self._wc(self.line_b)
-        self._make_activity(order_a, wc_a, 'SN-IPQC-301')
-        self._make_activity(order_b, wc_b, 'SN-IPQC-302')
+        self._make_activity(order_a, wc_a, '126100000004')
+        self._make_activity(order_b, wc_b, '126100000005')
         self.scheme._ipqc_patrol_tick()
         lines_with = self.env['sn.wsd.quality.inspection'].search([
             ('inspection_type', '=', 'ipqc'),
@@ -238,7 +238,7 @@ class TestIpqcPatrol(TransactionCase):
         self.scheme.responsible_user_id = responsible
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        self._make_activity(order, wc, 'SN-IPQC-401')
+        self._make_activity(order, wc, '126100000002')
         self.scheme._ipqc_patrol_tick()
         inspection = self.env['sn.wsd.quality.inspection'].search([
             ('inspection_type', '=', 'ipqc'),
@@ -253,7 +253,7 @@ class TestIpqcPatrol(TransactionCase):
         # 扫板：样本行填 SN，pending 自动翻 fail（Form 触发 onchange）
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        serial = self._make_activity(order, wc, 'SN-IPQC-501')
+        serial = self._make_activity(order, wc, '126100000006')
         inspection = self._inspection()
         with Form(inspection) as form:
             with form.sample_ids.new() as sample:
@@ -267,7 +267,7 @@ class TestIpqcPatrol(TransactionCase):
         # 一板多不良：同 SN 不同缺陷多行合法；同 SN 同缺陷被唯一约束拦截
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        serial = self._make_activity(order, wc, 'SN-IPQC-601')
+        serial = self._make_activity(order, wc, '126100000007')
         inspection = self._inspection()
         Sample = self.env['sn.wsd.quality.inspection.sample']
         Sample.create({'inspection_id': inspection.id,
@@ -290,7 +290,7 @@ class TestIpqcPatrol(TransactionCase):
         # 有 SN 行必须 qty=1；无 SN 行记缺陷数量且可修改
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        serial = self._make_activity(order, wc, 'SN-IPQC-701')
+        serial = self._make_activity(order, wc, '126100000008')
         inspection = self._inspection()
         Sample = self.env['sn.wsd.quality.inspection.sample']
         with self.assertRaises(IntegrityError):
@@ -311,8 +311,8 @@ class TestIpqcPatrol(TransactionCase):
         # 统计纯加法、板级按 SN 去重：SN-A 两行只算一片，无 SN 行按 qty 累加
         order = self._order(self.line_a)
         wc = self._wc(self.line_a)
-        sn_a = self._make_activity(order, wc, 'SN-IPQC-801')
-        sn_b = self._make_activity(order, wc, 'SN-IPQC-802')
+        sn_a = self._make_activity(order, wc, '126100000009')
+        sn_b = self._make_activity(order, wc, '126100000010')
         inspection = self._inspection()
         inspection.write({'x_picked_qty': 8})
         Sample = self.env['sn.wsd.quality.inspection.sample']

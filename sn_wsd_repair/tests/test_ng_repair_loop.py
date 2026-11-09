@@ -98,7 +98,7 @@ class TestNgRepairLoop(TransactionCase):
     def test_01_ng_requires_defect_and_stamps_it(self):
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
-        serial = order.scan_enter('SN-LP-001', wc_in)
+        serial = order.scan_enter('126100000001', wc_in)
         with self.assertRaises(ValidationError):
             order.leave_station(serial, 'ng')  # sn_wsd_quality gate
         order.leave_station(serial, 'ng', ng_defect=self.defect_code)
@@ -109,7 +109,7 @@ class TestNgRepairLoop(TransactionCase):
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
         self.op_in.x_max_test_count = 2
-        sn_name = 'SN-LP-002'
+        sn_name = '126100000002'
         serial = self._ng_pass(order, wc_in, sn_name)
         self._ng_pass(order, wc_in, sn_name)  # limit reached
         # the SN shows up in the pending-repair list
@@ -153,7 +153,7 @@ class TestNgRepairLoop(TransactionCase):
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
         self.op_in.x_max_test_count = 1
-        sn_name = 'SN-LP-003'
+        sn_name = '126100000003'
         serial = self._ng_pass(order, wc_in, sn_name)
         failed_op = self._history(serial, self.op_in)[:1].route_operation_id
         repair_order = self.env['sn.wsd.repair.order'].create({
@@ -176,7 +176,7 @@ class TestNgRepairLoop(TransactionCase):
         station NG defect codes (history), not only open quality issues."""
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
-        identity = self._ng_pass(order, wc_in, 'SN-LP-004')
+        identity = self._ng_pass(order, wc_in, '126100000004')
         self.assertEqual(
             identity._sn_pending_ng_defect_codes(), self.defect_code)
         new_order = self.env['sn.wsd.repair.order'].new({
@@ -192,7 +192,7 @@ class TestNgRepairLoop(TransactionCase):
         mo, order = self._make_order_online()
         wc_in = self._make_workcenter(self.op_in)
         self.op_in.x_max_test_count = 2
-        serial = order.scan_enter('SN-LP-005', wc_in)
+        serial = order.scan_enter('126100000005', wc_in)
         self.env['sn.wsd.quality.issue'].create({
             'serial_identity_id': serial.id,
             'defect_code_id': self.defect_code.id,
@@ -205,18 +205,18 @@ class TestNgRepairLoop(TransactionCase):
         order.leave_station(serial, 'ng', ng_defect=self.defect_code)
         # re-entry refused while the issue is open
         with self.assertRaises(ValidationError):
-            order.scan_enter('SN-LP-005', wc_in)
+            order.scan_enter('126100000005', wc_in)
         # closing the issue unfreezes: re-entry works, counter reset
         self.env['sn.wsd.quality.issue'].search([
             ('serial_identity_id', '=', serial.id)]).write({
             'state': 'closed', 'closed_time': fields.Datetime.now()})
-        order.scan_enter('SN-LP-005', wc_in)
+        order.scan_enter('126100000005', wc_in)
 
     def test_06_binding_registry(self):
         """Product SN and machine SN bind through the binding model."""
         Identity = self.env['sn.wsd.serial.identity']
-        product = Identity.get_or_create('SN-BIND-P01', self.company)
-        machine = Identity.get_or_create('SN-BIND-M01', self.company)
+        product = Identity.get_or_create('126100000006', self.company)
+        machine = Identity.get_or_create('126100000007', self.company)
         self.env['sn.wsd.serial.binding'].create({
             'serial_identity_id': product.id,
             'bound_serial_identity_id': machine.id,

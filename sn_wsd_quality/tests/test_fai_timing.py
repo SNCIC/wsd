@@ -1,4 +1,5 @@
 from odoo import fields
+import itertools
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
@@ -108,22 +109,28 @@ class TestFaiTiming(TransactionCase):
     def _feed(self, order, name):
         return order.scan_enter(name, self.wc_in)
 
-    def _pass_round(self, order, prefix):
+    _sn_seq = itertools.count(500)
+
+    def _sn(self):
+        """标准格式 SN（过站内核格式闸 2026-11-09）：'1261'+自增 8 位。"""
+        return '1261%08d' % next(self._sn_seq)
+
+    def _pass_round(self, order):
         # feed both samples, leave OK (full sample set) -> all pass -> done
-        for n in ('001', '002'):
-            serial = self._feed(order, '%s-%s' % (prefix, n))
+        for _n in ('001', '002'):
+            serial = self._feed(order, self._sn())
             order.leave_station(serial, 'ok')
         inspection = order.x_fai_inspection_id
         inspection.action_set_all_pass()
         inspection.action_done()
         return inspection
 
-    def _fail_round(self, order, prefix):
+    def _fail_round(self, order):
         # feed both samples, leave OK (matrix expands), then fail every cell
         # (matrix caliber: a text value off the expectation fails) -> done
         # lands on a non-pass result
-        for n in ('001', '002'):
-            serial = self._feed(order, '%s-%s' % (prefix, n))
+        for _n in ('001', '002'):
+            serial = self._feed(order, self._sn())
             order.leave_station(serial, 'ok')
         inspection = order.x_fai_inspection_id
         inspection.cell_ids.write({'text_value': 'NG'})
@@ -143,7 +150,7 @@ class TestFaiTiming(TransactionCase):
     # ---------------- first feed opens the round ----------------
     def test_11_first_feed_creates_round_and_registers_sample_1(self):
         order = self._order()
-        s1 = self._feed(order, 'SN-FAIT-101')
+        s1 = self._feed(order, '126100000001')
         inspection = order.x_fai_inspection_id
         self.assertTrue(inspection)
         self.assertEqual(inspection.inspection_type, 'fai')
@@ -164,8 +171,8 @@ class TestFaiTiming(TransactionCase):
 
     def test_12_feeds_2_to_n_register_samples_one_doc(self):
         order = self._order()
-        s1 = self._feed(order, 'SN-FAIT-201')
-        s2 = self._feed(order, 'SN-FAIT-202')
+        s1 = self._feed(order, '126100000002')
+        s2 = self._feed(order, '126100000003')
         inspection = order.x_fai_inspection_id
         self.assertEqual(inspection.x_fai_serial_ids, s1 | s2)
         self.assertEqual(order.x_fai_sample_count, 2)
@@ -177,7 +184,7 @@ class TestFaiTiming(TransactionCase):
         # the action_done fail branch keeps creating the next round right
         # away (not lazy) so every round is its own FPY data point
         order = self._order()
-        inspection1 = self._fail_round(order, 'SN-FAIT-30')
+        inspection1 = self._fail_round(order)
         self.assertNotEqual(inspection1.result, 'pass')
         self.assertEqual(order.x_fai_state, 'in_progress')
         self.assertEqual(order.x_fai_round, 2)
@@ -187,15 +194,15 @@ class TestFaiTiming(TransactionCase):
         self.assertFalse(new.x_fai_serial_ids,
                          'the new round waits for fresh samples')
         # the gate re-arms: 2 boards fit, the 3rd is blocked
-        self._feed(order, 'SN-FAIT-303')
-        self._feed(order, 'SN-FAIT-304')
+        self._feed(order, '126100000005')
+        self._feed(order, '126100000006')
         with self.assertRaises(ValidationError):
-            self._feed(order, 'SN-FAIT-305')
+            self._feed(order, '126100000007')
 
     # ---------------- re-online round is lazy too ----------------
     def test_14_reonline_round_waits_for_next_feed(self):
         order = self._order()
-        inspection1 = self._pass_round(order, 'SN-FAIT-40')
+        inspection1 = self._pass_round(order)
         self.assertEqual(order.x_fai_state, 'passed')
         order.action_offline()
         from odoo.addons.sn_wsd_mrp.tests.pick_gate import give_pick
@@ -208,7 +215,7 @@ class TestFaiTiming(TransactionCase):
         self.assertEqual(order.x_fai_round, 1)
         self.assertEqual(len(order.x_fai_inspection_ids), 1)
         # the next feed opens the new round and lands as its sample 1
-        s3 = self._feed(order, 'SN-FAIT-403')
+        s3 = self._feed(order, '126100000009')
         self.assertEqual(order.x_fai_state, 'in_progress')
         self.assertEqual(order.x_fai_round, 2)
         self.assertEqual(order.x_fai_sample_count, 1)
@@ -222,8 +229,8 @@ class TestFaiTiming(TransactionCase):
     def test_15_no_scheme_product_never_creates(self):
         self.scheme.active = False
         order = self._order()
-        for n in ('A', 'B', 'C'):
-            self._feed(order, 'SN-FAIT-NO-%s' % n)
+        for _n in ('A', 'B', 'C'):
+            self._feed(order, self._sn())
         self.assertEqual(order.x_fai_state, 'none')
         self.assertFalse(order.x_fai_inspection_ids)
         self.assertEqual(order.x_fai_round, 0)
@@ -233,7 +240,7 @@ class TestFaiTiming(TransactionCase):
         # 首件判定前，样本板在首件工序后继的任何扫码（设备/终端共用内核）
         # 都必须被拦住；首件工序自身的复测不受影响；判定通过后放行
         order = self._order()
-        s1 = self._feed(order, 'SN-FAIT-1601')
+        s1 = self._feed(order, '126100000010')
         order.leave_station(s1, 'ok')  # 首件工序合格离开，板等后继
         with self.assertRaises(ValidationError) as ctx:
             order.pass_one_station(s1, self.wc_out, 'ok')
@@ -242,7 +249,7 @@ class TestFaiTiming(TransactionCase):
         # 首件工序本身不在闸门范围（复测照常）
         order.pass_one_station(s1, self.wc_in, 'ok')
         # 样本齐 + 判定通过后，后继接受该板
-        s2 = self._feed(order, 'SN-FAIT-1602')
+        s2 = self._feed(order, '126100000011')
         order.leave_station(s2, 'ok')
         inspection = order.x_fai_inspection_id
         inspection.action_set_all_pass()

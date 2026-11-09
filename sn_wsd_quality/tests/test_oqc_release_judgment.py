@@ -224,8 +224,8 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_01_pass_with_pending_board_is_not_released(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-101')
-        insp = self._ng_round(order, 'SN-RJ-102')
+        self._ok_round(order, '126100000001')
+        insp = self._ng_round(order, '126100000002')
         self.assertEqual(len(insp.x_fai_serial_ids), 2)
         self.assertEqual(insp.x_oqc_pending_qty, 1)
         insp.action_done()
@@ -244,15 +244,15 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_02_reject_keeps_disposition_open_without_hold(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-RJ-201')
-        self._ng_round(order, 'SN-RJ-202')
+        insp = self._ng_round(order, '126100000003')
+        self._ng_round(order, '126100000004')
         insp.action_done()
         insp.invalidate_recordset()
         self.assertEqual(insp.result, 'reject')
         self.assertFalse(insp.x_oqc_release_ready)
         self.assertIn('verdict', insp.x_oqc_release_message)
         # no auto hold / quality issue: disposition paths stay open
-        for name in ('SN-RJ-201', 'SN-RJ-202'):
+        for name in ('126100000003', '126100000004'):
             serial = self.env['sn.wsd.serial.identity'].search(
                 [('name', '=', name)])
             self.assertNotEqual(serial.x_quality_hold_state, 'hold')
@@ -269,14 +269,14 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_03a_concession_accepts_scope_and_releases(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-301')
-        insp = self._ng_round(order, 'SN-RJ-302')
+        self._ok_round(order, '126100000005')
+        insp = self._ng_round(order, '126100000006')
         insp.action_done()
         insp.invalidate_recordset()
         self.assertEqual(insp.result, 'pass')
         wizard = self._wizard(insp, reason='Cosmetic flaw accepted.')
         self.assertEqual(wizard.scope_serial_ids.mapped('name'),
-                         ['SN-RJ-302'])
+                         ['126100000006'])
         self.assertFalse(wizard.hard_block_reasons,
                          'a complete sample with no rework has no blocker')
         wizard.action_apply()
@@ -285,7 +285,7 @@ class TestOqcReleaseJudgment(TransactionCase):
         concession = events.filtered(
             lambda e: e.action == 'concession'
             and e.serial_identity_id
-            and e.serial_identity_id.name == 'SN-RJ-302')
+            and e.serial_identity_id.name == '126100000006')
         self.assertEqual(len(concession), 1)
         self.assertEqual(concession.action, 'concession')
         self.assertEqual(concession.state_after, 'concession')
@@ -306,7 +306,7 @@ class TestOqcReleaseJudgment(TransactionCase):
         self.assertEqual(order.x_oqc_state, 'passed')
         # the NG pass row stays an NG: a concession never fakes a test OK
         history = self.env['sn.wsd.serial.operation.history'].search([
-            ('serial_identity_id.name', '=', 'SN-RJ-302'),
+            ('serial_identity_id.name', '=', '126100000006'),
             ('route_operation_id', '=', self._oqc_row(order).id)])
         self.assertEqual(set(history.mapped('result')), {'ng'})
         # nothing left to concede: a repeated submit is refused
@@ -316,8 +316,8 @@ class TestOqcReleaseJudgment(TransactionCase):
 
     def test_03b_concession_refuses_stale_versions(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-311')
-        insp = self._ng_round(order, 'SN-RJ-312')
+        self._ok_round(order, '126100000007')
+        insp = self._ng_round(order, '126100000008')
         insp.action_done()
         defaults = self._defaults(insp)
         # a concurrent edit bumps the latest event of the scope board
@@ -339,12 +339,12 @@ class TestOqcReleaseJudgment(TransactionCase):
 
     def test_03c_concession_refuses_concurrent_new_ng(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-321')
-        insp = self._ng_round(order, 'SN-RJ-322')
+        self._ok_round(order, '126100000009')
+        insp = self._ng_round(order, '126100000010')
         insp.action_done()
         defaults = self._defaults(insp)
         # a new NG lands between opening the wizard and submitting
-        ghost = self._serial('SN-RJ-323')
+        ghost = self._serial('126100000011')
         insp.x_oqc_ng_serial_ids = [(4, ghost.id)]
         wizard = self.env['sn.wsd.quality.oqc.concession.wizard'].create(
             dict(defaults, reason='Scope moved under me.'))
@@ -357,8 +357,8 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_04_reopen_keeps_aql_snapshot_and_rejudges(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-RJ-401')
-        self._ng_round(order, 'SN-RJ-402')
+        insp = self._ng_round(order, '126100000012')
+        self._ng_round(order, '126100000013')
         insp.action_done()
         insp.invalidate_recordset()
         self.assertEqual(insp.result, 'reject')
@@ -375,7 +375,7 @@ class TestOqcReleaseJudgment(TransactionCase):
             (insp.sample_size, insp.accept_qty, insp.reject_qty),
             (2, 1, 2))
         # disposition closes both boards: d recomputes without a new round
-        for name in ('SN-RJ-401', 'SN-RJ-402'):
+        for name in ('126100000012', '126100000013'):
             self._close_retest(insp, self.env['sn.wsd.serial.identity'].search(
                 [('name', '=', name)]))
         insp.invalidate_recordset()
@@ -393,8 +393,8 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_05_same_board_counted_once(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-501')
-        insp = self._ng_round(order, 'SN-RJ-502')
+        self._ok_round(order, '126100000014')
+        insp = self._ng_round(order, '126100000015')
         serial = insp.x_oqc_ng_serial_ids[:1]
         self.assertEqual(len(insp._oqc_bad_serial_ids()), 1)
         # a defect line carrying the same SN must not add a second count
@@ -422,24 +422,24 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_06_concession_board_continues_route(self):
         order = self._order(qty=5)
-        self._ok_round(order, 'SN-RJ-601')
-        insp = self._ng_round(order, 'SN-RJ-602')
+        self._ok_round(order, '126100000016')
+        insp = self._ng_round(order, '126100000017')
         self._wizard(insp).action_apply()
         order.invalidate_recordset()
         # the conceded board may enter the successor operation B
-        order.sn_station_scan(self.wc_b.id, 'SN-RJ-602')
+        order.sn_station_scan(self.wc_b.id, '126100000017')
         wip = self.env['sn.wsd.serial.wip'].search([
-            ('serial_identity_id.name', '=', 'SN-RJ-602'),
+            ('serial_identity_id.name', '=', '126100000017'),
             ('mes_order_id', '=', order.id)])
         self.assertEqual(wip.route_operation_id, self._b_row(order),
                          'the conceded board entered operation B')
         # an unconceded NG board is still refused at B
         line2, wcs2 = self._alt_line_wcs('L2')
         order2 = self._order(qty=5, line=line2)
-        self._ok_round(order2, 'SN-RJ-611', wcs=wcs2)
-        self._ng_round(order2, 'SN-RJ-612', wcs=wcs2)
+        self._ok_round(order2, '126100000018', wcs=wcs2)
+        self._ng_round(order2, '126100000019', wcs=wcs2)
         with self.assertRaises(ValidationError) as ctx:
-            order2.sn_station_scan(wcs2['B'].id, 'SN-RJ-612')
+            order2.sn_station_scan(wcs2['B'].id, '126100000019')
         self.assertIn('not reachable', str(ctx.exception))
 
     def _b_row(self, order):
@@ -451,7 +451,7 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_07a_concession_refused_on_incomplete_sample(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-RJ-701')  # 1 of 2 samples reached
+        insp = self._ng_round(order, '126100000020')  # 1 of 2 samples reached
         wizard = self._wizard(insp)
         self.assertIn('incomplete', wizard.hard_block_reasons)
         with self.assertRaises(UserError) as ctx:
@@ -461,8 +461,8 @@ class TestOqcReleaseJudgment(TransactionCase):
 
     def test_07b_concession_refused_on_required_items(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-711')
-        insp = self._ng_round(order, 'SN-RJ-712')
+        self._ok_round(order, '126100000021')
+        insp = self._ng_round(order, '126100000022')
         # blank every cell of both boards: the NG board keeps its pending
         # disposition (its detected event stands) while no fail cell is
         # left, so the required item lines drop back to pending
@@ -479,9 +479,9 @@ class TestOqcReleaseJudgment(TransactionCase):
 
     def test_07c_concession_refused_while_reworking(self):
         order = self._order()
-        insp = self._ng_round(order, 'SN-RJ-721')
+        insp = self._ng_round(order, '126100000023')
         serial = insp.x_oqc_ng_serial_ids[:1]
-        self._ng_round(order, 'SN-RJ-722')
+        self._ng_round(order, '126100000024')
         op_a_row = order.x_mes_route_id.operation_ids.filtered(
             lambda r: r.operation_id == self.op_a)
         insp.action_rework_sn(serial, op_a_row, 'defect at A')
@@ -494,8 +494,8 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_08_all_pass_shortcut_refused_with_pending_board(self):
         order = self._order(qty=5)
-        self._ok_round(order, 'SN-RJ-801')
-        insp = self._ng_round(order, 'SN-RJ-802')
+        self._ok_round(order, '126100000025')
+        insp = self._ng_round(order, '126100000026')
         with self.assertRaises(UserError) as ctx:
             insp.action_set_all_pass()
         self.assertIn('all-pass shortcut', str(ctx.exception))
@@ -504,8 +504,8 @@ class TestOqcReleaseJudgment(TransactionCase):
         # a clean inspection keeps the shortcut
         line2, wcs2 = self._alt_line_wcs('L8')
         order2 = self._order(qty=5, line=line2)
-        insp2 = self._ok_round(order2, 'SN-RJ-811', wcs=wcs2)
-        self._ok_round(order2, 'SN-RJ-812', wcs=wcs2)
+        insp2 = self._ok_round(order2, '126100000027', wcs=wcs2)
+        self._ok_round(order2, '126100000028', wcs=wcs2)
         self.assertTrue(insp2.action_set_all_pass())
         insp2.action_done()
         insp2.invalidate_recordset()
@@ -517,8 +517,8 @@ class TestOqcReleaseJudgment(TransactionCase):
     # ------------------------------------------------------------------
     def test_09_ng_after_release_registers_and_blocks(self):
         order = self._order()
-        self._ok_round(order, 'SN-RJ-901')
-        insp = self._ok_round(order, 'SN-RJ-902')
+        self._ok_round(order, '126100000029')
+        insp = self._ok_round(order, '126100000030')
         insp.action_done()
         insp.invalidate_recordset()
         self.assertEqual(insp.result, 'pass')
@@ -527,14 +527,14 @@ class TestOqcReleaseJudgment(TransactionCase):
         self.assertEqual(order.x_oqc_state, 'passed')
         # a third board leaves the OQC operation NG after the release:
         # the early exit must not swallow it
-        self._feed_through_a(order, 'SN-RJ-903')
-        res = order.sn_station_scan(self.wc_c.id, 'SN-RJ-903')
+        self._feed_through_a(order, '126100000031')
+        res = order.sn_station_scan(self.wc_c.id, '126100000031')
         if isinstance(res, dict) and res.get('action') == 'leave':
             order.sn_station_leave(
                 res['wip_id'], 'ng', ng_defect_code_id=self.defect.id)
         insp.invalidate_recordset()
         serial = self.env['sn.wsd.serial.identity'].search(
-            [('name', '=', 'SN-RJ-903')])
+            [('name', '=', '126100000031')])
         detected = self._events(insp).filtered(
             lambda e: e.serial_identity_id == serial)
         self.assertEqual(len(detected), 1,

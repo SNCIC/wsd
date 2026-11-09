@@ -5,5 +5,5 @@ from . import test_station_source
 from . import test_lock_close
 from . import test_ledger_access
 from . import test_ratio_rebalance
-from . import test_batch_pass_exclusion
+from . import test_batch_pass_payment
 from . import test_daily_workbench
