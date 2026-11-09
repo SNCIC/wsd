@@ -176,5 +176,10 @@
             <field name="model_id" ref="model_sn_wsd_substitute_rule"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
+        <record id="rule_sn_wsd_mes_order_stats_company" model="ir.rule">
+            <field name="name">MES Order Execution Stats Multi-company</field>
+            <field name="model_id" ref="model_sn_wsd_mes_order_stats"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

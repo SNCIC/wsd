@@ -465,51 +465,52 @@ class MesOrderRouteOperation(models.Model):
     report_ids = fields.One2many(
         'sn.wsd.mes.operation.report', 'route_operation_id',
     )
-    # Execution counters (event-driven stored computes): each pass/report
-    # rewrites this row inside the same transaction, so the flow canvas,
-    # order quantities and station terminals read them with zero aggregation.
+    # Execution counters (read-time aggregates): every pass writes only its
+    # own history/wip row, so concurrent scans on the same order never touch a
+    # shared row. These counters are computed when read -- see _pass_stats for
+    # the batched SQL (one grouped query per source, never one per operation).
     x_wip_qty = fields.Integer(
-        string='In Progress', compute='_compute_pass_statistics', store=True,
+        string='In Progress', compute='_compute_pass_statistics',
         help='SNs currently at this operation.',
     )
     x_entered_qty = fields.Integer(
-        string='Entered', compute='_compute_pass_statistics', store=True,
+        string='Entered', compute='_compute_pass_statistics',
         help='Distinct SNs that ever entered this operation (any result, '
              'including in progress): the arrived quantity for '
              'remaining = planned - entered.',
     )
     x_ok_qty = fields.Integer(
-        string='Passed', compute='_compute_pass_statistics', store=True,
+        string='Passed', compute='_compute_pass_statistics',
         help='SNs that left this operation with result OK.',
     )
     x_ng_qty = fields.Integer(
-        string='Rejected', compute='_compute_pass_statistics', store=True,
+        string='Rejected', compute='_compute_pass_statistics',
         help='SNs that left this operation with result NG.',
     )
     x_scrap_qty = fields.Float(
-        string='Scrapped', compute='_compute_pass_statistics', store=True,
+        string='Scrapped', compute='_compute_pass_statistics',
         help='Scrapped amount: SNs that left with result Scrap (station '
              'mode) or accumulated scrap reports (report mode).',
     )
     x_reported_qty = fields.Float(
-        string='Reported Quantity', compute='_compute_pass_statistics', store=True,
+        string='Reported Quantity', compute='_compute_pass_statistics',
         help='Accumulated reported quantity (report mode): OK + NG + scrap, '
              'the invested amount.',
     )
     x_reported_ok_qty = fields.Float(
-        string='Reported OK', compute='_compute_pass_statistics', store=True,
+        string='Reported OK', compute='_compute_pass_statistics',
         help='Accumulated OK reported quantity (report mode).',
     )
     x_reported_ng_qty = fields.Float(
-        string='Reported NG', compute='_compute_pass_statistics', store=True,
+        string='Reported NG', compute='_compute_pass_statistics',
         help='Accumulated NG reported quantity (report mode).',
     )
     x_reported_scrap_qty = fields.Float(
-        string='Reported Scrap', compute='_compute_pass_statistics', store=True,
+        string='Reported Scrap', compute='_compute_pass_statistics',
         help='Accumulated scrap reported quantity (report mode).',
     )
     x_yield_rate = fields.Float(
-        string='Yield Rate', compute='_compute_pass_statistics', store=True,
+        string='Yield Rate', compute='_compute_pass_statistics',
         help='OK passes divided by OK + NG passes (scrap included in '
              'report mode).',
     )
@@ -525,39 +526,99 @@ class MesOrderRouteOperation(models.Model):
             op.display_label = ' / '.join(
                 filter(None, [op.x_step_code, op.name])) or op.operation_id.display_name
 
+    def _pass_stats(self):
+        """Batched pass counters of this route-operation recordset.
+
+        Three grouped queries (history / wip / reports) cover every operation
+        in the recordset: the counters are read-time aggregates, so a flow
+        canvas or an order list must never fan out into per-row searches.
+        """
+        ids = tuple(self.ids)
+        stats = {
+            op_id: {'wip': 0, 'entered': 0, 'ok': 0, 'ng': 0, 'scrap': 0,
+                    'rep_ok': 0.0, 'rep_ng': 0.0, 'rep_scrap': 0.0}
+            for op_id in ids
+        }
+        if not ids:
+            return stats
+        cr = self.env.cr
+        cr.execute("""
+            SELECT route_operation_id, result,
+                   COUNT(DISTINCT serial_identity_id)
+              FROM sn_wsd_serial_operation_history
+             WHERE route_operation_id IN %s
+             GROUP BY route_operation_id, result
+        """, [ids])
+        for op_id, result, count in cr.fetchall():
+            if result in ('ok', 'ng', 'scrap'):
+                stats[op_id][result] = count
+        cr.execute("""
+            SELECT route_operation_id, COUNT(*)
+              FROM sn_wsd_serial_wip
+             WHERE route_operation_id IN %s
+             GROUP BY route_operation_id
+        """, [ids])
+        for op_id, count in cr.fetchall():
+            stats[op_id]['wip'] = count
+        # Entered: distinct SNs that ever reached the operation (history) plus
+        # the ones parked there right now. A plate re-tested several times is
+        # one unit, and the UNION keeps a wip row from being counted twice.
+        cr.execute("""
+            SELECT route_operation_id, COUNT(*)
+              FROM (
+                    SELECT route_operation_id, serial_identity_id
+                      FROM sn_wsd_serial_operation_history
+                     WHERE route_operation_id IN %s
+                    UNION
+                    SELECT route_operation_id, serial_identity_id
+                      FROM sn_wsd_serial_wip
+                     WHERE route_operation_id IN %s
+                   ) entered
+             GROUP BY route_operation_id
+        """, [ids, ids])
+        for op_id, count in cr.fetchall():
+            stats[op_id]['entered'] = count
+        cr.execute("""
+            SELECT route_operation_id,
+                   COALESCE(SUM(qty_ok), 0),
+                   COALESCE(SUM(qty_ng), 0),
+                   COALESCE(SUM(qty_scrap), 0)
+              FROM sn_wsd_mes_operation_report
+             WHERE route_operation_id IN %s
+             GROUP BY route_operation_id
+        """, [ids])
+        for op_id, ok_qty, ng_qty, scrap_qty in cr.fetchall():
+            stats[op_id]['rep_ok'] = float(ok_qty)
+            stats[op_id]['rep_ng'] = float(ng_qty)
+            stats[op_id]['rep_scrap'] = float(scrap_qty)
+        return stats
+
     @api.depends('serial_history_ids.result', 'serial_wip_ids',
                  'report_ids.qty_ok', 'report_ids.qty_ng', 'report_ids.qty_scrap')
     def _compute_pass_statistics(self):
+        stats = self._pass_stats()
         for op in self:
-            reports = op.report_ids
-            ok_qty = sum(reports.mapped('qty_ok'))
-            ng_qty = sum(reports.mapped('qty_ng'))
-            scrap_qty = sum(reports.mapped('qty_scrap'))
-            op.x_reported_ok_qty = ok_qty
-            op.x_reported_ng_qty = ng_qty
-            op.x_reported_scrap_qty = scrap_qty
-            op.x_reported_qty = ok_qty + ng_qty + scrap_qty
-            op.x_wip_qty = len(op.serial_wip_ids)
-            histories = op.serial_history_ids
+            data = stats.get(op.id) or {}
+            rep_ok = data.get('rep_ok', 0.0)
+            rep_ng = data.get('rep_ng', 0.0)
+            rep_scrap = data.get('rep_scrap', 0.0)
+            op.x_reported_ok_qty = rep_ok
+            op.x_reported_ng_qty = rep_ng
+            op.x_reported_scrap_qty = rep_scrap
+            op.x_reported_qty = rep_ok + rep_ng + rep_scrap
+            op.x_wip_qty = data.get('wip', 0)
             # 到站台数（去重）：进过本工序就算——含在制、NG 待复测、报废，
             # 复测/维修回流不重复计
-            op.x_entered_qty = len(set(histories.mapped(
-                'serial_identity_id').ids))
+            op.x_entered_qty = data.get('entered', 0)
             # 台数按 SN 去重：一块板复测多行只算一台（测了几次查历史行）
-            op.x_ok_qty = len(set(
-                histories.filtered(lambda h: h.result == 'ok')
-                .mapped('serial_identity_id').ids))
-            op.x_ng_qty = len(set(
-                histories.filtered(lambda h: h.result == 'ng')
-                .mapped('serial_identity_id').ids))
+            op.x_ok_qty = data.get('ok', 0)
+            op.x_ng_qty = data.get('ng', 0)
             if op.mes_route_id.manage_mode == 'report':
-                op.x_scrap_qty = scrap_qty
-                passed = ok_qty + ng_qty + scrap_qty
-                op.x_yield_rate = (ok_qty / passed) if passed else 0.0
+                op.x_scrap_qty = rep_scrap
+                passed = rep_ok + rep_ng + rep_scrap
+                op.x_yield_rate = (rep_ok / passed) if passed else 0.0
             else:
-                op.x_scrap_qty = len(set(
-                    histories.filtered(lambda h: h.result == 'scrap')
-                    .mapped('serial_identity_id').ids))
+                op.x_scrap_qty = data.get('scrap', 0)
                 passed = op.x_ok_qty + op.x_ng_qty + op.x_scrap_qty
                 op.x_yield_rate = (op.x_ok_qty / passed) if passed else 0.0
 

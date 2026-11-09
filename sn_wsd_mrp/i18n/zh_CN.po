@@ -8872,3 +8872,19 @@ msgstr "资产号"
 #: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__sn_sale_asset_number
 msgid "Asset number the customer assigned to the equipment of the source sales orders."
 msgstr "客户为来源销售订单设备分配的资产号。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_stats__x_input_qty
+msgid "Input Quantity"
+msgstr "投入数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_sn_wsd_mes_order_stats__x_output_qty
+msgid "Output Quantity"
+msgstr "产出数量"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_sn_wsd_mes_order_stats
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_order_stats
+msgid "Execution Statistics"
+msgstr "执行统计"

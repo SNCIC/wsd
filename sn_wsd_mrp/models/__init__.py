@@ -10,6 +10,7 @@ from . import mrp_production_mes
 from . import mes_order
 from . import mes_order_pass_gate
 from . import mes_order_route
+from . import mes_order_stats
 from . import clear_pass_log
 from . import batch_pass_log
 from . import mes_order_batch_pass
