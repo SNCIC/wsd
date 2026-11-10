@@ -5,6 +5,10 @@ from odoo import api, fields, models
 SN_MES_MATERIAL_ROWS = 6
 SN_MES_MATERIAL_DETAIL_ROWS = 8
 
+# Item rows of the completion receipt sheet: the same count as ITEM_ROWS of
+# report/receipt_prn.py, so the model and the layout never drift apart.
+SN_MES_RECEIPT_ROWS = 6
+
 
 class StockPicking(models.Model):
     """Data of the MES material issue and return sheets."""
@@ -26,6 +30,27 @@ class StockPicking(models.Model):
         help='The transfer returns material to the stock: it is printed on '
              'the material return sheet.',
     )
+    sn_prn_receipt = fields.Boolean(
+        string='Completion Receipt Sheet',
+        compute='_compute_sn_prn_receipt',
+        store=True,
+        help='The transfer receives the output of a MES order: it is printed '
+             'on the semi-finished or the finished product receipt sheet.',
+    )
+    sn_prn_receipt_kind = fields.Selection(
+        selection=[
+            ('finished', 'Finished Product'),
+            ('semi_finished', 'Semi-Finished Product'),
+        ],
+        string='Receipt Sheet',
+        default='finished',
+        copy=False,
+        help='Sheet printed for the completion receipt. The finished product '
+             'sheet carries the print count of the document, the semi-finished '
+             'one does not. The kind is set on the transfer because both '
+             'receipts go through the same operation type and carry the same '
+             'number prefix, so the operation type cannot tell them apart.',
+    )
 
     @api.depends('picking_type_id')
     def _compute_sn_prn_mes_operation(self):
@@ -39,6 +64,14 @@ class StockPicking(models.Model):
             picking.sn_prn_mes_return = bool(
                 warehouse
                 and picking_type == warehouse.picking_type_return_id)
+
+    @api.depends('picking_type_id')
+    def _compute_sn_prn_receipt(self):
+        for picking in self:
+            warehouse = picking.picking_type_id.warehouse_id
+            picking.sn_prn_receipt = bool(
+                warehouse
+                and picking.picking_type_id == warehouse.picking_type_receipt_id)
 
     def _sn_get_mes_material_moves(self):
         """Moves reported on the sheet, in the order of the paper form."""
@@ -162,3 +195,39 @@ class StockPicking(models.Model):
     def action_print_mes_return_prn(self):
         """Download the ESC/P stream of the material return sheet."""
         return self._sn_prn_action('/sn_wsd_mrp/mes_return/prn')
+
+    def _sn_get_receipt_prn_lines(self):
+        """Rows of the completion receipt sheet, one per received product."""
+        self.ensure_one()
+        note = self.sn_prn_note or self.note or ''
+        rows = []
+        for index, move in enumerate(self._sn_get_mes_material_moves(),
+                                     start=1):
+            rows.append({
+                'sequence': index,
+                'product_code': move.product_id.default_code or '',
+                'product_name': move.product_id.name or '',
+                'material_specification':
+                    move.product_id.material_specification or '',
+                'uom': move.product_uom.name or '',
+                'quantity': self._sn_prn_number(move.quantity),
+                'note': note if index == 1 else '',
+            })
+        return rows
+
+    def _sn_get_receipt_prn_pages(self):
+        """Split the rows of the receipt sheet into the bands of the form."""
+        self.ensure_one()
+        rows = self._sn_get_receipt_prn_lines()
+        start = range(0, max(len(rows), 1), SN_MES_RECEIPT_ROWS)
+        return [rows[index:index + SN_MES_RECEIPT_ROWS] for index in start]
+
+    def _sn_get_receipt_prn_total(self):
+        """Total quantity of the receipt, printed in the total row."""
+        self.ensure_one()
+        total = sum(self._sn_get_mes_material_moves().mapped('quantity'))
+        return self._sn_prn_number(total)
+
+    def action_print_receipt_prn(self):
+        """Download the ESC/P stream of the completion receipt sheet."""
+        return self._sn_prn_action('/sn_wsd_mrp/receipt/prn')

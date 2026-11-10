@@ -30,6 +30,21 @@ class SnPrnMixin(models.AbstractModel):
         copy=False,
         help='Name printed on the approval line of the dot-matrix sheet.',
     )
+    sn_prn_keeper_id = fields.Many2one(
+        'hr.employee',
+        string='Warehouse Keeper',
+        copy=False,
+        help='Name printed on the keeper line of the dot-matrix sheet.',
+    )
+    sn_prn_inspector_id = fields.Many2one(
+        'hr.employee',
+        string='Inspected By',
+        copy=False,
+        help='Name printed on the inspection line of the dot-matrix sheet. '
+             'Kept on the document rather than read from the quality control, '
+             'because a sheet is also printed for the transfers that no '
+             'inspection covers.',
+    )
 
     def _sn_prn_next_print_count(self):
         """Count this print job and return the number each sheet shows.

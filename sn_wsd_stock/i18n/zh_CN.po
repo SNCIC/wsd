@@ -1590,3 +1590,152 @@ msgid ""
 "read from the operation type. Its valuation account is the one booking the "
 "loss or the gain."
 msgstr "盘点作业差异经过的虚拟库位，取自作业类型；该库位的存货计价科目用于盘亏或盘盈记账。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_other_receipt
+msgid "Other Receipt Sheet"
+msgstr "其他入库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_other_receipt
+msgid ""
+"The transfer is an other receipt: it is printed on the other receipt sheet."
+msgstr "该调拨为其他入库，打印在其他入库单上。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_picking__sn_prn_other_delivery
+msgid "Other Delivery Sheet"
+msgstr "其他出库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_prn_other_delivery
+msgid ""
+"The transfer is an other delivery: it is printed on the other delivery "
+"sheet."
+msgstr "该调拨为其他出库，打印在其他出库单上。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_picking_form_other_operation_prn
+msgid "Print Other Receipt"
+msgstr "打印其他入库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_stock_picking_form_other_operation_prn
+msgid "Print Other Delivery"
+msgstr "打印其他出库单"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_stock.action_print_other_receipt_prn
+msgid "Print Other Receipts (ESC/P)"
+msgstr "批量打印其他入库单（ESC/P）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_stock.action_print_other_delivery_prn
+msgid "Print Other Deliveries (ESC/P)"
+msgstr "批量打印其他出库单（ESC/P）"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Receipt Type:"
+msgstr "入库类型："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Business Type:"
+msgstr "业务类型："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Department:"
+msgstr "部门："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Date:"
+msgstr "日期："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Document No.:"
+msgstr "单据编号："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "No."
+msgstr "序号"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Material Name"
+msgstr "物料名称"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Received Quantity"
+msgstr "实收数量"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Remark"
+msgstr "备注"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Total:"
+msgstr "合计："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Approved by:"
+msgstr "审核："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Inspected by:"
+msgstr "检验："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Warehouse Keeper:"
+msgstr "仓管员："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Collected by:"
+msgstr "领料："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Prepared by:"
+msgstr "制单："
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: code:addons/sn_wsd_stock/report/other_operation_prn.py:0
+msgid "Page %(page)d / %(total)d"
+msgstr "第%(page)d/%(total)d页"

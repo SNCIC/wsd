@@ -1,8 +1,22 @@
 from odoo import api, fields, models
 
-# Item rows of the delivery sheet: a band of the 135 mm form carries seven
-# materials, a longer delivery continues on the next band.
-SN_SALES_DELIVERY_ROWS = 7
+# Item rows of the delivery sheet: a band of the 135 mm form carries six
+# materials, a longer delivery continues on the next band. The terms of the
+# delivery sit under the table, which is what keeps the count at six.
+SN_SALES_DELIVERY_ROWS = 6
+
+# Terms printed under the item table of the delivery note. They are the terms
+# the customer signs against, so they are kept here rather than on the company:
+# a customer receives the same terms whatever the warehouse it is served from.
+SN_SALES_DELIVERY_TERMS = (
+    'Please inspect the goods within 3 days of the delivery, then sign and '
+    'stamp this sheet and send it back to us.',
+    'The goods are taken as accepted when this sheet is not sent back within '
+    '3 days of the delivery. Damage caused by the transport has to be '
+    'reported to us within 7 days of the delivery.',
+    'We answer such a claim within 3 days. Beyond that delay we carry no risk '
+    'of the transport.',
+)
 
 
 class StockPicking(models.Model):
@@ -71,6 +85,16 @@ class StockPicking(models.Model):
         """Remark of the delivery head, the device test report line of the form."""
         self.ensure_one()
         return self.sn_prn_note or self.note or ''
+
+    def _sn_get_sales_delivery_prn_summary(self):
+        """Summary line of the head, read from the sale order of the delivery."""
+        self.ensure_one()
+        return self.sale_id.sn_summary or ''
+
+    def _sn_get_sales_delivery_prn_terms(self):
+        """Terms printed under the item table, one entry per line."""
+        self.ensure_one()
+        return SN_SALES_DELIVERY_TERMS
 
     def action_print_sales_delivery_prn(self):
         """Download the ESC/P stream of the delivery for the print bridge."""

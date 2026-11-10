@@ -4,6 +4,7 @@ from . import issue_material_label
 from . import stock_location
 from . import stock_move
 from . import stock_picking
+from . import stock_picking_prn
 from . import other_operation
 from . import stock_return_picking
 from . import stock_rule

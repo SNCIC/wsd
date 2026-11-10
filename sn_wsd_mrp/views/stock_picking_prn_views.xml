@@ -29,14 +29,27 @@
                         class="btn-secondary"
                         invisible="not sn_prn_mes_return or state == 'cancel'"
                         groups="stock.group_stock_user"/>
+                <button name="action_print_receipt_prn"
+                        type="object"
+                        string="Print Completion Receipt"
+                        class="btn-secondary"
+                        invisible="not sn_prn_receipt or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
             </xpath>
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="sn_prn_mes_issue" invisible="1"/>
                 <field name="sn_prn_mes_return" invisible="1"/>
+                <field name="sn_prn_receipt" invisible="1"/>
                 <field name="sn_prn_reviewer_id"
-                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return"/>
+                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return and not sn_prn_receipt"/>
                 <field name="sn_prn_note"
-                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return"/>
+                       invisible="not sn_prn_mes_issue and not sn_prn_mes_return and not sn_prn_receipt"/>
+                <field name="sn_prn_receipt_kind"
+                       invisible="not sn_prn_receipt"/>
+                <field name="sn_prn_inspector_id"
+                       invisible="not sn_prn_receipt"/>
+                <field name="sn_prn_keeper_id"
+                       invisible="not sn_prn_receipt"/>
                 <field name="sn_prn_print_count" readonly="1" invisible="1"/>
             </xpath>
         </field>
@@ -67,5 +80,14 @@
         <field name="binding_view_types">list</field>
         <field name="state">code</field>
         <field name="code">action = records.action_print_mes_return_prn()</field>
+    </record>
+
+    <record id="action_print_receipt_prn" model="ir.actions.server">
+        <field name="name">Print Completion Receipts (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_receipt_prn()</field>
     </record>
 </odoo>

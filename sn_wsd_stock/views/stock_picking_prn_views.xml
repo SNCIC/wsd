@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Other receipt and other delivery sheets of the 135 mm continuous form:
+         the buttons of the transfer hand the ESC/P stream to SNERP, which sends
+         it unchanged to the dot-matrix RAW queue. The keeper and the inspector
+         are filled on the transfer before the paper is signed. -->
+    <record id="view_stock_picking_form_other_operation_prn" model="ir.ui.view">
+        <field name="name">stock.picking.form.other.operation.prn</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_other_receipt_prn"
+                        type="object"
+                        string="Print Other Receipt"
+                        class="btn-secondary"
+                        invisible="not sn_prn_other_receipt or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+                <button name="action_print_other_delivery_prn"
+                        type="object"
+                        string="Print Other Delivery"
+                        class="btn-secondary"
+                        invisible="not sn_prn_other_delivery or state == 'cancel'"
+                        groups="stock.group_stock_user"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sn_prn_other_receipt" invisible="1"/>
+                <field name="sn_prn_other_delivery" invisible="1"/>
+                <field name="sn_prn_reviewer_id"
+                       invisible="not sn_prn_other_receipt and not sn_prn_other_delivery"/>
+                <field name="sn_prn_inspector_id"
+                       invisible="not sn_prn_other_receipt and not sn_prn_other_delivery"/>
+                <field name="sn_prn_keeper_id"
+                       invisible="not sn_prn_other_receipt and not sn_prn_other_delivery"/>
+                <field name="sn_prn_note"
+                       invisible="not sn_prn_other_receipt and not sn_prn_other_delivery"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_print_other_receipt_prn" model="ir.actions.server">
+        <field name="name">Print Other Receipts (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_other_receipt_prn()</field>
+    </record>
+
+    <record id="action_print_other_delivery_prn" model="ir.actions.server">
+        <field name="name">Print Other Deliveries (ESC/P)</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_other_delivery_prn()</field>
+    </record>
+</odoo>

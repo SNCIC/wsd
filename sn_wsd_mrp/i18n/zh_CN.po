@@ -9143,3 +9143,101 @@ msgstr "产出数量"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_order_stats
 msgid "Execution Statistics"
 msgstr "执行统计"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Finished Product Receipt Sheet"
+msgstr "产品入库单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Semi-Finished Product Receipt Sheet"
+msgstr "半成品入库单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__sn_prn_receipt
+msgid "Completion Receipt Sheet"
+msgstr "完工入库单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__sn_prn_receipt
+msgid ""
+"The transfer receives the output of a MES order: it is printed on the "
+"semi-finished or the finished product receipt sheet."
+msgstr "该调拨接收MES制令单的产出，打印在半成品入库单或产品入库单上。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_stock_picking__sn_prn_receipt_kind
+msgid "Receipt Sheet"
+msgstr "入库单类型"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_mrp.field_stock_picking__sn_prn_receipt_kind
+msgid ""
+"Sheet printed for the completion receipt. The finished product sheet carries "
+"the print count of the document, the semi-finished one does not. The kind is "
+"set on the transfer because both receipts go through the same operation type "
+"and carry the same number prefix, so the operation type cannot tell them "
+"apart."
+msgstr ""
+"完工入库打印的单据。产品入库单带单据打印次数，半成品入库单不带。因两种入库共用同一作业类型和同一单号前缀，作业类型无法区分，故在调拨上选择类型。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__stock_picking__sn_prn_receipt_kind__finished
+msgid "Finished Product"
+msgstr "成品"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.model.fields.selection,name:sn_wsd_mrp.selection__stock_picking__sn_prn_receipt_kind__semi_finished
+msgid "Semi-Finished Product"
+msgstr "半成品"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Printed:"
+msgstr "打印次数："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Received Quantity"
+msgstr "实收数量"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Inspected by:"
+msgstr "检验："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Warehouse Keeper:"
+msgstr "仓管员："
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/report/receipt_prn.py:0
+msgid "Page %(page)d of %(total)d"
+msgstr "第%(page)d页，共%(total)d页"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_stock_picking_form_mes_material_prn
+msgid "Print Completion Receipt"
+msgstr "打印入库单"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: model:ir.actions.server,name:sn_wsd_mrp.action_print_receipt_prn
+msgid "Print Completion Receipts (ESC/P)"
+msgstr "批量打印入库单（ESC/P）"

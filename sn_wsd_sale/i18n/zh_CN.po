@@ -353,3 +353,58 @@ msgstr "合计："
 #: code:addons/sn_wsd_sale/report/sale_order_prn.py:0
 msgid "Quantity Total"
 msgstr "数量合计"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Sales Delivery Note"
+msgstr "销售发货单"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Delivery Note No.:"
+msgstr "单号："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Issued by:"
+msgstr "开单人："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Customer Signature (Stamp):"
+msgstr "客户签字（盖章）："
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/report/sales_delivery_prn.py:0
+msgid "Page %(page)d of %(total)d"
+msgstr "第%(page)d页，共%(total)d页"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/models/stock_picking_prn.py:0
+msgid ""
+"Please inspect the goods within 3 days of the delivery, then sign and stamp "
+"this sheet and send it back to us."
+msgstr "货到3天内客户应对产品进行验收，验收无误后请签字、盖章并将本单回传我司。"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/models/stock_picking_prn.py:0
+msgid ""
+"The goods are taken as accepted when this sheet is not sent back within 3 "
+"days of the delivery. Damage caused by the transport has to be reported to "
+"us within 7 days of the delivery."
+msgstr "若收到产品3日内未回传本单即视为默认收货。如运输造成的破损请在7日内向我司提出。"
+
+#. module: sn_wsd_sale
+#. odoo-python
+#: code:addons/sn_wsd_sale/models/stock_picking_prn.py:0
+msgid ""
+"We answer such a claim within 3 days. Beyond that delay we carry no risk of "
+"the transport."
+msgstr "我司在3日内给予回复。逾期我司不承担任何运输造成的风险。"

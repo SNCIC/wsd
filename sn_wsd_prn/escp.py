@@ -33,6 +33,8 @@ import os
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from odoo import fields
+
 _logger = logging.getLogger(__name__)
 
 # Graphics density of the printer: 120 dots per inch horizontally, 180
@@ -133,6 +135,19 @@ def rule(dpi=HORIZONTAL_DPI):
 def clean(value):
     """Single line text of a value: a newline would break the cell anchor."""
     return ' '.join(str(value or '').split())
+
+
+def date_text(record, value):
+    """Date of a sheet as the paper forms write it: 2026/11/6.
+
+    The day is read in the time zone of the user who launches the print job, not
+    in UTC: a transfer validated at 7 a.m. in China is one day ahead of the UTC
+    date, and the sheet is signed on the day the workshop sees.
+    """
+    if not value:
+        return ''
+    value = fields.Datetime.context_timestamp(record, value)
+    return '%d/%d/%d' % (value.year, value.month, value.day)
 
 
 def fit_text(draw, text, text_font, max_width):

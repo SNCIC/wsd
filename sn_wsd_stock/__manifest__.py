@@ -1,9 +1,9 @@
 {
     'name': 'SN WSD Stock',
-    'version': '19.0.1.31.0',
+    'version': '19.0.1.32.0',
     'summary': 'Incoming material labels, internal lot generation and operation detail reports',
     'category': 'Supply Chain/Inventory',
-    'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp', 'sn_wsd_label', 'sn_wsd_list', 'sn_wsd_material'],
+    'depends': ['stock', 'mail', 'resource', 'sn_wsd_mrp', 'sn_wsd_prn', 'sn_wsd_label', 'sn_wsd_list', 'sn_wsd_material'],
     'data': [
         'security/company_rules.xml',
         'security/ir.model.access.csv',
@@ -20,6 +20,7 @@
         'views/operation_detail_views.xml',
         'views/reception_detail_views.xml',
         'views/other_operation_views.xml',
+        'views/stock_picking_prn_views.xml',
         'views/consignment_views.xml',
         'views/inventory_operation_views.xml',
         'views/sn_other_operation_type_views.xml',
