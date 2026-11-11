@@ -212,6 +212,22 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_repair_cause_search" model="ir.ui.view">
+        <field name="name">sn.wsd.repair.cause.search</field>
+        <field name="model">sn.wsd.repair.cause</field>
+        <field name="arch" type="xml">
+            <search string="Failure Causes">
+                <field name="name"/>
+                <field name="code"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_repair_cause" model="ir.actions.act_window">
         <field name="name">Failure Causes</field>
         <field name="res_model">sn.wsd.repair.cause</field>

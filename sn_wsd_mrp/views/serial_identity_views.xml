@@ -80,6 +80,43 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_serial_identity_search" model="ir.ui.view">
+        <field name="name">sn.wsd.serial.identity.search</field>
+        <field name="model">sn.wsd.serial.identity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <separator/>
+                <filter name="origin_laser" string="Laser"
+                        domain="[('origin_type', '=', 'laser')]"/>
+                <filter name="origin_external" string="External"
+                        domain="[('origin_type', '=', 'external')]"/>
+                <filter name="origin_manual" string="Manual"
+                        domain="[('origin_type', '=', 'manual')]"/>
+                <filter name="origin_migration" string="Migration"
+                        domain="[('origin_type', '=', 'migration')]"/>
+                <separator/>
+                <filter name="created_today" string="Created Today"
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter name="created_this_week" string="Created This Week"
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <separator/>
+                <filter name="machine_binding" string="Machine Binding"
+                        domain="[('binding_ids', '!=', False)]"/>
+                <filter name="no_binding" string="No Binding"
+                        domain="[('binding_ids', '=', False)]"/>
+                <group>
+                    <filter name="group_origin_type" string="Origin Type"
+                            context="{'group_by': 'origin_type'}"/>
+                    <filter name="group_origin_mo" string="Origin Manufacturing Order"
+                            context="{'group_by': 'origin_production_id'}"/>
+                    <filter name="group_create_date" string="Creation Date"
+                            context="{'group_by': 'create_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_serial_identity" model="ir.actions.act_window">
         <field name="name">Serial Identities</field>
         <field name="res_model">sn.wsd.serial.identity</field>

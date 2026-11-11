@@ -22,6 +22,39 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_piece_settlement_search" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.settlement.search</field>
+        <field name="model">sn.wsd.piece.settlement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="mes_order_id"/>
+                <field name="product_id"/>
+                <field name="mes_order_id" string="MO"
+                       filter_domain="[('mes_order_id.production_id', 'ilike', self)]"/>
+                <field name="participant_ids" string="Participant"
+                       filter_domain="[('participant_ids.employee_id', 'ilike', self)]"/>
+                <separator/>
+                <filter name="f_draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="f_confirmed" string="Confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter name="f_void" string="Void"
+                        domain="[('state', '=', 'void')]"/>
+                <separator/>
+                <filter name="f_today" string="Today"
+                        domain="[('date', '&gt;=', 'today'), ('date', '&lt;', 'today +1d')]"/>
+                <filter name="f_this_week" string="This Week"
+                        domain="[('date', '&gt;=', '=week_start'), ('date', '&lt;', '=week_start +1w')]"/>
+                <group>
+                    <filter name="g_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="g_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
+                    <filter name="g_month" string="Business Month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="view_sn_wsd_piece_settlement_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.settlement.form</field>
         <field name="model">sn.wsd.piece.settlement</field>

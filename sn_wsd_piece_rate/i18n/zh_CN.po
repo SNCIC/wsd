@@ -58,6 +58,7 @@ msgstr "知晓并保留剩余草稿"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__action
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_log_search
 msgid "Action"
 msgstr "动作"
 
@@ -124,6 +125,7 @@ msgstr "业务日期"
 
 #. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "Business Month"
 msgstr "业务月"
 
@@ -151,6 +153,7 @@ msgstr "勾选确认您知晓未结算草稿将留在已关账的月份中。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_close_log__action__close
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_log_search
 msgid "Close"
 msgstr "关账"
 
@@ -194,6 +197,7 @@ msgstr "确认"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__confirmed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "Confirmed"
 msgstr "已确认"
 
@@ -298,6 +302,7 @@ msgstr "显示名称"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "Draft"
 msgstr "草稿"
 
@@ -382,11 +387,6 @@ msgstr "从报工生成计件单"
 #: code:addons/sn_wsd_piece_rate/wizard/piece_settlement_generate_wizard.py:0
 msgid "Generated Settlements"
 msgstr "已生成结算单"
-
-#. module: sn_wsd_piece_rate
-#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
-msgid "Group By"
-msgstr "分组"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__x_piece_settled_label
@@ -482,6 +482,7 @@ msgstr "报工行参与人"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_generate_wizard__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "MES Order"
 msgstr "制令单"
 
@@ -500,6 +501,11 @@ msgstr "管理方式"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__material_specification
 msgid "Material Specification"
 msgstr "物料规格"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
+msgid "MO"
+msgstr "制造订单（MO）"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__month_closed
@@ -612,6 +618,7 @@ msgstr "只能选择没有未作废计件单的报工行。"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__route_operation_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement_participant__route_operation_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_rate_search
 msgid "Operation"
 msgstr "工序"
 
@@ -627,6 +634,11 @@ msgstr "工序（字典）"
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__operation_report_id
 msgid "Operation Report"
 msgstr "报工记录"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
+msgid "Participant"
+msgstr "参与人"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_count
@@ -664,6 +676,7 @@ msgstr "绩效比"
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__period
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_wizard__period
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_log_search
 msgid "Period"
 msgstr "期间"
 
@@ -774,6 +787,8 @@ msgstr "单价（元/台）"
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_rate__product_id
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_rate_search
 msgid "Product"
 msgstr "产品"
 
@@ -830,6 +845,7 @@ msgstr "剩余草稿"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_close_log__action__reopen
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_log_search
 msgid "Reopen"
 msgstr "重开"
 
@@ -1024,6 +1040,7 @@ msgstr ""
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_settlement__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "Status"
 msgstr "状态"
 
@@ -1188,6 +1205,11 @@ msgid "This Month"
 msgstr "本月"
 
 #. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
+msgid "This Week"
+msgstr "本周"
+
+#. module: sn_wsd_piece_rate
 #. odoo-python
 #: code:addons/sn_wsd_piece_rate/models/piece_settlement.py:0
 msgid "This action is only for station-mode settlements."
@@ -1209,6 +1231,11 @@ msgstr "待分配"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_generate_wizard_form
 msgid "To Report"
 msgstr "待报工"
+
+#. module: sn_wsd_piece_rate
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
+msgid "Today"
+msgstr "今天"
 
 #. module: sn_wsd_piece_rate
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_participant_list
@@ -1265,12 +1292,14 @@ msgstr "未结算报工行"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_close_log__user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_log_search
 msgid "User"
 msgstr "操作人"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields.selection,name:sn_wsd_piece_rate.selection__sn_wsd_piece_settlement__state__void
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_settlement_search
 msgid "Void"
 msgstr "已作废"
 

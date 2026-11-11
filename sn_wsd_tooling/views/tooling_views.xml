@@ -41,6 +41,21 @@
             </field>
         </record>
 
+        <record id="view_sn_tooling_type_search" model="ir.ui.view">
+            <field name="name">sn.tooling.type.search</field>
+            <field name="model">sn.tooling.type</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <group>
+                        <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <!-- Tooling template -->
         <record id="view_sn_tooling_template_list" model="ir.ui.view">
             <field name="name">sn.tooling.template.list</field>

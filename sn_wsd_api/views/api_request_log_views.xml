@@ -56,6 +56,33 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_api_request_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.api.request.log.search</field>
+        <field name="model">sn.wsd.api.request.log</field>
+        <field name="arch" type="xml">
+            <search string="Device API Logs">
+                <field name="endpoint"/>
+                <field name="sn"/>
+                <field name="workcenter_code"/>
+                <field name="employee_code"/>
+                <field name="result_code"/>
+                <separator/>
+                <filter string="Success" name="filter_success" domain="[('result_code', '=', '200')]"/>
+                <filter string="Failure" name="filter_failure" domain="[('result_code', '!=', '200')]"/>
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('request_time', '&gt;=', 'today'), ('request_time', '&lt;', 'today +1d')]"/>
+                <filter string="This Week" name="filter_week"
+                        domain="[('request_time', '&gt;=', '=week_start'), ('request_time', '&lt;', '=week_start +1w')]"/>
+                <group>
+                    <filter string="Endpoint" name="group_endpoint" context="{'group_by': 'endpoint'}"/>
+                    <filter string="Result" name="group_result" context="{'group_by': 'result_code'}"/>
+                    <filter string="Request Time" name="group_request_time" context="{'group_by': 'request_time:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_api_request_log" model="ir.actions.act_window">
         <field name="name">Device API Logs</field>
         <field name="res_model">sn.wsd.api.request.log</field>

@@ -260,6 +260,7 @@
         <field name="name">Exception Board</field>
         <field name="res_model">sn.wsd.exception.ticket</field>
         <field name="view_mode">kanban,form,list</field>
+        <field name="search_view_id" ref="view_sn_wsd_exception_ticket_search"/>
         <field name="context">{'search_default_open': 1}</field>
     </record>
 </odoo>

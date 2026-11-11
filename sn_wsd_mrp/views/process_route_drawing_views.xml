@@ -63,6 +63,21 @@
                 <field name="create_uid" string="Created by"/>
                 <separator/>
                 <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="board_single" string="Single Side"
+                        domain="[('product_id.x_board_side', '=', 'single')]"/>
+                <filter name="board_double" string="Double Side"
+                        domain="[('product_id.x_board_side', '=', 'double')]"/>
+                <separator/>
+                <filter name="side_top" string="Top (T)"
+                        domain="[('x_side', '=', 'top')]"/>
+                <filter name="side_bottom" string="Bottom (B)"
+                        domain="[('x_side', '=', 'bottom')]"/>
+                <separator/>
+                <filter name="created_today" string="Created Today"
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter name="created_this_week" string="Created This Week"
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"/>
                 <group>
                     <filter name="group_route" string="Process Route" domain="[]" context="{'group_by': 'route_id'}"/>
                     <filter name="group_workshop" string="Workshop" domain="[]" context="{'group_by': 'x_workshop_id'}"/>
