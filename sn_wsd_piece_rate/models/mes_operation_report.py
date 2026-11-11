@@ -45,9 +45,6 @@ class MesOperationReport(models.Model):
         help='People who produced this batch, with their performance '
              'ratios. Copied as-is into the piece settlement draft.')
     participant_count = fields.Integer(compute='_compute_participant_count')
-    participant_summary = fields.Char(
-        string='Allocation', compute='_compute_participant_summary',
-        help='Compact view of the participants and their ratios.')
 
     @api.depends('piece_settlement_ids.state')
     def _compute_piece_settled(self):
@@ -65,13 +62,6 @@ class MesOperationReport(models.Model):
     def _compute_participant_count(self):
         for report in self:
             report.participant_count = len(report.participant_ids)
-
-    @api.depends('participant_ids.employee_id', 'participant_ids.performance_ratio')
-    def _compute_participant_summary(self):
-        for report in self:
-            report.participant_summary = ' / '.join(
-                f'{p.employee_id.name} {p.performance_ratio:g}%'
-                for p in report.participant_ids.sorted('sequence'))
 
     def _search_piece_settled(self, operator, value):
         # Odoo 19 会把 '= True' 规范成 ('in', [True]) 传入，value 可能是集合

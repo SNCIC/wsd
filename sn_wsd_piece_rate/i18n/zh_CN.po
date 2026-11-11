@@ -98,7 +98,6 @@ msgid "Allocated Total"
 msgstr "金额"
 
 #. module: sn_wsd_piece_rate
-#: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_summary
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_piece_report_wizard_line__participant_summary
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_mes_operation_report_search_piece
 msgid "Allocation"
@@ -165,11 +164,6 @@ msgstr "关账 / 重开期间"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_piece_rate.view_sn_wsd_piece_close_wizard_form
 msgid "Close Period"
 msgstr "关账"
-
-#. module: sn_wsd_piece_rate
-#: model:ir.model.fields,help:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report__participant_summary
-msgid "Compact view of the participants and their ratios."
-msgstr "参与人与绩效比的摘要展示。"
 
 #. module: sn_wsd_piece_rate
 #: model:ir.model.fields,field_description:sn_wsd_piece_rate.field_sn_wsd_mes_operation_report_participant__company_id
