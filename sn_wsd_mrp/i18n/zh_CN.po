@@ -6328,6 +6328,7 @@ msgstr "SN %(sn)s 已经由结束工序 %(op)s 离开制令单 %(order)s，不�
 #. module: sn_wsd_mrp
 #. odoo-python
 #: code:addons/sn_wsd_mrp/models/mes_order.py:0
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
 msgid ""
 "SN %s is not in the standard format: 12 digits starting with 1 or 2."
 msgstr "SN %s 不是标准格式：应为 1 或 2 开头的 12 位数字。"
@@ -8888,3 +8889,108 @@ msgstr "产出数量"
 #: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_mes_order_stats
 msgid "Execution Statistics"
 msgstr "执行统计"
+
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid ""
+"SN segment of manufacturing order %s must be filled as a pair: both the "
+"start and the end SN."
+msgstr "制造订单 %s 的 SN 号段必须成对填写：起始 SN 和结束 SN 都要填。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid ""
+"SN segment of manufacturing order %s starts after it ends: %s > %s."
+msgstr "制造订单 %s 的 SN 号段起始大于结束：%s > %s。"
+
+#. module: sn_wsd_mrp
+#. odoo-python
+#: code:addons/sn_wsd_mrp/models/mrp_production_mes.py:0
+msgid ""
+"SN segment %s - %s of manufacturing order %s overlaps the segment %s - %s "
+"of manufacturing order %s."
+msgstr "制造订单 %3$s 的 SN 号段 %1$s - %2$s 与制造订单 %6$s 的号段 %4$s - %5$s 重叠。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_sn_segment_start
+msgid "SN Segment Start"
+msgstr "SN 号段起始"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_sn_segment_end
+msgid "SN Segment End"
+msgstr "SN 号段结束"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,field_description:sn_wsd_mrp.field_mrp_production__x_sn_segment_length
+msgid "SN Segment Length"
+msgstr "SN 号段长度"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_sn_segment_start
+msgid ""
+"First SN of the pre-printed range allocated to this MO (standard format: 12 "
+"digits, head digit 1 or 2). Leave both bounds empty for MOs that carry no "
+"segment."
+msgstr "分配给本制造订单的预打印号段的首个 SN（标准格式：1 或 2 开头的 12 位数字）。"
+"不需要号段的订单两端留空即可。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_sn_segment_end
+msgid ""
+"Last SN of the range (inclusive). Must be filled together with the start "
+"SN."
+msgstr "号段的最后一个 SN（含）。必须与起始 SN 成对填写。"
+
+#. module: sn_wsd_mrp
+#: model:ir.model.fields,help:sn_wsd_mrp.field_mrp_production__x_sn_segment_length
+msgid ""
+"Number of SNs covered by the segment (end - start + 1). The planner may "
+"over-allocate on purpose, so no check against the planned quantity."
+msgstr "号段覆盖的 SN 个数（结束 - 起始 + 1）。允许故意多发，不校验与计划数量的关系。"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,name:sn_wsd_mrp.action_mrp_production_sn_segment
+#: model:ir.ui.menu,name:sn_wsd_mrp.menu_sn_wsd_sn_segment
+msgid "SN Segments"
+msgstr "SN 号段台账"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_sn_segment_filter
+msgid "Has SN Segment"
+msgstr "有号段"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_sn_segment_filter
+msgid "1-Head Segments"
+msgstr "1 开头号段"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_sn_segment_filter
+msgid "2-Head Segments"
+msgstr "2 开头号段"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_sn_segment_filter
+msgid "Segment Product"
+msgstr "号段产品"
+
+#. module: sn_wsd_mrp
+#: model_terms:ir.ui.view,arch_db:sn_wsd_mrp.view_mrp_production_sn_segment_list
+msgid "Total SNs"
+msgstr "SN 总数"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,help:sn_wsd_mrp.action_mrp_production_sn_segment
+msgid "No SN segment allocated yet"
+msgstr "还没有分配 SN 号段"
+
+#. module: sn_wsd_mrp
+#: model:ir.actions.act_window,help:sn_wsd_mrp.action_mrp_production_sn_segment
+msgid ""
+"Open a manufacturing order and fill its SN segment; ranges never overlap "
+"across the company."
+msgstr "打开制造订单填写 SN 号段；全公司范围内号段不会重叠。"

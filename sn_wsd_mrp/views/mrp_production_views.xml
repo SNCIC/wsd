@@ -160,6 +160,11 @@
                 <field name="x_nameplate_begin" />
                 <field name="x_nameplate_end" />
                 <field name="x_contract_no" />
+                <!-- SN segment (mo-sn-segment): planner-side, one optional
+                     pair of bounds; not related to the nameplate range -->
+                <field name="x_sn_segment_start"/>
+                <field name="x_sn_segment_end"/>
+                <field name="x_sn_segment_length"/>
             </xpath>
             <xpath expr="//div[@name='bom_div']" position="after">
                 <field name="x_route_id" groups="mrp.group_mrp_routings"/>
@@ -272,6 +277,67 @@
                     </field>
                 </page>
             </xpath>
+        </field>
+    </record>
+
+    <!-- SN segment ledger (mo-sn-segment): every MO carrying a segment,
+         sorted by the start SN so gaps between adjacent rows are visible
+         at a glance (no overlap = strictly ascending starts; 1-head and
+         2-head ranges cluster naturally). -->
+    <record id="view_mrp_production_sn_segment_list" model="ir.ui.view">
+        <field name="name">mrp.production.list.sn.segment.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <list default_order="x_sn_segment_start" create="false" delete="false">
+                <field name="name" string="Manufacturing Order No." readonly="1"/>
+                <field name="product_id" readonly="1"/>
+                <field name="product_qty" string="Input Qty" readonly="1"/>
+                <field name="x_sn_segment_start"/>
+                <field name="x_sn_segment_end"/>
+                <field name="x_sn_segment_length" sum="Total SNs"/>
+                <field name="x_mes_schedule_state" widget="badge" optional="show"
+                       decoration-danger="x_mes_schedule_state == 'unplanned'"
+                       decoration-warning="x_mes_schedule_state == 'partial'"
+                       decoration-success="x_mes_schedule_state == 'planned'"/>
+                <field name="state" widget="badge" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_sn_segment_filter" model="ir.ui.view">
+        <field name="name">mrp.production.select.sn.segment.sn.wsd.mrp</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Manufacturing Order No."/>
+                <field name="product_id"/>
+                <filter string="Has SN Segment" name="has_sn_segment"
+                        domain="[('x_sn_segment_start', '!=', False)]"/>
+                <separator/>
+                <filter string="1-Head Segments" name="seg_head_1"
+                        domain="[('x_sn_segment_start', '=like', '1%')]"/>
+                <filter string="2-Head Segments" name="seg_head_2"
+                        domain="[('x_sn_segment_start', '=like', '2%')]"/>
+                <group>
+                    <filter string="Segment Product" name="group_segment_product" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mrp_production_sn_segment" model="ir.actions.act_window">
+        <field name="name">SN Segments</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mrp_production_sn_segment_filter"/>
+        <field name="context">{'search_default_has_sn_segment': 1}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mrp_production_sn_segment_list')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No SN segment allocated yet</p>
+            <p>Open a manufacturing order and fill its SN segment; ranges never overlap across the company.</p>
         </field>
     </record>
 </odoo>

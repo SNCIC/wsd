@@ -1,7 +1,7 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
-from .constants import SIDE_LABELS, board_side_required_sides
+from .constants import SIDE_LABELS, STANDARD_SN_RE, board_side_required_sides
 
 
 class MrpProductionMesSchedule(models.Model):
@@ -354,3 +354,93 @@ class MrpProductionMesSchedule(models.Model):
                 Rule.run(procurements)
             production.x_last_replenishment_date = fields.Datetime.now()
         return True
+
+    # ------------------------------------------------------------------
+    # SN segment (mo-sn-segment): the pre-printed standard-SN range the
+    # planner allocates to this MO in one shot. The workshop prints the
+    # labels offline; at station passes the numbers register and bind to
+    # the MES orders through the existing kernel (enter_station) -- this
+    # block only records the range. Fixed-length 12-digit strings compare
+    # lexicographically == numerically, so plain string comparisons carry
+    # the order and overlap checks; a 1-head range is always below a
+    # 2-head one, both heads live in one global sequence.
+    # ------------------------------------------------------------------
+    x_sn_segment_start = fields.Char(
+        string='SN Segment Start', copy=False, tracking=True,
+        help='First SN of the pre-printed range allocated to this MO '
+             '(standard format: 12 digits, head digit 1 or 2). Leave both '
+             'bounds empty for MOs that carry no segment.')
+    x_sn_segment_end = fields.Char(
+        string='SN Segment End', copy=False, tracking=True,
+        help='Last SN of the range (inclusive). Must be filled together '
+             'with the start SN.')
+    x_sn_segment_length = fields.Integer(
+        string='SN Segment Length', compute='_compute_x_sn_segment_length',
+        help='Number of SNs covered by the segment (end - start + 1). The '
+             'planner may over-allocate on purpose, so no check against '
+             'the planned quantity.')
+
+    @api.depends('x_sn_segment_start', 'x_sn_segment_end')
+    def _compute_x_sn_segment_length(self):
+        for production in self:
+            start, end = production.x_sn_segment_start, production.x_sn_segment_end
+            if start and end:
+                production.x_sn_segment_length = int(end) - int(start) + 1
+            else:
+                production.x_sn_segment_length = 0
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for values in vals_list:
+            self._sn_segment_normalize(values)
+        return super().create(vals_list)
+
+    def write(self, vals):
+        self._sn_segment_normalize(vals)
+        return super().write(vals)
+
+    @staticmethod
+    def _sn_segment_normalize(values):
+        # strip the bounds on the way in: a pasted space would silently
+        # poison the fixed-length string ordering
+        for field_name in ('x_sn_segment_start', 'x_sn_segment_end'):
+            if values.get(field_name):
+                values[field_name] = values[field_name].strip()
+
+    @api.constrains('x_sn_segment_start', 'x_sn_segment_end')
+    def _check_x_sn_segment(self):
+        for production in self:
+            start = production.x_sn_segment_start or ''
+            end = production.x_sn_segment_end or ''
+            if not start and not end:
+                continue
+            if not start or not end:
+                raise ValidationError(_(
+                    'SN segment of manufacturing order %s must be filled as '
+                    'a pair: both the start and the end SN.',
+                    production.display_name))
+            for sn in (start, end):
+                if not STANDARD_SN_RE.fullmatch(sn):
+                    raise ValidationError(_(
+                        'SN %s is not in the standard format: 12 digits '
+                        'starting with 1 or 2.', sn))
+            if start > end:
+                raise ValidationError(_(
+                    'SN segment of manufacturing order %s starts after it '
+                    'ends: %s > %s.',
+                    production.display_name, start, end))
+            # every MO state participates (cancelled ones included): there
+            # is no release logic, freeing a cancelled range is a manual edit
+            conflict = self.search([
+                ('id', '!=', production.id),
+                ('company_id', '=', production.company_id.id),
+                ('x_sn_segment_start', '<=', end),
+                ('x_sn_segment_end', '>=', start),
+            ], limit=1)
+            if conflict:
+                raise ValidationError(_(
+                    'SN segment %s - %s of manufacturing order %s overlaps '
+                    'the segment %s - %s of manufacturing order %s.',
+                    start, end, production.display_name,
+                    conflict.x_sn_segment_start, conflict.x_sn_segment_end,
+                    conflict.display_name))
