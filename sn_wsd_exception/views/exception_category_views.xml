@@ -64,8 +64,14 @@
         <field name="arch" type="xml">
             <search string="Exception Categories">
                 <field name="name"/>
+                <field name="code"/>
                 <field name="default_team_id"/>
+                <separator/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Parent Category" name="group_parent" context="{'group_by': 'parent_id'}"/>
+                    <filter string="Default Responsible Team" name="group_default_team" context="{'group_by': 'default_team_id'}"/>
+                </group>
             </search>
         </field>
     </record>

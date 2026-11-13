@@ -156,10 +156,49 @@
     </record>
 
 
+    <!-- Fuller online material search overriding the thin model default
+         (sn_wsd_barcode.view_sn_smt_online_material_search) via the action
+         search_view_id below. -->
+    <record id="view_sn_smt_online_material_search" model="ir.ui.view">
+        <field name="name">sn.smt.online.material.search</field>
+        <field name="model">sn.smt.online.material</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mes_order_id"/>
+                <field name="model_code"/>
+                <field name="required_item_code"/>
+                <field name="table_no"/>
+                <field name="loadpoint"/>
+                <field name="chanel_sn"/>
+                <field name="loaded_material_lot_id"/>
+                <field name="loaded_feeder_id"/>
+                <separator/>
+                <filter name="filter_material_loaded" string="Material Loaded" domain="[('is_load', '=', 'Y')]"/>
+                <filter name="filter_not_loaded" string="Not Loaded" domain="[('is_load', '=', 'N')]"/>
+                <filter name="filter_skipped" string="Skipped" domain="[('is_skip', '=', 'Y')]"/>
+                <filter name="filter_tray" string="Tray" domain="[('is_tray', '=', 'Y')]"/>
+                <filter name="filter_reel_end" string="Reel End" domain="[('loaded_reel_end', '=', True)]"/>
+                <separator/>
+                <filter name="filter_source_smt_table" string="SMT Material Table" domain="[('source', '=', 'smt_table')]"/>
+                <filter name="filter_source_drawing_list" string="Drawing Material List" domain="[('source', '=', 'drawing_list')]"/>
+                <group>
+                    <filter name="group_by_mes_order" string="MES Order" context="{'group_by': 'mes_order_id'}"/>
+                    <filter name="group_by_production_line" string="Production Line" context="{'group_by': 'production_line_id'}"/>
+                    <filter name="group_by_device" string="Device Sequence" context="{'group_by': 'device_seq'}"/>
+                    <filter name="group_by_table" string="Table" context="{'group_by': 'table_no'}"/>
+                    <filter name="group_by_loadpoint" string="Loadpoint" context="{'group_by': 'loadpoint'}"/>
+                    <filter name="group_by_face" string="Face" context="{'group_by': 'process_face'}"/>
+                    <filter name="group_by_load_state" string="Load State" context="{'group_by': 'is_load'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_smt_online_material" model="ir.actions.act_window">
         <field name="name">SMT Online Materials</field>
         <field name="res_model">sn.smt.online.material</field>
         <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_sn_smt_online_material_search"/>
     </record>
 
     <record id="view_sn_smt_feeder_list" model="ir.ui.view">

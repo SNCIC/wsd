@@ -368,6 +368,7 @@ msgstr "绑定"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "Binding State"
 msgstr "绑定状态"
 
@@ -551,6 +552,7 @@ msgstr "元器件绑定历史"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_mes_test_result__component_binding_ids
 #: model:ir.ui.menu,name:sn_wsd_quality.menu_sn_wsd_meter_component_binding
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_identity_form_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "Component Bindings"
 msgstr "元器件绑定"
 
@@ -576,6 +578,7 @@ msgstr "元器件追溯"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__component_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "Component Type"
 msgstr "元器件类型"
 
@@ -1018,6 +1021,7 @@ msgstr "事件时间"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_component_binding__event_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "Event Type"
 msgstr "事件类型"
 
@@ -4289,6 +4293,11 @@ msgid "The verification scheme code and version must be unique per company."
 msgstr "每个公司的检定方案编码和版本必须是唯一的。"
 
 #. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
+msgid "This Week"
+msgstr "本周"
+
+#. module: sn_wsd_quality
 #: model:ir.model.fields.selection,name:sn_wsd_quality.selection__sn_wsd_meter_verification_scheme__meter_product_type__three_phase
 msgid "Three Phase"
 msgstr "三相"
@@ -4310,6 +4319,11 @@ msgstr "结束"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_sampling_lot_range__lot_qty_max
 msgid "To Quantity"
 msgstr "结束数量"
+
+#. module: sn_wsd_quality
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
+msgid "Today"
+msgstr "今天"
 
 #. module: sn_wsd_quality
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_meter_verification_point__tolerance_abs
@@ -5277,6 +5291,7 @@ msgstr "MES 工序报工"
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_quality_oqc_disposition_event__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_quality.field_sn_wsd_serial_freeze__mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_serial_freeze_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quality.view_sn_wsd_meter_component_binding_search
 msgid "MES Order"
 msgstr "制令单"
 

@@ -17,6 +17,27 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_piece_close_log_search" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.close.log.search</field>
+        <field name="model">sn.wsd.piece.close.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="period"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter name="f_close" string="Close"
+                        domain="[('action', '=', 'close')]"/>
+                <filter name="f_reopen" string="Reopen"
+                        domain="[('action', '=', 'reopen')]"/>
+                <group>
+                    <filter name="g_period" string="Period" context="{'group_by': 'period'}"/>
+                    <filter name="g_action" string="Action" context="{'group_by': 'action'}"/>
+                    <filter name="g_user" string="User" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_piece_close_log" model="ir.actions.act_window">
         <field name="name">Monthly Closing</field>
         <field name="res_model">sn.wsd.piece.close.log</field>

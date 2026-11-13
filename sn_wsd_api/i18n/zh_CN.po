@@ -189,6 +189,7 @@ msgstr "缺陷"
 
 #. module: sn_wsd_api
 #: model:ir.actions.act_window,name:sn_wsd_api.action_sn_wsd_api_request_log model:ir.ui.menu,name:sn_wsd_api.menu_sn_wsd_api_request_log
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
 msgid "Device API Logs"
 msgstr "设备接口日志"
 
@@ -254,6 +255,7 @@ msgstr "员工号为空。"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__endpoint
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
 msgid "Endpoint"
 msgstr "端点"
 
@@ -293,6 +295,11 @@ msgstr "首检(FAI)"
 #: code:addons/sn_wsd_api/static/src/js/trace_page.js:0
 msgid "Fail"
 msgstr "不合格"
+
+#. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
+msgid "Failure"
+msgstr "失败"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields.selection,name:sn_wsd_api.selection__sn_wsd_mes_test_result__test_type__final_test
@@ -933,6 +940,7 @@ msgstr "请求ID"
 
 #. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_api_request_log__request_time
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
 msgid "Request Time"
 msgstr "请求时间"
 
@@ -954,6 +962,7 @@ msgstr "响应体摘要。"
 #. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
 msgid "Result"
 msgstr "结果"
 
@@ -1138,6 +1147,11 @@ msgid "Submitter"
 msgstr "送检人"
 
 #. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
+msgid "Success"
+msgstr "成功"
+
+#. module: sn_wsd_api
 #: model:ir.model.fields,field_description:sn_wsd_api.field_sn_wsd_trace_event__summary
 msgid "Summary"
 msgstr "摘要"
@@ -1210,6 +1224,11 @@ msgid "The uploaded form, verbatim."
 msgstr "上报表单原文。"
 
 #. module: sn_wsd_api
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
+msgid "This Week"
+msgstr "本周"
+
+#. module: sn_wsd_api
 #. odoo-javascript
 #: code:addons/sn_wsd_api/static/src/xml/trace_page.xml:0
 msgid "Time"
@@ -1217,6 +1236,7 @@ msgstr "时间"
 
 #. module: sn_wsd_api
 #: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_detail_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_test_result_search model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_aoi_defect_detail_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_api.view_sn_wsd_api_request_log_search
 msgid "Today"
 msgstr "今天"
 

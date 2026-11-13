@@ -14,6 +14,23 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_piece_rate_search" model="ir.ui.view">
+        <field name="name">sn.wsd.piece.rate.search</field>
+        <field name="model">sn.wsd.piece.rate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="operation_id"/>
+                <field name="price"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <group>
+                    <filter name="g_product" string="Product" context="{'group_by': 'product_id'}"/>
+                    <filter name="g_operation" string="Operation" context="{'group_by': 'operation_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="view_sn_wsd_piece_rate_form" model="ir.ui.view">
         <field name="name">sn.wsd.piece.rate.form</field>
         <field name="model">sn.wsd.piece.rate</field>

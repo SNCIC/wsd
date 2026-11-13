@@ -41,10 +41,14 @@
                 <field name="employee_id"/>
                 <field name="employee_code"/>
                 <field name="settlement_id" string="Settlement"/>
+                <field name="mes_order_id" string="Product"
+                       filter_domain="[('mes_order_id.product_id', 'ilike', self)]"/>
+                <field name="route_operation_id" string="Operation"
+                       filter_domain="[('route_operation_id.operation_id', 'ilike', self)]"/>
                 <filter name="f_this_month" string="This Month"
                         domain="[('settlement_date', '&gt;=',
                                   context_today().strftime('%Y-%m-01'))]"/>
-                <separator string="Group By"/>
+                <separator/>
                 <filter string="Employee" name="g_employee"
                         context="{'group_by': 'employee_id'}"/>
                 <filter string="Business Month" name="g_month"

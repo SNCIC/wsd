@@ -33,5 +33,7 @@
         <field name="sequence">95</field>
     </record>
     <menuitem id="menu_sn_wsd_serial_identity" name="Serial Identities" parent="menu_sn_wsd_traceability" action="action_sn_wsd_serial_identity" sequence="10"/>
+    <!-- SN segment ledger (mo-sn-segment): MO-level pre-printed SN ranges -->
+    <menuitem id="menu_sn_wsd_sn_segment" name="SN Segments" parent="menu_sn_wsd_traceability" action="action_mrp_production_sn_segment" sequence="20"/>
     <menuitem id="menu_sn_wsd_meter_pack_record" name="Pack Records" parent="menu_sn_wsd_traceability" action="action_sn_wsd_meter_pack_record" sequence="30"/>
 </odoo>

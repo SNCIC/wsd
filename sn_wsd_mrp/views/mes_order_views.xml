@@ -466,6 +466,21 @@
                 <field name="product_id"/>
                 <field name="production_line_id"/>
                 <field name="production_id"/>
+                <separator/>
+                <filter name="mode_station" string="Station Tracking"
+                        domain="[('x_manage_mode', '=', 'station')]"/>
+                <filter name="mode_report" string="Operation Reporting"
+                        domain="[('x_manage_mode', '=', 'report')]"/>
+                <separator/>
+                <filter name="side_single" string="Single"
+                        domain="[('x_side', '=', 'single')]"/>
+                <filter name="side_top" string="Top (T)"
+                        domain="[('x_side', '=', 'top')]"/>
+                <filter name="side_bottom" string="Bottom (B)"
+                        domain="[('x_side', '=', 'bottom')]"/>
+                <separator/>
+                <filter name="plan_today" string="Today"
+                        domain="[('date_plan', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 <group>
                     <filter name="group_line" string="Production Line"
                             context="{'group_by': 'production_line_id'}"/>

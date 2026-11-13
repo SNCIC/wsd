@@ -12,7 +12,6 @@
                        decoration-muted="not x_piece_settled"
                        optional="show"/>
                 <field name="x_piece_settled" column_invisible="1"/>
-                <field name="participant_summary" optional="show"/>
                 <field name="participant_count" string="Participants" optional="hide"/>
                 <field name="team_id" optional="hide"/>
             </field>

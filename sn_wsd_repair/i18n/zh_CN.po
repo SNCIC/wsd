@@ -78,6 +78,11 @@ msgid "Add at least one defect line before reporting."
 msgstr "提报前请至少登记一条缺陷明细。"
 
 #. module: sn_wsd_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_cause_search
+msgid "Archived"
+msgstr "归档"
+
+#. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__message_attachment_count
 msgid "Attachment Count"
 msgstr "附件数量"
@@ -105,6 +110,7 @@ msgstr "原因编码"
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__company_id
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_cause_search
 msgid "Company"
 msgstr "公司"
 
@@ -189,6 +195,7 @@ msgstr "草稿"
 
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__route_operation_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_search
 msgid "Failed Operation"
 msgstr "不良工序"
 
@@ -208,6 +215,7 @@ msgstr "故障原因"
 #. module: sn_wsd_repair
 #: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_cause
 #: model:ir.actions.act_window,name:sn_wsd_repair.action_sn_wsd_repair_cause
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_cause_search
 msgid "Failure Causes"
 msgstr "故障原因"
 
@@ -332,6 +340,7 @@ msgstr "物料规格"
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_order__mes_order_id
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_pending__mes_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_search
 msgid "MES Order"
 msgstr "制令单"
 
@@ -483,6 +492,7 @@ msgstr "过站次数"
 #. module: sn_wsd_repair
 #: model:ir.actions.act_window,name:sn_wsd_repair.action_sn_wsd_repair_pending
 #: model:ir.ui.menu,name:sn_wsd_repair.menu_sn_wsd_repair_pending
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_search
 msgid "Pending Repair"
 msgstr "待维修"
 
@@ -1036,6 +1046,16 @@ msgstr "在进行维修提报之前，扫描的序列号必须处于异常或不
 msgid ""
 "The selected work order must belong to the selected manufacturing order."
 msgstr "所选的工单（工作令）必须属于所选的制造订单。"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_search
+msgid "This Week"
+msgstr "本周"
+
+#. module: sn_wsd_repair
+#: model_terms:ir.ui.view,arch_db:sn_wsd_repair.view_sn_wsd_repair_pending_search
+msgid "Today"
+msgstr "今天"
 
 #. module: sn_wsd_repair
 #: model:ir.model.fields,field_description:sn_wsd_repair.field_sn_wsd_repair_type__code

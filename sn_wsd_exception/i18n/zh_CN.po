@@ -44,6 +44,9 @@ msgid "Active"
 msgstr "有效"
 
 #. module: sn_wsd_exception
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_ticket_search
 msgid "Archived"
 msgstr "已归档"
@@ -149,6 +152,8 @@ msgstr "编码"
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__company_id
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_reason__company_id
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__company_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_search
 msgid "Company"
 msgstr "公司"
 
@@ -237,6 +242,7 @@ msgstr "默认等级"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__default_team_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_search
 msgid "Default Responsible Team"
 msgstr "默认责任组"
 
@@ -482,6 +488,7 @@ msgstr "异常原因"
 #: model:ir.actions.act_window,name:sn_wsd_exception.action_sn_wsd_exception_reason
 #: model:ir.ui.menu,name:sn_wsd_exception.menu_sn_wsd_exception_reason
 #: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_reason_search
 msgid "Exception Reasons"
 msgstr "异常原因"
 
@@ -804,6 +811,7 @@ msgstr "超时"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_category__parent_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_category_search
 msgid "Parent Category"
 msgstr "上级分类"
 
@@ -1123,6 +1131,7 @@ msgstr "责任组"
 
 #. module: sn_wsd_exception
 #: model:ir.model.fields,field_description:sn_wsd_exception.field_sn_wsd_exception_team__leader_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_exception.view_sn_wsd_exception_team_search
 msgid "Team Leader"
 msgstr "组长"
 

@@ -19,6 +19,29 @@
         </field>
     </record>
 
+    <record id="view_sn_wsd_repair_pending_search" model="ir.ui.view">
+        <field name="name">sn.wsd.repair.pending.search</field>
+        <field name="model">sn.wsd.repair.pending</field>
+        <field name="arch" type="xml">
+            <search string="Pending Repair">
+                <field name="serial_name"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="operation_name"/>
+                <field name="last_pass_time"/>
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('last_pass_time', '&gt;=', 'today'), ('last_pass_time', '&lt;', 'today +1d')]"/>
+                <filter string="This Week" name="filter_week"
+                        domain="[('last_pass_time', '&gt;=', '=week_start'), ('last_pass_time', '&lt;', '=week_start +1w')]"/>
+                <group>
+                    <filter string="MES Order" name="group_mes_order" context="{'group_by': 'mes_order_id'}"/>
+                    <filter string="Failed Operation" name="group_operation" context="{'group_by': 'route_operation_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_sn_wsd_repair_pending" model="ir.actions.act_window">
         <field name="name">Pending Repair</field>
         <field name="res_model">sn.wsd.repair.pending</field>

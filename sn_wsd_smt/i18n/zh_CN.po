@@ -119,6 +119,7 @@ msgstr "需要采取行动"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__active
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Active"
 msgstr "生效"
 
@@ -482,6 +483,7 @@ msgstr "确认"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__confirmed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
 msgid "Confirmed"
 msgstr "已确认"
 
@@ -604,6 +606,7 @@ msgstr "明细"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_feeder_line__device_seq
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__device_seq
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "Device Sequence"
 msgstr "设备序号"
 
@@ -671,6 +674,7 @@ msgstr "显示名称"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
 msgid "Done"
 msgstr "完成"
 
@@ -681,6 +685,7 @@ msgstr "下载导入模板"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_panel__state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
 msgid "Draft"
 msgstr "草稿"
 
@@ -1185,6 +1190,7 @@ msgstr "物料初始数量"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_feeder_line__loadpoint
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_log__loadpoint
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "Loadpoint"
 msgstr "料站"
 
@@ -1213,6 +1219,9 @@ msgstr "物料SN"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__mes_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_consumption_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_material_log_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "MES Order"
 msgstr "制令单"
 
@@ -1229,6 +1238,7 @@ msgstr "制令单没有生效中的 SMT 制造订单。"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__production_name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "MO Number"
 msgstr "制造订单号"
 
@@ -1320,6 +1330,7 @@ msgstr "人工报废。"
 #: model:ir.model,name:sn_wsd_smt.model_mrp_production
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_query_wizard__production_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__production_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
 msgid "Manufacturing Order"
 msgstr "制造订单"
 
@@ -1697,6 +1708,7 @@ msgstr "包装"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_board__panel_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Panel"
 msgstr "拼板"
 
@@ -1811,6 +1823,8 @@ msgstr "产品用料"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__product_no
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Product No"
 msgstr "产品编号"
 
@@ -1845,6 +1859,7 @@ msgstr "生产日期"
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_material_table_line__production_line_id
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_online_material__production_line_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "Production Line"
 msgstr "生产线"
 
@@ -1934,6 +1949,7 @@ msgstr "换料次数"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__replaced
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Replaced"
 msgstr "已替换"
 
@@ -2162,6 +2178,7 @@ msgstr "SMT 物料查询向导"
 #: model:ir.model,name:sn_wsd_smt.model_sn_smt_material_table
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_wsd_mes_order__x_smt_material_table_id
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_material_table__table_type__smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "SMT Material Table"
 msgstr "SMT 料站表"
 
@@ -2333,6 +2350,7 @@ msgstr "确认报废该料车？此操作不可逆。"
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__scrapped
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Scrapped"
 msgstr "已报废"
 
@@ -2432,6 +2450,7 @@ msgstr "制令单需要的料站不在料车上：%s。"
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_sn_smt_pcb_panel__state
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_cart_search
 #: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_feeder_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Status"
 msgstr "状态"
 
@@ -2913,6 +2932,7 @@ msgstr "轨道类型"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields,field_description:sn_wsd_smt.field_mrp_feeder_line__is_tray
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "Tray"
 msgstr "托盘"
 
@@ -3040,6 +3060,7 @@ msgstr "值"
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_pcb_board__state__voided
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
 msgid "Voided"
 msgstr "已作废"
 
@@ -3129,6 +3150,7 @@ msgstr "整单批量下料该制令单的全部在线物料？各卷余量将保
 
 #. module: sn_wsd_smt
 #: model:ir.model.fields.selection,name:sn_wsd_smt.selection__sn_smt_online_material__source__drawing_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
 msgid "Drawing Material List"
 msgstr "关键物料清单"
 
@@ -3329,3 +3351,61 @@ msgid ""
 "Confirm this reel is used up? Its remaining book quantity will be zeroed "
 "at the next completion backflush (reel-end loss attributed to this order)."
 msgstr "确认该卷已用尽？其剩余账面量将在下次完工倒冲归零（卷终损耗归本单）。"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+msgid "Board SN"
+msgstr "单板SN"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
+msgid "Created Day"
+msgstr "创建日期"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Face"
+msgstr "面别"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Load State"
+msgstr "上料状态"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Material Loaded"
+msgstr "已上料"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Not Loaded"
+msgstr "未上料"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Reel End"
+msgstr "卷终"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Skipped"
+msgstr "跳过"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_online_material_search
+msgid "Table"
+msgstr "表号"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
+msgid "This Week"
+msgstr "本周"
+
+#. module: sn_wsd_smt
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_panel_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_smt.view_sn_smt_pcb_board_search
+msgid "Today"
+msgstr "今天"

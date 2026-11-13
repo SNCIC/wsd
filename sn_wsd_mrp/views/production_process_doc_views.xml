@@ -15,6 +15,24 @@
         </field>
     </record>
 
+    <record id="view_production_process_doc_type_search" model="ir.ui.view">
+        <field name="name">production.process.doc.type.search</field>
+        <field name="model">production.process.doc.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <separator/>
+                <filter name="inactive" string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_company" string="Company"
+                            context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_production_process_doc_type" model="ir.actions.act_window">
         <field name="name">Process Document Types</field>
         <field name="res_model">production.process.doc.type</field>
