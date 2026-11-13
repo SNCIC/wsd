@@ -102,11 +102,32 @@ class PurchaseRequestLine(models.Model):
         compute='_compute_reception_step_quantities',
         help='Quantity that has completed the storage step of the reception.',
     )
+    # The module reports a fully received line as 'done', a state the purchase
+    # order no longer has in Odoo 19 (a completed order is a 'purchase' order
+    # flagged as locked), so the selection is rebuilt with that value. A value
+    # missing from the selection makes the web client fail to render the field.
+    purchase_state = fields.Selection(selection='_selection_purchase_state')
 
     _check_approved_qty = models.Constraint(
         'CHECK(approved_qty >= 0 AND approved_qty <= product_qty)',
         'The approved quantity must be between zero and the requested quantity.',
     )
+
+    @api.model
+    def _selection_purchase_state(self):
+        """Purchase status, including the receiving state of the line.
+
+        The selection is the one of the purchase order, completed with the
+        'done' state that the module still reports for a fully received line.
+        That state is inserted before the cancelled one, so the choices read in
+        the order the purchase goes through.
+        """
+        states = self.env['purchase.order']._fields['state']._description_selection(self.env)
+        cancelled = [state for state in states if state[0] == 'cancel']
+        options = [state for state in states if state[0] != 'cancel']
+        options.append(('done', _('Fully Received')))
+        options.extend(cancelled)
+        return options
 
     @api.depends('approved_qty', 'qty_done')
     def _compute_approved_pending_qty(self):

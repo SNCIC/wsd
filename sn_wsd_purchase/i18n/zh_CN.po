@@ -534,6 +534,8 @@ msgid "Partially Received"
 msgstr "部分收货"
 
 #. module: sn_wsd_purchase
+#. odoo-python
+#: code:addons/sn_wsd_purchase/models/purchase_request.py:0
 #: model:ir.model.fields.selection,name:sn_wsd_purchase.selection__purchase_request_line__receipt_status__fully_received
 #: model_terms:ir.ui.view,arch_db:sn_wsd_purchase.view_sn_purchase_detail_search
 msgid "Fully Received"
