@@ -130,11 +130,41 @@ class PurchaseRequestLine(models.Model):
         return options
 
     @api.depends(
+        'purchase_request_allocation_ids',
+        'purchase_request_allocation_ids.requested_product_uom_qty',
+        'purchase_request_allocation_ids.purchase_line_id',
+        'purchase_request_allocation_ids.purchase_line_id.product_qty',
+        'purchase_request_allocation_ids.purchase_line_id.product_uom_id',
+        'purchase_request_allocation_ids.purchase_line_id.state',
+        'purchase_lines',
+        'purchase_lines.product_qty',
+        'purchase_lines.product_uom_id',
+        'purchase_lines.state',
+        'product_uom_id',
+    )
+    def _compute_purchased_qty(self):
+        """Ordered quantity, split between the lines sharing a purchase line.
+
+        The module counts the whole quantity of a purchase order line on every
+        request line linked to it, which counts the same goods once per line as
+        soon as several request lines share an order line. The quantity is
+        split between them here instead.
+        """
+        quantities = self._get_ordered_quantities()
+        by_line = defaultdict(float)
+        for (line_id, _purchase_line_id), quantity in quantities.items():
+            by_line[line_id] += quantity
+        for line in self:
+            line.purchased_qty = by_line.get(line.id, 0.0)
+
+    @api.depends(
         'purchase_lines',
         'purchase_lines.state',
         'purchase_lines.order_id.state',
         'purchase_lines.product_qty',
         'purchase_lines.qty_received',
+        'purchase_request_allocation_ids',
+        'purchase_request_allocation_ids.requested_product_uom_qty',
     )
     def _compute_purchase_state(self):
         """Follow the receipt as well as the state of the purchase order.
@@ -142,16 +172,54 @@ class PurchaseRequestLine(models.Model):
         The module only depends on the state of the purchase order, which does
         not change when the goods are received, so a fully received line kept
         the status of its order. The quantities the computation compares are
-        added to its dependencies.
+        added to its dependencies, and a line is only received in full when the
+        order line it is split on is, and when a quantity is really ordered for
+        it.
         """
-        return super()._compute_purchase_state()
+        quantities = self._get_ordered_quantities()
+        for line in self:
+            line.purchase_state = line._get_purchase_state(quantities)
 
-    @api.depends('approved_qty', 'qty_done')
+    def _get_purchase_state(self, quantities):
+        """Purchase status of the line, given its split quantities.
+
+        Same states as the module: the line follows the state of its orders,
+        and 'done' is reported for a fully received order line. The quantities
+        split on the line tell whether the line is really served by that order
+        line.
+        """
+        self.ensure_one()
+        purchase_lines = self.purchase_lines
+        if not purchase_lines:
+            return False
+        if any(
+            quantities.get((self.id, purchase_line.id))
+            and purchase_line.qty_received >= purchase_line.product_qty
+            and purchase_line.state == 'purchase'
+            for purchase_line in purchase_lines
+        ):
+            return 'done'
+        if all(purchase_line.state == 'cancel' for purchase_line in purchase_lines):
+            return 'cancel'
+        if any(purchase_line.state == 'purchase' for purchase_line in purchase_lines):
+            return 'purchase'
+        if any(purchase_line.state == 'to approve' for purchase_line in purchase_lines):
+            return 'to approve'
+        if any(purchase_line.state == 'sent' for purchase_line in purchase_lines):
+            return 'sent'
+        if all(purchase_line.state in ('draft', 'cancel') for purchase_line in purchase_lines):
+            return 'draft'
+        return False
+
+    @api.depends('approved_qty', 'purchased_qty')
     def _compute_approved_pending_qty(self):
         for line in self:
             line.approved_pending_qty = max(line.approved_qty - line.purchased_qty, 0.0)
 
     @api.depends(
+        'purchase_request_allocation_ids',
+        'purchase_request_allocation_ids.requested_product_uom_qty',
+        'purchase_request_allocation_ids.purchase_line_id',
         'purchase_lines',
         'purchase_lines.state',
         'purchase_lines.price_total',
@@ -166,14 +234,29 @@ class PurchaseRequestLine(models.Model):
         'product_uom_id',
     )
     def _compute_tax_included_amounts(self):
+        """Tax included amounts of the quantities ordered for the line.
+
+        The module keeps the whole amount of a purchase order line, which is
+        counted once per request line when several request lines share the same
+        order line. The amount follows the split quantities instead.
+        """
+        quantities = self._get_ordered_quantities()
         for line in self:
             tax_included_amount = 0.0
-            purchased_qty = 0.0
+            ordered_qty = 0.0
             for purchase_line in line.purchase_lines.filtered(
                 lambda purchase_line: purchase_line.state != 'cancel'
             ):
+                quantity = quantities.get((line.id, purchase_line.id), 0.0)
+                if not quantity or not purchase_line.product_qty:
+                    continue
+                ordered_qty += quantity
                 order = purchase_line.order_id
-                amount = purchase_line.price_total
+                amount = self._quantity_in_uom(
+                    quantity,
+                    line.product_uom_id,
+                    purchase_line.product_uom_id,
+                ) * (purchase_line.price_total / purchase_line.product_qty)
                 if order.currency_id != line.currency_id:
                     amount = order.currency_id._convert(
                         amount,
@@ -183,17 +266,74 @@ class PurchaseRequestLine(models.Model):
                         round=False,
                     )
                 tax_included_amount += amount
-                if line.product_uom_id:
-                    purchased_qty += purchase_line.product_uom_id._compute_quantity(
-                        purchase_line.product_qty,
-                        line.product_uom_id,
-                    )
-                else:
-                    purchased_qty += purchase_line.product_qty
             line.tax_included_amount = tax_included_amount
             line.tax_included_unit_price = (
-                tax_included_amount / purchased_qty if purchased_qty else 0.0
+                tax_included_amount / ordered_qty if ordered_qty else 0.0
             )
+
+    def _quantity_in_uom(self, quantity, from_uom, to_uom):
+        """Quantity converted between two UoMs, kept as is when one is missing."""
+        if not from_uom or not to_uom or from_uom == to_uom:
+            return quantity
+        return from_uom._compute_quantity(quantity, to_uom)
+
+    def _get_ordered_quantities(self):
+        """Quantity ordered for each request line, per purchase order line.
+
+        A purchase order line is shared by every request line it was created
+        for, so its quantity is split between them in the order the allocations
+        were created, and capped by the quantity of the order line: the order
+        may have been reduced after the request, in which case the quantities
+        of the request lines no longer add up to the ordered one. The quantities
+        are given in the UoM of the request line, keyed by request line and
+        purchase order line.
+
+        Request lines linked to the order line without an allocation take what
+        is left, so the split still adds up to the ordered quantity.
+        """
+        quantities = defaultdict(float)
+        purchase_lines = self.purchase_lines.filtered(lambda line: line.state != 'cancel')
+        for purchase_line in purchase_lines:
+            purchase_uom = purchase_line.product_uom_id
+            remaining = purchase_line.product_qty
+            covered = set()
+            for allocation in purchase_line.purchase_request_allocation_ids.sorted('id'):
+                request_line = allocation.purchase_request_line_id
+                requested = self._quantity_in_uom(
+                    allocation.requested_product_uom_qty,
+                    allocation.product_uom_id,
+                    purchase_uom,
+                )
+                quantity = min(requested, remaining)
+                if quantity <= 0.0:
+                    continue
+                quantities[(request_line.id, purchase_line.id)] += self._quantity_in_uom(
+                    quantity,
+                    purchase_uom,
+                    request_line.product_uom_id,
+                )
+                remaining -= quantity
+                covered.add(request_line.id)
+            if remaining <= 0.0:
+                continue
+            for request_line in purchase_line.purchase_request_lines.filtered(
+                lambda line: line.id not in covered
+            ).sorted('id'):
+                requested = self._quantity_in_uom(
+                    request_line.approved_qty or request_line.product_qty,
+                    request_line.product_uom_id,
+                    purchase_uom,
+                )
+                quantity = min(requested, remaining)
+                if quantity <= 0.0:
+                    continue
+                quantities[(request_line.id, purchase_line.id)] += self._quantity_in_uom(
+                    quantity,
+                    purchase_uom,
+                    request_line.product_uom_id,
+                )
+                remaining -= quantity
+        return quantities
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -235,10 +375,7 @@ class PurchaseRequestLine(models.Model):
             line.expected_arrival_date = min(dates) if dates else False
 
     @api.depends(
-        'purchase_lines',
-        'purchase_lines.product_qty',
-        'purchase_lines.product_uom_id',
-        'purchase_lines.state',
+        'purchased_qty',
         'qty_done',
     )
     def _compute_receipt_status(self):
