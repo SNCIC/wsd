@@ -812,7 +812,12 @@ class QualityInspection(models.Model):
 
     def _ensure_sample_units(self):
         for inspection in self.filtered(lambda record: not record.sample_ids and record.sample_size > 0):
-            if inspection.sample_selection_method == 'manual':
+            if (inspection.sample_selection_method == 'manual'
+                    and inspection._get_candidate_sample_serials()):
+                # A manual selection only stands when there are serials to
+                # pick from: the inspector chooses them. An incoming lot
+                # carries no production serial, so its manual records still
+                # get the placeholder ledger the finish gate counts.
                 continue
             if inspection.sampling_method == 'full' and inspection.sample_size > MAX_DETAILED_SAMPLE_ROWS:
                 inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
@@ -828,11 +833,60 @@ class QualityInspection(models.Model):
             if not inspection.sample_value_ids:
                 inspection.write({'sample_value_ids': inspection._sample_value_commands()})
 
+    def _ensure_iqc_sample_ledger(self):
+        """Materialize the sample ledger an incoming inspection counts on.
+
+        The ledger is what the finish gate counts, but a record configured
+        for a manual sample selection is created without any row, and the
+        gate then refuses a lot whose items all passed. Required items
+        already settled pass mean the lot carried no defect, so the rows
+        generated here are settled pass with them; a record still holding an
+        open item keeps its ledger untouched for the inspector.
+        """
+        for inspection in self.filtered(
+                lambda record: record.inspection_type == 'iqc'
+                and not record.x_full_inspection
+                and record.sample_size > 0
+                and record.sample_checked_qty < record.sample_size):
+            if inspection.line_ids.filtered(
+                    lambda line: line.required and line.result != 'pass'):
+                # An item is still open: the lot is not settled, so the
+                # inspector keeps working on the ledger.
+                continue
+            if not inspection.sample_ids:
+                # An empty ledger is filled with the placeholder rows the
+                # record would have been created with. No measurement row is
+                # opened here: an item settled at lot level needs none, and
+                # opening them would only raise the next gate.
+                inspection.write({'sample_ids': inspection._sample_commands_from_placeholders()})
+            inspection.sample_ids.filtered(
+                lambda sample: sample.result == 'pending').write({'result': 'pass'})
+            inspection.flush_recordset()
+            inspection.invalidate_recordset(['sample_checked_qty'])
+            shortage = inspection.sample_size - inspection.sample_checked_qty
+            if shortage > 0:
+                # The rows already recorded do not cover the sample size:
+                # the gap is closed on one aggregated row, the way a large
+                # lot is kept on a single ledger line.
+                inspection.write({'sample_ids': [Command.create({
+                    'sequence': max(inspection.sample_ids.mapped('sequence') or [0]) + 1,
+                    'company_id': inspection.company_id.id,
+                    'lot_id': inspection.lot_id.id,
+                    'qty': shortage,
+                    'result': 'pass',
+                })]})
+        return True
+
     def action_done(self):
         for inspection in self:
             missing = inspection.line_ids.filtered(lambda line: line.required and line.result == 'pending')
             if missing:
                 raise UserError(_('Complete all required inspection items before finishing the inspection.'))
+            # An inspection judged item by item can reach the finish gate
+            # without a sample row (manual selection, or a record created
+            # before the ledger was filled): backfill it so the counted
+            # quantity follows the judgment instead of blocking the lot.
+            inspection._ensure_iqc_sample_ledger()
             # Full-lot OQC keeps no sample ledger (boards are judged one
             # by one at the station): the n-sample gate does not apply
             # there. Quantity closure is governed by the full-lot gap
@@ -857,6 +911,9 @@ class QualityInspection(models.Model):
 
     def action_set_all_pass(self):
         result = super().action_set_all_pass()
+        # Every required item passed, so the sample ledger is backed up the
+        # same way: the button settles the ledger a manual record never had.
+        self._ensure_iqc_sample_ledger()
         self.mapped('sample_ids').filtered(lambda sample: sample.result == 'pending').write({'result': 'pass'})
         return result
 
