@@ -129,6 +129,23 @@ class PurchaseRequestLine(models.Model):
         options.extend(cancelled)
         return options
 
+    @api.depends(
+        'purchase_lines',
+        'purchase_lines.state',
+        'purchase_lines.order_id.state',
+        'purchase_lines.product_qty',
+        'purchase_lines.qty_received',
+    )
+    def _compute_purchase_state(self):
+        """Follow the receipt as well as the state of the purchase order.
+
+        The module only depends on the state of the purchase order, which does
+        not change when the goods are received, so a fully received line kept
+        the status of its order. The quantities the computation compares are
+        added to its dependencies.
+        """
+        return super()._compute_purchase_state()
+
     @api.depends('approved_qty', 'qty_done')
     def _compute_approved_pending_qty(self):
         for line in self:
