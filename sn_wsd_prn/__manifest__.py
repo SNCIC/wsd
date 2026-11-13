@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Dot-Matrix Sheets',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'summary': 'ESC/P dot-matrix engine shared by the printed transport and '
                'production documents',
     'category': 'Inventory/Inventory',

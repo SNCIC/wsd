@@ -26,7 +26,7 @@ class SnPrnMixin(models.AbstractModel):
     )
     sn_prn_reviewer_id = fields.Many2one(
         'res.users',
-        string='Approved By',
+        string='Sheet Approved By',
         copy=False,
         help='Name printed on the approval line of the dot-matrix sheet.',
     )

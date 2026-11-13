@@ -14,6 +14,8 @@ msgstr ""
 #. module: sn_wsd_account
 #. odoo-python
 #: code:addons/sn_wsd_account/report/vendor_bill_prn.py:0
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_is_expense_invoice
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_bank_statement_line__sn_prn_is_expense_invoice
 msgid "Expense Invoice"
 msgstr "费用发票"
 
@@ -107,3 +109,67 @@ msgstr "打印费用发票"
 #: model:ir.actions.server,name:sn_wsd_account.action_print_expense_invoice_prn
 msgid "Print Expense Invoices (ESC/P)"
 msgstr "批量打印费用发票（ESC/P）"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_reviewer_id
+msgid "Sheet Approved By"
+msgstr "审核人"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_account.field_account_move__sn_prn_reviewer_id
+msgid "Name printed on the approval line of the dot-matrix sheet."
+msgstr "打印在点阵单据审核栏的人名。"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_note
+msgid "Print Remark"
+msgstr "打印备注"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_account.field_account_move__sn_prn_note
+msgid "Remark printed on the dot-matrix sheet of this document."
+msgstr "打印在本单据点阵表单上的备注。"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_print_count
+msgid "Print Count"
+msgstr "打印次数"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_account.field_account_move__sn_prn_print_count
+msgid "Number of times the dot-matrix sheet of this document has been printed."
+msgstr "本单据点阵表单已打印的次数。"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_keeper_id
+msgid "Warehouse Keeper"
+msgstr "仓管员"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_account.field_account_move__sn_prn_keeper_id
+msgid "Name printed on the keeper line of the dot-matrix sheet."
+msgstr "打印在点阵单据仓管员栏的人名。"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_account.field_account_move__sn_prn_inspector_id
+msgid "Inspected By"
+msgstr "检验人"
+
+#. module: sn_wsd_account
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_account.field_account_move__sn_prn_inspector_id
+msgid ""
+"Name printed on the inspection line of the dot-matrix sheet. Kept on the "
+"document rather than read from the quality control, because a sheet is also "
+"printed for the transfers that no inspection covers."
+msgstr ""
+"打印在点阵单据检验栏的人名。保存在单据上而不是取自质检记录，因为无检验覆盖的调拨也要打印单据。"
