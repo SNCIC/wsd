@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_sn_inj_plan" model="ir.sequence">
+            <field name="name">注塑排产计划</field>
+            <field name="code">sn.inj.plan</field>
+            <field name="prefix">ZS%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_mold_change" model="ir.sequence">
+            <field name="name">换模单</field>
+            <field name="code">sn.inj.mold.change</field>
+            <field name="prefix">HM%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_fai" model="ir.sequence">
+            <field name="name">注塑首件</field>
+            <field name="code">sn.inj.fai</field>
+            <field name="prefix">SJ%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_process_card" model="ir.sequence">
+            <field name="name">标准工艺卡</field>
+            <field name="code">sn.inj.process.card</field>
+            <field name="prefix">GYK-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_drying" model="ir.sequence">
+            <field name="name">原料烘干</field>
+            <field name="code">sn.inj.drying</field>
+            <field name="prefix">HG%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_color_batch" model="ir.sequence">
+            <field name="name">配色批次</field>
+            <field name="code">sn.inj.color.batch</field>
+            <field name="prefix">PS%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_regrind" model="ir.sequence">
+            <field name="name">水口料台账</field>
+            <field name="code">sn.inj.regrind</field>
+            <field name="prefix">SK%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_mix" model="ir.sequence">
+            <field name="name">投料配料单</field>
+            <field name="code">sn.inj.mix</field>
+            <field name="prefix">TL%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_report" model="ir.sequence">
+            <field name="name">模次报工</field>
+            <field name="code">sn.inj.report</field>
+            <field name="prefix">BG%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_sn_inj_mold_maint" model="ir.sequence">
+            <field name="name">模具保养任务</field>
+            <field name="code">sn.inj.mold.maint</field>
+            <field name="prefix">MB%(y)s%(month)s</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

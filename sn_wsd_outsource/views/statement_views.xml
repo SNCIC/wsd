@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_statement_list" model="ir.ui.view">
+        <field name="name">sn.out.statement.list</field>
+        <field name="model">sn.out.statement</field>
+        <field name="arch" type="xml">
+            <list string="代工对账单">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="factory_id"/>
+                <field name="order_text"/>
+                <field name="period" optional="show"/>
+                <field name="good_qty"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amount_goods" sum="合计"/>
+                <field name="amount_deduct" sum="合计"/>
+                <field name="amount_total" sum="合计"/>
+                <field name="state" widget="badge" decoration-info="state == 'confirmed'" decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_statement_form" model="ir.ui.view">
+        <field name="name">sn.out.statement.form</field>
+        <field name="model">sn.out.statement</field>
+        <field name="arch" type="xml">
+            <form string="代工对账单">
+                <header>
+                    <button name="action_confirm" type="object" string="双方确认" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="结算" class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_reset" type="object" string="退回草稿" invisible="state != 'confirmed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="factory_id" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="order_text"/>
+                            <field name="period" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="good_qty"/>
+                            <field name="amount_goods"/>
+                            <field name="amount_excess"/>
+                            <field name="amount_concession"/>
+                            <field name="amount_total" class="fw-bold"/>
+                            <field name="confirm_user" readonly="state != 'draft'"/>
+                            <field name="confirm_date"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="1">
+                        <list decoration-danger="amount &lt; 0">
+                            <field name="order_id"/>
+                            <field name="kind" widget="badge" decoration-success="kind == 'goods'" decoration-danger="kind != 'goods'"/>
+                            <field name="name"/>
+                            <field name="product_id" optional="hide"/>
+                            <field name="qty"/>
+                            <field name="price"/>
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="amount" sum="合计"/>
+                        </list>
+                    </field>
+                    <div class="text-muted small">应付金额 = 合格入库良品数 × 加工单价 − 超耗扣款 − 让步接收扣款。</div>
+                    <field name="note" placeholder="备注"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_out_statement" model="ir.actions.act_window">
+        <field name="name">代工对账单</field>
+        <field name="res_model">sn.out.statement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

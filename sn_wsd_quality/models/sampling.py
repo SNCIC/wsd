@@ -81,7 +81,7 @@ class QualitySamplingStandard(models.Model):
     @api.model
     def _matrix_level_columns(self):
         return [
-            {'key': key, 'label': label}
+            {'key': key, 'label': _(label)}  # LOCAL PATCH #5: 列标题补 _() 以便翻译
             for key, label in INSPECTION_LEVEL_SELECTION
         ]
 

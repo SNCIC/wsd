@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_issue_list" model="ir.ui.view">
+        <field name="name">sn.out.issue.list</field>
+        <field name="model">sn.out.issue</field>
+        <field name="arch" type="xml">
+            <list string="委外发料/退料">
+                <field name="name"/>
+                <field name="kind" widget="badge" decoration-info="kind == 'issue'" decoration-warning="kind == 'return'"/>
+                <field name="date"/>
+                <field name="order_id"/>
+                <field name="factory_id"/>
+                <field name="product_id"/>
+                <field name="total_qty" sum="合计"/>
+                <field name="picking_id"/>
+                <field name="handler" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_issue_form" model="ir.ui.view">
+        <field name="name">sn.out.issue.form</field>
+        <field name="model">sn.out.issue</field>
+        <field name="arch" type="xml">
+            <form string="委外发料/退料">
+                <header>
+                    <button name="action_fill_from_bom" type="object" string="按 BOM 重算" invisible="state != 'draft' or kind != 'issue'"/>
+                    <button name="action_done" type="object" string="确认出库" class="btn-primary" invisible="state != 'draft' or kind != 'issue'"/>
+                    <button name="action_done" type="object" string="确认退回入库" class="btn-primary" invisible="state != 'draft' or kind != 'return'"/>
+                    <button name="action_cancel" type="object" string="取消" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind" readonly="1"/>
+                            <field name="order_id" readonly="1"/>
+                            <field name="factory_id"/>
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="handler" readonly="state != 'draft'"/>
+                            <field name="picking_id"/>
+                            <field name="note" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="lot_id"/>
+                            <field name="unit_qty" optional="show"/>
+                            <field name="std_qty" optional="show"/>
+                            <field name="qty" sum="合计"/>
+                            <field name="uom_id"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sn_out_issue" model="ir.actions.act_window">
+        <field name="name">委外发料/退料</field>
+        <field name="res_model">sn.out.issue</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

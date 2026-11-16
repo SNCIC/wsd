@@ -32,6 +32,7 @@
         'wizard/process_doc_copy_wizard_views.xml',
         'views/batch_pass_log_views.xml',
         'views/mrp_production_views.xml',
+        'views/mrp_production_meter_info_views.xml',  # LOCAL PATCH #8
         'views/mes_order_views.xml',
         'views/production_process_doc_views.xml',
         'views/mes_route_check_views.xml',

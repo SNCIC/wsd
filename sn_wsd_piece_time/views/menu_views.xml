@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_time_entry" name="工时记录"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_time_entry" sequence="22"/>
+    <menuitem id="menu_work_timer" name="工位计时"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_work_timer" sequence="24"/>
+    <menuitem id="menu_labor_analysis" name="工时分析"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_labor_analysis" sequence="34"/>
+    <menuitem id="menu_labor_cost" name="制令单人工成本"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_labor_cost" sequence="36"/>
+    <menuitem id="menu_payroll_summary" name="员工月度计件计时汇总"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_payroll_summary" sequence="40"/>
+    <menuitem id="menu_payroll_export" name="导出月度工资表"
+              parent="sn_wsd_piece_rate.menu_sn_wsd_piece_rate_root"
+              action="action_payroll_export" sequence="42"/>
+</odoo>

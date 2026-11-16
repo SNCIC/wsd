@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_time_entry" model="ir.sequence">
+            <field name="name">工时记录</field>
+            <field name="code">sn.wsd.time.entry</field>
+            <field name="prefix">GS%(y)s%(month)s-</field>
+            <field name="padding">4</field>
+        </record>
+        <record id="seq_work_timer" model="ir.sequence">
+            <field name="name">工位计时</field>
+            <field name="code">sn.wsd.work.timer</field>
+            <field name="prefix">JS%(y)s%(month)s-</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

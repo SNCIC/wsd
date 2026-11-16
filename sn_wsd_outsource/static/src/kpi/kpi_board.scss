@@ -1,0 +1,5 @@
+.o_out_kpi {
+    .o_out_kpi_cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .o_out_kpi_charts { grid-template-columns: 1.2fr 1fr 1fr; }
+    .o_out_kpi_canvas { position: relative; height: 640px; }
+}

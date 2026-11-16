@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_balance_list" model="ir.ui.view">
+        <field name="name">sn.out.balance.list</field>
+        <field name="model">sn.out.balance</field>
+        <field name="arch" type="xml">
+            <list string="物料平衡" decoration-danger="excess_qty &gt; 0" decoration-warning="state == 'draft'">
+                <field name="order_id"/>
+                <field name="factory_id"/>
+                <field name="finished_product_id" optional="show"/>
+                <field name="product_id"/>
+                <field name="unit_qty" optional="show"/>
+                <field name="issued_qty"/>
+                <field name="std_use_qty"/>
+                <field name="reasonable_loss_qty"/>
+                <field name="returned_qty"/>
+                <field name="excess_qty"/>
+                <field name="remaining_qty"/>
+                <field name="actual_loss_rate" optional="show"/>
+                <field name="loss_rate_max" optional="show"/>
+                <field name="excess_rate"/>
+                <field name="price" optional="show"/>
+                <field name="deduct_amount" sum="合计"/>
+                <field name="check_ok" widget="boolean"/>
+                <field name="state" widget="badge" decoration-success="state == 'confirmed'" decoration-warning="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_balance_form" model="ir.ui.view">
+        <field name="name">sn.out.balance.form</field>
+        <field name="model">sn.out.balance</field>
+        <field name="arch" type="xml">
+            <form string="物料平衡">
+                <header>
+                    <button name="action_refresh" type="object" string="重新计算" invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="确认平衡" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="有超耗" bg_color="text-bg-danger" invisible="excess_qty &lt;= 0"/>
+                    <div class="oe_title"><h2><field name="order_id" readonly="1"/> · <field name="product_id" readonly="1"/></h2></div>
+                    <div class="alert alert-info" role="alert">
+                        平衡式：发料 = 回货良品耗用 + 合理损耗 + 退料 + 超耗（代工厂结存须退回为 0）
+                        <br/><b><field name="formula" nolabel="1"/></b>
+                    </div>
+                    <group>
+                        <group string="发出与回收">
+                            <field name="factory_id"/>
+                            <field name="finished_product_id"/>
+                            <field name="lot_text"/>
+                            <field name="issued_qty"/>
+                            <field name="returned_qty"/>
+                            <field name="remaining_qty" readonly="state != 'draft'"/>
+                            <field name="good_qty"/>
+                            <field name="unit_qty"/>
+                            <field name="std_use_qty"/>
+                        </group>
+                        <group string="损耗与扣款">
+                            <field name="actual_loss_qty"/>
+                            <field name="actual_loss_rate"/>
+                            <field name="loss_rate_max"/>
+                            <field name="allowed_loss_qty"/>
+                            <field name="reasonable_loss_qty"/>
+                            <field name="excess_qty"/>
+                            <field name="excess_rate"/>
+                            <field name="price" readonly="state != 'draft'"/>
+                            <field name="penalty_factor"/>
+                            <field name="deduct_amount"/>
+                            <field name="check_ok"/>
+                            <field name="consume_picking_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_out_balance_search" model="ir.ui.view">
+        <field name="name">sn.out.balance.search</field>
+        <field name="model">sn.out.balance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="order_id"/>
+                <field name="factory_id"/>
+                <field name="product_id"/>
+                <filter name="excess" string="有超耗" domain="[('excess_qty', '&gt;', 0)]"/>
+                <filter name="draft" string="待确认" domain="[('state', '=', 'draft')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_out_balance" model="ir.actions.act_window">
+        <field name="name">物料平衡</field>
+        <field name="res_model">sn.out.balance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

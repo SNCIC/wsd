@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_request_list" model="ir.ui.view">
+        <field name="name">sn.out.request.list</field>
+        <field name="model">sn.out.request</field>
+        <field name="arch" type="xml">
+            <list string="外发申请与询价" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="date_request"/>
+                <field name="source"/>
+                <field name="sale_order_id" optional="show"/>
+                <field name="plan_id" optional="show"/>
+                <field name="customer_id" optional="hide"/>
+                <field name="product_id"/>
+                <field name="qty"/>
+                <field name="date_need"/>
+                <field name="reason_type"/>
+                <field name="load_pct"/>
+                <field name="quote_count" string="询价家数"/>
+                <field name="awarded_quote_id" optional="hide"/>
+                <field name="order_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'quoting'" decoration-success="state == 'awarded'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_request_form" model="ir.ui.view">
+        <field name="name">sn.out.request.form</field>
+        <field name="model">sn.out.request</field>
+        <field name="arch" type="xml">
+            <form string="外发申请与询价">
+                <header>
+                    <button name="action_eval_load" type="object" string="评估本厂负荷" invisible="state not in ('draft', 'quoting')"/>
+                    <button name="action_start_quote" type="object" string="发起询价" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="取消" invisible="state not in ('draft', 'quoting')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,quoting,awarded"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_order" type="object" class="oe_stat_button" icon="fa-industry"
+                                invisible="not order_id">
+                            <field name="order_id" widget="statinfo" string="代工单"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="外发需求">
+                            <field name="source"/>
+                            <field name="sale_order_id" invisible="source != 'sale'"/>
+                            <field name="plan_id" invisible="source != 'plan'"/>
+                            <field name="customer_id"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                            <field name="date_need"/>
+                            <field name="mold_id"/>
+                            <field name="suggest_mode"/>
+                        </group>
+                        <group string="外发原因（本厂产能评估）">
+                            <field name="reason_type"/>
+                            <field name="reason" placeholder="说明产能不足的具体原因"/>
+                            <field name="need_hours"/>
+                            <field name="load_pct" widget="progressbar"/>
+                            <field name="load_summary" nolabel="1" colspan="2" class="text-danger fw-bold"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="询价比价" name="quotes">
+                            <field name="quote_ids" readonly="state not in ('draft', 'quoting')">
+                                <list editable="bottom" decoration-success="awarded" decoration-muted="coop_state == 'suspended' or state == 'lost'"
+                                      decoration-bf="is_best">
+                                    <field name="factory_id"/>
+                                    <field name="coop_state" widget="badge" decoration-success="coop_state == 'qualified'"
+                                           decoration-warning="coop_state == 'trial'" decoration-danger="coop_state == 'suspended'"/>
+                                    <field name="rating" widget="badge" decoration-success="rating == 'A'" decoration-info="rating == 'B'"
+                                           decoration-warning="rating == 'C'" decoration-danger="rating == 'D'"/>
+                                    <field name="capacity_pcs_day"/>
+                                    <field name="mode"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount" optional="show"/>
+                                    <field name="lead_days"/>
+                                    <field name="date_promise"/>
+                                    <field name="late_days"/>
+                                    <field name="loss_rate"/>
+                                    <field name="score"/>
+                                    <field name="is_best" widget="boolean"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'awarded'" decoration-info="state == 'quoted'"/>
+                                    <field name="awarded" column_invisible="1"/>
+                                    <field name="note" optional="hide"/>
+                                    <button name="action_award" type="object" string="定点" icon="fa-check"
+                                            class="btn-link" invisible="parent.state != 'quoting' or state != 'quoted' or coop_state == 'suspended'"/>
+                                </list>
+                            </field>
+                            <div class="text-muted small">综合得分 = 价格分 40（最低价/本家价）+ 交期分 30（晚于要求每天扣 6）+ 绩效得分 × 30%；暂停合作的代工厂不可定点。</div>
+                        </page>
+                        <page string="本厂机台负荷" name="load">
+                            <field name="load_line_ids" readonly="1">
+                                <list decoration-danger="load_level == 'full'" decoration-warning="load_level == 'busy'">
+                                    <field name="machine_id"/>
+                                    <field name="tonnage"/>
+                                    <field name="avail_hours" sum="合计"/>
+                                    <field name="planned_hours" sum="合计"/>
+                                    <field name="free_hours" sum="合计"/>
+                                    <field name="load_pct" widget="progressbar"/>
+                                    <field name="load_level" widget="badge" decoration-danger="load_level == 'full'"
+                                           decoration-warning="load_level == 'busy'" decoration-success="load_level == 'ok'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_out_request_search" model="ir.ui.view">
+        <field name="name">sn.out.request.search</field>
+        <field name="model">sn.out.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="sale_order_id"/>
+                <filter name="quoting" string="询价中" domain="[('state', '=', 'quoting')]"/>
+                <filter name="awarded" string="已定点" domain="[('state', '=', 'awarded')]"/>
+                <group>
+                    <filter name="g_reason" string="外发原因" context="{'group_by': 'reason_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_out_request" model="ir.actions.act_window">
+        <field name="name">外发申请与询价</field>
+        <field name="res_model">sn.out.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_out_quote_list" model="ir.ui.view">
+        <field name="name">sn.out.quote.list</field>
+        <field name="model">sn.out.quote</field>
+        <field name="arch" type="xml">
+            <list string="询价比价" decoration-success="awarded" decoration-muted="coop_state == 'suspended'">
+                <field name="request_id"/>
+                <field name="factory_id"/>
+                <field name="coop_state" widget="badge"/>
+                <field name="rating" widget="badge"/>
+                <field name="mode"/>
+                <field name="unit_price"/>
+                <field name="date_promise"/>
+                <field name="score"/>
+                <field name="state" widget="badge"/>
+                <field name="awarded" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+</odoo>

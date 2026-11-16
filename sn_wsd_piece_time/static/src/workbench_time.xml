@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_piece_time.DailyWorkbenchTime" t-inherit="sn_wsd_piece_rate.DailyWorkbench" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('card-body')]/div[hasclass('row')]" position="inside">
+            <div class="col-md-3">
+                <label class="form-label">开工时间</label>
+                <input type="datetime-local" class="form-control"
+                       t-att-value="selectedLine.x_date_start"
+                       t-on-input="ev => { selectedLine.x_date_start = ev.target.value; }"/>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">完工时间</label>
+                <input type="datetime-local" class="form-control"
+                       t-att-value="selectedLine.x_date_end"
+                       t-on-input="ev => { selectedLine.x_date_end = ev.target.value; }"/>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">或直接填工时（小时）</label>
+                <input type="number" min="0" step="0.25" class="form-control"
+                       t-att-value="selectedLine.x_hours"
+                       t-on-input="ev => { selectedLine.x_hours = Number(ev.target.value) || 0; }"/>
+            </div>
+        </xpath>
+        <xpath expr="//th[@t-esc='labels.ratio']" position="after">
+            <th>本人工时（小时，留空=整段）</th>
+        </xpath>
+        <xpath expr="//input[contains(@t-on-change, 'onRatioInput')]/.." position="after">
+            <td style="width: 10rem;">
+                <input type="number" min="0" step="0.25" class="form-control form-control-sm"
+                       t-att-value="p.x_work_hours || ''"
+                       t-on-input="ev => { p.x_work_hours = Number(ev.target.value) || 0; }"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@t-esc='labels.allocation']" position="before">
+            <th>工时</th>
+        </xpath>
+        <xpath expr="//td[hasclass('o_drw_summary')]" position="before">
+            <td>
+                <t t-if="line.x_hours">
+                    <t t-esc="line.x_hours"/> h
+                </t>
+                <t t-elif="line.x_date_start and line.x_date_end">已填时段</t>
+                <t t-else="">—</t>
+            </td>
+        </xpath>
+    </t>
+</templates>

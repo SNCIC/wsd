@@ -77,9 +77,11 @@
         <xpath expr="//button[hasclass('o-mail-Chatter-activity')]/span" position="attributes">
             <attribute name="class" add="d-none d-sm-inline" separator=" " />
         </xpath>
+        <!-- LOCAL PATCH #3: 当前 Odoo 19 源码 Chatter 模板已无此按钮，xpath 不匹配导致所有带 chatter 的表单崩溃，暂注释
         <xpath expr="//button[@t-if='props.hasAttachmentPreview and state.thread.attachmentsInWebClientView.length']" position="attributes">
             <attribute name="t-if">props.isChatterAside and props.hasAttachmentPreview and state.thread.attachmentsInWebClientView.length</attribute>
         </xpath>
+        -->
         <xpath expr="//button[@t-on-click='onClickSearch']" position="after">
         	<button
                 class="btn btn-link text-action px-1"

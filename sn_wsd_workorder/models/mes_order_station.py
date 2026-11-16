@@ -161,8 +161,9 @@ class MesOrderStationServices(models.Model):
             'order_id': row.mes_order_id.id,
             'order_name': row.mes_order_id.name,
             'result': row.result,
-            'in_date': fields.Datetime.to_string(
-                row.out_date or row.in_date) if (row.out_date or row.in_date)
+            # LOCAL PATCH #10: 按用户时区显示（原样输出 UTC）
+            'in_date': fields.Datetime.to_string(fields.Datetime.context_timestamp(
+                self, row.out_date or row.in_date)) if (row.out_date or row.in_date)
                 else '',
         } for row in wip_rows]
         return payload

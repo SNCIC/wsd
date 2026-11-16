@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_mold_loan_list" model="ir.ui.view">
+        <field name="name">sn.out.mold.loan.list</field>
+        <field name="model">sn.out.mold.loan</field>
+        <field name="arch" type="xml">
+            <list string="模具外借" decoration-warning="state == 'loaned'" decoration-danger="overdue">
+                <field name="name"/>
+                <field name="mold_id"/>
+                <field name="cavity_text"/>
+                <field name="factory_id"/>
+                <field name="order_id"/>
+                <field name="date_out"/>
+                <field name="date_expect_back"/>
+                <field name="date_back"/>
+                <field name="days_out"/>
+                <field name="shots_out"/>
+                <field name="shots_at_factory"/>
+                <field name="shots_back"/>
+                <field name="life_progress_back" widget="progressbar" optional="show"/>
+                <field name="overdue" column_invisible="1"/>
+                <field name="state" widget="badge" decoration-warning="state == 'loaned'" decoration-success="state == 'returned'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_mold_loan_form" model="ir.ui.view">
+        <field name="name">sn.out.mold.loan.form</field>
+        <field name="model">sn.out.mold.loan</field>
+        <field name="arch" type="xml">
+            <form string="模具外借">
+                <header>
+                    <button name="action_loan" type="object" string="确认借出" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_return" type="object" string="归还入库" class="btn-primary" invisible="state != 'loaned'"/>
+                    <button name="action_cancel" type="object" string="取消" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,loaned,returned"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="超期未还" bg_color="text-bg-danger" invisible="not overdue"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="模具与去向">
+                            <field name="mold_id" readonly="state != 'draft'"/>
+                            <field name="mold_name"/>
+                            <field name="cavity_text"/>
+                            <field name="factory_id" readonly="state != 'draft'"/>
+                            <field name="order_id" readonly="state != 'draft'"/>
+                            <field name="origin_location_id"/>
+                        </group>
+                        <group string="时间与模次">
+                            <field name="date_out"/>
+                            <field name="date_expect_back"/>
+                            <field name="date_back"/>
+                            <field name="days_out"/>
+                            <field name="overdue" invisible="1"/>
+                            <field name="shots_out"/>
+                            <field name="shots_at_factory" readonly="state != 'loaned'"/>
+                            <field name="shots_back"/>
+                            <field name="life_progress_back" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="condition_out" readonly="state != 'draft'"/>
+                        <field name="condition_back" readonly="state != 'loaned'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_out_mold_loan_search" model="ir.ui.view">
+        <field name="name">sn.out.mold.loan.search</field>
+        <field name="model">sn.out.mold.loan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mold_id"/>
+                <field name="factory_id"/>
+                <filter name="loaned" string="外借中" domain="[('state', '=', 'loaned')]"/>
+                <filter name="returned" string="已归还" domain="[('state', '=', 'returned')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_out_mold_loan" model="ir.actions.act_window">
+        <field name="name">模具外借</field>
+        <field name="res_model">sn.out.mold.loan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

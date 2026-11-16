@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_color_recipe_list" model="ir.ui.view">
+        <field name="name">sn.inj.color.recipe.list</field>
+        <field name="model">sn.inj.color.recipe</field>
+        <field name="arch" type="xml">
+            <list string="配色配方">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="color_no"/>
+                <field name="color_name"/>
+                <field name="color_hex" widget="color" string="色板"/>
+                <field name="grade_id"/>
+                <field name="masterbatch_pct"/>
+                <field name="let_down"/>
+                <field name="regrind_pct"/>
+                <field name="delta_e_max"/>
+                <field name="product_ids" widget="many2many_tags"/>
+                <field name="batch_count" string="批次数"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sn_inj_color_recipe_form" model="ir.ui.view">
+        <field name="name">sn.inj.color.recipe.form</field>
+        <field name="model">sn.inj.color.recipe</field>
+        <field name="arch" type="xml">
+            <form string="配色配方">
+                <header>
+                    <button name="action_activate" type="object" string="生效" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_obsolete" type="object" string="作废" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="code"/></h1>
+                        <h3><field name="name"/></h3>
+                    </div>
+                    <group>
+                        <group string="颜色">
+                            <field name="color_no"/>
+                            <field name="color_name"/>
+                            <field name="color_hex" widget="color"/>
+                            <field name="delta_e_max"/>
+                            <field name="version"/>
+                        </group>
+                        <group string="配比">
+                            <field name="grade_id"/>
+                            <field name="total_pct"/>
+                            <field name="masterbatch_pct"/>
+                            <field name="let_down"/>
+                            <field name="regrind_pct"/>
+                            <field name="mix_minutes"/>
+                            <field name="product_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="配方组成">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="kind"/>
+                                    <field name="material"/>
+                                    <field name="supplier"/>
+                                    <field name="ratio_pct" sum="合计"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="配色批次">
+                            <field name="batch_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="mix_time"/>
+                                    <field name="machine_id" optional="hide"/>
+                                    <field name="total_kg" sum="合计"/>
+                                    <field name="base_kg"/>
+                                    <field name="masterbatch_kg"/>
+                                    <field name="base_lot"/>
+                                    <field name="masterbatch_lot"/>
+                                    <field name="delta_e"/>
+                                    <field name="result" widget="badge" decoration-success="result == 'pass'" decoration-danger="result == 'fail'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="说明"><field name="note"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_sn_inj_color_recipe" model="ir.actions.act_window">
+        <field name="name">配色配方</field>
+        <field name="res_model">sn.inj.color.recipe</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_inj_color_batch_list" model="ir.ui.view">
+        <field name="name">sn.inj.color.batch.list</field>
+        <field name="model">sn.inj.color.batch</field>
+        <field name="arch" type="xml">
+            <list string="配色批次" decoration-danger="result == 'fail'">
+                <field name="name"/>
+                <field name="recipe_id"/>
+                <field name="color_no"/>
+                <field name="machine_id"/>
+                <field name="mix_time"/>
+                <field name="total_kg" sum="合计"/>
+                <field name="base_kg"/>
+                <field name="masterbatch_kg"/>
+                <field name="base_lot"/>
+                <field name="masterbatch_lot"/>
+                <field name="operator_id"/>
+                <field name="delta_e"/>
+                <field name="result" widget="badge" decoration-success="result == 'pass'" decoration-danger="result == 'fail'"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_sn_inj_color_batch" model="ir.actions.act_window">
+        <field name="name">配色批次</field>
+        <field name="res_model">sn.inj.color.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_mold_change_list" model="ir.ui.view">
+        <field name="name">sn.inj.mold.change.list</field>
+        <field name="model">sn.inj.mold.change</field>
+        <field name="arch" type="xml">
+            <list string="换模单" decoration-muted="state == 'cancel'">
+                <field name="name" width="110px"/>
+                <field name="machine_id" width="105px"/>
+                <field name="change_type" optional="hide"/>
+                <field name="mold_out_id" context="{'inj_mold_short': 1}" width="110px"/>
+                <field name="mold_in_id" context="{'inj_mold_short': 1}" width="110px"/>
+                <field name="reason" width="100px"/>
+                <field name="planned_start" optional="hide"/>
+                <field name="actual_start"/>
+                <field name="actual_end"/>
+                <field name="external_minutes" string="外部(分)" optional="show"/>
+                <field name="internal_minutes" string="内部(分)" optional="show"/>
+                <field name="duration_minutes" string="换模时长(分)" decoration-danger="over_target" decoration-bf="over_target"/>
+                <field name="target_minutes" optional="hide"/>
+                <field name="fai_result" widget="badge" decoration-success="fai_result == 'pass'" decoration-danger="fai_result == 'fail'" decoration-warning="fai_result == 'pending'"/>
+                <field name="over_target" column_invisible="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-warning="state in ('in_progress', 'fai')" decoration-info="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_mold_change_form" model="ir.ui.view">
+        <field name="name">sn.inj.mold.change.form</field>
+        <field name="model">sn.inj.mold.change</field>
+        <field name="arch" type="xml">
+            <form string="换模单">
+                <header>
+                    <button name="action_start" type="object" string="开始换模" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mounted" type="object" string="换模完成（发起首件）" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_open_fai" type="object" string="首件检验" invisible="not fai_id"/>
+                    <button name="action_cancel" type="object" string="取消" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,fai,done"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="超 SMED 目标" bg_color="text-bg-danger" invisible="not over_target"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="换模信息">
+                            <field name="machine_id"/>
+                            <field name="change_type"/>
+                            <field name="mold_out_id"/>
+                            <field name="mold_in_id"/>
+                            <field name="plan_id"/>
+                            <field name="reason"/>
+                            <field name="reason_note"/>
+                            <field name="leader_id"/>
+                        </group>
+                        <group string="时间（末件合格 → 首件合格）">
+                            <field name="planned_start"/>
+                            <field name="planned_end"/>
+                            <field name="actual_start"/>
+                            <field name="mounted_at"/>
+                            <field name="actual_end"/>
+                            <field name="duration_minutes"/>
+                            <field name="target_minutes"/>
+                            <field name="over_target" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="SMED 内外部作业">
+                        <group>
+                            <field name="external_minutes"/>
+                            <field name="internal_minutes"/>
+                        </group>
+                        <group>
+                            <field name="fai_id"/>
+                            <field name="fai_result" widget="badge" decoration-success="fai_result == 'pass'" decoration-danger="fai_result == 'fail'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="作业步骤">
+                            <field name="step_ids">
+                                <list editable="bottom" decoration-info="step_type == 'external'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="step_type"/>
+                                    <field name="name"/>
+                                    <field name="minutes" sum="合计"/>
+                                    <field name="done" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="备注"><field name="note"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_mold_change_graph" model="ir.ui.view">
+        <field name="name">sn.inj.mold.change.graph</field>
+        <field name="model">sn.inj.mold.change</field>
+        <field name="arch" type="xml">
+            <graph string="换模时长统计" type="bar">
+                <field name="machine_id"/>
+                <field name="duration_minutes" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_sn_inj_mold_change_pivot" model="ir.ui.view">
+        <field name="name">sn.inj.mold.change.pivot</field>
+        <field name="model">sn.inj.mold.change</field>
+        <field name="arch" type="xml">
+            <pivot string="换模时长分析">
+                <field name="machine_id" type="row"/>
+                <field name="reason" type="col"/>
+                <field name="duration_minutes" type="measure"/>
+                <field name="internal_minutes" type="measure"/>
+                <field name="external_minutes" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_sn_inj_mold_change_search" model="ir.ui.view">
+        <field name="name">sn.inj.mold.change.search</field>
+        <field name="model">sn.inj.mold.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="machine_id"/>
+                <field name="mold_in_id"/>
+                <filter name="done" string="已完成" domain="[('state', '=', 'done')]"/>
+                <filter name="over" string="超目标" domain="[('over_target', '=', True)]"/>
+                <group>
+                    <filter name="g_machine" string="机台" context="{'group_by': 'machine_id'}"/>
+                    <filter name="g_mold" string="换上模具" context="{'group_by': 'mold_in_id'}"/>
+                    <filter name="g_reason" string="原因" context="{'group_by': 'reason'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_sn_inj_mold_change" model="ir.actions.act_window">
+        <field name="name">换模单</field>
+        <field name="res_model">sn.inj.mold.change</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+    </record>
+
+    <!-- 首件 -->
+    <record id="view_sn_inj_fai_list" model="ir.ui.view">
+        <field name="name">sn.inj.fai.list</field>
+        <field name="model">sn.inj.fai</field>
+        <field name="arch" type="xml">
+            <list string="首件检验">
+                <field name="name"/>
+                <field name="machine_id"/>
+                <field name="mold_id"/>
+                <field name="product_id"/>
+                <field name="change_id"/>
+                <field name="request_time"/>
+                <field name="judge_time"/>
+                <field name="inspector_id"/>
+                <field name="result" widget="badge" decoration-success="result == 'pass'" decoration-danger="result == 'fail'" decoration-warning="result == 'pending'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sn_inj_fai_form" model="ir.ui.view">
+        <field name="name">sn.inj.fai.form</field>
+        <field name="model">sn.inj.fai</field>
+        <field name="arch" type="xml">
+            <form string="首件检验">
+                <header>
+                    <button name="action_pass" type="object" string="判定合格" class="btn-primary" invisible="result != 'pending'"/>
+                    <button name="action_fail" type="object" string="判定不合格" invisible="result != 'pending'"/>
+                    <button name="action_retest" type="object" string="调机后重检" invisible="result != 'fail'"/>
+                    <field name="result" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="machine_id"/>
+                            <field name="mold_id"/>
+                            <field name="product_id"/>
+                            <field name="plan_id"/>
+                            <field name="change_id"/>
+                        </group>
+                        <group>
+                            <field name="request_time"/>
+                            <field name="judge_time"/>
+                            <field name="inspector_id"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <field name="item_ids">
+                        <list editable="bottom" decoration-danger="result == 'ng'">
+                            <field name="sequence" widget="handle"/>
+                            <field name="item_type"/>
+                            <field name="name"/>
+                            <field name="unit"/>
+                            <field name="std_value"/>
+                            <field name="lower"/>
+                            <field name="upper"/>
+                            <field name="measured"/>
+                            <field name="result"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_sn_inj_fai" model="ir.actions.act_window">
+        <field name="name">首件检验</field>
+        <field name="res_model">sn.inj.fai</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

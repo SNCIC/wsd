@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_time_entry_list" model="ir.ui.view">
+        <field name="name">sn.wsd.time.entry.list</field>
+        <field name="model">sn.wsd.time.entry</field>
+        <field name="arch" type="xml">
+            <list string="工时记录" decoration-warning="state == 'to_confirm'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="employee_code" optional="hide"/>
+                <field name="mes_order_id"/>
+                <field name="route_operation_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="hours" sum="合计"/>
+                <field name="qty_ok" sum="合计"/>
+                <field name="category" widget="badge" decoration-info="category == 'production'"
+                       decoration-warning="category == 'rework'" decoration-success="category == 'trial'"
+                       decoration-danger="category == 'downtime'"/>
+                <field name="source"/>
+                <field name="exception_id" optional="hide"/>
+                <field name="manual_reason" optional="show"/>
+                <field name="confirmed_by" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'confirmed'"
+                       decoration-warning="state == 'to_confirm'"/>
+                <field name="frozen_label" optional="show"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_time_entry_form" model="ir.ui.view">
+        <field name="name">sn.wsd.time.entry.form</field>
+        <field name="model">sn.wsd.time.entry</field>
+        <field name="arch" type="xml">
+            <form string="工时记录">
+                <header>
+                    <button name="action_leader_confirm" type="object" string="班组长确认"
+                            class="btn-primary" invisible="state != 'to_confirm'"
+                            groups="sn_wsd_piece_time.group_time_leader"/>
+                    <button name="action_cancel" type="object" string="作废"
+                            invisible="state == 'cancelled' or operation_report_id"/>
+                    <field name="state" widget="statusbar" statusbar_visible="to_confirm,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group string="人员与对象">
+                            <field name="employee_id" readonly="state != 'to_confirm'"/>
+                            <field name="category" readonly="state != 'to_confirm'"/>
+                            <field name="paid"/>
+                            <field name="mes_order_id" readonly="state != 'to_confirm'"/>
+                            <field name="route_operation_id" readonly="state != 'to_confirm'"/>
+                            <field name="exception_id" invisible="category != 'downtime'"
+                                   readonly="state != 'to_confirm'"/>
+                            <field name="downtime_reason" invisible="category != 'downtime'"
+                                   readonly="state != 'to_confirm'"/>
+                        </group>
+                        <group string="时间与数量">
+                            <field name="date_start" readonly="state != 'to_confirm'"/>
+                            <field name="date_end" readonly="state != 'to_confirm'"/>
+                            <field name="hours" readonly="state != 'to_confirm'"/>
+                            <field name="qty_ok" readonly="state != 'to_confirm'"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="来源与留痕">
+                            <field name="source"/>
+                            <field name="operation_report_id" invisible="not operation_report_id"/>
+                            <field name="timer_id" invisible="not timer_id"/>
+                            <field name="manual_reason" invisible="source != 'manual'"
+                                   required="source == 'manual'" readonly="state != 'to_confirm'"/>
+                            <field name="confirmed_by"/>
+                            <field name="confirmed_at"/>
+                            <field name="frozen_label"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_time_entry_search" model="ir.ui.view">
+        <field name="name">sn.wsd.time.entry.search</field>
+        <field name="model">sn.wsd.time.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="mes_order_id"/>
+                <field name="name"/>
+                <filter name="f_to_confirm" string="待班组长确认" domain="[('state', '=', 'to_confirm')]"/>
+                <filter name="f_manual" string="手工补录" domain="[('source', '=', 'manual')]"/>
+                <filter name="f_downtime" string="停机/异常" domain="[('category', '=', 'downtime')]"/>
+                <filter name="f_paid" string="计入人工工时" domain="[('paid', '=', True)]"/>
+                <group>
+                    <filter name="g_emp" string="员工" context="{'group_by': 'employee_id'}"/>
+                    <filter name="g_order" string="制令单" context="{'group_by': 'mes_order_id'}"/>
+                    <filter name="g_cat" string="工时类别" context="{'group_by': 'category'}"/>
+                    <filter name="g_src" string="工时来源" context="{'group_by': 'source'}"/>
+                    <filter name="g_date" string="业务日期" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_time_entry" model="ir.actions.act_window">
+        <field name="name">工时记录</field>
+        <field name="res_model">sn.wsd.time.entry</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'default_source': 'manual', 'default_state': 'to_confirm'}</field>
+    </record>
+</odoo>

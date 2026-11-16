@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_plan_list" model="ir.ui.view">
+        <field name="name">sn.inj.plan.list</field>
+        <field name="model">sn.inj.plan</field>
+        <field name="arch" type="xml">
+            <list string="注塑排产计划" decoration-muted="state in ('done', 'cancel')" decoration-success="state == 'running'">
+                <field name="name"/>
+                <field name="priority" widget="priority" optional="show"/>
+                <field name="machine_id"/>
+                <field name="mold_id"/>
+                <field name="product_id"/>
+                <field name="planned_qty"/>
+                <field name="cavity"/>
+                <field name="required_shots"/>
+                <field name="std_cycle"/>
+                <field name="planned_hours" sum="合计"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="good_qty"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge" decoration-success="state == 'running'" decoration-info="state == 'confirmed'"
+                       decoration-muted="state in ('done', 'cancel')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_plan_form" model="ir.ui.view">
+        <field name="name">sn.inj.plan.form</field>
+        <field name="model">sn.inj.plan</field>
+        <field name="arch" type="xml">
+            <form string="注塑排产计划">
+                <header>
+                    <button name="action_confirm" type="object" string="下达" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start" type="object" string="开工" class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_done" type="object" string="完工" invisible="state not in ('running',)"/>
+                    <button name="action_cancel" type="object" string="取消" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_reset_draft" type="object" string="重置为草稿" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,running,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="产品 / 模具 / 机台">
+                            <field name="product_id" readonly="state not in ('draft',)"/>
+                            <field name="mold_id" readonly="state not in ('draft',)"/>
+                            <field name="machine_id" readonly="state not in ('draft',)"/>
+                            <field name="card_id"/>
+                            <field name="color_recipe_id"/>
+                            <field name="production_id"/>
+                            <field name="partner_id"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                        <group string="产能测算">
+                            <field name="planned_qty" readonly="state not in ('draft',)"/>
+                            <field name="cavity"/>
+                            <field name="required_shots"/>
+                            <field name="std_cycle"/>
+                            <field name="planned_hours"/>
+                            <field name="changeover_minutes"/>
+                            <field name="date_start" readonly="state not in ('draft',)"/>
+                            <field name="date_end"/>
+                            <field name="date_finished" invisible="state != 'done'"/>
+                            <field name="date_deadline"/>
+                        </group>
+                    </group>
+                    <group string="执行进度">
+                        <group>
+                            <field name="done_shots"/>
+                            <field name="good_qty"/>
+                            <field name="defect_qty"/>
+                        </group>
+                        <group>
+                            <field name="progress" widget="progressbar"/>
+                            <field name="yield_rate"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="报工明细">
+                            <field name="report_line_ids" readonly="1">
+                                <list>
+                                    <field name="report_id"/>
+                                    <field name="product_id"/>
+                                    <field name="cavity"/>
+                                    <field name="total_qty" sum="合计"/>
+                                    <field name="defect_qty" sum="合计"/>
+                                    <field name="good_qty" sum="合计"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="换模单">
+                            <field name="mold_change_ids" readonly="1"/>
+                        </page>
+                        <page string="备注"><field name="note"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_plan_gantt" model="ir.ui.view">
+        <field name="name">sn.inj.plan.gantt</field>
+        <field name="model">sn.inj.plan</field>
+        <field name="type">gantt</field>
+        <field name="arch" type="xml">
+            <gantt string="注塑排产甘特"
+                   date_start="date_start"
+                   date_stop="gantt_end"
+                   default_group_by="machine_id"
+                   color="x_gantt_color"
+                   progress="progress"
+                   create="0" disable_drag_drop="1">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="mold_id"/>
+                <field name="planned_qty"/>
+                <field name="required_shots"/>
+                <field name="progress"/>
+                <field name="state"/>
+                <field name="x_gantt_color"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_plan_search" model="ir.ui.view">
+        <field name="name">sn.inj.plan.search</field>
+        <field name="model">sn.inj.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="mold_id"/>
+                <field name="machine_id"/>
+                <filter name="open" string="未完成" domain="[('state', 'in', ('draft', 'confirmed', 'running'))]"/>
+                <filter name="running" string="生产中" domain="[('state', '=', 'running')]"/>
+                <filter name="window" string="11/10–11/20" domain="[('date_start', '&gt;=', '2026-11-09 16:00:00'), ('date_start', '&lt;', '2026-11-20 16:00:00')]"/>
+                <group>
+                    <filter name="g_machine" string="机台" context="{'group_by': 'machine_id'}"/>
+                    <filter name="g_state" string="状态" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_plan_pivot" model="ir.ui.view">
+        <field name="name">sn.inj.plan.pivot</field>
+        <field name="model">sn.inj.plan</field>
+        <field name="arch" type="xml">
+            <pivot string="排产分析">
+                <field name="machine_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="planned_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_sn_inj_plan" model="ir.actions.act_window">
+        <field name="name">注塑排产</field>
+        <field name="res_model">sn.inj.plan</field>
+        <field name="view_mode">list,gantt,form,pivot</field>
+    </record>
+    <record id="action_sn_inj_plan_gantt" model="ir.actions.act_window">
+        <field name="name">排产甘特（按机台）</field>
+        <field name="res_model">sn.inj.plan</field>
+        <field name="view_mode">gantt,list,form</field>
+        <field name="context">{'default_range': 'month'}</field>
+        <field name="domain">[('state', '!=', 'cancel')]</field>
+    </record>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sn_wsd_outsource.KpiBoard">
+        <div class="o_out_kpi h-100 overflow-auto bg-view">
+            <div class="d-flex align-items-center gap-3 px-4 py-2 border-bottom">
+                <h4 class="m-0">代工厂绩效看板</h4>
+                <span class="text-muted small">综合得分 = 准交率 × 40% + 批次合格率 × 40% + 物料分 20（超耗率每 1% 扣 4 分）；按月统计并回写评级，D 级自动暂停合作</span>
+            </div>
+            <t t-set="d" t-value="state.data"/>
+            <div t-if="d" class="px-4 pt-3 pb-4">
+                <div class="o_out_kpi_cards d-grid gap-3 mb-3">
+                    <t t-foreach="d.rows" t-as="r" t-key="r.id">
+                        <div class="card p-3" t-on-click="() => this.openFactory(r.id)" style="cursor:pointer">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <b class="fs-5"><t t-esc="r.name"/></b>
+                                <span t-att-class="'badge ' + stateClass(r.coop_state)"><t t-esc="r.coop_label"/></span>
+                                <span t-att-class="'badge ms-auto fs-6 ' + ratingClass(r.rating)"><t t-esc="r.rating"/> 级 · <t t-esc="fmt(r.score)"/></span>
+                            </div>
+                            <div class="d-flex justify-content-between small">
+                                <div><div class="text-muted">准交率</div><b class="fs-6"><t t-esc="fmt(r.ontime_rate)"/>%</b></div>
+                                <div><div class="text-muted">批次合格率</div><b class="fs-6"><t t-esc="fmt(r.pass_rate)"/>%</b></div>
+                                <div><div class="text-muted">超耗率</div><b t-att-class="'fs-6 ' + (r.excess_rate &gt; 0 ? 'text-danger' : '')"><t t-esc="fmt(r.excess_rate, 2)"/>%</b></div>
+                                <div><div class="text-muted">到货批次</div><b class="fs-6"><t t-esc="r.batches"/></b></div>
+                                <div><div class="text-muted">在制/在借模</div><b class="fs-6"><t t-esc="r.open_orders"/> / <t t-esc="r.loans"/></b></div>
+                            </div>
+                            <div class="small text-muted mt-2">评级期间 <t t-esc="r.period"/> ｜ 可承接 <t t-esc="r.capacity"/> 件/日 ｜ 判退/让步/挑选批 <t t-esc="r.reject"/></div>
+                        </div>
+                    </t>
+                </div>
+                <div class="o_out_kpi_charts d-grid gap-3">
+                    <div class="card p-2"><div class="o_out_kpi_canvas"><canvas t-ref="bar"/></div></div>
+                    <div class="card p-2"><div class="o_out_kpi_canvas"><canvas t-ref="line"/></div></div>
+                    <div class="card p-2"><div class="o_out_kpi_canvas"><canvas t-ref="excess"/></div></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

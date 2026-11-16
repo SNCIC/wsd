@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_inj_mold_maint" model="ir.cron">
+        <field name="name">注塑：按模次生成模具保养任务</field>
+        <field name="model_id" ref="model_sn_inj_mold_maint"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+    <record id="cron_inj_drying_window" model="ir.cron">
+        <field name="name">注塑：烘干批次可用窗口检查</field>
+        <field name="model_id" ref="model_sn_inj_drying"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_check_window()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="cron_inj_shift_oee" model="ir.cron">
+        <field name="name">注塑：按机台按班生成 OEE 记录</field>
+        <field name="model_id" ref="model_sn_inj_machine"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_oee()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+    </record>
+</odoo>

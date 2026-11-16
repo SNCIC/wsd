@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_process_card_list" model="ir.ui.view">
+        <field name="name">sn.inj.process.card.list</field>
+        <field name="model">sn.inj.process.card</field>
+        <field name="arch" type="xml">
+            <list string="标准工艺卡" decoration-muted="state == 'obsolete'">
+                <field name="name"/>
+                <field name="version_label" string="版本"/>
+                <field name="product_id"/>
+                <field name="mold_id"/>
+                <field name="machine_id"/>
+                <field name="tonnage_min" optional="hide"/>
+                <field name="tonnage_max" optional="hide"/>
+                <field name="grade_id"/>
+                <field name="cavity"/>
+                <field name="std_cycle"/>
+                <field name="part_weight"/>
+                <field name="monitored_count"/>
+                <field name="approve_date" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-warning="state == 'review'"
+                       decoration-info="state == 'draft'" decoration-muted="state == 'obsolete'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_process_card_form" model="ir.ui.view">
+        <field name="name">sn.inj.process.card.form</field>
+        <field name="model">sn.inj.process.card</field>
+        <field name="arch" type="xml">
+            <form string="标准工艺卡">
+                <header>
+                    <button name="action_submit" type="object" string="提交审核" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="批准生效" class="btn-primary" invisible="state != 'review'"/>
+                    <button name="action_reject" type="object" string="驳回" invisible="state != 'review'"/>
+                    <button name="action_new_version" type="object" string="升版" invisible="state not in ('active', 'obsolete')"/>
+                    <button name="action_obsolete" type="object" string="作废" invisible="state != 'active'"/>
+                    <button name="action_load_template" type="object" string="载入参数模板" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,active,obsolete"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="生效" bg_color="text-bg-success" invisible="state != 'active'"/>
+                    <widget name="web_ribbon" title="审核中" bg_color="text-bg-warning" invisible="state != 'review'"/>
+                    <div class="oe_title">
+                        <h1 class="d-flex gap-3"><field name="name" readonly="1"/><field name="version_label" readonly="1" class="text-primary"/></h1>
+                    </div>
+                    <group>
+                        <group string="适用范围">
+                            <field name="product_id" readonly="state not in ('draft',)"/>
+                            <field name="mold_id" readonly="state not in ('draft',)"/>
+                            <field name="cavity"/>
+                            <field name="machine_id"/>
+                            <label for="tonnage_min" string="适用吨位(T)"/>
+                            <div class="o_row"><field name="tonnage_min" nolabel="1"/> <span>–</span> <field name="tonnage_max" nolabel="1"/></div>
+                            <field name="grade_id"/>
+                            <field name="color_recipe_id"/>
+                        </group>
+                        <group string="关键指标">
+                            <field name="std_cycle"/>
+                            <field name="cool_time"/>
+                            <field name="part_weight"/>
+                            <field name="runner_weight"/>
+                            <field name="shot_weight"/>
+                            <field name="regrind_max_pct"/>
+                            <field name="monitored_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="温度（料筒 5 段 / 模温）" name="barrel">
+                            <field name="barrel_line_ids" readonly="state != 'draft'" context="{'default_category': 'barrel'}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category" column_invisible="1"/>
+                                    <field name="code" column_invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="unit"/>
+                                    <field name="std_value"/>
+                                    <field name="lower"/>
+                                    <field name="upper"/>
+                                    <field name="window_text"/>
+                                    <field name="monitored" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="注射 / V/P / 保压" name="inject">
+                            <field name="inject_line_ids" readonly="state != 'draft'" context="{'default_category': 'inject'}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category" column_invisible="1"/>
+                                    <field name="code" column_invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="unit"/>
+                                    <field name="std_value"/>
+                                    <field name="lower"/>
+                                    <field name="upper"/>
+                                    <field name="window_text"/>
+                                    <field name="monitored" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="计量 / 冷却 / 周期 / 重量" name="meter">
+                            <field name="meter_line_ids" readonly="state != 'draft'" context="{'default_category': 'meter'}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category" column_invisible="1"/>
+                                    <field name="code" column_invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="unit"/>
+                                    <field name="std_value"/>
+                                    <field name="lower"/>
+                                    <field name="upper"/>
+                                    <field name="window_text"/>
+                                    <field name="monitored" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="版本与审批" name="approval">
+                            <group>
+                                <group>
+                                    <field name="version"/>
+                                    <field name="prev_card_id"/>
+                                    <field name="submit_user_id"/>
+                                    <field name="submit_date"/>
+                                </group>
+                                <group>
+                                    <field name="approve_user_id"/>
+                                    <field name="approve_date"/>
+                                </group>
+                            </group>
+                            <field name="change_note" placeholder="变更说明（升版原因、调整的参数）"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_process_card_search" model="ir.ui.view">
+        <field name="name">sn.inj.process.card.search</field>
+        <field name="model">sn.inj.process.card</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="mold_id"/>
+                <filter name="active_cards" string="生效" domain="[('state', '=', 'active')]"/>
+                <filter name="review" string="审核中" domain="[('state', '=', 'review')]"/>
+                <filter name="not_obsolete" string="未作废" domain="[('state', '!=', 'obsolete')]"/>
+                <group>
+                    <filter name="g_product" string="产品" context="{'group_by': 'product_id'}"/>
+                    <filter name="g_state" string="状态" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_inj_process_card" model="ir.actions.act_window">
+        <field name="name">标准工艺卡</field>
+        <field name="res_model">sn.inj.process.card</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

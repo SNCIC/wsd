@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LOCAL PATCH #8：电表扩展字段（x_meter_* / x_accuracy_class / x_comm_protocol / x_firmware_version / x_tender_no …）
+         在模型中已定义但没有任何视图展示；本地演示在制造订单表单加一个「电表信息」页签集中展示。 -->
+    <record id="view_mrp_production_form_meter_info" model="ir.ui.view">
+        <field name="name">mrp.production.form.meter.info</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="电表信息" name="wsd_meter_info">
+                    <group>
+                        <group string="产品规格">
+                            <field name="x_meter_product_type"/>
+                            <field name="x_meter_model"/>
+                            <field name="x_voltage_spec"/>
+                            <field name="x_current_spec"/>
+                            <field name="x_accuracy_class"/>
+                            <field name="x_comm_protocol"/>
+                            <field name="x_firmware_version"/>
+                            <field name="x_parameter_template"/>
+                            <field name="x_inspection_standard"/>
+                        </group>
+                        <group string="订单与批次">
+                            <field name="x_customer_project"/>
+                            <field name="x_tender_no"/>
+                            <field name="x_contract_no"/>
+                            <field name="x_production_batch_no"/>
+                            <field name="x_delivery_batch_no"/>
+                        </group>
+                    </group>
+                    <group string="工艺开关">
+                        <group>
+                            <field name="x_need_burn_firmware"/>
+                            <field name="x_need_initial_calibration"/>
+                            <field name="x_need_aging"/>
+                        </group>
+                        <group>
+                            <field name="x_need_final_verification"/>
+                            <field name="x_need_sealing"/>
+                            <field name="x_need_carton_traceability"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

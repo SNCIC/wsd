@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_grade_list" model="ir.ui.view">
+        <field name="name">sn.inj.material.grade.list</field>
+        <field name="model">sn.inj.material.grade</field>
+        <field name="arch" type="xml">
+            <list string="料种" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="family"/>
+                <field name="brand_grade"/>
+                <field name="need_drying"/>
+                <field name="dry_temp"/>
+                <field name="dry_temp_tol"/>
+                <field name="dry_hours"/>
+                <field name="dew_point_max" optional="hide"/>
+                <field name="moisture_max"/>
+                <field name="hold_hours"/>
+                <field name="regrind_max_pct"/>
+                <field name="regrind_control"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_sn_inj_grade" model="ir.actions.act_window">
+        <field name="name">料种与烘料标准</field>
+        <field name="res_model">sn.inj.material.grade</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_sn_inj_dryer_list" model="ir.ui.view">
+        <field name="name">sn.inj.dryer.list</field>
+        <field name="model">sn.inj.dryer</field>
+        <field name="arch" type="xml">
+            <list string="干燥机">
+                <field name="code" string="设备编号"/>
+                <field name="name" string="名称"/>
+                <field name="manufacturer" string="制造商"/>
+                <field name="model" string="型号"/>
+                <field name="dryer_type"/>
+                <field name="capacity_kg"/>
+                <field name="max_temp"/>
+                <field name="machine_ids" widget="many2many_tags"/>
+                <field name="current_drying_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sn_inj_dryer_form" model="ir.ui.view">
+        <field name="name">sn.inj.dryer.form</field>
+        <field name="model">sn.inj.dryer</field>
+        <field name="arch" type="xml">
+            <form string="干燥机">
+                <sheet>
+                    <div class="oe_title"><h1><field name="code"/></h1><h3><field name="name"/></h3></div>
+                    <group>
+                        <group>
+                            <field name="dryer_type"/>
+                            <field name="manufacturer" string="制造商"/>
+                            <field name="model" string="型号"/>
+                            <field name="capacity_kg"/>
+                            <field name="max_temp"/>
+                        </group>
+                        <group>
+                            <field name="machine_ids" widget="many2many_tags"/>
+                            <field name="current_drying_id"/>
+                        </group>
+                    </group>
+                    <field name="drying_ids" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sn_inj_dryer" model="ir.actions.act_window">
+        <field name="name">干燥机</field>
+        <field name="res_model">sn.inj.dryer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_sn_inj_drying_list" model="ir.ui.view">
+        <field name="name">sn.inj.drying.list</field>
+        <field name="model">sn.inj.drying</field>
+        <field name="arch" type="xml">
+            <list string="原料烘干记录" decoration-danger="state in ('expired', 'ng')" decoration-info="state == 'drying'"
+                  decoration-muted="state == 'used'">
+                <field name="name" width="110px"/>
+                <field name="dryer_id" width="70px"/>
+                <field name="grade_id" width="120px"/>
+                <field name="lot_no" width="150px"/>
+                <field name="qty_kg" string="上料(kg)" sum="合计" optional="hide"/>
+                <field name="machine_id" width="105px"/>
+                <field name="std_temp" string="标准℃" optional="show"/>
+                <field name="actual_temp" string="实测℃" optional="hide"/>
+                <field name="dew_point" optional="hide"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="dry_hours_actual" string="烘干(h)"/>
+                <field name="std_hours" optional="hide"/>
+                <field name="moisture" string="含水率%"/>
+                <field name="moisture_max" string="上限%" optional="show"/>
+                <field name="usable_until" optional="hide"/>
+                <field name="window_text" width="110px"/>
+                <field name="state" widget="badge" decoration-success="state == 'ok'" decoration-info="state in ('drying', 'wait_test')"
+                       decoration-danger="state in ('expired', 'ng')" decoration-muted="state == 'used'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sn_inj_drying_form" model="ir.ui.view">
+        <field name="name">sn.inj.drying.form</field>
+        <field name="model">sn.inj.drying</field>
+        <field name="arch" type="xml">
+            <form string="原料烘干">
+                <header>
+                    <button name="action_finish" type="object" string="结束烘干" class="btn-primary" invisible="state != 'drying'"/>
+                    <button name="action_mark_used" type="object" string="已用完" invisible="state != 'ok'"/>
+                    <button name="action_redry" type="object" string="重新烘干" class="btn-primary" invisible="state not in ('expired', 'ng')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="drying,wait_test,ok,used"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="超时需重烘" bg_color="text-bg-danger" invisible="state != 'expired'"/>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="上料">
+                            <field name="dryer_id"/>
+                            <field name="grade_id"/>
+                            <field name="lot_no"/>
+                            <field name="qty_kg"/>
+                            <field name="machine_id"/>
+                            <field name="operator_id"/>
+                            <field name="redry_of_id" invisible="not redry_of_id"/>
+                        </group>
+                        <group string="烘干过程">
+                            <field name="std_temp"/>
+                            <field name="set_temp"/>
+                            <field name="actual_temp"/>
+                            <field name="temp_abnormal"/>
+                            <field name="dew_point"/>
+                            <field name="date_start"/>
+                            <field name="planned_end"/>
+                            <field name="date_end"/>
+                            <field name="dry_hours_actual"/>
+                        </group>
+                    </group>
+                    <group string="检测与可用窗口">
+                        <group>
+                            <field name="moisture"/>
+                            <field name="moisture_max"/>
+                            <field name="test_time"/>
+                        </group>
+                        <group>
+                            <field name="usable_until"/>
+                            <field name="window_text"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_sn_inj_drying_search" model="ir.ui.view">
+        <field name="name">sn.inj.drying.search</field>
+        <field name="model">sn.inj.drying</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="lot_no"/>
+                <field name="grade_id"/>
+                <filter name="usable" string="合格可用" domain="[('state', '=', 'ok')]"/>
+                <filter name="problem" string="超时/不合格" domain="[('state', 'in', ('expired', 'ng'))]"/>
+                <group>
+                    <filter name="g_grade" string="料种" context="{'group_by': 'grade_id'}"/>
+                    <filter name="g_dryer" string="干燥机" context="{'group_by': 'dryer_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_sn_inj_drying" model="ir.actions.act_window">
+        <field name="name">原料烘干</field>
+        <field name="res_model">sn.inj.drying</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

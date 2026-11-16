@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_out_root" name="整单代加工" sequence="37"
+              web_icon="sn_wsd_outsource,static/description/icon.png" groups="mrp.group_mrp_user"/>
+
+    <menuitem id="menu_out_decide" name="外发决策" parent="menu_out_root" sequence="10"/>
+    <menuitem id="menu_out_request" name="外发申请与询价" parent="menu_out_decide" sequence="10" action="action_sn_out_request"/>
+
+    <menuitem id="menu_out_exec" name="代工执行" parent="menu_out_root" sequence="20"/>
+    <menuitem id="menu_out_order" name="代工单" parent="menu_out_exec" sequence="10" action="action_sn_out_order"/>
+    <menuitem id="menu_out_progress" name="进度回报" parent="menu_out_exec" sequence="20" action="action_sn_out_progress"/>
+    <menuitem id="menu_out_issue" name="委外发料/退料" parent="menu_out_exec" sequence="30" action="action_sn_out_issue"/>
+    <menuitem id="menu_out_loan" name="模具外借" parent="menu_out_exec" sequence="40" action="action_sn_out_mold_loan"/>
+
+    <menuitem id="menu_out_quality" name="回货与质量" parent="menu_out_root" sequence="30"/>
+    <menuitem id="menu_out_receipt" name="代工回货" parent="menu_out_quality" sequence="10" action="action_sn_out_receipt"/>
+    <menuitem id="menu_out_iqc" name="回货检验" parent="menu_out_quality" sequence="20" action="action_sn_out_iqc"/>
+    <menuitem id="menu_out_defect" name="回货不良分析" parent="menu_out_quality" sequence="30" action="action_sn_out_iqc_defect"/>
+
+    <menuitem id="menu_out_settle" name="物料与结算" parent="menu_out_root" sequence="40"/>
+    <menuitem id="menu_out_balance" name="物料平衡" parent="menu_out_settle" sequence="10" action="action_sn_out_balance"/>
+    <menuitem id="menu_out_statement" name="代工对账单" parent="menu_out_settle" sequence="20" action="action_sn_out_statement"/>
+
+    <menuitem id="menu_out_partner" name="代工厂" parent="menu_out_root" sequence="50"/>
+    <menuitem id="menu_out_factory" name="代工厂档案" parent="menu_out_partner" sequence="10" action="action_sn_out_factory"/>
+    <menuitem id="menu_out_kpi_board" name="绩效看板" parent="menu_out_partner" sequence="15" action="action_sn_out_kpi_board"/>
+    <menuitem id="menu_out_kpi" name="绩效明细" parent="menu_out_partner" sequence="20" action="action_sn_out_kpi"/>
+    <menuitem id="menu_out_kpi_wizard" name="绩效统计" parent="menu_out_partner" sequence="30" action="action_sn_out_kpi_wizard"/>
+</odoo>

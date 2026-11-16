@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_machine_list" model="ir.ui.view">
+        <field name="name">sn.inj.machine.list</field>
+        <field name="model">sn.inj.machine</field>
+        <field name="arch" type="xml">
+            <list string="注塑机台账">
+                <field name="sequence" widget="handle"/>
+                <field name="code" string="机台编号"/>
+                <field name="name" string="机台名称" optional="hide"/>
+                <field name="brand"/>
+                <field name="model" string="型号"/>
+                <field name="drive_type" optional="hide"/>
+                <field name="tonnage"/>
+                <field name="clamp_force_kn"/>
+                <field name="screw_diameter"/>
+                <field name="max_shot_weight"/>
+                <field name="run_state" widget="badge" decoration-success="run_state == 'running'"
+                       decoration-warning="run_state in ('changeover', 'wait_material')" decoration-danger="run_state == 'fault'"
+                       decoration-muted="run_state in ('idle', 'planned_stop')"/>
+                <field name="current_mold_id" context="{'inj_mold_short': 1}"/>
+                <field name="current_plan_id" context="{'inj_plan_short': 1}"/>
+                <field name="state_note" string="状态说明" optional="show"/>
+                <field name="oee_7d" widget="progressbar" string="7 天 OEE" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_machine_form" model="ir.ui.view">
+        <field name="name">sn.inj.machine.form</field>
+        <field name="model">sn.inj.machine</field>
+        <field name="arch" type="xml">
+            <form string="注塑机">
+                <header>
+                    <button name="action_open_terminal" type="object" string="工位屏（工艺卡）" class="btn-primary" icon="fa-desktop"/>
+                    <button name="action_generate_last_shift_oee" type="object" string="生成上一班 OEE"/>
+                    <field name="run_state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_plans" type="object" class="oe_stat_button" icon="fa-calendar" string="排产计划"/>
+                        <button name="action_view_shots" type="object" class="oe_stat_button" icon="fa-line-chart" string="逐模次参数"/>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="code" string="机台编号"/>
+                        <h1><field name="code"/></h1>
+                        <h3><field name="name" placeholder="机台名称"/></h3>
+                    </div>
+                    <group>
+                        <group string="技术参数">
+                            <field name="brand"/>
+                            <field name="model" string="型号"/>
+                            <field name="drive_type"/>
+                            <field name="tonnage"/>
+                            <field name="clamp_force_kn"/>
+                            <field name="screw_diameter"/>
+                            <field name="max_shot_weight"/>
+                            <field name="max_inject_pressure"/>
+                            <field name="tie_bar"/>
+                            <label for="mold_thick_min" string="容模厚度(mm)"/>
+                            <div class="o_row"><field name="mold_thick_min" nolabel="1"/> <span>–</span> <field name="mold_thick_max" nolabel="1"/></div>
+                        </group>
+                        <group string="运行状态">
+                            <field name="state_since"/>
+                            <field name="state_note"/>
+                            <field name="current_mold_id"/>
+                            <field name="current_plan_id"/>
+                            <field name="std_cycle"/>
+                            <field name="last_cycle"/>
+                            <field name="cycle_dev_pct"/>
+                            <field name="oee_7d" widget="progressbar"/>
+                            <field name="today_good"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="资产信息（设备台账）">
+                            <field name="manufacturer" string="制造商"/>
+                            <field name="serial_no" string="出厂编号"/>
+                            <field name="commissioning_date" string="投用日期"/>
+                            <field name="equipment_class" string="设备等级"/>
+                        </group>
+                        <group string="车间归属">
+                            <field name="workshop_id"/>
+                            <field name="production_line_id"/>
+                            <field name="location_id" string="安装位置"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_machine_kanban" model="ir.ui.view">
+        <field name="name">sn.inj.machine.kanban</field>
+        <field name="model">sn.inj.machine</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="run_state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between">
+                            <field name="code" class="fw-bold fs-5"/>
+                            <field name="run_state" widget="badge" decoration-success="run_state == 'running'" decoration-danger="run_state == 'fault'" decoration-warning="run_state == 'changeover'"/>
+                        </div>
+                        <div><field name="brand"/> <field name="model"/> · <field name="tonnage"/>T</div>
+                        <div class="text-muted">模具：<field name="current_mold_id"/></div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_machine_search" model="ir.ui.view">
+        <field name="name">sn.inj.machine.search</field>
+        <field name="model">sn.inj.machine</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code" string="机台编号"/>
+                <field name="name"/>
+                <filter name="running" string="运行" domain="[('run_state', '=', 'running')]"/>
+                <filter name="stopped" string="停机" domain="[('run_state', '!=', 'running')]"/>
+                <group>
+                    <filter name="g_brand" string="品牌" context="{'group_by': 'brand'}"/>
+                    <filter name="g_state" string="机台状态" context="{'group_by': 'run_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_inj_machine" model="ir.actions.act_window">
+        <field name="name">注塑机台账</field>
+        <field name="res_model">sn.inj.machine</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+    <!-- 状态事件 -->
+    <record id="view_sn_inj_machine_event_list" model="ir.ui.view">
+        <field name="name">sn.inj.machine.event.list</field>
+        <field name="model">sn.inj.machine.event</field>
+        <field name="arch" type="xml">
+            <list string="机台状态事件" create="0">
+                <field name="event_time"/>
+                <field name="machine_id"/>
+                <field name="shift_date"/>
+                <field name="shift"/>
+                <field name="state" widget="badge" decoration-success="state == 'running'" decoration-danger="state == 'fault'" decoration-warning="state in ('changeover', 'wait_material')"/>
+                <field name="counter"/>
+                <field name="mold_id"/>
+                <field name="alarm"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sn_inj_machine_event_search" model="ir.ui.view">
+        <field name="name">sn.inj.machine.event.search</field>
+        <field name="model">sn.inj.machine.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="machine_id"/>
+                <filter name="fault" string="故障" domain="[('state', '=', 'fault')]"/>
+                <group>
+                    <filter name="g_machine" string="机台" context="{'group_by': 'machine_id'}"/>
+                    <filter name="g_shift" string="班次" context="{'group_by': 'shift'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_sn_inj_machine_event" model="ir.actions.act_window">
+        <field name="name">机台状态事件</field>
+        <field name="res_model">sn.inj.machine.event</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="action_sn_inj_oee" model="ir.actions.act_window">
+        <field name="name">注塑机 OEE（按班）</field>
+        <field name="res_model">sn.wsd.device.oee.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('equipment_id.code', '=like', 'ZS-%')]</field>
+    </record>
+</odoo>

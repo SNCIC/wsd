@@ -58,7 +58,7 @@ class SnWsdWarehouseDashboardService(models.AbstractModel):
             'user_name': picking.user_id.name or picking.partner_id.name or '-',
             'time': fields.Datetime.to_string(date_done) if date_done else '',
             'state': picking.state,
-            'state_label': PICKING_STATE_LABELS.get(picking.state, picking.state),
+            'state_label': self.env._(PICKING_STATE_LABELS.get(picking.state, picking.state)),  # LOCAL PATCH #12: 模块级 _() 在导入时无语言环境，状态恒为英文，这里按当前用户语言再译
         }
 
     @api.model
@@ -203,7 +203,7 @@ class SnWsdWarehouseDashboardService(models.AbstractModel):
                 'name': p.name or '/',
                 'type_label': type_labels.get(p.picking_type_id.code, p.picking_type_id.name),
                 'state': p.state,
-                'state_label': PICKING_STATE_LABELS.get(p.state, p.state),
+                'state_label': self.env._(PICKING_STATE_LABELS.get(p.state, p.state)),  # LOCAL PATCH #12: 模块级 _() 在导入时无语言环境，状态恒为英文，这里按当前用户语言再译
                 'partner_name': p.partner_id.name or '',
                 'user_name': p.user_id.name or '-',
                 'time': fields.Datetime.to_string(p.write_date or p.scheduled_date or p.date_done or fields.Datetime.now()),

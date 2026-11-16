@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_inj_shot_list" model="ir.ui.view">
+        <field name="name">sn.inj.shot.list</field>
+        <field name="model">sn.inj.shot</field>
+        <field name="arch" type="xml">
+            <list string="逐模次参数" create="0" decoration-danger="is_out">
+                <field name="shot_time"/>
+                <field name="shift" optional="show"/>
+                <field name="machine_id"/>
+                <field name="mold_id" optional="show"/>
+                <field name="product_id" optional="hide"/>
+                <field name="shot_no"/>
+                <field name="cycle_time"/>
+                <field name="inject_time" optional="hide"/>
+                <field name="peak_pressure"/>
+                <field name="hold_pressure"/>
+                <field name="vp_position" optional="show"/>
+                <field name="melt_temp"/>
+                <field name="mold_temp"/>
+                <field name="cushion"/>
+                <field name="metering_time" optional="hide"/>
+                <field name="is_out" widget="boolean"/>
+                <field name="out_items" optional="show"/>
+                <field name="exception_id" optional="show"/>
+                <field name="source" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_shot_form" model="ir.ui.view">
+        <field name="name">sn.inj.shot.form</field>
+        <field name="model">sn.inj.shot</field>
+        <field name="arch" type="xml">
+            <form string="模次参数" create="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="machine_id"/>
+                            <field name="mold_id"/>
+                            <field name="plan_id"/>
+                            <field name="product_id"/>
+                            <field name="card_id"/>
+                            <field name="shot_no"/>
+                            <field name="shot_time"/>
+                            <field name="shot_date"/>
+                            <field name="shift"/>
+                        </group>
+                        <group>
+                            <field name="cycle_time"/>
+                            <field name="inject_time"/>
+                            <field name="peak_pressure"/>
+                            <field name="hold_pressure"/>
+                            <field name="vp_position"/>
+                            <field name="melt_temp"/>
+                            <field name="mold_temp"/>
+                            <field name="cushion"/>
+                            <field name="metering_time"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="is_out"/>
+                        <field name="out_items"/>
+                        <field name="exception_id"/>
+                        <field name="source"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_shot_graph" model="ir.ui.view">
+        <field name="name">sn.inj.shot.graph</field>
+        <field name="model">sn.inj.shot</field>
+        <field name="arch" type="xml">
+            <graph string="参数趋势" type="line">
+                <field name="shot_time" interval="hour"/>
+                <field name="machine_id"/>
+                <field name="cycle_time" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_shot_pivot" model="ir.ui.view">
+        <field name="name">sn.inj.shot.pivot</field>
+        <field name="model">sn.inj.shot</field>
+        <field name="arch" type="xml">
+            <pivot string="模次参数分析">
+                <field name="machine_id" type="row"/>
+                <field name="shot_date" type="col" interval="day"/>
+                <field name="cycle_time" type="measure"/>
+                <field name="out_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sn_inj_shot_search" model="ir.ui.view">
+        <field name="name">sn.inj.shot.search</field>
+        <field name="model">sn.inj.shot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="machine_id"/>
+                <field name="mold_id"/>
+                <field name="shot_no"/>
+                <filter name="out" string="超限" domain="[('is_out', '=', True)]"/>
+                <filter name="day" string="白班" domain="[('shift', '=', 'day')]"/>
+                <filter name="night" string="夜班" domain="[('shift', '=', 'night')]"/>
+                <filter name="last24" string="近 24 小时" domain="[('shot_time', '&gt;=', (context_today() - relativedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="g_machine" string="机台" context="{'group_by': 'machine_id'}"/>
+                    <filter name="g_mold" string="模具" context="{'group_by': 'mold_id'}"/>
+                    <filter name="g_shift" string="班次" context="{'group_by': 'shift'}"/>
+                    <filter name="g_date" string="班次日期" context="{'group_by': 'shot_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_inj_shot" model="ir.actions.act_window">
+        <field name="name">逐模次参数</field>
+        <field name="res_model">sn.inj.shot</field>
+        <field name="view_mode">list,graph,pivot,form</field>
+    </record>
+    <record id="action_sn_inj_shot_out" model="ir.actions.act_window">
+        <field name="name">参数超限记录</field>
+        <field name="res_model">sn.inj.shot</field>
+        <field name="view_mode">list,pivot,form</field>
+        <field name="domain">[('is_out', '=', True)]</field>
+    </record>
+    <record id="action_sn_inj_spc" model="ir.actions.client">
+        <field name="name">SPC 控制图</field>
+        <field name="tag">sn_inj_spc</field>
+    </record>
+    <record id="action_sn_inj_exception" model="ir.actions.act_window">
+        <field name="name">注塑异常单</field>
+        <field name="res_model">sn.wsd.exception.ticket</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('workshop_id.code', '=', 'WS-INJ')]</field>
+    </record>
+</odoo>

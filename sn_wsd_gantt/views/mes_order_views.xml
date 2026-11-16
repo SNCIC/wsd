@@ -8,12 +8,13 @@
         <field name="model">sn.wsd.mes.order</field>
         <field name="type">gantt</field>
         <field name="arch" type="xml">
+            <!-- LOCAL PATCH #9: color 改用 x_gantt_color（按状态着色） -->
             <gantt string="MES Order Schedule"
                    date_start="date_plan"
                    date_stop="x_date_plan_end"
                    default_group_by="production_line_id"
                    default_scale="day"
-                   color="state"
+                   color="x_gantt_color"
                    create="0" edit="0" delete="0" disable_drag_drop="1">
                 <field name="name"/>
                 <field name="production_id"/>
@@ -22,6 +23,7 @@
                 <field name="planned_qty"/>
                 <field name="picked_qty"/>
                 <field name="state"/>
+                <field name="x_gantt_color"/>
             </gantt>
         </field>
     </record>

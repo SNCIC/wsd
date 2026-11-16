@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_out_factory_list" model="ir.ui.view">
+        <field name="name">sn.out.factory.list</field>
+        <field name="model">sn.out.factory</field>
+        <field name="arch" type="xml">
+            <list string="代工厂档案" decoration-muted="coop_state == 'suspended'">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="partner_id" optional="show"/>
+                <field name="city" optional="show"/>
+                <field name="coop_state" widget="badge" decoration-success="coop_state == 'qualified'"
+                       decoration-warning="coop_state == 'trial'" decoration-danger="coop_state == 'suspended'"/>
+                <field name="rating" widget="badge" decoration-success="rating == 'A'" decoration-info="rating == 'B'"
+                       decoration-warning="rating == 'C'" decoration-danger="rating == 'D'"/>
+                <field name="rating_score"/>
+                <field name="tonnage_text"/>
+                <field name="machine_count"/>
+                <field name="grade_text" string="擅长料种"/>
+                <field name="capacity_shots_day" string="日产能(模次)"/>
+                <field name="capacity_pcs_day" string="日产能(件)"/>
+                <field name="cert_text" optional="show"/>
+                <field name="open_order_count" string="在制单"/>
+                <field name="loan_count" string="在借模"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_out_factory_form" model="ir.ui.view">
+        <field name="name">sn.out.factory.form</field>
+        <field name="model">sn.out.factory</field>
+        <field name="arch" type="xml">
+            <form string="代工厂档案">
+                <header>
+                    <button name="action_set_qualified" type="object" string="转为合格" class="btn-primary"
+                            invisible="coop_state == 'qualified'" groups="mrp.group_mrp_manager"/>
+                    <button name="action_set_trial" type="object" string="转为试用" invisible="coop_state != 'suspended'"
+                            groups="mrp.group_mrp_manager"/>
+                    <button name="action_suspend" type="object" string="暂停合作" invisible="coop_state == 'suspended'"
+                            groups="mrp.group_mrp_manager"/>
+                    <field name="coop_state" widget="statusbar" statusbar_visible="trial,qualified,suspended"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-industry">
+                            <field name="order_count" widget="statinfo" string="代工单"/>
+                        </button>
+                        <button name="action_view_loans" type="object" class="oe_stat_button" icon="fa-cubes">
+                            <field name="loan_count" widget="statinfo" string="在借模具"/>
+                        </button>
+                        <button name="action_view_kpi" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                            <field name="rating_score" widget="statinfo" string="绩效得分"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="已暂停" bg_color="text-bg-danger" invisible="coop_state != 'suspended'"/>
+                    <widget name="web_ribbon" title="试用中" bg_color="text-bg-warning" invisible="coop_state != 'trial'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="代工厂简称"/></h1>
+                        <h3><field name="partner_id" placeholder="企业名称"/></h3>
+                    </div>
+                    <group>
+                        <group string="基本信息">
+                            <field name="code"/>
+                            <field name="city"/>
+                            <field name="distance_km"/>
+                            <field name="contact"/>
+                            <field name="phone"/>
+                            <field name="coop_since"/>
+                            <field name="suspend_reason" invisible="coop_state != 'suspended'"/>
+                            <field name="location_id"/>
+                        </group>
+                        <group string="综合评级">
+                            <field name="rating" widget="badge" decoration-success="rating == 'A'" decoration-info="rating == 'B'"
+                                   decoration-warning="rating == 'C'" decoration-danger="rating == 'D'"/>
+                            <field name="rating_score"/>
+                            <field name="rating_period"/>
+                            <field name="last_ontime_rate"/>
+                            <field name="last_pass_rate"/>
+                            <field name="last_excess_rate"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="机台与产能">
+                            <label for="tonnage_min" string="可做吨位(T)"/>
+                            <div class="o_row">
+                                <field name="tonnage_min" nolabel="1"/> <span>–</span> <field name="tonnage_max" nolabel="1"/>
+                            </div>
+                            <field name="machine_count"/>
+                            <field name="shift_mode"/>
+                            <field name="capacity_shots_day"/>
+                            <field name="capacity_pcs_day"/>
+                        </group>
+                        <group string="擅长料种与工艺">
+                            <field name="grade_ids" widget="many2many_tags"/>
+                            <field name="capability" nolabel="1" colspan="2" placeholder="工艺能力：热流道、嵌件、双色、自动化取件…"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="机台清单" name="machines">
+                            <field name="machine_ids">
+                                <list editable="bottom">
+                                    <field name="brand"/>
+                                    <field name="model"/>
+                                    <field name="tonnage"/>
+                                    <field name="qty" sum="合计"/>
+                                    <field name="year"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="资质证书" name="certs">
+                            <field name="cert_ids">
+                                <list editable="bottom" decoration-danger="state == 'expired'" decoration-warning="state == 'expiring'">
+                                    <field name="name"/>
+                                    <field name="number"/>
+                                    <field name="issuer"/>
+                                    <field name="date_expire"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'valid'"
+                                           decoration-warning="state == 'expiring'" decoration-danger="state == 'expired'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="绩效记录" name="kpi">
+                            <field name="kpi_ids" readonly="1">
+                                <list>
+                                    <field name="period"/>
+                                    <field name="batch_count"/>
+                                    <field name="ontime_rate"/>
+                                    <field name="pass_rate"/>
+                                    <field name="excess_rate"/>
+                                    <field name="deduct_amount"/>
+                                    <field name="score"/>
+                                    <field name="rating" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="接口" name="api" groups="mrp.group_mrp_manager">
+                            <group>
+                                <field name="api_token"/>
+                            </group>
+                            <div class="text-muted">代工厂通过 POST /api/outsource/progress 回报进度（JSON：token、order、produced_qty、shots、stage、note）。</div>
+                        </page>
+                        <page string="备注" name="note">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_out_factory_search" model="ir.ui.view">
+        <field name="name">sn.out.factory.search</field>
+        <field name="model">sn.out.factory</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="partner_id"/>
+                <field name="grade_ids"/>
+                <filter name="qualified" string="合格" domain="[('coop_state', '=', 'qualified')]"/>
+                <filter name="trial" string="试用" domain="[('coop_state', '=', 'trial')]"/>
+                <filter name="suspended" string="暂停" domain="[('coop_state', '=', 'suspended')]"/>
+                <group>
+                    <filter name="g_state" string="合作状态" context="{'group_by': 'coop_state'}"/>
+                    <filter name="g_rating" string="评级" context="{'group_by': 'rating'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_out_factory" model="ir.actions.act_window">
+        <field name="name">代工厂档案</field>
+        <field name="res_model">sn.out.factory</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
