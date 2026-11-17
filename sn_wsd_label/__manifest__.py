@@ -1,9 +1,9 @@
 {
     'name': 'SN WSD Label Center',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'summary': 'Designable label templates with ZPL / CPCL-JSON rendering',
     'category': 'Manufacturing/Manufacturing',
-    'depends': ['mail', 'sn_wsd_field'],
+    'depends': ['mail', 'mrp', 'sn_wsd_field'],
     'data': [
         'security/label_security.xml',
         'security/company_rules.xml',

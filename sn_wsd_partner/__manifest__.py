@@ -1,9 +1,9 @@
 {
     'name': 'SN WSD Partner',
-    'version': '19.0.4.0.0',
+    'version': '19.0.4.1.0',
     'summary': 'Supplier groups and automatically generated supplier references',
     'category': 'Purchase/Purchase',
-    'depends': ['sn_wsd_code_rule', 'contacts'],
+    'depends': ['sn_wsd_code_rule', 'contacts', 'purchase'],
     'data': [
         'security/ir.model.access.csv',
         'data/supplier_code_data.xml',

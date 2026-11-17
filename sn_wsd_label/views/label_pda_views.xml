@@ -9,5 +9,5 @@
 
     <menuitem id="menu_label_print_screen" name="Label Print" sequence="5"
               parent="menu_label_center" action="action_label_print_screen"
-              groups="base.group_user"/>
+              groups="mrp.group_mrp_user,-base.group_user"/>
 </odoo>

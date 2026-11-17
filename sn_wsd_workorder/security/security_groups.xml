@@ -11,9 +11,5 @@
             <field name="name">Shop Floor Manager</field>
             <field name="implied_ids" eval="[Command.link(ref('sn_wsd_workorder.group_sn_wsd_shop_floor_user'))]"/>
         </record>
-
-        <record id="base.group_user" model="res.groups">
-            <field name="implied_ids" eval="[Command.link(ref('sn_wsd_workorder.group_sn_wsd_shop_floor_user'))]"/>
-        </record>
     </data>
 </odoo>

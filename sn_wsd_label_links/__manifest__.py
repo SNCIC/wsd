@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Label Links',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'summary': 'Print-label entry points and seed templates for business models',
     'category': 'Manufacturing/Manufacturing',
     'depends': [
