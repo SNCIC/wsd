@@ -1805,3 +1805,64 @@ msgid ""
 "printed for the transfers that no inspection covers."
 msgstr ""
 "打印在点阵单据检验栏的人名。保存在单据上而不是取自质检记录，因为无检验覆盖的调拨也要打印单据。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_session
+msgid "Inventory Session"
+msgstr "盘点会话"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_session
+msgid ""
+"Document the line is merged on in the inventory detail reports: the transfer "
+"of a former inventory loss or gain, or one application of the physical "
+"inventory, named and dated the same for every line it booked."
+msgstr ""
+"明细行所属的盘点单据，盘盈盘亏明细按它合并单据信息：历史盘盈/盘亏取对应调拨单，官方实物库存取一次应用；同一次应用写入的每一行名称与日期相同。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_user_id
+msgid "Counted By"
+msgstr "盘点人"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_user_id
+msgid ""
+"User who counted the stock: the responsible of the transfer of a former "
+"inventory loss or gain, the user who applied the physical inventory "
+"otherwise."
+msgstr "盘点人：历史盘盈/盘亏取调拨单负责人，官方实物库存盘点取执行应用的用户。"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,field_description:sn_wsd_stock.field_stock_move__sn_inventory_stock_location_id
+msgid "Stock Location"
+msgstr "库存位置"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_move__sn_inventory_stock_location_id
+msgid ""
+"Internal location whose stock the difference of the inventory loss or gain "
+"was booked on."
+msgstr "盘盈/盘亏差异记入的内部库位。"
+
+#. module: sn_wsd_stock
+#: model_terms:ir.ui.view,arch_db:sn_wsd_stock.view_sn_wsd_inventory_operation_detail_list
+msgid "Counting Date"
+msgstr "盘点日期"
+
+#. module: sn_wsd_stock
+#. odoo-python
+#: model:ir.model.fields,help:sn_wsd_stock.field_stock_picking__sn_inventory_operation
+msgid ""
+"Inventory loss or inventory gain the transfer of the former inventory "
+"operation menus was created from. The difference of a physical inventory is "
+"booked on the stock moves directly, so only the transfers kept from the "
+"former feature carry it."
+msgstr ""
+"历史盘盈/盘亏菜单创建的调拨单所属的盘点作业。实物库存盘点的差异直接记在库存移动上，因此只有旧功能保留的调拨单携带该标记。"

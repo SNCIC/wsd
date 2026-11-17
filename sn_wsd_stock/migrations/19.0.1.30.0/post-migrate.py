@@ -26,6 +26,11 @@ def migrate(cr, version):
     for code, field_name in (
             ('IVL', 'sn_inventory_loss_type_id'),
             ('IVG', 'sn_inventory_gain_type_id')):
+        # The two operation types were retired by 19.0.1.33.0: a database
+        # upgrading from an older version runs this migration with the new
+        # model, which no longer knows the columns.
+        if field_name not in env['stock.warehouse']._fields:
+            continue
         for warehouse in warehouses:
             if warehouse[field_name]:
                 continue

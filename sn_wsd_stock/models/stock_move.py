@@ -9,7 +9,10 @@ from odoo import api, fields, models
 # the operation type cannot tell them apart either: the other receipts, the
 # vendor return and the receipt share the incoming code, the other deliveries
 # and the delivery share the outgoing code, and the quality control, the
-# storage and the MES operations share the internal one.
+# storage and the MES operations share the internal one. The inventory losses
+# and gains have no operation type any more: the difference of a physical
+# inventory is booked on the stock moves of the stock module, whose side
+# carrying the inventory usage location gives the direction.
 SN_OPERATION_KINDS = [
     ('receipt', 'Receipt'),
     ('consignment_in', 'Consignment Receipt'),
@@ -196,6 +199,58 @@ class StockMove(models.Model):
         store=True,
         index=True,
     )
+    sn_inventory_session = fields.Char(
+        string='Inventory Session',
+        compute='_compute_sn_inventory_session',
+        help='Document the line is merged on in the inventory detail reports: '
+             'the transfer of a former inventory loss or gain, or one '
+             'application of the physical inventory, named and dated the same '
+             'for every line it booked.',
+    )
+    sn_inventory_user_id = fields.Many2one(
+        'res.users',
+        string='Counted By',
+        compute='_compute_sn_inventory_user_id',
+        help='User who counted the stock: the responsible of the transfer of a '
+             'former inventory loss or gain, the user who applied the '
+             'physical inventory otherwise.',
+    )
+    sn_inventory_stock_location_id = fields.Many2one(
+        'stock.location',
+        string='Stock Location',
+        compute='_compute_sn_inventory_stock_location_id',
+        help='Internal location whose stock the difference of the inventory '
+             'loss or gain was booked on.',
+    )
+
+    @api.depends('picking_id', 'reference', 'date')
+    def _compute_sn_inventory_session(self):
+        for move in self:
+            if move.picking_id:
+                move.sn_inventory_session = 'picking-%s' % move.picking_id.id
+            elif move.date:
+                move.sn_inventory_session = '%s/%s' % (
+                    move.reference or '',
+                    fields.Datetime.to_string(move.date),
+                )
+            else:
+                move.sn_inventory_session = move.reference or False
+
+    @api.depends('picking_id.user_id', 'create_uid')
+    def _compute_sn_inventory_user_id(self):
+        for move in self:
+            move.sn_inventory_user_id = (
+                move.picking_id.user_id or move.create_uid)
+
+    @api.depends('sn_operation_kind', 'location_id', 'location_dest_id')
+    def _compute_sn_inventory_stock_location_id(self):
+        for move in self:
+            if move.sn_operation_kind == 'inventory_gain':
+                move.sn_inventory_stock_location_id = move.location_dest_id
+            elif move.sn_operation_kind == 'inventory_loss':
+                move.sn_inventory_stock_location_id = move.location_id
+            else:
+                move.sn_inventory_stock_location_id = False
 
     @api.depends('picking_type_id', 'picking_type_id.warehouse_id.reception_steps')
     def _compute_sn_reception_step(self):
@@ -245,8 +300,6 @@ class StockMove(models.Model):
         'picking_type_id.warehouse_id.int_type_id',
         'picking_type_id.warehouse_id.other_in_type_id',
         'picking_type_id.warehouse_id.other_out_type_id',
-        'picking_type_id.warehouse_id.sn_inventory_loss_type_id',
-        'picking_type_id.warehouse_id.sn_inventory_gain_type_id',
         'picking_type_id.warehouse_id.sn_consignment_in_type_id',
         'picking_type_id.warehouse_id.sn_outsourcing_issue_type_id',
         'picking_type_id.warehouse_id.sn_unstored_return_type_id',
@@ -257,6 +310,10 @@ class StockMove(models.Model):
         'picking_type_id.warehouse_id.picking_type_return_id',
         'picking_type_id.warehouse_id.picking_type_over_pick_id',
         'picking_type_id.warehouse_id.picking_type_receipt_id',
+        'is_inventory',
+        'location_id.usage',
+        'location_dest_id.usage',
+        'picking_id.sn_inventory_operation',
         'production_id',
         'raw_material_production_id',
     )
@@ -267,21 +324,38 @@ class StockMove(models.Model):
     def _get_sn_operation_kind(self):
         """Kind of operation the move belongs to.
 
-        The kind is read by comparing the operation type of the transfer with
-        the operation types of its warehouse, never on the code or the name of
-        the type: several types share the incoming, outgoing and internal
-        codes (other receipts, vendor returns, quality control, storage and the
-        MES operations), so a code cannot tell them apart.
+        A physical inventory has no transfer: the stock module books the
+        difference of a counting on a move of its own, entering the stock
+        (gain) or leaving it (loss), and the side carrying the ``inventory``
+        usage location tells the two apart. The inventory losses and gains of
+        the former feature were transfers of their own operation types; their
+        types are archived and no longer linked to the warehouse, so their
+        documents keep the kind they were booked with, read on the marker the
+        transfer carries.
 
-        A manufacturing move has no transfer: it is read on the production
-        order it consumes for or produces. The activity of the operation type
-        is not checked here, so the archived types still report their history;
-        the reception step of the three reception reports keeps its own
-        activity rule to preserve their behaviour.
+        For the other moves, the kind is read by comparing the operation type
+        of the transfer with the operation types of its warehouse, never on the
+        code or the name of the type: several types share the incoming,
+        outgoing and internal codes (other receipts, vendor returns, quality
+        control, storage and the MES operations), so a code cannot tell them
+        apart.
+
+        A manufacturing move has no transfer either: it is read on the
+        production order it consumes for or produces. The activity of the
+        operation type is not checked here, so the archived types still report
+        their history; the reception step of the three reception reports keeps
+        its own activity rule to preserve their behaviour.
         """
         self.ensure_one()
+        if self.is_inventory:
+            return self._get_sn_inventory_kind()
         if self.production_id or self.raw_material_production_id:
             return 'manufacture'
+        inventory_operation = self.picking_id.sn_inventory_operation
+        if inventory_operation == 'loss':
+            return 'inventory_loss'
+        if inventory_operation == 'gain':
+            return 'inventory_gain'
         picking_type = self.picking_type_id
         warehouse = picking_type.warehouse_id
         if not warehouse:
@@ -293,8 +367,6 @@ class StockMove(models.Model):
             (warehouse.store_type_id, 'storage'),
             (warehouse.other_in_type_id, 'other_in'),
             (warehouse.other_out_type_id, 'other_out'),
-            (warehouse.sn_inventory_loss_type_id, 'inventory_loss'),
-            (warehouse.sn_inventory_gain_type_id, 'inventory_gain'),
             (warehouse.sn_unstored_return_type_id, 'vendor_return'),
             (warehouse.pick_type_id, 'pick'),
             (warehouse.pack_type_id, 'pack'),
@@ -312,6 +384,24 @@ class StockMove(models.Model):
         for operation_type, kind in operation_types:
             if operation_type and picking_type == operation_type:
                 return kind
+        return False
+
+    def _get_sn_inventory_kind(self):
+        """Inventory loss or gain the official physical inventory booked.
+
+        The stock module applies a counting through the inventory location of
+        the product: the goods enter the stock from there on a gain and leave
+        the stock to there on a loss.
+        """
+        self.ensure_one()
+        if not self.is_inventory:
+            return False
+        if (self.location_id.usage == 'inventory'
+                and self.location_dest_id.usage == 'internal'):
+            return 'inventory_gain'
+        if (self.location_id.usage == 'internal'
+                and self.location_dest_id.usage == 'inventory'):
+            return 'inventory_loss'
         return False
 
     @api.depends('production_id', 'raw_material_production_id')
