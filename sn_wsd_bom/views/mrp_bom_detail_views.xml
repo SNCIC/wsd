@@ -30,7 +30,6 @@
                 <field name="product_uom_id" groups="uom.group_uom" readonly="1"/>
                 <!-- Cost of the component: latest purchase price and the date
                      it was purchased, added by sn_wsd_cost. -->
-                <field name="sn_currency_id" column_invisible="1"/>
                 <field name="sn_unit_cost" optional="show"/>
                 <field name="sn_cost_amount" optional="show"/>
                 <field name="sn_cost_date" optional="show"/>

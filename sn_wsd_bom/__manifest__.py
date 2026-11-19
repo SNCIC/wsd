@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD BOM',
-    'version': '19.0.1.4.0',
+    'version': '19.0.1.4.1',
     'summary': 'BOM Excel import, flat BOM detail list and line batch update',
     'description': 'Import tree-structured ERP BOM Excel exports into mrp.bom through a '
                    'wizard, and browse every BOM component line in a flat list where the '
