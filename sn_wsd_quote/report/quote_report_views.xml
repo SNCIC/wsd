@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_sn_quote_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="mt-0">
+                            Quotation Estimate <span t-field="doc.name"/>
+                            <small t-if="doc.revision &gt; 1" class="text-muted">
+                                - revision <t t-out="doc.revision"/>
+                            </small>
+                        </h2>
+
+                        <div class="row mt-4">
+                            <div class="col-7">
+                                <strong>Customer</strong>
+                                <div t-field="doc.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            </div>
+                            <div class="col-5">
+                                <table class="table table-sm table-borderless mb-0">
+                                    <tr>
+                                        <td>Product</td>
+                                        <td class="text-end">
+                                            <span t-field="doc.product_code"/>
+                                            <span t-field="doc.product_id"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.bom_id">
+                                        <td>Bill of Materials</td>
+                                        <td class="text-end"><span t-field="doc.bom_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Quantity</td>
+                                        <td class="text-end">
+                                            <t t-out="doc.quantity"/>
+                                            <t t-out="doc.uom_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date</td>
+                                        <td class="text-end"><span t-field="doc.date"/></td>
+                                    </tr>
+                                    <tr t-if="doc.validity_date">
+                                        <td>Valid Until</td>
+                                        <td class="text-end"><span t-field="doc.validity_date"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <t t-set="materials"
+                           t-value="doc.line_ids.filtered(lambda line: line.line_type == 'material')"/>
+                        <t t-if="materials">
+                            <h4 class="mt-4">Material Cost</h4>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Specification</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-center">Price Date</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="materials" t-as="line">
+                                        <td>
+                                            <span t-field="line.product_code"/>
+                                            <span t-field="line.product_id"/>
+                                        </td>
+                                        <td><span t-field="line.material_specification"/></td>
+                                        <td class="text-end">
+                                            <t t-out="line.quantity"/>
+                                            <t t-out="line.uom_id.name"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-out="line.unit_price"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                        <td class="text-center"><span t-field="line.price_date"/></td>
+                                        <td class="text-end">
+                                            <span t-out="line.amount"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <t t-set="operations"
+                           t-value="doc.line_ids.filtered(lambda line: line.line_type == 'operation')"/>
+                        <t t-if="operations">
+                            <h4 class="mt-4">Operation Cost</h4>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Operation</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="operations" t-as="line">
+                                        <td><span t-field="line.name"/></td>
+                                        <td class="text-end"><t t-out="line.quantity"/></td>
+                                        <td class="text-end">
+                                            <span t-out="line.unit_price"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-out="line.amount"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <t t-set="expenses"
+                           t-value="doc.line_ids.filtered(lambda line: line.line_type == 'expense')"/>
+                        <t t-if="expenses">
+                            <h4 class="mt-4">Other Costs</h4>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-center">Basis</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="expenses" t-as="line">
+                                        <td><span t-field="line.name"/></td>
+                                        <td class="text-center">
+                                            <t t-if="line.is_fixed">One-off</t>
+                                            <t t-else="">Per unit</t>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-out="line.amount"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <t t-if="doc.tier_ids">
+                                    <h4>Quantity Tiers</h4>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-end">Quantity</th>
+                                                <th class="text-end">Unit Cost</th>
+                                                <th class="text-end">Unit Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="doc.tier_ids" t-as="tier">
+                                                <td class="text-end"><t t-out="tier.quantity"/></td>
+                                                <td class="text-end">
+                                                    <span t-out="tier.unit_cost"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-out="tier.price_unit"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tbody>
+                                        <tr>
+                                            <td>Material</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.material_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Operations</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.operation_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Other costs per unit</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.expense_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>One-off costs</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.fixed_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.overhead_cost">
+                                            <td>Overhead</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.overhead_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.management_cost">
+                                            <td>Management</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.management_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-black">
+                                            <td><strong>Unit Cost</strong></td>
+                                            <td class="text-end">
+                                                <span t-out="doc.unit_cost"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Markup</td>
+                                            <td class="text-end"><t t-out="doc.markup_percent"/> %</td>
+                                        </tr>
+                                        <tr class="border-black">
+                                            <td><strong>Unit Price</strong></td>
+                                            <td class="text-end">
+                                                <strong>
+                                                    <span t-out="doc.price_unit"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Quoted amount</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.amount_total"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Margin</td>
+                                            <td class="text-end">
+                                                <span t-out="doc.margin_amount"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                (<t t-out="doc.margin_percent"/> %)
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p t-if="doc.note" class="mt-4">
+                            <strong>Notes</strong>
+                            <span t-field="doc.note"/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_sn_quote" model="ir.actions.report">
+        <field name="name">Quotation Estimate</field>
+        <field name="model">sn.wsd.quote</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sn_wsd_quote.report_sn_quote_document</field>
+        <field name="report_file">sn_wsd_quote.report_sn_quote_document</field>
+        <field name="print_report_name">'Quotation Estimate - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_sn_wsd_quote"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

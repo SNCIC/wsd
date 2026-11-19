@@ -28,6 +28,13 @@
                 <field name="qty_denominator"/>
                 <field name="product_qty" readonly="1" force_save="1"/>
                 <field name="product_uom_id" groups="uom.group_uom" readonly="1"/>
+                <!-- Cost of the component: latest purchase price and the date
+                     it was purchased, added by sn_wsd_cost. -->
+                <field name="sn_currency_id" column_invisible="1"/>
+                <field name="sn_unit_cost" optional="show"/>
+                <field name="sn_cost_amount" optional="show"/>
+                <field name="sn_cost_date" optional="show"/>
+                <field name="sn_cost_source" optional="hide"/>
                 <field name="x_board_side" optional="show"/>
                 <field name="x_advance_issue" optional="show"/>
                 <field name="substitute_rule_count" string="Subs." optional="hide"/>

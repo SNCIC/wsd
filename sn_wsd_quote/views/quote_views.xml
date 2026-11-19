@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_wsd_quote_list" model="ir.ui.view">
+        <field name="name">sn.wsd.quote.list</field>
+        <field name="model">sn.wsd.quote</field>
+        <field name="arch" type="xml">
+            <list string="Quotation Estimates">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_code"/>
+                <field name="product_id"/>
+                <field name="bom_id" optional="show"/>
+                <field name="date" optional="show"/>
+                <field name="quantity" optional="show" sum="Total"/>
+                <field name="unit_cost" optional="show"/>
+                <field name="price_unit" optional="show"/>
+                <field name="margin_percent" optional="show"/>
+                <field name="amount_total" optional="show" sum="Total"/>
+                <field name="validity_date" optional="hide"/>
+                <field name="user_id" optional="hide" widget="many2one_avatar_user"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'won'"
+                       decoration-info="state == 'confirmed'"
+                       decoration-warning="state == 'sent'"
+                       decoration-danger="state == 'lost'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quote_form" model="ir.ui.view">
+        <field name="name">sn.wsd.quote.form</field>
+        <field name="model">sn.wsd.quote</field>
+        <field name="arch" type="xml">
+            <form string="Quotation Estimate">
+                <header>
+                    <button name="action_generate_costs" string="Generate from BoM"
+                            type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" invisible="state != 'draft'"/>
+                    <button name="action_send" string="Mark as Sent"
+                            type="object" invisible="state != 'confirmed'"/>
+                    <button name="action_won" string="Won"
+                            type="object" invisible="state not in ('confirmed', 'sent')"/>
+                    <button name="action_lost" string="Lost"
+                            type="object" invisible="state not in ('confirmed', 'sent')"/>
+                    <button name="action_new_revision" string="New Revision"
+                            type="object"/>
+                    <button name="action_reset" string="Reset to Draft"
+                            type="object" invisible="state == 'draft'"/>
+                    <button name="%(action_report_sn_quote)d" string="Cost Sheet"
+                            type="action" icon="fa-print"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,sent,won"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3 class="text-muted" invisible="revision == 1">
+                            Revision <field name="revision" readonly="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="product_id"/>
+                            <field name="product_code"/>
+                            <field name="material_specification"/>
+                            <field name="bom_id"/>
+                            <field name="route_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="validity_date"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="quantity"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Cost per Unit">
+                            <field name="material_cost"/>
+                            <field name="operation_cost"/>
+                            <field name="expense_cost"/>
+                            <field name="overhead_percent"/>
+                            <field name="management_percent"/>
+                            <field name="fixed_cost"/>
+                            <field name="unit_cost" class="fw-bold"/>
+                        </group>
+                        <group string="Quotation">
+                            <field name="markup_percent"/>
+                            <field name="price_unit"/>
+                            <field name="amount_total"/>
+                            <field name="margin_amount"/>
+                            <field name="margin_percent"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cost Lines" name="cost_lines">
+                            <field name="line_ids" context="{'default_quote_id': id}">
+                                <list editable="bottom" decoration-danger="price_missing">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="price_missing" column_invisible="1"/>
+                                    <field name="line_type"/>
+                                    <field name="product_id"
+                                           invisible="line_type != 'material'"
+                                           options="{'no_create': True}"/>
+                                    <field name="operation_id"
+                                           invisible="line_type != 'operation'"
+                                           options="{'no_create': True}"/>
+                                    <field name="name" string="Description"/>
+                                    <field name="quantity" optional="show"/>
+                                    <field name="loss_percent"
+                                           invisible="line_type != 'material'"/>
+                                    <field name="unit_price"/>
+                                    <field name="price_date"
+                                           invisible="line_type != 'material'"/>
+                                    <field name="price_source"
+                                           invisible="line_type != 'material'"/>
+                                    <field name="is_fixed" invisible="line_type != 'expense'"/>
+                                    <field name="amount" readonly="1" sum="Cost"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Quantity Tiers" name="tiers">
+                            <field name="tier_ids">
+                                <list editable="bottom">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_cost"/>
+                                    <field name="price_unit"/>
+                                    <field name="margin_percent"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Assumptions, excluded items, payment terms..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_wsd_quote_search" model="ir.ui.view">
+        <field name="name">sn.wsd.quote.search</field>
+        <field name="model">sn.wsd.quote</field>
+        <field name="arch" type="xml">
+            <search string="Quotation Estimates">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="user_id"/>
+                <filter name="my_quotes" string="My Estimates"
+                        domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="confirmed" string="Confirmed"
+                        domain="[('state', 'in', ('confirmed', 'sent'))]"/>
+                <filter name="won" string="Won" domain="[('state', '=', 'won')]"/>
+                <filter name="lost" string="Lost" domain="[('state', '=', 'lost')]"/>
+                <separator/>
+                <filter name="expired" string="Expired"
+                        domain="[('validity_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_partner" string="Customer" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_user" string="Salesperson" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_wsd_quote" model="ir.actions.act_window">
+        <field name="name">Quotation Estimates</field>
+        <field name="res_model">sn.wsd.quote</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_wsd_quote_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a quotation estimate
+            </p>
+            <p>
+                Cost one unit of a product from its bill of materials at the
+                latest purchase prices, add the operation and one-off costs,
+                then quote a price from the markup.
+            </p>
+        </field>
+    </record>
+</odoo>

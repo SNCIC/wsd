@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view_sn_cost" model="ir.ui.view">
+        <field name="name">product.template.form.sn.cost</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <group name="purchase" position="before">
+                <group string="Latest Purchase Price" name="sn_latest_purchase">
+                    <field name="sn_latest_purchase_price"/>
+                    <field name="sn_latest_purchase_date"/>
+                    <field name="sn_latest_purchase_source"/>
+                    <field name="sn_latest_purchase_partner_id"/>
+                    <field name="sn_latest_purchase_ref"/>
+                    <button name="action_sn_refresh_latest_purchase_price"
+                            string="Refresh from Purchase Orders"
+                            type="object"
+                            icon="fa-refresh"
+                            colspan="2"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

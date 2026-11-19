@@ -1,0 +1,815 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sn_wsd_quote
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-19 07:22+0000\n"
+"PO-Revision-Date: 2026-11-19 07:22+0000\n"
+"Last-Translator: SNCIC\n"
+"Language-Team: Chinese (Simplified Han script)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: sn_wsd_quote
+#: model:ir.actions.report,print_report_name:sn_wsd_quote.action_report_sn_quote
+msgid "'Quotation Estimate - %s' % object.name"
+msgstr "'报价测算 - %s' % object.name"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "- revision"
+msgstr "- 版本"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "<strong>Customer</strong>"
+msgstr "<strong>客户</strong>"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "<strong>Notes</strong>"
+msgstr "<strong>备注</strong>"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "<strong>Unit Cost</strong>"
+msgstr "<strong>单位成本</strong>"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "<strong>Unit Price</strong>"
+msgstr "<strong>单价</strong>"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_needaction
+msgid "Action Needed"
+msgstr "需要处理"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__amount
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Amount"
+msgstr "金额"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Assumptions, excluded items, payment terms..."
+msgstr "假设条件、不含项目、付款条件……"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Basis"
+msgstr "计价基准"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__bom_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__bom_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Bill of Materials"
+msgstr "物料清单"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_generate_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__company_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__price_date
+msgid "Confirmation date of the purchase the material price comes from."
+msgstr "物料价格来源采购的确认日期。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote__state__confirmed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Cost"
+msgstr "成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Cost Lines"
+msgstr "成本明细"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Cost Sheet"
+msgstr "成本测算表"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__unit_cost
+msgid ""
+"Cost of one unit of the quoted product, one-off costs spread over the quoted"
+" quantity."
+msgstr "报价产品的单位成本，一次性费用按报价数量分摊。"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.actions.act_window,help:sn_wsd_quote.action_sn_wsd_quote
+msgid ""
+"Cost one unit of a product from its bill of materials at the\n"
+"                latest purchase prices, add the operation and one-off costs,\n"
+"                then quote a price from the markup."
+msgstr "按最新采购价从物料清单算出产品单位成本，加上工序与一次性费用，再按加成率得出报价。"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Cost per Unit"
+msgstr "单位成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__amount
+msgid ""
+"Cost per one unit of the quoted product, or the total for a one-off expense."
+msgstr "报价产品的单位成本；一次性费用则为总额。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_generate__explode_sub_boms
+msgid ""
+"Cost the materials of the sub-assemblies instead of the sub-assembly itself."
+" Kits are always exploded."
+msgstr "半成品按其组成材料计价，而非按半成品本身；套件（虚拟件）始终展开。"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.actions.act_window,help:sn_wsd_quote.action_sn_wsd_quote
+msgid "Create a quotation estimate"
+msgstr "新建报价测算"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__currency_id
+msgid "Currency"
+msgstr "币别"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__partner_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Customer"
+msgstr "客户"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__validity_date
+msgid "Date the quoted price stops applying."
+msgstr "报价失效的日期。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Description"
+msgstr "名称"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote__state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__line_type__expense
+msgid "Expense"
+msgstr "费用"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__is_fixed
+msgid ""
+"Expense invoiced once for the whole order (tooling, certification, freight):"
+" the amount is the total, not a cost per unit."
+msgstr "整单一次性发生的费用（模具、认证、运费）：金额为总额，不是单位成本。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__expense_cost
+msgid "Expense per Unit"
+msgstr "单位费用"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Expired"
+msgstr "已失效"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__explode_sub_boms
+msgid "Explode Sub-BoMs"
+msgstr "展开子 BOM"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（联系人）"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_generate_form
+msgid "Generate"
+msgstr "生成"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_generate_form
+msgid "Generate Cost from Bill of Materials"
+msgstr "从物料清单生成成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model,name:sn_wsd_quote.model_sn_wsd_quote_generate
+msgid "Generate Quotation Estimate Cost"
+msgstr "生成报价测算成本"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Generate from BoM"
+msgstr "从 BOM 生成"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "勾选后，新消息需要你处理。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__message_has_error
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "勾选后，部分消息发送失败。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__include_operations
+msgid "Include Operations"
+msgstr "包含工序"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__note
+msgid "Internal Note"
+msgstr "内部备注"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__name
+msgid ""
+"Label printed on the cost sheet. Filled from the material or the operation, "
+"free text for an expense."
+msgstr "成本测算表上打印的名称。物料或工序自动带出，费用可自由填写。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__loss_percent
+msgid "Loss (%)"
+msgstr "损耗率(%)"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote__state__lost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Lost"
+msgstr "丢单"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__management_cost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Management"
+msgstr "管理费"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__management_percent
+msgid "Management Rate (%)"
+msgstr "管理费率(%)"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__management_percent
+msgid ""
+"Management and finance expenses, applied to the material, operation and "
+"overhead costs."
+msgstr "管理与财务费用，按材料、工序及制造费用计提。"
+
+#. module: sn_wsd_quote
+#: model:res.groups,name:sn_wsd_quote.group_sn_quote_manager
+msgid "Manager"
+msgstr "管理员"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__price_source__manufacture
+msgid "Manufacturing Cost"
+msgstr "制造成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__overhead_percent
+msgid "Manufacturing overhead, applied to the material and operation costs."
+msgstr "制造费用，按材料与工序成本计提。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__margin_amount
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Margin"
+msgstr "毛利"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__margin_percent
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__margin_percent
+msgid "Margin (%)"
+msgstr "毛利率(%)"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Mark as Sent"
+msgstr "标记为已发送"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Markup"
+msgstr "加成率"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__markup_percent
+msgid "Markup (%)"
+msgstr "加成率(%)"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__product_id
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__line_type__material
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Material"
+msgstr "物料"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__product_code
+msgid "Material Code"
+msgstr "物料编码"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__material_cost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Material Cost"
+msgstr "材料成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送错误"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_ids
+msgid "Messages"
+msgstr "消息"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "My Estimates"
+msgstr "我的测算"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "New Revision"
+msgstr "新版本"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Notes"
+msgstr "备注"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_needaction_counter
+msgid "Number of Actions"
+msgstr "待处理数量"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要处理的消息数量"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送失败的消息数量"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__is_fixed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "One-off"
+msgstr "一次性"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__fixed_cost
+msgid "One-off Cost"
+msgstr "一次性费用"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "One-off costs"
+msgstr "一次性费用"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__operation_id
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__line_type__operation
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Operation"
+msgstr "工序"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__operation_cost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Operation Cost"
+msgstr "工序成本"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Operations"
+msgstr "工序"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Other Costs"
+msgstr "其他费用"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Other costs per unit"
+msgstr "单位其他费用"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__overhead_cost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Overhead"
+msgstr "制造费用"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__overhead_percent
+msgid "Overhead Rate (%)"
+msgstr "制造费用率(%)"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Per unit"
+msgstr "按单位"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__markup_percent
+msgid "Percentage added to the unit cost to obtain the quoted price."
+msgstr "在单位成本上加成的比例，用于得出报价。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__price_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Price Date"
+msgstr "价格日期"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__price_missing
+msgid "Price Missing"
+msgstr "缺少价格"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__price_missing
+msgid ""
+"Set when a material or an operation has no price at all: the estimate "
+"understates the cost and the line has to be priced by hand."
+msgstr "物料或工序完全没有价格时置位：测算成本会被低估，需要手工补价。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__price_source
+msgid "Price Source"
+msgstr "价格来源"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__route_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__route_id
+msgid "Process Route"
+msgstr "工艺路线"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__product_code
+msgid "Product Code"
+msgstr "产品编码"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__price_source__purchase
+msgid "Purchase Order"
+msgstr "采购订单"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__quantity
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__quantity
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__quantity
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__tier_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Quantity Tiers"
+msgstr "数量阶梯"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__quantity
+msgid ""
+"Quantity consumed by one unit of the quoted product, in the unit of the "
+"line."
+msgstr "生产一单位报价产品所消耗的数量，按本行单位表示。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__quantity
+msgid ""
+"Quantity quoted. The one-off costs are spread over it, so it drives the unit"
+" cost of the worksheet."
+msgstr "报价数量。一次性费用按此数量分摊，因此会影响测算的单位成本。"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Quotation"
+msgstr "报价"
+
+#. module: sn_wsd_quote
+#: model:ir.actions.report,name:sn_wsd_quote.action_report_sn_quote
+#: model:ir.model,name:sn_wsd_quote.model_sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__quote_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__quote_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__quote_id
+#: model:ir.module.category,name:sn_wsd_quote.module_category_sn_quote
+#: model:res.groups.privilege,name:sn_wsd_quote.privilege_sn_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Quotation Estimate"
+msgstr "报价测算"
+
+#. module: sn_wsd_quote
+#: model:ir.model,name:sn_wsd_quote.model_sn_wsd_quote_line
+msgid "Quotation Estimate Line"
+msgstr "报价测算明细"
+
+#. module: sn_wsd_quote
+#: model:ir.model,name:sn_wsd_quote.model_sn_wsd_quote_tier
+msgid "Quotation Estimate Tier"
+msgstr "报价测算数量阶梯"
+
+#. module: sn_wsd_quote
+#: model:ir.actions.act_window,name:sn_wsd_quote.action_sn_wsd_quote
+#: model:ir.ui.menu,name:sn_wsd_quote.menu_sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Quotation Estimates"
+msgstr "报价测算"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__amount_total
+msgid "Quoted Amount"
+msgstr "报价金额"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Quoted amount"
+msgstr "报价金额"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__price_unit
+msgid ""
+"Quoted unit price. Writing it back-computes the markup, so the price can be "
+"entered directly when the market sets it."
+msgstr "报价单价。直接改写会反算加成率，市价决定时可直接录入价格。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__rating_ids
+msgid "Ratings"
+msgstr "评分"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__name
+msgid "Reference"
+msgstr "单号"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_generate__clear_existing
+msgid "Remove the cost lines of the estimate before generating the new ones."
+msgstr "生成新明细前先删除原有成本明细。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_generate__clear_existing
+msgid "Replace Existing Lines"
+msgstr "替换现有明细"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Reset to Draft"
+msgstr "重置为草稿"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__revision
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+msgid "Revision"
+msgstr "版本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送错误"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__user_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Salesperson"
+msgstr "销售员"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote_line__loss_percent
+msgid "Scrap rate of the material, applied on top of the quantity."
+msgstr "物料损耗率，在用量之上追加。"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote__state__sent
+msgid "Sent"
+msgstr "已发送"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__sequence
+msgid "Sequence"
+msgstr "序号"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__material_specification
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__material_specification
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Specification"
+msgstr "规格型号"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__price_source__standard
+msgid "Standard Cost"
+msgstr "标准成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__fixed_cost
+msgid ""
+"Tooling, certification, packing design: costs invoiced once for the whole "
+"order, spread over the quoted quantity."
+msgstr "模具、认证、包装设计等整单一次性费用，按报价数量分摊。"
+
+#. module: sn_wsd_quote
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_list
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__line_type
+msgid "Type"
+msgstr "类型"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__uom_id
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__uom_id
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__unit_cost
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__unit_cost
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Unit Cost"
+msgstr "单位成本"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__price_unit
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_line__unit_price
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote_tier__price_unit
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Unit Price"
+msgstr "单价"
+
+#. module: sn_wsd_quote
+#: model:res.groups,name:sn_wsd_quote.group_sn_quote_user
+msgid "User"
+msgstr "用户"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__validity_date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.report_sn_quote_document
+msgid "Valid Until"
+msgstr "有效期至"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote_line__price_source__pricelist
+msgid "Vendor Pricelist"
+msgstr "供应商价目表"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,field_description:sn_wsd_quote.field_sn_wsd_quote__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields,help:sn_wsd_quote.field_sn_wsd_quote__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_quote
+#: model:ir.model.fields.selection,name:sn_wsd_quote.selection__sn_wsd_quote__state__won
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_quote.view_sn_wsd_quote_search
+msgid "Won"
+msgstr "成交"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cost of the BoM on its form: the material cost reads the stored cost of
+         the components, which follows the latest purchase prices. -->
+    <record id="view_mrp_bom_form_sn_cost" model="ir.ui.view">
+        <field name="name">mrp.bom.form.sn.cost</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]" position="after">
+                <group name="sn_cost" string="Cost">
+                    <group>
+                        <field name="sn_currency_id" invisible="1"/>
+                        <field name="sn_material_cost"/>
+                        <field name="sn_operation_cost"/>
+                    </group>
+                    <group>
+                        <field name="sn_total_cost"/>
+                        <field name="sn_unit_cost"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='bom_line_ids']/list/field[@name='product_uom_id']" position="after">
+                <field name="sn_currency_id" column_invisible="1"/>
+                <field name="sn_unit_cost" optional="show"/>
+                <field name="sn_cost_amount" optional="show"/>
+                <field name="sn_cost_date" optional="show"/>
+                <field name="sn_cost_source" optional="hide"/>
+                <field name="sn_cost_partner_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

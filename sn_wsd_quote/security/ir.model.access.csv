@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sn_wsd_quote_user,sn.wsd.quote user,model_sn_wsd_quote,group_sn_quote_user,1,1,1,0
+access_sn_wsd_quote_manager,sn.wsd.quote manager,model_sn_wsd_quote,group_sn_quote_manager,1,1,1,1
+access_sn_wsd_quote_line_user,sn.wsd.quote.line user,model_sn_wsd_quote_line,group_sn_quote_user,1,1,1,1
+access_sn_wsd_quote_line_manager,sn.wsd.quote.line manager,model_sn_wsd_quote_line,group_sn_quote_manager,1,1,1,1
+access_sn_wsd_quote_tier_user,sn.wsd.quote.tier user,model_sn_wsd_quote_tier,group_sn_quote_user,1,1,1,1
+access_sn_wsd_quote_tier_manager,sn.wsd.quote.tier manager,model_sn_wsd_quote_tier,group_sn_quote_manager,1,1,1,1
+access_sn_wsd_quote_generate_user,sn.wsd.quote.generate user,model_sn_wsd_quote_generate,group_sn_quote_user,1,1,1,1
+access_sn_wsd_quote_generate_manager,sn.wsd.quote.generate manager,model_sn_wsd_quote_generate,group_sn_quote_manager,1,1,1,1

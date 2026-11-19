@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sn_wsd_quote"
+              name="Quotation Estimates"
+              parent="sale.sale_menu_root"
+              action="action_sn_wsd_quote"
+              sequence="45"
+              groups="group_sn_quote_user"/>
+</odoo>

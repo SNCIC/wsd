@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_cost.BomOverviewLine" t-inherit="mrp.BomOverviewLine" t-inherit-mode="extension">
+        <xpath expr="//td[@name='td_mrp_bom']" position="after">
+            <td t-if="showCostInfo" class="text-end">
+                <t t-if="data.sn_unit_cost" t-esc="formatMonetary(data.sn_unit_cost)"/>
+            </td>
+            <td t-if="showCostInfo" class="text-center" t-esc="data.sn_cost_date"/>
+        </xpath>
+    </t>
+
+</templates>

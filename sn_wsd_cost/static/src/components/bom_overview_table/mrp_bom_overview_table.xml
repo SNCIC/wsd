@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sn_wsd_cost.BomOverviewTable" t-inherit="mrp.BomOverviewTable" t-inherit-mode="extension">
+        <xpath expr="//th[@name='th_mrp_bom_h']" position="after">
+            <th t-if="showCostInfo" class="text-end"
+                title="Latest purchase price of the component, in the unit of measure of the line.">Unit Price</th>
+            <th t-if="showCostInfo" class="text-center"
+                title="Confirmation date of the purchase the price comes from.">Purchase Date</th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_f']" position="after">
+            <td t-if="showCostInfo"/>
+            <td t-if="showCostInfo"/>
+        </xpath>
+
+        <xpath expr="//td[@name='td_mrp_bom_b']" position="after">
+            <td t-if="showCostInfo"/>
+            <td t-if="showCostInfo"/>
+        </xpath>
+    </t>
+
+</templates>
