@@ -6,126 +6,54 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 00:00+0000\n"
-"PO-Revision-Date: 2026-11-19 00:00+0000\n"
+"POT-Creation-Date: 2026-11-19 03:11+0000\n"
+"PO-Revision-Date: 2026-11-19 03:11+0000\n"
 "Last-Translator: \n"
-"Language-Team: Chinese (Simplified)\n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: sn_wsd_toll
-#: model:ir.model,name:sn_wsd_toll.model_sn_toll_order
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_order_id
-msgid "Toll Manufacturing Order"
-msgstr "受托加工单"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "&lt; Back to orders"
+msgstr "返回订单列表"
 
 #. module: sn_wsd_toll
-#: model:ir.model,name:sn_wsd_toll.model_sn_toll_material_line
-msgid "Toll Manufacturing Supplied Material"
-msgstr "受托加工客供料"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_needaction
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_needaction
+msgid "Action Needed"
+msgstr "需要操作"
 
 #. module: sn_wsd_toll
-#: model:ir.model,name:sn_wsd_toll.model_sn_toll_loss
-msgid "Toll Manufacturing Loss Settlement"
-msgstr "受托加工损耗结算"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_ids
+msgid "Activities"
+msgstr "活动"
 
 #. module: sn_wsd_toll
-#: model:ir.model,name:sn_wsd_toll.model_sn_toll_loss_line
-msgid "Toll Manufacturing Loss Line"
-msgstr "受托加工损耗明细"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "活动异常图标"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__name
-msgid "Order Number"
-msgstr "单号"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_state
+msgid "Activity State"
+msgstr "活动状态"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__partner_id
-msgid "Customer"
-msgstr "客户"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "活动类型图标"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_id
-msgid "Finished Product"
-msgstr "成品"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_qty
-msgid "Quantity"
-msgstr "数量"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__date_order
-msgid "Order Date"
-msgstr "单据日期"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__date_deadline
-msgid "Delivery Deadline"
-msgstr "交付期限"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__pricing_method
-msgid "Pricing Basis"
-msgstr "计价基础"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__piece_rate_id
-msgid "Piece Rate"
-msgstr "计件单价"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__pricing_method__fixed
-msgid "Fixed Price"
-msgstr "固定单价"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_unit
-msgid "Processing Fee per Unit"
-msgstr "单位加工费"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_amount
-msgid "Processing Fee"
-msgstr "加工费"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_deduction
-msgid "Loss Deduction"
-msgstr "损耗扣款"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_net
-msgid "Net Processing Fee"
-msgstr "净加工费"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_product_id
-msgid "Processing Fee Product"
-msgstr "加工费产品"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_policy
-msgid "Default Loss Settlement"
-msgstr "默认损耗结算方式"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__deduct
-msgid "Deduct from Processing Fee"
-msgstr "从加工费扣减"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__claim
-msgid "Separate Claim Invoice"
-msgstr "单独索赔发票"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__resupply
-msgid "Customer Resupply"
-msgstr "客户补料"
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"Add the material supplied by the customer on toll manufacturing order '%s' "
+"before receiving it."
+msgstr "请先在受托加工单 '%s' 上登记客户提供的物料，再进行收货。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_allowance
@@ -133,19 +61,521 @@ msgid "Allowed Loss (%)"
 msgstr "允许损耗率(%)"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_line_ids
-msgid "Supplied Material"
-msgstr "客供料"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__amount
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Amount"
+msgstr "金额"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_stock_qty
-msgid "Supplied Material in Stock"
-msgstr "客供料库存"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__fee_deduction
+msgid ""
+"Amount deducted from the processing fee by the confirmed loss settlements "
+"that deduct from the fee."
+msgstr "由从加工费扣减的已确认损耗结算所冲减的金额。"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_received_qty
-msgid "Material Received"
-msgstr "客供料已收"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_attachment_count
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_attachment_count
+msgid "Attachment Count"
+msgstr "附件数量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__bom_id
+msgid "Bill of Materials"
+msgstr "物料清单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__bom_line_id
+msgid "Bill of Materials Line"
+msgstr "物料清单行"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__state__cancel
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__cancel
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__account_move_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Claim Invoice"
+msgstr "索赔发票"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__company_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__company_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/sale_order.py:0
+msgid "Confirm sale order '%s' before creating its toll manufacturing orders."
+msgstr "请先确认销售订单 '%s'，再生成受托加工单。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"Confirm toll manufacturing order '%s' before creating its manufacturing "
+"order."
+msgstr "请先确认受托加工单 '%s'，再创建生产订单。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__confirmed
+msgid "Confirmed"
+msgstr "已确认"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_consumed
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "Consumed"
+msgstr "已耗"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_res_partner
+msgid "Contact"
+msgstr "联系人"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Create Manufacturing Order"
+msgstr "创建生产订单"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_order_form_toll
+msgid "Create Toll Orders"
+msgstr "生成受托加工单"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.actions.act_window,help:sn_wsd_toll.action_sn_toll_order
+msgid "Create a toll manufacturing order"
+msgstr "新建受托加工单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__create_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__create_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__create_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__create_date
+msgid "Created on"
+msgstr "创建时间"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__currency_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__currency_id
+msgid "Currency"
+msgstr "币种"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__partner_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__partner_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Customer"
+msgstr "客户"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__settlement_type__resupply
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__resupply
+msgid "Customer Resupply"
+msgstr "客户补料"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_stock_move__sn_toll_partner_id
+msgid ""
+"Customer owning the goods moved by the toll manufacturing chain. The "
+"reservation is restricted to that owner and the valuation excludes the move "
+"lines carrying it."
+msgstr "受托加工流程中货物所属的客户。预留只取该货主的库存，估值也会排除这些移动行。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_mrp_production__sn_toll_partner_id
+msgid ""
+"Customer owning the material consumed and the finished goods produced by "
+"this manufacturing order."
+msgstr "消耗客供料并产出成品的客户，二者均归该客户所有。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__date
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "Date"
+msgstr "日期"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+msgid "Deadline"
+msgstr "期限"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__settlement_type__deduct
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__deduct
+msgid "Deduct from Processing Fee"
+msgstr "从加工费扣减"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_policy
+msgid "Default Loss Settlement"
+msgstr "默认损耗结算方式"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_material_line__product_uom_id
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__product_uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr "所有库存操作默认使用的计量单位。"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Deliver Finished Goods"
+msgstr "交付成品"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Delivered"
+msgstr "已交付"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__delivered_qty
+msgid "Delivered Quantity"
+msgstr "已交付数量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__date_deadline
+msgid "Delivery Deadline"
+msgstr "交付期限"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_account_move__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_move__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__display_name
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_quant__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Done"
+msgstr "完成"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__state__draft
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__draft
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_search
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Draft"
+msgstr "草稿"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"Every supplied material line of toll manufacturing order '%s' is already "
+"received."
+msgstr "受托加工单 '%s' 的客供料已全部收货。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__delivery_picking_ids
+#: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_delivery
+msgid "Finished Goods Deliveries"
+msgstr "成品交付单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Finished Product"
+msgstr "成品"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__pricing_method__fixed
+msgid "Fixed Price"
+msgstr "固定单价"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_follower_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_follower_ids
+msgid "Followers"
+msgstr "关注者"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_partner_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "关注者（联系人）"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font awesome 图标，例如 fa-tasks"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__has_message
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__has_message
+msgid "Has Message"
+msgstr "有消息"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_account_move__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order_line__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_move__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_quant__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_exception_icon
+msgid "Icon"
+msgstr "图标"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "用于标示异常活动的图标。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__message_needaction
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "勾选后，新消息需要您处理。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__message_has_error
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__message_has_sms_error
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__message_has_error
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "勾选后，部分消息发送失败。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__in_progress
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "In Progress"
+msgstr "进行中"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_on_hand
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "In Stock"
+msgstr "在库"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Internal notes..."
+msgstr "内部备注..."
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Invoice"
+msgstr "发票"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__invoice_count
+msgid "Invoice Count"
+msgstr "发票数量"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Invoice Processing Fee"
+msgstr "加工费开票"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__account_move_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Invoices"
+msgstr "发票"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_is_follower
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_is_follower
+msgid "Is Follower"
+msgstr "是关注者"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_account_move
+msgid "Journal Entry"
+msgstr "日记账分录"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__write_uid
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__write_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__write_date
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__write_date
+msgid "Last Updated on"
+msgstr "最后更新时间"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Late"
+msgstr "逾期"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__is_linked_to_sale
+msgid "Linked to a Sale Order"
+msgstr "已关联销售订单"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Load Loss"
+msgstr "载入损耗"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_loss
+msgid "Loss"
+msgstr "损耗"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_deduction
+msgid "Loss Deduction"
+msgstr "损耗扣款"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Loss Lines"
+msgstr "损耗明细"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Loss Policy"
+msgstr "损耗策略"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__loss_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Loss Settlement"
+msgstr "损耗结算"
+
+#. module: sn_wsd_toll
+#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_loss
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_ids
+#: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_loss
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Loss Settlements"
+msgstr "损耗结算"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+msgid "Loss deduction - %(order)s - %(loss)s"
+msgstr "损耗扣款 - %(order)s - %(loss)s"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Loss deduction - %s"
+msgstr "损耗扣款 - %s"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+msgid "Loss settlement '%s' has no line."
+msgstr "损耗结算 '%s' 没有明细行。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+msgid "Loss settlement '%s' is not a draft."
+msgstr "损耗结算 '%s' 不是草稿状态。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__quantity
+msgid "Lost Quantity"
+msgstr "损耗数量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__production_count
+msgid "MO Count"
+msgstr "生产订单数量"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "MOs"
+msgstr "生产订单"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+#: model:ir.model,name:sn_wsd_toll.model_mrp_production
+msgid "Manufacturing Order"
+msgstr "生产订单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__production_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Manufacturing Orders"
+msgstr "生产订单"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Mark as Done"
+msgstr "标记完成"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__product_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__product_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "Material"
+msgstr "物料"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_consumed_qty
@@ -158,152 +588,138 @@ msgid "Material Loss"
 msgstr "客供料损耗"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__produced_qty
-msgid "Produced Quantity"
-msgstr "已生产数量"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__delivered_qty
-msgid "Delivered Quantity"
-msgstr "已交付数量"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__remaining_qty
-msgid "Remaining to Deliver"
-msgstr "待交付数量"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__progress
-msgid "Progress (%)"
-msgstr "进度(%)"
-
-#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_picking_ids
+#: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_material_receipt
 msgid "Material Receipts"
 msgstr "客供料收货单"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__delivery_picking_ids
-msgid "Finished Goods Deliveries"
-msgstr "成品交付单"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_received_qty
+msgid "Material Received"
+msgstr "客供料已收"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_ids
-#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_loss
-msgid "Loss Settlements"
-msgstr "损耗结算"
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+msgid "Material loss - %(order)s - %(product)s"
+msgstr "物料损耗 - %(order)s - %(product)s"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__production_ids
-msgid "Manufacturing Orders"
-msgstr "生产订单"
+#: model_terms:ir.actions.act_window,help:sn_wsd_toll.action_sn_toll_order
+msgid ""
+"Material supplied by the customer is stored under his\n"
+"                ownership: it stays out of your stock valuation and cannot be\n"
+"                taken by another order."
+msgstr "客户提供的物料以其所有权存放：不计入我方库存估值，也不会被其他订单占用。"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__account_move_ids
-msgid "Invoices"
-msgstr "发票"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_has_error
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_has_error
+msgid "Message Delivery error"
+msgstr "消息发送失败"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__product_id
-msgid "Material"
-msgstr "物料"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_ids
+msgid "Messages"
+msgstr "消息"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__product_uom_qty
-msgid "Supplied Quantity"
-msgstr "客供数量"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "我的活动期限"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_received
-msgid "Received"
-msgstr "已收"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_list
+msgid "Net Fee"
+msgstr "净费用"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_consumed
-msgid "Consumed"
-msgstr "已耗"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_net
+msgid "Net Processing Fee"
+msgstr "净加工费"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_theoretical
-msgid "Theoretical Consumption"
-msgstr "理论用量"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "下一活动期限"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_loss
-msgid "Loss"
-msgstr "损耗"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_summary
+msgid "Next Activity Summary"
+msgstr "下一活动摘要"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_to_receive
-msgid "To Receive"
-msgstr "待收"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_type_id
+msgid "Next Activity Type"
+msgstr "下一活动类型"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_on_hand
-msgid "In Stock"
-msgstr "在库"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+msgid "No toll manufacturing order yet."
+msgstr "暂无受托加工单。"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__settlement_type
-msgid "Settlement Type"
-msgstr "结算方式"
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"No warehouse is configured for the company of toll manufacturing order '%s'."
+msgstr "受托加工单 '%s' 所属公司未配置仓库。"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__amount
-msgid "Total Amount"
-msgstr "合计金额"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__note
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__note
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Notes"
+msgstr "备注"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__account_move_id
-msgid "Claim Invoice"
-msgstr "索赔发票"
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Nothing is left to invoice on sale order '%s'."
+msgstr "销售订单 '%s' 已无待开票内容。"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__picking_id
-msgid "Resupply Receipt"
-msgstr "补料收货单"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_needaction_counter
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_needaction_counter
+msgid "Number of Actions"
+msgstr "操作数量"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__quantity
-msgid "Lost Quantity"
-msgstr "损耗数量"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_has_error_counter
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_has_error_counter
+msgid "Number of errors"
+msgstr "错误数量"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__unit_cost
-msgid "Unit Cost"
-msgstr "单位成本"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__message_needaction_counter
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "需要处理的消息数量"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_receipt
-msgid "Toll Material Receipt"
-msgstr "客供料收货"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__message_has_error_counter
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "发送失败的消息数量"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_delivery
-msgid "Toll Finished Goods Delivery"
-msgstr "受托成品交付"
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+msgid "Order"
+msgstr "单据"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_move__sn_toll_partner_id
-msgid "Toll Goods Owner"
-msgstr "客供品货主"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__date_order
+msgid "Order Date"
+msgstr "单据日期"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__sn_is_toll
-#: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_root
-msgid "Toll Manufacturing"
-msgstr "受托加工"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__sn_is_toll_customer
-msgid "Toll Manufacturing Customer"
-msgstr "受托加工客户"
-
-#. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__sn_toll_order_ids
-#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_order
-msgid "Toll Manufacturing Orders"
-msgstr "受托加工单"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__name
+msgid "Order Number"
+msgstr "单号"
 
 #. module: sn_wsd_toll
 #: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_order
@@ -311,9 +727,183 @@ msgid "Orders"
 msgstr "受托加工单"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_toll_order_count
-msgid "Toll Order Count"
-msgstr "受托加工单数量"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__loss_allowance
+msgid ""
+"Percentage of the theoretical consumption tolerated before a loss is settled"
+" with the customer."
+msgstr "在向客户结算损耗之前允许的理论用量偏差百分比。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__piece_rate_id
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__pricing_method__piece_rate
+msgid "Piece Rate"
+msgstr "计件单价"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__pricing_method
+msgid ""
+"Piece Rate reuses the processing price configured on a piece rate record; "
+"Fixed Price lets the processing fee be typed on the order."
+msgstr "计件单价复用计件单价记录上的加工价格；固定单价则直接在单据上填写加工费。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__pricing_method
+msgid "Pricing Basis"
+msgstr "计价基础"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_amount
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Processing Fee"
+msgstr "加工费"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_product_id
+msgid "Processing Fee Product"
+msgstr "加工费产品"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__fee_unit
+msgid "Processing Fee per Unit"
+msgstr "单位加工费"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Processing fee - %(order)s - %(product)s"
+msgstr "加工费 - %(order)s - %(product)s"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__fee_unit
+msgid ""
+"Processing fee invoiced to the customer for one finished unit. Taken from "
+"the piece rate when the order is priced on a piece rate, and snapshotted so "
+"later rate changes do not rewrite the order."
+msgstr "每个成品向客户收取的加工费。按计件计价时取自计件单价，并做快照，后续单价调整不会改写单据。"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+msgid "Produced"
+msgstr "已生产"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__produced_qty
+msgid "Produced Quantity"
+msgstr "已生产数量"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Product"
+msgstr "产品"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_tmpl_id
+msgid "Product Template"
+msgstr "产品模板"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Production"
+msgstr "生产"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Progress"
+msgstr "进度"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__progress
+msgid "Progress (%)"
+msgstr "进度(%)"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_qty
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+msgid "Quantity"
+msgstr "数量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_material_line__qty_loss
+msgid ""
+"Quantity consumed above the theoretical consumption plus the allowed loss "
+"tolerance. Only this quantity is settled with the customer."
+msgstr "超出理论用量与允许损耗率之外的消耗数量。仅该数量需要与客户结算。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__material_stock_qty
+msgid ""
+"Quantity of supplied material currently stored for the customer. Computed as"
+" superuser so the customer portal can show it without granting access to the"
+" stock quants."
+msgstr "当前为客户存放的客供料数量。以超级用户计算，便于客户门户展示而不授予库存量权限。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_material_line__qty_on_hand
+msgid "Quantity of this material currently stored for the customer."
+msgstr "当前为该客户存放的该物料数量。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_material_line__product_uom_qty
+msgid ""
+"Quantity the customer announces as supplied. The receipt transfer is created"
+" for the quantity still missing."
+msgstr "客户申报的客供数量。收货单只为尚缺的数量生成。"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_stock_quant
+msgid "Quants"
+msgstr "库存量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__rating_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__rating_ids
+msgid "Ratings"
+msgstr "评分"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Receive Supplied Material"
+msgstr "客供料收货"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_received
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Received"
+msgstr "已收"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__name
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "Reference"
+msgstr "单号"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__remaining_qty
+msgid "Remaining to Deliver"
+msgstr "待交付数量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__activity_user_id
+msgid "Responsible User"
+msgstr "负责人"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__picking_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Resupply Receipt"
+msgstr "补料收货单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__message_has_sms_error
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "短信发送失败"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__sale_order_id
@@ -321,66 +911,419 @@ msgid "Sale Order"
 msgstr "销售订单"
 
 #. module: sn_wsd_toll
-#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__is_linked_to_sale
-msgid "Linked to a Sale Order"
-msgstr "已关联销售订单"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__sale_line_id
+msgid "Sale Order Line"
+msgstr "销售订单行"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/sale_order.py:0
-msgid "Create Toll Orders"
-msgstr "生成受托加工单"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__sale_order_id
+msgid ""
+"Sale order that launched the toll manufacturing: its lines carry the "
+"processing fee and the finished goods delivery."
+msgstr "触发本次受托加工的销售订单：其订单行承载加工费与成品交付。"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/sale_order.py:0
-msgid "Toll manufacturing order '%s' must contain at least one storable finished product line."
-msgstr "受托加工销售订单 '%s' 至少需要一行可库存的成品明细。"
+#: model:ir.model,name:sn_wsd_toll.model_sale_order
+msgid "Sales Order"
+msgstr "销售订单"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/sale_order.py:0
-msgid "Confirm sale order '%s' before creating its toll manufacturing orders."
-msgstr "请先确认销售订单 '%s'，再生成受托加工单。"
+#: model:ir.model,name:sn_wsd_toll.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "销售订单行"
 
 #. module: sn_wsd_toll
+#. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Add the material supplied by the customer on toll manufacturing order '%s' before receiving it."
-msgstr "请先在受托加工单 '%s' 上登记客户提供的物料，再进行收货。"
+msgid ""
+"Select the processing fee product on toll manufacturing order '%s' before "
+"invoicing."
+msgstr "开票前请为受托加工单 '%s' 选择加工费产品。"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Nothing is left to invoice on sale order '%s'."
-msgstr "销售订单 '%s' 已无待开票内容。"
-
-#. module: sn_wsd_toll
+#. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_loss.py:0
-msgid "Select the processing fee product on toll manufacturing order '%s' so the loss can be deducted on sale order '%s'."
+msgid ""
+"Select the processing fee product on toll manufacturing order '%s' so the "
+"loss can be deducted on sale order '%s'."
 msgstr "请为受托加工单 '%s' 设置加工费产品，以便在销售订单 '%s' 上冲减损耗。"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Receive Supplied Material"
-msgstr "客供料收货"
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__settlement_type__claim
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__loss_policy__claim
+msgid "Separate Claim Invoice"
+msgstr "单独索赔发票"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Create Manufacturing Order"
-msgstr "创建生产订单"
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__sequence
+msgid "Sequence"
+msgstr "序号"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Deliver Finished Goods"
-msgstr "交付成品"
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__fee_product_id
+msgid "Service product used on the processing fee invoice."
+msgstr "加工费发票上使用的服务产品。"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Settle"
+msgstr "结算"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
 msgid "Settle Loss"
 msgstr "损耗结算"
 
 #. module: sn_wsd_toll
-#: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Invoice Processing Fee"
-msgstr "加工费开票"
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__state__done
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_search
+msgid "Settled"
+msgstr "已结算"
 
 #. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+msgid "Settlement"
+msgstr "结算"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__settlement_type
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_search
+msgid "Settlement Type"
+msgstr "结算方式"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__loss_policy
+msgid ""
+"Settlement proposed when a loss settlement is created from this order. Any "
+"of the three settlements can still be chosen per document. The allowed loss "
+"percentage is tolerated: only the quantity above it is settled."
+msgstr "从本单创建损耗结算时默认采用的结算方式。每张单据仍可改选三种方式之一。允许损耗率内的数量不结算，仅结算超出部分。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__state
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__state
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_search
+msgid "Status"
+msgstr "状态"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "基于活动的状态。逾期：截止日期已过；今天：活动日期为今天；计划：未来活动。"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_stock_move
+msgid "Stock Move"
+msgstr "库存移动"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Supplied"
+msgstr "客供"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_line_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Supplied Material"
+msgstr "客供料"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__material_stock_qty
+msgid "Supplied Material in Stock"
+msgstr "客供料库存"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__product_uom_qty
+msgid "Supplied Quantity"
+msgstr "客供数量"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_home_toll
+msgid "Supplied material and production progress"
+msgstr "客供料与生产进度"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_order_detail
+msgid "Supplied material in stock:"
+msgstr "客供料库存："
+
+#. module: sn_wsd_toll
+#. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
-msgid "Mark as Done"
-msgstr "完成"
+msgid "The allowed loss percentage must be between 0 and 100."
+msgstr "允许损耗率必须在 0 到 100 之间。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sale_order__sn_is_toll
+msgid ""
+"The order processes material supplied by the customer: the sold price is the"
+" processing fee, the finished goods stay the property of the customer and "
+"the supplied material is received through consignment receipts."
+msgstr "本单加工客户提供的物料：销售价格为加工费，成品归客户所有，客供料通过受托入库单收货。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_res_partner__sn_is_toll_customer
+#: model:ir.model.fields,help:sn_wsd_toll.field_res_users__sn_is_toll_customer
+msgid ""
+"The partner entrusts us with material to process: the supplied material and "
+"the finished goods stay his property and are excluded from our stock "
+"valuation."
+msgstr "该合作伙伴委托我方加工物料：客供料与成品均归其所有，不计入我方库存估值。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"The quantity of toll manufacturing order '%s' must be greater than zero."
+msgstr "受托加工单 '%s' 的数量必须大于零。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_stock_picking__sn_toll_delivery
+msgid ""
+"The transfer gives the finished goods back to the customer who owns them."
+msgstr "该单据将成品交还给拥有其所有权的客户。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_stock_picking__sn_toll_receipt
+msgid ""
+"The transfer receives the material supplied by the customer for a toll "
+"manufacturing order."
+msgstr "该单据接收客户为受托加工单提供的物料。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_theoretical
+msgid "Theoretical Consumption"
+msgstr "理论用量"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_to_receive
+msgid "To Receive"
+msgstr "待收"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_res_partner_filter_toll
+msgid "Toll Customers"
+msgstr "受托加工客户"
+
+#. module: sn_wsd_toll
+#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_delivery
+msgid "Toll Finished Goods Deliveries"
+msgstr "受托成品交付单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_delivery
+msgid "Toll Finished Goods Delivery"
+msgstr "受托成品交付"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__sn_toll_partner_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_move__sn_toll_partner_id
+msgid "Toll Goods Owner"
+msgstr "客供品货主"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__sn_is_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_is_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_is_toll
+#: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_root
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_home_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_mrp_production_search_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_order_form_toll
+msgid "Toll Manufacturing"
+msgstr "受托加工"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__sn_is_toll_customer
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_users__sn_is_toll_customer
+msgid "Toll Manufacturing Customer"
+msgstr "受托加工客户"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_sn_toll_loss_line
+msgid "Toll Manufacturing Loss Line"
+msgstr "受托加工损耗明细"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_sn_toll_loss
+msgid "Toll Manufacturing Loss Settlement"
+msgstr "受托加工损耗结算"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_sn_toll_order
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_account_bank_statement_line__sn_toll_order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_account_move__sn_toll_order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_mrp_production__sn_toll_order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order_line__sn_toll_order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__order_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_order_id
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+msgid "Toll Manufacturing Order"
+msgstr "受托加工单"
+
+#. module: sn_wsd_toll
+#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_order
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__sn_toll_order_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_users__sn_toll_order_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_toll_order_ids
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_list
+msgid "Toll Manufacturing Orders"
+msgstr "受托加工单"
+
+#. module: sn_wsd_toll
+#: model:ir.model,name:sn_wsd_toll.model_sn_toll_material_line
+msgid "Toll Manufacturing Supplied Material"
+msgstr "受托加工客供料"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_receipt
+msgid "Toll Material Receipt"
+msgstr "客供料收货"
+
+#. module: sn_wsd_toll
+#: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_material_receipt
+msgid "Toll Material Receipts"
+msgstr "客供料收货单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_partner__sn_toll_order_count
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_res_users__sn_toll_order_count
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_toll_order_count
+msgid "Toll Order Count"
+msgstr "受托加工单数量"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_order_form_toll
+msgid "Toll Orders"
+msgstr "受托加工单"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Toll manufacturing order '%s' has no bill of materials."
+msgstr "受托加工单 '%s' 没有物料清单。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"Toll manufacturing order '%s' has no bill of materials: the material "
+"consumption cannot be computed."
+msgstr "受托加工单 '%s' 没有物料清单：无法计算物料消耗。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Toll manufacturing order '%s' has no finished goods left to deliver."
+msgstr "受托加工单 '%s' 已无成品可交付。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_loss.py:0
+msgid ""
+"Toll manufacturing order '%s' has no material loss above the tolerated "
+"quantity."
+msgstr "受托加工单 '%s' 没有超出允许量的物料损耗。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "Toll manufacturing order '%s' is cancelled."
+msgstr "受托加工单 '%s' 已取消。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/sale_order.py:0
+msgid ""
+"Toll manufacturing order '%s' must contain at least one storable finished "
+"product line."
+msgstr "受托加工销售订单 '%s' 至少需要一行可库存的成品明细。"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid ""
+"Toll manufacturing order '%s' must list the material supplied by the "
+"customer."
+msgstr "受托加工单 '%s' 必须登记客户提供的物料。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_account_bank_statement_line__sn_toll_order_id
+#: model:ir.model.fields,help:sn_wsd_toll.field_account_move__sn_toll_order_id
+msgid ""
+"Toll manufacturing order invoiced by this entry: processing fee or material "
+"loss claim."
+msgstr "本分录对应的受托加工单：加工费或物料损耗索赔。"
+
+#. module: sn_wsd_toll
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_list
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+#: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_list
+msgid "Total"
+msgstr "合计"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__amount
+msgid "Total Amount"
+msgstr "合计金额"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+#: model:ir.model,name:sn_wsd_toll.model_stock_picking
+msgid "Transfer"
+msgstr "调拨单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "记录上异常活动的类型。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__product_uom_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__product_uom_id
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__product_uom_id
+msgid "Unit"
+msgstr "单位"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss_line__unit_cost
+msgid "Unit Cost"
+msgstr "单位成本"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss_line__unit_cost
+msgid ""
+"Value of one lost unit, used by the claim invoice and by the deduction from "
+"the processing fee. Defaults to the material cost and can be negotiated with"
+" the customer."
+msgstr "每个损耗单位的价值，用于索赔发票与加工费扣减。默认取物料成本，可与客户协商。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__website_message_ids
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__website_message_ids
+msgid "Website Messages"
+msgstr "网站消息"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_loss__website_message_ids
+#: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__website_message_ids
+msgid "Website communication history"
+msgstr "网站沟通记录"
+
+#. module: sn_wsd_toll
+#. odoo-python
+#: code:addons/sn_wsd_toll/models/toll_order.py:0
+msgid "sn_toll_order_id"
+msgstr "受托加工单"
