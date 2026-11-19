@@ -375,6 +375,73 @@ class PurchaseRequestLine(models.Model):
             line.expected_arrival_date = min(dates) if dates else False
 
     @api.depends(
+        'purchase_request_allocation_ids',
+        'purchase_request_allocation_ids.stock_move_id',
+        'purchase_request_allocation_ids.stock_move_id.state',
+        'purchase_request_allocation_ids.stock_move_id.move_orig_ids',
+        'purchase_request_allocation_ids.stock_move_id.location_id',
+        'purchase_request_allocation_ids.stock_move_id.picking_type_id',
+        'purchase_request_allocation_ids.allocated_product_qty',
+        'purchase_request_allocation_ids.open_product_qty',
+        'purchase_lines',
+        'purchase_lines.qty_received',
+        'purchase_lines.product_uom_id',
+        'purchase_lines.state',
+        'product_uom_id',
+    )
+    def _compute_qty(self):
+        """Received and in-progress quantities, counted once per reception.
+
+        The module adds up the allocated quantity of every allocation of the
+        line. A reception in several steps chains the moves with push rules
+        (vendors -> input -> quality -> stock), and the module copies the
+        allocation of the receipt move onto the move of the next step. Both
+        allocations are then allocated when their move is validated, so the
+        received quantity reports the same goods twice and can exceed the
+        quantity that was ordered.
+
+        Only the allocations of the move that brings the goods in are counted
+        here; the copies made on the moves of the following steps are ignored.
+        A line without such an allocation keeps the module fallback on the
+        received quantity of its purchase lines.
+        """
+        for line in self:
+            allocations = line.purchase_request_allocation_ids.filtered(
+                line._is_receipt_allocation
+            )
+            if allocations:
+                line.qty_done = sum(allocations.mapped('allocated_product_qty'))
+                line.qty_in_progress = sum(allocations.mapped('open_product_qty'))
+                continue
+            received_qty = sum(
+                purchase_line.product_uom_id._compute_quantity(
+                    purchase_line.qty_received,
+                    line.product_uom_id,
+                    rounding_method='HALF-UP',
+                )
+                for purchase_line in line.purchase_lines
+                if purchase_line.state != 'cancel' and purchase_line.qty_received
+            )
+            line.qty_done = received_qty
+            line.qty_in_progress = max(line.purchased_qty - received_qty, 0.0)
+
+    def _is_receipt_allocation(self, allocation):
+        """Whether the allocation belongs to the move that receives the goods.
+
+        An allocation without a stock move is the one of a service line, which
+        is filled from the received quantity of the purchase line. Otherwise
+        the move must bring the goods in: a move of a following reception step
+        is fed by the receipt move, which is what tells the copies apart.
+        """
+        self.ensure_one()
+        move = allocation.stock_move_id
+        if not move:
+            return True
+        if move.move_orig_ids:
+            return False
+        return move.location_id.usage == 'supplier' or move.picking_code == 'incoming'
+
+    @api.depends(
         'purchased_qty',
         'qty_done',
     )
