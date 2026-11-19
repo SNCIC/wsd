@@ -53,7 +53,7 @@ msgstr "活动类型图标"
 msgid ""
 "Add the material supplied by the customer on toll manufacturing order '%s' "
 "before receiving it."
-msgstr "请先在受托加工单 '%s' 上登记客户提供的物料，再进行收货。"
+msgstr "请先在受托加工订单 '%s' 上登记客户提供的物料，再进行收货。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_order__loss_allowance
@@ -127,7 +127,7 @@ msgstr "确认"
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/sale_order.py:0
 msgid "Confirm sale order '%s' before creating its toll manufacturing orders."
-msgstr "请先确认销售订单 '%s'，再生成受托加工单。"
+msgstr "请先确认销售订单 '%s'，再生成受托加工订单。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -135,7 +135,7 @@ msgstr "请先确认销售订单 '%s'，再生成受托加工单。"
 msgid ""
 "Confirm toll manufacturing order '%s' before creating its manufacturing "
 "order."
-msgstr "请先确认受托加工单 '%s'，再创建生产订单。"
+msgstr "请先确认受托加工订单 '%s'，再创建生产订单。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_order__state__confirmed
@@ -161,12 +161,12 @@ msgstr "创建生产订单"
 #. module: sn_wsd_toll
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_order_form_toll
 msgid "Create Toll Orders"
-msgstr "生成受托加工单"
+msgstr "生成受托加工订单"
 
 #. module: sn_wsd_toll
 #: model_terms:ir.actions.act_window,help:sn_wsd_toll.action_sn_toll_order
 msgid "Create a toll manufacturing order"
-msgstr "新建受托加工单"
+msgstr "新建受托加工订单"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__create_uid
@@ -309,7 +309,7 @@ msgstr "草稿"
 msgid ""
 "Every supplied material line of toll manufacturing order '%s' is already "
 "received."
-msgstr "受托加工单 '%s' 的客供料已全部收货。"
+msgstr "受托加工订单 '%s' 的客供料已全部收货。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -659,14 +659,14 @@ msgstr "下一活动类型"
 #. module: sn_wsd_toll
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
 msgid "No toll manufacturing order yet."
-msgstr "暂无受托加工单。"
+msgstr "暂无受托加工订单。"
 
 #. module: sn_wsd_toll
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid ""
 "No warehouse is configured for the company of toll manufacturing order '%s'."
-msgstr "受托加工单 '%s' 所属公司未配置仓库。"
+msgstr "受托加工订单 '%s' 所属公司未配置仓库。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_loss__note
@@ -724,7 +724,7 @@ msgstr "单号"
 #. module: sn_wsd_toll
 #: model:ir.ui.menu,name:sn_wsd_toll.menu_sn_toll_order
 msgid "Orders"
-msgstr "受托加工单"
+msgstr "受托加工订单"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,help:sn_wsd_toll.field_sn_toll_order__loss_allowance
@@ -938,7 +938,7 @@ msgstr "销售订单行"
 msgid ""
 "Select the processing fee product on toll manufacturing order '%s' before "
 "invoicing."
-msgstr "开票前请为受托加工单 '%s' 选择加工费产品。"
+msgstr "开票前请为受托加工订单 '%s' 选择加工费产品。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -946,7 +946,7 @@ msgstr "开票前请为受托加工单 '%s' 选择加工费产品。"
 msgid ""
 "Select the processing fee product on toll manufacturing order '%s' so the "
 "loss can be deducted on sale order '%s'."
-msgstr "请为受托加工单 '%s' 设置加工费产品，以便在销售订单 '%s' 上冲减损耗。"
+msgstr "请为受托加工订单 '%s' 设置加工费产品，以便在销售订单 '%s' 上冲减损耗。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sn_toll_loss__settlement_type__claim
@@ -1084,7 +1084,7 @@ msgstr "该合作伙伴委托我方加工物料：客供料与成品均归其所
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid ""
 "The quantity of toll manufacturing order '%s' must be greater than zero."
-msgstr "受托加工单 '%s' 的数量必须大于零。"
+msgstr "受托加工订单 '%s' 的数量必须大于零。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,help:sn_wsd_toll.field_stock_picking__sn_toll_delivery
@@ -1097,7 +1097,7 @@ msgstr "该单据将成品交还给拥有其所有权的客户。"
 msgid ""
 "The transfer receives the material supplied by the customer for a toll "
 "manufacturing order."
-msgstr "该单据接收客户为受托加工单提供的物料。"
+msgstr "该单据接收客户为受托加工订单提供的物料。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__qty_theoretical
@@ -1169,7 +1169,7 @@ msgstr "受托加工损耗结算"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
 #: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sale_order__sn_order_type__toll
 msgid "Toll Manufacturing Order"
-msgstr "受托加工单"
+msgstr "受托加工订单"
 
 #. module: sn_wsd_toll
 #: model:ir.actions.act_window,name:sn_wsd_toll.action_sn_toll_order
@@ -1179,7 +1179,7 @@ msgstr "受托加工单"
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.portal_my_toll_orders
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_list
 msgid "Toll Manufacturing Orders"
-msgstr "受托加工单"
+msgstr "受托加工订单"
 
 #. module: sn_wsd_toll
 #: model:ir.model,name:sn_wsd_toll.model_sn_toll_material_line
@@ -1201,18 +1201,18 @@ msgstr "客供料收货单"
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_res_users__sn_toll_order_count
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_toll_order_count
 msgid "Toll Order Count"
-msgstr "受托加工单数量"
+msgstr "受托加工订单数量"
 
 #. module: sn_wsd_toll
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_order_form_toll
 msgid "Toll Orders"
-msgstr "受托加工单"
+msgstr "受托加工订单"
 
 #. module: sn_wsd_toll
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid "Toll manufacturing order '%s' has no bill of materials."
-msgstr "受托加工单 '%s' 没有物料清单。"
+msgstr "受托加工订单 '%s' 没有物料清单。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -1220,13 +1220,13 @@ msgstr "受托加工单 '%s' 没有物料清单。"
 msgid ""
 "Toll manufacturing order '%s' has no bill of materials: the material "
 "consumption cannot be computed."
-msgstr "受托加工单 '%s' 没有物料清单：无法计算物料消耗。"
+msgstr "受托加工订单 '%s' 没有物料清单：无法计算物料消耗。"
 
 #. module: sn_wsd_toll
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid "Toll manufacturing order '%s' has no finished goods left to deliver."
-msgstr "受托加工单 '%s' 已无成品可交付。"
+msgstr "受托加工订单 '%s' 已无成品可交付。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -1234,13 +1234,13 @@ msgstr "受托加工单 '%s' 已无成品可交付。"
 msgid ""
 "Toll manufacturing order '%s' has no material loss above the tolerated "
 "quantity."
-msgstr "受托加工单 '%s' 没有超出允许量的物料损耗。"
+msgstr "受托加工订单 '%s' 没有超出允许量的物料损耗。"
 
 #. module: sn_wsd_toll
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid "Toll manufacturing order '%s' is cancelled."
-msgstr "受托加工单 '%s' 已取消。"
+msgstr "受托加工订单 '%s' 已取消。"
 
 #. module: sn_wsd_toll
 #. odoo-python
@@ -1256,7 +1256,7 @@ msgstr "受托加工销售订单 '%s' 至少需要一行可库存的成品明细
 msgid ""
 "Toll manufacturing order '%s' must list the material supplied by the "
 "customer."
-msgstr "受托加工单 '%s' 必须登记客户提供的物料。"
+msgstr "受托加工订单 '%s' 必须登记客户提供的物料。"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields,help:sn_wsd_toll.field_account_bank_statement_line__sn_toll_order_id
@@ -1264,7 +1264,7 @@ msgstr "受托加工单 '%s' 必须登记客户提供的物料。"
 msgid ""
 "Toll manufacturing order invoiced by this entry: processing fee or material "
 "loss claim."
-msgstr "本分录对应的受托加工单：加工费或物料损耗索赔。"
+msgstr "本分录对应的受托加工订单：加工费或物料损耗索赔。"
 
 #. module: sn_wsd_toll
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_loss_form
@@ -1327,7 +1327,7 @@ msgstr "网站沟通记录"
 #. odoo-python
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid "sn_toll_order_id"
-msgstr "受托加工单"
+msgstr "受托加工订单"
 
 #. module: sn_wsd_toll
 #: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sale_order__sn_order_type__consignment
@@ -1360,4 +1360,4 @@ msgstr ""
 msgid ""
 "Technical flag kept in sync with the order type: it drives the toll "
 "manufacturing creation and the search filters."
-msgstr "与单据类型同步的技术标记：用于驱动受托加工单的生成与筛选。"
+msgstr "与单据类型同步的技术标记：用于驱动受托加工订单的生成与筛选。"
