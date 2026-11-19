@@ -404,6 +404,33 @@ class StockMove(models.Model):
             return 'inventory_loss'
         return False
 
+    def sn_action_open_document(self):
+        """Open the document behind a line of the operation detail reports.
+
+        The operation detail reports list the moves of the operations, one line
+        per move, and print the document information once per document:
+        clicking a line opens the document of the operation instead of the
+        move, which carries no information of its own.
+
+        A manufacturing move has no transfer: it belongs to its production
+        order, which is the document its report lists. Every other move opens
+        its transfer, the former inventory operations included, and falls back
+        on the stock module on the stock move itself when the operation was
+        booked without one (see ``action_open_reference``).
+        """
+        self.ensure_one()
+        production = self.sn_production_id
+        if (self.sn_operation_kind == 'manufacture'
+                and production
+                and production.has_access('read')):
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'mrp.production',
+                'res_id': production.id,
+                'view_mode': 'form',
+            }
+        return self.action_open_reference()
+
     @api.depends('production_id', 'raw_material_production_id')
     def _compute_sn_production_id(self):
         for move in self:

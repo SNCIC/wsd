@@ -495,6 +495,22 @@ class PurchaseRequestLine(models.Model):
                     )
         return super().write(vals)
 
+    def action_open_request(self):
+        """Open the purchase request of the line.
+
+        The purchase detail reports (Purchase Request Lines, Summary Details)
+        list the request lines one line per material: clicking a line opens the
+        request it belongs to, which is the document the merged cells of the
+        report print once and the line itself is maintained on.
+        """
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'purchase.request',
+            'res_id': self.request_id.id,
+            'view_mode': 'form',
+        }
+
     def _calc_new_qty(self, request_line, po_line=None, new_pr_line=False):
         quantity = super()._calc_new_qty(
             request_line,

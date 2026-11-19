@@ -14,6 +14,10 @@
          that carry no transfer, so their kind is read on the direction of the
          move (see stock_move.py).
 
+         Every list opens the document of the operation when a line is
+         clicked: the transfer of the operation, or the production order of a
+         manufacturing operation (see StockMove.sn_action_open_document).
+
          The lists are not inherited from each other: Odoo applies every view
          inheriting a view to that view too, so adding or removing a column in
          a child view would change the other reports as well. The operations
@@ -79,6 +83,7 @@
         <field name="arch" type="xml">
             <list string="Other Receipt Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -123,6 +128,7 @@
         <field name="arch" type="xml">
             <list string="Other Delivery Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -167,6 +173,7 @@
         <field name="arch" type="xml">
             <list string="Operation Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -215,6 +222,7 @@
         <field name="arch" type="xml">
             <list string="Inventory Operation Details" create="false"
                   delete="false" js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="date desc, id desc">
                 <field name="sn_inventory_session" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -246,6 +254,7 @@
         <field name="arch" type="xml">
             <list string="MES Operation Details" create="false" delete="false"
                   js_class="sn_wsd_merged_cells_list"
+                  action="sn_action_open_document" type="object"
                   default_order="sn_validation_date desc, sn_picking_date desc, picking_id, id">
                 <field name="picking_id" column_invisible="1"/>
                 <field name="reference" string="Document No."/>
@@ -287,6 +296,7 @@
         <field name="model">stock.move</field>
         <field name="arch" type="xml">
             <list string="Manufacturing Details" create="false" delete="false"
+                  action="sn_action_open_document" type="object"
                   default_order="date desc, id desc">
                 <field name="sn_production_id" string="Manufacturing Order"/>
                 <field name="origin" string="Source Document"/>

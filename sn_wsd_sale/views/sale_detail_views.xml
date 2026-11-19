@@ -2,14 +2,16 @@
 <odoo>
     <!-- Order details (Sales > Orders > Order Details): every sale order line
          on one line, with the order header printed once per order. The list is
-         read only: the lines are maintained from their order. -->
+         read only: the lines are maintained from their order, so clicking a
+         line opens the order of the line (see SaleOrderLine.action_open_order). -->
     <record id="view_sn_sale_detail_list" model="ir.ui.view">
         <field name="name">sale.order.line.sale.detail.list</field>
         <field name="model">sale.order.line</field>
         <field name="arch" type="xml">
             <list string="Order Details" create="false" delete="false"
                   default_order="order_id, sequence, id"
-                  js_class="sn_wsd_merged_cells_list">
+                  js_class="sn_wsd_merged_cells_list"
+                  action="action_open_order" type="object">
                 <field name="order_id"/>
                 <field name="order_date"/>
                 <field name="order_partner_id"/>

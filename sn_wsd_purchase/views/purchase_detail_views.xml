@@ -6,9 +6,11 @@
         <field name="arch" type="xml">
             <!-- The header information of a request is printed on the first
                  line of its details only: the merged cells renderer hides the
-                 values the lines below repeat. -->
+                 values the lines below repeat. Clicking a line opens the
+                 purchase request it belongs to. -->
             <list string="Purchase Details" create="false" delete="false"
-                  js_class="sn_wsd_merged_cells_list">
+                  js_class="sn_wsd_merged_cells_list"
+                  action="action_open_request" type="object">
                 <field name="request_id"/>
                 <field name="date_required"/>
                 <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>
@@ -113,14 +115,21 @@
 
     <!-- Purchase details report of the purchase order lines: the supplier is
          the vendor of the order, so every line carries one. The request line
-         report above stays the purchase request details report. -->
+         report above stays the purchase request details report.
+
+         Clicking a line opens the purchase order of the line instead of the
+         line itself: the report lists the lines of the orders and the line
+         carries no information the order does not. The action is the one of
+         the purchase order line (action_open_order), the same the sale
+         analysis report uses for its own lines. -->
     <record id="view_sn_purchase_order_detail_list" model="ir.ui.view">
         <field name="name">purchase.order.line.purchase.detail.list</field>
         <field name="model">purchase.order.line</field>
         <field name="arch" type="xml">
             <list string="Purchase Details" create="false" delete="false"
                   default_order="order_id, sequence, id"
-                  js_class="sn_wsd_merged_cells_list">
+                  js_class="sn_wsd_merged_cells_list"
+                  action="action_open_order" type="object">
                 <field name="order_id"/>
                 <field name="supplier_id"/>
                 <field name="date_order"/>
@@ -207,13 +216,15 @@
          on one line, with the request header printed once per request. The
          receipt, quality control and storage reports of sn_wsd_stock list the
          operations of each step instead; this one keeps the quantities of the
-         three steps side by side for the warehouse to reconcile them. -->
+         three steps side by side for the warehouse to reconcile them.
+         Clicking a line opens the purchase request it belongs to. -->
     <record id="view_sn_purchase_summary_detail_list" model="ir.ui.view">
         <field name="name">purchase.request.line.summary.detail.list</field>
         <field name="model">purchase.request.line</field>
         <field name="arch" type="xml">
             <list string="Summary Details" create="false" delete="false"
-                  js_class="sn_wsd_merged_cells_list">
+                  js_class="sn_wsd_merged_cells_list"
+                  action="action_open_request" type="object">
                 <field name="request_id"/>
                 <field name="date_required"/>
                 <field name="requested_by" string="Created By" widget="many2one_avatar_user"/>

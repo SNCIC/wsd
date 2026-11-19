@@ -32,6 +32,21 @@ class SaleOrderLine(models.Model):
              'order sheet. Left empty, the order commitment date is printed.',
     )
 
+    def action_open_order(self):
+        """Open the sale order of the line.
+
+        The order detail report lists the lines of the orders one line per
+        material and prints the order header once per order: clicking a line
+        opens the order it belongs to, which the line is maintained on.
+        """
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'res_id': self.order_id.id,
+            'view_mode': 'form',
+        }
+
     def _sn_get_dot_matrix_delivery_date(self):
         """Delivery date of the line as the sheet prints it (YYYY-MM-DD)."""
         self.ensure_one()
