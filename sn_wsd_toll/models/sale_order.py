@@ -57,6 +57,18 @@ class SaleOrder(models.Model):
                     bom = self.env['mrp.bom']._bom_find(
                         line.product_id, company_id=order.company_id.id,
                         bom_type='normal').get(line.product_id)
+                    material_lines = []
+                    if bom:
+                        # Prefill the material supplied by the customer with
+                        # the components of the bill of materials: the usual
+                        # toll contract supplies them all. Lines that are not
+                        # supplied by the customer are removed by the user.
+                        ratio = line.product_uom_qty / (bom.product_qty or 1.0)
+                        material_lines = [[0, 0, {
+                            'product_id': bom_line.product_id.id,
+                            'product_uom_qty': bom_line.product_qty * ratio,
+                            'bom_line_id': bom_line.id,
+                        }] for bom_line in bom.bom_line_ids]
                     toll_order = toll_order_model.create({
                         'partner_id': order.partner_id.id,
                         'company_id': order.company_id.id,
@@ -67,6 +79,7 @@ class SaleOrder(models.Model):
                         'product_id': line.product_id.id,
                         'product_qty': line.product_uom_qty,
                         'bom_id': bom.id if bom else False,
+                        'material_line_ids': material_lines,
                         'pricing_method': 'fixed',
                         'fee_unit': line.price_unit,
                         'state': 'confirmed',

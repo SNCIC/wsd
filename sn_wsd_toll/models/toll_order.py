@@ -729,7 +729,16 @@ class SnTollMaterialLine(models.Model):
                     consumed += sum(
                         move_line.quantity for move_line in move.move_line_ids)
             produced = sum(order.production_ids.mapped('qty_produced'))
-            unit_qty = line.bom_line_id.product_qty if line.bom_line_id else 0.0
+            # The bill of materials line is optional on the supplied material
+            # line: fall back to the line of the order bill of materials that
+            # carries the same product, otherwise the theoretical consumption
+            # would be zero and every consumed unit would look like a loss.
+            bom_line = line.bom_line_id
+            if not bom_line and order.bom_id:
+                bom_line = order.bom_id.bom_line_ids.filtered(
+                    lambda candidate: candidate.product_id == line.product_id,
+                )[:1]
+            unit_qty = bom_line.product_qty if bom_line else 0.0
             bom_qty = order.bom_id.product_qty or 1.0
             theoretical = unit_qty * (produced or order.product_qty) / bom_qty
             tolerance = theoretical * order.loss_allowance / 100.0
