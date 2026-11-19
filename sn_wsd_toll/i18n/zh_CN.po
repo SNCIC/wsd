@@ -1167,6 +1167,7 @@ msgstr "受托加工损耗结算"
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_sn_toll_material_line__order_id
 #: model:ir.model.fields,field_description:sn_wsd_toll.field_stock_picking__sn_toll_order_id
 #: model_terms:ir.ui.view,arch_db:sn_wsd_toll.view_sn_toll_order_form
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sale_order__sn_order_type__toll
 msgid "Toll Manufacturing Order"
 msgstr "受托加工单"
 
@@ -1327,3 +1328,36 @@ msgstr "网站沟通记录"
 #: code:addons/sn_wsd_toll/models/toll_order.py:0
 msgid "sn_toll_order_id"
 msgstr "受托加工单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sale_order__sn_order_type__consignment
+msgid "Consignment Sales Order"
+msgstr "寄售销售订单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,field_description:sn_wsd_toll.field_sale_order__sn_order_type
+msgid "Order Type"
+msgstr "单据类型"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields.selection,name:sn_wsd_toll.selection__sale_order__sn_order_type__standard
+msgid "Standard Sales Order"
+msgstr "标准销售订单"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sale_order__sn_order_type
+msgid ""
+"Standard: the goods are sold and invoiced as usual.\n"
+"Consignment: the goods are stored at the customer and invoiced when he consumes them.\n"
+"Toll manufacturing: the customer supplies the material, we process it and invoice a processing fee."
+msgstr ""
+"标准：按常规方式销售并开票。\n"
+"寄售：货物存放在客户处，客户耗用时再开票。\n"
+"受托加工：客户提供物料，我方加工并收取加工费。"
+
+#. module: sn_wsd_toll
+#: model:ir.model.fields,help:sn_wsd_toll.field_sale_order__sn_is_toll
+msgid ""
+"Technical flag kept in sync with the order type: it drives the toll "
+"manufacturing creation and the search filters."
+msgstr "与单据类型同步的技术标记：用于驱动受托加工单的生成与筛选。"

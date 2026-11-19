@@ -18,10 +18,21 @@
                            string="Toll Orders"/>
                 </button>
             </xpath>
-            <xpath expr="//page[@name='other_information']" position="inside">
-                <group string="Toll Manufacturing">
-                    <field name="sn_is_toll"/>
-                </group>
+            <xpath expr="//group[@name='partner_details']/field[@name='partner_id']"
+                   position="before">
+                <field name="sn_order_type" readonly="state in ('cancel', 'sale')"/>
+                <field name="sn_is_toll" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_toll" model="ir.ui.view">
+        <field name="name">sale.order.list.toll</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sn_order_type" optional="show"/>
             </xpath>
         </field>
     </record>

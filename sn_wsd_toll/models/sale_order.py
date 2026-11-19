@@ -5,12 +5,24 @@ from odoo.exceptions import UserError
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    sn_order_type = fields.Selection(
+        selection=[
+            ('standard', 'Standard Sales Order'),
+            ('consignment', 'Consignment Sales Order'),
+            ('toll', 'Toll Manufacturing Order'),
+        ],
+        string='Order Type', default='standard', required=True, copy=True,
+        tracking=True,
+        help='Standard: the goods are sold and invoiced as usual.\n'
+             'Consignment: the goods are stored at the customer and invoiced '
+             'when he consumes them.\n'
+             'Toll manufacturing: the customer supplies the material, we '
+             'process it and invoice a processing fee.',
+    )
     sn_is_toll = fields.Boolean(
-        string='Toll Manufacturing',
-        help='The order processes material supplied by the customer: the '
-             'sold price is the processing fee, the finished goods stay the '
-             'property of the customer and the supplied material is received '
-             'through consignment receipts.',
+        string='Toll Manufacturing', readonly=True, copy=False,
+        help='Technical flag kept in sync with the order type: it drives the '
+             'toll manufacturing creation and the search filters.',
     )
     sn_toll_order_ids = fields.One2many(
         'sn.toll.order', 'sale_order_id',
@@ -19,6 +31,18 @@ class SaleOrder(models.Model):
     sn_toll_order_count = fields.Integer(
         string='Toll Order Count', compute='_compute_sn_toll_order_count',
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'sn_order_type' in vals:
+                vals['sn_is_toll'] = vals['sn_order_type'] == 'toll'
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if 'sn_order_type' in vals:
+            vals['sn_is_toll'] = vals['sn_order_type'] == 'toll'
+        return super().write(vals)
 
     @api.depends('sn_toll_order_ids')
     def _compute_sn_toll_order_count(self):
