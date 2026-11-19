@@ -254,6 +254,102 @@ class MeterComponentBinding(models.Model):
             active_bindings |= created_binding
         return created_bindings
 
+    @api.model
+    def unbind_component_bindings(self, identity, component_sns, workcenter=False,
+                                  operator_code=False, external_event_id=False):
+        """Explicit unbind (bind-error correction), shared by the device API
+        and the PDA station-pass screen: flip each active binding of the
+        given component SNs on ``identity`` to ``removed`` and append an
+        ``unbind`` event row (who / where / when) -- same event-log shape as
+        the implicit replace. Trace-only: no stock move, no consumption
+        ledger, no station-pass counting; the component SN is released and
+        may bind to any parent again. Unbind requires a live MES order
+        (done/cancelled and empty-order rows are rejected). Re-sending the
+        same ``external_event_id`` replays the first call's event rows."""
+        sns = [sn for sn in dict.fromkeys(
+            (sn or '').strip() for sn in (component_sns or [])
+        ) if sn]
+        if not identity or not sns:
+            raise ValidationError(_('Nothing to unbind.'))
+        if external_event_id:
+            replay = self.search([
+                ('serial_identity_id', '=', identity.id),
+                ('event_type', '=', 'unbind'),
+            ]).filtered(lambda row: (
+                row.payload or {}).get('external_event_id') == external_event_id)
+            if replay:
+                return replay
+        active = self.search([
+            ('serial_identity_id', '=', identity.id),
+            ('component_sn', 'in', sns),
+            ('state', '=', 'active'),
+        ])
+        missing = [sn for sn in sns if sn not in active.mapped('component_sn')]
+        if missing:
+            raise ValidationError(_(
+                'Component %s is not actively bound on %s.',
+                ', '.join(missing), identity.name))
+        for binding in active:
+            order = binding.mes_order_id
+            if not order:
+                raise ValidationError(_(
+                    'Component binding of %s on %s has no MES order; '
+                    'contact the administrator.', binding.component_sn, identity.name))
+            if order.state in ('done', 'cancelled'):
+                raise ValidationError(_(
+                    'MES order %s is %s; unbind is not allowed.',
+                    order.name, order.state))
+        events = self.env['sn.wsd.meter.component.binding']
+        for binding in active:
+            binding.state = 'removed'
+            events |= self.create({
+                'company_id': binding.company_id.id,
+                'serial_identity_id': identity.id,
+                'route_operation_id': binding.route_operation_id.id,
+                'workcenter_id': workcenter.id if workcenter else binding.workcenter_id.id,
+                'component_type': binding.component_type,
+                'event_type': 'unbind',
+                'state': 'removed',
+                'event_time': fields.Datetime.now(),
+                'operator_code': operator_code or False,
+                'component_product_id': binding.component_product_id.id,
+                'component_lot_id': binding.component_lot_id.id,
+                'component_sn': binding.component_sn,
+                'payload': {'external_event_id': external_event_id} if external_event_id else {},
+            })
+        return events
+
+    @api.model
+    def unbind_from_scan(self, workcenter_id, parent_sn, component_sn):
+        """PDA station-pass screen, unbind mode (two-step scan): resolve the
+        scanned parent SN in the current company, then run the unbind kernel
+        for the single scanned component. The operator on the event row is
+        the logged-in PDA user."""
+        workcenter = self.env['mrp.workcenter'].browse(workcenter_id).exists()
+        sn = (parent_sn or '').strip()
+        component = (component_sn or '').strip()
+        if not sn or not component:
+            raise ValidationError(_('Nothing to unbind.'))
+        identity = self.env['sn.wsd.serial.identity'].with_context(
+            active_test=False).search([
+                ('name', '=', sn),
+                '|',
+                ('company_id', '=', False),
+                ('company_id', '=', self.env.company.id),
+            ], limit=1)
+        if not identity:
+            raise ValidationError(_('SN %s is unknown.', sn))
+        events = self.unbind_component_bindings(
+            identity, [component],
+            workcenter=workcenter,
+            operator_code=self.env.user.login or self.env.user.name)
+        event = events[:1]
+        return {
+            'unbound': len(events),
+            'component_type': dict(COMPONENT_TYPE_SELECTION).get(
+                event.component_type, event.component_type or ''),
+        }
+
 
 class SerialIdentity(models.Model):
     _inherit = 'sn.wsd.serial.identity'

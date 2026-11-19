@@ -818,6 +818,29 @@ class TestScanPassHttp(ScanPassFixture, HttpCase):
         self.assertTrue(body['data']['ok'])
         self.assertTrue(body['data']['sn'])
 
+    def test_22_component_unbind_wire(self):
+        # bind via scan-pass, then unbind over the wire (standard JSON)
+        self.service.scan_pass(self._payload(
+            M_SN='126110002002', M_MAIN_ID='CMP-WIRE-1'))
+        res = self._post('/api/v1/components/unbind', json.dumps({
+            'sn': '126110002002',
+            'componentSns': ['CMP-WIRE-1'],
+            'workStation': 'APIWCIN',
+            'employee': 'APIOP',
+        }))
+        body = res.json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['code'], 200)
+        self.assertTrue(body['data']['ok'])
+        self.assertEqual(body['data']['unbound'], 1)
+        # unknown component -> business 422, nothing partially unbound
+        res = self._post('/api/v1/components/unbind', json.dumps({
+            'sn': '126110002002',
+            'componentSns': ['CMP-WIRE-404'],
+            'workStation': 'APIWCIN',
+        }))
+        self.assertEqual(res.status_code, 422)
+
 
 def _aoi_payload(**kw):
     payload = {
@@ -1479,3 +1502,68 @@ class TestSnCoding(ScanPassFixture, TransactionCase):
         nxt = Identity.generate_for_production(
             self.production, origin_type='laser')
         self.assertEqual(nxt.name, 'DWG-API00124')
+
+
+@tagged('post_install', '-at_install')
+class TestComponentUnbindApi(ScanPassFixture, TransactionCase):
+    """Component-unbind endpoint: standard JSON contract, kernel delegation,
+    event-id replay and batch atomicity."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_fixture()
+
+    def _unbind_payload(self, **kw):
+        payload = {
+            'sn': '126110000001',
+            'componentSns': ['CMP-API-1'],
+            'workStation': 'APIWCIN',
+            'employee': 'APIOP',
+        }
+        payload.update(kw)
+        return payload
+
+    def test_01_unbind_upload(self):
+        self.service.scan_pass(self._payload(M_MAIN_ID='CMP-API-1'))
+        result = self.service.unbind_components(self._unbind_payload())
+        self.assertTrue(result['ok'])
+        self.assertEqual(result['unbound'], 1)
+        Binding = self.env['sn.wsd.meter.component.binding']
+        event = Binding.search([
+            ('component_sn', '=', 'CMP-API-1'),
+            ('event_type', '=', 'unbind')])
+        self.assertEqual(len(event), 1)
+        self.assertEqual(event.operator_code, 'APIOP')
+        self.assertEqual(
+            Binding.search_count([
+                ('component_sn', '=', 'CMP-API-1'),
+                ('state', '=', 'active')]), 0)
+
+    def test_02_missing_field_gates(self):
+        with self.assertRaises(ValidationError):
+            self.service.unbind_components(self._unbind_payload(sn=''))
+        with self.assertRaises(ValidationError):
+            self.service.unbind_components(self._unbind_payload(componentSns=[]))
+        with self.assertRaises(ValidationError):
+            self.service.unbind_components(self._unbind_payload(workStation=''))
+
+    def test_03_event_id_replay(self):
+        self.service.scan_pass(self._payload(M_MAIN_ID='CMP-API-2'))
+        body = self._unbind_payload(
+            componentSns=['CMP-API-2'], externalEventId='UB-API-2')
+        first = self.service.unbind_components(body)
+        second = self.service.unbind_components(body)
+        self.assertEqual(first['unbound'], second['unbound'])
+        self.assertEqual(self.env['sn.wsd.meter.component.binding'].search_count([
+            ('component_sn', '=', 'CMP-API-2'),
+            ('event_type', '=', 'unbind')]), 1)
+
+    def test_04_atomic_reject(self):
+        self.service.scan_pass(self._payload(M_MAIN_ID='CMP-API-3'))
+        with self.assertRaises(ValidationError):
+            self.service.unbind_components(self._unbind_payload(
+                componentSns=['CMP-API-3', 'CMP-API-404']))
+        self.assertEqual(self.env['sn.wsd.meter.component.binding'].search_count([
+            ('component_sn', '=', 'CMP-API-3'),
+            ('state', '=', 'active')]), 1)
