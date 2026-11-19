@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <record id="group_sn_toll_user" model="res.groups">
-            <field name="name">Toll Manufacturing User</field>
-            <field name="implied_ids" eval="[Command.link(ref('mrp.group_mrp_user'))]"/>
-        </record>
-
-        <record id="group_sn_toll_manager" model="res.groups">
-            <field name="name">Toll Manufacturing Manager</field>
-            <field name="implied_ids" eval="[Command.link(ref('group_sn_toll_user'))]"/>
-        </record>
+        <!-- Access rights follow the manufacturing convention of the
+             project: mrp.group_mrp_user and mrp.group_mrp_manager hold the
+             rights, no dedicated group is created. -->
 
         <!-- Portal customers only see their own toll manufacturing orders. -->
         <record id="sn_toll_order_portal_rule" model="ir.rule">

@@ -1,13 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sn_toll_order_user,sn.toll.order user,model_sn_toll_order,group_sn_toll_user,1,1,1,1
-access_sn_toll_order_manager,sn.toll.order manager,model_sn_toll_order,group_sn_toll_manager,1,1,1,1
+access_sn_toll_order_user,sn.toll.order user,model_sn_toll_order,mrp.group_mrp_user,1,1,1,1
+access_sn_toll_order_manager,sn.toll.order manager,model_sn_toll_order,mrp.group_mrp_manager,1,1,1,1
 access_sn_toll_order_portal,sn.toll.order portal,model_sn_toll_order,base.group_portal,1,0,0,0
-access_sn_toll_material_line_user,sn.toll.material.line user,model_sn_toll_material_line,group_sn_toll_user,1,1,1,1
-access_sn_toll_material_line_manager,sn.toll.material.line manager,model_sn_toll_material_line,group_sn_toll_manager,1,1,1,1
+access_sn_toll_material_line_user,sn.toll.material.line user,model_sn_toll_material_line,mrp.group_mrp_user,1,1,1,1
+access_sn_toll_material_line_manager,sn.toll.material.line manager,model_sn_toll_material_line,mrp.group_mrp_manager,1,1,1,1
 access_sn_toll_material_line_portal,sn.toll.material.line portal,model_sn_toll_material_line,base.group_portal,1,0,0,0
-access_sn_toll_loss_user,sn.toll.loss user,model_sn_toll_loss,group_sn_toll_user,1,1,1,1
-access_sn_toll_loss_manager,sn.toll.loss manager,model_sn_toll_loss,group_sn_toll_manager,1,1,1,1
+access_sn_toll_loss_user,sn.toll.loss user,model_sn_toll_loss,mrp.group_mrp_user,1,1,1,1
+access_sn_toll_loss_manager,sn.toll.loss manager,model_sn_toll_loss,mrp.group_mrp_manager,1,1,1,1
 access_sn_toll_loss_portal,sn.toll.loss portal,model_sn_toll_loss,base.group_portal,1,0,0,0
-access_sn_toll_loss_line_user,sn.toll.loss.line user,model_sn_toll_loss_line,group_sn_toll_user,1,1,1,1
-access_sn_toll_loss_line_manager,sn.toll.loss.line manager,model_sn_toll_loss_line,group_sn_toll_manager,1,1,1,1
+access_sn_toll_loss_line_user,sn.toll.loss.line user,model_sn_toll_loss_line,mrp.group_mrp_user,1,1,1,1
+access_sn_toll_loss_line_manager,sn.toll.loss.line manager,model_sn_toll_loss_line,mrp.group_mrp_manager,1,1,1,1
 access_sn_toll_loss_line_portal,sn.toll.loss.line portal,model_sn_toll_loss_line,base.group_portal,1,0,0,0
