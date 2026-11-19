@@ -1931,6 +1931,12 @@ msgid "No defect code matches %s."
 msgstr "没有匹配 %s 的缺陷代码。"
 
 #. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "No SN matches %s."
+msgstr "没有匹配 %s 的 SN。"
+
+#. module: sn_wsd_barcode
 #. odoo-python
 #: code:addons/sn_wsd_barcode/controllers/sn_wsd_barcode.py:0
 msgid ""
@@ -3363,6 +3369,12 @@ msgstr "请扫缺陷代码。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Scan the component SN to unbind from %s."
+msgstr "请扫要从 %s 解绑的组件 SN。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid "Scan the destination location"
 msgstr "扫描目的位置"
@@ -3408,6 +3420,12 @@ msgstr "扫物料卷号"
 #: code:addons/sn_wsd_barcode/static/src/models/barcode_picking_model.js:0
 msgid "Scan the package %s"
 msgstr "扫描包裹%s"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Scan the parent SN."
+msgstr "请扫父 SN。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -3724,6 +3742,12 @@ msgstr "SN %s 已过 %s。"
 #: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
 msgid "SN %s scrapped."
 msgstr "SN %s 已报废。"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "SN %s — scan the component SN."
+msgstr "SN %s——请扫组件 SN。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
@@ -4218,6 +4242,18 @@ msgstr "调拨允许您将产品从一个位置调拨到另外一个位置。"
 #: code:addons/sn_wsd_barcode/static/src/workshop/workshop_action.js:0
 msgid "Unbind P Board"
 msgstr "解除P板关联"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Unbind"
+msgstr "解绑"
+
+#. module: sn_wsd_barcode
+#. odoo-javascript
+#: code:addons/sn_wsd_barcode/static/src/station_pass/station_pass.js:0
+msgid "Unbound %s from %s."
+msgstr "已解绑 %s（原绑在 %s 上）。"
 
 #. module: sn_wsd_barcode
 #. odoo-javascript
