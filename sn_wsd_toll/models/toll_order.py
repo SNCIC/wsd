@@ -519,6 +519,9 @@ class SnTollOrder(models.Model):
                 raise UserError(_(
                     "Nothing is left to invoice on sale order '%s'.",
                     self.sale_order_id.display_name))
+            # Keep the toll order as the origin of the invoice so its invoice
+            # smart button and the loss settlements stay traceable.
+            invoice.sn_toll_order_id = self.id
             return {
                 'type': 'ir.actions.act_window',
                 'name': _('Invoice'),

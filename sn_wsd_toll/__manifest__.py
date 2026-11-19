@@ -1,6 +1,6 @@
 {
     'name': 'SN WSD Toll Manufacturing',
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.0.3',
     'summary': 'Toll manufacturing: customer-supplied material ownership, loss settlement and customer portal',
     'category': 'Manufacturing',
     'depends': [
