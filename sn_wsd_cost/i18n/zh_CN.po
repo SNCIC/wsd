@@ -46,8 +46,11 @@ msgstr "价格来源采购的确认日期。"
 
 #. module: sn_wsd_cost
 #: model:ir.model.fields,help:sn_wsd_cost.field_mrp_bom_line__sn_cost_date
-msgid "Confirmation date of the purchase the unit price comes from."
-msgstr "单价来源采购的确认日期。"
+msgid ""
+"Confirmation date of the purchase the unit price comes from. Empty when the "
+"price comes from the vendor pricelist or from the standard cost of the "
+"material."
+msgstr "单价来源采购的确认日期；价格来自供应商价目表或标准成本时为空。"
 
 #. module: sn_wsd_cost
 #: model_terms:ir.ui.view,arch_db:sn_wsd_cost.view_mrp_bom_form_sn_cost

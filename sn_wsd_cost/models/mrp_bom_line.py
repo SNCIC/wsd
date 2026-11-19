@@ -38,7 +38,9 @@ class MrpBomLine(models.Model):
         string='Purchase Date',
         compute='_compute_sn_cost',
         store=True,
-        help='Confirmation date of the purchase the unit price comes from.',
+        help='Confirmation date of the purchase the unit price comes from. '
+             'Empty when the price comes from the vendor pricelist or from the '
+             'standard cost of the material.',
     )
     sn_cost_source = fields.Selection(
         PRICE_SOURCE_SELECTION,
@@ -90,6 +92,7 @@ class MrpBomLine(models.Model):
             line.sn_unit_cost = cost['price']
             line.sn_cost_amount = company.currency_id.round(
                 cost['price'] * line.product_qty)
-            line.sn_cost_date = cost['date']
+            line.sn_cost_date = cost['date'] \
+                if cost['source'] == 'purchase' else False
             line.sn_cost_source = cost['source']
             line.sn_cost_partner_id = cost['partner_id']

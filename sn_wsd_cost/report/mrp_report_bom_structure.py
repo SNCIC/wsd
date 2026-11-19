@@ -28,8 +28,13 @@ class ReportMrpReportBomStructure(models.AbstractModel):
 
     @api.model
     def _has_cost_info(self, data):
-        """Whether the price and purchase date columns carry a value."""
-        if data.get('sn_cost_source') == 'purchase':
+        """Whether the price and purchase date columns carry a value.
+
+        The columns are shown as soon as one component has a unit price, even
+        when that price comes from the vendor pricelist instead of a purchase
+        order: only the purchase date stays empty in that case.
+        """
+        if data.get('sn_unit_cost'):
             return True
         return any(
             self._has_cost_info(component)
@@ -67,7 +72,11 @@ class ReportMrpReportBomStructure(models.AbstractModel):
         price = company.currency_id.round(cost['price'] * line_quantity)
         res['bom_cost'] = price
         res['sn_unit_cost'] = cost['price']
-        res['sn_cost_date'] = fields.Date.to_string(cost['date']) if cost['date'] else ''
+        # Only a purchase order carries a purchase date: the day a pricelist
+        # entry starts applying is not the day the material was purchased.
+        res['sn_cost_date'] = (
+            fields.Date.to_string(cost['date'])
+            if cost['date'] and cost['source'] == 'purchase' else '')
         res['sn_cost_source'] = cost['source']
         res['sn_cost_partner'] = cost['partner_id'].display_name or ''
         return res
