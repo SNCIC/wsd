@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_toll" model="ir.ui.view">
+        <field name="name">stock.picking.form.toll</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sn_toll_order_id"
+                       invisible="not sn_toll_order_id"
+                       readonly="1"/>
+                <field name="sn_toll_receipt" invisible="1"/>
+                <field name="sn_toll_delivery" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_toll" model="ir.ui.view">
+        <field name="name">stock.picking.list.toll</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sn_toll_order_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sn_toll_material_receipt" model="ir.actions.act_window">
+        <field name="name">Toll Material Receipts</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('sn_toll_receipt', '=', True)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <record id="action_sn_toll_delivery" model="ir.actions.act_window">
+        <field name="name">Toll Finished Goods Deliveries</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('sn_toll_delivery', '=', True)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+</odoo>

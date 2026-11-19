@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sn_toll_order_form" model="ir.ui.view">
+        <field name="name">sn.toll.order.form</field>
+        <field name="model">sn.toll.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_material_receipt"
+                            string="Receive Supplied Material" type="object"
+                            invisible="state in ('draft', 'cancel')"/>
+                    <button name="action_create_production"
+                            string="Create Manufacturing Order" type="object"
+                            invisible="state not in ('confirmed', 'in_progress')"/>
+                    <button name="action_create_delivery"
+                            string="Deliver Finished Goods" type="object"
+                            invisible="state not in ('confirmed', 'in_progress')"/>
+                    <button name="action_create_loss" string="Settle Loss"
+                            type="object"
+                            invisible="state in ('draft', 'cancel')"/>
+                    <button name="action_create_invoice"
+                            string="Invoice Processing Fee" type="object"
+                            invisible="state in ('draft', 'cancel')"/>
+                    <button name="action_done" string="Mark as Done"
+                            type="object"
+                            invisible="state not in ('confirmed', 'in_progress')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('done', 'cancel')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_productions" type="object"
+                                class="oe_stat_button" icon="fa-industry"
+                                invisible="production_count == 0">
+                            <field name="production_count" widget="statinfo"
+                                   string="MOs"/>
+                        </button>
+                        <button name="action_view_material_pickings" type="object"
+                                class="oe_stat_button" icon="fa-arrow-down">
+                            <field name="material_received_qty" widget="statinfo"
+                                   string="Received"/>
+                        </button>
+                        <button name="action_view_delivery_pickings" type="object"
+                                class="oe_stat_button" icon="fa-truck">
+                            <field name="delivered_qty" widget="statinfo"
+                                   string="Delivered"/>
+                        </button>
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo"
+                                   string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Toll Manufacturing Order"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer">
+                            <field name="partner_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="sale_order_id"
+                                   invisible="not sale_order_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="date_order" readonly="state != 'draft'"/>
+                            <field name="date_deadline"/>
+                        </group>
+                        <group string="Finished Product">
+                            <field name="product_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="product_tmpl_id" invisible="1"/>
+                            <field name="product_qty" readonly="state != 'draft'"/>
+                            <field name="product_uom_id" groups="uom.group_uom"/>
+                            <field name="bom_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Processing Fee">
+                        <group>
+                            <field name="pricing_method" readonly="state != 'draft'"/>
+                            <field name="piece_rate_id"
+                                   invisible="pricing_method != 'piece_rate'"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="fee_unit" readonly="state == 'done'"/>
+                            <field name="fee_product_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="fee_amount"/>
+                            <field name="fee_deduction"/>
+                            <field name="fee_net"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Supplied Material" name="material">
+                            <field name="material_line_ids"
+                                   readonly="state in ('done', 'cancel')">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="bom_line_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="product_uom_id"
+                                           groups="uom.group_uom"/>
+                                    <field name="product_uom_qty"
+                                           string="Supplied"/>
+                                    <field name="qty_received"/>
+                                    <field name="qty_on_hand"/>
+                                    <field name="qty_theoretical"/>
+                                    <field name="qty_consumed"/>
+                                    <field name="qty_loss"/>
+                                    <field name="qty_to_receive"/>
+                                </list>
+                            </field>
+                            <group string="Loss Policy">
+                                <field name="loss_policy"/>
+                                <field name="loss_allowance"/>
+                            </group>
+                        </page>
+                        <page string="Progress" name="progress">
+                            <group>
+                                <group string="Production">
+                                    <field name="produced_qty"/>
+                                    <field name="delivered_qty"/>
+                                    <field name="remaining_qty"/>
+                                    <field name="progress" widget="progressbar"/>
+                                </group>
+                                <group string="Supplied Material">
+                                    <field name="material_stock_qty"/>
+                                    <field name="material_received_qty"/>
+                                    <field name="material_consumed_qty"/>
+                                    <field name="material_loss_qty"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Manufacturing Orders" name="productions"
+                              invisible="production_count == 0">
+                            <field name="production_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="product_qty"/>
+                                    <field name="state"/>
+                                    <field name="date_start"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Loss Settlements" name="losses">
+                            <field name="loss_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="settlement_type"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'done'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sn_toll_order_list" model="ir.ui.view">
+        <field name="name">sn.toll.order.list</field>
+        <field name="model">sn.toll.order</field>
+        <field name="arch" type="xml">
+            <list string="Toll Manufacturing Orders"
+                  decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="date_deadline"/>
+                <field name="product_id"/>
+                <field name="product_qty" sum="Total"/>
+                <field name="produced_qty"/>
+                <field name="delivered_qty"/>
+                <field name="fee_net" sum="Net Fee"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'confirmed'"
+                       decoration-primary="state == 'in_progress'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sn_toll_order_search" model="ir.ui.view">
+        <field name="name">sn.toll.order.search</field>
+        <field name="model">sn.toll.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <filter name="filter_draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_progress" string="In Progress"
+                        domain="[('state', 'in', ('confirmed', 'in_progress'))]"/>
+                <filter name="filter_done" string="Done"
+                        domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="filter_late" string="Late"
+                        domain="[('date_deadline', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ('done', 'cancel'))]"/>
+                <group>
+                    <filter name="group_partner" string="Customer"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_product" string="Product"
+                            context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sn_toll_order" model="ir.actions.act_window">
+        <field name="name">Toll Manufacturing Orders</field>
+        <field name="res_model">sn.toll.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sn_toll_order_search"/>
+        <field name="context">{'search_default_filter_progress': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a toll manufacturing order
+            </p>
+            <p>
+                Material supplied by the customer is stored under his
+                ownership: it stays out of your stock valuation and cannot be
+                taken by another order.
+            </p>
+        </field>
+    </record>
+</odoo>
